@@ -19,18 +19,19 @@ Skype: eugene.babiy
 
 
 $PHPMAILER_LANG = array();
-$PHPMAILER_LANG["provide_address"] = 'Вы должны предоставить минимум ' .
-                                     'один адрес получателя.';
-$PHPMAILER_LANG["mailer_not_supported"] = ' почтовик не поддерживается.';
-$PHPMAILER_LANG["execute"] = 'Невозможно выполнить: ';
-$PHPMAILER_LANG["instantiate"] = 'Невозможно обработать почтовую функцию.';
-$PHPMAILER_LANG["authenticate"] = 'Ошибка SMTP: Аутентификация невозможна.';
-$PHPMAILER_LANG["from_failed"] = 'Ошибка в следующем адресе: ';
-$PHPMAILER_LANG["recipients_failed"] = 'Ошибка SMTP: Не удается отправка ' .
-                                       'следующим получателям: ';
-$PHPMAILER_LANG["data_not_accepted"] = 'Ошибка SMTP: Данные не приняты.';
-$PHPMAILER_LANG["connect_host"] = 'Ошибка SMTP: Невозможно связаться с SMTP host1111111111=======>.';
-$PHPMAILER_LANG["file_access"] = 'Доступ к файлу невозможен: ';
-$PHPMAILER_LANG["file_open"] = 'Ошибка Файла: Невозможно открыть файл: ';
-$PHPMAILER_LANG["encoding"] = 'Неизвестная кодировка: ';
+$PHPMAILER_LANG['provide_address']      = 'Пожалуйста, введите хотя бы один адрес e-mail получателя.';
+$PHPMAILER_LANG['mailer_not_supported'] = ' - почтовый сервер не поддерживается.';
+$PHPMAILER_LANG['execute']              = 'Невозможно выполнить команду: ';
+$PHPMAILER_LANG['instantiate']          = 'Невозможно запустить функцию mail.';
+$PHPMAILER_LANG['authenticate']         = 'Ошибка SMTP: ошибка авторизации.';
+$PHPMAILER_LANG['from_failed']          = 'Неверный адрес отправителя: ';
+$PHPMAILER_LANG['recipients_failed']    = 'Ошибка SMTP: отправка по следующим ' .
+                                          'адресам получателей не удалась: ';
+$PHPMAILER_LANG['data_not_accepted']    = 'Ошибка SMTP: данные не приняты.';
+$PHPMAILER_LANG['connect_host']         = 'Ошибка SMTP: не удается подключиться к серверу SMTP.';
+$PHPMAILER_LANG['file_access']          = 'Нет доступа к файлу: ';
+$PHPMAILER_LANG['file_open']            = 'Файловая ошибка: не удается открыть файл: ';
+$PHPMAILER_LANG['encoding']             = 'Неизвестный вид кодировки: ';
+$PHPMAILER_LANG['signing']              = 'Ошибка подписи: ';
+$PHPMAILER_LANG['smtp_error']           = 'Ошибка сервера SMTP: ';
 ?>

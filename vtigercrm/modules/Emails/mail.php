@@ -64,7 +64,10 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,trim($to_email,","),$attachment,$emailid,$module,$logo);
 	setCCAddress($mail,'cc',$cc);
 	setCCAddress($mail,'bcc',$bcc);
-	$mail->AddReplyTo($replyToEmail);
+        // SalesPlatform.ru begin
+        // Duplicated AddReplyTo() call. First into the setMailerProperties()
+	//$mail->AddReplyTo($replyToEmail);
+        // SalesPlatform.ru end
 	
 	// vtmailscanner customization: If Support Reply to is defined use it.
 	global $HELPDESK_SUPPORT_EMAIL_REPLY_ID;

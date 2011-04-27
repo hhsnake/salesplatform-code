@@ -84,7 +84,10 @@ function load_webmail(mid,hasAttachment) {
 	else
 		$("qualify_button").appendChild(Builder.node('input',{type: 'hidden',name: 'hide'}));
         $("download_attach_button").removeChild($("download_attach_button").firstChild);
-        $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
+        // SalesPlatform.ru begin
+        $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: alert_arr.LBL_DOWNLOAD_ATTACHMENTS, className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
+        //$("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
+        // SalesPlatform.ru end
 
 	makeSelected(node.id)
 }
