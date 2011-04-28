@@ -129,15 +129,20 @@ class SalesPlatform_PDF_ProductListDocumentPDFController {
 			$listPrice	= $productLineItem["listPrice{$productLineItemIndex}"];
 			$discount	= $productLineItem["discountTotal{$productLineItemIndex}"];
 			$taxable_total = $quantity * $listPrice - $discount;
+			if($discount > 0 && $quantity > 0) {
+			    $priceWithDiscount = $listPrice - $discount / $quantity;
+			} else {
+			    $priceWithDiscount = $listPrice;
+			}
 			$producttotal = $taxable_total;
-			$priceWithTax = $listPrice;
+			$priceWithTax = $priceWithDiscount;
 			if($this->focus->column_fields["hdnTaxType"] == "individual") {
 				for($tax_count=0;$tax_count<count($productLineItem['taxes']);$tax_count++) {
 					$tax_percent = $productLineItem['taxes'][$tax_count]['percentage'];
 					$total_tax_percent += $tax_percent;
 					$tax_amount = (($taxable_total*$tax_percent)/100);
 					$producttotal_taxes += $tax_amount;
-					$priceWithTax += (($listPrice * $tax_percent)/100);
+					$priceWithTax += (($priceWithDiscount * $tax_percent)/100);
 				}
 			}
 
@@ -159,7 +164,7 @@ class SalesPlatform_PDF_ProductListDocumentPDFController {
 			$contentModel->set('productQuantity', $this->formatNumber($quantity, 3));
 			$contentModel->set('productQuantityInt', $this->formatNumber($quantity, 0));
 			$contentModel->set('productUnits', getTranslatedString($usageunit, 'Products'));
-			$contentModel->set('productPrice',     $this->formatPrice($listPrice));
+			$contentModel->set('productPrice',     $this->formatPrice($priceWithDiscount));
 			$contentModel->set('productPriceWithTax', $this->formatPrice($priceWithTax));
 			$contentModel->set('productDiscount',  $this->formatPrice($discount)."\n ($discountPercentage%)");
 			$contentModel->set('productNetTotal',  $this->formatPrice($taxable_total));
