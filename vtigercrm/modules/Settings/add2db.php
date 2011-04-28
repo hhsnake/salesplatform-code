@@ -101,6 +101,13 @@ require_once('include/utils/utils.php');
 		$organization_inn=from_html($_REQUEST['organization_inn']);
 		$organization_kpp=from_html($_REQUEST['organization_kpp']);
 		$organization_bankaccount=from_html($_REQUEST['organization_bankaccount']);
+		$organization_bankname=from_html($_REQUEST['organization_bankname']);
+		$organization_bankid=from_html($_REQUEST['organization_bankid']);
+		$organization_corraccount=from_html($_REQUEST['organization_corraccount']);
+		$organization_director=from_html($_REQUEST['organization_director']);
+		$organization_bookkeeper=from_html($_REQUEST['organization_bookkeeper']);
+		$organization_entrepreneur=from_html($_REQUEST['organization_entrepreneur']);
+		$organization_entrepreneurreg=from_html($_REQUEST['organization_entrepreneurreg']);
 // SkyAdmin end
 		$organization_logo=from_html($_REQUEST['organization_logo']);
 
@@ -118,10 +125,11 @@ require_once('include/utils/utils.php');
 		{
 // SkyAdmin begin
 			$sql="INSERT INTO vtiger_organizationdetails
-				(organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, logoname) values (?,?,?,?,?,?,?,?,?,?,?)";
+				(organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, bankname, bankid, corraccount, director, bookkeeper, entrepreneur, entrepreneurreg, logoname) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
 							$organization_country, $organization_phone, $organization_fax, $organization_website, 
 							$organization_inn, $organization_kpp, $organization_bankaccount,
+							$organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg,
 							$organization_logoname);
 			//$sql="INSERT INTO vtiger_organizationdetails
 			//	(organizationname, address, city, state, code, country, phone, fax, website, logoname) values (?,?,?,?,?,?,?,?,?,?)";
@@ -153,11 +161,14 @@ require_once('include/utils/utils.php');
 // SkyAdmin begin
 			$sql = "UPDATE vtiger_organizationdetails
 				SET organizationname = ?, address = ?, city = ?, state = ?, code = ?, country = ?, 
-				phone = ?, fax = ?, website = ?, inn = ?, kpp = ?, bankaccount = ?, logoname = ? WHERE organizationname = ?";
+				phone = ?, fax = ?, website = ?, inn = ?, kpp = ?, bankaccount = ?, 
+				bankname = ?, bankid = ?, corraccount = ?, director = ?, bookkeeper = ?, entrepreneur = ?, entrepreneurreg = ?,
+				logoname = ? WHERE organizationname = ?";
 			$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
 					$organization_country, $organization_phone, $organization_fax, 
 					$organization_website, 
 					$organization_inn, $organization_kpp, $organization_bankaccount,
+					$organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg,
 					decode_html($organization_logoname), $org_name);
 			//$sql = "UPDATE vtiger_organizationdetails
 			//	SET organizationname = ?, address = ?, city = ?, state = ?, code = ?, country = ?, 

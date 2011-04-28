@@ -175,6 +175,9 @@
 	{if $MODULE eq 'SalesOrder'}
         	<input type="hidden" name="convertmode">
 	{/if}
+{* SalesPlatform.ru begin  *}
+        <input type="hidden" name="pdf_template">
+{* SalesPlatform.ru end  *}
 {elseif $MODULE eq 'Calendar'}
 	<input type="hidden" name="module" value="Calendar">
         <input type="hidden" name="record" value="{$ID}">

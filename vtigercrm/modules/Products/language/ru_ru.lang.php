@@ -189,6 +189,11 @@ $mod_strings = array (
 //Добавлено для 5.2.0
 	'Parent Product' => 'Главный Товар',
 
+// SalesPlatform.ru begin
+	'Manuf. Country' => 'Страна происхождения',
+	'Customs ID' => 'Номер ГТД',
+// SalesPlatform.ru end
+
 );
 
 ?>

@@ -199,6 +199,12 @@ $mod_strings = array (
       'Fax: ' => 'Факс: ',
       'Website: ' => 'Веб-сайт: ',
       'SalesOrder #' => 'Заказ №',
+      
+      'Facture Invoice' => 'Счет-фактура',
+      'Factura No' => '№ счет-фактуры',
+      'Factura Date' => 'Дата счет-фактуры',
+      'Payment No' => '№ платежного документа',
+      'Payment Date' => 'Дата платежного документа'
 
 // SkyAdmin end
       

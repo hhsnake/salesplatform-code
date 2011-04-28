@@ -8,9 +8,16 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-include_once 'modules/Invoice/InvoicePDFController.php';
+// SkyAdmin begin
+include_once 'modules/Invoice/SPInvoicePDFController.php';
+//include_once 'modules/Invoice/InvoicePDFController.php';
+// SkyAdmin end
+global $currentModule;
 
-$controller = new Vtiger_InvoicePDFController($currentModule);
+// SkyAdmin begin
+$controller = new SalesPlatform_InvoicePDFController($currentModule, $_REQUEST['pdf_template']);
+//$controller = new Vtiger_InvoicePDFController($currentModule);
+// SkyAdmin end
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 
 $filenameid = $_REQUEST['record'];

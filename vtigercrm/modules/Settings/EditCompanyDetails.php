@@ -57,6 +57,13 @@ $organization_website = $adb->query_result($result,0,'website');
 $organization_inn = $adb->query_result($result,0,'inn');
 $organization_kpp = $adb->query_result($result,0,'kpp');
 $organization_bankaccount = $adb->query_result($result,0,'bankaccount');
+$organization_bankname = $adb->query_result($result,0,'bankname');
+$organization_bankid = $adb->query_result($result,0,'bankid');
+$organization_corraccount = $adb->query_result($result,0,'corraccount');
+$organization_director = $adb->query_result($result,0,'director');
+$organization_bookkeeper = $adb->query_result($result,0,'bookkeeper');
+$organization_entrepreneur = $adb->query_result($result,0,'entrepreneur');
+$organization_entrepreneurreg = $adb->query_result($result,0,'entrepreneurreg');
 // SkyAdmin end
 $organization_logoname = $adb->query_result($result,0,'logoname');
 
@@ -87,6 +94,20 @@ if (isset($organization_kpp))
 	$smarty->assign("ORGANIZATIONKPP",$organization_kpp);
 if (isset($organization_bankaccount))
 	$smarty->assign("ORGANIZATIONBANKACCOUNT",$organization_bankaccount);
+if (isset($organization_bankname))
+	$smarty->assign("ORGANIZATIONBANKNAME",$organization_bankname);
+if (isset($organization_bankid))
+	$smarty->assign("ORGANIZATIONBANKID",$organization_bankid);
+if (isset($organization_corraccount))
+	$smarty->assign("ORGANIZATIONCORRACCOUNT",$organization_corraccount);
+if (isset($organization_director))
+	$smarty->assign("ORGANIZATIONDIRECTOR",$organization_director);
+if (isset($organization_bookkeeper))
+	$smarty->assign("ORGANIZATIONBOOKKEEPER",$organization_bookkeeper);
+if (isset($organization_entrepreneur))
+	$smarty->assign("ORGANIZATIONENTREPRENEUR",$organization_entrepreneur);
+if (isset($organization_entrepreneurreg))
+	$smarty->assign("ORGANIZATIONENTREPRENEURREG",$organization_entrepreneurreg);
 // SkyAdmin end
 
 if ($organization_logoname == '') 

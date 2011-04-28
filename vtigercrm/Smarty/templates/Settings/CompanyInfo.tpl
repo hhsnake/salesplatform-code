@@ -104,6 +104,34 @@
                             <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_BANKACCOUNT}</strong></td>
                             <td class="small cellText">{$ORGANIZATIONBANKACCOUNT}</td>
                           </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_BANKNAME}</strong></td>
+                            <td class="small cellText">{$ORGANIZATIONBANKNAME}</td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_BANKID}</strong></td>
+                            <td class="small cellText">{$ORGANIZATIONBANKID}</td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_CORRACCOUNT}</strong></td>
+                            <td class="small cellText">{$ORGANIZATIONCORRACCOUNT}</td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_DIRECTOR}</strong></td>
+                            <td class="small cellText">{$ORGANIZATIONDIRECTOR}</td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_BOOKKEEPER}</strong></td>
+                            <td class="small cellText">{$ORGANIZATIONBOOKKEEPER}</td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_ENTREPRENEUR}</strong></td>
+                            <td class="small cellText">{$ORGANIZATIONENTREPRENEUR}</td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_ENTREPRENEURREG}</strong></td>
+                            <td class="small cellText">{$ORGANIZATIONENTREPRENEURREG}</td>
+                          </tr>
 <!-- SkyAdmin end -->
                         </table>
 						

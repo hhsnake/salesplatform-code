@@ -1529,7 +1529,27 @@ function getAssociatedProducts($module,$focus,$seid='')
 	
 	if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice')
 	{
+// SalesPlatform.ru begin
 		$query="SELECT 
+					case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname,
+ 		            case when vtiger_products.productid != '' then vtiger_products.productcode else vtiger_service.service_no end as productcode, 
+					case when vtiger_products.productid != '' then vtiger_products.usageunit else vtiger_service.service_usageunit end as usageunit,									
+					case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price,									
+					case when vtiger_products.productid != '' then vtiger_products.manuf_country else '--' end as manuf_country,									
+					case when vtiger_products.productid != '' then vtiger_products.customs_id else '--' end as customs_id,									
+ 		            case when vtiger_products.productid != '' then vtiger_products.qtyinstock else 'NA' end as qtyinstock,
+ 		            case when vtiger_products.productid != '' then 'Products' else 'Services' end as entitytype,
+ 		                        vtiger_inventoryproductrel.listprice, 
+ 		                        vtiger_inventoryproductrel.description AS product_description, 
+ 		                        vtiger_inventoryproductrel.* 
+ 	                            FROM vtiger_inventoryproductrel 
+ 		                        LEFT JOIN vtiger_products 
+ 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+ 		                        LEFT JOIN vtiger_service 
+ 		                                ON vtiger_service.serviceid=vtiger_inventoryproductrel.productid 
+ 		                        WHERE id=?
+ 		                        ORDER BY sequence_no"; 
+/*		$query="SELECT 
 					case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname,
  		            case when vtiger_products.productid != '' then vtiger_products.productcode else vtiger_service.service_no end as productcode, 
 					case when vtiger_products.productid != '' then vtiger_products.usageunit else vtiger_service.service_usageunit end as usageunit,									
@@ -1545,7 +1565,8 @@ function getAssociatedProducts($module,$focus,$seid='')
  		                        LEFT JOIN vtiger_service 
  		                                ON vtiger_service.serviceid=vtiger_inventoryproductrel.productid 
  		                        WHERE id=?
- 		                        ORDER BY sequence_no"; 
+ 		                        ORDER BY sequence_no"; */
+// SalesPlatform.ru end
 			$params = array($focus->id);
 	}
 	elseif($module == 'Potentials')
@@ -1614,6 +1635,15 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$unitprice=$adb->query_result($result,$i-1,'unit_price');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 		$entitytype=$adb->query_result($result,$i-1,'entitytype');
+		
+// SalesPlatform.ru begin
+		if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice') {
+		    $manuf_country=$adb->query_result($result,$i-1,'manuf_country');
+		    $customs_id=$adb->query_result($result,$i-1,'customs_id');
+		}
+// SalesPlatform.ru end
+
+		
 		//crm-now: fix
 		$usageunit=$adb->query_result($result,$i-1,'usageunit');
 		if (!empty($entitytype)) {
@@ -1667,7 +1697,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		if($module == 'Potentials' || $module == 'Products' || $module == 'Services') {
 			$product_Detail[$i]['comment'.$i]= $productdescription;
 		}else {
-            $product_Detail[$i]['comment'.$i]= $comment;
+        	    $product_Detail[$i]['comment'.$i]= $comment;
 		}
 
 		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
@@ -1714,6 +1744,13 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$totalAfterDiscount = $productTotal-$discountTotal;
 		$product_Detail[$i]['discountTotal'.$i] = $discountTotal;
 		$product_Detail[$i]['totalAfterDiscount'.$i] = $totalAfterDiscount;
+
+// SalesPlatform.ru begin
+		if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice') {
+		    $product_Detail[$i]['manufCountry'.$i] = $manuf_country;
+		    $product_Detail[$i]['customsId'.$i] = $customs_id;
+		}
+// SalesPlatform.ru end
 
 		$taxTotal = '0.00';
 		$product_Detail[$i]['taxTotal'.$i] = $taxTotal;

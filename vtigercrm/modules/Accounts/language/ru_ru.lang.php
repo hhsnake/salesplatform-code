@@ -199,6 +199,10 @@ $mod_strings = array (
 	'Projects' => 'Проекты',
 	'Service Contracts' => 'Сервисные Контракты',
 	 
+// SalesPlatform.ru begin
+	'INN' => 'ИНН',
+	'KPP' => 'КПП',
+// SalesPlatform.ru end
 );
 
 ?>

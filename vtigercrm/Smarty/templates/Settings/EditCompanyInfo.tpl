@@ -122,6 +122,34 @@
                             <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_BANKACCOUNT}</strong></td>
                             <td class="small cellText"><input type="text" name="organization_bankaccount" class="detailedViewTextBox small" value="{$ORGANIZATIONBANKACCOUNT}"></td>
                           </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_BANKNAME}</strong></td>
+                            <td class="small cellText"><input type="text" name="organization_bankname" class="detailedViewTextBox small" value="{$ORGANIZATIONBANKNAME}"></td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_BANKID}</strong></td>
+                            <td class="small cellText"><input type="text" name="organization_bankid" class="detailedViewTextBox small" value="{$ORGANIZATIONBANKID}"></td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_CORRACCOUNT}</strong></td>
+                            <td class="small cellText"><input type="text" name="organization_corraccount" class="detailedViewTextBox small" value="{$ORGANIZATIONCORRACCOUNT}"></td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_DIRECTOR}</strong></td>
+                            <td class="small cellText"><input type="text" name="organization_director" class="detailedViewTextBox small" value="{$ORGANIZATIONDIRECTOR}"></td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_BOOKKEEPER}</strong></td>
+                            <td class="small cellText"><input type="text" name="organization_bookkeeper" class="detailedViewTextBox small" value="{$ORGANIZATIONBOOKKEEPER}"></td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_ENTREPRENEUR}</strong></td>
+                            <td class="small cellText"><input type="text" name="organization_entrepreneur" class="detailedViewTextBox small" value="{$ORGANIZATIONENTREPRENEUR}"></td>
+                          </tr>
+                          <tr>
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_ENTREPRENEURREG}</strong></td>
+                            <td class="small cellText"><input type="text" name="organization_entrepreneurreg" class="detailedViewTextBox small" value="{$ORGANIZATIONENTREPRENEURREG}"></td>
+                          </tr>
 <!-- SkyAdmin end -->
                         </table>
 						

@@ -8,9 +8,17 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-include_once 'modules/SalesOrder/SalesOrderPDFController.php';
+// SkyAdmin begin
+include_once 'modules/SalesOrder/SPSalesOrderPDFController.php';
+//include_once 'modules/SalesOrder/SalesOrderPDFController.php';
+global $currentModule;
+// SkyAdmin end
 
-$controller = new Vtiger_SalesOrderPDFController($currentModule);
+// SkyAdmin begin
+$controller = new SalesPlatform_SalesOrderPDFController($currentModule, $_REQUEST['pdf_template']);
+//$controller = new Vtiger_SalesOrderPDFController($currentModule);
+// SkyAdmin end
+
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 
 $filenameid = $_REQUEST['record'];

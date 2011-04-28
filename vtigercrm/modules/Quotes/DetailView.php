@@ -146,6 +146,22 @@ $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModul
 
 $smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
 
+// SkyAdmin begin
+
+global $adb;
+
+$templates_html = '';
+$templates_result = $adb->pquery("select * from sp_templates where module='$currentModule'", array());
+if($templates_result) {
+    while($templates_row = $adb->fetch_array($templates_result)) {
+	$templates_html .= '<option value="' . $templates_row['templateid'] . '">' . $templates_row['name'] . "</option>\n";
+    }
+}
+
+$smarty->assign('PDF_TEMPLATES_LIST', $templates_html);
+
+// SkyAdmin end
+
 $smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>

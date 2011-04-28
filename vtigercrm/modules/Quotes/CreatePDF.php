@@ -8,9 +8,17 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-include_once 'modules/Quotes/QuotePDFController.php';
+// SkyAdmin begin
+include_once 'modules/Quotes/SPQuotePDFController.php';
+//include_once 'modules/Quotes/QuotePDFController.php';
+global $currentModule;
+// SkyAdmin end
 
-$controller = new Vtiger_QuotePDFController($currentModule);
+// SkyAdmin begin
+$controller = new SalesPlatform_QuotePDFController($currentModule, $_REQUEST['pdf_template']);
+//$controller = new Vtiger_QuotePDFController($currentModule);
+// SkyAdmin end
+
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 
 if(isset($_REQUEST['savemode']) && $_REQUEST['savemode'] == 'file') {

@@ -293,7 +293,14 @@ $mod_strings = array (
 // SkyAdmin begin
       'LBL_ORGANIZATION_INN'=>'ИНН',
       'LBL_ORGANIZATION_KPP'=>'КПП',
-      'LBL_ORGANIZATION_BANKACCOUNT'=>'Реквизиты',
+      'LBL_ORGANIZATION_BANKACCOUNT'=>'Расч. счет',
+      'LBL_ORGANIZATION_BANKNAME'=>'Банк',
+      'LBL_ORGANIZATION_BANKID'=>'БИК',
+      'LBL_ORGANIZATION_CORRACCOUNT'=>'Корр. счет',
+      'LBL_ORGANIZATION_DIRECTOR'=>'Руководитель',
+      'LBL_ORGANIZATION_BOOKKEEPER'=>'Гл. бухгалтер',
+      'LBL_ORGANIZATION_ENTREPRENEUR'=>'Инд. предприниматель',
+      'LBL_ORGANIZATION_ENTREPRENEURREG'=>'Св-во о регистрации ИП',
 // SkyAdmin end
       'LBL_ORGANIZATION_DETAILS' => 'Информация Организации',
       'LBL_SPECIFY_COMPANY_DETAILS' => ' - Указать Информацию об Организации',

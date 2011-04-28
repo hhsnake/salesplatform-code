@@ -1875,7 +1875,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 
 		
 	       //Insert into vtiger_organizationdetails vtiger_table 
-	       $this->db->query("insert into vtiger_organizationdetails(organizationname,address,city,state,country,code,phone,fax,website,logoname,inn,kpp,bankaccount) values ('Демо-организация','ул. Большая Монетная, 13','Санкт-Петербург','','Россия','190000','+78125556622','+78125556623','www.example.com','vtiger-crm-logo.jpg','7897658534','783432324','Р/с 23853467893467893278 в банке Санкт-Петербург БИК 044092039')");
+	       $this->db->query("insert into vtiger_organizationdetails(organizationname,address,city,state,country,code,phone,fax,website,logoname,inn,kpp,bankaccount,bankname,bankid,corraccount,director,bookkeeper,entrepreneur,entrepreneurreg) values ('Демо-организация','ул. Большая Монетная, 13','Санкт-Петербург','','Россия','190000','+78125556622','+78125556623','www.example.com','vtiger-crm-logo.jpg','7897658534','783432324','23853467893467893278', 'Банк Санкт-Петербург', '044092039', '154141561565165','Иванов И.И.','Кузьмина Л.И.','','')");
 
 
 	$this->db->query("insert into vtiger_actionmapping values(0,'Save',0)");

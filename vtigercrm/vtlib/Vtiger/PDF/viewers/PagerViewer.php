@@ -25,16 +25,16 @@ class Vtiger_PDF_PagerViewer extends Vtiger_PDF_Viewer {
 	}
 	
 	function display($parent) {
-		$pdf = $parent->getPDF();
-		$headerFrame = $parent->getHeaderFrame();
+//		$pdf = $parent->getPDF();
+//		$headerFrame = $parent->getHeaderFrame();
 
-		$displayFormat = '-%s-';
-		if($this->model) {
-			$displayFormat = $this->model->get('format', $displayFormat);
-		}
-		$contentHeight = $pdf->GetStringHeight($displayFormat, $headerFrame->w/2.0);
-		$pdf->MultiCell($headerFrame->w/2.0, $contentHeight, sprintf($displayFormat, $pdf->getPage()), 0, 'L', 0, 1,
-			$headerFrame->x+$headerFrame->w/2.0, $headerFrame->y);
+//		$displayFormat = '-%s-';
+//		if($this->model) {
+//			$displayFormat = $this->model->get('format', $displayFormat);
+//		}
+//		$contentHeight = $pdf->GetStringHeight($displayFormat, $headerFrame->w/2.0);
+//		$pdf->MultiCell($headerFrame->w/2.0, $contentHeight, sprintf($displayFormat, $pdf->getPage()), 0, 'L', 0, 1,
+//			$headerFrame->x+$headerFrame->w/2.0, $headerFrame->y);
 	}
 }
 
