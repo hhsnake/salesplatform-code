@@ -4884,7 +4884,7 @@ function validateAlphaNumericInput($string){
     return true;
 }
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
 function validateAlphaNumericInputRus($string){
     preg_match('/^[\wА-Яа-я _\-]+$/', $string, $matches);
     if(count($matches) == 0) {
@@ -4892,7 +4892,7 @@ function validateAlphaNumericInputRus($string){
     }
     return true;
 }
-// SkyAdmin end
+// SalesPlatform.ru end
 
 function validateServerName($string){
     preg_match('/^[\w\-\.\\/:]+$/', $string, $matches);

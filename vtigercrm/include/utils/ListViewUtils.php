@@ -3081,7 +3081,7 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 	}
 	// END
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
     global $current_language;                                                                                                          
     if ($current_language == "ru_ru") {
 	$alphabet = array('А','Б','В','Г','Д','Е','Ж','З','И','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Э','Ю','Я');
@@ -3100,7 +3100,7 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 //    for($var='A',$i =1;$i<=26;$i++,$var++)
 	// Mike Crowe Mod --------------------------------------------------------added groupid to url
 		//$list .= '<td class="searchAlph" id="alpha_'.$i.'" align="center" onClick=\'alphabetic("'.$module.'","gname='.$groupid.'&query='.$query.'&search_field='.$fieldname.'&searchtype=BasicSearch&operator=s&type=alpbt&search_text='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'","alpha_'.$i.'")\'>'.$var.'</td>';
-// SkyAdmin end
+// SalesPlatform.ru end
 
 	$log->debug("Exiting AlphabeticalSearch method ...");
 	return $list;

@@ -109,6 +109,9 @@ $mod_strings = Array(
 'Sales Enity Module'=>'Sales Enity Module',
 'Related To'=>'Related To',
 'Assigned To'=>'Assigned To',
+// SalesPlatform.ru begin
+'Access Count'=>'Access Count',
+// SalesPlatform.ru end
 'Subject'=>'Subject',
 'Attachment'=>'Attachment',
 'Description'=>'Description',

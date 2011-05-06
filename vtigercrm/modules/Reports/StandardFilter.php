@@ -88,12 +88,16 @@ function getPrimaryStdFilterHTML($module,$selected="")
 	global $current_language;
 	$ogReport->oCustomView=new CustomView();
         $result = $ogReport->oCustomView->getStdCriteriaByModule($module);
-        $mod_strings = return_module_language($current_language,$module);
+// SalesPlatform.ru begin
+        //$mod_strings = return_module_language($current_language,$module);
+// SalesPlatform.ru end
 
 	if(isset($result))
 	{
 		foreach($result as $key=>$value)
 		{
+                        // SalesPlatform.ru begin
+                        /*
 			if(isset($mod_strings[$value]))
 			{
 				if($key == $selected)
@@ -113,6 +117,13 @@ function getPrimaryStdFilterHTML($module,$selected="")
 					$shtml .= "<option value=\"".$key."\">".getTranslatedString($module,$module)." - ".$value."</option>";
 				}
 			}
+                         */
+                        if ($key == $selected) {
+                                $shtml .= "<option selected value=\"".$key."\">".getTranslatedString($module,$module)." - ".getTranslatedString($value,$module)."</option>";
+                        } else {
+                                $shtml .= "<option value=\"".$key."\">".getTranslatedString($module,$module)." - ".getTranslatedString($value,$module)."</option>";
+                        }
+                        // SalesPlatform.ru end
 		}
 	}
 	
@@ -136,11 +147,15 @@ function getSecondaryStdFilterHTML($module,$selected="")
         	for($i=0;$i < count($secmodule) ;$i++)
         	{
 			$result = $ogReport->oCustomView->getStdCriteriaByModule($secmodule[$i]);
-			$mod_strings = return_module_language($current_language,$secmodule[$i]);
+                        // SalesPlatform.ru begin
+			//$mod_strings = return_module_language($current_language,$secmodule[$i]);
+                        // SalesPlatform.ru end
         		if(isset($result))
         		{
                 		foreach($result as $key=>$value)
                 		{
+                                        // SalesPlatform.ru begin
+                                        /*
                         		if(isset($mod_strings[$value]))
                                         {
 						if($key == $selected)
@@ -160,6 +175,13 @@ function getSecondaryStdFilterHTML($module,$selected="")
 							$shtml .= "<option value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".$value."</option>";
 						}
 					}
+                                         */
+                                        if($key == $selected) {
+                                                $shtml .= "<option selected value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".getTranslatedString($value,$secmodule[$i])."</option>";
+                                        } else {
+                                                $shtml .= "<option value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".getTranslatedString($value,$secmodule[$i])."</option>";
+                                        }
+                                        // SalesPlatform.ru end
                 		}
         		}
 		

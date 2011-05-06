@@ -416,6 +416,10 @@ $app_strings = array (
 'Analytics' => 'Analytics',
 'Inventory' => 'Inventory',
 'Tools' => 'Tools',
+// SalesPlatform.ru - begin
+'PrintingOptions' => 'Printing',
+// SalesPlatform.ru - end
+
 'Settings' => 'Settings',
 'LBL_INFORMATION' => 'Information',
 'LBL_MORE' => 'More',

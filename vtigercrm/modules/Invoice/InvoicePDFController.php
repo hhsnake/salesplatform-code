@@ -12,10 +12,10 @@ include_once 'include/InventoryPDFController.php';
 
 class Vtiger_InvoicePDFController extends Vtiger_InventoryPDFController{
 	function buildHeaderModelTitle() {
-// SkyAdmin begin
+// SalesPlatform.ru begin
 		return sprintf("%s: %s", getTranslatedString('Invoice #', $this->moduleName), $this->focusColumnValue('invoice_no'));
 		//return sprintf("%s: %s", rtrim($this->moduleName, 's'), $this->focusColumnValue('invoice_no'));
-// SkyAdmin end
+// SalesPlatform.ru end
 	}
 
 	function buildHeaderModelColumnCenter() {
@@ -56,10 +56,10 @@ class Vtiger_InvoicePDFController extends Vtiger_InventoryPDFController{
 	}
 
 	function getWatermarkContent() {
-// SkyAdmin begin
+// SalesPlatform.ru begin
 		return '';
 		//return $this->focusColumnValue('invoicestatus');
-// SkyAdmin end
+// SalesPlatform.ru end
 	}
 }
 ?>

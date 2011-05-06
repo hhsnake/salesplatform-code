@@ -54,7 +54,10 @@ $next = $dbCheckResult['flag'];
 $error_msg = $dbCheckResult['error_msg'];
 $error_msg_info = $dbCheckResult['error_msg_info'];
 $db_utf8_support = $dbCheckResult['db_utf8_support'];
-$vt_charset = ($db_utf8_support)? "UTF-8" : "ISO-8859-1";
+// SalesPlatform.ru begin
+$vt_charset = "UTF-8";
+//$vt_charset = ($db_utf8_support)? "UTF-8" : "ISO-8859-1";
+// SalesPlatform.ru end
 $_SESSION['config_file_info']['vt_charset']= $vt_charset;
 
 if($next == true) {

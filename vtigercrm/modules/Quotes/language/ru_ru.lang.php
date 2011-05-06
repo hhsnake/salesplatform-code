@@ -152,7 +152,8 @@ $mod_strings = array (
       'S&H Amount' => 'Общая Сумма',
       'Quote No' => 'Предложение №',
       
-// SkyAdmin begin
+// SalesPlatform.ru begin
+      'Conversion Rate' => 'Курс',
       'Valid Date' => 'Действительно до',
       'Issued Date' => 'Дата создания',
       'Quantity' => 'Кол-во',
@@ -165,8 +166,7 @@ $mod_strings = array (
       'Website: ' => 'Веб-сайт: ',
       'Quote' => 'Предложения',
       'Quote #' => 'Предложение №',
-
-// SkyAdmin end
+// SalesPlatform.ru end
 );
 
 ?>

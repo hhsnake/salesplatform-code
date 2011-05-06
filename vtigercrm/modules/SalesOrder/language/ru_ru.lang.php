@@ -178,7 +178,7 @@ $mod_strings = array (
       'End Period' => 'Конец',
       'Payment Duration' => 'Продолжительность Оплаты',
       'Invoice Status' => 'Статус Счета',
-// SkyAdmin begin
+// SalesPlatform.ru begin
       'Net 30 days'=>'В течение 30 дней',
       'Net 45 days'=>'В течение 45 дней',
       'Net 60 days'=>'В течение 60 дней',
@@ -204,9 +204,10 @@ $mod_strings = array (
       'Factura No' => '№ счет-фактуры',
       'Factura Date' => 'Дата счет-фактуры',
       'Payment No' => '№ платежного документа',
-      'Payment Date' => 'Дата платежного документа'
+      'Payment Date' => 'Дата платежного документа',
 
-// SkyAdmin end
+      'Conversion Rate' => 'Курс',
+// SalesPlatform.ru end
       
       );
 

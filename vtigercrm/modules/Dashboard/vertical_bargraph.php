@@ -25,8 +25,11 @@ include_once ('Image/Canvas.php');
  */
 function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_image_name)
 {
-
-	global $log,$root_directory,$lang_crm,$theme,$app_strings;
+    
+        // SalesPlatform.ru begin
+        global $default_charset;
+        // SalesPlatform.ru end
+        global $log,$root_directory,$lang_crm,$theme,$app_strings;
 //We'll be getting the values in the form of a string separated by commas
 	$datay=explode("::",$referdata); // The datay values  
 	$datax=explode("::",$refer_code); // The datax values  
@@ -44,7 +47,10 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 		else
 			$name=$datax[$i];
 		$pos = substr_count($name," ");
-		$alts[]=htmlentities($name)."=%d";
+                // SalesPlatform.ru begin
+		$alts[]=htmlentities($name, null, $default_charset);
+		//$alts[]=htmlentities($name)."=%d";
+                // SalesPlatform.ru end
 //If the datax value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
 		 if(utf8_strlen($name)>=15)
                         $name=utf8_substr($name, 0, 15);

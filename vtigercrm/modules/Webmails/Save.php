@@ -83,6 +83,18 @@ if(count($email->relationship) != 0) {
 	}else{
 		$contact_focus->column_fields['lastname'] =$email->from;
 	}
+        
+        // SalesPlatform.ru begin - added iconv to convert to UTF-8
+        $last_name = "";
+        $att_name_array = imap_mime_header_decode($contact_focus->column_fields['lastname']);
+        for ($i=0; $i<count($att_name_array); $i++) {
+                $last_name .= iconv($att_name_array[$i]->charset, 'UTF-8', $att_name_array[$i]->text);
+                if (!$last_name) {
+                    $last_name .= $att_name_array[$i]->text;
+                }
+        }
+        $contact_focus->column_fields['lastname'] = $last_name;
+        // SalesPlatform.ru end
 	
 	$contact_focus->column_fields['email'] = $email->from;
 	$contact_focus->column_fields["assigned_user_id"]=$current_user->id;

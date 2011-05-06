@@ -133,7 +133,7 @@ $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModul
 
 $smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
 
 global $adb;
 
@@ -147,7 +147,7 @@ if($templates_result) {
 
 $smarty->assign('PDF_TEMPLATES_LIST', $templates_html);
 
-// SkyAdmin end
+// SalesPlatform.ru end
 
 
 $smarty->display("Inventory/InventoryDetailView.tpl");

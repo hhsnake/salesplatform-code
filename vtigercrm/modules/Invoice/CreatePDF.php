@@ -8,16 +8,16 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-// SkyAdmin begin
+// SalesPlatform.ru begin
 include_once 'modules/Invoice/SPInvoicePDFController.php';
 //include_once 'modules/Invoice/InvoicePDFController.php';
-// SkyAdmin end
+// SalesPlatform.ru end
 global $currentModule;
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
 $controller = new SalesPlatform_InvoicePDFController($currentModule, $_REQUEST['pdf_template']);
 //$controller = new Vtiger_InvoicePDFController($currentModule);
-// SkyAdmin end
+// SalesPlatform.ru end
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 
 if(isset($_REQUEST['savemode']) && $_REQUEST['savemode'] == 'file') {

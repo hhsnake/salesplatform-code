@@ -82,7 +82,7 @@ function create_date()
 }
 
 //vtiger-ru-fork Eugene Babiy. Транслитерация с русского в латиницу
-//SkyAdmin - добавили заглавные буквы
+// SalesPlatform.ru - добавили заглавные буквы
 function translit( $s ) {
 	$r = array('а','б','в','г','д','е','ё','ж','з','и','й','к','л','м', 'н','о','п','р','с','т','у','ф','х','ц','ч', 'ш', 'щ', 'ъ','ы','ь','э', 'ю', 'я',
 		   'А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М', 'Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч', 'Ш', 'Щ', 'Ъ','Ы','Ь','Э', 'Ю', 'Я',' ');
@@ -221,7 +221,7 @@ for($i=0; $i<10; $i++)
 
 	$contact->column_fields["assigned_user_id"] = $assigned_user_id;
 	//TODO vtiger-ru-fork Eugene Babiy. Добавить транслит на имена.
-	// SkyAdmin - добавили
+	// SalesPlatform.ru - добавили
 	$contact->column_fields["email"] = strtolower(translit($contact->column_fields["firstname"]))."_".strtolower(translit($contact->column_fields["lastname"]))."@mail.ru";
 
 	$contact->column_fields["phone"] = create_phone_number();
@@ -298,7 +298,7 @@ for($i=0; $i<10; $i++)
 
 	$lead->column_fields["assigned_user_id"] = $assigned_user_id;
 	//TODO vtiger-ru-fork Eugene Babiy. добавлен транслит на имена.
-	// SkyAdmin - добавили
+	// SalesPlatform.ru - добавили
 	$lead->column_fields["email"] = strtolower(translit($lead->column_fields["firstname"]))."_".strtolower(translit($lead->column_fields["lastname"]))."@mail.ru";
 	
 	$website = str_replace($whitespace, "", strtolower(ucfirst(strtolower($company_name_array[$i]))));

@@ -11,10 +11,10 @@ include_once 'include/InventoryPDFController.php';
 include_once dirname(__FILE__). '/SalesOrderPDFHeaderViewer.php';
 class Vtiger_SalesOrderPDFController extends Vtiger_InventoryPDFController{
 	function buildHeaderModelTitle() {
-// SkyAdmin begin
+// SalesPlatform.ru begin
 		return sprintf("%s: %s", getTranslatedString('SalesOrder #', $this->moduleName), $this->focusColumnValue('salesorder_no'));
 		//return sprintf("%s: %s", rtrim($this->moduleName, 's'), $this->focusColumnValue('salesorder_no'));
-// SkyAdmin end
+// SalesPlatform.ru end
 	}
 
 	function getHeaderViewer() {
@@ -69,10 +69,10 @@ class Vtiger_SalesOrderPDFController extends Vtiger_InventoryPDFController{
 	}
 
 	function getWatermarkContent() {
-// SkyAdmin begin
+// SalesPlatform.ru begin
 		return '';
 		//return $this->focusColumnValue('sostatus');
-// SkyAdmin end
+// SalesPlatform.ru end
 	}
 }
 ?>

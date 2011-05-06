@@ -106,10 +106,10 @@ function getKeyMetrics($maxval,$calCnt)
 		foreach($metriclists as $metriclist)
 		{
 			$value=array();
-// SkyAdmin begin - adjust key metric name length for russian words
+// SalesPlatform.ru begin - adjust key metric name length for russian words
 			$CVname = (utf8_strlen($metriclist['name']) > 20) ? (utf8_substr($metriclist['name'],0,20).'...') : $metriclist['name'];
 			//$CVname = (strlen($metriclist['name']) > 20) ? (substr($metriclist['name'],0,20).'...') : $metriclist['name'];
-// SkyAdmin end
+// SalesPlatform.ru end
 			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$CVname . '</a> <font style="color:#6E6E6E;">('. $metriclist['user'] .')</font>';
 			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.getTranslatedString($metriclist['module']). '</a>';
 			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$metriclist['count'].'</a>';

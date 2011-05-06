@@ -167,6 +167,9 @@ $mod_strings = array (
       'Sub Total' => 'Итого',
       'S&H Amount' => 'Общая Сумма',
       'PurchaseOrder No' => 'Заказ на Закупку №',
+      // SalesPlatform.ru begin
+      'Conversion Rate' => 'Курс',
+      // SalesPlatform.ru end
 );
 
 ?>

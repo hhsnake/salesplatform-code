@@ -414,6 +414,9 @@ $app_strings = array (
       'Analytics' => 'Аналитика',
       'Inventory' => 'Склад',
       'Tools' => 'Инструменты',
+// SalesPlatform.ru - begin
+      'PrintingOptions' => 'Вывод на печать',
+// SalesPlatform.ru - end
       'Settings' => 'Настройки',
       'LBL_INFORMATION' => 'Информация',
       'LBL_MORE' => 'Дополнительная',

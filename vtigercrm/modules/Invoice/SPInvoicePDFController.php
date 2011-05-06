@@ -49,10 +49,10 @@ class SalesPlatform_InvoicePDFController extends SalesPlatform_PDF_ProductListDo
 	}
 
 	function getWatermarkContent() {
-// SkyAdmin begin
+// SalesPlatform.ru begin
 		return '';
 		//return $this->focusColumnValue('invoicestatus');
-// SkyAdmin end
+// SalesPlatform.ru end
 	}
 
     function russianDate($date){

@@ -56,6 +56,9 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (27,'Portal',0,24,'Portal',0,1,0)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (28,'Webmails',0,25,'Webmails',0,1,1)");
 		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values (29,'Users',0,26,'Users',0,1,0)");
+// SalesPlatform.ru begin
+                $this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values (30,'SPPDFTemplates',0,27,'PDF Templates',0,1,0)");
+// SalesPlatform.ru end
 		
 		// Populate the vtiger_blocks vtiger_table
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",2,'LBL_OPPORTUNITY_INFORMATION',1,0,0,0,0,0,1,0)");
@@ -136,6 +139,12 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_blocks values (".$podescription.",21,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0,1,0)");
 		$sobasicblock = $this->db->getUniqueID('vtiger_blocks');
 		$this->db->query("insert into vtiger_blocks values (".$sobasicblock .",22,'LBL_SO_INFORMATION',1,0,0,0,0,0,1,0)");
+
+// SalesPlatform.ru begin
+                $sofactura = $this->db->getUniqueID('vtiger_blocks');
+		$this->db->query("insert into vtiger_blocks values (".$sofactura.",22,'Facture Invoice',2,0,0,0,0,0,1,0)");
+// SalesPlatform.ru end
+
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_CUSTOM_INFORMATION',3,0,0,0,0,0,1,0)");
 		$soaddressblock = $this->db->getUniqueID('vtiger_blocks');
 		$this->db->query("insert into vtiger_blocks values (".$soaddressblock.",22,'LBL_ADDRESS_INFORMATION',4,0,0,0,0,0,1,0)");
@@ -144,7 +153,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_blocks values (".$sotermsblock.",22,'LBL_TERMS_INFORMATION',6,0,0,0,0,0,1,0)");
 		$sodescription = $this->db->getUniqueID('vtiger_blocks');
 		$this->db->query("insert into vtiger_blocks values (".$sodescription.",22,'LBL_DESCRIPTION_INFORMATION',7,0,0,0,0,0,1,0)");
-		$invoicebasicblock = $this->db->getUniqueID('vtiger_blocks');
+                $invoicebasicblock = $this->db->getUniqueID('vtiger_blocks');
 		$this->db->query("insert into vtiger_blocks values (".$invoicebasicblock.",23,'LBL_INVOICE_INFORMATION',1,0,0,0,0,0,1,0)");
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",23,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0,1,0)");
 		$invoiceaddressblock = $this->db->getUniqueID('vtiger_blocks');
@@ -213,6 +222,11 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,19,9,1,'V~M',0,4,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,22,9,2,'T~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,21,9,2,'T~O',3,null,'BAS',0)");
+
+// SalesPlatform.ru begin
+		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'inn', 'vtiger_account', 1, 1, 'inn', 'INN', 1, 2, 0, 30, 23, 9, 1, 'V~O', 3, NULL, 'BAS', 0)");
+		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'kpp', 'vtiger_account', 1, 1, 'kpp', 'KPP', 1, 2, 0, 30, 24, 9, 1, 'V~O', 3, NULL, 'BAS', 0)");
+// SalesPlatform.ru end
 
 		//Block 11
 		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_accountbillads',1,'21','bill_street','Billing Address',1,2,0,100,1,11,1,'V~O',1,null,'BAS',1)");
@@ -458,6 +472,10 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,19,31,2,'T~O',3,null,'BAS',0)");
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,21,31,2,'T~O',3,null,'BAS',0)");
 
+// SalesPlatform.ru begin
+ 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'manuf_country', 'vtiger_products', 1, 1, 'manuf_country', 'Manuf. Country', 1, 2, 0, 100, 22, 31, 1, 'V~O', 3, NULL, 'BAS', 0)");
+ 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'customs_id', 'vtiger_products', 1, 1, 'customs_id', 'Customs ID', 1, 2, 0, 100, 23, 31, 1, 'V~O', 3, NULL, 'BAS', 0)");
+// SalesPlatform.ru end
 
 		//Block32 Pricing Information
 
@@ -840,6 +858,14 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$sorecurringinvoiceblock,1,'D~O~OTH~G~start_period~Start Period',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,0,100,6,$sorecurringinvoiceblock,1,'V~M',3,null,'BAS',0)");
+
+// SalesPlatform.ru begin
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'factura_no', 'vtiger_salesorder', 1, 1, 'factura_no', 'Factura No', 1, 2, 0, 100, 1, $sofactura, 1, 'V~O', 3, NULL, 'BAS', 0)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'factura_date', 'vtiger_salesorder', 1, 5, 'factura_date', 'Factura Date', 1, 2, 0, 100, 2, $sofactura, 1, 'D~O', 3, NULL, 'BAS', 0)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_no', 'vtiger_salesorder', 1, 1, 'payment_no', 'Payment No', 1, 2, 0, 100, 3, $sofactura, 1, 'V~O', 3, NULL, 'BAS', 0)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_date', 'vtiger_salesorder', 1, 5, 'payment_date', 'Payment Date', 1, 2, 0, 100, 4, $sofactura, 1, 'D~O', 3, NULL, 'BAS', 0)");
+// SalesPlatform.ru end
+
 		
 		//Sales Order Details -- END
 		
@@ -1903,7 +1929,10 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_actionmapping values(10,'DuplicatesHandling',0)");
 
 	//Insert values for vtiger_moduleowners vtiger_table which contains the modules and their vtiger_users. default user id admin - after 4.2 patch 2
-	$module_array = Array('Potentials','Contacts','Accounts','Leads','Documents','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns');
+// SalesPlatform.ru begin
+        $module_array = Array('Potentials','Contacts','Accounts','Leads','Documents','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns','SPPDFTemplates');
+        //$module_array = Array('Potentials','Contacts','Accounts','Leads','Documents','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns');
+// SalesPlatform.ru end
 	foreach($module_array as $mod)
 	{
 		$this->db->query("insert into vtiger_moduleowners values(".getTabid($mod).",1)");
@@ -1947,6 +1976,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_parenttabrel values (7,24,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (7,27,2)");
 	$this->db->query("insert into vtiger_parenttabrel values (7,8,3)");
+// SalesPlatform.ru begin
+	$this->db->query("insert into vtiger_parenttabrel values (7,30,4)");
+// SalesPlatform.ru end
 	$this->db->query("insert into vtiger_parenttabrel values (2,26,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (2,6,2)");
 	$this->db->query("insert into vtiger_parenttabrel values (2,4,3)");
@@ -2016,9 +2048,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 		'Potentials'=>'СДЕЛКА_',
 		'HelpDesk'  =>'ЗАЯВКА_',
 		'Quotes'    =>'ПР_',
-		'SalesOrder'=>'ПРОД_',
+		'SalesOrder'=>'',
 		'PurchaseOrder'=>'ЗАК_',
-		'Invoice'   =>'СЧЕТ_',
+		'Invoice'   =>'',
 		'Products'  =>'ТОВ_',
 		'Vendors'   =>'ПОСТ_',
 		'PriceBooks'=>'КАТ_',

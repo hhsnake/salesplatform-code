@@ -290,7 +290,7 @@ $mod_strings = array (
       'LBL_ORGANIZATION_PHONE' => 'Тел.',
       'LBL_ORGANIZATION_FAX' => 'Факс',
       'LBL_ORGANIZATION_WEBSITE' => 'Вебсайт',
-// SkyAdmin begin
+// SalesPlatform.ru begin
       'LBL_ORGANIZATION_INN'=>'ИНН',
       'LBL_ORGANIZATION_KPP'=>'КПП',
       'LBL_ORGANIZATION_BANKACCOUNT'=>'Расч. счет',
@@ -301,7 +301,7 @@ $mod_strings = array (
       'LBL_ORGANIZATION_BOOKKEEPER'=>'Гл. бухгалтер',
       'LBL_ORGANIZATION_ENTREPRENEUR'=>'Инд. предприниматель',
       'LBL_ORGANIZATION_ENTREPRENEURREG'=>'Св-во о регистрации ИП',
-// SkyAdmin end
+// SalesPlatform.ru end
       'LBL_ORGANIZATION_DETAILS' => 'Информация Организации',
       'LBL_SPECIFY_COMPANY_DETAILS' => ' - Указать Информацию об Организации',
       'LBL_ORGANIZATION_LOGO' => 'Логотип Организации',

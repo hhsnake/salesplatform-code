@@ -76,6 +76,11 @@ $mod_strings = array (
       'LBL_TOOL_FORM_TITLE' => 'Инструменты Сделок',
       'Potential Name' => 'Название Сделки',
       'Amount' => 'Сумма',
+      // SalesPlatform.ru begin
+      'Amount (в руб)' => 'Сумма (в руб)',
+      'Conversion Rate' => 'Курс',
+      'S&H Amount' => 'Общая Сумма',
+      // SalesPlatform.ru end
       'Account Name' => 'Контрагент',
       'Currency' => 'Валюта',
       'Expected Close Date' => 'Ожидаемая Дата Закрытия',

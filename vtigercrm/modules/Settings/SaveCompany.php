@@ -20,7 +20,7 @@ $organization_country=$_REQUEST['organization_country'];
 $organization_phone=$_REQUEST['organization_phone'];
 $organization_fax=$_REQUEST['organization_fax'];
 $organization_website=$_REQUEST['organization_website'];
-// SkyAdmin begin
+// SalesPlatform.ru begin
 $organization_inn=$_REQUEST['organization_inn'];
 $organization_kpp=$_REQUEST['organization_kpp'];
 $organization_bankaccount=$_REQUEST['organization_bankaccount'];
@@ -31,7 +31,7 @@ $organization_director=$_REQUEST['organization_director'];
 $organization_bookkeeper=$_REQUEST['organization_bookkeeper'];
 $organization_entrepreneur=$_REQUEST['organization_entrepreneur'];
 $organization_entrepreneurreg=$_REQUEST['organization_entrepreneurreg'];
-// SkyAdmin end
+// SalesPlatform.ru end
 
 $sql="select * from vtiger_organizationdetails where organizationname = ?";
 $result = $adb->pquery($sql, array($org_name));
@@ -39,21 +39,21 @@ $org_name = $adb->query_result($result,0,'organizationname');
 
 if($org_name=='')
 {
-// SkyAdmin begin
+// SalesPlatform.ru begin
 	$sql="insert into vtiger_organizationdetails values(?,?,?,?,?,?,?,?,?,?,?,?)";
 	//$sql="insert into vtiger_organizationdetails values(?,?,?,?,?,?,?,?,?)";
 	$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $organization_inn, $organization_kpp, $organization_bankaccount, $organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg);
 	//$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website);
-// SkyAdmin end
+// SalesPlatform.ru end
 }
 else
 {
-// SkyAdmin begin
+// SalesPlatform.ru begin
 	$sql="update vtiger_organizationdetails set organizationname = ?, address = ?, city = ?, state = ?,  code = ?, country = ?,  phone = ?,  fax = ?,  website = ?, inn = ?, kpp = ?, bankaccount = ?, bankname = ?, bankid = ?, corraccount = ?, director = ?, bookkeeper = ?, entrepreneur = ?, entrepreneurreg = ? where organizationname = ?";
 	$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $organization_inn, $organization_kpp, $organization_bankaccount, $organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg, $org_name);
 	//$sql="update vtiger_organizationdetails set organizationname = ?, address = ?, city = ?, state = ?,  code = ?, country = ?,  phone = ?,  fax = ?,  website = ? where organizationname = ?";
 	//$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $org_name);
-// SkyAdmin end
+// SalesPlatform.ru end
 }	
 $adb->pquery($sql, $params);
 

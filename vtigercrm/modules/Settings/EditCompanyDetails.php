@@ -53,7 +53,7 @@ $organization_country = $adb->query_result($result,0,'country');
 $organization_phone = $adb->query_result($result,0,'phone');
 $organization_fax = $adb->query_result($result,0,'fax');
 $organization_website = $adb->query_result($result,0,'website');
-// SkyAdmin begin
+// SalesPlatform.ru begin
 $organization_inn = $adb->query_result($result,0,'inn');
 $organization_kpp = $adb->query_result($result,0,'kpp');
 $organization_bankaccount = $adb->query_result($result,0,'bankaccount');
@@ -64,7 +64,7 @@ $organization_director = $adb->query_result($result,0,'director');
 $organization_bookkeeper = $adb->query_result($result,0,'bookkeeper');
 $organization_entrepreneur = $adb->query_result($result,0,'entrepreneur');
 $organization_entrepreneurreg = $adb->query_result($result,0,'entrepreneurreg');
-// SkyAdmin end
+// SalesPlatform.ru end
 $organization_logoname = $adb->query_result($result,0,'logoname');
 
 
@@ -87,7 +87,7 @@ if (isset($organization_fax))
 if (isset($organization_website))
 	$smarty->assign("ORGANIZATIONWEBSITE",$organization_website);
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
 if (isset($organization_inn))
 	$smarty->assign("ORGANIZATIONINN",$organization_inn);
 if (isset($organization_kpp))
@@ -108,7 +108,7 @@ if (isset($organization_entrepreneur))
 	$smarty->assign("ORGANIZATIONENTREPRENEUR",$organization_entrepreneur);
 if (isset($organization_entrepreneurreg))
 	$smarty->assign("ORGANIZATIONENTREPRENEURREG",$organization_entrepreneurreg);
-// SkyAdmin end
+// SalesPlatform.ru end
 
 if ($organization_logoname == '') 
 	$organization_logoname = vtlib_purify($_REQUEST['prev_name']);

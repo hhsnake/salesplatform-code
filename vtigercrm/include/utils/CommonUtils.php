@@ -2630,7 +2630,6 @@ function getTemplateDetails($templateid)
  *  @param string $parent_type - module of the entity
  * 	return string $description - Returns description, merged with the input template.
 */
-									
 function getMergedDescription($description,$id,$parent_type)
 {
 	global $adb,$log;
@@ -2655,6 +2654,7 @@ function getMergedDescription($description,$id,$parent_type)
     $log->debug("Exiting from getMergedDescription ...");
 	return $description;
 }
+            										
 
 /* Function to merge the custom date & time fields in email templates */
 function getMergedDescriptionCustomVars($fields, $description) {

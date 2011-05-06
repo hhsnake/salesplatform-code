@@ -245,11 +245,11 @@ class Vtiger_InventoryPDFController {
 			$org_phone = $adb->query_result($result,0,"phone");
 			$org_fax = $adb->query_result($result,0,"fax");
 			$org_website = $adb->query_result($result,0,"website");
-// SkyAdmin begin			
+// SalesPlatform.ru begin
 			$org_inn = $adb->query_result($result,0,"inn");
 			$org_kpp = $adb->query_result($result,0,"kpp");
 			$org_bankaccount = $adb->query_result($result,0,"bankaccount");
-// SkyAdmin end
+// SalesPlatform.ru end
 
 			$addressValues = array();
 			$addressValues[] = $resultrow['address'];
@@ -261,11 +261,11 @@ class Vtiger_InventoryPDFController {
 			if(!empty($resultrow['phone']))		$additionalCompanyInfo[]= "\n".getTranslatedString("Phone: ", $this->moduleName). $resultrow['phone'];
 			if(!empty($resultrow['fax']))		$additionalCompanyInfo[]= "\n".getTranslatedString("Fax: ", $this->moduleName). $resultrow['fax'];
 			if(!empty($resultrow['website']))	$additionalCompanyInfo[]= "\n".getTranslatedString("Website: ", $this->moduleName). $resultrow['website'];
-// SkyAdmin begin			
+// SalesPlatform.ru begin
 			if(!empty($resultrow['inn']))	$additionalCompanyInfo[]= "\n".getTranslatedString("ИНН: ", $this->moduleName). $resultrow['inn'];
 			if(!empty($resultrow['kpp']))	$additionalCompanyInfo[]= "\n".getTranslatedString("КПП: ", $this->moduleName). $resultrow['kpp'];
 			if(!empty($resultrow['bankaccount']))	$additionalCompanyInfo[]= "\n". $resultrow['bankaccount'];
-// SkyAdmin end			
+// SalesPlatform.ru end
 
 			$modelColumnLeft = array(
 				'logo' => "test/logo/".$resultrow['logoname'],

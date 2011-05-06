@@ -245,11 +245,17 @@
 
 
 <!-- Following condition is added to avoid the Tools section in Products and Vendors because we are not providing the Print and Email Now links throughout all the modules. when we provide these links we will remove this if condition -->
-{if $MODULE neq 'Products' && $MODULE neq 'Services' && $MODULE neq 'Vendors'}
+{* SalesPlatform.ru begin  *}
+{if $MODULE neq 'Products' && $MODULE neq 'Services' && $MODULE neq 'Vendors' && $MODULE neq 'PurchaseOrder'}
+{* {if $MODULE neq 'Products' && $MODULE neq 'Services' && $MODULE neq 'Vendors'} *}
+{* SalesPlatform.ru end *}
 
    <tr>
 	<td align="left">
-		<span class="genHeaderSmall">{$APP.Tools}</span><br /> 
+{* SalesPlatform.ru begin  *}
+		<span class="genHeaderSmall">{$APP.PrintingOptions}</span><br /> 
+{*		<span class="genHeaderSmall">{$APP.Tools}</span><br /> *}
+{* SalesPlatform.ru end  *}
 	</td>
    </tr>
 
@@ -257,7 +263,10 @@
 
 
 <!-- To display the Export To PDF link for PO, SO, Quotes and Invoice - starts -->
-{if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
+{* SalesPlatform.ru begin  *}
+{if $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
+{* {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'} *}
+{* SalesPlatform.ru end  *}
 
 	{if $MODULE eq 'SalesOrder'}
 		{assign var=export_pdf_action value="CreateSOPDF"}
@@ -269,7 +278,7 @@
    <tr>
 	<td align="left" style="padding-left:10px;">
 	<form action="" name="PrintSettings" id="form">
-	    Форма: <select name="pdf_templates">
+	    Форма: <select name="pdf_templates" class="small">
 		{$PDF_TEMPLATES_LIST}
     	    </select>
     	</form>
@@ -288,7 +297,10 @@
 	</td>
    </tr>
 
-{if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
+{* SalesPlatform.ru begin  *}
+{if $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
+{* {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'} *}
+{* SalesPlatform.ru end  *}
 <!-- Added to give link to  send Invoice PDF through mail -->
  <tr>
 	<td align="left" style="padding-left:10px;">
@@ -331,12 +343,12 @@
 
 {literal}
 <script type='text/javascript'>
-// SkyAdmin begin
+// SalesPlatform.ru begin
 function generatepdf_send(uri)
 {
     document.location.href = uri + "&pdf_template=" + document.PrintSettings.pdf_templates.value;
 }
-// SkyAdmin end
+// SalesPlatform.ru end
 function sendpdf_submit()
 {
 	// Submit the form to get the attachment ready for submission

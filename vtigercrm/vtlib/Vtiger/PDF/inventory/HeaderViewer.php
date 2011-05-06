@@ -74,12 +74,12 @@ class Vtiger_PDF_InventoryHeaderViewer extends Vtiger_PDF_HeaderViewer {
 			$contentWidth = $pdf->GetStringWidth($this->model->get('title'));
 			$contentHeight = $pdf->GetStringHeight($this->model->get('title'), $contentWidth);
 			
-// SkyAdmin begin
+// SalesPlatform.ru begin
 			$roundedRectX = $headerFrame->w+$headerFrame->x-$contentWidth*1.5;
 			$roundedRectW = $contentWidth*1.5;
 			//$roundedRectX = $headerFrame->w+$headerFrame->x-$contentWidth*2.0;
 			//$roundedRectW = $contentWidth*2.0;
-// SkyAdmin end
+// SalesPlatform.ru end
 			
 			$pdf->RoundedRect($roundedRectX, 10, $roundedRectW, 10, 3, '1111', 'DF', array(), array(205,201,201));
 			

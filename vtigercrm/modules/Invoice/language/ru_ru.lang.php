@@ -166,7 +166,7 @@ $mod_strings = array (
       'No' => 'Нет',
       'Date' => 'Дата',
       'Documents' => 'Документы',
-// SkyAdmin begin
+// SalesPlatform.ru begin
       'Issued Date' => 'Дата создания',
       'Quantity' => 'Кол-во',
       'Net Total' => 'Итого',
@@ -178,7 +178,10 @@ $mod_strings = array (
       'Website: ' => 'Веб-сайт: ',
       'Invoice #' => 'Счет №',
 
-// SkyAdmin end
+      'Service Name' => 'Название Услуги',
+      'List Price' => 'Цена в Каталоге',
+      'Comments' => 'Комментарии',
+// SalesPlatform.ru end
 );
 
 ?>

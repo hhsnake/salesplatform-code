@@ -290,12 +290,15 @@ $mod_strings = array (
 'LBL_VIEW_DETAILS' => 'Просмотр Подробностей',
 'LBL_SHOW_STANDARD_FILTERS' => 'Показать Стандартные Фильтры',
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
     // Priority
     'High' => 'Высокий',
     'Medium' => 'Средний',
     'Low' => 'Низкий',
-// SkyAdmin end
+    
+    'S&H Amount' => 'Общая Сумма',
+    'Conversion Rate' => 'Курс',
+// SalesPlatform.ru end
 
 );
 

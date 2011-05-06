@@ -48,10 +48,10 @@ if(isset($arr_val))
 {
 	foreach($arr_val[0] as $key=>$value)
 	{
-// SkyAdmin begin
+// SalesPlatform.ru begin
 		$worksheet->write(0, $count, iconv("UTF-8", "CP1251", $key), $header);
 		//$worksheet->write(0, $count, $key , $header);
-// SkyAdmin end
+// SalesPlatform.ru end
 		$count = $count + 1;
 	}
 	$rowcount=1;
@@ -62,10 +62,10 @@ if(isset($arr_val))
 		{
 			//$worksheet->write($key+1, $dcount, iconv("UTF-8", "ISO-8859-1", $value));
 			$value = decode_html($value);
-// SkyAdmin begin
+// SalesPlatform.ru begin
 			$worksheet->write($key+1, $dcount, iconv("UTF-8", "CP1251", $value));
 			//$worksheet->write($key+1, $dcount, utf8_decode($value));
-// SkyAdmin end
+// SalesPlatform.ru end
 			$dcount = $dcount + 1;
 		}
 		$rowcount++; 
@@ -77,10 +77,10 @@ if(isset($arr_val))
 		foreach($totalxls[0] as $key=>$value)
 		{
 				$chdr=substr($key,-3,3);
-// SkyAdmin begin
+// SalesPlatform.ru begin
 			$worksheet->write($rowcount, $count, iconv("UTF-8", "CP1251", $mod_strings[$chdr]));
 			//$worksheet->write($rowcount, $count, $mod_strings[$chdr]);
-// SkyAdmin end
+// SalesPlatform.ru end
 			$count = $count + 1;
 		}
 	}
@@ -92,15 +92,15 @@ if(isset($arr_val))
 			{
 					//$worksheet->write($key+1, $dcount, iconv("UTF-8", "ISO-8859-1", $value));
 					if ($dcount==1)
-// SkyAdmin begin
+// SalesPlatform.ru begin
 							$worksheet->write($key+$rowcount, 0, iconv("UTF-8", "CP1251", substr($hdr,0,strlen($hdr)-4)));
 							//orksheet->write($key+$rowcount, 0, utf8_decode(substr($hdr,0,strlen($hdr)-4)));
-// SkyAdmin end
+// SalesPlatform.ru end
 				$value = decode_html($value);
-// SkyAdmin begin
+// SalesPlatform.ru begin
 					$worksheet->write($key+$rowcount, $dcount, iconv("UTF-8", "CP1251", $value));
 					//orksheet->write($key+$rowcount, $dcount, utf8_decode($value));
-// SkyAdmin end
+// SalesPlatform.ru end
 					$dcount = $dcount + 1;
 			}
 	} 

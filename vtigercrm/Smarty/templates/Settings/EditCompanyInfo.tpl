@@ -109,7 +109,7 @@
                             <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_WEBSITE}</strong></td>
                             <td class="small cellText"><input type="text" name="organization_website" class="detailedViewTextBox small" value="{$ORGANIZATIONWEBSITE}"></td>
                           </tr>
-<!-- SkyAdmin begin -->
+<!-- SalesPlatform.ru begin -->
                           <tr>
                             <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_INN}</strong></td>
                             <td class="small cellText"><input type="text" name="organization_inn" class="detailedViewTextBox small" value="{$ORGANIZATIONINN}"></td>
@@ -150,7 +150,7 @@
                             <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_ENTREPRENEURREG}</strong></td>
                             <td class="small cellText"><input type="text" name="organization_entrepreneurreg" class="detailedViewTextBox small" value="{$ORGANIZATIONENTREPRENEURREG}"></td>
                           </tr>
-<!-- SkyAdmin end -->
+<!-- SalesPlatform.ru end -->
                         </table>
 						
 						</td>

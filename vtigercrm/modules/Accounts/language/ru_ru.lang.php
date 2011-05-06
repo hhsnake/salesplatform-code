@@ -200,6 +200,8 @@ $mod_strings = array (
 	'Service Contracts' => 'Сервисные Контракты',
 	 
 // SalesPlatform.ru begin
+        'Conversion Rate' => 'Курс',
+        'S&H Amount' => 'Общая Сумма',
 	'INN' => 'ИНН',
 	'KPP' => 'КПП',
 // SalesPlatform.ru end

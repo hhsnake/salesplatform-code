@@ -174,7 +174,10 @@ function ShowFolders(folderid)
 												</select>&nbsp;
 											</td>
 											<td width="10%">
-					<input name="find" value=" Find " class="crmbutton small create" onclick="Searchfn();" type="button">
+					<!-- SalesPlatform.ru begin -->
+                                        <input name="find" value=" {$APP.LBL_SEARCH} " class="crmbutton small create" onclick="Searchfn();" type="button">
+					<!-- <input name="find" value=" Find " class="crmbutton small create" onclick="Searchfn();" type="button"> -->
+					<!-- SalesPlatform.ru end -->
 				</td>
 										</tr>
 									</table>

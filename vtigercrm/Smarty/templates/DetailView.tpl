@@ -610,6 +610,7 @@ function sendfile_email()
 		{* END *}
                 <!-- Action links END -->
 
+
 		{if $TAG_CLOUD_DISPLAY eq 'true'}
 		<!-- Tag cloud display -->
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">

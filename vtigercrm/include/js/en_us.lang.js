@@ -150,6 +150,10 @@
 				LBL_NO_DATA_SELECTED:'There is no record selected. Select at least one record to Export',
 				LBL_SEARCH_WITHOUTSEARCH_ALL:'You have used search option but you have not selected without search & all options.\nYou can click [ok] to export all data or You can click [cancel] and try again with other export criteria',
 				STOCK_IS_NOT_ENOUGH : 'Stock is not enough',
+                                // SalesPlatform.ru begin
+				QTY : 'Qty',
+                                COLUMN : 'Column',
+                                // SalesPlatform.ru end
 				INVALID_QTY : 'Invalid Qty',
 				LBL_SEARCH_WITHOUTSEARCH_CURRENTPAGE:'You have used search option but you have not selected without search & currentpage options.\nYou can click [ok] to export current page data or You can click [cancel] and try again with some other export criteria.',
 				LBL_SELECT_COLUMN: ' Invalid column.\n Please select column',

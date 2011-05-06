@@ -89,6 +89,9 @@ $mod_strings = array (
       'Sales Enity Module' => 'Модуль Продаж',
       'Related To' => 'Относится к',
       'Assigned To' => 'Ответственный',
+      // SalesPlatform.ru begin
+      'Access Count'=>'Кол-во обращений',
+      // SalesPlatform.ru end
       'Subject' => 'Тема',
       'Attachment' => 'Вложение',
       'Description' => 'Описание',

@@ -454,7 +454,7 @@ function changeSteps1()
 				glueCondition = trim(glueConditionObject.value);
 			}
 
-			if (!emptyCheck(columnId," Column ","text"))
+			if (!emptyCheck(columnId, alert_arr.COLUMN,"text"))
 				return false;
 			if (!emptyCheck(comparatorId,selectedColumnLabel+" Option","text"))
 				return false;

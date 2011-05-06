@@ -103,10 +103,10 @@ if (is_array($overview))
                 $hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);
                 $val->from = utf8_decode(utf8_encode(imap_utf8(addslashes($val->from))));
                 $val->to = utf8_decode(utf8_encode(imap_utf8(addslashes($val->to))));
-// SkyAdmin begin
+// SalesPlatform.ru begin
                 $val->subject = strip_tags(iconv_mime_decode($val->subject, 0, "UTF-8"));
                 //$val->subject = utf8_decode(utf8_encode(imap_utf8($val->subject)));
-// SkyAdmin end
+// SalesPlatform.ru end
 		$to = str_replace("<",":",$val->to);
 		$to_list = str_replace(">","",$to);
 		$from = str_replace("<",":",$val->from);

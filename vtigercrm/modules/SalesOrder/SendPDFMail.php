@@ -8,16 +8,16 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-// SkyAdmin begin
+// SalesPlatform.ru begin
 include_once 'modules/SalesOrder/SPSalesOrderPDFController.php';
 //include_once 'modules/SalesOrder/SalesOrderPDFController.php';
 global $currentModule;
-// SkyAdmin end
+// SalesPlatform.ru end
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
 $controller = new SalesPlatform_SalesOrderPDFController($currentModule, $_REQUEST['pdf_template']);
 //$controller = new Vtiger_SalesOrderPDFController($currentModule);
-// SkyAdmin end
+// SalesPlatform.ru end
 
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 

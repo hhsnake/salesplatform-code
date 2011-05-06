@@ -21,10 +21,10 @@ $image_path=$theme_path."images/";
 
 $recprefix = vtlib_purify($_REQUEST['recprefix']);
 $mode = $_REQUEST['mode'];
-// SkyAdmin begin
+// SalesPlatform.ru begin
 //$validInput = validateAlphaNumericInput($recprefix);
 $validInput = validateAlphaNumericInputRus($recprefix);
-// SkyAdmin end
+// SalesPlatform.ru end
 if(!empty($recprefix) && ! $validInput) {
     $recprefix = '';
     $mode='';

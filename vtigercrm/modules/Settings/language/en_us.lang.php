@@ -569,7 +569,7 @@ $mod_strings = Array(
 'LBL_ORGANIZATION_PHONE'=>'Phone',
 'LBL_ORGANIZATION_FAX'=>'Fax',
 'LBL_ORGANIZATION_WEBSITE'=>'Website',
-// SkyAdmin begin
+// SalesPlatform.ru begin
 'LBL_ORGANIZATION_INN'=>'INN',
 'LBL_ORGANIZATION_KPP'=>'KPP',
 'LBL_ORGANIZATION_BANKACCOUNT'=>'Bank account',
@@ -580,7 +580,7 @@ $mod_strings = Array(
 'LBL_ORGANIZATION_BOOKKEEPER'=>'Bookkeeper',
 'LBL_ORGANIZATION_ENTREPRENEUR'=>'Entrepreneur',
 'LBL_ORGANIZATION_ENTREPRENEURREG'=>'Entrepreneur ID',
-// SkyAdmin end
+// SalesPlatform.ru end
 'LBL_ORGANIZATION_DETAILS'=>'Company Information',
 'LBL_SPECIFY_COMPANY_DETAILS'=>' - Specify Company Information',
 'LBL_ORGANIZATION_LOGO'=>'Company Logo',

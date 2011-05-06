@@ -130,10 +130,10 @@ if($_POST["command"] == "check_mbox") {
                         	$ret .= '{"mail":';
                         	$ret .= '{';
                         	$ret .= '"mailid":"'.$data[$i]->msgno.'",';
-// SkyAdmin begin                        	
+// SalesPlatform.ru begin
                        		$ret .= '"subject":"'.substr(iconv_mime_decode($data[$i]->subject, 0, "UTF-8"),0,40).'",';
                        		//$ret .= '"subject":"'.substr($data[$i]->subject,0,40).'",';
-// SkyAdmin end
+// SalesPlatform.ru end
                         	$ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
                         	$ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
 				$ret .= '"to":"'.$data[$i]->to.'",';
@@ -282,10 +282,10 @@ if (is_array($overview))
 		//we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
 		$val->from = utf8_decode(utf8_encode(imap_utf8(addslashes($val->from))));
 		$val->to = utf8_decode(utf8_encode(imap_utf8(addslashes($val->to))));
-// SkyAdmin begin
+// SalesPlatform.ru begin
 		$val->subject = strip_tags(iconv_mime_decode($val->subject, 0, "UTF-8"));
 		//$val->subject = utf8_decode(utf8_encode(imap_utf8($val->subject)));
-// SkyAdmin end
+// SalesPlatform.ru end
 		$to = str_replace("<",":",$val->to);
                 $to_list = str_replace(">","",$to);
                 $from = str_replace("<",":",$val->from);

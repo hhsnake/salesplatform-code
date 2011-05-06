@@ -8,16 +8,16 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-// SkyAdmin begin
+// SalesPlatform.ru begin
 include_once 'modules/Quotes/SPQuotePDFController.php';
 //include_once 'modules/Quotes/QuotePDFController.php';
 global $currentModule;
-// SkyAdmin end
+// SalesPlatform.ru end
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
 $controller = new SalesPlatform_QuotePDFController($currentModule, $_REQUEST['pdf_template']);
 //$controller = new Vtiger_QuotePDFController($currentModule);
-// SkyAdmin end
+// SalesPlatform.ru end
 
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 

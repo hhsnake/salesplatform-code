@@ -17,10 +17,10 @@ class Vtiger_PDF_TCPDF extends TCPDF {
 	public function __construct($orientation='P', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8') {
 		parent::__construct($orientation, $unit, $format, $unicode, $encoding);
 		$this->SetFont('','',10);
-		// SkyAdmin begin
+		// SalesPlatform.ru begin
 		//$this->setFontFamily('times');
 		$this->setFontFamily('helvetica');
-		// SkyAdmin end
+		// SalesPlatform.ru end
 	}
 
 	function getFontSize() {

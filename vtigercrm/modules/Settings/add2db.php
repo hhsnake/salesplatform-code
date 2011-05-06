@@ -97,7 +97,7 @@ require_once('include/utils/utils.php');
 		$organization_phone=from_html($_REQUEST['organization_phone']);
 		$organization_fax=from_html($_REQUEST['organization_fax']);
 		$organization_website=from_html($_REQUEST['organization_website']);
-// SkyAdmin begin
+// SalesPlatform.ru begin
 		$organization_inn=from_html($_REQUEST['organization_inn']);
 		$organization_kpp=from_html($_REQUEST['organization_kpp']);
 		$organization_bankaccount=from_html($_REQUEST['organization_bankaccount']);
@@ -108,7 +108,7 @@ require_once('include/utils/utils.php');
 		$organization_bookkeeper=from_html($_REQUEST['organization_bookkeeper']);
 		$organization_entrepreneur=from_html($_REQUEST['organization_entrepreneur']);
 		$organization_entrepreneurreg=from_html($_REQUEST['organization_entrepreneurreg']);
-// SkyAdmin end
+// SalesPlatform.ru end
 		$organization_logo=from_html($_REQUEST['organization_logo']);
 
 		$organization_logoname=$filename;
@@ -123,7 +123,7 @@ require_once('include/utils/utils.php');
 
 		if($org_name=='')
 		{
-// SkyAdmin begin
+// SalesPlatform.ru begin
 			$sql="INSERT INTO vtiger_organizationdetails
 				(organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, bankname, bankid, corraccount, director, bookkeeper, entrepreneur, entrepreneurreg, logoname) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
@@ -135,7 +135,7 @@ require_once('include/utils/utils.php');
 			//	(organizationname, address, city, state, code, country, phone, fax, website, logoname) values (?,?,?,?,?,?,?,?,?,?)";
 			//$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
 			//				$organization_country, $organization_phone, $organization_fax, $organization_website, $organization_logoname);
-// SkyAdmin end
+// SalesPlatform.ru end
 		}
 		else
 		{
@@ -158,7 +158,7 @@ require_once('include/utils/utils.php');
 				$organization_logoname=$org_logo;
 			}
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
 			$sql = "UPDATE vtiger_organizationdetails
 				SET organizationname = ?, address = ?, city = ?, state = ?, code = ?, country = ?, 
 				phone = ?, fax = ?, website = ?, inn = ?, kpp = ?, bankaccount = ?, 
@@ -175,7 +175,7 @@ require_once('include/utils/utils.php');
 			//	phone = ?, fax = ?, website = ?, logoname = ? WHERE organizationname = ?";
 			//$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
 			//		$organization_country, $organization_phone, $organization_fax, $organization_website, decode_html($organization_logoname), $org_name);
-// SkyAdmin end
+// SalesPlatform.ru end
 		}
 		$adb->pquery($sql, $params);
 

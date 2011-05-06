@@ -67,7 +67,7 @@ $mod_strings = array (
 <br>2. Создайте новую БД (Лучше создать БД на сервере где работает Ваша БД vtiger 5.0.)
 <br>3. Загрузите этот дамп 4.2.3 в Вашу новую БД.
 <br>Теперь задайте параметры доступа к этой БД. Миграция изменит схему БД на ту что в версии 5.0.
-Теперь Вы можете задать имя этой БД в файле config.inc.php чтобы использовать эту БД тоесть, $dbconfig[\'db_name\'] = \'new db name\';',
+Теперь Вы можете задать имя этой БД в файле config.inc.php, чтобы использовать эту БД, то есть, $dbconfig[\'db_name\'] = \'new db name\';',
       'LBL_ENTER_MYSQL_SERVER_PATH' => 'Введите путь к Серверу MySQL',
       'LBL_SERVER_PATH_DESC' => 'Путь к Серверу MySQL, например <b>/home/5beta/vtigerCRM5_beta/mysql/bin</b> или <b>c:\Program Files\mysql\bin</b>',
       'LBL_MYSQL_SERVER_PATH' => 'Путь к Серверу MySQL : ',
@@ -75,17 +75,17 @@ $mod_strings = array (
       'LBL_CANCEL_BUTTON' => 'Отмена',
       'LBL_UPGRADE_FROM_VTIGER_5X' => 'Обновить БД с vtiger CRM 5.x до следующих версий',
       'LBL_PATCH_OR_MIGRATION' => 'Вам необходимо указать версию БД источника (Обновление Патчем или Миграция)',
-      'ENTER_SOURCE_HOST' => 'Пожалуйста укажите Хост Источникаe',
-      'ENTER_SOURCE_MYSQL_PORT' => 'Пожалуйста укажите Порт MySql Источника',
-      'ENTER_SOURCE_MYSQL_USER' => 'Пожалуйста укажите Пользователя MySql Источника',
-      'ENTER_SOURCE_DATABASE' => 'Пожалуйста укажите Название БД Источника',
-      'ENTER_SOURCE_MYSQL_DUMP' => 'Пожалуйста укажите правильный файл дампа БД MySQL',
-      'ENTER_HOST' => 'Пожалуйста укажите Хост',
-      'ENTER_MYSQL_PORT' => 'Пожалуйста укажите Порт MySql',
-      'ENTER_MYSQL_USER' => 'Пожалуйста укажите Пользователя MySql',
-      'ENTER_DATABASE' => 'Пожалуйста укажите Название БД',
-      'SELECT_ANYONE_OPTION' => 'Пожалуйста выберите любую опцию',
-      'ENTER_CORRECT_MYSQL_PATH' => 'Пожалуйста укажите правильный путь к MySQL',
+      'ENTER_SOURCE_HOST' => 'Пожалуйста, укажите Хост Источника',
+      'ENTER_SOURCE_MYSQL_PORT' => 'Пожалуйста, укажите Порт MySql Источника',
+      'ENTER_SOURCE_MYSQL_USER' => 'Пожалуйста, укажите Пользователя MySql Источника',
+      'ENTER_SOURCE_DATABASE' => 'Пожалуйста, укажите Название БД Источника',
+      'ENTER_SOURCE_MYSQL_DUMP' => 'Пожалуйста, укажите правильный файл дампа БД MySQL',
+      'ENTER_HOST' => 'Пожалуйста, укажите Хост',
+      'ENTER_MYSQL_PORT' => 'Пожалуйста, укажите Порт MySql',
+      'ENTER_MYSQL_USER' => 'Пожалуйста, укажите Пользователя MySql',
+      'ENTER_DATABASE' => 'Пожалуйста, укажите Название БД',
+      'SELECT_ANYONE_OPTION' => 'Пожалуйста, выберите любую опцию',
+      'ENTER_CORRECT_MYSQL_PATH' => 'Пожалуйста, укажите правильный путь к MySQL',
 );
 
 ?>

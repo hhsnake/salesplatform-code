@@ -140,10 +140,10 @@ class Webmails extends CRMEntity {
 	$mailHeader['from_name'] = $theader->from[0]->personal;
 	$mailHeader['fromaddr'] = $theader->fromaddress;
 
-// SkyAdmin begin
+// SalesPlatform.ru begin
 	$mailHeader['subject'] = strip_tags(iconv_mime_decode($theader->subject, 0, "UTF-8"));
 	//$mailHeader['subject'] = strip_tags($theader->subject);
-// SkyAdmin end
+// SalesPlatform.ru end
 	$mailHeader['date'] = $theader->date;
 
 	for($p=0;$p<count($theader->reply_to);$p++) {
@@ -642,13 +642,13 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 			unset($att_name);
 			$att_name_array = imap_mime_header_decode($tmp['name']);
 			for ($i=0; $i<count($att_name_array); $i++) {
-// SkyAdmin begin - added iconv to convert to UTF-8
+// SalesPlatform.ru begin - added iconv to convert to UTF-8
 				$att_name .= iconv($att_name_array[$i]->charset, 'UTF-8', $att_name_array[$i]->text);
 				if(!$att_name) {
 				    $att_name .= $att_name_array[$i]->text;
 				}
 				//$att_name .= $att_name_array[$i]->text;
-// SkyAdmin end
+// SalesPlatform.ru end
 			}
 			if(!preg_match("/unknown/",$att_name))
 				$this->attname[$ct] = $att_name;	

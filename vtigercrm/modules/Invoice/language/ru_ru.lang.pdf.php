@@ -15,7 +15,10 @@ $pdf_strings = Array(
     'Description' => 'Наименование',
     'Qty' => 'К-во.',
     'UnitPrice' => 'Цена',
-    'LineTotal' => 'Сума',
+    // SalesPlatform.ru begin
+    'LineTotal' => 'Сумма',
+    //'LineTotal' => 'Сума',
+    // SalesPlatform.ru end
     'VAR_SUBTOTAL' => 'Итого',
     'VAR_SHIPCOST' => 'Доставка',
     'Tax' => 'НДС',

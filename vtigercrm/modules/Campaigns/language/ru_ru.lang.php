@@ -31,6 +31,11 @@ $mod_strings = array (
       'Expected Revenue' => 'Ожидаемый Доход',
       'Budget Cost' => 'Бюджет',
       'Actual Cost' => 'Затраты',
+      // SalesPlatform.ru begin
+      'Expected Revenue (в руб)' => 'Ожидаемый Доход (в руб)',
+      'Budget Cost (в руб)' => 'Бюджет (в руб)',
+      'Actual Cost (в руб)' => 'Затраты (в руб)',
+      // SalesPlatform.ru end
       'Expected Response' => 'Ожидаемая Реакция',
       'Assigned To' => 'Ответственный',
       'Num Sent' => 'Отправлено',

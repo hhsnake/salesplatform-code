@@ -24,7 +24,9 @@ include_once ('Image/Canvas.php');
 function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_image_name)
 {
 
-
+        // SalesPlatform.ru begin
+        global $default_charset;
+        // SalesPlatform.ru end
 	global $log,$root_directory,$lang_crm,$theme;
 	//We'll be getting the values in the form of a string separated by commas
 	$datay=explode("::",$referdata); // The datay values
@@ -39,7 +41,10 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 	{
 		$name=$datax[$i];
 		$pos = substr_count($name," ");
-		$alts[]=htmlentities($name)."=%d";
+                // SalesPlatform.ru begin
+		$alts[]=htmlentities($name, null, $default_charset);
+		//$alts[]=htmlentities($name)."=%d";
+                // SalesPlatform.ru end
 		//If the datax value of a string is greater, adding '\n' to it so that it'll come in 2nd line
 		if(strlen($name)>=14)
 			$name=substr($name, 0, 34);
