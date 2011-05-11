@@ -552,9 +552,11 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		$this->db->pquery($sql, $params);
 	}
 	
+/* SalesPlatform.ru begin
 	public function getNonAdminAccessControlQuery($module, $user,$scope='') {
 		return " and vtiger_crmentity$scope.smownerid=$user->id ";
 	}
+ SalesPlatform.ru end */
 }
 /** Function to get the emailids for the given ids form the request parameters 
  *  It returns an array which contains the mailids and the parentidlists

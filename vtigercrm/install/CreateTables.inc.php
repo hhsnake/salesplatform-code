@@ -62,10 +62,10 @@ function create_default_users_access() {
 		//vtiger-ru-fork 28.10.2010 Eugene Babiy. Добавлен Администратор
 		$adb->query("insert into vtiger_role values('H".$role1_id."','Организация','H".$role1_id."',0)");
         $adb->query("insert into vtiger_role values('H".$role2_id."','Директор','H".$role1_id."::H".$role2_id."',1)");
-        $adb->query("insert into vtiger_role values('H".$role3_id."','Администратор','H".$role1_id."::H".$role2_id."',2)");
-        $adb->query("insert into vtiger_role values('H".$role4_id."','Заместитель Директора','H".$role1_id."::H".$role2_id."::H".$role3_id."',3)");
-        $adb->query("insert into vtiger_role values('H".$role5_id."','Менеджер по Продажам','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."',4)");
-        $adb->query("insert into vtiger_role values('H".$role6_id."','Продавец','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',5)");
+        $adb->query("insert into vtiger_role values('H".$role3_id."','Администратор','H".$role1_id."::H".$role2_id."::H".$role3_id."',2)");
+        $adb->query("insert into vtiger_role values('H".$role4_id."','Заместитель Директора','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."',3)");
+        $adb->query("insert into vtiger_role values('H".$role5_id."','Менеджер по Продажам','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',4)");
+        $adb->query("insert into vtiger_role values('H".$role6_id."','Продавец','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."::H".$role6_id."',5)");
         
 		//Insert into vtiger_role2profile
 		$adb->query("insert into vtiger_role2profile values ('H".$role2_id."',".$profile1_id.")");
