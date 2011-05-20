@@ -121,7 +121,10 @@ function OpenComposer(id,mode)
                         url = 'index.php?module=Webmails&action=DetailView&record='+id+'&mailid='+id+'&mailbox='+mailbox;
                         break;
                 }
-        openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
+        // SalesPlatform.ru begin
+        openPopUp('xComposeEmail',this,url,'createemailWin',855,733,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
+        //openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
+        // SalesPlatform.ru end
 }
 
 function makeSelected(rowId)
@@ -517,7 +520,10 @@ function runEmailCommand(com,id) {
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=WebmailsAjax&start='+start+'&command='+command+'&mailid='+id+'&file='+file+'&mailbox='+mailbox+qry_str+'&search_type='+$("search_type").value+'&search_input='+$("search_input").value,
+                        // SalesPlatform.ru begin - escape added for mailbox var
+                        postBody: 'module=Webmails&action=WebmailsAjax&start='+start+'&command='+command+'&mailid='+id+'&file='+file+'&mailbox='+escape(mailbox)+qry_str+'&search_type='+$("search_type").value+'&search_input='+$("search_input").value,
+                        //postBody: 'module=Webmails&action=WebmailsAjax&start='+start+'&command='+command+'&mailid='+id+'&file='+file+'&mailbox='+mailbox+qry_str+'&search_type='+$("search_type").value+'&search_input='+$("search_input").value,
+                        // SalesPlatform.ru end
                         onComplete: function(t) {
                                 resp = t.responseText;
 				id=resp;

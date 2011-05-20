@@ -362,6 +362,10 @@ if (is_array($list)) {
         $boxes .= '<option value="move_to" SELECTED>'.$mod_strings['LBL_MOVE_TO'].'</option>';
 	foreach ($list as $key => $val) {
 		$tmpval = preg_replace(array("/\{.*?\}/i"),array(""),$val->name);
+                // SalesPlatform.ru begin
+                //$tmpval_utf8 = iconv('UTF-7', 'UTF-8', str_replace('&', '+', str_replace(',', '/', $tmpval)));
+                $tmpval_utf8 = mb_convert_encoding($tmpval, "UTF-8", "UTF7-IMAP");
+                // SalesPlatform.ru end
 		if(preg_match("/trash/i",$tmpval))
 			$img = "webmail_trash.gif";
 		elseif($_REQUEST["mailbox"] == $tmpval)
@@ -392,7 +396,7 @@ if (is_array($list)) {
 			if($tmpval[0] != "."){
 				if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
                                 // SalesPlatform.ru begin
-				$folders .= '<li style="padding-left:0px;"><img src="'.$img_src.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li style="padding-left:0px;"><img src="'.$img_src.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval_utf8.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				//$folders .= '<li style="padding-left:0px;"><img src="themes/'.$theme.'/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
                                 // SalesPlatform.ru end
 				if($unread_msgs > 0)
@@ -408,7 +412,7 @@ if (is_array($list)) {
 				if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
                                 // SalesPlatform.ru begin
-				$folders .= '<li ><img src="'.$img_src.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li ><img src="'.$img_src.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval_utf8.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				//$folders .= '<li ><img src="themes/'.$theme.'/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
                                 // SalesPlatform.ru end
 				if($box->unseen > 0)
@@ -438,7 +442,10 @@ $smarty->assign("CATEGORY","My Home Page");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("FOLDER_SELECT", $boxes);
 $smarty->assign("NUM_EMAILS", $numEmails);
-$smarty->assign("MAILBOX", $MailBox->mailbox);
+// SalesPlatform.ru begin
+$smarty->assign("MAILBOX", mb_convert_encoding($MailBox->mailbox, "UTF-8", "UTF7-IMAP"));
+//$smarty->assign("MAILBOX", $MailBox->mailbox);
+// SalesPlatform.ru end
 $smarty->assign("ACCOUNT", $MailBox->display_name);
 $smarty->assign("BOXLIST",$folders);
 $smarty->assign("DEGRADED_SERVICE",$degraded_service);

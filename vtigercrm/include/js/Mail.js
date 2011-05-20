@@ -115,7 +115,10 @@ function validate_sendmail(idlist,module)
 	{
 		var field_lists = email_type.join(':');
 		var url= 'index.php?module=Emails&action=EmailsAjax&pmodule='+module+'&file=EditView&sendmail=true&idlist='+idlist+'&field_lists='+field_lists;
-		openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+                // SalesPlatform.ru begin
+		openPopUp('xComposeEmail',this,url,'createemailWin',855,733,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+		//openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+                // SalesPlatform.ru end
 		fninvsh('roleLay');
 		return true;
 	}
@@ -135,7 +138,10 @@ function sendmail(module,idstrings)
 					if(response.responseText == "Mail Ids not permitted" || response.responseText == "No Mail Ids")
 					{
 						var url= 'index.php?module=Emails&action=EmailsAjax&pmodule='+module+'&file=EditView&sendmail=true';
-				                openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+                                                // SalesPlatform.ru begin
+				                openPopUp('xComposeEmail',this,url,'createemailWin',855,733,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+				                //openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+                                                // SalesPlatform.ru end
 					}	
 					else
 						getObj('sendmail_cont').innerHTML=response.responseText;

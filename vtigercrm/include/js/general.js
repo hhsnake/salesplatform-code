@@ -1701,7 +1701,11 @@ function fnvshobj(obj,Lay){
     var topSide = findPosY(obj);
     var maxW = tagName.style.width;
     var widthM = maxW.substring(0,maxW.length-2);
-    if(Lay == 'editdiv') 
+    if(Lay == 'editdiv'
+    // SalesPlatform.ru begin
+        || Lay == 'sendmail_cont'
+    // SalesPlatform.ru end
+    )
     {
         leftSide = leftSide - 225;
         topSide = topSide - 125;
@@ -1870,7 +1874,10 @@ function InternalMailer(record_id,field_id,field_name,par_module,type) {
         }
 
         var opts = "menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes";
-        openPopUp('xComposeEmail',this,url,'createemailWin',830,662,opts);
+        // SalesPlatform.ru begin
+        openPopUp('xComposeEmail',this,url,'createemailWin',855,733,opts);
+        //openPopUp('xComposeEmail',this,url,'createemailWin',830,662,opts);
+        // SalesPlatform.ru end
 }
 
 function fnHide_Event(obj){
@@ -1880,7 +1887,10 @@ function ReplyCompose(id,mode)
 {
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&reply=true';
 	
-	openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');	
+        // SalesPlatform.ru begin
+	openPopUp('xComposeEmail',this,url,'createemailWin',855,733,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+	//openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+        // SalesPlatform.ru end
 }
 function OpenCompose(id,mode) 
 {
@@ -1913,7 +1923,10 @@ function OpenCompose(id,mode)
 		case 'print':
 			url = 'index.php?module=Emails&action=EmailsAjax&file=PrintEmail&record='+id+'&print=true'; 	 			
 	}
-	openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+        // SalesPlatform.ru begin
+	openPopUp('xComposeEmail',this,url,'createemailWin',855,733,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+	//openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+        // SalesPlatform.ru end
 }
 
 //Function added for Mass select in Popup - Philip
@@ -2040,7 +2053,10 @@ function SelectAll(mod,parmod)
 function ShowEmail(id)
 {
        url = 'index.php?module=Emails&action=EmailsAjax&file=DetailView&record='+id;
-       openPopUp('xComposeEmail',this,url,'createemailWin',820,695,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+       // SalesPlatform.ru begin
+       openPopUp('xComposeEmail',this,url,'createemailWin',855,733,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+       //openPopUp('xComposeEmail',this,url,'createemailWin',820,695,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+       // SalesPlatform.ru end
 }
 
 var bSaf = (navigator.userAgent.indexOf('Safari') != -1);

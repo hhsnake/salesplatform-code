@@ -637,7 +637,9 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 		if (!empty($tmp['name']))
 			{
 			$mime = str_replace('/', '-', $tmp['mime']);
-			if ($display_part_no == true)
+                        // SalesPlatform.ru begin - if() commented
+			//if ($display_part_no == true)
+                        // SalesPlatform.ru end
 				//$link .= $tmp['number']-1 . '&nbsp;&nbsp;';
 			unset($att_name);
 			$att_name_array = imap_mime_header_decode($tmp['name']);
@@ -654,9 +656,13 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 				$this->attname[$ct] = $att_name;	
 			$att_name_dl = $att_name;
 			$att_name = $this->convertLang2Html($att_name);
-			if(!preg_match("/unknown/",$att_name)){	
-				$link .= ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
-				$this->anchor_arr[$ct] = '<a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
+			if(!preg_match("/unknown/",$att_name)){
+                                // SalesPlatform.ru begin
+				$link .= ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . urlencode(base64_encode($att_name_dl)) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
+				//$link .= ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
+				$this->anchor_arr[$ct] = '<a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . urlencode(base64_encode($att_name_dl)) . '&mime=' . $mime . '">';
+				//$this->anchor_arr[$ct] = '<a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
+                                // SalesPlatform.ru end
 				$this->att_details[$ct]['name'] = $att_name;
 				$this->att_details[$ct]['size'] = $tmp['size'];
 				$this->att_details[$ct]['type'] = $tmp['mime'];
