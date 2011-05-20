@@ -155,6 +155,9 @@
         <input type="hidden" name="email_id">
         <input type="hidden" name="source_module">
         <input type="hidden" name="entity_id">
+{* SalesPlatform.ru begin  *}
+        <input type="hidden" name="pdf_template">
+{* SalesPlatform.ru end  *}
 {elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
 	<input type="hidden" name="module" value="{$MODULE}">
         <input type="hidden" name="record" value="{$ID}">
