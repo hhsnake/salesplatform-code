@@ -828,6 +828,11 @@ $app_strings = array (
 'MSG_VTIGERTEAM'=>' vTiger Team',
 'MSG_IS_NOT_UPLOADED'=>'is not uploaded. Allowed file types - jpeg, png, jpg, pjpeg, x-png or gif',
 'MSG_IMAGE_ERROR'=>'Image not found',
+// SalesPlatform.ru begin
+'MSG_NEW_RECORD'=>'New record',
+'MSG_NEW_RECORD_NOTIFICATION'=>'Notification of a new CRM record',
+'MSG_RECORD_LINK'=>'Link to the record',
+// SalesPlatform.ru end
 
 'Information'=>'Information',
 'Address'=>'Address',

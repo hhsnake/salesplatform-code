@@ -210,7 +210,9 @@ if($_REQUEST['mode'] == 'create') {
 	$email_body .= $mod_strings['LBL_PASSWORD'] . " : " . $focus->column_fields['user_password'] . "<br>";
 	$email_body .= $mod_strings['LBL_ROLE_NAME'] . " : " . getRoleName($_POST['user_role']) . "<br>";
 	$email_body .= "<br>" . $app_strings['MSG_THANKS'] . "<br>" . $current_user->user_name;
-	$email_body = htmlentities($email_body, ENT_QUOTES, $default_charset);
+// SalesPlatform.ru begin
+	//$email_body = htmlentities($email_body, ENT_QUOTES, $default_charset);
+// SalesPlatform.ru end
 
 	$mail_status = send_mail('Users',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 	if($mail_status != 1) {

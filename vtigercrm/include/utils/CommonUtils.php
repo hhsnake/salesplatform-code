@@ -2298,9 +2298,16 @@ function sendNotificationToGroups($groupid,$crmid,$module)
 	               $curr_userid = $adb->query_result($groupqry_res,$z,'id');
 	               $tosender=$adb->query_result($groupqry_res,$z,'user_name');
 	               $pmodule = 'Users';
-		       	   $description = $app_strings['MSG_DEAR']." ".$tosender.",<br>".$returnEntity[$crmid]." ".$app_strings['MSG_HAS_BEEN_CREATED_FOR']." ".$module."<br><br>".$app_strings['MSG_THANKS'].",<br>".$app_strings['MSG_VTIGERTEAM'];
+// SalesPlatform.ru begin
+//		       	   $description = $app_strings['MSG_DEAR']." ".$tosender.",<br>".$returnEntity[$crmid]." ".$app_strings['MSG_HAS_BEEN_CREATED_FOR']." ".$module."<br><br>".$app_strings['MSG_THANKS'].",<br>".$app_strings['MSG_VTIGERTEAM'];
+
+                       global $site_URL;
+                       $description = $app_strings['MSG_DEAR']." ".$tosender.",<br>".$app_strings['MSG_NEW_RECORD']." ".$returnEntity[$crmid]." ".$app_strings['MSG_HAS_BEEN_CREATED_FOR']." ".getTranslatedString($module, $module);
+                       $description .= "<br><a href=\"$site_URL/index.php?action=DetailView&module=$module&record=$crmid\">".$app_strings['MSG_RECORD_LINK']."</a>";
+                       $description .= "<br><br>".$app_strings['MSG_THANKS'].",<br>".$app_strings['MSG_VTIGERTEAM'];
+// SalesPlatform.ru end
 	               require_once('modules/Emails/mail.php');
-	               $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'','Record created-vTiger Team',$description,'','','all',$crmid);
+	               $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$app_strings['MSG_NEW_RECORD_NOTIFICATION'],$description,'','','all',$crmid);
 	               $all_to_emailids []= $emailadd;
 	               $mail_status_str .= $emailadd."=".$mail_status."&&&";
 	        }

@@ -48,7 +48,10 @@ class CRMEntity
 
 	function saveentity($module,$fileid='')
 	{
-		global $current_user, $adb;//$adb added by raju for mass mailing
+		global $log;
+		$log->debug("Entering into saveentity($module,$fileid) method.");
+
+                global $current_user, $adb;//$adb added by raju for mass mailing
 		$insertion_mode = $this->mode;
 	
 		$this->db->println("TRANS saveentity starts $module");
@@ -679,6 +682,9 @@ class CRMEntity
 
 function whomToSendMail($module,$insertion_mode,$assigntype)
 {
+        global $log;
+        $log->debug("Entering whomToSendMail($module,$insertion_mode,$assigntype) method ...");
+
  	global $adb;
    	if($insertion_mode!="edit")
    	{
