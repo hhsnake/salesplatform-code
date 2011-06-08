@@ -171,6 +171,7 @@ class SalesPlatform_PDF_ProductListDocumentPDFController {
 			$contentModel->set('productTax',       $this->formatPrice($tax));
 			$contentModel->set('productTaxPercent', $total_tax_percent);
 			$contentModel->set('productTotal',     $this->formatPrice($producttotal));
+			$contentModel->set('productDescription',   $productLineItem["productDescription{$productLineItemIndex}"]);
 			$contentModel->set('productComment',   $productLineItem["comment{$productLineItemIndex}"]);
 			$contentModel->set('manufCountry', $productLineItem["manufCountry{$productLineItemIndex}"]);
 			$contentModel->set('customsId', $productLineItem["customsId{$productLineItemIndex}"]);
