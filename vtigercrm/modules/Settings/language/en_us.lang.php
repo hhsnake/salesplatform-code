@@ -1087,6 +1087,9 @@ $mod_strings = Array(
 'LBL_TASK_TITLE'=>'Task Title',
 'LBL_PARENT_WORKFLOW'=>'Parent Workflow',
 'MSG_EXECUTE_TASK_DELAY'=>'Execute the task after some delay',
+// SalesPlatform.ru begin
+'MSG_EXECUTE_TASK_PERIODICAL'=>'Execute the task periodical',
+// SalesPlatform.ru end
 'LBL_AFTER'=>'After',
 'LBL_BEFORE'=>'Before',
 'LBL_TASK_OPERATIONS'=>'Task Operations',

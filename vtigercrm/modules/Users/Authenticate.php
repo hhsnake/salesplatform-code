@@ -30,8 +30,12 @@ global $mod_strings, $default_charset;
 $focus = new Users();
 
 // Add in defensive code here.
-$focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
-$user_password = vtlib_purify($_REQUEST['user_password']);
+// SalesPlatform.ru begin : trim added
+$focus->column_fields["user_name"] = to_html(trim($_REQUEST['user_name']));
+$user_password = vtlib_purify(trim($_REQUEST['user_password']));
+//$focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
+//$user_password = vtlib_purify($_REQUEST['user_password']);
+// SalesPlatform.ru end
 
 $focus->load_user($user_password);
 

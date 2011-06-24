@@ -262,7 +262,13 @@ class jpgraph {
 			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL, 'white', '#E5E5E5')));
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+// SalesPlatform.ru begin					
+			if(isset($currency_symbol_before) && $currency_symbol_before)
+			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+    			else
+			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+// SalesPlatform.ru end
 				//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;
 			
 			$title->setText($titlestr);
@@ -299,7 +305,10 @@ class jpgraph {
 			$yaxis->setAxisIntersection('max');
 
 			// Then fix the tick marks
-			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
+// SalesPlatform.ru begin					
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', "%d");
+//			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
+// SalesPlatform.ru end
 			$yaxis->setFontSize(8);
 			$yaxis->setDataPreprocessor($valueproc);
 			// Arrange Y-Axis tick marks inside
@@ -324,7 +333,10 @@ class jpgraph {
 			$marker->setFontSize(8);
 			$gbplot->setMarker($marker);
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+// SalesPlatform.ru begin
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+// SalesPlatform.ru end
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -594,7 +606,13 @@ class jpgraph {
 			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+// SalesPlatform.ru begin					
+			if(isset($currency_symbol_before) && $currency_symbol_before)
+			    $titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			else
+			    $titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+// SalesPlatform.ru end
 			//$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total;
 			$title->setText($titlestr);
 
@@ -627,7 +645,10 @@ class jpgraph {
 			// Then fix the tick marks
 			$yaxis->setFontSize(8);
 			$yaxis->setAxisIntersection('max');
-			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
+// SalesPlatform.ru begin					
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', "%d");
+//			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
+// SalesPlatform.ru end
 			$yaxis->setDataPreprocessor($valueproc);
 			$yaxis->setLabelInterval($ticks[0]);
 			$yaxis->setTickOptions(-5,0);
@@ -647,7 +668,10 @@ class jpgraph {
 			$gbplot->setMarker($marker);
 
 			// Finally setup the title
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
+// SalesPlatform.ru begin
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+// SalesPlatform.ru end
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -889,7 +913,13 @@ class jpgraph {
 			$font->setColor($font_color);
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+// SalesPlatform.ru begin					
+			if(isset($currency_symbol_before) && $currency_symbol_before)
+			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			else
+			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+// SalesPlatform.ru end
 			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;
 			$title->setText($titlestr);
 
@@ -925,7 +955,10 @@ class jpgraph {
 			$gridY->setLineColor('#E5E5E5@0.5');
 
 			// First make the labels look right
-			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
+// SalesPlatform.ru begin					
+    			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', "%d");
+//			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
+// SalesPlatform.ru end
 			$yaxis->setDataPreprocessor($valueproc);
 			$yaxis->setLabelInterval($ticks[0]);
 			$yaxis->setTickOptions(-5,0);
@@ -946,7 +979,10 @@ class jpgraph {
 
 			// Finally setup the title
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
+// SalesPlatform.ru begin
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+// SalesPlatform.ru end
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -1135,13 +1171,22 @@ $log->debug("Exiting pipeline_by_lead_source method ...");
 			$gbplot->setFillStyle($fills);
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+// SalesPlatform.ru begin					
+			if(isset($currency_symbol_before) && $currency_symbol_before)
+			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			else
+			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+// SalesPlatform.ru end
 			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;
 
 			$title->setText($titlestr);
 
 			// format the data values
-			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
+// SalesPlatform.ru begin					
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', "%d");
+//			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
+// SalesPlatform.ru end
 
 			// set markers
 			$marker =& $graph->addNew('value_marker', IMAGE_GRAPH_VALUE_Y);
@@ -1159,7 +1204,10 @@ $log->debug("Exiting pipeline_by_lead_source method ...");
 			$legend_box->setFillColor('#F5F5F5');
 			$legend_box->showShadow();
 
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+// SalesPlatform.ru begin
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+// SalesPlatform.ru end
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_LEFT);
 

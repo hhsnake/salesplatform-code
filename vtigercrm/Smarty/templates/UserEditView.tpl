@@ -57,8 +57,10 @@ function check_duplicate()
                 {rdelim}
         );
 	{rdelim}
-	else
+	else {ldelim}
+	    VtigerJS_DialogBox.unblock();
             alert(alert_arr.NO_SPECIAL+alert_arr.IN_USERNAME)
+	{rdelim}
 {rdelim}
 
 </script>

@@ -108,7 +108,16 @@ require_once('VTWorkflowUtils.php');
 						if($task->active) {
 							$trigger = $task->trigger;
 							if($trigger != null){
-								$delay = strtotime($data[$trigger['field']])+$trigger['days']*86400;
+                                                                // SalesPlatform.ru begin
+                                                                if ($trigger['days'] != null) {
+                                                                    $delay = strtotime($data[$trigger['field']])+$trigger['days']*86400;
+                                                                } else if (($trigger['time'] != null) && ($trigger['period'] != null)) {
+                                                                    $delay = VTRepeatableTask::calcNextTime($trigger['time'], $trigger['period']);
+                                                                } else {
+                                                                    $delay = 0;
+                                                                }
+								//$delay = strtotime($data[$trigger['field']])+$trigger['days']*86400;
+                                                                // SalesPlatform.ru end
 							}else{
 								$delay = 0;
 							}

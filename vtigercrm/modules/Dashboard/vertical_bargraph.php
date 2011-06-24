@@ -52,28 +52,32 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 		//$alts[]=htmlentities($name)."=%d";
                 // SalesPlatform.ru end
 //If the datax value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
-		 if(utf8_strlen($name)>=15)
-                        $name=utf8_substr($name, 0, 15);
-		if($pos>=2)
-		{
-			$val=explode(" ",$name);
-			$n=count($val)-1;
-
-			$x="";
-			for($j=0;$j<count($val);$j++)
-			{
-				if($j != $n)
-				{
-					$x  .=" ". $val[$j];
-				}
-				else
-				{
-					$x .= "@#".$val[$j];
-				}
-			}
-			$name = $x;
-		}
-		$name=str_replace("@#", "\n",$name);
+// SalesPlatform.ru begin
+		 if(utf8_strlen($name)>17)
+                        $name=utf8_substr($name, 0, 17) . '...';
+//		 if(utf8_strlen($name)>=15)
+//                        $name=utf8_substr($name, 0, 15);
+//		if($pos>=2)
+//		{
+//			$val=explode(" ",$name);
+//			$n=count($val)-1;
+//
+//			$x="";
+//			for($j=0;$j<count($val);$j++)
+//			{
+//				if($j != $n)
+//				{
+//					$x  .=" ". $val[$j];
+//				}
+//				else
+//				{
+//					$x .= "@#".$val[$j];
+//				}
+//			}
+//			$name = $x;
+//		}
+//		$name=str_replace("@#", "\n",$name);
+// SalesPlatform.ru end
 		$temp[]=$name; 
 	}
 	$datax=$temp;

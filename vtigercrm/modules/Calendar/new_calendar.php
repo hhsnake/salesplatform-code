@@ -18,7 +18,10 @@ $subtab = vtlib_purify($_REQUEST['subtab']);
 $viewBox = vtlib_purify($_REQUEST['viewOption']);
 if(empty($viewBox))
 {
-	$viewBox = 'listview';
+        // SalesPlatform.ru begin
+	$viewBox = 'hourview';
+	//$viewBox = 'listview';
+        // SalesPlatform.ru end
 }
 if(empty($subtab))
 {

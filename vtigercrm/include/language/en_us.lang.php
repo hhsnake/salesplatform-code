@@ -143,6 +143,9 @@ $app_strings = array (
 'LNK_VTDOCS' => 'vtiger Docs',
 'LNK_ABOUT' => 'About',
 'LNK_OUTLOOK' => './include/images/outlook_download.gif',
+// SalesPlatform.ru - begin
+'LNK_COMMUNITY' => 'Community',
+// SalesPlatform.ru - end
 'SINGLE_Accounts' => 'Account',
 'SINGLE_Contacts' => 'Contact',
 'SINGLE_Campaigns' => 'Campaign',
@@ -496,6 +499,12 @@ $app_strings = array (
 'LBL_NEW_SORDER_BUTTON_KEY' => 'E',
 'LBL_NEW_SORDER_BUTTON' => 'New Sales Order',
 'LBL_PRODUCT_DETAILS' => 'Product Details',
+// SalesPlatform.ru begin
+'LBL_PRODUCT_CODE' => 'Part Number',
+'LBL_PRODUCT_NAME' => 'Name',
+'LBL_PRODUCT_DESCRIPTION' => 'Description',
+'LBL_PRODUCT_COMMENT' => 'Comment',
+// SalesPlatform.ru end
 'LBL_QTY_IN_STOCK' => 'Qty In Stock',
 'LBL_QTY' => 'Qty',
 'LBL_UNIT_PRICE' => 'Unit Price',

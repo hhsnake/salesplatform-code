@@ -31,10 +31,16 @@ if($moduleName == 'Events'){
 }
 
 if(!empty($fieldName)){
-	$values = getAllPickListValues($fieldName);
+        // SalesPlatform.ru begin
+	$values = getAllPickListValues($fieldName, $temp_module_strings);
+	//$values = getAllPickListValues($fieldName);
+        // SalesPlatform.ru end
 }
 
-$assignedValues = getAssignedPicklistValues($fieldName, $roleid, $adb);
+// SalesPlatform.ru begin
+$assignedValues = getAssignedPicklistValues($fieldName, $roleid, $adb, $temp_module_strings);
+//$assignedValues = getAssignedPicklistValues($fieldName, $roleid, $adb);
+// SalesPlatform.ru end
 
 $smarty->assign("THEME",$theme);
 $smarty->assign("FIELDNAME",$fieldName);

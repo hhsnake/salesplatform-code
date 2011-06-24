@@ -1871,7 +1871,15 @@ class ReportRun extends CRMEntity
 								$currency_value = $curid_value[1];
 								$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
 								if($custom_field_values[$i]!='')
+// SalesPlatform.ru begin					
+								{
+    								    if(isset($currency_symbol_before) && $currency_symbol_before)
 									$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+    								    else
+									$fieldvalue = $currency_value." ".$cur_sym_rate['symbol'];
+								}
+//									$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+// SalesPlatform.ru end
 								else
 									$fieldvalue = getTranslatedString($custom_field_values[$i]);
 							}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
@@ -2058,7 +2066,13 @@ class ReportRun extends CRMEntity
 							$currency_id = $curid_value[0];
 							$currency_value = $curid_value[1];
 							$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
-							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+// SalesPlatform.ru begin					
+    							if(isset($currency_symbol_before) && $currency_symbol_before)
+							    $fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+    							else
+							    $fieldvalue = $currency_value." ".$cur_sym_rate['symbol'];
+//							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+// SalesPlatform.ru end
 						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
 									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
 							$fieldvalue = getCurrencyName($custom_field_values[$i]);
@@ -2478,7 +2492,13 @@ class ReportRun extends CRMEntity
 							$currency_id = $curid_value[0];
 							$currency_value = $curid_value[1];
 							$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
-							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+// SalesPlatform.ru begin					
+							if(isset($currency_symbol_before) && $currency_symbol_before)
+							    $fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+    							else
+							    $fieldvalue = $currency_value." ".$cur_sym_rate['symbol'];
+//							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+// SalesPlatform.ru end
 						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
 									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
 							$fieldvalue = getCurrencyName($custom_field_values[$i]);

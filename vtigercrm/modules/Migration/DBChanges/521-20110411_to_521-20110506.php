@@ -68,6 +68,8 @@ if($numOfRows>0){
     
     ($salesorder_tabid, 'payment_date', 'vtiger_salesorder', 1, 5, 'payment_date', 'Payment Date',
     1, 2, 0, 100, 4, $max_block_id, 1, 'D~O', 3, NULL, 'BAS', 0, NULL)");
+    
+    ExecuteQuery("update vtiger_field_seq set id=LAST_INSERT_ID()");
 } else {
     $migrationlog->debug("Query Failed ==> $query \n");
 }
@@ -100,6 +102,9 @@ if($numOfRows>0){
 
     ($account_tabid, 'kpp', 'vtiger_account', 1, 1, 'kpp', 'KPP',
     1, 2, 0, 30, " . ($start_sequence+1) . ", $block_id, 1, 'V~O', 3, NULL, 'BAS', 0, NULL)");
+
+	    ExecuteQuery("update vtiger_field_seq set id=LAST_INSERT_ID()");
+
 	} else {
 	    $migrationlog->debug("Query Failed ==> $query3 \n");
 	}
@@ -136,6 +141,9 @@ if($numOfRows>0){
 
     ($product_tabid, 'customs_id', 'vtiger_products', 1, 1, 'customs_id', 'Customs ID',
     1, 2, 0, 100, " . ($start_sequence+1) . ", $block_id, 1, 'V~O', 3, NULL, 'BAS', 0, NULL)");
+
+	    ExecuteQuery("update vtiger_field_seq set id=LAST_INSERT_ID()");
+
 	} else {
 	    $migrationlog->debug("Query Failed ==> $query3 \n");
 	}

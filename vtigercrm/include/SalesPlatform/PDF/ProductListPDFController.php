@@ -171,8 +171,8 @@ class SalesPlatform_PDF_ProductListDocumentPDFController {
 			$contentModel->set('productTax',       $this->formatPrice($tax));
 			$contentModel->set('productTaxPercent', $total_tax_percent);
 			$contentModel->set('productTotal',     $this->formatPrice($producttotal));
-			$contentModel->set('productDescription',   $productLineItem["productDescription{$productLineItemIndex}"]);
-			$contentModel->set('productComment',   $productLineItem["comment{$productLineItemIndex}"]);
+			$contentModel->set('productDescription',   nl2br($productLineItem["productDescription{$productLineItemIndex}"]));
+			$contentModel->set('productComment',   nl2br($productLineItem["comment{$productLineItemIndex}"]));
 			$contentModel->set('manufCountry', $productLineItem["manufCountry{$productLineItemIndex}"]);
 			$contentModel->set('customsId', $productLineItem["customsId{$productLineItemIndex}"]);
 
@@ -311,7 +311,8 @@ class SalesPlatform_PDF_ProductListDocumentPDFController {
 			    $model->set('orgEntrepreneurreg', str_repeat('_', 50));
 			}
 
-			$model->set('orgLogo', "test/logo/".$resultrow['logoname']);
+			$model->set('orgLogo', '<img src="test/logo/'.$resultrow['logoname'].'">');
+			$model->set('orgLogoPath', 'test/logo/'.$resultrow['logoname']);
 			$model->set('orgName', decode_html($resultrow['organizationname']));
 		}
 

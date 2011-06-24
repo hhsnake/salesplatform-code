@@ -49,7 +49,15 @@ $mod_strings = array (
       'LBL_NO_TEMPLATES' => 'Нет Шаблонов',
       'LBL_SELECT'=>'Выбрать',
       'LBL_MESSAGE'=>'Сообщение',
-
+      // SalesPlatform.ru begin
+      'LBL_METHOD_NAME'=>'Название метода',
+      'VTChangeOwnerTask'=>'Изменить ответственного',
+      'VTSMSTask' => 'Отправка SMS',
+      'VTChangeFieldValueTask'=>'Изменить значение поля',
+      'LBL_UPDATED_FIELD_NAME' => 'Название обновляемого поля',
+      'LBL_NEW_FIELD_VALUE' => 'Новое значение',
+      'Workflow' => 'Обработчики',
+      // SalesPlatform.ru end
 );
 
 ?>

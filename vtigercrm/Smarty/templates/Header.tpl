@@ -133,6 +133,9 @@
 			 {/if}
 
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">{$APP.LBL_MY_PREFERENCES}</a></td>
+                         {* SalesPlatform.ru begin *}
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="http://community.salesplatform.ru/vtiger_links.php/community" target="_blank">{$APP.LNK_COMMUNITY}</a></td>
+                         {* SalesPlatform.ru end *}
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="http://community.salesplatform.ru/vtiger_links.php/wiki" target="_blank">{$APP.LNK_HELP}</a></td>
 			<!-- <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="javascript:;" onClick="openwin();">{$APP.LNK_WEARE}</a></td> -->
 			<td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">{$APP.LBL_LOGOUT}</a> ({$CURRENT_USER})</td> 

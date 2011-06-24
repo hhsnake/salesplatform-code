@@ -46,7 +46,10 @@ if($fld_module == 'Events'){
 }else{
 	$temp_module_strings = return_module_language($current_language, $fld_module);
 }
-$picklists_entries = getUserFldArray($fld_module,$roleid);
+// SalesPlatform begin
+$picklists_entries = getUserFldArray($fld_module,$roleid,$temp_module_strings);
+//$picklists_entries = getUserFldArray($fld_module,$roleid);
+// SalesPlatform end
 $available_module_picklist = array();
 $picklist_fields = array();
 if(!empty($picklists_entries)){

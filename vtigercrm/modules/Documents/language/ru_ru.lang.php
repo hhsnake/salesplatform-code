@@ -135,7 +135,9 @@ $mod_strings = Array(
 // Added according to Ticket #6198
 'Folder Name'=>'Название Папки',
 'Document No'=>'Документ №',
-'Internal'=>'База Данных',
-'External'=>'Внешнее',
+// SalesPlatform.ru begin
+'Internal'=>'Загрузить файл',
+'External'=>'Внешняя ссылка на файл',
+// SalesPlatform.ru end
 );
 ?>

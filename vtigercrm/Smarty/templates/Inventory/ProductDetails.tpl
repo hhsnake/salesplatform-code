@@ -165,11 +165,21 @@ function displayCoords(currObj,obj,mode,curr_row)
 	<td class="crmTableRow small lineOnTop">
 		<table width="100%"  border="0" cellspacing="0" cellpadding="1">
 		   <tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+				{$APP.LBL_PRODUCT_CODE}
+			</td>
+{* SalesPlatform.ru end *}
 			<td class="small" id="viewproductcode">
 				<input type="text" id="hdnProductcode1" name="hdnProductcode1" style="width:70%" value="" readonly>
 			</td>
 		   </tr>
 		   <tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+				{$APP.LBL_PRODUCT_NAME}
+			</td>
+{* SalesPlatform.ru end *}
 			<td class="small">
 				<input type="text" id="productName1" name="productName1" class="small" style="width:70%" value="{$PRODUCT_NAME}" readonly />
 				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}" />
@@ -178,18 +188,32 @@ function displayCoords(currObj,obj,mode,curr_row)
 			</td>
 		</tr>
 		<tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+				{$APP.LBL_PRODUCT_DESCRIPTION}
+			</td>
+{* SalesPlatform.ru end *}
 			<td class="small" id="viewdescription">
 				<textarea id="productDescription1" name="productDescription1" value="" class=small style="width:70%;height:80px" >{$hdnproductDescription1}</textarea>
 				<img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" onClick="{literal}${/literal}('productDescription1').value=''"; style="cursor:pointer;" />
 			</td>
 		   </tr>
 		   <tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+			</td>
+{* SalesPlatform.ru end *}
 			<td class="small">
 				<input type="hidden" value="" id="subproduct_ids1" name="subproduct_ids1" />
 				<span id="subprod_names1" name="subprod_names1" style="color:#C0C0C0;font-style:italic;"> </span>
 			</td>
 		   </tr>
 		   <tr valign="bottom">
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+				{$APP.LBL_PRODUCT_COMMENT}
+			</td>
+{* SalesPlatform.ru end *}
 			<td class="small" id="setComment">
 				<textarea id="comment1" name="comment1" class=small style="width:70%;height:40px"></textarea>
 				<img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" onClick="{literal}${/literal}('comment1').value=''"; style="cursor:pointer;" />

@@ -40,10 +40,25 @@ function edittaskscript($){
     	$('#check_select_date').click(function(){
     	    if($(this).attr('checked')){
     	        $('#select_date').css('display', 'block');
+                // SalesPlatform.ru begin
+    	        $('#select_period').css('display', 'none');
+                $('#check_select_period').attr('checked', '');
+                // SalesPlatform.ru end
     	    }else{
     	        $('#select_date').css('display', 'none');
     	    }
     	});
+        // SalesPlatform.ru begin
+    	$('#check_select_period').click(function(){
+    	    if($(this).attr('checked')){
+    	        $('#select_period').css('display', 'block');
+    	        $('#select_date').css('display', 'none');
+                $('#check_select_date').attr('checked', '');
+    	    }else{
+    	        $('#select_period').css('display', 'none');
+    	    }
+    	});
+        // SalesPlatform.ru end
 			$('#edittask_cancel_button').click(function(){
 				window.location=returnUrl;
 			});

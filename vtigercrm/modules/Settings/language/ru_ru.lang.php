@@ -157,6 +157,9 @@ $mod_strings = array (
       'LBL_USERNAME' => 'Пользователь',
       'LBL_PASWRD' => 'Пароль',
       'LBL_REQUIRES_AUTHENT' => 'Требует Аутентификацию?',
+      // SalesPlatform.ru begin
+      'LBL_FROM_EMAIL_FIELD'=>'Email Отправителя',
+      // SalesPlatform.ru end
       'LBL_USER_MANAGEMENT' => 'Управление Пользователями и Доступом',
       'LBL_USERS' => 'Пользователи',
       'LBL_USERS_LIST' => 'Пользователи',
@@ -717,6 +720,9 @@ $mod_strings = array (
       'LBL_TASK_TITLE' => 'Оглавление Задания',
       'LBL_PARENT_WORKFLOW' => 'Родительский Обработчик',
       'MSG_EXECUTE_TASK_DELAY' => 'Запустить задание после некоторой задержки',
+      // SalesPlatform.ru begin
+      'MSG_EXECUTE_TASK_PERIODICAL' => 'Запускать задание периодически',
+      // SalesPlatform.ru end
       'LBL_AFTER' => 'После',
       'LBL_BEFORE' => 'До',
       'LBL_TASK_OPERATIONS' => 'Операции Задания',
@@ -825,7 +831,7 @@ $mod_strings = array (
 
 // Добавлено для 5.2.0
 
-      'Settings'=>'Параметры',
+      'Settings'=>'Настройки',
       'Workflow'=>'Обработчик',
 
 

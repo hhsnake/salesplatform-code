@@ -1560,14 +1560,24 @@ function getDetailAssociatedProducts($module,$focus)
 		}
 		
 		//For Product Name
+// SalesPlatform.ru begin
 		$output .= '
 			   <tr valign="top">
 				<td class="crmTableRow small lineOnTop">
-					<font color="gray">'.$productcode.'</font>
-					<br><font color="black">'.$productname.'</font>
+					<font color="gray">'.getTranslatedString('LBL_PRODUCT_CODE').':</font>&nbsp;<font color="black">'.$productcode.'</font>
+					<br><font color="gray">'.getTranslatedString('LBL_PRODUCT_NAME').':</font>&nbsp;<font color="black">'.$productname.'</font>
 					<br><font color="gray">'.$productdescription.'</font>
 					<br><font color="gray">'.$comment.'</font>
 				</td>';
+//		$output .= '
+//			   <tr valign="top">
+//				<td class="crmTableRow small lineOnTop">
+//					<font color="gray">'.$productcode.'</font>
+//					<br><font color="black">'.$productname.'</font>
+//					<br><font color="gray">'.$productdescription.'</font>
+//					<br><font color="gray">'.$comment.'</font>
+//				</td>';
+// SalesPlatform.ru end
 		//Upto this added to display the Product name and comment
 
 

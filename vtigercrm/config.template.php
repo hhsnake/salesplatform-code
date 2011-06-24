@@ -199,4 +199,9 @@ if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set($default_timezone);
 }
 
+// SalesPlatform.ru begin
+// Flag that controls where to put currency symbol: true - before money value, false - after
+$currency_symbol_before = false;
+// SalesPlatform.ru end
+
 ?>

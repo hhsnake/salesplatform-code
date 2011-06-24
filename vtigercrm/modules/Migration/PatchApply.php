@@ -38,7 +38,10 @@ if(!isset($source_version) || empty($source_version))
 $reach = 0;
 foreach($versions as $version => $label)
 {
-	if($version == $source_version || $reach == 1)
+// SalesPlatform.ru begin
+	if($version === $source_version || $reach == 1)
+//	if($version == $source_version || $reach == 1)
+// SalesPlatform.ru end
 	{
 		$reach = 1;
 		$temp[] = $version;

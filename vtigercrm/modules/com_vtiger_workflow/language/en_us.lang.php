@@ -38,6 +38,13 @@ $mod_strings = array(
 'LBL_NO_TEMPLATES'=>'No Templates',
 'LBL_SELECT'=>'Select',
 'LBL_MESSAGE'=>'Message',
+// SalesPlatform.ru begin
+'LBL_METHOD_NAME'=>'Method Name',
+'VTChangeOwnerTask'=>'Change Owner',
+'VTChangeFieldValueTask'=>'Change Field Value',
+'LBL_UPDATED_FIELD_NAME' => 'Updated Field Name',
+'LBL_NEW_FIELD_VALUE' => 'New Value',
+// SalesPlatform.ru end
 );
 
 

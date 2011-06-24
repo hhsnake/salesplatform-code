@@ -49,8 +49,12 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 		//$alts[]=htmlentities($name)."=%d";
                 // SalesPlatform.ru end
 //If the daatx value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
-		 if(utf8_strlen($name)>=14)
-                        $name=utf8_substr($name, 0, 44);
+// SalesPlatform.ru begin
+		 if(utf8_strlen($name)>41)
+                        $name=utf8_substr($name, 0, 41) . '...';
+//		 if(utf8_strlen($name)>=14)
+//                        $name=utf8_substr($name, 0, 44);
+// SalesPlatform.ru end
 		if($pos>=2)
 		{
 			$val=explode(" ",$name);

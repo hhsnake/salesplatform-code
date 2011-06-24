@@ -142,6 +142,9 @@ $app_strings = array (
       'LNK_VTDOCS' => 'Документация',
       'LNK_ABOUT' => 'Описание',
       'LNK_OUTLOOK' => './include/images/outlook_download.gif',
+       // SalesPlatform.ru - begin
+       'LNK_COMMUNITY' => 'Сообщество',
+       // SalesPlatform.ru - end
       'SINGLE_Accounts' => 'Контрагент',
       'SINGLE_Contacts' => 'Контакт',
       'SINGLE_Campaigns' => 'Кампания',
@@ -493,6 +496,12 @@ $app_strings = array (
       'LBL_NEW_SORDER_BUTTON_KEY' => 'E',
       'LBL_NEW_SORDER_BUTTON' => 'Новый Заказ на Продажу',
       'LBL_PRODUCT_DETAILS' => 'Описание Товара',
+// SalesPlatform.ru begin
+      'LBL_PRODUCT_CODE' => 'Код товара',
+      'LBL_PRODUCT_NAME' => 'Наименование',
+      'LBL_PRODUCT_DESCRIPTION' => 'Описание',
+      'LBL_PRODUCT_COMMENT' => 'Комментарий',
+// SalesPlatform.ru  end
       'LBL_QTY_IN_STOCK' => 'Количество в Наличии',
       'LBL_QTY' => 'Кол-во',
       'LBL_UNIT_PRICE' => 'Цена Единицы',
@@ -856,8 +865,8 @@ $app_strings = array (
       'LBL_SEND_EMAIL_PDF' => 'Отослать PDF по e-mail',
       'ERR_INVALID_PAGE_COUNT' => 'Неправильная Нумерация Страницы',
       'Quotes' => 'Предложения',
-      'PurchaseOrder' => 'Заказ на Закупку',
-      'SalesOrder' => 'Заказ на Продажу',
+      'PurchaseOrder' => 'Заказы на Закупку',
+      'SalesOrder' => 'Заказы на Продажу',
       'Invoice' => 'Счета',
       'LBL_CREATING_NEW_Contacts' => 'Создание нового Контакта',
       'LBL_CREATING_NEW_Campaigns' => 'Создание новой Кампании',
@@ -1130,7 +1139,7 @@ $app_strings = array (
 	'FieldFormulas' => 'Формулы Полей',
 	'ModComments' => '',
 	'Project' => 'Проекты',
-	'ProjectMilestone' => 'Сроки Проектов',
+	'ProjectMilestone' => 'Контрольные Точки',
 	'ProjectTask' => 'Проектные Задания',
 	'ProjectTeam' => 'Проектные Команды',
 	'RecycleBin' => 'Корзина',
@@ -1139,7 +1148,7 @@ $app_strings = array (
 	'Tooltip' => 'Подсказки',
 	'VtigerBackup' => 'Резервное Копирование',
 	'Webforms' => 'ВебФормы',
-	'SINGLE_ProjectMilestone' => 'Критический Срок',
+	'SINGLE_ProjectMilestone' => 'Контрольная Точка',
 	'SINGLE_ProjectTask' => 'Проектное Задание',
 		
 //Конец добавления

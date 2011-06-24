@@ -40,6 +40,9 @@ require_once("VTWorkflowApplication.inc");
 		}else if($request["active"]=="false"){
 			$task->active=false;
 		}
+                // SalesPlatform.ru begin
+	        $task->trigger=null;
+                // SalesPlatform.ru end
 		if(isset($request['check_select_date'])){
 			$trigger = array(
 				'days'=>($request['select_date_direction']=='after'?1:-1)*(int)$request['select_date_days'],
@@ -47,6 +50,17 @@ require_once("VTWorkflowApplication.inc");
 				); 
 			$task->trigger=$trigger;
 		}
+                // SalesPlatform.ru begin
+		if (isset($request['check_select_period'])){
+			$trigger = array(
+				'days'=>null,
+				'field'=>null,
+				'period'=>(int)$request['select_period_mins'],
+				'time'=>$request['select_period_time']
+				);
+			$task->trigger=$trigger;
+		}
+                // SalesPlatform.ru end
 		
 		$fieldNames = $task->getFieldNames();
 		foreach($fieldNames as $fieldName){

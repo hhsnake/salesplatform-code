@@ -200,11 +200,24 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<!-- Product Re-Ordering Feature Code Addition ends -->
 		<table width="100%"  border="0" cellspacing="0" cellpadding="1">
 			<tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+				{$APP.LBL_PRODUCT_CODE}
+			</td>
+{* SalesPlatform.ru end *}
 			<td class="small" id="viewproductcode">
-				<textarea id="{$hdnProductcode}" name="{$hdnProductcode}" class=small style="width:70%;height:12px" readonly>{$data.$hdnProductcode}</textarea>
+{* SalesPlatform.ru begin *}
+{*				<textarea id="{$hdnProductcode}" name="{$hdnProductcode}" class=small style="width:70%;height:12px" readonly>{$data.$hdnProductcode}</textarea> *}
+				<input type="text" id="{$hdnProductcode}" name="{$hdnProductcode}" value="{$data.$hdnProductcode}" class="small" style="width: 70%;" readonly />
+{* SalesPlatform.ru end *}
 			</td>
 		   </tr>
 		   <tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+				{$APP.LBL_PRODUCT_NAME}
+			</td>
+{* SalesPlatform.ru end *}
 				<td class="small" valign="top">
 					<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" style="width: 70%;" readonly />
 					<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}" />
@@ -217,19 +230,33 @@ function displayCoords(currObj,obj,mode,curr_row)
 					{/if}
 				</td>
 			</tr>
-			</tr>
 		   <tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+				{$APP.LBL_PRODUCT_DESCRIPTION}
+			</td>
+{* SalesPlatform.ru end *}
 			<td class="small" id="viewdescription">
 				<textarea id="{$productDescription}" name="{$productDescription}" class=small style="width:70%;height:80px">{$data.$productDescription}</textarea>
 				<img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" onClick="{literal}${/literal}('{$productDescription}').value=''"; style="cursor:pointer;" />
 			</td>
+			</tr>
 			<tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+			</td>
+{* SalesPlatform.ru end *}
 				<td class="small">
 					<input type="hidden" value="{$data.$subproduct_ids}" id="{$subproduct_ids}" name="{$subproduct_ids}" />
 					<span id="{$subprod_names}" name="{$subprod_names}"  style="color:#C0C0C0;font-style:italic;">{$data.$subprod_names}</span>
 				</td>
 			</tr>
 			<tr>
+{* SalesPlatform.ru begin *}
+			<td class="small" width="80">
+				{$APP.LBL_PRODUCT_COMMENT}
+			</td>
+{* SalesPlatform.ru end *}
 				<td class="small" id="setComment">
 					<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
 					<img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" onClick="{literal}${/literal}('{$comment}').value=''"; style="cursor:pointer;" />

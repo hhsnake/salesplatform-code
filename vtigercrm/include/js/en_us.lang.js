@@ -306,5 +306,12 @@
 				'LBL_ENTER_WINDOW_TITLE': 'Please enter Window Title.',
 				'LBL_SELECT_ONLY_FIELDS': 'Please select only two fields.',
 				'LBL_ENTER_RSS_URL':'Please enter RSS URL',
-				'LBL_ADD_HOME_WIDGET': 'Unable to add homestuff! Please try again'
+				'LBL_ADD_HOME_WIDGET': 'Unable to add homestuff! Please try again',
+
+// SalesPlatform.ru begin
+'LBL_PRODUCT_CODE':'Part Number',
+'LBL_PRODUCT_NAME':'Name',
+'LBL_PRODUCT_DESCRIPTION':'Description',
+'LBL_PRODUCT_COMMENT':'Comment'
+// SalesPlatform.ru end
 			};

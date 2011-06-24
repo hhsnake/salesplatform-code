@@ -59,14 +59,23 @@
 		
 		<table border="0" cellpadding="5" cellspacing="0" width="100%" class="small">
 		<tr>
-			<td width='15%' nowrap="nowrap"><input type="checkbox" name="check_select_date" value="" id="check_select_date" {if $trigger neq null}checked{/if}> 
+                        {* SalesPlatform.ru begin *}
+			<td width='15%' nowrap="nowrap"><input type="checkbox" {if $task->executeImmediately}disabled{/if} name="check_select_date" value="" id="check_select_date" {if $trigger.days neq null}checked{/if}>
+			{* <td width='15%' nowrap="nowrap"><input type="checkbox" name="check_select_date" value="" id="check_select_date" {if $trigger neq null}checked{/if}> *}
+                        {* SalesPlatform.ru end *}
 			<b>{$MOD.MSG_EXECUTE_TASK_DELAY}</b></td>
 			<td>
-				<div id="select_date" style="display:none;">
+                                {* SalesPlatform.ru begin *}
+				<div id="select_date" {if $trigger.days eq null}style="display:none;"{/if}>
+				{* <div id="select_date" style="display:none;"> *}
+                                {* SalesPlatform.ru end *}
 					<input type="text" name="select_date_days" value="{$trigger.days}" id="select_date_days" class="small"> days 
 					<select name="select_date_direction" class="small">
 						<option {if $trigger.direction eq 'after'}selected{/if} value='after'>{$MOD.LBL_AFTER}</option>
-						<option {if $trigger.direction eq 'after'}selected{/if} value='before'>{$MOD.LBL_BEFORE}</option>
+                                                {* SalesPlatform.ru begin *}
+						<option {if $trigger.direction eq 'before'}selected{/if} value='before'>{$MOD.LBL_BEFORE}</option>
+						{* <option {if $trigger.direction eq 'after'}selected{/if} value='before'>{$MOD.LBL_BEFORE}</option> *}
+                                                {* SalesPlatform.ru end *}
 					</select> 
 					<select name="select_date_field" class="small">
 		{foreach key=name item=label from=$dateFields}
@@ -79,6 +88,21 @@
 			</td>
 		</tr>
 		</table>
+
+                {* SalesPlatform.ru begin *}
+		<table border="0" cellpadding="5" cellspacing="0" width="100%" class="small">
+		<tr>
+			<td width='15%' nowrap="nowrap"><input type="checkbox" {if $task->executeImmediately or not $task->executeRepeatedly}disabled{/if} name="check_select_period" value="" id="check_select_period" {if $trigger.period neq null}checked{/if}>
+			<b>{$MOD.MSG_EXECUTE_TASK_PERIODICAL}</b></td>
+			<td>
+				<div id="select_period" {if $trigger.period eq null}style="display:none;"{/if}>
+					every <input type="text" name="select_period_mins" value="{$trigger.period}" id="select_period_mins" class="small"> mins
+                                        start at <input type="hidden" name="select_period_time" value="{$trigger.time}" id="select_period_time" style="width:60px" class="time_field">
+				</div>
+			</td>
+		</tr>
+		</table>
+                {* SalesPlatform.ru end *}
 		
 		<table class="tableHeading" border="0"  width="100%" cellspacing="0" cellpadding="5">
 			<tr>

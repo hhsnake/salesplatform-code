@@ -92,8 +92,13 @@ require_once("VTWorkflowUtils.php");
 			}else{
 				$direction = 'after';
 			}
-			$smarty->assign('trigger', array('days'=>$days, 'direction'=>$direction, 
-			  'field'=>$trigger['field']));
+                        // SalesPlatform.ru begin
+			$smarty->assign('trigger', array('days'=>$days, 
+                            'direction'=>$direction, 'field'=>$trigger['field'],
+                            'period'=>$trigger['period'], 'time'=>$trigger['time']));
+			//$smarty->assign('trigger', array('days'=>$days, 'direction'=>$direction,
+			//  'field'=>$trigger['field']));
+                        // SalesPlatform.ru end
 		}
 		$curr_date="(general : (__VtigerMeta__) date)";
 		$curr_time='(general : (__VtigerMeta__) time)';

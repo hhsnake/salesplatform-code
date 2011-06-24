@@ -174,19 +174,28 @@ function verify_data(form) {
 	}
 	form.email1.value = trim(form.email1.value);
 	if (form.email1.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-		alert("$the_emailid"+form.email1.value+"$email_field_is");
+                // SalesPlatform.ru begin
+		alert(form.email1.value+"$email_field_is");
+		//alert("$the_emailid"+form.email1.value+"$email_field_is");
+                // SalesPlatform.ru end
 		form.email1.focus();
 		return false;
 	}
 	form.email2.value = trim(form.email2.value);
 	if (form.email2.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		alert("$the_emailid"+form.email2.value+"$other_email_field_is");
+                // SalesPlatform.ru begin
+		alert(form.email2.value+"$other_email_field_is");
+		//alert("$the_emailid"+form.email2.value+"$other_email_field_is");
+                // SalesPlatform.ru end
 		form.email2.focus();
 		return false;
 	}
 	form.yahoo_id.value = trim(form.yahoo_id.value);
 	if (form.yahoo_id.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value) || (trim(form.yahoo_id.value) != "" && !(form.yahoo_id.value.indexOf('yahoo') > -1))) {
-		alert("$the_emailid"+form.yahoo_id.value+"$yahoo_email_field_is");
+                // SalesPlatform.ru begin
+		alert(form.yahoo_id.value+"$yahoo_email_field_is");
+		//alert("$the_emailid"+form.yahoo_id.value+"$yahoo_email_field_is");
+                // SalesPlatform.ru end
 		form.yahoo_id.focus();
 		return false;
 	}

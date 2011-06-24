@@ -486,7 +486,10 @@ class Migration_Utils {
 		$reach = 0;
 		include($migrationInfo['root_directory']."/modules/Migration/versions.php");
 		foreach($versions as $version => $label) {
-			if($version == $source_version || $reach == 1) {
+// SalesPlatform.ru begin
+			if($version === $source_version || $reach == 1) {
+//			if($version == $source_version || $reach == 1) {
+// SalesPlatform.ru end
 				$reach = 1;
 				$temp[] = $version;
 			}
@@ -511,7 +514,10 @@ class Migration_Utils {
 			//Here we have to include all the files (all db differences for each release will be included)
 			$filename = "modules/Migration/DBChanges/".$temp[$patch_count]."_to_".$temp[$patch_count+1].".php";
 			$empty_tag = "<tr><td colspan='2'>&nbsp;</td></tr>";
-			$start_tag = "<tr><td colspan='2'><b><font color='red'>&nbsp;";
+			// SalesPlatform.ru begin
+			$start_tag = "<tr><td colspan='2'><b><font color='grey'>&nbsp;";
+			//$start_tag = "<tr><td colspan='2'><b><font color='red'>&nbsp;";
+			// SalesPlatform.ru end
 			$end_tag = "</font></b></td></tr>";
 	
 			if(is_file($filename)) {

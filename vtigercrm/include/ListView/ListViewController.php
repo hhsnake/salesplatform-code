@@ -321,8 +321,16 @@ class ListViewController {
 						if($fieldName == 'unit_price') {
 							$currencyId = getProductBaseCurrency($recordId,$module);
 							$cursym_convrate = getCurrencySymbolandCRate($currencyId);
-							$value = "<font style='color:grey;'>".$cursym_convrate['symbol'].
-								"</font> ". $value;
+// SalesPlatform.ru begin					
+    							if(isset($currency_symbol_before) && $currency_symbol_before)
+							    $value = "<font style='color:grey;'>".$cursym_convrate['symbol'].
+							    	    "</font> ". $value;
+    							else
+							    $value = $value." <font style='color:grey;'>".$cursym_convrate['symbol'].
+								    "</font>";
+//							$value = "<font style='color:grey;'>".$cursym_convrate['symbol'].
+//								"</font> ". $value;
+// SalesPlatform.ru end
 						} else {
 							$rate = $user_info['conv_rate'];
 							//changes made to remove vtiger_currency symbol infront of each
@@ -434,7 +442,13 @@ class ListViewController {
 					$currencyInfo = getInventoryCurrencyInfo($module, $recordId);
 					$currencyId = $currencyInfo['currency_id'];
 					$currencySymbol = $currencyInfo['currency_symbol'];
-					$value = $currencySymbol.$value;
+// SalesPlatform.ru begin					
+					if(isset($currency_symbol_before) && $currency_symbol_before)
+    					    $value = $currencySymbol.$value;
+    					else
+    					    $value = $value.' '.$currencySymbol;
+//					$value = $currencySymbol.$value;
+// SalesPlatform.ru end
 				}
 				if ( in_array($uitype,array(71,72,7,9,90)) ) {
 					$value = "<span align='right'>$value</div>";

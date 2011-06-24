@@ -76,7 +76,9 @@ $mod_strings = array (
       'LBL_SUPPORT_EXPIRY_DATE' => 'Дата окончания поддержки',
       'LBL_PURCHASE_DATE' => 'Дата Закупки',
       'Product Name' => 'Товар',
-      'Part Number' => '№ Партии',
+// SalesPlatform.ru begin
+      'Part Number' => 'Код товара',
+// SalesPlatform.ru end
       'Product Active' => 'Активен',
       'Commission Rate' => 'Комиссия (%)',
       'Qty/Unit' => 'Кол-во/Ед.',
@@ -183,7 +185,9 @@ $mod_strings = array (
       'MSG_THANKS' => 'Спасибо,',
       'LBL_PRODUCT_PRICES' => 'Цены Товаров',
       'Member Of' => 'Состоит в',
-      'Product No' => 'Код',
+// SalesPlatform.ru begin
+      'Product No' => 'Товар №',
+// SalesPlatform.ru end
       'LBL_NO_TAXES_ASSOCIATED' => 'Нет налогов асоциированных с этим товаром',
 
 //Добавлено для 5.2.0

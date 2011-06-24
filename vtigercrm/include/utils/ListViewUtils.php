@@ -1548,7 +1548,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			if($fieldname == 'unit_price') {			
 				$currency_id = getProductBaseCurrency($entity_id,$module);
 				$cursym_convrate = getCurrencySymbolandCRate($currency_id);
-				$value = "<font style='color:grey;'>".$cursym_convrate['symbol']."</font> ". $temp_val;
+// SalesPlatform.ru begin					
+				if(isset($currency_symbol_before) && $currency_symbol_before)
+				    $value = "<font style='color:grey;'>".$cursym_convrate['symbol']."</font> ". $temp_val;
+    				else
+				    $value = $temp_val . " <font style='color:grey;'>".$cursym_convrate['symbol']."</font>";
+//				$value = "<font style='color:grey;'>".$cursym_convrate['symbol']."</font> ". $temp_val;
+// SalesPlatform.ru end
 			} else {
 				$rate = $user_info['conv_rate'];
 				//changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
@@ -2036,12 +2042,20 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_temp_desc);
 					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(decode_html(nl2br($slashes_temp_val)))."","unitprice" => "$unitprice", "qtyinstk"=>"$qty_stock","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","subprod_ids"=>"$sub_det");
 					$order_code = $adb->query_result($list_result,$list_result_count,'productcode');
-					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br(decode_html($slashes_temp_val)))."","unitprice" => "$unitprice", "qtyinstk"=>"$qty_stock","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"".decode_html($slashes_desc)."","subprod_ids"=>"$sub_det","prod_code"=>"$order_code");
+// SalesPlatform.ru begin
+					$prod_sheet = $adb->query_result($list_result,$list_result_count,'productsheet');
+					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br(decode_html($slashes_temp_val)))."","unitprice" => "$unitprice", "qtyinstk"=>"$qty_stock","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"".decode_html($slashes_desc)."","subprod_ids"=>"$sub_det","prod_code"=>"$order_code","prod_sheet"=>"$prod_sheet");
+//					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br(decode_html($slashes_temp_val)))."","unitprice" => "$unitprice", "qtyinstk"=>"$qty_stock","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"".decode_html($slashes_desc)."","subprod_ids"=>"$sub_det","prod_code"=>"$order_code");
+// SalesPlatform.ru end
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
 					require_once('include/Zend/Json.php');
 					$prod_arr = Zend_Json::encode($tmp_arr);
-					//crm-now: order code added
-					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'","'.$order_code.'");\' vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+// SalesPlatform.ru begin
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'","'.$order_code.'","'.$prod_sheet.'");\' vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+
+//					//crm-now: order code added
+//					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'","'.$order_code.'");\' vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+// SalesPlatform.ru end
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{
@@ -2088,11 +2102,18 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$slashes_desc = addslashes(htmlspecialchars($product_des,ENT_QUOTES,$default_charset));
 					
 					$order_code = $adb->query_result($list_result,$list_result_count,'productcode');
-					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice", "taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"".decode_html($slashes_desc)."","subprod_ids"=>"$sub_det","prod_code"=>"$order_code");
+// SalesPlatform.ru begin
+					$prod_sheet = $adb->query_result($list_result,$list_result_count,'productsheet');
+					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice", "taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"".decode_html($slashes_desc)."","subprod_ids"=>"$sub_det","prod_code"=>"$order_code","prod_sheet"=>"$prod_sheet");
+//					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice", "taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"".decode_html($slashes_desc)."","subprod_ids"=>"$sub_det","prod_code"=>"$order_code");
+// SalesPlatform.ru end
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
 					require_once('include/Zend/Json.php');
 					$prod_arr = Zend_Json::encode($tmp_arr);
-					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.decode_html($slashes_desc).'","'.$sub_det.'","'.$order_code.'"); \'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+// SalesPlatform.ru begin
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.decode_html($slashes_desc).'","'.$sub_det.'","'.$order_code.'","'.$prod_sheet.'"); \'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+//					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.decode_html($slashes_desc).'","'.$sub_det.'","'.$order_code.'"); \'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+// SalesPlatform.ru end
 				}
 				elseif($popuptype == "inventory_service")
 				{
@@ -2126,11 +2147,18 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					
 					//crm-now: order code added
 					$order_code = $adb->query_result($list_result,$list_result_count,'service_no');
-					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","prod_code"=>"$order_code");
+// SalesPlatform.ru begin
+					$prod_sheet = '';
+					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","prod_code"=>"$order_code","prod_sheet"=>"$prod_sheet");
+//					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","prod_code"=>"$order_code");
+// SalesPlatform.ru end
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
 					require_once('include/Zend/Json.php');
 					$prod_arr = Zend_Json::encode($tmp_arr);
-					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$order_code.'");\'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+// SalesPlatform.ru begin
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$order_code.'","'.$prod_sheet.'");\'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+//					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$order_code.'");\'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+// SalesPlatform.ru end
 					//$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$product_des.'","'.$order_code.'");\'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
@@ -2432,7 +2460,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$currency_info = getInventoryCurrencyInfo($module, $entity_id);
 			$currency_id = $currency_info['currency_id'];
 			$currency_symbol = $currency_info['currency_symbol'];
-			$value = $currency_symbol.$temp_val;
+// SalesPlatform.ru begin					
+			if(isset($currency_symbol_before) && $currency_symbol_before)
+			    $value = $currency_symbol.$value;
+			else
+			    $value = $value.' '.$currency_symbol;
+//			$value = $currency_symbol.$temp_val;
+// SalesPlatform.ru end
 		}
 		else
 		{

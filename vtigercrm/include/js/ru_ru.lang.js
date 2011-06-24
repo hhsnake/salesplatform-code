@@ -116,7 +116,7 @@ var alert_arr = {
       GREATER_OR_EQUALS:'больше или равно',
       NO_SPECIAL_CHARS:'Специальные знаки не разрешаются в строке Инвойса',
       PLS_SELECT_VALID_FILE:'Пожалуйста выберите файл со следующим расширением:\n',
-      NO_SPECIAL:'Специальные знаки не разрешены',
+      NO_SPECIAL:'Специальные знаки и русские буквы не разрешены',
       NO_QUOTES:'Символы кавычек (\' ") и + не допускаются',
       IN_PROFILENAME:' в Названии Профиля',
       IN_GROUPNAME:' в названии Группы',
@@ -135,7 +135,7 @@ var alert_arr = {
       TIME_SHOULDNOT_PAST:'Текущее время для Действий со статусом Планируется',
       LBL_AND:'И',
       LBL_ENTER_VALID_PORT:'Пожалуйста введите верный номер порта',
-      IN_USERNAME:' в Имени ',
+      IN_USERNAME:' в поле Пользователь ',
       LBL_ENTER_VALID_NO:'Пожалуйста введите верный номер',
       LBL_PROVIDE_YES_NO:' Неверное значение.\n Пожалуйста ответьте Да или Нет',
       LBL_SELECT_CRITERIA:' Неверный критерий.\n Пожалуйста выберите критерий',
@@ -306,5 +306,13 @@ var alert_arr = {
 	'LBL_ENTER_WINDOW_TITLE': 'Пожалуйста введите Заголовок Окна.',
 	'LBL_SELECT_ONLY_FIELDS': 'Пожалуйста выберите только два поля.',
 	'LBL_ENTER_RSS_URL':'Пожалуйста введите адрес RSS',
-	'LBL_ADD_HOME_WIDGET': 'Невозможно добавить объект! Пожалуйста попробуйте еще'
+	'LBL_ADD_HOME_WIDGET': 'Невозможно добавить объект! Пожалуйста попробуйте еще',
+
+// SalesPlatform.ru begin
+      'LBL_PRODUCT_CODE':'Код товара',
+      'LBL_PRODUCT_NAME':'Наименование',
+      'LBL_PRODUCT_DESCRIPTION':'Описание',
+      'LBL_PRODUCT_COMMENT':'Комментарий'
+// SalesPlatform.ru end
+
 	};

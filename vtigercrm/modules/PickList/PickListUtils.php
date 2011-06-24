@@ -18,7 +18,10 @@
  * It gets the picklist details array for the given module in the given format
  * $fieldlist = Array(Array('fieldlabel'=>$fieldlabel,'generatedtype'=>$generatedtype,'columnname'=>$columnname,'fieldname'=>$fieldname,'value'=>picklistvalues))	
  */
-function getUserFldArray($fld_module,$roleid){
+// SalesPlatform.ru begin
+function getUserFldArray($fld_module,$roleid,$lang){
+//function getUserFldArray($fld_module,$roleid){
+// SalesPlatform.ru end
 	global $adb, $log;
 	$user_fld = Array();
 	$tabid = getTabid($fld_module);
@@ -42,8 +45,11 @@ function getUserFldArray($fld_module,$roleid){
 			$user_fld['generatedtype'] = $adb->query_result($result,$i,"generatedtype");	
 			$user_fld['columnname'] = $adb->query_result($result,$i,"columnname");	
 			$user_fld['fieldname'] = $adb->query_result($result,$i,"fieldname");	
-			$user_fld['uitype'] = $adb->query_result($result,$i,"uitype");	
-			$user_fld['value'] = getAssignedPicklistValues($user_fld['fieldname'], $roleid, $adb); 
+			$user_fld['uitype'] = $adb->query_result($result,$i,"uitype");
+                        // SalesPlatform.ru begin
+                        $user_fld['value'] = getAssignedPicklistValues($user_fld['fieldname'], $roleid, $adb, $lang);
+			//$user_fld['value'] = getAssignedPicklistValues($user_fld['fieldname'], $roleid, $adb);
+                        // SalesPlatform.ru end
 			$fieldlist[] = $user_fld;
 		}
 	}
@@ -100,7 +106,10 @@ function get_available_module_picklist($picklist_details){
  * @param string $fieldName - the name of the field
  * @return array $arr - the array containing the picklist values 
  */
-function getAllPickListValues($fieldName){
+// SalesPlatform.ru begin
+function getAllPickListValues($fieldName, $lang = null){
+//function getAllPickListValues($fieldName){
+// SalesPlatform.ru end
 	global $adb;
 	$sql = 'SELECT * FROM vtiger_'.$adb->sql_escape_string($fieldName);
 	$result = $adb->query($sql);
@@ -108,7 +117,19 @@ function getAllPickListValues($fieldName){
 	
 	$arr = array();
 	for($i=0;$i<$count;$i++){
-		$arr[] = $adb->query_result($result, $i, $fieldName);
+                // SalesPlatform.ru begin
+                $pick_val = $adb->query_result($result, $i, $fieldName);
+                if ($lang === null) {
+                    $arr[] = $pick_val;
+                } else {
+                    if($lang[$pick_val] != ''){
+                            $arr[$pick_val]=$lang[$pick_val];
+                    }else{
+                            $arr[$pick_val]=$pick_val;
+                    }
+                }
+		//$arr[] = $adb->query_result($result, $i, $fieldName);
+                // SalesPlatform.ru end
 	}
 	return $arr;
 }
@@ -131,9 +152,15 @@ function getEditablePicklistValues($fieldName, $lang, $adb){
 		for($i=0;$i<$RowCount;$i++){
 			$pick_val = $adb->query_result($res,$i,$fieldName);
 			if($lang[$pick_val] != ''){
-				$values[]=$lang[$pick_val];
+                                // SalesPlatform.ru begin
+				$values[$pick_val]=$lang[$pick_val];
+				//$values[]=$lang[$pick_val];
+                                // SalesPlatform.ru end
 			}else{
-				$values[]=$pick_val;
+                                // SalesPlatform.ru begin
+				$values[$pick_val]=$pick_val;
+				//$values[]=$pick_val;
+                                // SalesPlatform.ru end
 			}
 		}
 	}
@@ -156,9 +183,15 @@ function getNonEditablePicklistValues($fieldName, $lang, $adb){
 	for($i=0;$i<$count;$i++){
 		$non_val = $adb->query_result($result,$i,$fieldName);
 		if($lang[$non_val] != ''){
-			$values[]=$lang[$non_val];
+                        // SalesPlatform.ru begin
+			$values[$non_val]=$lang[$non_val];
+			//$values[]=$lang[$non_val];
+                        // SalesPlatform.ru end
 		}else{
-			$values[]=$non_val;
+                        // SalesPlatform.ru begin
+			$values[$non_val]=$non_val;
+			//$values[]=$non_val;
+                        // SalesPlatform.ru end
 		}
 	}
 	if(count($values)==0){
@@ -174,7 +207,10 @@ function getNonEditablePicklistValues($fieldName, $lang, $adb){
  * @param object $adb - the peardatabase object
  * @return array $val - the assigned picklist values in array format
  */
-function getAssignedPicklistValues($tableName, $roleid, $adb){
+// SalesPlatform.ru begin
+function getAssignedPicklistValues($tableName, $roleid, $adb, $lang = null){
+//function getAssignedPicklistValues($tableName, $roleid, $adb){
+// SalesPlatform.ru end
 	$arr = array();
 	
 	$sub = getSubordinateRoleAndUsers($roleid);
@@ -200,7 +236,19 @@ function getAssignedPicklistValues($tableName, $roleid, $adb){
 		
 		if($count) {
 			while($resultrow = $adb->fetch_array($result)) {
-				$arr[] = $resultrow[$tableName];
+                                // SalesPlatform.ru begin
+                                if ($lang === null) {
+                                    $arr[] = $resultrow[$tableName];
+                                } else {
+                                    $pick_val = $resultrow[$tableName];
+                                    if($lang[$pick_val] != ''){
+                                            $arr[$pick_val]=$lang[$pick_val];
+                                    }else{
+                                            $arr[$pick_val]=$pick_val;
+                                    }
+                                }
+                                // $arr[] = $resultrow[$tableName];
+                                // SalesPlatform.ru end
 			}
 		}
 	}

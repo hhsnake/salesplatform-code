@@ -46,8 +46,12 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 		//$alts[]=htmlentities($name)."=%d";
                 // SalesPlatform.ru end
 		//If the datax value of a string is greater, adding '\n' to it so that it'll come in 2nd line
-		if(strlen($name)>=14)
-			$name=substr($name, 0, 34);
+// SalesPlatform.ru begin
+		 if(utf8_strlen($name)>31)
+                        $name=utf8_substr($name, 0, 31) . '...';
+//		if(strlen($name)>=14)
+//			$name=substr($name, 0, 34);
+// SalesPlatform.ru begin
 		if($pos>=2)
 		{
 			$val=explode(" ",$name);
@@ -121,10 +125,16 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 		if(isset($_REQUEST['display_view']) && $_REQUEST['display_view']== 'MATRIX')
 		{
 			$datax[$i]=trim($datax[$i]);
-			if(strlen($datax[$i]) <= 10)
+// SalesPlatform.ru begin
+			if(utf8_strlen($datax[$i]) <= 10)
+//			if(strlen($datax[$i]) <= 10)
+// SalesPlatform.ru end
 				$datax[$i]=$datax[$i];
 			else
-				$datax[$i]= substr($datax[$i],0,10)."..";
+// SalesPlatform.ru begin
+				$datax[$i]= utf8_substr($datax[$i],0,10)."...";
+//				$datax[$i]= substr($datax[$i],0,10)."..";
+// SalesPlatform.ru end
 		}
 		// To have unique names even in case of duplicates let us add the id
 		$datalabel = $datax[$i];

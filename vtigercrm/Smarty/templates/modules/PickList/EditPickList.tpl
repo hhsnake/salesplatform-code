@@ -24,9 +24,16 @@
 			<b>{$MOD.LBL_SELECT_TO_EDIT}</b>
 			<br>
 			<select id="edit_availPickList" name="availList" size="10" style="width:250px;border:1px solid #666666;font-family:Arial, Helvetica, sans-serif;font-size:11px;" onchange="selectForEdit();">
+                                {* SalesPlatform.ru begin *}
+				{foreach item=pick_val key=pick_id from=$PICKVAL}
+					<option value="{$pick_id}">{$pick_val}</option>
+				{/foreach}
+                                {*
 				{foreach item=pick_val from=$PICKVAL}
 					<option value="{$pick_val}">{$pick_val}</option>
 				{/foreach}
+                                *}
+                                {* SalesPlatform.ru end *}
 			</select>
 			
 			{if is_array($NONEDITPICKLIST)}				
