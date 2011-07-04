@@ -45,10 +45,14 @@ function parse_import($file_name,$delimiter,$max_lines,$has_header)
 		return -1;
 	}
 
+// SalesPlatform.ru begin
+	setlocale(LC_CTYPE, "ru_RU.UTF-8");
+// SalesPlatform.ru end
+
 	while ( (( $fields = fgetcsv($fh, 4096, $delimiter) ) !== FALSE) 
 		&& ( $max_lines == -1 || $line_count < $max_lines)) 
 	{
-
+	
 		if ( count($fields) == 1 && isset($fields[0]) && $fields[0] == '')
 		{
 			break;

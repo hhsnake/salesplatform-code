@@ -36,6 +36,10 @@ require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/CommonUtils.php');
 
+// SalesPlatform.ru begin
+require_once('include/phputf8/utf8.php');
+// SalesPlatform.ru end
+
 @session_unregister('column_position_to_field');
 @session_unregister('totalrows');
 @session_unregister('recordcount');
@@ -210,16 +214,24 @@ if($total_num_rows >2)
 //If the cell value is very large then UI mapping will be collpased. So we will display partial text
 foreach($firstrow as $ind => $val)
 {
-	if(strlen($val) > 30)
-		$firstrow[$ind] = substr(to_html($val),0,30)." ..........";
+// SalesPlatform.ru begin
+	if(utf8_strlen($val) > 30)
+		$firstrow[$ind] = utf8_substr(to_html($val),0,30)." ..........";
+//	if(strlen($val) > 30)
+//		$firstrow[$ind] = substr(to_html($val),0,30)." ..........";
+// SalesPlatform.ru end
 	else
 		$firstrow[$ind] = to_html($val);
 }
 if (isset($secondrow)) { //Asha: Fix for ticket #4432
 	foreach($secondrow as $ind => $val)
 	{
-		if(strlen($val) > 30)
-			$secondrow[$ind] = substr(to_html($val),0,30)." ..........";
+// SalesPlatform.ru begin
+		if(utf8_strlen($val) > 30)
+			$secondrow[$ind] = utf8_substr(to_html($val),0,30)." ..........";
+//		if(strlen($val) > 30)
+//			$secondrow[$ind] = substr(to_html($val),0,30)." ..........";
+// SalesPlatform.ru end
 		else
 			$secondrow[$ind] = to_html($val);
 
@@ -227,8 +239,12 @@ if (isset($secondrow)) { //Asha: Fix for ticket #4432
 	if (isset($thirdrow)) { //Asha: Fix for ticket #4432
 		foreach($thirdrow as $ind => $val)
 		{
-			if(strlen($val) > 30)
-				$thirdrow[$ind] = substr(to_html($val),0,30)." ..........";
+// SalesPlatform.ru begin
+			if(utf8_strlen($val) > 30)
+				$thirdrow[$ind] = utf8_substr(to_html($val),0,30)." ..........";
+//			if(strlen($val) > 30)
+//				$thirdrow[$ind] = substr(to_html($val),0,30)." ..........";
+// SalesPlatform.ru end
 			else
                         	$thirdrow[$ind] = to_html($val);
 		}
