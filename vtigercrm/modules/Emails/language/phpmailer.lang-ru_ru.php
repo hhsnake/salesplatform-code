@@ -34,4 +34,8 @@ $PHPMAILER_LANG['file_open']            = 'Файловая ошибка: не �
 $PHPMAILER_LANG['encoding']             = 'Неизвестный вид кодировки: ';
 $PHPMAILER_LANG['signing']              = 'Ошибка подписи: ';
 $PHPMAILER_LANG['smtp_error']           = 'Ошибка сервера SMTP: ';
+
+// SalesPlatform.ru begin
+$PHPMAILER_LANG['tls']           = 'TLS: ';
+// SalesPlatform.ru end
 ?>

@@ -25,6 +25,12 @@ var alert_arr = {
       DELETE_VENDOR:'Удаление этого(их) Поставщика(ов) удалит связанные с ним(и) Заказы на Покупку. Вы уверены что хотите удалить выбранные ',
       SELECT_MAILID:'Пожалуйста выберите учетную запись почты',
       OVERWRITE_EXISTING_ACCOUNT2:') адресными данными?',
+	  // SalesPlatform.ru begin
+	  OVERWRITE_EXISTING_CONTACT1:'Заменить указанный адрес адресом выбранного (',
+	  OVERWRITE_EXISTING_CONTACT2:') контакта?',
+	  'No Mail Ids' : 'Отсутствует e-mail адрес',
+	  'Mail Ids not permitted' : 'Доступ к e-mail адресам не разрешен',
+	  // SalesPlatform.ru end
       MISSING_FIELDS:'Отсутствуют обязательные поля:',
       NOT_ALLOWED_TO_EDIT:'Вам не разрешено редактировать это поле',
       NOT_ALLOWED_TO_EDIT_FIELDS:'Вам не разрешено редактировать эти поля',
@@ -302,17 +308,39 @@ var alert_arr = {
 	BETWEEN: 'между',
 	BEFORE: 'перед',
 	AFTER: 'после',
-	'ERROR_DELETING_TRY_AGAIN': 'Ошибка при удалении. Пожалуйста попробуйте еще раз.',
-	'LBL_ENTER_WINDOW_TITLE': 'Пожалуйста введите Заголовок Окна.',
-	'LBL_SELECT_ONLY_FIELDS': 'Пожалуйста выберите только два поля.',
-	'LBL_ENTER_RSS_URL':'Пожалуйста введите адрес RSS',
-	'LBL_ADD_HOME_WIDGET': 'Невозможно добавить объект! Пожалуйста попробуйте еще',
+	'ERROR_DELETING_TRY_AGAIN': 'Ошибка при удалении. Пожалуйста, попробуйте еще раз.',
+	'LBL_ENTER_WINDOW_TITLE': 'Пожалуйста, введите Заголовок Окна.',
+	'LBL_SELECT_ONLY_FIELDS': 'Пожалуйста, выберите только два поля.',
+	'LBL_ENTER_RSS_URL':'Пожалуйста, введите адрес RSS',
+	'LBL_ADD_HOME_WIDGET': 'Невозможно добавить объект! Пожалуйста, попробуйте еще',
 
 // SalesPlatform.ru begin
       'LBL_PRODUCT_CODE':'Код товара',
       'LBL_PRODUCT_NAME':'Наименование',
       'LBL_PRODUCT_DESCRIPTION':'Описание',
-      'LBL_PRODUCT_COMMENT':'Комментарий'
+      'LBL_PRODUCT_COMMENT':'Комментарий',
+       SELECT_DOCWITHFILE:'Пожалуйста, выберите документ с файлом.',
+	  'LBL_OFF':'нет',
+	  'LBL_ON':'да',
+	  'LBL_MOV_EMAIL1':'Перемещение писем из папки ',
+	  'LBL_MOV_EMAIL2':' в папку ',
+	  'LBL_MOV_EMAIL3':''
 // SalesPlatform.ru end
 
 	};
+
+// SalesPlatform.ru begin
+var operationsTranslated = {
+	"is" : "соответствует",
+	"contains" : "содержит",
+	"does not contain" : "не содержит",
+	"starts with" : "начинается с",
+	"ends with" : "заканчивается на",
+	"equal to" : "равно",
+	"less than" : "меньше",
+	"greater than" : "больше",
+	"does not equal" : "не равно",
+	"less than or equal to" : "меньше или равно",
+	"greater than or equal to" : "больше или равно"
+};
+// SalesPlatform.ru end

@@ -118,6 +118,9 @@ EOQ;
  */
 function get_mini_calendar(& $cal){
 	global $current_user,$adb,$cal_log,$mod_strings,$theme;
+// SalesPlatform.ru begin
+	global $sunday_first;
+// SalesPlatform.ru end
 	$category = getParentTab();
 	$cal_log->debug('Entering get_mini_calendar() method...');
 	$count = 0;
@@ -138,7 +141,13 @@ function get_mini_calendar(& $cal){
 	$minical .= "<tr class='hdrNameBg'>";
 	//To display days in week 
 	$minical .= '<th width="12%">'.$mod_strings['LBL_WEEK'].'</th>';
-	for ($i = 0; $i < 7; $i ++){
+// SalesPlatform.ru begin
+	for($d=0;$d<7;$d++)
+	{
+		$i = $d;
+		if (!$sunday_first) $i= ($d+1)%7;
+//	for ($i = 0; $i < 7; $i ++){
+// SalesPlatform.ru end
 		$weekday = $mod_strings['cal_weekdays_short'][$i];
 		$minical .= '<th width="12%">'.$weekday.'</th>';
 	}
@@ -153,7 +162,13 @@ function get_mini_calendar(& $cal){
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
 			$class = dateCheck($cal['slice']->start_time->get_formatted_date());
 			if($j == 0){
-				$minical .= "<td style='text-align:center' ><a href='index.php?module=Calendar&action=index&view=week".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>".$cal['slice']->start_time->week."</td>";
+// SalesPlatform.ru begin
+				// Bugfix by Elmue: The week number must be taken from a working day; NOT from sunday, which always belongs to the PREVIOUS week! (ISO 8601)
+				$thursday = $cal['slice']->start_time->getThisweekDaysbyIndex(4);
+				$weekNo   = $thursday->week;
+				$minical .= "<td style='text-align:center' ><a href='index.php?module=Calendar&action=index&view=week".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>".$weekNo."</td>";
+//				$minical .= "<td style='text-align:center' ><a href='index.php?module=Calendar&action=index&view=week".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>".$cal['slice']->start_time->week."</td>";
+// SalesPlatform.ru end
 			}
 			
 			//To differentiate day having events from other days
@@ -804,8 +819,12 @@ function getWeekViewLayout(& $cal)
 		} else {
 			//To display Days in Week
 			$cal['slice'] = $cal['calendar']->week_array[$cal['calendar']->slices[$col-1]];
-			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col-1);
-			$day = $date->getdayofWeek_inshort();
+// SalesPlatform.ru begin
+			$date = $cal['slice']->start_time; // Bugfix: Show the day of the column. Not always sunday!
+//			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col-1);
+			$day = $date->getdayofWeek();
+//			$day = $date->getdayofWeek_inshort();
+// SalesPlatform.ru end
 			$weekview_layout .= '<td width=12% class="lvtCol" bgcolor="blue" valign=top>';
 			$weekview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
 			$weekview_layout .= $date->get_Date().' - '.$day;
@@ -949,7 +968,7 @@ function getMonthViewLayout(& $cal)
 	$monthview_layout .= '</table>';
 	return $monthview_layout;
 	$cal_log->debug("Exiting getMonthViewLayout() method...");
-		
+
 }
 
 /**
@@ -960,6 +979,9 @@ function getMonthViewLayout(& $cal)
 function getYearViewLayout(& $cal)
 {
 	global $mod_strings,$cal_log;
+// SalesPlatform.ru begin
+	global $sunday_first;
+// SalesPlatform.ru end
 	$category = getParentTab();
 	$cal_log->debug("Entering getYearViewLayout() method...");
 	$yearview_layout = '';
@@ -981,8 +1003,14 @@ function getYearViewLayout(& $cal)
 									</b></a>
 								</td>
 							</tr><tr class="hdrNameBg">';
-			for($w=0;$w<7;$w++)
+// SalesPlatform.ru begin
+			for($d=0;$d<7;$d++)
 			{
+				$w = $d;
+				if (!$sunday_first) $w= ($d+1)%7;
+//			for($w=0;$w<7;$w++)
+//			{
+// SalesPlatform.ru end
 				$yearview_layout .= '<th width="14%">'.$mod_strings['cal_weekdays_short'][$w].'</th>';
 			}
 			$yearview_layout .= '</tr>';
@@ -1264,7 +1292,7 @@ function getweekEventLayer(& $cal,$slice)
 		$cal_log->debug("Exiting getweekEventLayer() method...");
 		return $eventlayer;
 	}
-			
+
 }
 
 /**
@@ -1371,7 +1399,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		LEFT JOIN vtiger_groups
 			ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 		LEFT JOIN vtiger_users
-	       		ON vtiger_users.id = vtiger_crmentity.smownerid 
+	       		ON vtiger_users.id = vtiger_crmentity.smownerid
 		LEFT OUTER JOIN vtiger_recurringevents
 			ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
@@ -1871,7 +1899,7 @@ function constructEventListView(& $cal,$entry_list,$navigation_array='')
 	}
 	array_push($header,$mod_strings['LBL_ASSINGEDTO']);
 	array_push($header_width,'15%');
-	
+
         $list_view .="<table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
                         <tr>";
 	$header_rows = count($header);

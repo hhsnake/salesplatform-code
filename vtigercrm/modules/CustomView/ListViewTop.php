@@ -154,7 +154,10 @@ function getMetricList()
 			$metricslist['id'] = $cvrow['cvid'];
 			$metricslist['name'] = $cvrow['viewname'];
 			$metricslist['module'] = $cvrow['entitytype'];
-			$metricslist['user'] = getUserName($cvrow['userid']);
+// SalesPlatform.ru begin
+			$metricslist['user'] = getUserRealName($cvrow['userid']);
+//			$metricslist['user'] = getUserName($cvrow['userid']);
+// SalesPlatform.ru end
 			$metricslist['count'] = '';
 			if(isPermitted($cvrow['entitytype'],"index") == "yes"){
 				$metriclists[] = $metricslist;

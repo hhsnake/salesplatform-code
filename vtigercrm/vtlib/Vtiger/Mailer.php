@@ -43,7 +43,9 @@ class Vtiger_Mailer extends PHPMailer {
 	 * @access private
 	 */
 	function initialize() {
-		$this->IsSMTP();
+                // SalesPlatform.ru begin
+		//$this->IsSMTP();
+                // SalesPlatform.ru end
 
 		global $adb;
 		$result = $adb->pquery("SELECT * FROM vtiger_systems WHERE server_type=?", Array('email'));
@@ -53,6 +55,21 @@ class Vtiger_Mailer extends PHPMailer {
 			$this->Password = $adb->query_result($result, 0, 'server_password');
 			$this->SMTPAuth = $adb->query_result($result, 0, 'smtp_auth');
 			if(empty($this->SMTPAuth)) $this->SMTPAuth = false;
+// SalesPlatform.ru begin
+                        $use_sendmail = $adb->query_result($result,0,'use_sendmail');
+                        if(!empty($use_sendmail) && $use_sendmail != 'false')
+                            $this->IsSendmail();
+                        else
+                            $this->IsSMTP();
+
+                        $mail_server_tls = $adb->query_result($result,0,'server_tls');
+                        if(!empty($mail_server_tls) && $mail_server_tls != 'no')
+                            $this->SMTPSecure = $mail_server_tls;
+
+                        $mail_server_port = $adb->query_result($result,0,'server_port');
+                        if(!empty($mail_server_port) && $mail_server_port != 0)
+                            $this->Port = $mail_server_port;
+// SalesPlatform.ru end
 
 			$this->_serverConfigured = true;
 		}

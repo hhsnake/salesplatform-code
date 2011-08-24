@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -19,12 +19,12 @@ include('vtigerversion.php');
 // memory limit default value = 64M
 ini_set('memory_limit','64M');
 
-// show or hide calendar, world clock, calculator, chat and CKEditor 
-// Do NOT remove the quotes if you set these to false! 
+// show or hide calendar, world clock, calculator, chat and CKEditor
+// Do NOT remove the quotes if you set these to false!
 $CALENDAR_DISPLAY = 'true';
 $WORLD_CLOCK_DISPLAY = 'true';
 $CALCULATOR_DISPLAY = 'true';
-$CHAT_DISPLAY = 'true'; 
+$CHAT_DISPLAY = 'true';
 $USE_RTE = 'true';
 
 // url for customer portal (Example: http://vtiger.com/portal)
@@ -101,15 +101,15 @@ $upload_dir = '_VT_UPLOADDIR_';
 $upload_maxsize = 3000000;
 
 // flag to allow export functionality
-// 'all' to allow anyone to use exports 
-// 'admin' to only allow admins to export 
-// 'none' to block exports completely 
+// 'all' to allow anyone to use exports
+// 'admin' to only allow admins to export
+// 'none' to block exports completely
 // allow_exports default value = all
 $allow_exports = 'all';
 
 // files with one of these extensions will have '.txt' appended to their filename on upload
 // upload_badext default value = php, php3, php4, php5, pl, cgi, py, asp, cfm, js, vbs, html, htm
-$upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 'cfm', 'js', 'vbs', 'html', 
+$upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 'cfm', 'js', 'vbs', 'html',
 						'htm', 'exe', 'bin', 'bat', 'sh', 'dll', 'phps',
 						'phtml', 'xhtml', 'rb', 'msi', 'jsp');
 
@@ -202,6 +202,9 @@ if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 // SalesPlatform.ru begin
 // Flag that controls where to put currency symbol: true - before money value, false - after
 $currency_symbol_before = false;
+
+// define the first day of week for all PHP and JavaScript calendars
+$sunday_first = false;
 // SalesPlatform.ru end
 
 ?>

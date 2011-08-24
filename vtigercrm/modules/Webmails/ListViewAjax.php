@@ -202,9 +202,12 @@ if (is_array($list)) {
 			if($tmpval[0] != ".")
 			{
 				if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
-				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
+				// SalesPlatform.ru begin
+				//$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
+				$boxes .= '<option value="'.$tmpval.'">'.$tmpval_utf8;
+				// SalesPlatform.ru end
                                 // SalesPlatform.ru begin
-				$folders .= '<li ><img src="'.$img_src.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval_utf8.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li ><img src="'.$img_src.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\',\''.$tmpval_utf8.'\');" class="small">'.$tmpval_utf8.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				//$folders .= '<li ><img src="themes/'.$theme.'/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
                                 // SalesPlatform.ru end
 				if($box->unseen > 0)

@@ -416,6 +416,9 @@ function move_messages()
 	var nid = '';
 	var chkname=document.getElementsByName("selected_id");
 	mvmbox = $("mailbox_select").value;
+	// SalesPlatform.ru begin
+	mvmboxlabel = $("mailbox_select").options[$("mailbox_select").selectedIndex].innerHTML;
+	// SalesPlatform.ru end
 	var nid = Array();
 	var i=0;
 	move_mail = 1;
@@ -432,14 +435,20 @@ function move_messages()
 				'index.php',
 				{queue: {position: 'end', scope: 'command'},
 					method: 'post',
-					postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mailbox+'&start='+start+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
+					// SalesPlatform.ru begin
+					// postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mailbox+'&start='+start+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
+					postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+escape(mailbox)+'&start='+start+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+escape(mvmbox),
+					// SalesPlatform.ru end
 					onComplete: function(t) {
 						sh = $("show_msg");
 						var leftSide = findPosX(sh);
 					        var topSide = findPosY(sh);
 					        sh.style.left= leftSide + 400+'px';
 					        sh.style.top= topSide + 350 +'px';
-						sh.innerHTML = "Moving mail(s) from "+mailbox+" folder to "+mvmbox+" folder";
+						// SalesPlatform.ru begin
+						// sh.innerHTML = "Moving mail(s) from "+mailbox+" folder to "+mvmbox+" folder";
+						sh.innerHTML = alert_arr["LBL_MOV_EMAIL1"]+mailbox_label+alert_arr["LBL_MOV_EMAIL2"]+mvmboxlabel+alert_arr["LBL_MOV_EMAIL3"];
+						// SalesPlatform.ru end
                                                 sh.style.display = "block";
 						sh.classname = "delete_email";
                                                 new Effect.Fade(sh,{queue: {position: 'end', scope: 'effect'},duration: '50'});
@@ -691,8 +700,15 @@ function remove(s, t) {
   r += s.substring(0,i) + remove(s.substring(i + t.length), t);
   return r;
 }
-function changeMbox(box) {
+
+// SalesPlatform.ru begin
+// function changeMbox(box) {
+function changeMbox(box, box_label) {
+// SalesPlatform.ru end
 	mailbox=box;
+// SalesPlatform.ru begin
+	mailbox_label=box_label;
+// SalesPlatform.ru end
 	start = 0;	
 	change_box=1;
 	runEmailCommand("reload",0);

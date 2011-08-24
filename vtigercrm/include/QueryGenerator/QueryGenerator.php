@@ -96,7 +96,10 @@ class QueryGenerator {
 			$meta = $handler->getMeta();
 			$this->referenceModuleMetaInfo[$module] = $meta;
 			if($module == 'Users') {
-				$this->moduleNameFields[$module] = 'user_name';
+// SalesPlatform.ru begin
+                            $this->moduleNameFields[$module] = 'last_name,first_name';
+//                            $this->moduleNameFields[$module] = 'user_name';
+// SalesPlatform.ru end
 			} else {
 				$this->moduleNameFields[$module] = $meta->getNameFields();
 			}
@@ -525,8 +528,18 @@ class QueryGenerator {
 						$fieldGlue = ' OR';
 					}
 				} elseif (in_array($fieldName, $this->ownerFields)) {
-					$fieldSql .= "$fieldGlue vtiger_users.user_name $valueSql or ".
-							"vtiger_groups.groupname $valueSql";
+// SalesPlatform.ru begin
+                                    if($conditionInfo['operator'] == 'n' || $conditionInfo['operator'] == 'k')
+                                        $fieldSql .= "$fieldGlue (concat(ifnull(vtiger_users.last_name,''), ' ', ifnull(vtiger_users.first_name,'')) $valueSql and ".
+                                                     "ifnull(vtiger_users.user_name,'') $valueSql and ".
+                                                            "ifnull(vtiger_groups.groupname,'') $valueSql)";
+                                    else
+                                        $fieldSql .= "$fieldGlue concat(vtiger_users.last_name, ' ', vtiger_users.first_name) $valueSql or ".
+                                                     "vtiger_users.user_name $valueSql or ".
+                                                            "vtiger_groups.groupname $valueSql";
+//                                    $fieldSql .= "$fieldGlue vtiger_users.user_name $valueSql or ".
+//							"vtiger_groups.groupname $valueSql";
+// SalesPlatform.ru end
 				} else {
 					if($fieldName == 'birthday' && !$this->isRelativeSearchOperators(
 							$conditionInfo['operator'])) {

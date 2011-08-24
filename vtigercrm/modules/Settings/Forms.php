@@ -73,7 +73,10 @@ function verify_data(form) {
 		return false;
 	}
 	form.email.value = trim(form.email.value);
-	if (form.email.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
+// SalesPlatform.ru begin
+//	if (form.email.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
+	if (form.email.value != "" && !/^(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.email.value)) {
+// SalesPlatform.ru end
 		alert('"' + form.email.value + '" $err_invalid_email_address');
 		return false;
 	}
@@ -81,7 +84,7 @@ function verify_data(form) {
 		alert('"' + form.mails_per_page.value + '" $err_invalid_page_count');
 		return false;
 	}
-		
+
 	return true;
 }
 

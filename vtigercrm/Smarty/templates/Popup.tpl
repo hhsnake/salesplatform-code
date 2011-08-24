@@ -67,7 +67,10 @@ function set_focus() {ldelim}
 </script>
 
 <body  onload=set_focus() class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rightmargin=0>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
+{* SalesPlatform.ru begin *}
+<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
+{* SalesPlatform.ru end *}
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 	<tr>
 		<td>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">

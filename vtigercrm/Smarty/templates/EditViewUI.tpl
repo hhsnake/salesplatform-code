@@ -642,7 +642,10 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 
 					<script>
 						{*<!-- Create an instance of the multiSelector class, pass it the output target and the max number of files -->*}
-						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 6 );
+						{* SalesPlatform.ru begin *}
+						{* var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 6 ); *}
+						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 10 );
+						{* SalesPlatform.ru end *}
 						multi_selector.count = {$image_count}
 						{*<!-- Pass in the file element -->*}
 						multi_selector.addElement( document.getElementById( 'my_file_element' ) );
@@ -755,9 +758,22 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			      <font color="red">{$mandatory_field}</font>{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
 	            </td>
 				<td width="30%" align=left class="dvtCellInfo">
+{* SalesPlatform.ru begin *}
+                            {if $fldname eq 'reports_to_id'}
+					<input readonly name="reports_to_name" class="small" type="text" value='{$fldvalue}' tabindex="{$vt_tab}" >
+					<input name="reports_to_id" type="hidden" value='{$secondvalue}'>&nbsp;<img title="{$UMOD.LBL_CHANGE}" src="{'select.gif'|@vtiger_imageurl:$THEME}" alt="{$UMOD.LBL_CHANGE}" class="small" name=btn1 align="absmiddle" LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false&fromlink={$fromlink}&recordid={$ID}&user_field=reports_to_id","test","width=640,height=603,resizable=0,scrollbars=0");' style='cursor:hand;cursor:pointer'>
+                                        <input type="image" src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.reports_to_id.value=''; this.form.reports_to_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+                            {else}
+					<input readonly name="{$fldname}_display" class="small" type="text" value='{$fldvalue}' tabindex="{$vt_tab}" >
+					<input name="{$fldname}" type="hidden" value='{$secondvalue}'>&nbsp;<img title="{$UMOD.LBL_CHANGE}" src="{'select.gif'|@vtiger_imageurl:$THEME}" alt="{$UMOD.LBL_CHANGE}" class="small" name=btn1 align="absmiddle" LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false&fromlink={$fromlink}&recordid=&user_field={$fldname}","test","width=640,height=603,resizable=0,scrollbars=0");' style='cursor:hand;cursor:pointer'>
+                                        <input type="image" src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.{$fldname}.value=''; this.form.{$fldname}_display.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+                            {/if}
+{*
 					<input readonly name='reports_to_name' class="small" type="text" value='{$fldvalue}' tabindex="{$vt_tab}" >
-					<input name='reports_to_id' type="hidden" value='{$secondvalue}'>&nbsp;<input title="Change [Alt+C]" accessKey="C" type="button" class="small" value='{$UMOD.LBL_CHANGE}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false&fromlink={$fromlink}&recordid={$ID}","test","width=640,height=603,resizable=0,scrollbars=0");'>
-	            	&nbsp;<input type="image" src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.reports_to_id.value=''; this.form.reports_to_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+                                        <input name='reports_to_id' type="hidden" value='{$secondvalue}'>&nbsp;<input title="Change [Alt+C]" accessKey="C" type="button" class="small" value='{$UMOD.LBL_CHANGE}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false&fromlink={$fromlink}&recordid={$ID}","test","width=640,height=603,resizable=0,scrollbars=0");'>
+	            	<input type="image" src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.reports_to_id.value=''; this.form.reports_to_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+*}
+{* SalesPlatform.ru end *}
 	            </td>
 			{elseif $uitype eq 116 || $uitype eq 117}<!-- for currency in users details-->	
 			<td width="20%" class="dvtCellLabel" align=right>

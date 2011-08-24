@@ -9,20 +9,47 @@
  ********************************************************************************/
 
 require_once($root_directory."include/database/PearDatabase.php");
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
 global $mod_strings,$adb;
+// SalesPlatform.ru begin
+$idn = new idna_convert();
+// SalesPlatform.ru end
 $server=vtlib_purify($_REQUEST['server']);
 $port=vtlib_purify($_REQUEST['port']);
-$server_username=vtlib_purify($_REQUEST['server_username']);
+// SalesPlatform.ru begin
+//$server_username=vtlib_purify($_REQUEST['server_username']);
+$server_username = $idn->encode( vtlib_purify($_REQUEST['server_username']) );
+// SalesPlatform.ru end
 $server_password=vtlib_purify($_REQUEST['server_password']);
 $server_type = vtlib_purify($_REQUEST['server_type']);
 $server_path = vtlib_purify($_REQUEST['server_path']);
-$from_email_field = vtlib_purify($_REQUEST['from_email_field']);
+// SalesPlatform.ru begin
+//$from_email_field = vtlib_purify($_REQUEST['from_email_field']);
+$from_email_field = $idn->encode( vtlib_purify($_REQUEST['from_email_field']) );
+$from_name = vtlib_purify($_REQUEST['from_name']);
+error_log($from_name);
+// SalesPlatform.ru end
 $db_update = true;
 if($_REQUEST['smtp_auth'] == 'on' || $_REQUEST['smtp_auth'] == 1)
 	$smtp_auth = 'true';
 else
 	$smtp_auth = 'false';
-	
+
+// SalesPlatform.ru begin
+if(isset($_REQUEST['server_tls']))
+    $server_tls=vtlib_purify($_REQUEST['server_tls']);
+else
+    $server_tls = '';
+
+if($_REQUEST['use_sendmail'] == 'on' || $_REQUEST['use_sendmail'] == 1)
+	$use_sendmail = 'true';
+else
+	$use_sendmail = 'false';
+
+// SalesPlatform.ru end
+
 $sql="select * from vtiger_systems where server_type = ?";
 $id=$adb->query_result($adb->pquery($sql, array($server_type)),0,"id");
 
@@ -44,7 +71,7 @@ if($server_type == 'proxy')
 		while(!feof($sock)) {$proxy_cont .= fread($sock,4096);}
 		fclose($sock);
 		$proxy_cont = substr($proxy_cont, strpos($proxy_cont,"\r\n\r\n")+4);
-		
+
 		if(substr_count($proxy_cont, "Cache Access Denied") > 0)
 		{
 			$error_str = 'error=LBL_PROXY_AUTHENTICATION_REQUIRED';
@@ -109,12 +136,20 @@ if($server_type == 'proxy' || $server_type == 'ftp_backup' || $server_type == 'l
 	{
 		if($id=='') {
 			$id = $adb->getUniqueID('vtiger_systems');
-			$sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?,?)";
-			$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth,$server_path,$from_email_field);
+			// SalesPlatform.ru begin
+			// $sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?,?)";
+			$sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?,?,?,?,?)";
+			//$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth,$server_path,$from_email_field);
+			$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth,$server_path,$from_email_field,$server_tls,$from_name,$use_sendmail);
+			// SalesPlatform.ru end
 		}
 		else {
-			$sql="update vtiger_systems set server = ?, server_username = ?, server_password = ?, smtp_auth= ?, server_type = ?, server_port= ?, server_path = ?, from_email_field=? where id = ?";
-			$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port, $server_path,$from_email_field, $id);
+// SalesPlatform.ru begin
+			$sql="update vtiger_systems set server = ?, server_username = ?, server_password = ?, smtp_auth= ?, server_type = ?, server_port= ?, server_path = ?, from_email_field=?, server_tls=?, from_name=?, use_sendmail=? where id = ?";
+			$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port, $server_path,$from_email_field, $server_tls, $from_name, $use_sendmail, $id);
+//			$sql="update vtiger_systems set server = ?, server_username = ?, server_password = ?, smtp_auth= ?, server_type = ?, server_port= ?, server_path = ?, from_email_field=? where id = ?";
+//			$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port, $server_path,$from_email_field, $id);
+// SalesPlatform.ru end
 		}
 		$adb->pquery($sql, $params);
 	}
@@ -151,14 +186,20 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
         	{
                 	if($id=='') {
                         $id = $adb->getUniqueID("vtiger_systems");
-                        $sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?,?)";
-						$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth, '',$from_email_field);
+						// SalesPlatform.ru begin
+						// $sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?,?)";
+                        $sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?,?,?,?,?)";
+						// $params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth, '',$from_email_field);
+						$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth, '',$from_email_field,$server_tls, $from_name, $use_sendmail);
                 	} else {
-                        $sql="update vtiger_systems set server=?, server_username=?, server_password=?, smtp_auth=?, server_type=?, server_port=?,from_email_field=? where id=?";
-                		$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port,$from_email_field,$id);
+						// $sql="update vtiger_systems set server=?, server_username=?, server_password=?, smtp_auth=?, server_type=?, server_port=?,from_email_field=? where id=?";
+                        $sql="update vtiger_systems set server=?, server_username=?, server_password=?, smtp_auth=?, server_type=?, server_port=?,from_email_field=?, server_tls=?, from_name=?, use_sendmail=? where id=?";
+						// $params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port,$from_email_field,$id);
+                		$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port,$from_email_field,$server_tls,$from_name,$use_sendmail,$id);
+						// SalesPlatform.ru end
 					}
 				$adb->pquery($sql, $params);
-        	}	
+        	}
 	}
 }
 //While configuring Proxy settings, the submitted values will be retained when exception is thrown - dina

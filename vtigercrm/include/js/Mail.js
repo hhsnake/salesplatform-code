@@ -64,6 +64,59 @@ function massMail(module)
 	document.massdelete.action="index.php?module=CustomView&action=SendMailAction&return_module="+module+"&return_action=index&viewname="+viewid;
 }
 
+// SalesPlatform.ru begin
+function select_return_emails(entity_id, parentname, module) {
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: "module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+entity_id+"&sp_mode=popup",
+                        onComplete: function(response) {
+					if(response.responseText == "Mail Ids not permitted" || response.responseText == "No Mail Ids")
+					{
+						alert(alert_arr[response.responseText]);
+					}
+					else {
+						getObj('sendmail_cont').innerHTML=response.responseText;
+					}
+                        }
+                }
+        );
+}
+
+function validate_sendmail_popup(idlist,parentname,module) {
+	var j=0;
+	var chk_emails = document.SendMail.elements.length;
+	var oFsendmail = document.SendMail.elements
+	email_type = new Array();
+	for(var i=0 ;i < chk_emails ;i++)
+	{
+		if(oFsendmail[i].type != 'button')
+		{
+			if(oFsendmail[i].checked != false)
+			{
+				email_type [j++]= oFsendmail[i].value;
+			}
+		}
+	}
+	if(email_type != '')
+	{
+		for(var i=0 ;i < email_type.length ;i++)
+		{
+			var fieldid = email_type[i];
+			var email = document.SendMail.elements["semail_val_"+fieldid].value;
+			set_return_emails(idlist, fieldid, parentname, email, email, 1);
+			window.close();
+		}
+	}
+	else
+	{
+		alert(alert_arr.SELECT_MAILID);
+	}
+}
+
+// SalesPlatform.ru end
+
 //added by rdhital for better emails
 function set_return_emails(entity_id,email_id,parentname,emailadd,emailadd2,perm){
 	if(perm == 0 || perm == 3)
@@ -94,6 +147,21 @@ function set_return_emails(entity_id,email_id,parentname,emailadd,emailadd2,perm
 	}
 }	
 //added by raju for emails
+
+// SalesPlatform.ru begin
+function return_document_file(att_id, file_name){
+        var multi_selector = window.opener.document.getElementById( 'files_list' ).multi_selector;
+        if (att_id > 0) {
+            if (!multi_selector.current_element.disabled) {
+                multi_selector.current_element.setHiddenValue(att_id, file_name);
+            }
+        } else	{
+            alert(alert_arr.SELECT_DOCWITHFILE);
+            return false;
+	}
+        return true;
+}
+// SalesPlatform.ru end
 
 function validate_sendmail(idlist,module)
 {

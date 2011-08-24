@@ -33,7 +33,10 @@ var moduleName = '{$entityName}';
 	<tr>
 		<td style='padding-top: 10px;'>
 			<span id="task-fieldnames-busyicon"><b>{$MOD.LBL_LOADING}</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
-			<select id='task-fieldnames' class="small" style="display: none;"><option value=''>{$MOD.LBL_SELECT_OPTION_DOTDOTDOT}</option></select>
+                        {* SalesPlatform.ru begin : option for 'crmid' added *}
+			<select id='task-fieldnames' class="small" style="display: none;"><option value=''>{$MOD.LBL_SELECT_OPTION_DOTDOTDOT}</option><option value='crmid'>ID</option></select>
+			{* <select id='task-fieldnames' class="small" style="display: none;"><option value=''>{$MOD.LBL_SELECT_OPTION_DOTDOTDOT}</option></select> *}
+                        {* SalesPlatform.ru end *}
 		</td>
 			
 		<td>&nbsp</td>

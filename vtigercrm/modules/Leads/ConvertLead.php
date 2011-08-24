@@ -118,7 +118,7 @@ if($userid != ''){
 	$rows = $adb->num_rows($res);
 	if($rows > 0){
 		$userselected = 'checked';
-		$userdisplay= 'block';		
+		$userdisplay= 'block';
 	}else{
 		$groupselected = 'checked';
 		$groupdisplay= 'block';
@@ -142,7 +142,7 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php" onsubm
 	<input type="hidden" name="action">
 	<input type="hidden" name="parenttab" value="'.$category.'">
 	<input type="hidden" name="current_user_id" value="'.$modified_user_id.'">
-	
+
 	<div id="orgLay" style="display: block;" class="layerPopup" >
 	<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 		<tr>
@@ -150,8 +150,8 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php" onsubm
 			<td align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'. vtiger_imageurl('close.gif', $theme).'" align="absmiddle" border="0"></a></td>
 		</tr>
 		</table>
-	
-	<table border=0 cellspacing=0 cellpadding=0 width=95% align=center> 
+
+	<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
 	<tr>
 		<td class=small >
 			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
@@ -171,14 +171,20 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php" onsubm
 						</span>
 						</td>
 				</tr>';
-				
+
 			if(vtlib_isModuleActive('Accounts') && (isPermitted('Accounts','EditView')== 'yes')){
+				// SalesPlatform.ru begin
+//				$convertlead .= '<tr>
+//									<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
+//									<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'" readonly="readonly"></td>
+//								</tr>';
 				$convertlead .= '<tr>
 									<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
-									<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'" readonly="readonly"></td>
+									<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.htmlentities($company, ENT_QUOTES, "UTF-8").'" readonly="readonly"></td>
 								</tr>';
+				// SalesPlatform.ru end
 			}
-if(vtlib_isModuleActive('Potentials') && (isPermitted('Potentials','EditView')== 'yes')){			
+if(vtlib_isModuleActive('Potentials') && (isPermitted('Potentials','EditView')== 'yes')){
 // An array which as module => fields mapping, to check for field permissions
 $fields_list = array( 'Potentials'=> array('potentialname', 'closingdate', 'amount', 'sales_stage'));
 $fields_permission = array();
@@ -209,14 +215,22 @@ $convertlead .='<tr>
 				<div style="display: block;" id="cc"  >
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" >';
 					if($fields_permission['potentialname']=='0') {
-						
-						$convertlead .= '<tr>							
+						// SalesPlatform.ru begin
+//						$convertlead .= '<tr>
+//							<td align="right" class="dvtCellLabel" width="53%"><font color="red">'.$mandatory['potentialname'].'</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
+//							<td class="dvtCellInfo" width="47%">
+//							<input name="potential_name" class="detailedViewTextBox" value="'.$potentialname.'" tabindex="3">
+//							<input type="hidden" name="potentialname_mandatory" id="potentialname_mandatory" value='.$mandatory['potentialname'].' />
+//							</td>
+//						</tr>';
+						$convertlead .= '<tr>
 							<td align="right" class="dvtCellLabel" width="53%"><font color="red">'.$mandatory['potentialname'].'</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
 							<td class="dvtCellInfo" width="47%">
-							<input name="potential_name" class="detailedViewTextBox" value="'.$potentialname.'" tabindex="3">
+							<input name="potential_name" class="detailedViewTextBox" value="'.htmlentities($potentialname, ENT_QUOTES, "UTF-8").'" tabindex="3">
 							<input type="hidden" name="potentialname_mandatory" id="potentialname_mandatory" value='.$mandatory['potentialname'].' />
 							</td>
 						</tr>';
+						// SalesPlatform.ru end
 					}
 					if($fields_permission['closingdate']=='0') {
 					$convertlead .= '<tr>
@@ -237,10 +251,10 @@ $convertlead .='<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">'.$mandatory['amount'].'</font>'.$mod_strings['LBL_POTENTIAL_AMOUNT'].'</td>
 							<td class="dvtCellInfo">
 								<input type="hidden" name="amount_mandatory" id="amount_mandatory" value='.$mandatory['amount'].' />
-								<input type="text" name="potential_amount" class="detailedViewTextBox">'.$potential_amount.'</td>							
+								<input type="text" name="potential_amount" class="detailedViewTextBox">'.$potential_amount.'</td>
 						</tr>';
 					}
-					if($fields_permission['sales_stage']=='0') {	
+					if($fields_permission['sales_stage']=='0') {
 						$convertlead .='<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">'.$mandatory['sales_stage'].'</font>'.$mod_strings['LBL_POTENTIAL_SALES_STAGE'].'</td>
 							<td class="dvtCellInfo">

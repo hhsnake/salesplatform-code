@@ -95,7 +95,10 @@ $log->info("in  track view method ".$current_module);
 		 $item_summary = $adb->query_result($result,0,'entityname');
 		 if(strlen($item_summary) > 30)
 	     {
-		    $item_summary=substr($item_summary,0,30).'...';
+                    // SalesPlatform.ru begin
+		    //$item_summary=substr($item_summary,0,30).'...';
+                    $item_summary=mb_substr($item_summary,0,30,'UTF-8').'...';
+                    // SalesPlatform.ru end
 	     }
 	 }
 	 

@@ -143,7 +143,10 @@ $data['endhr'] = $time_arr['endhour'];
 $data['endmin'] = $time_arr['endmin'];
 $data['endfmt'] = $time_arr['endfmt'];
 $data['record'] = $focus->id;
-if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == 'yes')
+// SalesPlatform.ru begin
+// if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == 'yes' )
+if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == getTranslatedString('yes','Calendar') )
+// SalesPlatform.ru end
         $data['sendnotification'] = $mod_strings['LBL_YES'];
 else
         $data['sendnotification'] = $mod_strings['LBL_NO'];

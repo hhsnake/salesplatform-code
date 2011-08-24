@@ -198,7 +198,10 @@ if($image_error=="false")
 		$data_array['first_name'] = $_REQUEST['firstname'];
 		$data_array['last_name'] = $_REQUEST['lastname'];
 		$data_array['email'] = $_REQUEST['email'];
-		$data_array['portal_url'] = '<a href="'.$PORTAL_URL.'" style="font-family:Arial, Helvetica, sans-serif;font-size:12px; font-weight:bolder;text-decoration:none;color: #4242FD;">'.$mod_strings['Please Login Here'].'</a>';
+// SalesPlatform.ru begin
+		$data_array['portal_url'] = '<a href="'.$PORTAL_URL.'" style="font-family:Arial, Helvetica, sans-serif;font-size:12px; font-weight:bolder;text-decoration:none;color: #4242FD;">'.$PORTAL_URL.'</a>';
+//		$data_array['portal_url'] = '<a href="'.$PORTAL_URL.'" style="font-family:Arial, Helvetica, sans-serif;font-size:12px; font-weight:bolder;text-decoration:none;color: #4242FD;">'.$mod_strings['Please Login Here'].'</a>';
+// SalesPlatform.ru end
 	
 		$value = getmail_contents_portalUser($data_array,$password,"LoginDetails");
 		$contents=$value["body"];                                                                                      $subject=$value["subject"];

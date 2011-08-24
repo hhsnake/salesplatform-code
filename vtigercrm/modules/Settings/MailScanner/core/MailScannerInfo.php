@@ -220,7 +220,11 @@ class Vtiger_MailScannerInfo {
 					$lastscan   = $adb->query_result($fldres, $index, 'lastscan');
 					$rescan     = $adb->query_result($fldres, $index, 'rescan');
 					$enabled    = $adb->query_result($fldres, $index, 'enabled');
-					$folderinfo[$foldername] = Array ('folderid'=>$folderid, 'lastscan'=>$lastscan, 'rescan'=> $rescan, 'enabled'=>$enabled);
+					// SalesPlatform.ru begin
+					$folderlabel = htmlentities(mb_convert_encoding(html_entity_decode($foldername), "UTF-8", "UTF7-IMAP"), ENT_QUOTES, 'UTF-8');
+					//$folderinfo[$foldername] = Array ('folderid'=>$folderid, 'lastscan'=>$lastscan, 'rescan'=> $rescan, 'enabled'=>$enabled);
+					$folderinfo[$foldername] = Array ('folderid'=>$folderid, 'lastscan'=>$lastscan, 'rescan'=> $rescan, 'enabled'=>$enabled, 'folderlabel'=>$folderlabel);
+					// SalesPlatform.ru end
 				}
 			}
 		}

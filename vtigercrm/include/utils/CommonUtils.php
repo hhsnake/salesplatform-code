@@ -859,6 +859,27 @@ function getUserName($userid)
 	return $user_name;	
 }
 
+// SalesPlatform.ru begin
+function getUserRealName($userid)
+{
+	global $adb, $log;
+	$log->debug("Entering getUserRealName(".$userid.") method ...");
+	$log->info("in getUserRealName ".$userid);
+
+	if($userid != '')
+	{
+		$sql = "select first_name,last_name from vtiger_users where id=?";
+		$result = $adb->pquery($sql, array($userid));
+                if($adb->query_result($result,0,"first_name") != '')
+                    $user_name = $adb->query_result($result,0,"last_name").' '.$adb->query_result($result,0,"first_name");
+                else
+                    $user_name = $adb->query_result($result,0,"last_name");
+	}
+	$log->debug("Exiting getUserRealName method ...");
+	return $user_name;
+}
+// SalesPlatform.ru end
+
 /**
 * Get the user full name by giving the user id.   This method expects the user id
 * DG 30 Aug 2006
@@ -2751,7 +2772,10 @@ function getConvertedPriceFromDollar($price)
  *  return  $recurObj       - Object of class RecurringType
  */
  
-function getrecurringObjValue()
+// SalesPlatform.ru begin
+function getrecurringObjValue($end_request_var_name = 'due_date')
+//function getrecurringObjValue()
+// SalesPlatform.ru end
 {
 	$recurring_data = array();
 	if(isset($_REQUEST['recurringtype']) && $_REQUEST['recurringtype'] != null &&  $_REQUEST['recurringtype'] != '--None--' )
@@ -2760,10 +2784,16 @@ function getrecurringObjValue()
 		{
 			$recurring_data['startdate'] = $_REQUEST['date_start'];
 		}
-		if(isset($_REQUEST['due_date']) && $_REQUEST['due_date'] != null)
+                // SalesPlatform.ru begin
+		if(isset($_REQUEST[$end_request_var_name]) && $_REQUEST[$end_request_var_name] != null)
 		{
-			$recurring_data['enddate'] = $_REQUEST['due_date'];
+			$recurring_data['enddate'] = $_REQUEST[$end_request_var_name];
 		}
+		//if(isset($_REQUEST['due_date']) && $_REQUEST['due_date'] != null)
+		//{
+		//	$recurring_data['enddate'] = $_REQUEST['due_date'];
+		//}
+                // SalesPlatform.ru end
 		$recurring_data['type'] = $_REQUEST['recurringtype'];
 		if($_REQUEST['recurringtype'] == 'Weekly')
 		{
@@ -3563,6 +3593,51 @@ function getOwnerNameList($idList) {
 	}
 	return $nameList;
 }
+
+// SalesPlatform.ru begin
+/** Function to get owner name either user or group */
+function getOwnerRealName($id)
+{
+	global $adb, $log;
+	$log->debug("Entering getOwnerName(".$id.") method ...");
+	$log->info("in getOwnerName ".$id);
+
+	$ownerList = getOwnerRealNameList(array($id));
+	return $ownerList[$id];
+}
+
+/** Function to get owner name either user or group */
+function getOwnerRealNameList($idList) {
+	global $log;
+
+	if(!is_array($idList) || count($idList) == 0) {
+		return array();
+	}
+
+	$nameList = array();
+	$db = PearDatabase::getInstance();
+	$sql = "select first_name,last_name,id from vtiger_users where id in (".generateQuestionMarks($idList).")";
+	$result = $db->pquery($sql, $idList);
+	$it = new SqlResultIterator($db, $result);
+	foreach ($it as $row) {
+            if($row->first_name != '')
+		$nameList[$row->id] = $row->last_name.' '.$row->first_name;
+            else
+		$nameList[$row->id] = $row->last_name;
+	}
+	$groupIdList = array_diff($idList, array_keys($nameList));
+	if(count($groupIdList) > 0) {
+		$sql = "select groupname,groupid from vtiger_groups where groupid in (".
+				generateQuestionMarks($groupIdList).")";
+		$result = $db->pquery($sql, $groupIdList);
+		$it = new SqlResultIterator($db, $result);
+		foreach ($it as $row) {
+			$nameList[$row->groupid] = $row->groupname;
+		}
+	}
+	return $nameList;
+}
+// SalesPlatform.ru end
 
 /**
  * This function is used to get the blockid of the settings block for a given label.

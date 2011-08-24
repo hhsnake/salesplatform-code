@@ -278,8 +278,13 @@ function getCalendarDaysInMonth($date_time){
 	$month_array = array();
 	$slices = array();
 	$monthview_days = $date_time->daysinmonth;
-	
-	$firstday_of_month = $date_time->getThisMonthsDayByIndex(0);
+
+// SalesPlatform.ru begin
+	global $sunday_first;
+	$index = (!$sunday_first) ? -1 : 0;
+	$firstday_of_month = $date_time->getThisMonthsDayByIndex($index);
+//	$firstday_of_month = $date_time->getThisMonthsDayByIndex(0);
+// SalesPlatform.ru end
 	$fdom = $firstday_of_month;
 	
 	$num_of_prev_days = ($fdom->dayofweek+1)%7-1;

@@ -81,6 +81,15 @@ class Installation_Utils {
 						if($createdb_conn->Execute($query)) {
 							$db_creation_failed = false;
 						}
+                                                // SalesPlatform.ru begin
+                                                if(Common_Install_Wizard_Utils::isMySQL($db_type)) {
+                                                    $query = "grant all on $db_name.* to $db_username";
+
+                                                    if(!$createdb_conn->Execute($query)) {
+                                                            $db_creation_failed = true;
+                                                    }
+                                                }
+                                                // SalesPlatform.ru end
 						$createdb_conn->Close();
 					}
 				}
@@ -487,7 +496,7 @@ class Migration_Utils {
 		include($migrationInfo['root_directory']."/modules/Migration/versions.php");
 		foreach($versions as $version => $label) {
 // SalesPlatform.ru begin
-			if($version === $source_version || $reach == 1) {
+			if(strcmp($version, $source_version) == 0 || $reach == 1) {
 //			if($version == $source_version || $reach == 1) {
 // SalesPlatform.ru end
 				$reach = 1;
@@ -532,7 +541,9 @@ class Migration_Utils {
 		/* Install Vtlib Compliant Modules */
 		Common_Install_Wizard_Utils::installMandatoryModules();
 		Migration_Utils::installOptionalModules($migrationInfo['selected_optional_modules'], $migrationInfo['source_directory'], $migrationInfo['root_directory']);
-		Migration_utils::copyLanguageFiles($migrationInfo['source_directory'], $migrationInfo['root_directory']);
+// SalesPlatform.ru begin
+//		Migration_utils::copyLanguageFiles($migrationInfo['source_directory'], $migrationInfo['root_directory']);
+// SalesPlatform.ru end
 		
 		//Here we have to update the version in table. so that when we do migration next time we will get the version
 		$res = $adb->query('SELECT * FROM vtiger_version');

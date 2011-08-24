@@ -122,6 +122,16 @@ function vtws_getId($objId, $elemId){
 	return $objId."x".$elemId;
 }
 
+// SalesPlatform.ru begin
+/**
+* Get the CRM Entity ID by the Web Service entity ID
+*/
+function vtws_getCRMEntityId($elementid) {
+        list ($typeId, $id) = vtws_getIdComponents($elementid);
+        return $id;
+}
+// SalesPlatform.ru end
+
 function getEmailFieldId($meta, $entityId){
 	global $adb;
 	//no email field accessible in the module. since its only association pick up the field any way.

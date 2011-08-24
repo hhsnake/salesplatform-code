@@ -87,7 +87,10 @@ function vtmailscanner_folders_resetAll_To(checktype) {
 						{/if}
 							<td>
 								<input type="checkbox" name="folder_{$FOLDER.folderid}" value="{$FOLDERNAME}" {if $FOLDER.enabled}checked="true"{/if}>
-								<a href='javascript:void(0)' title='Lastscan: {$FOLDER.lastscan}'>{$FOLDERNAME}</a></td>
+								{* SalesPlatform.ru begin *}
+								{* <a href='javascript:void(0)' title='Lastscan: {$FOLDER.lastscan}'>{$FOLDERNAME}</a></td> *}
+								<a href='javascript:void(0)' title='Lastscan: {$FOLDER.lastscan}'>{$FOLDER.folderlabel}</a></td>
+								{* SalesPlatform.ru end *}
 						{if ($FOLDER_COL_INDEX % $FOLDER_COL_LIMIT) eq ($FOLDER_COL_LIMIT-1)}
 						</tr>
 						{assign var="FOLDER_ROW_OPEN" value="false"}

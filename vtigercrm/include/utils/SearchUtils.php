@@ -220,8 +220,12 @@ function get_usersid($table_name,$column_name,$search_string)
 	global $log;
 	$log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
 	global $adb;
-	$where.="(vtiger_users.user_name like '". formatForSqlLike($search_string) .
+// SalesPlatform.ru begin
+        $where.="(concat(vtiger_users.last_name, ' ', vtiger_users.first_name) like '". formatForSqlLike($search_string) .
 			"' or vtiger_groups.groupname like '". formatForSqlLike($search_string) ."')";
+//        $where.="(vtiger_users.user_name like '". formatForSqlLike($search_string) .
+//			"' or vtiger_groups.groupname like '". formatForSqlLike($search_string) ."')";
+// SalesPlatform.ru end
 	$log->debug("Exiting get_usersid method ...");
 	return $where;	
 }

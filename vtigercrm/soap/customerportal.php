@@ -18,6 +18,10 @@ require_once('modules/HelpDesk/language/en_us.lang.php');
 require_once('include/utils/CommonUtils.php');
 require_once('include/utils/VtlibUtils.php');
 
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
+
 /** Configure language for server response translation */
 global $default_language, $current_language;
 if(!isset($current_language)) $current_language = $default_language;
@@ -799,8 +803,12 @@ function create_ticket($input_array)
 
 	$ticket->save("HelpDesk");
 
-	$subject = "[From Portal] " .$ticket->column_fields['ticket_no']." [ Ticket ID : $ticket->id ] ".$title;
-	$contents = ' Ticket No : '.$ticket->column_fields['ticket_no']. '<br> Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>'.$description;
+// SalesPlatform.ru begin
+        $subject = 'SalesPlatform VtigerCRM [ '.getTranslatedString('LBL_TICKET_ID', 'HelpDesk').' : '.$ticket->id.' ] '.$title;
+        $contents = getTranslatedString('LBL_TICKET_ID', 'HelpDesk').' : '.$ticket->id.'<br> '.getTranslatedString('LBL_SUBJECT', 'HelpDesk').$title.'<br><br>'.$description;
+//	$subject = "[From Portal] " .$ticket->column_fields['ticket_no']." [ Ticket ID : $ticket->id ] ".$title;
+//	$contents = ' Ticket No : '.$ticket->column_fields['ticket_no']. '<br> Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>'.$description;
+// SalesPlatform.ru end
 
 	//get the contact email id who creates the ticket from portal and use this email as from email id in email
 	$result = $adb->pquery("select email from vtiger_contactdetails where contactid=?", array($parent_id));
@@ -1095,9 +1103,15 @@ function send_mail_for_password($mailid)
 
 	$mail = new PHPMailer();
 
+// SalesPlatform.ru begin
+	$idn = new idna_convert();
+// SalesPlatform.ru end
+
 	$mail->Subject = $mod_strings['LBL_SUBJECT_PORTAL_LOGIN_DETAILS'];
 	$mail->Body    = $contents;
-	$mail->IsSMTP();
+        // SalesPlatform.ru begin
+	//$mail->IsSMTP();
+        // SalesPlatform.ru end
 
 	$mailserverresult = $adb->pquery("select * from vtiger_systems where server_type=?", array('email'));
 	$mail_server = $adb->query_result($mailserverresult,0,'server');
@@ -1105,16 +1119,39 @@ function send_mail_for_password($mailid)
 	$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
 	$smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
 
+// SalesPlatform.ru begin
+        $use_sendmail = $adb->query_result($mailserverresult,0,'use_sendmail');
+        if(!empty($use_sendmail) && $use_sendmail != 'false')
+            $mail->IsSendmail();
+        else
+            $mail->IsSMTP();
+
+        $mail_server_tls = $adb->query_result($mailserverresult,0,'server_tls');
+	if(!empty($mail_server_tls) && $mail_server_tls != 'no')
+            $mail->SMTPSecure = $mail_server_tls;
+
+        $mail_server_port = $adb->query_result($mailserverresult,0,'server_port');
+        if(!empty($mail_server_port) && $mail_server_port != 0)
+            $mail->Port = $mail_server_port;
+// SalesPlatform.ru end
+
 	$mail->Host = $mail_server;
 	if($smtp_auth == 'true')
 	$mail->SMTPAuth = 'true';
 	$mail->Username = $mail_server_username;
 	$mail->Password = $mail_server_password;
-	$mail->From = $from;
+// SalesPlatform.ru begin
+	$mail->From = $idn->encode($from);
+//	$mail->From = $from;
+// SalesPlatform.ru end
 	$mail->FromName = $initialfrom;
 
-	$mail->AddAddress($user_name);
-	$mail->AddReplyTo($current_user->name);
+// SalesPlatform.ru begin
+	$mail->AddAddress($idn->encode($user_name));
+	$mail->AddReplyTo($idn->encode($current_user->name));
+//	$mail->AddAddress($user_name);
+//	$mail->AddReplyTo($current_user->name);
+// SalesPlatform.ru end
 	$mail->WordWrap = 50;
 
 	$mail->IsHTML(true);

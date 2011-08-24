@@ -12,14 +12,18 @@
 
 require("modules/Emails/class.phpmailer.php");
 
-/**   Function used to send email 
-  *   $module 		-- current module 
-  *   $to_email 	-- to email address 
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
+
+/**   Function used to send email
+  *   $module 		-- current module
+  *   $to_email 	-- to email address
   *   $from_name	-- currently loggedin user name
   *   $from_email	-- currently loggedin vtiger_users's email id. you can give as '' if you are not in HelpDesk module
   *   $subject		-- subject of the email you want to send
   *   $contents		-- body of the email you want to send
-  *   $cc		-- add email ids with comma seperated. - optional 
+  *   $cc		-- add email ids with comma seperated. - optional
   *   $bcc		-- add email ids with comma seperated. - optional.
   *   $attachment	-- whether we want to attach the currently selected file or all vtiger_files.[values = current,all] - optional
   *   $emailid		-- id of the email object which will be used to get the vtiger_attachments
@@ -38,7 +42,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	//Get the email id of assigned_to user -- pass the value and name, name must be "user_name" or "id"(field names of vtiger_users vtiger_table)
 	//$to_email = getUserEmailId('id',$assigned_user_id);
 
-	//if module is HelpDesk then from_email will come based on support email id 
+	//if module is HelpDesk then from_email will come based on support email id
 	if($from_email == '') {
 			//if from email is not defined, then use the useremailid as the from address
 			$from_email = getUserEmailId('user_name',$from_name);
@@ -57,7 +61,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	}
 
 	if($module != "Calendar")
-                $contents = addSignature($contents,$from_name);	
+                $contents = addSignature($contents,$from_name);
 
 	$mail = new PHPMailer();
 
@@ -68,7 +72,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
         // Duplicated AddReplyTo() call. First into the setMailerProperties()
 	//$mail->AddReplyTo($replyToEmail);
         // SalesPlatform.ru end
-	
+
 	// vtmailscanner customization: If Support Reply to is defined use it.
 	global $HELPDESK_SUPPORT_EMAIL_REPLY_ID;
 	if($HELPDESK_SUPPORT_EMAIL_REPLY_ID && $HELPDESK_SUPPORT_EMAIL_ID != $HELPDESK_SUPPORT_EMAIL_REPLY_ID) {
@@ -81,7 +85,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 		return 0;
     }
     // END
-    
+
 	$mail_status = MailSend($mail);
 
 	if($mail_status != 1)
@@ -97,8 +101,8 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 }
 
 /**	Function to get the user Email id based on column name and column value
-  *	$name -- column name of the vtiger_users vtiger_table 
-  *	$val  -- column value 
+  *	$name -- column name of the vtiger_users vtiger_table
+  *	$val  -- column value
   */
 function getUserEmailId($name,$val)
 {
@@ -175,16 +179,57 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	//$mail->Body = html_entity_decode(nl2br($contents));	//if we get html tags in mail then we will use this line
 	$mail->AltBody = strip_tags(preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$contents));
 
-	$mail->IsSMTP();		//set mailer to use SMTP
+        // SalesPlatform.ru begin
+	$query = "select * from vtiger_systems where server_type=?";
+	$params = array('email');
+	$result = $adb->pquery($query,$params);
+
+        if(isset($_REQUEST['use_sendmail']))
+	{
+		$use_sendmail = $_REQUEST['use_sendmail'];
+		if($use_sendmail == 'on')
+			$use_sendmail = 'true';
+	}
+	else if (isset($_REQUEST['module']) && $_REQUEST['module'] == 'Settings' && (!isset($_REQUEST['use_sendmail'])))
+	{
+		//added to avoid issue while editing the values in the outgoing mail server.
+		$use_sendmail = 'false';
+	}
+	else
+        {
+            $use_sendmail = $adb->query_result($result,0,'use_sendmail');
+        }
+
+        if ($use_sendmail == "true")
+            $mail->IsSendmail();
+        else
+            $mail->IsSMTP();
+//	$mail->IsSMTP();		//set mailer to use SMTP
+        // SalesPlatform.ru end
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
 
-	setMailServerProperties($mail);	
+	setMailServerProperties($mail);
+
+// SalesPlatform.ru begin
+	$idn = new idna_convert();
+// SalesPlatform.ru end
 
 	//Handle the from name and email for HelpDesk
-	$mail->From = $from_email;
+// SalesPlatform.ru begin
+        $mail->From = $idn->encode($from_email);
+//        $mail->From = $from_email;
+	$from_name_db = $adb->query_result($result,0,'from_name');
+	if(isset($from_name_db) && $from_name_db!=''){
+		//setting from _email to the defined email address in the outgoing server configuration
+		$from_name = $from_name_db;
+	} else {
+// SalesPlatform.ru end
 	$rs = $adb->pquery("select first_name,last_name from vtiger_users where user_name=?", array($from_name));
 	if($adb->num_rows($rs) > 0)
 		$from_name = $adb->query_result($rs,0,"first_name")." ".$adb->query_result($rs,0,"last_name");
+// SalesPlatform.ru begin
+        }
+// SalesPlatform.ru end
 
 	$mail->FromName = decode_html($from_name);
 
@@ -192,17 +237,26 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	{
 		if(is_array($to_email)) {
 			for($j=0,$num=count($to_email);$j<$num;$j++) {
-				$mail->addAddress($to_email[$j]);
+// SalesPlatform.ru begin
+				$mail->addAddress($idn->encode($to_email[$j]));
+//				$mail->addAddress($to_email[$j]);
+// SalesPlatform.ru end
 			}
 		} else {
 			$_tmp = explode(",",$to_email);
 			for($j=0,$num=count($_tmp);$j<$num;$j++) {
-				$mail->addAddress($_tmp[$j]);
+// SalesPlatform.ru begin
+				$mail->addAddress($idn->encode($_tmp[$j]));
+//				$mail->addAddress($_tmp[$j]);
+// SalesPlatform.ru end
 			}
 		}
 	}
 
-	$mail->AddReplyTo($from_email);
+// SalesPlatform.ru begin
+	$mail->AddReplyTo($idn->encode($from_email));
+//	$mail->AddReplyTo($from_email);
+// SalesPlatform.ru end
 	$mail->WordWrap = 50;
 
 	//If we want to add the currently selected file only then we will use the following function
@@ -233,6 +287,9 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 function setMailServerProperties($mail)
 {
 	global $adb;
+	// SalesPlatform.ru begin
+	$idn = new idna_convert();
+	// SalesPlatform.ru end
 	$adb->println("Inside the function setMailServerProperties");
 
 	$res = $adb->pquery("select * from vtiger_systems where server_type=?", array('email'));
@@ -241,18 +298,21 @@ function setMailServerProperties($mail)
 	else
 		$server = $adb->query_result($res,0,'server');
 	if(isset($_REQUEST['server_username']))
-		$username = $_REQUEST['server_username'];
+	// SalesPlatform.ru begin
+	//	$username = $_REQUEST['server_username'];
+		$username = $idn->encode( $_REQUEST['server_username'] );
+	// SalesPlatform.ru end
 	else
 	        $username = $adb->query_result($res,0,'server_username');
 	if(isset($_REQUEST['server_password']))
 		$password = $_REQUEST['server_password'];
 	else
         	$password = $adb->query_result($res,0,'server_password');
-	// Prasad: First time read smtp_auth from the request	
+	// Prasad: First time read smtp_auth from the request
 	if(isset($_REQUEST['smtp_auth']))
 	{
 		$smtp_auth = $_REQUEST['smtp_auth'];
-		if($smtp_auth == 'on')	
+		if($smtp_auth == 'on')
 			$smtp_auth = 'true';
 	}
 	else if (isset($_REQUEST['module']) && $_REQUEST['module'] == 'Settings' && (!isset($_REQUEST['smtp_auth'])))
@@ -263,6 +323,25 @@ function setMailServerProperties($mail)
 	else
 		$smtp_auth = $adb->query_result($res,0,'smtp_auth');
 
+// SalesPlatform.ru begin
+	if(isset($_REQUEST['port']))
+		$server_port = $_REQUEST['port'];
+	else
+		$server_port = $adb->query_result($res,0,'server_port');
+
+        if(isset($_REQUEST['server_tls']))
+	{
+		$server_tls = $_REQUEST['server_tls'];
+	}
+	else if (isset($_REQUEST['module']) && $_REQUEST['module'] == 'Settings' && (!isset($_REQUEST['server_tls'])))
+	{
+		//added to avoid issue while editing the values in the outgoing mail server.
+		$server_tls = 'no';
+	}
+	else
+		$server_tls = $adb->query_result($res,0,'server_tls');
+// SalesPlatform.ru end
+
 	$adb->println("Mail server name,username & password => '".$server."','".$username."','".$password."'");
 	if($smtp_auth == "true"){
 		$mail->SMTPAuth = true;	// turn on SMTP authentication
@@ -271,13 +350,20 @@ function setMailServerProperties($mail)
 	$mail->Username = $username ;	// SMTP username
         $mail->Password = $password ;	// SMTP password
 
+// SalesPlatform.ru begin
+        if(!empty($server_port) && $server_port != 0)
+            $mail->Port = $server_port;
+        if(!empty($server_tls) && $server_tls != 'no')
+            $mail->SMTPSecure = $server_tls;
+// SalesPlatform.ru end
+
 	return;
 }
 
 /**	Function to add the file as attachment with the mail object
   *	$mail -- reference of the mail object
   *	$filename -- filename which is going to added with the mail
-  *	$record -- id of the record - optional 
+  *	$record -- id of the record - optional
   */
 function addAttachment($mail,$filename,$record)
 {
@@ -366,7 +452,7 @@ function MailSend($mail)
 		$log->debug("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'");
 		return $mail->ErrorInfo;
         }
-	else 
+	else
 	{
 		 $log->info("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'");
 		return 1;
@@ -420,7 +506,7 @@ function getMailError($mail,$mail_status,$to)
 {
 	//Error types in class.phpmailer.php
 	/*
-	provide_address, mailer_not_supported, execute, instantiate, file_access, file_open, encoding, data_not_accepted, authenticate, 
+	provide_address, mailer_not_supported, execute, instantiate, file_access, file_open, encoding, data_not_accepted, authenticate,
 	connect_host, recipients_failed, from_failed
 	*/
 
@@ -528,7 +614,7 @@ function parseEmailErrorString($mail_error_str)
 			else
 			{
 				$adb->println("else part - mail send process failed due to the following reason.");
-				$errorstr .= "<br><b><font color=red> ".$mod_strings['MESSAGE_MAIL_COULD_NOT_BE_SEND_TO_THIS_EMAILID']." '".$status_str[0]."'. ".$mod_strings['PLEASE_CHECK_THIS_EMAILID']."</font></b>";	
+				$errorstr .= "<br><b><font color=red> ".$mod_strings['MESSAGE_MAIL_COULD_NOT_BE_SEND_TO_THIS_EMAILID']." '".$status_str[0]."'. ".$mod_strings['PLEASE_CHECK_THIS_EMAILID']."</font></b>";
 			}
 		}
 	}

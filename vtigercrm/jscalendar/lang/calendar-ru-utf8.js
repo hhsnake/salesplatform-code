@@ -109,4 +109,5 @@ Calendar._TT["DEF_DATE_FORMAT"] = "%d.%m.%Y";
 Calendar._TT["TT_DATE_FORMAT"] = "%e %b, %a";
 
 Calendar._TT["WEEKEND"] = "нед";
+Calendar._TT["WK"] = "нед";
 Calendar._TT["TIME"] = "Время:";

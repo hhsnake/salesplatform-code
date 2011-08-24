@@ -201,6 +201,15 @@ var $rel_serel_table = "vtiger_seactivityrel";
 				$files['original_name'] = vtlib_purify($_REQUEST[$fileindex.'_hidden']);
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
+                        // SalesPlatform.ru begin
+                        else {
+                            $existing_attachment_id = vtlib_purify($_REQUEST[$fileindex.'_hidden']);
+                            if ($existing_attachment_id > 0) {
+                                $sql3='insert into vtiger_seattachmentsrel values(?,?)';
+                                $adb->pquery($sql3, array($id, $existing_attachment_id));
+                            }
+                        }
+                        // SalesPlatform.ru end
 		}
 		if($module == 'Emails' && isset($_REQUEST['att_id_list']) && $_REQUEST['att_id_list'] != '')
 		{

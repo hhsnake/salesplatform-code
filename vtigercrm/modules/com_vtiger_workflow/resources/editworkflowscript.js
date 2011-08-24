@@ -299,7 +299,12 @@ function editworkflowscript($, conditions){
 	function resetFields(opType, condno){
 		var ops = $("#save_condition_"+condno+"_operation");
 		var selectedOperations = operations[opType.name];
-		var l = dict(zip(selectedOperations, selectedOperations));
+// SalesPlatform.ru begin
+		var translated=[];
+		$.each(selectedOperations, function(i,v) {translated[i]=operationsTranslated[v]});
+		var l = dict(zip(selectedOperations, translated));
+//		var l = dict(zip(selectedOperations, selectedOperations));
+// SalesPlatform.ru end
 		fillOptions(ops, l);
 		defaultValue(opType.name)(opType, condno);
 	}

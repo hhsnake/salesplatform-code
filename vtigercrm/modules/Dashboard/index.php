@@ -239,7 +239,7 @@ if($CHAT_DISPLAY == 'true') {
 							<!-- CHART ONE TABLE -->
 							<table width="100%" border="0" cellpadding="0" cellspacing="0">
 							<tr>
-								<td height="300">
+								<td>
 								
 								<?php 
 									if(!isset($_REQUEST['type']))

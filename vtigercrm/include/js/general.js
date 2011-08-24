@@ -244,7 +244,10 @@ function patternValidate(fldName,fldLabel,type) {
 		/*changes made to fix -- ticket#3278 & ticket#3461
 		  var re=new RegExp(/^.+@.+\..+$/)*/
 		//Changes made to fix tickets #4633, #5111  to accomodate all possible email formats
-		var re=new RegExp(/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/)
+        // SalesPlatform.ru begin
+		var re=new RegExp(/^[a-zA-Zа-яА-Я0-9]+([\_\-\.]*[a-zA-Zа-яА-Я0-9]+[\_\-]?)*@[a-zA-Zа-яА-Я0-9]+([\_\-]?[a-zA-Zа-яА-Я0-9]+)*\.+([\-\_]?[a-zA-Zа-яА-Я0-9])+(\.?[a-zA-Zа-яА-Я0-9]+)*$/)
+//		var re=new RegExp(/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/)
+        // SalesPlatform.ru end
 	}
 
 	if (type.toUpperCase()=="DATE") {//DATE validation 
@@ -1701,11 +1704,7 @@ function fnvshobj(obj,Lay){
     var topSide = findPosY(obj);
     var maxW = tagName.style.width;
     var widthM = maxW.substring(0,maxW.length-2);
-    if(Lay == 'editdiv'
-    // SalesPlatform.ru begin
-        || Lay == 'sendmail_cont'
-    // SalesPlatform.ru end
-    )
+    if(Lay == 'editdiv')
     {
         leftSide = leftSide - 225;
         topSide = topSide - 125;
@@ -1922,6 +1921,12 @@ function OpenCompose(id,mode)
 			break;
 		case 'print':
 			url = 'index.php?module=Emails&action=EmailsAjax&file=PrintEmail&record='+id+'&print=true'; 	 			
+        // SalesPlatform.ru begin
+                        break;
+		default:
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
+			break;
+        // SalesPlatform.ru end
 	}
         // SalesPlatform.ru begin
 	openPopUp('xComposeEmail',this,url,'createemailWin',855,733,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');

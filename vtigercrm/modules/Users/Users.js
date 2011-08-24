@@ -11,9 +11,18 @@
 
 
 document.write("<script type='text/javascript' src='include/js/Mail.js'></"+"script>");
-function set_return(user_id, user_name) {
-		window.opener.document.EditView.reports_to_name.value = user_name;
+function set_return(user_id, user_name, user_field) {
+// SalesPlatform.ru begin
+    if(user_field == 'reports_to_id') {
+    		window.opener.document.EditView.reports_to_name.value = user_name;
 		window.opener.document.EditView.reports_to_id.value = user_id;
+    } else {
+    		window.opener.document.EditView[user_field + '_display'].value = user_name;
+		window.opener.document.EditView[user_field].value = user_id;
+    }
+//    		window.opener.document.EditView.reports_to_name.value = user_name;
+//		window.opener.document.EditView.reports_to_id.value = user_id;
+// SalesPlatform.ru end
 }
 
 var fckEditoFrame = '';

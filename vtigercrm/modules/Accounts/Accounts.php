@@ -360,7 +360,10 @@ class Accounts extends CRMEntity {
 			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
 				$button .= "<input title='".getTranslatedString('LBL_NEW'). " ". getTranslatedString('LBL_TODO', $related_module) ."' class='crmbutton small create'" .
 					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\";this.form.return_module.value=\"$this_module\";this.form.activity_mode.value=\"Task\";' type='submit' name='button'" .
-					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString('LBL_TODO', $related_module) ."'>&nbsp;";
+					// SalesPlatform.ru begin
+					// " value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString('LBL_TODO', $related_module) ."'>&nbsp;";
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString('LBL_TODOS', $related_module) ."'>&nbsp;";
+					// SalesPlatform.ru end
 				$button .= "<input title='".getTranslatedString('LBL_NEW'). " ". getTranslatedString('LBL_TODO', $related_module) ."' class='crmbutton small create'" .
 					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\";this.form.return_module.value=\"$this_module\";this.form.activity_mode.value=\"Events\";' type='submit' name='button'" .
 					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString('LBL_EVENT', $related_module) ."'>";
@@ -464,14 +467,14 @@ class Accounts extends CRMEntity {
 		
 		$button = '';
 		
-		$button .= '<input type="hidden" name="email_directing_module"><input type="hidden" name="record">';	
-                    
+		$button .= '<input type="hidden" name="email_directing_module"><input type="hidden" name="record">';
+
 		if($actions) {
 			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
 			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
 				$button .= "<input title='". getTranslatedString('LBL_ADD_NEW')." ". getTranslatedString($singular_modname)."' accessyKey='F' class='crmbutton small create' onclick='fnvshobj(this,\"sendmail_cont\");sendmail(\"$this_module\",$id);' type='button' name='button' value='". getTranslatedString('LBL_ADD_NEW')." ". getTranslatedString($singular_modname)."'></td>";
 			}
-		} 
+		}
 
 		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
 			vtiger_activity.activityid, vtiger_activity.subject,

@@ -51,6 +51,9 @@ class Calendar_RepeatEvents {
 	/**
 	 * Calculate the time interval to create repeated event entries.
 	 */
+        // SalesPlatform.ru begin
+        // Deadcode after fix for repeat function
+        // SalesPlatform.ru end
 	static function getRepeatInterval($type, $frequency, $recurringInfo, $start_date, $limit_date) {
 		$repeatInterval = Array();
 		$starting = self::mktime($start_date);
@@ -125,9 +128,12 @@ class Calendar_RepeatEvents {
 	static function repeat($focus) {
 
 		global $log;
-		$repeat = getrecurringObjValue();
-		$frequency = $repeat->recur_freq;
-		$repeattype= $repeat->recur_type;
+                // SalesPlatform.ru begin
+		$repeat = getrecurringObjValue('calendar_repeat_limit_date');
+		//$repeat = getrecurringObjValue();
+		//$frequency = $repeat->recur_freq;
+		//$repeattype= $repeat->recur_type;
+                // SalesPlatform.ru end
 	
 		$base_focus = new Activity();
 		$base_focus->retrieve_entity_info($focus->id,'Events');
@@ -136,9 +142,11 @@ class Calendar_RepeatEvents {
 		$base_focus_start = $base_focus->column_fields['date_start'].' '.$base_focus->column_fields['time_start'];
 		$base_focus_end = $base_focus->column_fields['due_date'].' '.$base_focus->column_fields['time_end'];
 
-		$repeat_limit = getDBInsertDateValue($_REQUEST['calendar_repeat_limit_date']).' '.$base_focus->column_fields['time_start'];
-
-		$repeatIntervals = self::getRepeatInterval($repeattype, $frequency, $repeat, $base_focus_start, $repeat_limit);
+                // SalesPlatform.ru begin
+		//$repeat_limit = getDBInsertDateValue($_REQUEST['calendar_repeat_limit_date']).' '.$base_focus->column_fields['time_start'];
+                //
+		//$repeatIntervals = self::getRepeatInterval($repeattype, $frequency, $repeat, $base_focus_start, $repeat_limit);
+                // SalesPlatform.ru end
 
 		$base_focus_start = self::mktime($base_focus_start);
 		$base_focus_end   = self::mktime($base_focus_end);
@@ -148,8 +156,16 @@ class Calendar_RepeatEvents {
 		/** Create instance before and reuse */
 		$new_focus = new Activity();
 
-		$numberOfRepeats = count($repeatIntervals);
-		foreach($repeatIntervals as $index => $interval) {
+                // SalesPlatform.ru begin
+		foreach($repeat->recurringdates as $index => $next_date) {
+                        $interval = ceil((self::mktime($next_date." 00:00:00") - $base_focus_start) / (60 * 60 * 24));
+                        if ($interval <= 0) {
+                            // Skip first "header" Activity
+                            continue;
+                        }
+		//$numberOfRepeats = count($repeatIntervals);
+		//foreach($repeatIntervals as $index => $interval) {
+                // SalesPlatform.ru end
 			$new_focus_start_timing = self::nexttime($base_focus_start, "+$interval days");
 			$new_focus_start_timing = self::splittime(self::formattime($new_focus_start_timing));
 

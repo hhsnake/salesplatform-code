@@ -18,6 +18,9 @@
  * @copyright 2001 - 2003 Brent R. Matzelle
  */
 
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
 
 //file modified by richie
 require_once('include/utils/utils.php');
@@ -144,19 +147,38 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	global $root_directory;
 
 	$mail = new PHPMailer();
+// SalesPlatform.ru begin
+	$idn = new idna_convert();
+// SalesPlatform.ru end
 
 
 	$mail->Subject = $subject;
 	$mail->Body    = nl2br($contents);//"This is the HTML message body <b>in bold!</b>";
 
+        // SalesPlatform.ru begin
+	//$mail->IsSMTP();                                      // set mailer to use SMTP
+        // SalesPlatform.ru end
 
-	$mail->IsSMTP();                                      // set mailer to use SMTP
-	
 		$mailserverresult=$adb->pquery("select * from vtiger_systems where server_type='email'", array());
 		$mail_server = $adb->query_result($mailserverresult,0,'server');
 		$mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
 		$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
 		$smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
+// SalesPlatform.ru begin
+            $use_sendmail = $adb->query_result($mailserverresult,0,'use_sendmail');
+            if(!empty($use_sendmail) && $use_sendmail != 'false')
+                $mail->IsSendmail();
+            else
+                $mail->IsSMTP();
+
+                $mail_server_tls = $adb->query_result($mailserverresult,0,'server_tls');
+                if(!empty($mail_server_tls) && $mail_server_tls != 'no')
+                    $mail->SMTPSecure = $mail_server_tls;
+
+                $mail_server_port = $adb->query_result($mailserverresult,0,'server_port');
+                if(!empty($mail_server_port) && $mail_server_port != 0)
+                    $mail->Port = $mail_server_port;
+// SalesPlatform.ru end
 
 		$_REQUEST['server']=$mail_server;
 		$log->info("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
@@ -169,12 +191,18 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 		$mail->SMTPAuth = false;
 	$mail->Username = $mail_server_username ;	// SMTP username
 	$mail->Password = $mail_server_password ;	// SMTP password
-	$mail->From = $from;
+// SalesPlatform.ru begin
+	$mail->From = $idn->encode($from);
+//	$mail->From = $from;
+// SalesPlatform.ru end
 	$mail->FromName = $initialfrom;
 	$log->info("Mail sending process : From Name & email id => '".$initialfrom."','".$from."'");
 	foreach($to as $pos=>$addr)
 	{
-		$mail->AddAddress($addr);                  // name is optional
+// SalesPlatform.ru begin
+		$mail->AddAddress($idn->encode($addr));                  // name is optional
+//		$mail->AddAddress($addr);                  // name is optional
+// SalesPlatform.ru end
 		$log->info("Mail sending process : To Email id = '".$addr."' (set in the mail object)");
 
 	}

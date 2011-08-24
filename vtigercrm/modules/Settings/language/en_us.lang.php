@@ -86,6 +86,10 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_LIST'=>'Currencies List',
 
+// SalesPlatform.ru begin
+'LBL_PARTICIPANTS_OF' => 'of',
+'LBL_USE_SENDMAIL' => 'Use system sendmail',
+// SalesPlatform.ru end
 
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 
@@ -304,6 +308,8 @@ $mod_strings = Array(
 
 'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'Outgoing Mail Server Password',
 
+'LBL_OUTGOING_MAIL_SERVER_PORT' => 'Server Port',
+
 'LBL_MAIL_SERVER_SMTP'=>'Mail Server Settings (SMTP)',
 
 'LBL_BACKUP_SERVER_CONFIG'=>'Backup Server Configuration',
@@ -343,6 +349,9 @@ $mod_strings = Array(
 'LBL_PASWRD'=>'Password',
 'LBL_REQUIRES_AUTHENT'=>'Requires Authentication?',
 'LBL_FROM_EMAIL_FIELD'=>'From Email',
+// SalesPlatform.ru begin
+'LBL_FROM_NAME'=>'From Name',
+// SalesPlatform.ru end
 
 //Fields for Settings
 

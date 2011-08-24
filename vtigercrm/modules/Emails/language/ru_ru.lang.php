@@ -91,6 +91,8 @@ $mod_strings = array (
       'Assigned To' => 'Ответственный',
       // SalesPlatform.ru begin
       'Access Count'=>'Кол-во обращений',
+      'No Mail Ids' => 'Отсутствует e-mail адрес',
+      'Mail Ids not permitted' => 'Доступ к e-mail адресам не разрешен',
       // SalesPlatform.ru end
       'Subject' => 'Тема',
       'Attachment' => 'Вложение',

@@ -543,6 +543,43 @@ function sendfile_email()
 					{/if}
 					
 				<!-- End: Actions for Documents Module -->	
+
+{* SalesPlatform.ru begin *}
+				<!-- Start: Actions for PDF Templates -->
+                                {if $PDF_TEMPLATES_LIST && $MODULE eq 'HelpDesk'}
+                                   <tr>
+                                        <td align="left">
+                                                <span class="genHeaderSmall">{$APP.PrintingOptions}</span><br />
+                                        </td>
+                                   </tr>
+
+                		{assign var=export_pdf_action value="CreatePDF"}
+                               <tr>
+                                    <td align="left" style="padding-left:10px;">
+                                    <form action="" name="PrintSettings" id="form">
+                                        Форма: <select name="pdf_templates" class="small">
+                                            {$PDF_TEMPLATES_LIST}
+                                        </select>
+                                    </form>
+                                    </td>
+                               </tr>
+
+                               <tr>
+                                    <td align="left" style="padding-left:10px;">
+                                            <a href="javascript: generatepdf_send('index.php?module={$MODULE}&action={$export_pdf_action}&return_module={$MODULE}&return_action=DetailView&record={$ID}&return_id={$ID}')" class="webMnu"><img src="{'actionGeneratePDF.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
+                                            <a href="javascript: generatepdf_send('index.php?module={$MODULE}&action={$export_pdf_action}&return_module={$MODULE}&return_action=DetailView&record={$ID}&return_id={$ID}')" class="webMnu">{$APP.LBL_EXPORT_TO_PDF}</a>
+                                    </td>
+                               </tr>
+                                 <tr>
+                                        <td align="left" style="padding-left:10px;">
+                                                <a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='SendPDFMail'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.pdf_template.value=document.PrintSettings.pdf_templates.value; sendpdf_submit();" class="webMnu"><img src="{'PDFMail.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
+                                                <a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='SendPDFMail'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.pdf_template.value=document.PrintSettings.pdf_templates.value; sendpdf_submit();" class="webMnu">{$APP.LBL_SEND_EMAIL_PDF}</a>
+                                        </td>
+                                   </tr>
+				{/if}
+
+				<!-- End: Actions for PDF Templates -->
+{* SalesPlatform.ru end *}
                   </table>
                 {* vtlib customization: Avoid line break if custom links are present *}
                 {if !isset($CUSTOM_LINKS) || empty($CUSTOM_LINKS)}
@@ -762,6 +799,28 @@ getTagCloud();
   var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL});
   var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE});
 </script>
+
+{* SalesPlatform.ru begin *}
+{literal}
+<script type='text/javascript'>
+function generatepdf_send(uri)
+{
+    document.location.href = uri + "&pdf_template=" + document.PrintSettings.pdf_templates.value;
+}
+function sendpdf_submit()
+{
+	// Submit the form to get the attachment ready for submission
+	document.DetailView.submit();
+{/literal}
+
+	{if $MODULE eq 'HelpDesk'}
+		OpenCompose('{$ID}','HelpDesk');
+	{/if}
+{literal}
+}
+</script>
+{/literal}
+{* SalesPlatform.ru end *}
 </td>
 
 	<td align=right valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>

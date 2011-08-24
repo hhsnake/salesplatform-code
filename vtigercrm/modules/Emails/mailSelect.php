@@ -25,7 +25,10 @@ $smarty = new vtigerCRM_Smarty;
 
 $userid =  $current_user->id;
 
-$querystr = "select fieldid, fieldname, fieldlabel, columnname from vtiger_field where tabid=? and uitype=13 and vtiger_field.presence in (0,2)";
+// SalesPlatform.ru begin
+//$querystr = "select fieldid, fieldname, fieldlabel, columnname from vtiger_field where tabid=? and uitype=13 and vtiger_field.presence in (0,2)";
+$querystr = "select fieldid, fieldname, fieldlabel, columnname from vtiger_field where tabid=? and uitype in (13,104) and vtiger_field.presence in (0,2)";
+// SalesPlatform.ru end
 $res=$adb->pquery($querystr, array(getTabid($pmodule)));
 $numrows = $adb->num_rows($res);
 $returnvalue = Array();
@@ -39,8 +42,11 @@ for($i = 0; $i < $numrows; $i++)
 		$temp=$adb->query_result($res,$i,'columnname');
 		$columnlists [] = $temp;
 		$fieldid=$adb->query_result($res,$i,'fieldid');
-		$fieldlabel =$adb->query_result($res,$i,'fieldlabel');
-		$value[] = getTranslatedString($fieldlabel);
+                // SalesPlatform.ru begin
+                //$fieldlabel = $adb->query_result($res,$i,'fieldlabel');
+		$fieldlabel = getTranslatedString( $adb->query_result($res,$i,'fieldlabel'), $pmodule );
+                // SalesPlatform.ru end
+                $value[] = $fieldlabel;
 		$returnvalue [$fieldid]= $value;
 	}
 }
@@ -85,6 +91,29 @@ if($single_record && count($columnlists) > 0)
 			}	
 			$entity_name = $adb->query_result($result,0,'contactname');
 			break;	
+		// SalesPlatform.ru begin
+		case 'Vendors':
+			$query = 'select vendorname,'.implode(",",$columnlists).' from vtiger_vendor left join vtiger_vendorcf on vtiger_vendorcf.vendorid = vtiger_vendor.vendorid where vtiger_vendor.vendorid = ?';
+			$result=$adb->pquery($query, array($idlist));
+			foreach($columnlists as $columnname) {
+				$con_eval = $adb->query_result($result,0,$columnname);
+				$field_value[$count++] = $con_eval;
+				if($con_eval != "") $val_cnt++;
+			}
+			$entity_name = $adb->query_result($result,0,'vendorname');
+			break;
+		case 'Users':
+			$query = 'select concat(first_name," ",last_name) as username,'.implode(",",$columnlists).' from vtiger_users where vtiger_users.id = ?';
+			$result=$adb->pquery($query, array($idlist));
+		        foreach($columnlists as $columnname)	
+			{
+				$con_eval = $adb->query_result($result,0,$columnname);
+				$field_value[$count++] = $con_eval;
+				if($con_eval != "") $val_cnt++;
+			}	
+			$entity_name = $adb->query_result($result,0,'username');
+			break;
+		// SalesPlatform.ru end
 	}	
 }
 $smarty->assign('PERMIT',$permit);
@@ -98,12 +127,18 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("FROM_MODULE", $pmodule);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
-if($single_record && count($columnlists) > 0 && $val_cnt > 0)
-	$smarty->display("SelectEmail.tpl");
+if($single_record && count($columnlists) > 0 && $val_cnt > 0) {
+	// SalesPlatform.ru begin
+	if(isset ($_REQUEST["sp_mode"]) && $_REQUEST["sp_mode"] == "popup")
+		$smarty->display("SelectEmailPopup.tpl");
+	else
+	// SalesPlatform.ru end
+		$smarty->display("SelectEmail.tpl");
+}
 else if(!$single_record && count($columnlists) > 0)
 	$smarty->display("SelectEmail.tpl");
 else if($single_record && $val_cnt == 0)
-        echo "No Mail Ids";	
+	echo "No Mail Ids";
 else
 	echo "Mail Ids not permitted";	
 ?>

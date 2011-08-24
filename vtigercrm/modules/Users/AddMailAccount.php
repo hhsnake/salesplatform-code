@@ -10,6 +10,9 @@
 
 require_once('Smarty_setup.php');
 require_once('modules/Settings/Forms.php');
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
 
 global $mod_strings;
 global $app_strings;
@@ -18,6 +21,11 @@ global $current_user;
 
 global $adb;
 global $theme;
+
+// SalesPlatform.ru begin
+$idn = new idna_convert();
+// SalesPlatform.ru end
+
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
@@ -32,17 +40,23 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 	$sql = "select * from vtiger_mail_accounts where user_id=?";
 	$result = $adb->pquery($sql, array($_REQUEST['record']));
 	$rowcount = $adb->num_rows($result);
-	
+
 	if ($rowcount!=0)
 	{
 		while($temprow = $adb->fetchByAssoc($result))
 		{
 			$smarty->assign("DISPLAYNAME", $temprow['display_name']);
 			$smarty->assign("ID", $temprow['user_id']);
-			$smarty->assign("EMAIL", $temprow['mail_id']);
+			// SalesPlatform.ru begin
+//			$smarty->assign("EMAIL", $temprow['mail_id']);
+			$smarty->assign("EMAIL", $idn->decode($temprow['mail_id']) );
+			// SalesPlatform.ru end
 			$smarty->assign("ACCOUNTNAME", $temprow['account_name']);
 			$smarty->assign($temprow['mail_protocol'],$temprow['mail_protocol']);
-			$smarty->assign("SERVERUSERNAME", $temprow['mail_username']);
+			// SalesPlatform.ru begin
+//			$smarty->assign("SERVERUSERNAME", $temprow['mail_username']);
+			$smarty->assign("SERVERUSERNAME", $idn->decode($temprow['mail_username']) );
+			// SalesPlatform.ru end
 			$smarty->assign("SERVERPASSWORD", $temprow['mail_password']);
 			$smarty->assign("SERVERNAME", $temprow['mail_servername']);
 			$smarty->assign("RECORD_ID", $temprow['account_id']);
@@ -95,7 +109,7 @@ if($count > 0)
 	$field = '<input name="server_password" value="*****" class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" type="password">';//"<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='crmButton password small' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=EditView&mail_accounts=true\",\"test\",\"width=320,height=200,resizable=no,scrollbars=0, toolbar=no, titlebar=no, left=200, top=226, screenX=100, screenY=126\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
 else
 	$field = '<input name="server_password" value="" class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" type="password">';
-$smarty->assign('CHANGE_PW_BUTTON',$field);	
+$smarty->assign('CHANGE_PW_BUTTON',$field);
 
 $return_module = vtlib_purify($_REQUEST['return_module']);
 if(empty($return_module)) $return_module = 'Settings';

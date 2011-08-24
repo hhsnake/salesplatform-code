@@ -149,7 +149,15 @@ else
 				$advfilterlist[$i-1]["value"] = implode(", ",$val);
 				$and_text = "<em old='(yyyy-mm-dd)'>(".$current_user->date_format.")</em>&nbsp;".$mod_strings['LBL_AND'];
 			}
-			$smarty->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
+			// SalesPlatform.ru begin
+			$filterValues = explode(",",$advfilterlist[$i-1]["value"]);
+			for ($j = 0; $j < count($filterValues); $j++) {
+				$filterValues[$j] = getTranslatedString( trim($filterValues[$j]), $cv_module );
+			}
+			$dispStr = implode(", ", $filterValues);
+			//$smarty->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
+			$smarty->assign("VALUE".$i,$dispStr);
+			// SalesPlatform.ru end
 			$smarty->assign("AND_TEXT".$i,$and_text);
 		}
 		$smarty->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);

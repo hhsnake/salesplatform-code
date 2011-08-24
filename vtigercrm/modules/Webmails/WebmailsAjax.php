@@ -33,7 +33,10 @@ if(isset($_REQUEST['file']) && $_REQUEST['file']!='' && !isset($_REQUEST['ajax']
 	exit();
 }
 $mailid = vtlib_purify($_REQUEST["mailid"]);
-if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=vtlib_purify($_REQUEST["mailbox"]);} else {$mailbox="INBOX";}
+// SalesPlatform.ru begin
+// if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=vtlib_purify($_REQUEST["mailbox"]);} else {$mailbox="INBOX";}
+if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=html_entity_decode( vtlib_purify($_REQUEST["mailbox"]) ); } else {$mailbox="INBOX";}
+// SalesPlatform.ru end
 
 $adb->println("Inside WebmailsAjax.php");
 

@@ -107,13 +107,22 @@
 	<table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="5" id='expressionlist'>
 		<tr>
 			<td class="colHeader small" width="20%">
-				Module
+				{* SalesPlatform.ru begin *}
+				{* Module *}
+				{$MOD.LBL_MODULE}
+				{* SalesPlatform.ru end *}
 			</td>
 			<td class="colHeader small" width="65">
-				Description
+				{* SalesPlatform.ru begin *}
+				{* Description *}
+				{$MOD.LBL_DESCRIPTION}
+				{* SalesPlatform.ru end *}
 			</td>
 			<td class="colHeader small" width="15%">
-				Tools
+				{* SalesPlatform.ru begin *}
+				{* Tools *}
+				{$MOD.LBL_TOOLS}
+				{* SalesPlatform.ru end *}
 			</td>
 		</tr>
 {foreach item=workflow from=$workflows}

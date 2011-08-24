@@ -159,10 +159,16 @@ class ReportRun extends CRMEntity
 						} else {
 							$condition = "and vtiger_crmentity.crmid!=''";
 						}
+// SalesPlatform.ru begin
 						if($temp_module_from_tablename == $module)
-							$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '' $condition) then ".$selectedfields[0].".user_name else vtiger_groups".$module.".groupname end as '".$module."_Assigned_To'";
+							$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '' $condition) then concat(".$selectedfields[0].".last_name,' ',".$selectedfields[0].".first_name) else vtiger_groups".$module.".groupname end as '".$module."_Assigned_To'";
 						else//Some Fields can't assigned to groups so case avoided (fields like inventory manager)
-							$columnslist[$fieldcolname] = $selectedfields[0].".user_name as '".$header_label."'";
+							$columnslist[$fieldcolname] = "concat(".$selectedfields[0].".last_name,' ',".$selectedfields[0].".first_name) as '".$header_label."'";
+//						if($temp_module_from_tablename == $module)
+//							$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '' $condition) then ".$selectedfields[0].".user_name else vtiger_groups".$module.".groupname end as '".$module."_Assigned_To'";
+//						else//Some Fields can't assigned to groups so case avoided (fields like inventory manager)
+//							$columnslist[$fieldcolname] = $selectedfields[0].".user_name as '".$header_label."'";
+// SalesPlatform.ru end
 							
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field == 'Products_Handler')//Products cannot be assiged to group only to handler so group is not included

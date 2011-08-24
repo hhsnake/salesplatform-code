@@ -103,11 +103,19 @@ class Users {
 	var $popup_type;
 
 	var $search_fields = Array(
-		'Name'=>Array('vtiger_users'=>'last_name'),
+// SalesPlatform.ru begin
+		'Last Name'=>Array('vtiger_users'=>'last_name'),
+		'Name'=>Array('vtiger_users'=>'first_name'),
+//		'Name'=>Array('vtiger_users'=>'last_name'),
+// SalesPlatform.ru end
 		'Email'=>Array('vtiger_users'=>'email1')
 	);
 	var $search_fields_name = Array(
-		'Name'=>'last_name',
+// SalesPlatform.ru begin
+		'Last Name'=>'last_name',
+		'Name'=>'first_name',
+//		'Name'=>'last_name',
+// SalesPlatform.ru end
 		'Email'=>'email1'
 	);
 
@@ -150,7 +158,10 @@ class Users {
 	var $emailTemplate_defaultFields = array('first_name','last_name','title','department','phone_home','phone_mobile','signature','email1','address_street','address_city','address_state','address_country','address_postalcode');
 	
 	// This is the list of fields that are in the lists.
-	var $default_order_by = "user_name";
+// SalesPlatform.ru begin
+	var $default_order_by = "last_name,first_name";
+//	var $default_order_by = "user_name";
+// SalesPlatform.ru end
 	var $default_sort_order = 'ASC';
 
 	var $record_id;

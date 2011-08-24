@@ -286,11 +286,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		//Control will come here only for Products - Handler and Quotes - Inventory Manager
 		if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array_realnames(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
 		}
 		else
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array_realnames(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 		}
 		$fieldvalue [] = $users_combo;
 	}
@@ -326,11 +326,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array_realnames(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
 		}
 		else
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array_realnames(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 		}
 
 		if($noof_group_rows!=0)
@@ -1276,7 +1276,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}elseif($uitype == 101)
 	{
 		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
-        $fieldvalue[] = getUserName($value);
+// SalesPlatform.ru begin
+        $fieldvalue[] = getUserRealName($value);
+//        $fieldvalue[] = getUserName($value);
+// SalesPlatform.ru end
         $fieldvalue[] = $value;
 	}
 	elseif($uitype == 26){
@@ -1450,6 +1453,9 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 	$focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
     $focus->column_fields['currency_id'] = $quote_focus->column_fields['currency_id'];
     $focus->column_fields['conversion_rate'] = $quote_focus->column_fields['conversion_rate'];
+	// SalesPlatform.ru begin
+	$focus->column_fields['contact_id'] = $quote_focus->column_fields['contact_id'];
+	// SalesPlatform.ru end
 
 	$log->debug("Exiting getConvertQuoteToInvoice method ...");
 	return $focus;

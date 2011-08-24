@@ -119,23 +119,64 @@ class vt_DateTime
 		$datetimevalue = new vt_DateTime($day_array,true);
 		return $datetimevalue;
 	}
-	
+
+// SalesPlatform.ru begin
 	/**
 	 * function to get days in week using index
 	 * @param integer       $index - number between 0 to 6
-	 * return vt_DateTime obj  $datetimevalue
+	 * returns a vt_DateTime of the corresponding weekday always in the same week as $this
+
+	 The ISO 8601 week ALWAYS starts with MONDAY.
+	 The PHP week starts with 0 = SUNDAY, but PHP uses the ISO week number!
+
+	 $sunday_first = true (PHP week)               |  $sunday_first = false (ISO week)
+	 -----------------------------------------------------------------------------------------------
+	 $index = 0 -> Sun of PHP week X = ISO week X-1 |  $index = 0 -> Mon of ISO week X = PHP week X
+	 $index = 1 -> Mon of PHP week X = ISO week X   |  $index = 1 -> Tue of ISO week X = PHP week X
+	 $index = 2 -> Tue of PHP week X = ISO week X   |  $index = 2 -> Wed of ISO week X = PHP week X
+	 $index = 3 -> Wed of PHP week X = ISO week X   |  $index = 3 -> Thu of ISO week X = PHP week X
+	 $index = 4 -> Thu of PHP week X = ISO week X   |  $index = 4 -> Fri of ISO week X = PHP week X
+	 $index = 5 -> Fri of PHP week X = ISO week X   |  $index = 5 -> Sat of ISO week X = PHP week X
+	 $index = 6 -> Sat of PHP week X = ISO week X   |  $index = 6 -> Sun of ISO week X = PHP week X+1
 	 */
-	function getThisweekDaysbyIndex($index){
+	function getThisweekDaysbyIndex($index)
+	{
 		$week_array = array();
-		if($index < 0 || $index > 6){
+		if($index < 0 || $index > 6)
 			die("day is invalid");
+
+		// If monday is the first week day: $this = sunday returns the previous PHP week
+		global $sunday_first;
+		if (!$sunday_first)
+		{
+			$index += 1;
+			if ($this->dayofweek == 0)
+				$index -= 7;
 		}
-		$week_array['day'] = $this->day + ($index - $this->dayofweek);
+
+		$week_array['day']   = $this->day + $index - $this->dayofweek;
 		$week_array['month'] = $this->month;
-		$week_array['year'] = $this->year;
+		$week_array['year']  = $this->year;
 		$datetimevalue = new vt_DateTime($week_array,true);
 		return $datetimevalue;
 	}
+//	/**
+//	 * function to get days in week using index
+//	 * @param integer       $index - number between 0 to 6
+//	 * return vt_DateTime obj  $datetimevalue
+//	 */
+//	function getThisweekDaysbyIndex($index){
+//		$week_array = array();
+//		if($index < 0 || $index > 6){
+//			die("day is invalid");
+//		}
+//		$week_array['day'] = $this->day + ($index - $this->dayofweek);
+//		$week_array['month'] = $this->month;
+//		$week_array['year'] = $this->year;
+//		$datetimevalue = new vt_DateTime($week_array,true);
+//		return $datetimevalue;
+//	}
+// SalesPlatform.ru end
 
 	/**
 	 * function to get days in month using index
@@ -367,6 +408,39 @@ class vt_DateTime
 	function get_formatted_time(){
 		return $this->z_hour.":".$this->min;
 	}
+
+// SalesPlatform.ru begin
+
+    /**
+    * add_Offset(-2, "days") returns a date = $this - 2 days
+	*/
+	function add_Offset($offset, $unit)
+	{
+		$sec  = $this->second;
+		$min  = $this->minute;
+		$hour = $this->hour;
+		$day  = $this->day;
+		$mon  = $this->month;
+		$year = $this->year;
+
+		switch ($unit)
+		{
+			case "seconds": $sec  += $offset;   break;
+			case "minutes": $min  += $offset;   break;
+			case "hours":   $hour += $offset;   break;
+			case "days":    $day  += $offset;   break;
+			case "weeks":   $day  += $offset*7; break;
+			case "months":  $mon  += $offset;   break;
+			case "years":   $year += $offset;   break;
+			default: die("Invalid Unit");
+		}
+
+		$ar = array();
+		$newDate = new vt_DateTime($ar, false);
+		$newDate->setDateTime(mktime($hour,$min,$sec,$mon,$day,$year));
+		return $newDate;
+	}
+// SalesPlatform.ru end
 
 	/**
 	 * function to get date depends on mode value

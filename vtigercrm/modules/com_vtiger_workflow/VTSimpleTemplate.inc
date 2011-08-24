@@ -8,26 +8,34 @@
  * All Rights Reserved.
  ************************************************************************************/
 class VTSimpleTemplate{
-	
+
 	function __construct($templateString){
 		$this->template = $templateString;
 	}
-	
+
 	function render($entityCache, $entityId){
 		$this->cache = $entityCache;
 		$this->parent = $this->cache->forId($entityId);
 		return $this->parseTemplate();
 	}
-	
+
 	private function matchHandler($match){
 		preg_match('/\((\w+) : \(([_\w]+)\) (\w+)\)/', $match[1], $matches);
 		if(count($matches)==0){
 			$fieldname = $match[1];
 			$data = $this->parent->getData();
 			if($this->useValue($data, $fieldname)){
-				$result = $data[$fieldname];
+				// SalesPlatform.ru begin
+				//$result = $data[$fieldname];
+				$result = getTranslatedString( $data[$fieldname], $this->parent->getModuleName());
+				// SalesPlatform.ru end
 			}else{
 				$result ='';
+                                // SalesPlatform.ru begin
+                                if ($fieldname == "crmid") {
+                                    $result = vtws_getCRMEntityId($this->parent->getId());
+                                }
+                                // SalesPlatform.ru end
 			}
 		}else{
 			list($full, $referenceField, $referenceModule, $fieldname) = $matches;
@@ -41,11 +49,11 @@ class VTSimpleTemplate{
 					$entity = $this->cache->forId($referenceId);
 					if($referenceModule==="Users" && $entity->getModuleName()=="Groups"){
 						list($groupEntityId, $groupId) = vtws_getIdComponents($referenceId);
-						
+
 						require_once('include/utils/GetGroupUsers.php');
 						$ggu = new GetGroupUsers();
 						$ggu->getAllUsersInGroup($groupId);
-						
+
 						$users = $ggu->group_users;
 						$parts = Array();
 						foreach($users as $userId){
@@ -70,9 +78,11 @@ class VTSimpleTemplate{
 				}
 			}
 		}
-			if(!empty($result)){
-				$result .= ',';
-		}
+                // SalesPlatform.ru begin
+                //if (!empty($result)) {
+                //        $result .= ',';
+                //}
+                // SalesPlatform.ru end
 		return $result;						
 		
 	}
@@ -84,7 +94,7 @@ class VTSimpleTemplate{
 	function parseTemplate(){
 		return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))\s*,?/', array($this,"matchHandler"), $this->template);
 	}
-	
+
 	function getMetaValue($fieldname){
 		switch($fieldname){
 			case 'date': return getNewDisplayDate();

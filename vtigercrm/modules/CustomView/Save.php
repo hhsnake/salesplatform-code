@@ -12,6 +12,46 @@ require_once('include/utils/utils.php');
 global $adb;
 global $log, $current_user;
 
+// SalesPlatform.ru begin
+function decodeLocalizedFilterValues($values, $tabid, $module, $fieldname) {
+	global $adb, $app_strings, $current_language;
+	$mod_strings = return_module_language($current_language,$module);
+	$result = $adb->pquery("SELECT uitype FROM vtiger_field WHERE tabid = ? AND fieldname = ?", array($tabid, $fieldname) );
+	if ($adb->num_rows($result) > 0) {
+		$uitype = $adb->query_result($result, 0, "uitype");
+		if ($uitype == 15 || $uitype == 16) {
+			$result = $adb->pquery("SELECT $fieldname FROM vtiger_$fieldname", array() );
+			if ( ( $numRows = $adb->num_rows($result) ) > 0) {
+				$picklist = array();
+				for ($i = 0; $i < $numRows; $i++) {
+					$picklist[] = $adb->query_result($result, $i, $fieldname);
+				}
+				for ($i = 0; $i < count($values); $i++) {
+					$value = trim($values[$i]);
+					foreach ($mod_strings as $k=>$v) {
+						if ($v == $value) {
+							if ( in_array($k, $picklist) ) {
+								$values[$i] = $k;
+								continue 2;
+							}
+						}
+					}
+					foreach ($app_strings as $k=>$v) {
+						if ($v == $value) {
+							if ( in_array($k, $picklist) ) {
+								$values[$i] = $k;
+								continue 2;
+							}
+						}
+					}
+					$values[$i] = $value;
+				}
+			}
+		}
+	}
+}
+// SalesPlatform.ru end
+
 $cvid = (int) vtlib_purify($_REQUEST["record"]);
 $cvmodule = vtlib_purify($_REQUEST["cvmodule"]);
 $parenttab = getParentTab();
@@ -234,6 +274,10 @@ if($cvmodule != "") {
 							}
 							$adv_filter_value[$i] = implode(", ",$val);	
 						}
+						// SalesPlatform.ru begin
+						decodeLocalizedFilterValues(&$temp_val, $cv_tabid, $cvmodule, $col[2]);
+						$adv_filter_value[$i] = implode(", ",$temp_val);
+						// SalesPlatform.ru end
 						$advfiltersql = "INSERT INTO vtiger_cvadvfilter (cvid,columnindex,columnname,comparator,value) VALUES (?,?,?,?,?)";
 						$advfilterparams = array($genCVid, $i, $adv_filter_col[$i], $adv_filter_option[$i], $adv_filter_value[$i]);
 						$advfilterresult = $adb->pquery($advfiltersql, $advfilterparams);

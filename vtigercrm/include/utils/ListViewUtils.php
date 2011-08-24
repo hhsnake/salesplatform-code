@@ -1460,7 +1460,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if($value == '' ) {
 			$user_id = $adb->query_result($list_result,$list_result_count,'smownerid');
 			if ($user_id != null && $user_id != '') {
-				$value = getOwnerName($user_id);
+// SalesPlatform.ru begin
+				$value = getOwnerRealName($user_id);
+//				$value = getOwnerName($user_id);
+// SalesPlatform.ru end
 			}
 		}
 	}
@@ -1921,6 +1924,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$value = vt_suppressHTMLTags(implode(',',$json->decode($temp_val)));
 		}
 	}
+// SalesPlatform.ru begin
+	elseif($uitype == 156){
+            $value = getTranslatedString($temp_val, 'Settings');
+	}
+// SalesPlatform.ru end
 	//end email status tracking
 	else
 	{
@@ -2288,7 +2296,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name).'</a>';
+						// SalesPlatform.ru begin
+						// $value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name).'</a>';
+						$value = '<a href="javascript:select_return_emails('.$entity_id.',\''.decode_html($slashes_name).'\',\''.$module.'\');">'.textlength_check($name).'</a>';
+						// SalesPlatform.ru end
 
 					}elseif ($module=='Vendors')
 					{
@@ -2309,7 +2320,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name).'</a>';
+						// SalesPlatform.ru begin
+						//$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name).'</a>';
+						$value = '<a href="javascript:select_return_emails('.$entity_id.',\''.decode_html($slashes_name).'\',\''.$module.'\');">'.textlength_check($name).'</a>';
+						// SalesPlatform.ru end
 
 					}elseif ($module=='Contacts' || $module=='Leads')
 					{
@@ -2343,8 +2357,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
-						
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
+						// SalesPlatform.ru begin
+						//$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:select_return_emails('.$entity_id.',\''.decode_html($slashes_name).'\',\''.$module.'\');">'.$name.'</a>';
+						// SalesPlatform.ru end
 
 					}else
 					{
@@ -2356,8 +2372,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						$email_check = 1;
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.',-1,"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name)	.'</a>';
-						
+						// SalesPlatform.ru begin
+						//$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.',-1,"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name)	.'</a>';
+						$value = '<a href="javascript:select_return_emails('.$entity_id.',\''.decode_html($slashes_name).'\',\''.$module.'\');">'.textlength_check($name).'</a>';
+						// SalesPlatform.ru end
 					}
 						
 				}	
@@ -2389,10 +2407,25 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_specific_campaign("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'");\'>'.$temp_val.'</a>';
 				}
+                                // SalesPlatform.ru begin
+				elseif($popuptype == "return_document_file")
+				{
+					$focus->record_id = $_REQUEST['recordid'];
+                                        $file_name = $adb->query_result($list_result,$list_result_count,'filename');
+                                        $att_id = $adb->query_result($list_result,$list_result_count,'attachmentsid');
+                                        $value = '<a href="javascript:window.close();" onclick=\'return_document_file("'.$att_id.'", "'.$file_name.'");\'>'.$temp_val.'</a>';
+				}
+                                // SalesPlatform.ru end
 				else
 				{
 					if($colname == "lastname")
 						$temp_val = getFullNameFromQResult($list_result,$list_result_count,$module);
+// SalesPlatform.ru begin
+					if($colname == "last_name")
+                                            $slashes_temp_val = popup_from_html(
+                                                    $adb->query_result($list_result,$list_result_count,'last_name').' '.$adb->query_result($list_result,$list_result_count,'first_name'));
+                                        else
+// SalesPlatform.ru end
 
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
@@ -2401,7 +2434,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					if($_REQUEST['maintab'] == 'Calendar')
 						$value = '<a href="javascript:window.close();" onclick=\'set_return_todo("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'");\'>'.$temp_val.'</a>';
 					else
-						$value = '<a href="javascript:window.close();" onclick=\'set_return("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'");\'>'.$temp_val.'</a>';
+// SalesPlatform.ru begin
+                                                $value = '<a href="javascript:window.close();" onclick=\'set_return("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'","'.$_REQUEST['user_field'].'");\'>'.$temp_val.'</a>';
+//                                                $value = '<a href="javascript:window.close();" onclick=\'set_return("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'");\'>'.$temp_val.'</a>';
+// SalesPlatform.ru end
 				}
 			}
 			else
@@ -2462,9 +2498,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$currency_symbol = $currency_info['currency_symbol'];
 // SalesPlatform.ru begin					
 			if(isset($currency_symbol_before) && $currency_symbol_before)
-			    $value = $currency_symbol.$value;
+			    $value = $currency_symbol.$temp_val;
 			else
-			    $value = $value.' '.$currency_symbol;
+			    $value = $temp_val.' '.$currency_symbol;
 //			$value = $currency_symbol.$temp_val;
 // SalesPlatform.ru end
 		}
@@ -2618,8 +2654,9 @@ function getListQuery($module,$where='')
                 $query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Documents":
+                // SalesPlatform.ru begin
 		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
-			vtiger_crmentity.smownerid,vtiger_attachmentsfolder.*,vtiger_notes.*
+			vtiger_crmentity.smownerid,vtiger_attachmentsfolder.*,vtiger_notes.*,vtiger_seattachmentsrel.attachmentsid
 			FROM vtiger_notes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_notes.notesid
@@ -2627,8 +2664,22 @@ function getListQuery($module,$where='')
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
-			LEFT JOIN vtiger_attachmentsfolder 
+			LEFT JOIN vtiger_seattachmentsrel
+				ON vtiger_seattachmentsrel.crmid = vtiger_notes.notesid
+			LEFT JOIN vtiger_attachmentsfolder
 				ON vtiger_notes.folderid = vtiger_attachmentsfolder.folderid";
+//		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
+//			vtiger_crmentity.smownerid,vtiger_attachmentsfolder.*,vtiger_notes.*
+//			FROM vtiger_notes
+//			INNER JOIN vtiger_crmentity
+//				ON vtiger_crmentity.crmid = vtiger_notes.notesid
+//			LEFT JOIN vtiger_groups
+//				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+//			LEFT JOIN vtiger_users
+//				ON vtiger_users.id = vtiger_crmentity.smownerid
+//			LEFT JOIN vtiger_attachmentsfolder
+//				ON vtiger_notes.folderid = vtiger_attachmentsfolder.folderid";
+                // SalesPlatform.ru end
 		$query .= getNonAdminAccessControlQuery($module,$current_user);
 		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;

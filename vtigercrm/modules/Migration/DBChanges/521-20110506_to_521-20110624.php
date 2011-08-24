@@ -24,7 +24,11 @@ $migrationlog->debug("\n\nDB Changes from 5.2.1-20110506 to 5.2.1-20110624 -----
 require_once 'include/utils/CommonUtils.php';
 global $adb;
 
-ExecuteQuery("update vtiger_links set linkurl = 'javascript:SMSNotifier.checkstatus(\\'tbl$WRAPPER_NAME$\\', $RECORD$)' where linklabel = 'LBL_CHECK_STATUS'");
+$query=$adb->pquery("select * from vtiger_links where linklabel = 'LBL_CHECK_STATUS'",array());
+$numOfRows=$adb->num_rows($query);
+if($numOfRows > 0){
+    ExecuteQuery("update vtiger_links set linkurl = 'javascript:SMSNotifier.checkstatus(\\'tbl$WRAPPER_NAME$\\', $RECORD$)' where linklabel = 'LBL_CHECK_STATUS'");
+}
 
 $migrationlog->debug("\n\nDB Changes from 5.2.1-20110506 to 5.2.1-20110624 -------- Ends \n\n");
 ?>

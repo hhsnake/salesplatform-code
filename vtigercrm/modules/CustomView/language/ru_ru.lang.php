@@ -77,8 +77,8 @@ $mod_strings = array (
       'Custom Information' => 'Заметки',
       '- Event Information' => '- Информация о Событии',
       '- Event Description' => '- Описание События',
-      '- Task Information' => '- Информация о Задании',
-      '- Task Description' => '- Описание Задания',
+      '- Task Information' => '- Информация о Задаче',
+      '- Task Description' => '- Описание Задачи',
       'Title' => 'Оглавление',
       'Assigned To' => 'Ответственный',
       'Related to' => 'Относится к',
@@ -223,7 +223,6 @@ $mod_strings = array (
       'LBL_EDIT' => 'Изменить',
       'LBL_STATUS_PUBLIC_APPROVE' => 'Одобрить',
       'LBL_STATUS_PUBLIC_DENY' => 'Запретить',
-
 
 );
 

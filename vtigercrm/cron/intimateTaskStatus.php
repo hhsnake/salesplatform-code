@@ -18,12 +18,20 @@ global $app_strings;
 $emailresult = $adb->pquery("SELECT email1 from vtiger_users", array());
 $emailid = $adb->fetch_array($emailresult);
 $emailaddress = $emailid[0];
-$mailserveresult = $adb->pquery("SELECT server,server_username,server_password,smtp_auth FROM vtiger_systems where server_type = ?", array('email'));
+// SalesPlatform.ru begin
+$mailserveresult = $adb->pquery("SELECT server,server_username,server_password,smtp_auth,server_port,server_tls,use_sendmail FROM vtiger_systems where server_type = ?", array('email'));
+//$mailserveresult = $adb->pquery("SELECT server,server_username,server_password,smtp_auth FROM vtiger_systems where server_type = ?", array('email'));
+// SalesPlatform.ru end
 $mailrow = $adb->fetch_array($mailserveresult);
 $mailserver = $mailrow[0];
 $mailuname = $mailrow[1];
 $mailpwd = $mailrow[2];
 $smtp_auth = $mailrow[3];
+// SalesPlatform.ru begin
+$mailserver_port = $mailrow[4];
+$mailserver_tls = $mailrow[5];
+$use_sendmail = $mailrow[6];
+// SalesPlatform.ru end
 // End Email Setup
 
 
@@ -52,7 +60,10 @@ if($activevalue[0] == 1)
 			$assigned_user = $adb->query_result($user_res,0,'user_name');
 		}
 		$mail_body = $app_strings['Dear_Admin_tasks_not_been_completed']." ".$app_strings['LBL_SUBJECT'].": ".$subject."<br> ".$app_strings['LBL_ASSIGNED_TO'].": ".$assigned_user."<br><br>".$app_strings['Task_sign'];
-	 	sendmail($emailaddress,$emailaddress,$app_strings['Task_Not_completed'].': '.$subject,$mail_body,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru begin
+	 	sendmail($emailaddress,$emailaddress,$app_strings['Task_Not_completed'].': '.$subject,$mail_body,$mailserver,$mailuname,$mailpwd,"",$smtp_auth,$mailserver_port,$mailserver_tls,$use_sendmail);
+//	 	sendmail($emailaddress,$emailaddress,$app_strings['Task_Not_completed'].': '.$subject,$mail_body,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru end
 	}
 }
 
@@ -70,7 +81,10 @@ if($activevalue[0] == 1)
 		$pot_name = $myrow['potentialname'];
 		$body_content = $app_strings['Dear_Team'].$app_strings['Dear_Team_Time_to_Party']."<br><br>".$app_strings['Potential_Id']." ".$pot_id;
 		$body_content .= $app_strings['Potential_Name']." ".$pot_name."<br><br>";
-		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$body_content,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru begin
+		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$body_content,$mailserver,$mailuname,$mailpwd,"",$smtp_auth,$mailserver_port,$mailserver_tls,$use_sendmail);
+//		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$body_content,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru end
 	}
 }
 //Pending tickets
@@ -85,7 +99,10 @@ if($activevalue[0] == 1)
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$ticketid = $myrow['ticketid'];
-		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);	
+// SalesPlatform.ru begin
+		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth,$mailserver_port,$mailserver_tls);
+//		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru end
 	}
 }
 
@@ -101,7 +118,10 @@ $count = $adb->query_result($result,0,'count');
 //changes made to get too many tickets notification only when tickets count is greater than or equal to 5
 	if($count >= 5)
 	{
-		sendmail($emailaddress,$emailaddress,$app_strings['Too_many_pending_tickets'],$app_strings['Dear_Admin_too_ many_tickets_pending'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru begin
+		sendmail($emailaddress,$emailaddress,$app_strings['Too_many_pending_tickets'],$app_strings['Dear_Admin_too_ many_tickets_pending'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth,$mailserver_port,$mailserver_tls,$use_sendmail);
+//		sendmail($emailaddress,$emailaddress,$app_strings['Too_many_pending_tickets'],$app_strings['Dear_Admin_too_ many_tickets_pending'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru end
 	}
 }
 
@@ -116,7 +136,10 @@ if($activevalue[0] == 1)
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$productname=$myrow[0];
-		sendmail($emailaddress,$emailaddress,$app_strings['Support_starting'],$app_strings['Hello_Support'].$productname ."\n ".$app_strings['Congratulations'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);	
+// SalesPlatform.ru begin
+		sendmail($emailaddress,$emailaddress,$app_strings['Support_starting'],$app_strings['Hello_Support'].$productname ."\n ".$app_strings['Congratulations'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth,$mailserver_port,$mailserver_tls,$use_sendmail);
+//		sendmail($emailaddress,$emailaddress,$app_strings['Support_starting'],$app_strings['Hello_Support'].$productname ."\n ".$app_strings['Congratulations'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru end
 	}
 }
 
@@ -131,7 +154,10 @@ if($activevalue[0] == 1)
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$productname=$myrow[0];
-		sendmail($emailaddress,$emailaddress,$app_strings['Support_Ending_Subject'],$app_strings['Support_Ending_Content'].$productname.$app_strings['kindly_renew'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru begin
+		sendmail($emailaddress,$emailaddress,$app_strings['Support_Ending_Subject'],$app_strings['Support_Ending_Content'].$productname.$app_strings['kindly_renew'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth,$mailserver_port,$mailserver_tls,$use_sendmail);
+//		sendmail($emailaddress,$emailaddress,$app_strings['Support_Ending_Subject'],$app_strings['Support_Ending_Content'].$productname.$app_strings['kindly_renew'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+// SalesPlatform.ru end
 	}
 }
 

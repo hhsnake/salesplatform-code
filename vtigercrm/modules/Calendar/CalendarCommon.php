@@ -349,14 +349,20 @@ function getActivityDetails($description,$user_id,$from='')
 		$end_date_lable=$mod_strings['Due Date'];
 	}
 
-	$name = getUserName($user_id);
-	
+	// SalesPlatform.ru begin
+	//$name = getUserName($user_id);
+	$name = getUserFullName($user_id);
+	// SalesPlatform.ru end
+
 	if($from == "invite")
 		$msg = getTranslatedString($mod_strings['LBL_ACTIVITY_INVITATION']);
 	else
 		$msg = getTranslatedString($mod_strings['LBL_ACTIVITY_NOTIFICATION']);
 
-	$current_username = getUserName($current_user->id);
+	// SalesPlatform.ru begin
+	//$current_username = getUserName($current_user->id);
+	$current_username = getUserFullName($current_user->id);
+	// SalesPlatform.ru end
 	$status = getTranslatedString($description['status'],'Calendar');
 	$list = $name.',';
 	$list .= '<br><br>'.$msg.' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':<br>';
@@ -374,7 +380,7 @@ function getActivityDetails($description,$user_id,$from='')
 		$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Location"].' : '.$description['location'];
 			
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_APP_DESCRIPTION"].': '.$description['description'];
-        $list .= '<br><br>'.$mod_strings["LBL_REGARDS_STRING"].' ,';
+        $list .= '<br><br>'.$mod_strings["LBL_REGARDS_STRING"].', ';
         $list .= '<br>'.$current_username.'.';
 
         $log->debug("Exiting getActivityDetails method ...");
@@ -412,7 +418,10 @@ function getEventNotification($mode,$subject,$desc)
 {
 	global $current_user,$adb;
 	require_once("modules/Emails/mail.php");
-	$subject = $mode.' : '.$subject;
+	// SalesPlatform.ru begin
+	//$subject = $mode.' : '.$subject;
+	$subject = getTranslatedString( $mode, 'Calendar' ) .' : '. getTranslatedString( $subject, 'Calendar' );
+	// SalesPlatform.ru end
 	$crmentity = new CRMEntity();
 	if(getUserName($desc['user_id']))
 	{
@@ -463,7 +472,10 @@ function sendInvitation($inviteesid,$mode,$subject,$desc)
 
 }
 
-function getActivityMailInfo($return_id,$status,$activity_type)
+// SalesPlatform.ru begin
+function getActivityMailInfo($return_id,$status,$activity_type,$mode='edit')
+//function getActivityMailInfo($return_id,$status,$activity_type)
+// SalesPlatform.ru end
 {
 	$mail_data = Array();
 	global $adb;
@@ -512,7 +524,10 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	{
 		$cont_name = getContactName($cont_id);
 	}
-	$mail_data['mode'] = "edit";
+// SalesPlatform.ru begin
+	$mail_data['mode'] = $mode;
+//	$mail_data['mode'] = "edit";
+// SalesPlatform.ru end
 	$mail_data['activity_mode'] = $activity_type;
 	$mail_data['sendnotification'] = $send_notification;
 	$mail_data['user_id'] = $usr_id;

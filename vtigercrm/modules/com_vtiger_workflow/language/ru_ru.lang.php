@@ -5,7 +5,7 @@
 *  Version      : 5.2.0
 *  Created Date : 2010-08-23
 *  Author       : Eugene Babiy
-*  License      : 
+*  License      :
 Licensed under Vtiger Public License Version 1.1.
 
 If you have a questions or suggestions about this translation module, please contact me.
@@ -21,10 +21,10 @@ Skype: eugene.babiy
 $mod_strings = array (
       'VTEmailTask' => 'Отправить Email',
       'VTEntityMethodTask' => 'Запустить Пользовательскую Функцию',
-      'VTCreateTodoTask' => 'Создать Задание',
+      'VTCreateTodoTask' => 'Создать Задачу',
       'VTCreateEventTask' => 'Создать Событие',
-      'LBL_EDIT_TASK' => 'Изменить Задание',
-      'LBL_EDIT_TASK_TITLE' => 'Измените существующее задание или создайте новое',
+      'LBL_EDIT_TASK' => 'Изменить Задачу',
+      'LBL_EDIT_TASK_TITLE' => 'Измените существующую задачу или создайте новую',
       'LBL_EDIT_WORKFLOW' => 'Изменить Обработчик',
       'LBL_EDIT_WORKFLOW_TITLE' => 'Измените существующий обработчик или создадите новый',
       'LBL_FROM_TEMPLATE' => 'Из Шаблона',
@@ -37,7 +37,7 @@ $mod_strings = array (
       'LBL_VALIDATION_MISSING_MANDATORY_FIELDS' => 'Есть пустые обязательные поля.',
       'LBL_VALIDATION_INVALID_DATE_RANGE' => 'Дата/время начала больше даты/времени завершения',
       'LBL_ERROR_NO_WORKFLOW' => 'Обработчик который Вы запросили не существует',
-      'LBL_ERROR_NO_TASK' => 'Задание которое Вы запросили не существует',
+      'LBL_ERROR_NO_TASK' => 'Задача, которую Вы запросили, не существует',
       'LBL_ERROR_NOT_ADMIN' => 'У Вас нет доступа к этому модулю так как Вы не являетесь администратором',
       'LBL_CREATE_WORKFLOW' => 'Создать Обработчик',
       'LBL_WORKFLOW_LIST' => 'Список Обработчиков',
@@ -54,9 +54,13 @@ $mod_strings = array (
       'VTChangeOwnerTask'=>'Изменить ответственного',
       'VTSMSTask' => 'Отправка SMS',
       'VTChangeFieldValueTask'=>'Изменить значение поля',
+	  'LBL_DESCRIPTION' => 'Описание',
       'LBL_UPDATED_FIELD_NAME' => 'Название обновляемого поля',
+	  'LBL_MODULE' => 'Модуль',
       'LBL_NEW_FIELD_VALUE' => 'Новое значение',
-      'Workflow' => 'Обработчики',
+	  'LBL_SETTINGS' => 'Настройки',
+	  'LBL_TOOLS' => 'Инструменты',
+	  'Workflow' => 'Обработчики',
       // SalesPlatform.ru end
 );
 

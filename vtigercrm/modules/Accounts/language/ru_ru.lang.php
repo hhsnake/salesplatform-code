@@ -5,7 +5,7 @@
 *  Version      : 5.2.0
 *  Created Date : 2010-08-23
 *  Author       : Eugene Babiy
-*  License      : 
+*  License      :
 Licensed under Vtiger Public License Version 1.1.
 
 If you have a questions or suggestions about this translation module, please contact me.
@@ -34,7 +34,7 @@ $mod_strings = array (
       'LBL_LIST_PHONE' => 'Тел.',
       'LBL_LIST_EMAIL_ADDRESS' => 'Email',
       'LBL_LIST_CONTACT_NAME' => 'Контакт',
-      'LBL_LIST_AMOUNT' => 'Сума',
+      'LBL_LIST_AMOUNT' => 'Сумма',
       'db_name' => 'LBL_LIST_ACCOUNT_NAME',
       'db_website' => 'LBL_LIST_WEBSITE',
       'db_billing_address_city' => 'LBL_LIST_CITY',
@@ -80,8 +80,8 @@ $mod_strings = array (
       'LBL_GENERAL_INFORMATION' => 'Общая информация',
       'LBL_NEW_POTENTIAL' => 'Новая сделка',
       'LBL_POTENTIAL_TITLE' => 'Сделки',
-      'LBL_NEW_TASK' => 'Нов.задание',
-      'LBL_TASK_TITLE' => 'Задания',
+      'LBL_NEW_TASK' => 'Нов.задача',
+      'LBL_TASK_TITLE' => 'Задачи',
       'LBL_NEW_CALL' => 'Нов.звонок',
       'LBL_CALL_TITLE' => 'Звонки',
       'LBL_NEW_MEETING' => 'Нов.встреча',
@@ -115,14 +115,14 @@ $mod_strings = array (
       'Assigned To' => 'Ответственный',
       'Billing Address' => 'Юридический адрес',
       'Shipping Address' => 'Фактический адрес',
-      'Billing City' => 'Город',
-      'Shipping City' => 'Город',
-      'Billing State' => 'Область',
-      'Shipping State' => 'Область',
-      'Billing Code' => 'Индекс',
-      'Shipping Code' => 'Индекс',
-      'Billing Country' => 'Страна',
-      'Shipping Country' => 'Страна',
+      'Billing City' => 'Ю/А Город',
+      'Shipping City' => 'Ф/А Город',
+      'Billing State' => 'Ю/А Область',
+      'Shipping State' => 'Ф/А Область',
+      'Billing Code' => 'Ю/А Индекс',
+      'Shipping Code' => 'Ф/А Индекс',
+      'Billing Country' => 'Ю/А Страна',
+      'Shipping Country' => 'Ф/А Страна',
       'Created Time' => 'Создано',
       'Modified Time' => 'Изменено',
       'Description' => 'Описание',
@@ -198,7 +198,7 @@ $mod_strings = array (
 //Добавлено для 5.2.0
 	'Projects' => 'Проекты',
 	'Service Contracts' => 'Сервисные Контракты',
-	 
+
 // SalesPlatform.ru begin
         'Conversion Rate' => 'Курс',
         'S&H Amount' => 'Общая Сумма',

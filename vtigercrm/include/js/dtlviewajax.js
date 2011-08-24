@@ -347,7 +347,17 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			getObj(dtlView).innerHTML = alert_arr.NO;
 		}
-
+        // SalesPlatform.ru begin
+        }else if(uitype == '156')
+	{
+		if(tagValue == 'on')
+		{
+			getObj(dtlView).innerHTML = alert_arr.YES;
+		}else
+		{
+			getObj(dtlView).innerHTML = alert_arr.NO;
+		}
+        // SalesPlatform.ru end
 	}else if(uitype == 116 || uitype == 117)
 	{
 			getObj(dtlView).innerHTML = document.getElementById(txtBox).options[document.getElementById(txtBox).selectedIndex].text; 

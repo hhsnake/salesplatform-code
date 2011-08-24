@@ -42,8 +42,12 @@ $mod_strings = array(
 'LBL_METHOD_NAME'=>'Method Name',
 'VTChangeOwnerTask'=>'Change Owner',
 'VTChangeFieldValueTask'=>'Change Field Value',
+'LBL_DESCRIPTION' => 'Description',
 'LBL_UPDATED_FIELD_NAME' => 'Updated Field Name',
+'LBL_MODULE' => 'Module',
 'LBL_NEW_FIELD_VALUE' => 'New Value',
+'LBL_SETTINGS' => 'Settings',
+'LBL_TOOLS' => 'Tools',
 // SalesPlatform.ru end
 );
 

@@ -23,6 +23,14 @@ $mails_per_page = $_REQUEST['mails_per_page'];
 $ssltype = $_REQUEST["ssltype"];
 $sslmeth = $_REQUEST["sslmeth"];
 
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+
+$idn = new idna_convert();
+$server_username = $idn->encode($server_username);
+$email = $idn->encode($email);
+// SalesPlatform.ru end
+
 if($mails_per_page == '') $mails_per_page='0';
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {

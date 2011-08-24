@@ -150,10 +150,12 @@
 				LBL_NO_DATA_SELECTED:'There is no record selected. Select at least one record to Export',
 				LBL_SEARCH_WITHOUTSEARCH_ALL:'You have used search option but you have not selected without search & all options.\nYou can click [ok] to export all data or You can click [cancel] and try again with other export criteria',
 				STOCK_IS_NOT_ENOUGH : 'Stock is not enough',
-                                // SalesPlatform.ru begin
+				// SalesPlatform.ru begin
 				QTY : 'Qty',
-                                COLUMN : 'Column',
-                                // SalesPlatform.ru end
+				COLUMN : 'Column',
+				'No Mail Ids': 'No Mail Ids',
+				'Mail Ids not permitted': 'Mail Ids not permitted',
+				// SalesPlatform.ru end
 				INVALID_QTY : 'Invalid Qty',
 				LBL_SEARCH_WITHOUTSEARCH_CURRENTPAGE:'You have used search option but you have not selected without search & currentpage options.\nYou can click [ok] to export current page data or You can click [cancel] and try again with some other export criteria.',
 				LBL_SELECT_COLUMN: ' Invalid column.\n Please select column',
@@ -309,9 +311,31 @@
 				'LBL_ADD_HOME_WIDGET': 'Unable to add homestuff! Please try again',
 
 // SalesPlatform.ru begin
+'LBL_OFF':'off',
+'LBL_ON':'on',
 'LBL_PRODUCT_CODE':'Part Number',
 'LBL_PRODUCT_NAME':'Name',
 'LBL_PRODUCT_DESCRIPTION':'Description',
-'LBL_PRODUCT_COMMENT':'Comment'
+'LBL_PRODUCT_COMMENT':'Comment',
+SELECT_DOCWITHFILE:'Please Select a Document with file'
+'LBL_MOV_EMAIL1':'Moving mail(s) from ',
+'LBL_MOV_EMAIL2':' folder to ',
+'LBL_MOV_EMAIL3':' folder'
 // SalesPlatform.ru end
 			};
+
+// SalesPlatform.ru begin
+var operationsTranslated = {
+	"is" : "is",
+	"contains" : "contains",
+	"does not contain" : "does not contain",
+	"starts with" : "starts with",
+	"ends with" : "ends with",
+	"equal to" : "equal to",
+	"less than" : "less than",
+	"greater than" : "greater than",
+	"does not equal" : "does not equal",
+	"less than or equal to" : "less than or equal to",
+	"greater than or equal to" : "greater than or equal to"
+};
+// SalesPlatform.ru end

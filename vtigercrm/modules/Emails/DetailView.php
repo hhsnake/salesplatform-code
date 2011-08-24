@@ -25,6 +25,9 @@ require_once('data/Tracker.php');
 require_once('include/upload_file.php');
 require_once('include/utils/utils.php');
 require_once("include/Zend/Json.php");
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
 
 global $log;
 global $app_strings;
@@ -33,6 +36,10 @@ global $currentModule;
 
 $focus = CRMEntity::getInstance($currentModule);
 $json = new Zend_Json();
+// SalesPlatform.ru begin
+// Punnycode encoder/decoder
+$idn = new idna_convert();
+// SalesPlatform.ru end
 
 $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['record'])) 
@@ -45,10 +52,28 @@ if(isset($_REQUEST['record']))
 	$result = $adb->pquery($query, array($focus->id));
 	$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
 	$to_email = $json->decode($adb->query_result($result,0,'to_email'));
+	// SalesPlatform.ru begin
+	// Decoding e-mails with punnycode to display national domains in "to" field properly
+	foreach ($to_email as $k=>$v) {
+		$to_email[$k] = $idn->decode($v);
+	}
+	// SalesPlatform.ru end
 	$cc_email = $json->decode($adb->query_result($result,0,'cc_email'));
+	// SalesPlatform.ru begin
+	// Decoding e-mails with punnycode to display national domains in "cc" field properly
+	foreach ($cc_email as $k=>$v) {
+		$cc_email[$k] = $idn->decode($v);
+	}
+	// SalesPlatform.ru end
 	$smarty->assign('TO_MAIL',vt_suppressHTMLTags(@implode(',',$to_email)));	
 	$smarty->assign('CC_MAIL',vt_suppressHTMLTags(@implode(',',$cc_email)));	
     $bcc_email = $json->decode($adb->query_result($result,0,'bcc_email'));	
+	// SalesPlatform.ru begin
+	// Decoding e-mails with punnycode to display national domains in "bcc" field properly
+	foreach ($bcc_email as $k=>$v) {
+		$bcc_email[$k] = $idn->decode($v);
+	}
+	// SalesPlatform.ru end
 	$smarty->assign('BCC_MAIL',vt_suppressHTMLTags(@implode(',',$bcc_email)));	
 	$smarty->assign('EMAIL_FLAG',$adb->query_result($result,0,'email_flag'));	
 	if($focus->column_fields['name'] != '')

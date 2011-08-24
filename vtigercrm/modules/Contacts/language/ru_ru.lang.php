@@ -5,7 +5,7 @@
 *  Version      : 5.2.0
 *  Created Date : 2010-08-23
 *  Author       : Eugene Babiy
-*  License      : 
+*  License      :
 Licensed under Vtiger Public License Version 1.1.
 
 If you have a questions or suggestions about this translation module, please contact me.
@@ -103,8 +103,8 @@ $mod_strings = array (
       'LBL_GENERAL_INFORMATION' => 'Общая Информация',
       'LBL_NEW_POTENTIAL' => 'Новая Сделка',
       'LBL_POTENTIAL_TITLE' => 'Сделки',
-      'LBL_NEW_TASK' => 'Новое Задание',
-      'LBL_TASK_TITLE' => 'Задания',
+      'LBL_NEW_TASK' => 'Новая Задача',
+      'LBL_TASK_TITLE' => 'Задачи',
       'LBL_NEW_CALL' => 'Новый Звонок',
       'LBL_CALL_TITLE' => 'Звонки',
       'LBL_NEW_MEETING' => 'Новая Встреча',
@@ -139,12 +139,12 @@ $mod_strings = array (
       'Reference' => 'Рекомендации',
       'Created Time' => 'Создано',
       'Modified Time' => 'Изменено',
-      'Mailing Street' => 'Почта: улица',
+      'Mailing Street' => 'Улица',
       'Other Street' => 'Доп.адрес: улица',
-      'Mailing City' => 'Почта: город',
-      'Mailing State' => 'Почта: область',
-      'Mailing Zip' => 'Почта: индекс',
-      'Mailing Country' => 'Почта: страна',
+      'Mailing City' => 'Город',
+      'Mailing State' => 'Область',
+      'Mailing Zip' => 'Индекс',
+      'Mailing Country' => 'Страна',
       'Mailing Po Box' => 'Абонентский Ящик',
       'Other Po Box' => 'Другой а/я',
       'Other City' => 'Доп.адрес: город',

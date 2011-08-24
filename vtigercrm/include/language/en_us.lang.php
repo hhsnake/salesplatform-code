@@ -504,6 +504,7 @@ $app_strings = array (
 'LBL_PRODUCT_NAME' => 'Name',
 'LBL_PRODUCT_DESCRIPTION' => 'Description',
 'LBL_PRODUCT_COMMENT' => 'Comment',
+'LBL_SELECT_DOC_FILE' => 'Document',
 // SalesPlatform.ru end
 'LBL_QTY_IN_STOCK' => 'Qty In Stock',
 'LBL_QTY' => 'Qty',
@@ -676,7 +677,7 @@ $app_strings = array (
 'NO_DATA_AVAILABLE_WITH_SPECIFIED_PERIOD'=>'No data available with the specified time period',
 
 //Added for 5.0.3
-'Files_Maximum_6'=>'Files Maximum 6',
+'Files_Maximum_6'=>'Files Maximum 10',
 'To'=>'To:',
 
 'Date & Time' => 'Date & Time',

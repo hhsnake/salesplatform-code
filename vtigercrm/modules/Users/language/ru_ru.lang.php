@@ -5,7 +5,7 @@
 *  Version      : 5.2.0
 *  Created Date : 2010-08-23
 *  Author       : Eugene Babiy
-*  License      : 
+*  License      :
 Licensed under Vtiger Public License Version 1.1.
 
 If you have a questions or suggestions about this translation module, please contact me.
@@ -128,7 +128,7 @@ $mod_strings = array (
       'LBL_ACCOUNTS' => 'Контрагенты',
       'LBL_CONTACTS' => 'Контакты',
       'LBL_OPPURTUNITIES' => 'Сделки',
-      'LBL_TASKS' => 'Задания',
+      'LBL_TASKS' => 'Задачи',
       'LBL_CASES' => 'Дела',
       'LBL_EMAILS' => 'Почта',
       'LBL_NOTES' => 'Заметки',
@@ -300,8 +300,8 @@ $mod_strings = array (
       'LBL_INACTIVE' => 'Неактивно',
       'LBL_NOTIFICATION' => 'Уведомление',
       'LBL_DESCRIPTION' => 'Описание',
-      'LBL_TASK_NOTIFICATION' => 'Уведомление о задержке задания',
-      'LBL_TASK_NOTIFICATION_DESCRITPION' => 'Уведомить если задание задерживается больше чем на 24 часа',
+      'LBL_TASK_NOTIFICATION' => 'Уведомление о задержке задачи',
+      'LBL_TASK_NOTIFICATION_DESCRITPION' => 'Уведомить если задача задерживается больше, чем на 24 часа',
       'LBL_MANY_TICKETS' => 'Уведомление о многом количестве обращений',
       'LBL_MANY_TICKETS_DESCRIPTION' => 'Уведомить если особое событие собрало слишком много обращений, что может привести к блокировке службы поддержки',
       'LBL_PENDING_TICKETS' => 'Уведомление о ожидающих обращениях',
@@ -372,7 +372,7 @@ $mod_strings = array (
       'LBL_PRODUCT_FIELD_ACCESS' => 'Доступ к полям Товара',
       'LBL_NOTE_FIELD_ACCESS' => 'Доступ к полям Заметок',
       'LBL_EMAIL_FIELD_ACCESS' => 'Доступ к полям Почты',
-      'LBL_TASK_FIELD_ACCESS' => 'Доступ к полям Заданий',
+      'LBL_TASK_FIELD_ACCESS' => 'Доступ к полям Задач',
       'LBL_EVENT_FIELD_ACCESS' => 'Доступ к полям Событий',
       'LBL_VENDOR_FIELD_ACCESS' => 'Доступ к полям Поставщиков',
       'LBL_PB_FIELD_ACCESS' => 'Доступ к полям Списков Цен',
@@ -391,7 +391,7 @@ $mod_strings = array (
       'CVLVT' => 'Единицы Измерения',
       'HLT' => 'Последние Запросы Поддержки',
       'OLV' => 'Последние открытые Дела',
-      'GRT' => 'Размещение моей Группы',
+      'GRT' => 'Положение Моей Группы',
       'OLTSO' => 'Последние Заказы на Продажу',
       'ILTI' => 'Последние Счета',
       'HDB' => 'Диаграмма Главной Страницы',
@@ -440,7 +440,7 @@ $mod_strings = array (
       'LBL_USER_IMAGE_INFORMATION' => 'Фотография Пользователя',
       'Role' => 'Роль',
       'Email' => 'Email',
-      'Admin' => 'Админ',
+      'Admin' => 'Администратор',
       'User Name' => 'Пользователь',
       'First Name' => 'Имя',
       'Last Name' => 'Фамилия',

@@ -152,7 +152,10 @@ function validate()
 				  <br>
 				  <br>
                             	</div></td>
-                            <td class="small" style="background-color:#ddFFdd" valign=top>{$CMOD.LBL_MEMBER} of &quot;{$ROLENAME}&quot; <br>
+							{* SalesPlatform.ru begin *}
+							{* <td class="small" style="background-color:#ddFFdd" valign=top>{$CMOD.LBL_MEMBER} of &quot;{$ROLENAME}&quot; <br> *}
+                            <td class="small" style="background-color:#ddFFdd" valign=top>{$CMOD.LBL_MEMBER} {$CMOD.LBL_PARTICIPANTS_OF} &quot;{$ROLENAME}&quot; <br>
+							{* SalesPlatform.ru end *}
                              <select multiple id="selectedColumns" name="selectedColumns" class="small crmFormList" size=10 >
 																			{foreach item=element from=$SELPROFILELISTS}
 																				<option value="{$element.0}">{$element.1}</option>

@@ -123,9 +123,15 @@
 					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
 						<input id="my_file_element" type="file" name="{$elements.2.0}" tabindex="7" onchange="validateFilename(this);">
 						<input type="hidden" name="{$elements.2.0}_hidden" value="" />
-																	</div>
+                                        {* SalesPlatform.ru begin *}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;{$APP.LBL_SELECT_DOC_FILE}
+                                        <span id="select_doc_file" class="mailClientCSSButton">
+                                            <img src="{'select.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Documents&amp;action=Popup&amp;popuptype=return_document_file&amp;form=EditView&amp;form_submit=false&amp;parenttab=Emails&amp;html=Popup_picker","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
+                                        </span>
+                                        {* SalesPlatform.ru end *}
+                                        </div>
 					<script>
-						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 6 );
+						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 10 );
 						multi_selector.count = 0
 						multi_selector.addElement( document.getElementById( 'my_file_element' ) );
 					</script>

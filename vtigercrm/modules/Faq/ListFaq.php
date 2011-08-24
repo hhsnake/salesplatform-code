@@ -152,13 +152,22 @@ function getMyFaq($maxval,$calCnt)
 }
 
 function getMyFaqSearch($output) {
-	$output['&query'] = 'true';
-	$output['&Fields0'] = 'faqstatus';
-	$output['&Condition0'] = 'n';
-	$output['&Srch_value0'] = 'Obsolete';
-	$output['&searchtype'] = 'advance';
-	$output['&search_cnt'] = '1';
-	$output['matchtype'] = 'any';
+// SalesPlatform.ru begin
+        $output['query'] = 'true';
+        $output['Fields0'] = 'faqstatus';
+        $output['Condition0'] = 'n';
+        $output['Srch_value0'] = 'Obsolete';
+        $output['searchtype'] = 'advance';
+        $output['search_cnt'] = '1';
+        $output['matchtype'] = 'any';
+//      $output['&query'] = 'true';
+//      $output['&Fields0'] = 'faqstatus';
+//      $output['&Condition0'] = 'n';
+//      $output['&Srch_value0'] = 'Obsolete';
+//      $output['&searchtype'] = 'advance';
+//      $output['&search_cnt'] = '1';
+//      $output['matchtype'] = 'any';
+// SalesPlatform.ru end                                                                                                                     	$output['&query'] = 'true';
 	return $output;
 }
 

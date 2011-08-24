@@ -338,10 +338,13 @@
                           <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
                         </div>
 			{else}
-				 <td width=25% class="dvtCellInfo" align="left">{$keyval}
+				{* SalesPlatform.ru begin *}
+				{* <td width=25% class="dvtCellInfo" align="left">{$keyval} *}
+			<td width=25% class="dvtCellInfo" align="left">{if $APP.$keyval!=''}{$APP.$keyval}{elseif $MOD.$keyval!=''}{$MOD.$keyval}{else}{$keyval}{/if}&nbsp;
 			{/if}
-                        </td>    
-			 
+				{* SalesPlatform.ru end *}
+                        </td>
+
 						{elseif $keyid eq 83}<!-- Handle the Tax in Inventory -->
 							{foreach item=tax key=count from=$TAX_DETAILS}
 								<td align="right" class="dvtCellLabel">

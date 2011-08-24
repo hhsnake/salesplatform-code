@@ -7,49 +7,8 @@
  * Portions created by SalesPlatform are Copyright (C) SalesPlatform.
  * All Rights Reserved.
  ************************************************************************************/
-include_once 'vtlib/Vtiger/PDF/viewers/HeaderViewer.php';
-include_once 'include/Aste/Template.php';                                                                                                                                                 
-include_once 'include/Aste/Block.php';
-include_once 'include/Aste/Block/Parser.php';
-include_once 'include/Aste/Exception.php';
+include_once 'include/SalesPlatform/PDF/viewers/SPHeaderViewer.php';
 
-class SalesPlatform_PDF_ProductListDocumentHeaderViewer extends Vtiger_PDF_HeaderViewer {
-
-	protected $template;
-	protected $height;
-
-	function __construct($template, $height) {
-	    $this->template = $template;
-	    $this->height = $height;
-	}
-
-	function totalHeight($parent) {
-		return $this->height;
-	}
-	
-	function display($parent) {
-		$pdf = $parent->getPDF();
-		$headerFrame = $parent->getHeaderFrame();
-		if($this->model) {
-		
-			try {
-			    $template = new Aste_Template($this->template);
-			    $header = $template->getBlock('header');
-			    
-    			    foreach($this->model->keys() as $key) {
-    				$header->setVar($key, $this->model->get($key));
-    			    }
-    			    
-			    $content = $header->fetch();
-			    $pdf->writeHTMLCell($headerFrame->w, $headerFrame->h,$headerFrame->x, $headerFrame->y, $content);
-			} catch(Aste_Exception $e) {
-			}
-
-			// Add the border cell at the end
-			// This is required to reset Y position for next write
-			$pdf->MultiCell($headerFrame->w, $headerFrame->h-$headerFrame->y, "", 0, 'L', 0, 1, $headerFrame->x, $headerFrame->y);
-		}	
-		
-	}
-	
+class SalesPlatform_PDF_ProductListDocumentHeaderViewer extends SalesPlatform_PDF_SPHeaderViewer {
 }
+?>

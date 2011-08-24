@@ -39,7 +39,7 @@ $reach = 0;
 foreach($versions as $version => $label)
 {
 // SalesPlatform.ru begin
-	if($version === $source_version || $reach == 1)
+	if(strcmp($version, $source_version) == 0 || $reach == 1)
 //	if($version == $source_version || $reach == 1)
 // SalesPlatform.ru end
 	{

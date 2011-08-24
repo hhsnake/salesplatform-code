@@ -88,7 +88,10 @@ if($ajaxaction == "DETAILVIEW")
 			$data_array['first_name'] = $modObj->column_fields['firstname'];
 			$data_array['last_name'] = $modObj->column_fields['lastname'];
 			$data_array['email'] = $email;
-			$data_array['portal_url'] = "<a href=".$PORTAL_URL."/login.php>".$mod_strings['Please Login Here']."</a>";
+// SalesPlatform.ru begin
+                        $data_array['portal_url'] = "<a href=".$PORTAL_URL."/login.php>".$PORTAL_URL."</a>";
+//                        $data_array['portal_url'] = "<a href=".$PORTAL_URL."/login.php>".$mod_strings['Please Login Here']."</a>";
+// SalesPlatform.ru end
 			$contents = getmail_contents_portalUser($data_array,$password);
 		 if($modObj->id != "")
 		 {

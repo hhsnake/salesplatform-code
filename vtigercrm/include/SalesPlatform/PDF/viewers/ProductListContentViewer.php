@@ -7,33 +7,10 @@
  * Portions created by SalesPlatform are Copyright (C) SalesPlatform.
  * All Rights Reserved.
  ************************************************************************************/
+include_once 'include/SalesPlatform/PDF/viewers/SPContentViewer.php';
 
-include_once 'vtlib/Vtiger/PDF/viewers/ContentViewer.php';
-include_once 'include/Aste/Template.php';                                                                                                                                                 
-include_once 'include/Aste/Block.php';
-include_once 'include/Aste/Block/Parser.php';
-include_once 'include/Aste/Exception.php';
+class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_PDF_SPContentViewer {
 
-class SalesPlatform_PDF_ProductListDocumentContentViewer extends Vtiger_PDF_ContentViewer {
-
-	protected $template;
-	
-	protected $orientation;
-	
-	protected $documentModel;
-
-	function __construct($template, $orientation) {
-	    $this->template = $template;
-	    $this->orientation = $orientation;
-	}
-	
-	function initDisplay($parent) {
-	}
-	
-	function setDocumentModel($model) {
-	    $this->documentModel = $model;
-	}
-	
 	function display($parent) {
 
 		$models = $this->contentModels;

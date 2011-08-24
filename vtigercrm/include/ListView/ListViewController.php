@@ -84,7 +84,10 @@ class ListViewController {
 			$meta = $this->queryGenerator->getMeta($module);
 			if ($meta->isModuleEntity()) {
 				if($module == 'Users') {
-					$nameList = getOwnerNameList($idList);
+// SalesPlatform.ru begin
+					$nameList = getOwnerRealNameList($idList);
+//					$nameList = getOwnerNameList($idList);
+// SalesPlatform.ru end
 				} else {
 					//TODO handle multiple module names overriding each other.
 					$nameList = getEntityName($module, $idList);
@@ -152,11 +155,17 @@ class ListViewController {
 				}
 				if(count($idList) > 0) {
 					if(!is_array($this->ownerNameList[$fieldName])) {
-						$this->ownerNameList[$fieldName] = getOwnerNameList($idList);
+// SalesPlatform.ru begin
+						$this->ownerNameList[$fieldName] = getOwnerRealNameList($idList);
+//						$this->ownerNameList[$fieldName] = getOwnerNameList($idList);
+// SalesPlatform.ru end
 					} else {
 						//array_merge API loses key information so need to merge the arrays
 						// manually.
-						$newOwnerList = getOwnerNameList($idList);
+// SalesPlatform.ru begin
+						$newOwnerList = getOwnerRealNameList($idList);
+//						$newOwnerList = getOwnerNameList($idList);
+// SalesPlatform.ru end
 						foreach ($newOwnerList as $id => $name) {
 							$this->ownerNameList[$fieldName][$id] = $name;
 						}

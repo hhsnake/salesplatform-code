@@ -360,7 +360,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$user_id = $col_fields[$fieldname];
-		$user_name = getUserName($user_id);
+// SalesPlatform.ru begin
+                $user_name = getUserRealName($user_id);
+//                $user_name = getUserName($user_id);
+// SalesPlatform.ru end
 		$assigned_user_id = $current_user->id;
 		if(is_admin($current_user))
 		{
@@ -372,11 +375,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array_realnames(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
 		}
 		else
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $user_id), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array_realnames(FALSE, "Active", $user_id), $assigned_user_id);
 		}
 		$label_fld ["options"] = $users_combo;
 
@@ -396,7 +399,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$user = 'yes';
 		}
 		
-		$owner_name = getOwnerName($owner_id);
+// SalesPlatform.ru begin
+		$owner_name = getOwnerRealName($owner_id);
+//		$owner_name = getOwnerName($owner_id);
+// SalesPlatform.ru end
 		$label_fld[] =getTranslatedString($fieldlabel, $module);
 		$label_fld[] =$owner_name;
 		
@@ -459,11 +465,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id,'private'), $current_user->id);
+			$users_combo = get_select_options_array(get_user_array_realnames(FALSE, "Active", $current_user->id,'private'), $current_user->id);
 		}
 		else
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id), $current_user->id);
+			$users_combo = get_select_options_array(get_user_array_realnames(FALSE, "Active", $current_user->id), $current_user->id);
 		}
 
 		if($noof_group_rows!=0)

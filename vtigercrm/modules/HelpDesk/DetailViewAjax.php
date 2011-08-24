@@ -48,7 +48,10 @@ if($ajaxaction == "DETAILVIEW")
 			require_once('modules/Emails/mail.php');
 			$user_emailid = getUserEmailId('id',$modObj->column_fields['assigned_user_id']);
 			
-			$subject = $modObj->column_fields['ticket_no'] . ' [ '.$mod_strings['LBL_TICKET_ID'].' : '.$modObj->id.' ] Re : '.$modObj->column_fields['ticket_title'];
+// SalesPlatform.ru begin
+                        $subject = 'SalesPlatform.ru [ '.getTranslatedString('LBL_TICKET_ID', 'HelpDesk').' : '.$modObj->id.' ] Re : '.$modObj->column_fields['ticket_title'];
+//			$subject = $modObj->column_fields['ticket_no'] . ' [ '.$mod_strings['LBL_TICKET_ID'].' : '.$modObj->id.' ] Re : '.$modObj->column_fields['ticket_title'];
+// SalesPlatform.ru end
 			$parent_id = $modObj->column_fields['parent_id'];
 			if(!empty($parent_id) && $parent_id!=0){
 				$parent_module = getSalesEntityType($parent_id);
@@ -70,7 +73,7 @@ if($ajaxaction == "DETAILVIEW")
 				}
 				
 				if($isactive == 1){
-					$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$modObj->id."&fun=detail'>Ticket Details</a>";
+					$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$modObj->id."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
 					$email_body = $subject.'<br><br>'.getPortalInfo_Ticket($modObj->id,$sub,$contactname,$url,"edit");
 				}else{
 					$data['sub']=$modObj->column_fields['ticket_title'];

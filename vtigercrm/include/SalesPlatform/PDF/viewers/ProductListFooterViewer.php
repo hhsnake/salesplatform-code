@@ -7,42 +7,8 @@
  * Portions created by SalesPlatform are Copyright (C) SalesPlatform.
  * All Rights Reserved.
  ************************************************************************************/
-include_once 'vtlib/Vtiger/PDF/viewers/FooterViewer.php';
-include_once 'include/Aste/Template.php';                                                                                                                                                 
-include_once 'include/Aste/Block.php';
-include_once 'include/Aste/Block/Parser.php';
-include_once 'include/Aste/Exception.php';
+include_once 'include/SalesPlatform/PDF/viewers/SPFooterViewer.php';
 
-class SalesPlatform_PDF_ProductListDocumentFooterViewer extends Vtiger_PDF_FooterViewer {
-
-	protected $template;
-	protected $height;
-
-	function __construct($template, $height) {
-	    $this->template = $template;
-	    $this->height = $height;
-	}
-
-	function totalHeight($parent) {
-		return $this->height;
-	}
-
-	function display($parent) {
-
-		$pdf = $parent->getPDF();
-		$footerFrame = $parent->getFooterFrame();
-
-		if($this->model) {
-		
-			try {
-    			    $template = new Aste_Template($this->template);
-			    $footer = $template->getBlock('footer');
-    			    $content = $footer->fetch();
-			    $pdf->writeHTMLCell($headerFrame->w, $headerFrame->h,$headerFrame->x, $headerFrame->y, $content);
-			} catch(Aste_Exception $e) {
-			}
-		}	
-
-	}
+class SalesPlatform_PDF_ProductListDocumentFooterViewer extends SalesPlatform_PDF_SPFooterViewer {
 }
 ?>

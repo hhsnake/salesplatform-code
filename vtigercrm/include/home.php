@@ -649,7 +649,10 @@ function getGroupTaskLists($maxval,$calCnt){
 
 				$value[]=$list;	
 				$value[]= $row["groupname"];
-				$value[]= $row["type"];
+// SalesPlatform.ru begin
+				$value[]= getTranslatedString($row["type"]);
+//				$value[]= $row["type"];
+// SalesPlatform.ru end
 				$entries[$row["id"]]=$value;	
 				$i++;
 			}

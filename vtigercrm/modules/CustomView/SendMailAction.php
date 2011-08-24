@@ -10,6 +10,10 @@
 require_once('include/database/PearDatabase.php');
 require_once('modules/CustomView/CustomView.php');
 
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
+
 global $current_user;
 global $adb;
 
@@ -119,10 +123,15 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
 	require_once("modules/Emails/class.phpmailer.php");
 
 	$mail = new PHPMailer();
+// SalesPlatform.ru begin
+	$idn = new idna_convert();
+// SalesPlatform.ru end
 
 	$mail->Subject = $subject;
 	$mail->Body    = nl2br($contents);
-	$mail->IsSMTP();
+        // SalesPlatform.ru begin
+	//$mail->IsSMTP();
+        // SalesPlatform.ru end
 
 	if($current_user_id != '')
 	{
@@ -138,6 +147,21 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
 		$mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
 		$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
 		$smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
+// SalesPlatform.ru begin
+            $use_sendmail = $adb->query_result($mailserverresult,0,'use_sendmail');
+            if(!empty($use_sendmail) && $use_sendmail != 'false')
+                $mail->IsSendmail();
+            else
+                $mail->IsSMTP();
+
+                $mail_server_tls = $adb->query_result($mailserverresult,0,'server_tls');
+                if(!empty($mail_server_tls) && $mail_server_tls != 'no')
+                    $mail->SMTPSecure = $mail_server_tls;
+
+                $mail_server_port = $adb->query_result($mailserverresult,0,'server_port');
+                if(!empty($mail_server_port) && $mail_server_port != 0)
+                    $mail->Port = $mail_server_port;
+// SalesPlatform.ru end
 
 		$adb->println("Mail Server Details : '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
 		$_REQUEST['server']=$mail_server;
@@ -146,11 +170,18 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
 	$mail->SMTPAuth = $smtp_auth;
 	$mail->Username = $mail_server_username;
 	$mail->Password = $mail_server_password;
-	$mail->From = $from;
+// SalesPlatform.ru begin
+	$mail->From = $idn->encode($from);
+//	$mail->From = $from;
+// SalesPlatform.ru end
 	$mail->FromName = $initialfrom;
 
-	$mail->AddAddress($to);
-	$mail->AddReplyTo($from);
+// SalesPlatform.ru begin
+	$mail->AddAddress($idn->encode($to));
+	$mail->AddReplyTo($idn->encode($from));
+//	$mail->AddAddress($to);
+//	$mail->AddReplyTo($from);
+// SalesPlatform.ru end
 	$mail->WordWrap = 50;
 
 	$mail->IsHTML(true);

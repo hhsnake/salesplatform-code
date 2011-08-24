@@ -76,9 +76,25 @@
 					<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
 					<tr>
 					<td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                          {* SalesPlatform.ru begin *}
+                          <tr>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USE_SENDMAIL}</strong></td>
+                            <td class="small cellText">
+				{if $USE_SENDMAIL eq 'checked'}
+					{$MOD.LBL_YES}
+				{else}
+					{$MOD.LBL_NO}
+				{/if}
+			    </td>
+                          </tr>
+                          {* SalesPlatform.ru end *}
                           <tr>
                             <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
                             <td width="80%" class="small cellText"><strong>{$MAILSERVER}&nbsp;</strong></td>
+                          </tr>
+                          <tr valign="top">
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER_PORT}</strong></td>
+                            <td class="small cellText">{$MAILSERVERPORT}&nbsp;</td>
                           </tr>
                           <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USERNAME}</strong></td>
@@ -97,6 +113,13 @@
 							<td class="small cellText">{$FROM_EMAIL_FIELD}&nbsp;</td>
 							</td>
 						  </tr>
+{* SalesPlatform.ru begin *}
+						  <tr>
+							<td nowrap class="small cellLabel"><strong>{$MOD.LBL_FROM_NAME}</strong></td>
+							<td class="small cellText">{$FROM_NAME}&nbsp;</td>
+							</td>
+						  </tr>
+{* SalesPlatform.ru end *}
                           <tr>
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_REQUIRES_AUTHENT}</strong></td>
                             <td class="small cellText">
@@ -107,16 +130,43 @@
 				{/if}
 			    </td>
                           </tr>
+{* SalesPlatform.ru begin *}
+			<tr>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_SSL_OPTIONS}</strong></td>
+                            <td class="small cellText">
+				{if $SSL eq 'checked'}
+		    		    {$MOD.LBL_SSL}
+		    		{elseif $TLS eq 'checked'}
+				    {$MOD.LBL_TLS}
+				{else}
+				    {$MOD.LBL_NO_TLS}
+				{/if}
+		       </tr>
+{* SalesPlatform.ru end *}
                         </table>
 			  {else}
 					
 			<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
 			<tr>
 			<td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                        {* SalesPlatform.ru begin *}
+                        <tr>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USE_SENDMAIL}</strong></td>
+                            <td class="small cellText">
+                              	<input type="checkbox" name="use_sendmail" {$USE_SENDMAIL}/>
+			    </td>
+                        </tr>
+                        {* SalesPlatform.ru end *}
                         <tr>
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font>&nbsp;<strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
                             <td width="80%" class="small cellText">
 				<input type="text" class="detailedViewTextBox small" value="{$MAILSERVER}" name="server">
+			    </td>
+                          </tr>
+                          <tr valign="top">
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER_PORT}</strong></td>
+                            <td class="small cellText">
+				<input type="text" class="detailedViewTextBox small" value="{$MAILSERVERPORT}" name="port">
 			    </td>
                           </tr>
                           <tr valign="top">
@@ -137,12 +187,29 @@
 				 <input type="text" class="detailedViewTextBox small" value="{$FROM_EMAIL_FIELD}" name="from_email_field"/>
 							</td>
 						</tr>
+{* SalesPlatform.ru begin *}
+						<tr>
+							<td nowrap class="small cellLabel"><strong>{$MOD.LBL_FROM_NAME}</strong></td>
+							<td class="small cellText">
+				 <input type="text" class="detailedViewTextBox small" value="{$FROM_NAME}" name="from_name"/>
+							</td>
+						</tr>
+{* SalesPlatform.ru end *}
 						<tr>
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_REQUIRES_AUTHENT}</strong></td>
                             <td class="small cellText">
                               	<input type="checkbox" name="smtp_auth" {$SMTP_AUTH}/>
 			    </td>
                           </tr>
+{* SalesPlatform.ru begin *}
+			<tr>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_SSL_OPTIONS}</strong></td>
+                            <td class="small cellText">
+		    		<input type="radio" name="server_tls" value="no" {$NOTLS} />&nbsp;{$MOD.LBL_NO_TLS}
+				<input type="radio" name="server_tls" value="tls" {$TLS} />&nbsp; {$MOD.LBL_TLS}
+				<input type="radio" name="server_tls" value="ssl" {$SSL} />&nbsp; {$MOD.LBL_SSL} </td>
+		       </tr>
+{* SalesPlatform.ru end *}
                         </table>
 				
 			{/if}

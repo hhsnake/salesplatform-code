@@ -52,6 +52,10 @@ function MultiSelector( list_target, max ){
 	} else {
 		this.max = -1;
 	};
+        // SalesPlatform.ru begin
+        // Add reference to this object
+        this.list_target.multi_selector = this;
+        // SalesPlatform.ru end
 	
 	/**
 	 * Add a new file input element
@@ -66,6 +70,43 @@ function MultiSelector( list_target, max ){
 
 			// Add reference to this object
 			element.multi_selector = this;
+
+                        // SalesPlatform.ru begin
+                        element.setHiddenValue = function(att_id, att_name){
+				// New file input
+				var new_element = document.createElement( 'input' );
+				new_element.type = 'file';
+
+				// Add new element
+				this.parentNode.insertBefore( new_element, this );
+
+				// Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/4876
+				// SingleQuoted filename cannot be handled using $_FILES, we handle it through hidden field.
+				// http://in.php.net/manual/en/features.file-upload.php#64087
+				var new_element_hdn = null;
+				if(typeof(element.form) != 'undefined') {
+					new_element_hdn = element.form ["'" + this.name + '_hidden' + "'"];
+				}
+				if( new_element_hdn == null ) {
+					new_element_hdn = document.createElement( 'input' );
+					new_element_hdn.name = this.name + '_hidden';
+					new_element_hdn.type = 'hidden';
+					this.parentNode.insertBefore( new_element_hdn, this );
+				}
+				if(new_element_hdn.type == 'hidden') new_element_hdn.value = att_id;
+				// End
+
+				// Apply 'update' to element
+				this.multi_selector.addElement( new_element );
+
+				// Update list
+				this.multi_selector.addListRow( this, att_name );
+
+				// Hide this: we can't use display:none because Safari doesn't like it
+				this.style.position = 'absolute';
+				this.style.left = '-1000px';
+                        }
+                        // SalesPlatform.ru end
 
 			// What to do when a file is selected
 			element.onchange = function(){
@@ -124,7 +165,10 @@ function MultiSelector( list_target, max ){
 	/**
 	 * Add a new row to the list of files
 	 */
-	this.addListRow = function( element ){
+        // SalesPlatform.ru begin
+	this.addListRow = function( element , value ){
+	//this.addListRow = function( element ){
+        // SalesPlatform.ru end
 
 		// Row div
 		var new_row = document.createElement( 'div' );
@@ -161,6 +205,11 @@ function MultiSelector( list_target, max ){
 
 		// Set row value
 		new_row.innerHTML = element.value;
+                // SalesPlatform.ru begin
+                if (typeof(value) != 'undefined') {
+                    new_row.innerHTML = value;
+                }
+                // SalesPlatform.ru end
 
 		// Add button
 		new_row.appendChild( new_row_button );

@@ -127,6 +127,9 @@
         <input type="hidden" name="return_id" value="{$RETURN_ID}">
         <input type="hidden" name="return_action" value="">
         <input type="hidden" name="isDuplicate">
+{* SalesPlatform.ru begin  *}
+        <input type="hidden" name="pdf_template">
+{* SalesPlatform.ru end  *}
 {elseif $MODULE eq 'Faq'}
 	<input type="hidden" name="module" value="{$MODULE}">
         <input type="hidden" name="record" value="{$ID}">

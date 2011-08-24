@@ -29,7 +29,7 @@ class VTChangeOwnerTask extends VTTask {
                     $ws_id = $wfEntity->getId();
                     if ($ws_id > 0) {
                         // Get the CRMEntity id
-                        $relatedCRMid = substr($ws_id, stripos($ws_id, 'x') + 1);
+                        $relatedCRMid = vtws_getCRMEntityId($ws_id);
                         if ($relatedCRMid > 0) {
                             // Get the CRMEntity object
                             $data = CRMEntity::getInstance($wfEntity->getModuleName());

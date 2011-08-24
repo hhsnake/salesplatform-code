@@ -19,21 +19,20 @@ class SalesPlatform_QuotePDFController extends SalesPlatform_PDF_ProductListDocu
 	
 		$this->generateEntityModel($this->focus, 'Quotes', 'quote_', $model);
 
-		if($this->focusColumnValue('potential_id')) {
-            	    $entity = new Potentials();
+                $entity = new Potentials();
+		if($this->focusColumnValue('potential_id'))
             	    $entity->retrieve_entity_info($this->focusColumnValue('potential_id'), 'Potentials');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Potentials', 'potential_', $model);
-		    }
-		}
+                $this->generateEntityModel($entity, 'Potentials', 'potential_', $model);
 
-		if($this->focusColumnValue('account_id')) {
-            	    $entity = new Accounts();
+                $entity = new Accounts();
+		if($this->focusColumnValue('account_id'))
             	    $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Accounts', 'account_', $model);
-		    }
-		}
+                $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
+
+                $entity = new Contacts();
+		if($this->focusColumnValue('contact_id'))
+            	    $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
+                $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
 		$model->set('quote_no', $this->focusColumnValue('quote_no'));
 		return $model;

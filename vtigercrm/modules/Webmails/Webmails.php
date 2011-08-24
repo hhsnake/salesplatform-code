@@ -14,6 +14,9 @@ require_once('modules/Webmails/functions.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
+// SalesPlatform.ru begin
+require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
 class result
 {
 	  var $text = "";
@@ -65,7 +68,11 @@ class Webmails extends CRMEntity {
 		$this->db->println("Webmail TO:");
 		$this->db->println($this->to);
 
-		$this->from = $this->headers["theader"]["from"];
+// SalesPlatform.ru begin
+		$idn = new idna_convert();
+		$this->from = $idn->decode($this->headers["theader"]["from"]);
+//		$this->from = $this->headers["theader"]["from"];
+// SalesPlatform.ru end
 		$this->fromname = $this->headers["theader"]["from_name"];
 		$this->fromaddr = $this->headers["theader"]["fromaddr"];
 
@@ -814,18 +821,33 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		$from_array = $this->mime_header_decode($from_header);
 		for ($j = 0; $j < count($from_array); $j++)
 			$from .= $from_array[$j]->text;
-		//fixed the issue #3235
-		$toheader = @imap_fetchheader($this->mbox, $this->mailid);
-	        $to_arr = explode("To:",$toheader);
-	        if(!stripos($to_arr[1],'mime')){
-	                $to_add = stripos($to_arr[1],"CC:")?explode("CC:",$to_arr[1]):explode("Subject:",$to_arr[1]);
-	                $to_header = trim($to_add[0]);
-		}
-		else
-			$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
-		$to_array = $this->mime_header_decode($to_header);
+
+// SalesPlatform.ru begin
+//		//fixed the issue #3235
+//		$toheader = @imap_fetchheader($this->mbox, $this->mailid);
+//	        $to_arr = explode("To:",$toheader);
+//	        if(!stripos($to_arr[1],'mime')){
+//	                $to_add = stripos($to_arr[1],"CC:")?explode("CC:",$to_arr[1]):explode("Subject:",$to_arr[1]);
+//	                $to_header = trim($to_add[0]);
+//		}
+//		else
+//			$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
+//		$to_array = $this->mime_header_decode($to_header);
+//		for ($j = 0; $j < count($to_array); $j++)
+//			$to .= $to_array[$j]->text;
+	$idn = new idna_convert();
+	$to_arr = array();
+	$rfc_headers = imap_rfc822_parse_headers(imap_fetchheader($this->mbox, $this->mailid));
+	for($p=0;$p<count($rfc_headers->to);$p++) {
+			$to_arr[] = $rfc_headers->to[$p]->mailbox.'@'.$rfc_headers->to[$p]->host;
+			$to_arr_decoded[] = $rfc_headers->to[$p]->mailbox.'@'.$idn->decode( $rfc_headers->to[$p]->host );
+	}
+	$to_header = implode(',', $to_arr_decoded);
+	$to_header_raw = implode(',', $to_arr);
+		$to_array = $this->mime_header_decode($to_header_raw);
 		for ($j = 0; $j < count($to_array); $j++)
 			$to .= $to_array[$j]->text;
+// SalesPlatform.ru end
 		$to = str_replace(',', ', ', $to);
 		$this->to_header = $to_header;
 		$cc_header = isset($ref_contenu_message->ccaddress) ? $ref_contenu_message->ccaddress : '';

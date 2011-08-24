@@ -28,4 +28,8 @@ $PHPMAILER_LANG['file_open']            = 'File Error: Could not open file: ';
 $PHPMAILER_LANG['encoding']             = 'Unknown encoding: ';
 $PHPMAILER_LANG['signing']              = 'Signing Error: ';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
+
+// SalesPlatform.ru begin
+$PHPMAILER_LANG['tls']           = 'TLS: ';
+// SalesPlatform.ru end
 ?>

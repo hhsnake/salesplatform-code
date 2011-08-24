@@ -8,6 +8,9 @@
  *
  ********************************************************************************/
 
+// SalesPlatform.ru begin
+document.write("<script type='text/javascript' src='include/js/Mail.js'></script>");
+// SalesPlatform.ru end
 //Added after 504 for renaming a folder
 function UpdateAjaxSave(label,fid,fldname,fileOrFolder)
 {
