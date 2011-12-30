@@ -194,7 +194,7 @@ class Vtiger_PDF_InventoryContentViewer extends Vtiger_PDF_ContentViewer {
 		$waterMarkPositions=array("30","180");
 		$waterMarkRotate=array("45","50","180");
 
-		$pdf->SetFont('','B',50);
+		$pdf->SetFont('Arial','B',50);
 		$pdf->SetTextColor(230,230,230);
 		$pdf->Rotate($waterMarkRotate[0], $waterMarkRotate[1], $waterMarkRotate[2]);
 		$pdf->Text($waterMarkPositions[0], $waterMarkPositions[1], 'created');

@@ -84,7 +84,7 @@ function verify_data(form) {
 		alert('"' + form.mails_per_page.value + '" $err_invalid_page_count');
 		return false;
 	}
-
+		
 	return true;
 }
 

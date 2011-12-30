@@ -106,7 +106,10 @@ class Vtiger_MailScannerInfo {
 			$lastscancount = $adb->num_rows($lastscanres);
 			if($lastscancount) {
 				for($lsindex = 0; $lsindex < $lastscancount; ++$lsindex) {
-					$folder = $adb->query_result($lastscanres, $lsindex, 'foldername');
+// SalesPlatform.ru begin
+                                        $folder = html_entity_decode($adb->query_result($lastscanres, $lsindex, 'foldername'));
+//                                        $folder = $adb->query_result($lastscanres, $lsindex, 'foldername');
+// SalesPlatform.ru end
 					$scannedon =$adb->query_result($lastscanres, $lsindex, 'lastscan');
 					$nextrescan =$adb->query_result($lastscanres, $lsindex, 'rescan');
 					$this->lastscan[$folder] = $scannedon;
@@ -215,7 +218,10 @@ class Vtiger_MailScannerInfo {
 			if($fldcount) {
 				$folderinfo = Array();
 				for($index = 0; $index < $fldcount; ++$index) {
-					$foldername = $adb->query_result($fldres, $index, 'foldername');
+// SalesPlatform.ru begin
+					$foldername = html_entity_decode($adb->query_result($fldres, $index, 'foldername'));
+//					$foldername = $adb->query_result($fldres, $index, 'foldername');
+// SalesPlatform.ru end
 					$folderid   = $adb->query_result($fldres, $index, 'folderid');
 					$lastscan   = $adb->query_result($fldres, $index, 'lastscan');
 					$rescan     = $adb->query_result($fldres, $index, 'rescan');
@@ -302,7 +308,7 @@ class Vtiger_MailScannerInfo {
 	 * Compare this instance with give instance
 	 */
 	function compare($otherInstance) {
-		$checkkeys = Array('server', 'scannername', 'protocol', 'username', 'password', 'ssltype', 'sslmethod', 'searchfor', 'markas',);
+		$checkkeys = Array('server', 'scannername', 'protocol', 'username', 'password', 'ssltype', 'sslmethod', 'searchfor', 'markas');
 		foreach($checkkeys as $key) { 
 			if($this->$key != $otherInstance->$key) return false;
 		}
@@ -337,21 +343,21 @@ class Vtiger_MailScannerInfo {
 		$useisvalid = ($this->isvalid)? 1 : 0;
 
 		$usepassword = $this->__crypt($this->password);
-
+        
 		global $adb;
-		if($this->scannerid) { // This record exists in the database
-			$adb->pquery("UPDATE vtiger_mailscanner SET scannername=?,server=?,protocol=?,username=?,password=?,ssltype=?,
-				sslmethod=?,connecturl=?,searchfor=?,markas=?,isvalid=? WHERE scannerid=?", 
-				Array($this->scannername,$this->server,$this->protocol, $this->username, $usepassword, $this->ssltype, 
-				$this->sslmethod, $this->connecturl,$this->searchfor, $this->markas,$useisvalid, $this->scannerid));
-		} else {
-			$adb->pquery("INSERT INTO vtiger_mailscanner(scannername,server,protocol,username,password,ssltype,
-				sslmethod,connecturl,searchfor,markas,isvalid) VALUES(?,?,?,?,?,?,?,?,?,?,?)", 
-				Array($this->scannername,$this->server, $this->protocol, $this->username, $usepassword, 
+		if($this->scannerid == false) {
+            $adb->pquery("INSERT INTO vtiger_mailscanner(scannername,server,protocol,username,password,ssltype,
+				sslmethod,connecturl,searchfor,markas,isvalid) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+				Array($this->scannername,$this->server, $this->protocol, $this->username, $usepassword,
 				$this->ssltype, $this->sslmethod, $this->connecturl, $this->searchfor, $this->markas, $useisvalid));
 			$this->scannerid = $adb->database->Insert_ID();
-		}
-
+        } else { //this record is exist in the data
+			$adb->pquery("UPDATE vtiger_mailscanner SET scannername=?,server=?,protocol=?,username=?,password=?,ssltype=?,
+				sslmethod=?,connecturl=?,searchfor=?,markas=?,isvalid=? WHERE scannerid=?",
+				Array($this->scannername,$this->server,$this->protocol, $this->username, $usepassword, $this->ssltype,
+				$this->sslmethod, $this->connecturl,$this->searchfor, $this->markas,$useisvalid, $this->scannerid));
+        }
+		
 		return $mailServerChanged;
 	}
 

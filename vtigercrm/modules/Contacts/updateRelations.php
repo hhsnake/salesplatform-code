@@ -44,7 +44,11 @@ foreach($storearray as $id)
 			$adb->pquery("insert into vtiger_campaigncontrel values(?,?,1)", array($id, $forCRMRecord));
 		elseif($dest_mod == 'Documents')
 			$adb->pquery("insert into vtiger_senotesrel values(?,?)", array($forCRMRecord,$id));
-		else {
+// SalesPlatform.ru begin: Added select possibility for contacts activities
+		elseif($dest_mod == 'Calendar')
+			$adb->pquery("insert into vtiger_cntactivityrel values(?,?)", array($forCRMRecord,$id));
+// SalesPlatform.ru end
+                else {
 			$focus->save_related_module($currentModule, $forCRMRecord, $dest_mod, $id);
 		}
 	}

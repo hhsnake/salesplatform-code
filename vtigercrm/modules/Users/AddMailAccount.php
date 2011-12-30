@@ -40,7 +40,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 	$sql = "select * from vtiger_mail_accounts where user_id=?";
 	$result = $adb->pquery($sql, array($_REQUEST['record']));
 	$rowcount = $adb->num_rows($result);
-
+	
 	if ($rowcount!=0)
 	{
 		while($temprow = $adb->fetchByAssoc($result))
@@ -109,7 +109,7 @@ if($count > 0)
 	$field = '<input name="server_password" value="*****" class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" type="password">';//"<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='crmButton password small' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=EditView&mail_accounts=true\",\"test\",\"width=320,height=200,resizable=no,scrollbars=0, toolbar=no, titlebar=no, left=200, top=226, screenX=100, screenY=126\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
 else
 	$field = '<input name="server_password" value="" class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" type="password">';
-$smarty->assign('CHANGE_PW_BUTTON',$field);
+$smarty->assign('CHANGE_PW_BUTTON',$field);	
 
 $return_module = vtlib_purify($_REQUEST['return_module']);
 if(empty($return_module)) $return_module = 'Settings';

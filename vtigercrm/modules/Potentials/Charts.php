@@ -90,9 +90,11 @@ class jpgraph {
 			$first = true;
 			$current = 0;
 
+			$date = new DateTimeField($date_start);
+			$endDate = new DateTimeField($date_end);
 			//build the where clause for the query that matches $date_start and $date_end
 			$where .= " closingdate >= '$date_start' AND closingdate <= '$date_end'";
-			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".getDisplayDate($date_start)." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".getDisplayDate($date_end)."\n";
+			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date->getDisplayDate()." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$endDate->getDisplayDate()."\n";
 
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
@@ -152,7 +154,8 @@ class jpgraph {
 				foreach($stages as $stage) {
 					$log->debug("stage is $stage");
 					foreach ($user_id as $the_id) {
-						$the_user = get_assigned_user_name($the_id);
+						$the_user = getEntityName('Users', $the_id);
+						$the_user = $the_user[$the_id];
 						if (!isset($datax[$stage][$the_id])) {
 							$datax[$stage][$the_id] = array();
 						}
@@ -493,7 +496,8 @@ class jpgraph {
 			  	}
 			  	foreach($stages as $stage) {
 					foreach ($user_id as $the_id) {
-						$the_user = get_assigned_user_name($the_id);
+						$the_user = getEntityName('Users', $the_id);
+						$the_user = $the_user[$the_id];
 						$log->debug("stage_key is $stage");
 						if (!isset($datax[$stage][$the_id])) {
 							$datax[$stage][$the_id] = array();
@@ -669,8 +673,8 @@ class jpgraph {
 
 			// Finally setup the title
 // SalesPlatform.ru begin
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
-//			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
 // SalesPlatform.ru end
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
@@ -771,9 +775,11 @@ class jpgraph {
 				$where .= ")";
 			}
 
+			$date = new DateTimeField($date_start);
+			$endDate = new DateTimeField($date_end);
 			//build the where clause for the query that matches $date_start and $date_end
 			$where .= " AND closingdate >= '$date_start' AND closingdate <= '$date_end'";
-			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".getDisplayDate($date_start)." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".getDisplayDate($date_end)."\n";
+			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date->getDisplayDate()." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$endDate->getDisplayDate()."\n";
 
 			//Now do the db queries
 			//query for opportunity data that matches $datax and $user
@@ -809,7 +815,8 @@ class jpgraph {
 			$aAlts = array();
 			foreach ($datax as $stage_key=>$stage_translation) {
 			  foreach ($user_id as $the_id) {
-			  	$the_user = get_assigned_user_name($the_id);
+			  	$the_user = getEntityName('Users', $the_id);
+				$the_user = $the_user[$the_id];
 				if (!isset($datay[$the_id])) {
 					$datay[$the_id] = array();
 				}
@@ -981,7 +988,7 @@ class jpgraph {
 
 // SalesPlatform.ru begin
 			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
-//			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+//			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
 // SalesPlatform.ru end
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
@@ -1205,8 +1212,8 @@ $log->debug("Exiting pipeline_by_lead_source method ...");
 			$legend_box->showShadow();
 
 // SalesPlatform.ru begin
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
-//			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
 // SalesPlatform.ru end
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_LEFT);

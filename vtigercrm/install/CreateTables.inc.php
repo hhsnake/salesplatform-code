@@ -745,8 +745,8 @@ function create_default_users_access() {
         $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
 		$user->column_fields["date_format"] = 'yyyy-mm-dd';
 		$user->column_fields["hour_format"] = '24';
-		$user->column_fields["start_hour"] = '09:00';
-		$user->column_fields["end_hour"] = '18:00';
+		$user->column_fields["start_hour"] = '08:00';
+		$user->column_fields["end_hour"] = '23:00';
 		$user->column_fields["imagename"] = '';
 		$user->column_fields["internal_mailer"] = '1';
 		$user->column_fields["activity_view"] = 'This Week';
@@ -761,6 +761,13 @@ function create_default_users_access() {
 		$role_result = $adb->query($role_query);
 		$role_id = $adb->query_result($role_result,0,"roleid");
 		$user->column_fields["roleid"] = $role_id;
+
+            // SalesPlatform.ru begin: Add default currency formatting
+            $user->column_fields["currency_grouping_pattern"] = '123,456,789';
+            $user->column_fields["currency_decimal_separator"] = ',';
+            $user->column_fields["currency_grouping_separator"] = ' ';
+            $user->column_fields["currency_symbol_placement"] = '1.0$';
+            // SalesPlatform.ru end
 
         $user->save("Users");
         $admin_user_id = $user->id;
@@ -875,6 +882,7 @@ $success = $adb->createTables("schema/DatabaseSchema.xml");
      }
  }
 
+
 // TODO HTML
 if($success==0)
 	die("Error: Tables not created.  Table creation failed.\n");
@@ -896,54 +904,6 @@ $combo->create_nonpicklist_tables();
 //Writing tab data in flat file
 create_tab_data_file();
 create_parenttab_data_file();
-
-//to get the users lists
-$query = 'select id from vtiger_users';
-$result=$adb->pquery($query,array());
-
-//creating home page widgets
-$defaultWidgets = array(array('Top Accounts', 0, 'ALVT', 'Accounts'), 
-						array('Home Page Dashboard', 1, 'HDB', 'Dashboard'),
-						array('Top Potentials', 0, 'PLVT','Potentials'),
-						array('Top Quotes', 0,'QLTQ','Quotes'),
-						array('Key Metrics', 0,'CVLVT','NULL'),
-						array('Top Trouble Tickets', 0,'HLT','HelpDesk'),
-						array('Upcoming Activities', 0,'UA','Calendar'),
-						array('My Group Allocation', 1,'GRT','NULL'),
-						array('Top Sales Orders', 0,'OLTSO','SalesOrder'),
-						array('Top Invoices', 0,'ILTI','Invoice'),
-						array('My New Leads', 0,'MNL','Leads'),
-						array('Top Purchase Orders', 0,'OLTPO','PurchaseOrder'),
-						array('Pending Activities', 0,'PA','Calendar'),
-						array('My Recent FAQs', 0,'LTFAQ','Faq'),);
-
-$defaultWidgets = array_reverse($defaultWidgets);
-
-for($u=0;$u<$adb->num_rows($result);$u++){
-	$userid = $adb->query_result($result,$u,'id');
-	
-	for($i=0; $i<count($defaultWidgets); $i++){
-		$stuffid = $adb->getUniqueID("vtiger_homestuff");
-		$widgetTitle = $defaultWidgets[$i][0];
-		$visible = $defaultWidgets[$i][1];
-		$type = $defaultWidgets[$i][2];
-		$module = $defaultWidgets[$i][3];
-		$sequence = $i+1;
-		
-		$sql="insert into vtiger_homestuff values(?, ?, 'Default', ?, ?, ?)";
-		$res=$adb->pquery($sql,array($stuffid, $sequence, $userid, $visible, $widgetTitle));
-		
-		$sql="insert into vtiger_homedefault values($stuffid, '$type', 5, '$module')";
-		$adb->pquery($sql,array());
-	}
-	
-	$stuffid = $adb->getUniqueID("vtiger_homestuff");
-	$widgetTitle = "Tag Cloud";
-	$visible = 0;
-	$sequence = $i+1;
-	$sql="insert into vtiger_homestuff values(?, ?, 'Tag Cloud', ?, ?, ?)";
-	$res=$adb->pquery($sql,array($stuffid, $sequence, $userid, $visible, $widgetTitle));
-}
 
 // default report population
 require_once('modules/Reports/PopulateReports.php');
@@ -988,9 +948,16 @@ function registerEvents($adb) {
 
 	// Registering event for Recurring Invoices
 	$em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');
+
+	//Registering Entity Delta handler for before save and after save events of the record to track the field value changes
+	$em->registerHandler('vtiger.entity.beforesave', 'data/VTEntityDelta.php', 'VTEntityDelta');
+	$em->registerHandler('vtiger.entity.aftersave', 'data/VTEntityDelta.php', 'VTEntityDelta');
 	
 	// Workflow manager
-	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
+	$dependentEventHandlers = array('VTEntityDelta');
+	$dependentEventHandlersJson = Zend_Json::encode($dependentEventHandlers);
+	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler',
+								'',$dependentEventHandlersJson);
 	
 	//Registering events for On modify
 	$em->registerHandler('vtiger.entity.afterrestore', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
@@ -1181,6 +1148,39 @@ function setFieldHelpInfo() {
 				'число использованных единиц обслуживания автоматически увеличивается при закрытии заявки '.
 				'на величину, указанную в заявке. '.
 				'При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.');
+
+	$usersModuleInstance = Vtiger_Module::getInstance('Users');
+	$field1 = Vtiger_Field::getInstance('currency_grouping_pattern', $usersModuleInstance);
+	$field2 = Vtiger_Field::getInstance('currency_decimal_separator', $usersModuleInstance);
+	$field3 = Vtiger_Field::getInstance('currency_grouping_separator', $usersModuleInstance);
+	$field4 = Vtiger_Field::getInstance('currency_symbol_placement', $usersModuleInstance);
+
+	$field1->setHelpInfo("<b>Currency - Digit Grouping Pattern</b> <br/><br/>".
+								"This pattern specifies the format in which the currency separator will be placed.");
+	$field2->setHelpInfo("<b>Currency - Decimal Separator</b> <br/><br/>".
+										"Decimal separator specifies the separator to be used to separate ".
+										"the fractional values from the whole number part. <br/>".
+										"<b>Eg:</b> <br/>".
+										". => 123.45 <br/>".
+										", => 123,45 <br/>".
+										"' => 123'45 <br/>".
+										"  => 123 45 <br/>".
+										"$ => 123$45 <br/>");
+	$field3->setHelpInfo("<b>Currency - Grouping Separator</b> <br/><br/>".
+										"Grouping separator specifies the separator to be used to group ".
+										"the whole number part into hundreds, thousands etc. <br/>".
+										"<b>Eg:</b> <br/>".
+										". => 123.456.789 <br/>".
+										", => 123,456,789 <br/>".
+										"' => 123'456'789 <br/>".
+										"  => 123 456 789 <br/>".
+										"$ => 123$456$789 <br/>");
+	$field4->setHelpInfo("<b>Currency - Symbol Placement</b> <br/><br/>".
+										"Symbol Placement allows you to configure the position of the ".
+										"currency symbol with respect to the currency value.<br/>".
+										"<b>Eg:</b> <br/>".
+										"$1.0 => $123,456,789.50 <br/>".
+										"1.0$ => 123,456,789.50$ <br/>");
 }
 
 ?>

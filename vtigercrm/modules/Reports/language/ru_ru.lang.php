@@ -1,22 +1,15 @@
 <?php
-/***********************************************************
-*  Module       : Reports
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      : 
-Licensed under Vtiger Public License Version 1.1.
-
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 $mod_strings = array (
       'LBL_MODULE_NAME' => 'Отчёты',
@@ -280,10 +273,14 @@ $mod_strings = array (
 
 //Добавлено в 5.2.0
 
-'LBL_OR'=>'или',
-'LBL_NEW_GROUP'=>'Новая Группа',
-'LBL_DELETE_GROUP'=>'Удалить Группу',
-'LBL_NEW_CONDITION'=>'Новое Условие',
+// SalesPlatform.ru begin
+// 5.3.0 begin
+//'LBL_OR'=>'или',
+//'LBL_NEW_GROUP'=>'Новая Группа',
+//'LBL_DELETE_GROUP'=>'Удалить Группу',
+//'LBL_NEW_CONDITION'=>'Новое Условие',
+// 5.3.0 end
+// SalesPlatform.ru end
 'LBL_SHARING_TYPE'=>'Тип Обмена',
 'LBL_SELECT_REPORT_TYPE_TO_CONTROL_ACCESS'=>'Выберите тип Обмена для Контроля Доступа к Отчету', 
 'LBL_ACTION' => 'Действие',
@@ -298,6 +295,47 @@ $mod_strings = array (
     
     'S&H Amount' => 'Общая Сумма',
     'Conversion Rate' => 'Курс',
+
+// 5.3.0 begin
+    'LBL_YEAR' => 'Год',
+    'LBL_MONTH'=> 'Месяц',
+    'LBL_QUARTER'=> 'Квартал',
+    'LBL_NONE'=> 'Нет',
+
+    'LBL_ROLES'=>'Роли',
+    'LBL_ROLES_SUBORDINATES'=>'Роли и Субординации',
+    'LBL_SCHEDULE_EMAIL'=>'Запланировать отправку Email',
+    'LBL_SCHEDULE_EMAIL_DESCRIPTION'=>'Настроить отправку Отчета по email выбранным получателям через регулярные интервалы',
+    'LBL_USERS_AVAILABEL'=> 'Получатели',
+    'LBL_REPORT_FORMAT_PDF'=> 'PDF',
+    'LBL_REPORT_FORMAT_EXCEL'=> 'EXCEL',
+    'LBL_REPORT_FORMAT_BOTH'=> 'Оба',
+    'LBL_REPORT_FORMAT'=> 'Формат Отчета',
+    'LBL_USERS_SELECTED'=>'Выбранные получатели',
+    'LBL_SELECT'=>'Выбор',
+    'Hourly'=>'Каждый час',
+    'Daily'=>'Каждый день',
+    'Weekly'=>'Каждую неделю',
+    'BiWeekly'=>'Раз в две недели',
+    'Monthly'=>'Каждый месяц',
+    'Annually'=>'Каждый год',
+    'LBL_SCHEDULE_REPORT'=>'Запланировать Отчет',
+    'LBL_SCHEDULE_FREQUENCY'=>'Частота',
+    'OPTION_SCHEDULE_EMAIL_CHOOSE'=>'Выберите ..... ',
+    'LBL_SCHEDULE_EMAIL_TIME'=>'Время',
+    'LBL_SCHEDULE_EMAIL_DOW'=>'День недели',
+    'LBL_SCHEDULE_EMAIL_DAY'=>'День',
+    'LBL_SCHEDULE_EMAIL_MONTH'=>'Месяц',
+    'WEEKDAY_STRINGS' => array('Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'),
+    'MONTH_STRINGS' => array('Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'),
+
+    'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'Это автоматическое сообщение, рассылаемое планировщиком отчетов.',
+    'LBL_TIME_FORMAT_MSG' => 'hh:mm (24-часовой формат)',
+
+    'LBL_SAVE_REPORT' => 'Сохранить',
+    'LBL_SAVE_REPORT_AS' => 'Сохранить Отчет как...',
+// 5.3.0 end
+
 // SalesPlatform.ru end
 
 );

@@ -36,13 +36,13 @@ class SalesPlatform_PDF_SPPDFController {
 
 	    $templates_result = $adb->pquery("select * from sp_templates where templateid=$templateid", array());
 	    if($templates_result) {
-		$templates_row = $adb->fetch_array($templates_result);
-		if($templates_row) {
-		    $this->pageOrientation = $templates_row['page_orientation'];
-		    $this->headerSize = $templates_row['header_size'];
-		    $this->footerSize = $templates_row['footer_size'];
-		    return $templates_row['template'];
-		}
+		if($adb->num_rows($templates_result) > 0)
+                {
+		    $this->pageOrientation = $adb->query_result($templates_result,0,'page_orientation');
+		    $this->headerSize = $adb->query_result($templates_result,0,'header_size');
+		    $this->footerSize = $adb->query_result($templates_result,0,'footer_size');
+		    return html_entity_decode($adb->query_result($templates_result,0,'template'), ENT_QUOTES, 'UTF-8');
+                }
 	    }
 	    
 	    return '';

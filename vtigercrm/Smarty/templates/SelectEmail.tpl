@@ -15,7 +15,7 @@
 		<tr>
 			<td width="90%" align="left" class="genHeaderSmall">{$MOD.SELECT_EMAIL}
 				{if $ONE_RECORD neq 'true'}
-				({$MOD.LBL_MULTIPLE} {$APP[$FROM_MODULE]})
+				({$MOD.LBL_MULTIPLE} {$APP[$FROM_MODULE]}{* SalesPlatform.ru begin *}:&nbsp;{$IDLIST_SIZE}{* SalesPlatform.ru end *})
 				{/if}
 				&nbsp;
 			</td>

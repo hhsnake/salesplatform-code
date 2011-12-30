@@ -11,10 +11,12 @@ include_once 'include/InventoryPDFController.php';
 include_once dirname(__FILE__). '/SalesOrderPDFHeaderViewer.php';
 class Vtiger_SalesOrderPDFController extends Vtiger_InventoryPDFController{
 	function buildHeaderModelTitle() {
-// SalesPlatform.ru begin
-		return sprintf("%s: %s", getTranslatedString('SalesOrder #', $this->moduleName), $this->focusColumnValue('salesorder_no'));
-		//return sprintf("%s: %s", rtrim($this->moduleName, 's'), $this->focusColumnValue('salesorder_no'));
-// SalesPlatform.ru end
+		$singularModuleNameKey = 'SINGLE_'.$this->moduleName;
+		$translatedSingularModuleLabel = getTranslatedString($singularModuleNameKey, $this->moduleName);
+		if($translatedSingularModuleLabel == $singularModuleNameKey) {
+			$translatedSingularModuleLabel = getTranslatedString($this->moduleName, $this->moduleName);
+		}
+		return sprintf("%s: %s", $translatedSingularModuleLabel, $this->focusColumnValue('salesorder_no'));
 	}
 
 	function getHeaderViewer() {
@@ -69,10 +71,7 @@ class Vtiger_SalesOrderPDFController extends Vtiger_InventoryPDFController{
 	}
 
 	function getWatermarkContent() {
-// SalesPlatform.ru begin
-		return '';
-		//return $this->focusColumnValue('sostatus');
-// SalesPlatform.ru end
+		return $this->focusColumnValue('sostatus');
 	}
 }
 ?>

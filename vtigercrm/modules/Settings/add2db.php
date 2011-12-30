@@ -123,17 +123,18 @@ require_once('include/utils/utils.php');
 
 		if($org_name=='')
 		{
+			$organizationId = $this->db->getUniqueID('vtiger_organizationdetails');
 // SalesPlatform.ru begin
 			$sql="INSERT INTO vtiger_organizationdetails
-				(organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, bankname, bankid, corraccount, director, bookkeeper, entrepreneur, entrepreneurreg, logoname) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
+				(organization_id,organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, bankname, bankid, corraccount, director, bookkeeper, entrepreneur, entrepreneurreg, logoname) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			$params = array($organizationId,$organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
 							$organization_country, $organization_phone, $organization_fax, $organization_website, 
 							$organization_inn, $organization_kpp, $organization_bankaccount,
 							$organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg,
 							$organization_logoname);
 			//$sql="INSERT INTO vtiger_organizationdetails
-			//	(organizationname, address, city, state, code, country, phone, fax, website, logoname) values (?,?,?,?,?,?,?,?,?,?)";
-			//$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
+			//	(organization_id,organizationname, address, city, state, code, country, phone, fax, website, logoname) values (?,?,?,?,?,?,?,?,?,?)";
+			//$params = array($organizationId,$organization_name, $organization_address, $organization_city, $organization_state, $organization_code,
 			//				$organization_country, $organization_phone, $organization_fax, $organization_website, $organization_logoname);
 // SalesPlatform.ru end
 		}

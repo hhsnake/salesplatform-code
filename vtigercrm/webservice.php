@@ -16,7 +16,9 @@
 	require_once("include/Webservices/SessionManager.php");
 	require_once("include/Zend/Json.php");
 	require_once('include/logging.php');
-	require_once "include/language/$default_language.lang.php";
+        // SalesPlatform.ru begin : bugfix for current language, used setCurrentLanguage() function
+	//require_once "include/language/$default_language.lang.php";
+	// SalesPlatform.ru end
 	
 	$API_VERSION = "0.22";
 	
@@ -89,6 +91,14 @@
 			}
 		}
 		$sid = $sessionManager->startSession($sessionId,$adoptSession);
+                
+                // SalesPlatform.ru begin : bugfix for current language
+                require_once('include/utils/utils.php');
+                global $current_language;
+                // Set the current language and the language strings
+                setCurrentLanguage();
+                vtws_preserveGlobal('current_language', $current_language);
+                // SalesPlatform.ru end
 		
 		if(!$sessionId && !$operationManager->isPreLoginOperation()){
 			writeErrorOutput($operationManager,new WebServiceException(WebServiceErrorCode::$AUTHREQUIRED,"Authencation required"));
@@ -119,6 +129,7 @@
 		}
 		$rawOutput = $operationManager->runOperation($operationInput,$current_user);
 		writeOutput($operationManager, $rawOutput);
+                //error_log("$operation rawOutput=".print_r($rawOutput, true));
 	}catch(WebServiceException $e){
 		writeErrorOutput($operationManager,$e);
 	}catch(Exception $e){

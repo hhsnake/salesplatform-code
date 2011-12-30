@@ -1,27 +1,34 @@
 <?php
-/***********************************************************
-*  Module       : Webservices
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      : 
-Licensed under Vtiger Public License Version 1.1.
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
 $app_strings = array (
 	'Groups'=>'Группы',
 	'DocumentFolders'=>'Папки Документов',
 	'Currency'=>'Валюта',
 	'SINGLE_Groups'=>'Группа',
-	'SINGLE_DocumentFolders'=>'Папка Документа',
+	'SINGLE_DocumentFolders'=>'Папка Документов',
 	'SINGLE_Currency'=>'Валюта',
 );
+
+// SalesPlatform.ru begin
+// 5.3.0 begin
+$webservice_strings = array(
+	'LBL_INVALID_OLD_PASSWORD' => 'Неверно указан старый пароль.',
+	'LBL_NEW_PASSWORD_MISMATCH' => "Новый пароль не совпадает с подтверждением",
+	'LBL_DATABASE_QUERY_ERROR' => 'Ошибка базы данных при выполнении операции',
+	'LBL_CHANGE_PASSWORD_FAILURE' => 'Ошибка изменения пароля',
+// 5.3.0 end
+// SalesPlatform.ru end
+);
+
 ?>

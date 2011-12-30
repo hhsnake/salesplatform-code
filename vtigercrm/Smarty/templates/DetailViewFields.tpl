@@ -81,7 +81,10 @@
 						{assign var=fontval value=''}
 					{/if}
 				{/foreach}
-				<font color="{$fontval}">{$keyval}</font>
+{* SalesPlatform.ru begin *}
+				<font color="{$fontval}">{if $APP.$keyval!=''}{$APP.$keyval}{elseif $MOD.$keyval!=''}{$MOD.$keyval}{else}{$keyval}{/if}</font>
+{*				<font color="{$fontval}">{$keyval}</font> *}
+{* SalesPlatform.ru end *}
 			</td>
 		{elseif $keyid eq '33'}
 			<td width=25% class="dvtCellInfo" align="left">&nbsp;
@@ -96,7 +99,7 @@
 				{$selected_val|replace:"\n":"<br>&nbsp;&nbsp;"}
 			</td>
 		{elseif $keyid eq '17'} <!--WebSite-->
-			<td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="http://{$keyval}" target="_blank">{$keyval}</a>
+			<td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="{$keyval}" target="_blank">{$keyval}</a>
 			</td>
 		{elseif $keyid eq '85'}<!--Skype-->
 			<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">

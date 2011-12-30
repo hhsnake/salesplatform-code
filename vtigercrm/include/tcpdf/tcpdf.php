@@ -11275,6 +11275,11 @@ if (!class_exists('TCPDF', false)) {
 			$key = 0;
 			while ($key < $maxel) {
 				if ($dom[$key]['tag'] OR ($key == 0)) {
+// SalesPlatform.ru begin: Add page breaks
+                                        if(isset($dom[$key]['style']['page-break-before']) && $dom[$key]['style']['page-break-before'] == 'always') {
+                                            $this->checkPageBreak($this->PageBreakTrigger + 1);
+                                        }
+// SalesPlatform.ru end
 					if ((($dom[$key]['value'] == 'table') OR ($dom[$key]['value'] == 'tr')) AND (isset($dom[$key]['align']))) {
 						$dom[$key]['align'] = ($this->rtl) ? 'R' : 'L';
 					}

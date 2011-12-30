@@ -246,8 +246,9 @@ class Vtiger_MailScannerAction {
 	 */
 	function __CreateNewEmail($mailrecord, $module, $linkfocus) {	
 		global $current_user, $adb;
-		if(!$current_user) $current_user = new Users();
-		$current_user->id = 1;
+		if(!$current_user) {
+			$current_user = Users::getActiveAdminUser();
+		}
 
 		$focus = new Emails();
 		$focus->column_fields['parent_type'] = $module;
@@ -258,7 +259,7 @@ class Vtiger_MailScannerAction {
 		$focus->column_fields['description'] = $mailrecord->getBodyHTML();
 		$focus->column_fields['assigned_user_id'] = $linkfocus->column_fields['assigned_user_id'];
 		$focus->column_fields["date_start"]= date('Y-m-d', $mailrecord->_date);
-		$focus->column_fields["email_flag"] = 'SAVED';
+		$focus->column_fields["email_flag"] = 'MAILSCANNER';
 		
 		$from=$mailrecord->_from[0];
 		$to = $mailrecord->_to[0];
@@ -276,15 +277,60 @@ class Vtiger_MailScannerAction {
 		$this->log("Created [$focus->id]: $mailrecord->_subject linked it to " . $linkfocus->id);
 
 		// TODO: Handle attachments of the mail (inline/file)
-		$this->__SaveAttachements($mailrecord, 'Emails', $focus);
+                // SalesPlatform.ru begin
+		$this->__SaveAttachements($mailrecord, 'Emails', $focus, $linkfocus);
+		//$this->__SaveAttachements($mailrecord, 'Emails', $focus);
+                // SalesPlatform.ru end
 
 		return $emailid;
 	}
+// SalesPlatform.ru begin
+//return supported encodings in lowercase.
+    function mb_list_lowerencodings() {
+        $r = mb_list_encodings();
+        for ($n = sizeOf($r); $n--;) {
+            $r[$n] = strtolower($r[$n]);
+        } return $r;
+    }
+
+//  Receive a string with a mail header and returns it
+// decoded to a specified charset.
+// If the charset specified into a piece of text from header
+// isn't supported by "mb", the "fallbackCharset" will be
+// used to try to decode it.
+    function decodeMimeString($mimeStr, $inputCharset='utf-8', $targetCharset='utf-8', $fallbackCharset='iso-8859-1') {
+        $encodings = $this->mb_list_lowerencodings();
+        $inputCharset = strtolower($inputCharset);
+        $targetCharset = strtolower($targetCharset);
+        $fallbackCharset = strtolower($fallbackCharset);
+
+        $decodedStr = '';
+        $mimeStrs = imap_mime_header_decode($mimeStr);
+        for ($n = sizeOf($mimeStrs), $i = 0; $i < $n; $i++) {
+            $mimeStr = $mimeStrs[$i];
+            $mimeStr->charset = strtolower($mimeStr->charset);
+            if (($mimeStr == 'default' && $inputCharset == $targetCharset)
+                    || $mimStr->charset == $targetCharset) {
+                $decodedStr.=$mimStr->text;
+            } else {
+                $decodedStr.=mb_convert_encoding(
+                $mimeStr->text, $targetCharset,
+                (in_array($mimeStr->charset, $encodings) ?
+                $mimeStr->charset : $fallbackCharset)
+                );
+            }
+        } return $decodedStr;
+    }
+
+// SalesPlatform.ru end
 
 	/**
 	 * Save attachments from the email and add it to the module record.
 	 */
-	function __SaveAttachements($mailrecord, $basemodule, $basefocus) {
+// SalesPlatform.ru begin
+        function __SaveAttachements($mailrecord, $basemodule, $basefocus, $linkfocus = null) {
+//        function __SaveAttachements($mailrecord, $basemodule, $basefocus) {
+// SalesPlatform.ru end
 		global $adb;
 
 		// If there is no attachments return
@@ -296,6 +342,9 @@ class Vtiger_MailScannerAction {
 		$date_var = $adb->formatDate(date('YmdHis'), true);
 
 		foreach($mailrecord->_attachments as $filename=>$filecontent) {
+// SalesPlatform.ru begin
+                        $filename = $this->decodeMimeString($filename);
+// SalesPlatform.ru end
 			$attachid = $adb->getUniqueId('vtiger_crmentity');
 			$description = $filename;
 			$usetime = $adb->formatDate($date_var, true);
@@ -320,10 +369,22 @@ class Vtiger_MailScannerAction {
 				// Link file attached to document
 				$adb->pquery("INSERT INTO vtiger_seattachmentsrel(crmid, attachmentsid) VALUES(?,?)", 
 					Array($document->id, $attachid));
-				
+
+// SalesPlatform.ru begin
+                                if(empty($linkfocus)) {
+// SalesPlatform.ru end
 				// Link document to base record
-				$adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)", 
-					Array($basefocus->id, $document->id));				
+				$adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)",
+					Array($basefocus->id, $document->id));
+// SalesPlatform.ru begin
+                                } else {
+                                    $adb->pquery("INSERT INTO vtiger_seattachmentsrel(crmid, attachmentsid) VALUES(?,?)",
+                                            Array($basefocus->id, $attachid));
+
+                                    $adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)",
+                                            Array($linkfocus->id, $document->id));
+                                }
+// SalesPlatform.ru end
 			}
 		}	
 	}

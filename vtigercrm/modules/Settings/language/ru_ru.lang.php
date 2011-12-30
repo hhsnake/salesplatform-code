@@ -1,22 +1,15 @@
 <?php
-/***********************************************************
-*  Module       : Settings
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      : 
-Licensed under Vtiger Public License Version 1.1.
-
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 $mod_strings = array (
       'LBL_MODULE_NAME' => 'Параметры',
@@ -686,8 +679,8 @@ $mod_strings = array (
       'LBL_DISABLED' => 'Выключено',
       'LBL_RULES' => 'Правила',
       'LBL_FOR' => 'Для',
-      'LBL_FROM' => 'Из',
-      'LBL_TO' => 'По',
+      'LBL_FROM' => 'От',
+      'LBL_TO' => 'Для',
       'LBL_ACTION' => 'Действие',
       'LBL_CREATE' => 'Создать',
       'LBL_TICKET' => 'Заявка',
@@ -844,7 +837,52 @@ $mod_strings = array (
 	  // SalesPlatform.ru begin
 	  'off' => 'нет',
 	  'on' => 'да',
-	  // SalesPlatform.ru end
+
+        // 5.3.0 begin
+        // Customization
+        'LBL_PUBLISHER' => 'Издатель',
+        'LBL_PUBLISHED_ON' => 'Дата Издания',
+        'LBL_LICENSE'   => 'Лицензия',
+        'LBL_EXTENSION_FILE_DOWNLOAD_FAILED' => 'Ошибка зарузку пакета расширения!',
+        'LBL_DEFAULT'=>'По умолчанию в учетной записи SMTP в качестве исходящего сервера установлен od1.vtiger.com. Чтобы избежать удаления исходящих сообщений СПАМ-фильтрами получателя мы рекомендуем сделать следующее.',
+        'LBL_OPTIONS1'=>'Отправлять сообщения через ваш сервер<br>
+                                        - Укажите настройки учетной записи SMTP (Имя сервера, Пользователь, Пароль).',
+        'LBL_OPTIONS2'=>"Добавьте сервер od1.vtiger.com в список доверенных отправителей вашего домена.<br>
+                                        - Если вы предпочитаете оставить сервер vtiger в качестве исходящего сервера, мы рекомендуем добавить в запись SPF вашего домена сервер vtiger в качестве допустимого отправителя вашего домена.
+                                          За дополнительной информацией о настройке записей SPF, пожалуйста, пишите на od-support@vtiger.com .",
+        'LBL_ALREADY_EXISTS' => 'Уже существует',
+        'LBL_EXTENSION_INCOMPATIBLE' => 'Расширение несовместимо',
+        'LBL_INSTALL' => 'Установить',
+        'LBL_DEFAULT_SETTINGS_BUTTON_TITLE' => 'Возврат к начальным значениям',
+        'LBL_CONFIRM_DEFAULT_SETTINGS' => 'Вы уверены, что хотите изменить настройки сервера на значения по умолчанию',
+        'EXISTING_DEFAULT_VALUES' => 'Настройки сервера уже установлены в значения по умолчанию',
+        'LBL_NOTE' => 'Замечание:',
+        'LBL_HIDE' => 'Спрятать детали',
+        'LBL_SHOW' => 'Показать детали',
+        // END
+        'LBL_USER_ADDITION_INFO'=>"Чтобы добавить нового пользователя, пожалуйста, нажмите
+                                   <span style='font-style:italic;color:blue;'>OD-Settings Menu -> On Demand Admin -> Add / Invite User </span>",
+
+        'LBL_READ_ONLY_ACCESS_MSG' => 'Доступ только для чтения',
+        'LBL_READ_WRITE_ACCESS_MSG' => 'Доступ для чтения и записи',
+
+        'LBL_DEFAULT_VALUE' => 'Значение по умолчанию',
+
+        'LBL_DESCRIPTION_Public: Read Only'=>'Доступ к данным других пользователей только для Чтения ',
+        'LBL_DESCRIPTION_Public: Read, Create/Edit'=>'Доступ к данным других пользователей для Чтения, Создания/Редактирования ',
+        'LBL_DESCRIPTION_Public: Read, Create/Edit, Delete'=>'Доступ к данным других пользователей для Чтения, Создания/Редактирования, Удаления ',
+
+        // For Dependency picklist
+        'LBL_PICKLIST_DEPENDENCY_SETUP' => 'Настройка зависимостей списков',
+        'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Настройка зависимостей между значениями списков в каждом модуле',
+
+        'Settings' => 'Настройки',
+        'LBL_ERR_TAX_LABEL_ALREADY_EXISTS' => 'Этот вид налога уже существует.',
+        'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Некоторые виды налогов уже существуют, поэтому не были сохранены.',
+
+        'Configuration Editor' => 'Редактор Конфигурации',
+	// 5.3.0 end
+        // SalesPlatform.ru end
 
 
 );

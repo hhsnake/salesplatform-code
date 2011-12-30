@@ -48,14 +48,27 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		}
 		$this->tabId = null;
 	}
-	
+
+	/**
+	 * returns tabid of the current object.
+	 * @return Integer 
+	 */
 	public function getTabId(){
 		if($this->tabId == null){
 			$this->tabId = getTabid($this->objectName);
 		}
 		return $this->tabId;
 	}
-	
+
+	/**
+	 * returns tabid that can be consumed for database lookup purpose generally, events and
+	 * calendar are treated as the same module
+	 * @return Integer
+	 */
+	public function getEffectiveTabId() {
+		return getTabid($this->getTabName());
+	}
+
 	public function getTabName(){
 		if($this->objectName == 'Events'){
 			return 'Calendar';
@@ -325,8 +338,18 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		require_once('modules/CustomView/CustomView.php');
 		$current_user = vtws_preserveGlobal('current_user',$this->user);
 		$theme = vtws_preserveGlobal('theme',$this->user->theme);
-		$default_language = VTWS_PreserveGlobal::getGlobal('default_language');
-		$current_language = vtws_preserveGlobal('current_language',$default_language);
+                // SalesPlatform.ru begin : bugfix for current language
+		$current_language = VTWS_PreserveGlobal::getGlobal('current_language');
+                if (empty($current_language)) {
+                    require_once('include/utils/utils.php');
+                    global $current_language;
+                    // Set the current language and the language strings
+                    setCurrentLanguage();
+                    vtws_preserveGlobal('current_language', $current_language);
+                }
+		//$default_language = VTWS_PreserveGlobal::getGlobal('default_language');
+		//$current_language = vtws_preserveGlobal('current_language',$default_language);
+                // SalesPlatform.ru end
 		
 		$this->computeAccess();
 		
@@ -357,13 +380,13 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		$tabid = $this->getTabId();
 		require('user_privileges/user_privileges_'.$this->user->id.'.php');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
-			$sql = "select * from vtiger_field where tabid =? and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4)"; 
+			$sql = "select *, '0' as readonly from vtiger_field where tabid =? and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4)";
 			$params = array($tabid, $block);	
 		}else{
 			$profileList = getCurrentUserProfileList();
 			
 			if (count($profileList) > 0) {
-				$sql = "SELECT *
+				$sql = "SELECT vtiger_field.*, vtiger_profile2field.readonly
 						FROM vtiger_field
 						INNER JOIN vtiger_profile2field
 						ON vtiger_profile2field.fieldid = vtiger_field.fieldid
@@ -374,7 +397,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 						AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4) and vtiger_field.presence in (0,2) group by columnname";
 				$params = array($tabid, $profileList, $block);
 			} else {
-				$sql = "SELECT *
+				$sql = "SELECT vtiger_field.*, vtiger_profile2field.readonly
 						FROM vtiger_field
 						INNER JOIN vtiger_profile2field
 						ON vtiger_profile2field.fieldid = vtiger_field.fieldid
@@ -439,9 +462,10 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		$exists = false;
 		$sql = '';
 		if($this->objectName == 'Users'){
-			$sql = 'select * from vtiger_users where id=? and deleted=0';
+			$sql = "select * from vtiger_users where id=? and deleted=0 and status='Active'";
 		}else{
-			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0 and setype='".$this->getTabName()."'";
+			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0 and setype='".
+				$this->getTabName()."'";
 		}
 		$result = $adb->pquery($sql , array($recordId));
 		if($result != null && isset($result)){
@@ -456,7 +480,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		global $adb;
 		
 		$query = "select fieldname,tablename,entityidfield from vtiger_entityname where tabid = ?";
-		$result = $adb->pquery($query, array($this->getTabId()));
+		$result = $adb->pquery($query, array($this->getEffectiveTabId()));
 		$fieldNames = '';
 		if($result){
 			$rowCount = $adb->num_rows($result);

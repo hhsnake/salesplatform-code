@@ -7,7 +7,7 @@
 			<autoincrement />
 		</field>
 		<field name="user_name" type="C" size="255" />
-		<field name="user_password" type="C" size="128" />
+		<field name="user_password" type="C" size="200" />
 		<field name="user_hash" type="C" size="32" />
 		<field name="cal_color" type="C" size="25">
 			<default value="#E6FAD8" />
@@ -41,9 +41,9 @@
 		<field name="phone_fax" type="C" size="50" />
 		<field name="email1" type="C" size="100" />
 		<field name="email2" type="C" size="100" />
-		<field name="yahoo_id" type="C" size="100" />
+		<field name="secondaryemail" type="C" size="100" />
 		<field name="status" type="C" size="25" />
-		<field name="signature" type="C" size="250" />
+		<field name="signature" type="C" size="1000" />
 		<field name="address_street" type="C" size="150" />
 		<field name="address_city" type="C" size="100" />
 		<field name="address_state" type="C" size="100" />
@@ -76,7 +76,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
-		<field name="confirm_password" type="C" size="30" />
+		<field name="confirm_password" type="C" size="300" />
 
 		<field name="internal_mailer" type="C" size="3">
 			<notnull />
@@ -89,6 +89,13 @@
 			<default value="MD5" />
 		</field>
 		<field name="accesskey" type="C" size="36" />
+		<field name="theme" type="C" size="100" />
+		<field name="language" type="C" size="36" />
+		<field name="time_zone" type="C" size="200" />
+		<field name="currency_grouping_pattern" type="C" size="100" />
+		<field name="currency_decimal_separator" type="C" size="2" />
+		<field name="currency_grouping_separator" type="C" size="2" />
+		<field name="currency_symbol_placement" type="C" size="20" />
 
 		<index name="user_user_name_idx">
 			<col>user_name</col>
@@ -290,8 +297,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
-		<field name="selected" type="I" size="1">
-			<notnull />
+		<field name="defaultvalue" type="X">
 		</field>
 		<field name="maximumlength" type="I" size="19" />
 		<field name="sequence" type="I" size="19" />
@@ -479,7 +485,7 @@
 		<field name="usertype" type="C" size="50" />
 		<field name="contacttype" type="C" size="50" />
 		<field name="otheremail" type="C" size="100" />
-		<field name="yahooid" type="C" size="100" />
+		<field name="secondaryemail" type="C" size="100" />
 		<field name="donotcall" type="C" size="3" />
 		<field name="emailoptout" type="C" size="3">
 			<default value="0" />
@@ -661,7 +667,7 @@
 		<field name="transferdate" type="D" />
 		<field name="revenuetype" type="C" size="50" />
 		<field name="noofemployees" type="I" size="50" />
-		<field name="yahooid" type="C" size="100" />
+		<field name="secondaryemail" type="C" size="100" />
 		<field name="assignleadchk" type="I" size="1">
 			<default value="0" />
 		</field>
@@ -4176,6 +4182,12 @@
 		<field name="value" type="C" size="200">
 			<default value="" />
 		</field>
+		<field name="groupid" type="I">
+			<default value="1" />
+		</field>
+		<field name="column_condition" type="C" size="255">
+			<default value="and" />
+		</field>
 
 		<index name="cvadvfilter_cvid_idx">
 			<col>cvid</col>
@@ -4657,8 +4669,11 @@
 	</table>
 
 	<table name="vtiger_organizationdetails">
-		<field name="organizationname" type="C" size="60">
+		<field name="organization_id" type="I" size="11">
 			<key />
+		</field>
+		<field name="organizationname" type="C" size="60">
+			<unique />
 		</field>
 		<field name="address" type="C" size="150" />
 		<field name="city" type="C" size="100" />
@@ -6671,7 +6686,9 @@
         <field name="is_active" type="I" size="1">
 			<notnull />
 		</field>
-        
+		<field name="dependent_on" type="C" size="255">
+			<default value="[]" />
+		</field>        
 		<index name="eventhandler_idx">
 			<unique />
 			<col>eventhandler_id</col>
@@ -6822,6 +6839,8 @@
 			<notnull />
 		</field>
 		<field name="defaultworkflow" type="I" size="1">
+		</field>
+		<field name="type" type="C" size="255">
 		</field>
 		<index name="com_vtiger_workflows_idx">
 			<unique />
@@ -7080,6 +7099,15 @@
 		<field name="linkurl" type="C" size="255" />
 		<field name="linkicon" type="C" size="100" />
 		<field name="sequence" type="I" />
+		<field name="handler_path" type="C" size="128">
+			<default value="NULL" />
+		</field>
+		<field name="handler_class" type="C" size="32">
+			<default value="NULL" />
+		</field>
+		<field name="handler" type="C" size="32">
+			<default value="NULL" />
+		</field>
 		<opt platform="mysql">ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
 		<index name="link_tabidtype_idx">
 			<col>tabid</col>
@@ -7357,6 +7385,164 @@
 	    <field name="page_orientation" type="C" size="1">
     	    </field>
     	    <opt platform="mysql">ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+	<table name="vtiger_scheduled_reports">
+		<field name="reportid" type="I">
+			<key />
+		</field>
+		<field name="recipients" type="X">
+		</field>
+		<field name="schedule" type="X">
+		</field>
+		<field name="format" type="C" size="10">
+		</field>
+		<field name="next_trigger_time" type="TS">
+			<DEFTIMESTAMP/>
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>	
+	
+	<table name="vtiger_ws_fieldinfo">
+		<field name="id" type="C" size="64">
+			<notnull />
+			<key />
+		</field>
+		<field name="property_name" type="C" size="32">
+		</field>
+		<field name="property_value" type="C" size="64">
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+	<table name="vtiger_cvadvfilter_grouping">
+		<field name="groupid" type="I" size="11">
+			<key />
+			<notnull />
+		</field>
+		<field name="cvid" type="I" size="19">
+			<key />
+		</field>
+		<field name="group_condition" type="C" size="255">
+		</field>
+		<field name="condition_expression" type="X">
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+	<table name="vtiger_picklist_dependency">
+		<field name="id" type="I" size="11">
+			<key />
+		</field>
+		<field name="tabid" type="I" size="19">
+			<notnull />
+		</field>
+		<field name="sourcefield" type="C" size="255">
+		</field>
+		<field name="targetfield" type="C" size="255">
+		</field>
+		<field name="sourcevalue" type="C" size="100">
+		</field>
+		<field name="targetvalues" type="X">
+		</field>
+		<field name="criteria" type="X">
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+	<table name="vtiger_currency_grouping_pattern">
+		<field name="currency_grouping_patternid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_grouping_pattern" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+	<table name="vtiger_currency_decimal_separator">
+		<field name="currency_decimal_separatorid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_decimal_separator" type="C" size="2">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+	<table name="vtiger_currency_grouping_separator">
+		<field name="currency_grouping_separatorid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_grouping_separator" type="C" size="2">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+	<table name="vtiger_currency_symbol_placement">
+		<field name="currency_symbol_placementid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_symbol_placement" type="C" size="30">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+	<table name="vtiger_time_zone">
+		<field name="time_zoneid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="time_zone" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
 	</table>
 	
 </schema>

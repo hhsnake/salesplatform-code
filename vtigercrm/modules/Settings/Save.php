@@ -29,7 +29,6 @@ $server_path = vtlib_purify($_REQUEST['server_path']);
 //$from_email_field = vtlib_purify($_REQUEST['from_email_field']);
 $from_email_field = $idn->encode( vtlib_purify($_REQUEST['from_email_field']) );
 $from_name = vtlib_purify($_REQUEST['from_name']);
-error_log($from_name);
 // SalesPlatform.ru end
 $db_update = true;
 if($_REQUEST['smtp_auth'] == 'on' || $_REQUEST['smtp_auth'] == 1)
@@ -71,7 +70,7 @@ if($server_type == 'proxy')
 		while(!feof($sock)) {$proxy_cont .= fread($sock,4096);}
 		fclose($sock);
 		$proxy_cont = substr($proxy_cont, strpos($proxy_cont,"\r\n\r\n")+4);
-
+		
 		if(substr_count($proxy_cont, "Cache Access Denied") > 0)
 		{
 			$error_str = 'error=LBL_PROXY_AUTHENTICATION_REQUIRED';
@@ -199,7 +198,7 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
 						// SalesPlatform.ru end
 					}
 				$adb->pquery($sql, $params);
-        	}
+        	}	
 	}
 }
 //While configuring Proxy settings, the submitted values will be retained when exception is thrown - dina

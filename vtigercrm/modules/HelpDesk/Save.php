@@ -71,7 +71,7 @@ else
 	$reply = '';
 
 // SalesPlatform.ru begin
-$subject = 'SalesPlatform.ru [ '.getTranslatedString('LBL_TICKET_ID', 'HelpDesk').' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
+$subject = $focus->column_fields['ticket_no'] . ' [ '.getTranslatedString('LBL_TICKET_ID', 'HelpDesk').' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
 $bodysubject = getTranslatedString('LBL_TICKET_ID', 'HelpDesk').' : '.$focus->id.'<br> '.getTranslatedString('LBL_SUBJECT', 'HelpDesk').$_REQUEST['ticket_title'];
 //$subject = $focus->column_fields['ticket_no'] . ' [ '.$mod_strings['LBL_TICKET_ID'].' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
 //$bodysubject = $mod_strings['Ticket No'] .":<br>" . $focus->column_fields['ticket_no'] . "<br>" . $mod_strings['LBL_TICKET_ID'].' : '.$focus->id.'<br> '.$mod_strings['LBL_SUBJECT'].$_REQUEST['ticket_title'];
@@ -109,7 +109,6 @@ if($isactive == 1)
 {
 	$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$focus->id."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
 	$email_body = $bodysubject.'<br><br>'.getPortalInfo_Ticket($focus->id,$_REQUEST['ticket_title'],$contactname,$url,$_REQUEST['mode']);
-
 }
 else
 {
@@ -165,7 +164,7 @@ if(PerformancePrefs::getBoolean('NOTIFY_OWNER_EMAILS', true) === true){
 		if($_REQUEST['parent_id'] != '' && $_REQUEST['parent_type'] != '')
         {
         	$parentmodule = $_REQUEST['parent_type'];
-            $parentid = $_REQUEST['parent_id'];
+            $parentid = vtlib_purify($_REQUEST['parent_id']);
 
 			$parent_email = getParentMailId($parentmodule,$parentid);
 			if($_REQUEST['mode'] != 'edit')

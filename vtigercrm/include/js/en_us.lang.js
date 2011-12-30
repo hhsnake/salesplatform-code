@@ -309,7 +309,14 @@
 				'LBL_SELECT_ONLY_FIELDS': 'Please select only two fields.',
 				'LBL_ENTER_RSS_URL':'Please enter RSS URL',
 				'LBL_ADD_HOME_WIDGET': 'Unable to add homestuff! Please try again',
+				
+				'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Default Value for this Field',
 
+				'RECIPIENTS_CANNOT_BE_EMPTY' : 'Selected Recipients cannot be empty',
+				'VALID_SCANNER_NAME' : 'Please enter a valid Scanner name (It should be only Characters and Numbers)',
+				'ERR_SAME_SOURCE_AND_TARGET' : 'Source field and Target field should not be same',
+				'ERR_ATLEAST_ONE_VALUE_FOR' : 'You need to select at least one value for',
+				'ERR_SELECT_MODULE_FOR_DEPENDENCY' : 'Please select a module to add Dependency'
 // SalesPlatform.ru begin
 'LBL_OFF':'off',
 'LBL_ON':'on',
@@ -317,10 +324,11 @@
 'LBL_PRODUCT_NAME':'Name',
 'LBL_PRODUCT_DESCRIPTION':'Description',
 'LBL_PRODUCT_COMMENT':'Comment',
-SELECT_DOCWITHFILE:'Please Select a Document with file'
+SELECT_DOCWITHFILE:'Please Select a Document with file',
 'LBL_MOV_EMAIL1':'Moving mail(s) from ',
 'LBL_MOV_EMAIL2':' folder to ',
-'LBL_MOV_EMAIL3':' folder'
+'LBL_MOV_EMAIL3':' folder',
+'SELECT_MASS':'No entity selected. Send to all records from current filter?'
 // SalesPlatform.ru end
 			};
 

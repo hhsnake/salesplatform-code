@@ -48,7 +48,7 @@ if(trim($subject) != "")
 				{
 					$emailid = $camodulerow["email"];
 					$otheremailid = $camodulerow["otheremail"];
-					$yahooid = $camodulerow["yahooid"];
+					$secondaryemail = $camodulerow["secondaryemail"];
 
 					if(trim($emailid) != "")
 					{
@@ -56,9 +56,9 @@ if(trim($subject) != "")
 					}elseif(trim($otheremailid) != "")
 					{
 						SendMailtoCustomView($camodule,$id,$otheremailid,$current_user->id,$subject,$contents);
-					}elseif(trim($yahooid) != "")
+					}elseif(trim($secondaryemail) != "")
 					{
-						SendMailtoCustomView($camodule,$id,$yahooid,$current_user->id,$subject,$contents);
+						SendMailtoCustomView($camodule,$id,$secondaryemail,$current_user->id,$subject,$contents);
 					}
 					else
 					{
@@ -74,15 +74,15 @@ if(trim($subject) != "")
 				if(isset($camodulerow))
 				{
 					$emailid = $camodulerow["email"];
-					$yahooid = $camodulerow["yahooid"];
+					$secondaryemail = $camodulerow["secondaryemail"];
 
 					if(trim($emailid) != "")
 					{
 						SendMailtoCustomView($camodule,$id,$emailid,$current_user->id,$subject,$contents);
 					}
-					elseif($trim($yahooid) != "")
+					elseif($trim($secondaryemail) != "")
 					{
-						SendMailtoCustomView($camodule,$id,$yahooid,$current_user->id,$subject,$contents);
+						SendMailtoCustomView($camodule,$id,$secondaryemail,$current_user->id,$subject,$contents);
 					}
 					else
 					{

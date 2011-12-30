@@ -148,9 +148,11 @@ var $rel_serel_table = "vtiger_seactivityrel";
 			{
 				if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
 				{
+					$adb->pquery("DELETE FROM vtiger_seactivityrel WHERE crmid = ? AND activityid = ? ",
+							array($this->column_fields['parent_id'], $this->id));
 					//$this->insertIntoEntityTable('vtiger_seactivityrel', $module);
 					$sql = 'insert into vtiger_seactivityrel values(?,?)';
-					$params = array($this->column_fields['parent_id'],$_REQUEST['currentid']);
+					$params = array($this->column_fields['parent_id'], $this->id);
 					$adb->pquery($sql,$params);
 				}
 				elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
@@ -415,7 +417,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 				onclick=\"return window.open("index.php?module=Users&return_module=Emails&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=true&return_id='.$id.'&recordid='.$id.'","test","width=640,height=520,resizable=0,scrollbars=0");\"
 				type="button">';                  
 
-		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id and vtiger_salesmanactivityrel.activityid=?';
+		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.secondaryemail , vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id and vtiger_salesmanactivityrel.activityid=?';
 		$result=$adb->pquery($query, array($id));   
 
 		$noofrows = $adb->num_rows($result);
@@ -445,7 +447,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 			$entries[] = $row['user_name'];
 			$entries[] = $row['email1'];
 			if($email == '')        $email = $row['email2'];
-			if($email == '')        $email = $row['yahoo_id'];
+			if($email == '')        $email = $row['secondaryemail'];
 
 			$entries[] = $row['phone_home'];
 			if($phone == '')        $phone = $row['phone_work'];
@@ -590,6 +592,12 @@ function get_to_emailids($module)
 		}
 		$columnlists = implode(',',$columns);
 		$idstring = $_REQUEST["idlist"];
+// SalesPlatform.ru begin : Send Emails to all Records from current filter
+                if(empty($idstring)) {
+                    $idstring = $_SESSION["salesplatform_idlist"];
+                    $_SESSION["salesplatform_idlist"] = '';
+                }
+// SalesPlatform.ru end
                 $single_record = false;
 		if(!strpos($idstring,':'))
 		{
@@ -600,22 +608,37 @@ function get_to_emailids($module)
 		switch($module)
 		{
 			case 'Leads':
-				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and ((ltrim(vtiger_leaddetails.email) != \'\') or (ltrim(vtiger_leaddetails.yahooid) != \'\')) and vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
+// SalesPlatform.ru begin
+                $query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
+//				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and ((ltrim(vtiger_leaddetails.email) != \'\') or (ltrim(vtiger_leaddetails.secondaryemail) != \'\')) and vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
+// SalesPlatform.ru end
 				break;
 			case 'Contacts':
 				//email opt out funtionality works only when we do mass mailing.
+// SalesPlatform.ru begin
 				if(!$single_record)
-				$concat_qry = '(((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.yahooid) != \'\')) and (vtiger_contactdetails.emailoptout != 1)) and ';
+				$concat_qry = '(vtiger_contactdetails.emailoptout != 1) and ';
 				else
-				$concat_qry = '((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.yahooid) != \'\')) and ';
+				$concat_qry = '';
+//				if(!$single_record)
+//				$concat_qry = '(((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.secondaryemail) != \'\')) and (vtiger_contactdetails.emailoptout != 1)) and ';
+//				else
+//				$concat_qry = '((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.secondaryemail) != \'\')) and ';
+// SalesPlatform.ru end
 				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and '.$concat_qry.'  vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
 				break;
 			case 'Accounts':
 				//added to work out email opt out functionality.
+// SalesPlatform.ru begin
 				if(!$single_record)
-					$concat_qry = '(((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and (vtiger_account.emailoptout != 1)) and ';
+					$concat_qry = '(vtiger_account.emailoptout != 1) and ';
 				else
-					$concat_qry = '((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and ';
+					$concat_qry = '';
+//				if(!$single_record)
+//					$concat_qry = '(((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and (vtiger_account.emailoptout != 1)) and ';
+//				else
+//					$concat_qry = '((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and ';
+// SalesPlatform.ru end
 					
 				$query = 'select crmid,accountname as entityname,'.$columnlists.' from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_crmentity.deleted=0 and '.$concat_qry.' vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
 				break;
@@ -690,9 +713,9 @@ function pdfAttach($obj,$module,$file_name,$id)
 	}
 }
 //this function check email fields profile permission as well as field access permission
-function emails_checkFieldVisiblityPermission($fieldname) {
+function emails_checkFieldVisiblityPermission($fieldname,$mode='readonly') {
 	global $current_user;
-	$ret = getFieldVisibilityPermission('Emails',$current_user->id,$fieldname);
+	$ret = getFieldVisibilityPermission('Emails',$current_user->id,$fieldname,$mode);
 	return $ret;
 }
 

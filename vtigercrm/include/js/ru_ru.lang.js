@@ -1,21 +1,14 @@
-/***********************************************************
-*  Module       : JavaScript
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      : 
-Licensed under vtiger Public License Version 1.1.
-
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 var alert_arr = {
       DELETE:'Вы уверены что хотите удалить выбранные ',
@@ -315,16 +308,27 @@ var alert_arr = {
 	'LBL_ADD_HOME_WIDGET': 'Невозможно добавить объект! Пожалуйста, попробуйте еще',
 
 // SalesPlatform.ru begin
+// 5.3.0 begin
+        'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Значение для поля по умолчанию',
+
+        'RECIPIENTS_CANNOT_BE_EMPTY' : 'Список получателей не может быть пустым',
+        'VALID_SCANNER_NAME' : 'Пожалуйста, укажите правильное наименование сканера (это должны быть только буквы и цифры)',
+        'ERR_SAME_SOURCE_AND_TARGET' : 'Источник и Приемник не должны совпадать',
+        'ERR_ATLEAST_ONE_VALUE_FOR' : 'Вы должны выбрать хотя бы одно значение в списке',
+        'ERR_SELECT_MODULE_FOR_DEPENDENCY' : 'Пожалуйста, выберите модуль для добавления зависимости',
+// 5.3.0 end
+
       'LBL_PRODUCT_CODE':'Код товара',
       'LBL_PRODUCT_NAME':'Наименование',
       'LBL_PRODUCT_DESCRIPTION':'Описание',
       'LBL_PRODUCT_COMMENT':'Комментарий',
-       SELECT_DOCWITHFILE:'Пожалуйста, выберите документ с файлом.',
+      'SELECT_DOCWITHFILE':'Пожалуйста, выберите документ с файлом.',
 	  'LBL_OFF':'нет',
 	  'LBL_ON':'да',
 	  'LBL_MOV_EMAIL1':'Перемещение писем из папки ',
 	  'LBL_MOV_EMAIL2':' в папку ',
-	  'LBL_MOV_EMAIL3':''
+	  'LBL_MOV_EMAIL3':'',
+      'SELECT_MASS':'Не выбрано ни одного значения. Сделать рассылку по всем записям текущего фильтра?'
 // SalesPlatform.ru end
 
 	};

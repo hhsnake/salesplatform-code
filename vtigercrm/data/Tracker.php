@@ -93,7 +93,10 @@ $log->info("in  track view method ".$current_module);
 		 $query1 = "select $fieldsname as entityname from $tablename where $entityidfield = ?"; 
 		 $result = $adb->pquery($query1, array($item_id));
 		 $item_summary = $adb->query_result($result,0,'entityname');
-		 if(strlen($item_summary) > 30)
+                 // SalesPlatform.ru begin
+                 if(mb_strlen($item_summary,'UTF-8') > 30)
+		 //if(strlen($item_summary) > 30)
+                 // SalesPlatform.ru end
 	     {
                     // SalesPlatform.ru begin
 		    //$item_summary=substr($item_summary,0,30).'...';

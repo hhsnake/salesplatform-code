@@ -55,8 +55,8 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 // SalesPlatform.ru begin
 		 if(utf8_strlen($name)>17)
                         $name=utf8_substr($name, 0, 17) . '...';
-//		 if(utf8_strlen($name)>=15)
-//                        $name=utf8_substr($name, 0, 15);
+//		 if(strlen($name)>=15)
+//                        $name=substr($name, 0, 15);
 //		if($pos>=2)
 //		{
 //			$val=explode(" ",$name);

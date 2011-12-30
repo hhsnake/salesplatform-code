@@ -48,6 +48,12 @@ if(isset($_REQUEST['maintab']) && $_REQUEST['maintab'] != '')
 }
 $smarty->assign("MAINTAB",$act_tab);
 			
+// This is added to support the type of popup and callback
+if(isset($_REQUEST['popupmode']) && isset($_REQUEST['callback'])) {
+	$url = "&popupmode=".$_REQUEST['popupmode']."&callback=".$_REQUEST['callback'];
+	$smarty->assign("POPUPMODE", $_REQUEST['popupmode']);
+	$smarty->assign("CALLBACK", $_REQUEST['callback']);
+}
 			
 switch($currentModule)
 {
@@ -314,7 +320,10 @@ else
 		$where_relquery .=" and vtiger_users.id!=".$adb->sql_escape_string($_REQUEST['recordid']);
 		$smarty->assign("RECORDID",vtlib_purify($_REQUEST['recordid']));
 	}
-	
+// SalesPlatform.ru begin: Added select possibility for contacts activities
+        if($currentModule == 'Calendar')
+            $where_relquery .= " and vtiger_activity.activitytype!='Task'";
+// SalesPlatform.ru end
 	$query = getListQuery($currentModule,$where_relquery);
 }
 
@@ -340,8 +349,8 @@ if(isset($where) && $where != '')
 }
 //Added to fix the issue #2307 
 
-$order_by = (isset($_REQUEST['order_by'])) ? $adb->sql_escape_string($_REQUEST['order_by']) : $focus->default_order_by;
-$sorder = (isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '') ? $adb->sql_escape_string($_REQUEST['sorder']) : $focus->default_sort_order;
+$order_by = $focus->getOrderBy();
+$sorder = $focus->getSortOrder();
 
 if(isset($order_by) && $order_by != '')
 {

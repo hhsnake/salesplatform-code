@@ -52,7 +52,7 @@ function parse_import($file_name,$delimiter,$max_lines,$has_header)
 	while ( (( $fields = fgetcsv($fh, 4096, $delimiter) ) !== FALSE) 
 		&& ( $max_lines == -1 || $line_count < $max_lines)) 
 	{
-	
+
 		if ( count($fields) == 1 && isset($fields[0]) && $fields[0] == '')
 		{
 			break;

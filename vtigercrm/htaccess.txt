@@ -1,1 +1,27 @@
+# Disable directory browsing
 Options -Indexes
+
+# mod_rewrite in use
+Options +FollowSymLinks
+RewriteEngine On
+
+# begin - Rewrite rules to block out some common exploits
+# Block out any script that includes a <script> tag in URL
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+# Block out any script trying to set a PHP GLOBALS variable via URL
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+# Block out any script trying to modify a _REQUEST variable via URL
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+# Send all blocked request to homepage with 403 Forbidden error!
+RewriteRule ^(.*)$ index.php [F,L]
+# end - Rewrite rules to block out some common exploits
+
+# begin SalesPlatform.ru vtiger CRM RESTRICTIONS
+RedirectMatch 403 (?i)/+(soap|cache|xtemplate|data|examples|include|log4php|metadata|modules)/+.*\.(php|inc)
+RedirectMatch 403 (?i)/+(adodb|backup|class_http|class_http_dir|cron|database|install|jscalendar|license|log4php.debug|packages|schema|soap|storage|test|themes|user_privileges|vtlib|cache)/+.*\.(php|inc)
+RedirectMatch 403 (?i)/+(Smarty)/+.*\.(php|tpl)
+# Block any request to storage except images
+RedirectMatch 403 (?i)/+(storage)/+.*\.(pdf|doc|xls|txt|odt|docx|xlsx|rtf|csv|html|htm)
+# Block any request to root except php
+RedirectMatch 403 (?i)/+.*\.(txt|log)
+# end SalesPlatform.ru vtiger CRM RESTRICTIONS

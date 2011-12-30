@@ -32,7 +32,7 @@ function checkAsteriskDetails(){
 	$sql = "select * from vtiger_asterisk";
 	$result = $adb->query($sql);
 	$count = $adb->num_rows($result);
-
+	
 	if($count > 0){
 		return "true";
 	}else{
@@ -45,14 +45,14 @@ function checkAsteriskDetails(){
  */
 function getAsteriskExtensions(){
 	global $adb, $current_user;
-
+	
 	$sql = "SELECT * FROM vtiger_asteriskextensions
             INNER JOIN vtiger_users ON vtiger_users.id = vtiger_asteriskextensions.userid
             AND vtiger_users.deleted=0 AND status = 'Active'";
 	$result = $adb->pquery($sql, array());
 	$count = $adb->num_rows($result);
 	$data = array();
-
+	
 	for($i=0;$i<$count;$i++){
 		$user = $adb->query_result($result, $i, "userid");
 		$extension = $adb->query_result($result, $i, "asterisk_extension");
@@ -81,12 +81,12 @@ $lbl_confirm_new_password = $mod_strings['LBL_LIST_CONFIRM_PASSWORD'];
 $lbl_user_email1 = $mod_strings['LBL_LIST_EMAIL'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
-$err_invalid_yahoo_email_address = $app_strings['ERR_INVALID_YAHOO_EMAIL_ADDRESS'];
+$err_invalid_secondary_email_address = $app_strings['ERR_INVALID_SECONDARY_EMAIL_ADDRESS'];
 $lbl_user_image=$mod_strings['User Image'];
 $the_emailid = $app_strings['THE_EMAILID'];
 $email_field_is = $app_strings['EMAIL_FILED_IS'].$err_invalid_email_address;
 $other_email_field_is = $app_strings['OTHER_EMAIL_FILED_IS'].$err_invalid_email_address;
-$yahoo_email_field_is = $app_strings['YAHOO_EMAIL_FILED_IS'].$err_invalid_yahoo_email_address;
+$secondary_email_field_is = $app_strings['SECONDARY_EMAIL_FILED_IS'].$err_invalid_secondary_email_address; 
 $lbl_asterisk_details_not_set = $app_strings['LBL_ASTERISK_SET_ERROR'];
 
 //check asteriskdetails start
@@ -105,13 +105,13 @@ $the_script  = <<<EOQ
 <!--  to hide script contents from old browsers
 function set_fieldfocus(errorMessage,oMiss_field){
 		alert("$err_missing_required_fields" + errorMessage);
-		oMiss_field.focus();
+		oMiss_field.focus();	
 }
 
 function verify_data(form) {
         var isError = false;
 	var errorMessage = "";
-
+	
 	//check if asterisk server details are set or not
 	if(trim(form.asterisk_extension.value)!="" && "$checkAsteriskDetails" == "false"){
 		errorMessage = "$lbl_asterisk_details_not_set";
@@ -131,7 +131,7 @@ function verify_data(form) {
             }
         }
 	//asterisk check ends
-
+	
 	if (trim(form.email1.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_user_email1";
@@ -174,8 +174,8 @@ function verify_data(form) {
 	}
 	form.email1.value = trim(form.email1.value);
 // SalesPlatform.ru begin
-//	if (form.email1.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-	if (form.email1.value != "" && !/^(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.email1.value)) {
+//	if (form.email1.value != "" && !/^\w+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
+	if (form.email1.value != "" && !/^(\w|[А-Яа-я])+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.email1.value)) {
 // SalesPlatform.ru end
 		alert("$the_emailid"+form.email1.value+"$email_field_is");
 		form.email1.focus();
@@ -183,20 +183,20 @@ function verify_data(form) {
 	}
 	form.email2.value = trim(form.email2.value);
 // SalesPlatform.ru begin
-//	if (form.email2.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-	if (form.email2.value != "" && !/^(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.email2.value)) {
+//	if (form.email2.value != "" && !/^\w+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
+	if (form.email2.value != "" && !/^(\w|[А-Яа-я])+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.email2.value)) {
 // SalesPlatform.ru end
 		alert("$the_emailid"+form.email2.value+"$other_email_field_is");
 		form.email2.focus();
 		return false;
 	}
-	form.yahoo_id.value = trim(form.yahoo_id.value);
-	if (form.yahoo_id.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value) || (trim(form.yahoo_id.value) != "" && !(form.yahoo_id.value.indexOf('yahoo') > -1))) {
-                // SalesPlatform.ru begin
-		alert(form.yahoo_id.value+"$yahoo_email_field_is");
-		//alert("$the_emailid"+form.yahoo_id.value+"$yahoo_email_field_is");
-                // SalesPlatform.ru end
-		form.yahoo_id.focus();
+	form.secondaryemail.value = trim(form.secondaryemail.value); 
+// SalesPlatform.ru begin
+//	if (form.secondaryemail.value != "" && !/^\w+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.secondaryemail.value)){
+	if (form.secondaryemail.value != "" && !/^(\w|[А-Яа-я])+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.secondaryemail.value)){
+// SalesPlatform.ru end
+		alert("$the_emailid"+form.secondaryemail.value+"$secondary_email_field_is");
+		form.secondaryemail.focus();
 		return false;
 	}
 

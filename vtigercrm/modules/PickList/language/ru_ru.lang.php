@@ -1,22 +1,15 @@
 <?php
-/***********************************************************
-*  Module       : PickList
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      : 
-Licensed under Vtiger Public License Version 1.1.
-
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 $mod_strings = array (
       'LBL_ASSIGN_BUTTON' => 'Назначить',
@@ -36,6 +29,26 @@ $mod_strings = array (
       'LBL_ADD_TO_OTHER_ROLES' => 'Добавить к другим ролям',
       'LBL_OK_BUTTON_LABEL' => 'Ok',
       'LBL_DISPLAYED_VALUES' => 'Все доступные значения для роли показаны внизу',
+
+// SalesPlatform.ru begin
+// 5.3.0 begin
+// For Dependency picklist
+	'LBL_PICKLIST_DEPENDENCY_SETUP' => 'Настройка зависимостей списков',
+	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Настройка зависимостей между значениями списков в каждом модуле',
+	'LBL_NEW_DEPENDENCY' => 'Новая Зависимость Списков',
+	'LBL_TOOLS' => 'Инструменты',
+	'LBL_SOURCE_FIELD' => 'Исходное поле',
+	'LBL_TARGET_FIELD' => 'Целевое поле',
+	'LBL_BUTTON_SELECTED_SOURCE_VALUES' => 'Выбор исходных значений',
+	'LBL_SELECTED_SOURCE_VALUES_MSG' => 'Выберите значения исходного списка для настройки связей',
+	'LBL_ERR_CYCLIC_DEPENDENCY' => 'Данная установка не разрешена, т.к. приводит к циклической зависимости',
+	'LBL_SELECTED_VALUES' => 'Выбранные значения',
+	'LBL_CONFIGURE_DEPENDENCY_HELP_1' => 'Ниже будут отображаться только связанные значения Исходного поля (за исключением первого раза)',
+	'LBL_CONFIGURE_DEPENDENCY_HELP_2' => "Если вы желаете посмотреть или изменить связи для других значений Исходного поля, <br/>
+                                                    вы можете выбрать соответствующие значения, нажав на кнопку <b>'Выбор исходных значений'</b> справа",
+	'LBL_CONFIGURE_DEPENDENCY_HELP_3' => 'Выбранные значения целевых полей выделены как',
+// 5.3.0 end
+// SalesPlatform.ru end
 
 );
 

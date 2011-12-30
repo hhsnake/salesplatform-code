@@ -238,12 +238,12 @@ function getAssignedPicklistValues($tableName, $roleid, $adb, $lang = null){
 			while($resultrow = $adb->fetch_array($result)) {
                                 // SalesPlatform.ru begin
                                 if ($lang === null) {
-                                    $arr[] = $resultrow[$tableName];
+                                    $arr[] = decode_html($resultrow[$tableName]);
                                 } else {
-                                    $pick_val = $resultrow[$tableName];
+                                    $pick_val = decode_html($resultrow[$tableName]);
                                     if($lang[$pick_val] != ''){
                                             $arr[$pick_val]=$lang[$pick_val];
-                                    }else{
+                                    } else {
                                             $arr[$pick_val]=$pick_val;
                                     }
                                 }

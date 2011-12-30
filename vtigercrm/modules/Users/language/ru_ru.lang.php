@@ -1,22 +1,15 @@
 <?php
-/***********************************************************
-*  Module       : Users
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      :
-Licensed under Vtiger Public License Version 1.1.
-
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 $mod_strings = array (
       'LBL_MODULE_NAME' => 'Пользователи',
@@ -568,6 +561,128 @@ $mod_strings = array (
       'Asterisk Configuration' => 'Конфигурация Asterisk',
       'Asterisk Extension' => 'Внутренний телефонный номер',
       ' Receive Incoming Calls' => 'Получать Входящие Звонки',
+
+// SalesPlatform.ru begin
+// 5.3.0 begin
+
+// Added for Create Custom Fields
+'LBL_USER_CUSTOMFIELDS_DESCRIPTION' => 'Создание дополнительных полей Пользователей ',
+'LBL_USER_CUSTOMFIELDS' => 'Дополнительные поля Пользователей',
+'LBL_USER_CUSTOMFIELDS' => 'Дополнительные поля Пользователей',
+
+'LBL_CURRENCY_CONFIGURATION'=> 'Настройка валюты',
+
+//Time zones-Dont change any value
+'Kwajalein' => '(UTC-12:00) International Date Line West',
+'Pacific/Midway' => '(UTC-11:00) Coordinated Universal Time-11',
+'Pacific/Samoa' => '(UTC-11:00) Samoa',
+'Pacific/Honolulu' => '(UTC-10:00) Hawaii',
+'America/Anchorage' => '(UTC-09:00) Alaska',
+'America/Los_Angeles' => '(UTC-08:00) Pacific Time (US &amp; Canada)',
+'America/Tijuana' => '(UTC-08:00) Tijuana, Baja California',
+'America/Denver' => '(UTC-07:00) Mountain Time (US &amp; Canada)',
+'America/Chihuahua' => '(UTC-07:00) Chihuahua, La Paz, Mazatlan',
+'America/Mazatlan' => '(UTC-07:00) Mazatlan',
+'America/Phoenix' => '(UTC-07:00) Arizona',
+'America/Regina' => '(UTC-06:00) Saskatchewan',
+'America/Tegucigalpa' => '(UTC-06:00) Central America',
+'America/Chicago' => '(UTC-06:00) Central Time (US &amp; Canada)',
+'America/Mexico_City' => '(UTC-06:00) Mexico City',
+'America/Monterrey' => '(UTC-06:00) Monterrey',
+'America/New_York' => '(UTC-05:00) Eastern Time (US &amp; Canada)',
+'America/Bogota' => '(UTC-05:00) Bogota, Lima, Quito',
+'America/Lima' => '(UTC-05:00) Lima',
+'America/Rio_Branco' => '(UTC-05:00) Rio Branco',
+'America/Indiana/Indianapolis' => '(UTC-05:00) Indiana (East)',
+'America/Caracas' => '(UTC-04:30) Caracas',
+'America/Halifax' => '(UTC-04:00) Atlantic Time (Canada)',
+'America/Manaus' => '(UTC-04:00) Manaus',
+'America/Santiago' => '(UTC-04:00) Santiago',
+'America/La_Paz' => '(UTC-04:00) La Paz',
+'America/Cuiaba' => '(UTC-04:00) Cuiaba',
+'America/Asuncion' => '(UTC-04:00) Asuncion',
+'America/St_Johns' => '(UTC-03:30) Newfoundland',
+'America/Argentina/Buenos_Aires' => '(UTC-03:00) Buenos Aires',
+'America/Sao_Paulo' => '(UTC-03:00) Brasilia',
+'America/Godthab' => '(UTC-03:00) Greenland',
+'America/Montevideo' => '(UTC-03:00) Montevideo',
+'Atlantic/South_Georgia' => '(UTC-02:00) Mid-Atlantic',
+'Atlantic/Azores' => '(UTC-01:00) Azores',
+'Atlantic/Cape_Verde' => '(UTC-01:00) Cape Verde Is.',
+'Europe/London' => '(UTC) London, Edinburgh, Dublin, Lisbon',
+'UTC' => '(UTC) Coordinated Universal Time, Greenwich Mean Time',
+'Africa/Monrovia' => '(UTC) Monrovia, Reykjavik',
+'Africa/Casablanca' => '(UTC) Casablanca',
+'Europe/Belgrade' => '(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague',
+'Europe/Sarajevo' => '(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb',
+'Europe/Brussels' => '(UTC+01:00) Brussels, Copenhagen, Madrid, Paris',
+'Africa/Algiers' => '(UTC+01:00) West Central Africa',
+'Europe/Amsterdam' => '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna',
+'Europe/Minsk' => '(UTC+02:00) Минск',
+'Africa/Cairo' => '(UTC+02:00) Cairo',
+'Europe/Helsinki' => '(UTC+02:00) Helsinki, Riga, Sofia, Tallinn, Vilnius',
+'Europe/Athens' => '(UTC+02:00) Athens, Bucharest',
+'Europe/Istanbul' => '(UTC+02:00) Istanbul',
+'Asia/Jerusalem' => '(UTC+02:00) Jerusalem',
+'Asia/Amman' => '(UTC+02:00) Amman',
+'Asia/Beirut' => '(UTC+02:00) Beirut',
+'Africa/Windhoek' => '(UTC+02:00) Windhoek',
+'Africa/Harare' => '(UTC+02:00) Harare',
+'Asia/Kuwait' => '(UTC+03:00) Kuwait, Riyadh',
+'Asia/Baghdad' => '(UTC+03:00) Baghdad',
+'Africa/Nairobi' => '(UTC+03:00) Nairobi',
+'Asia/Tehran' => '(UTC+03:30) Tehran',
+'Asia/Tbilisi' => '(UTC+04:00) Tbilisi',
+'Europe/Moscow' => '(UTC+04:00) Москва, Волгоград',
+'Asia/Muscat' => '(UTC+04:00) Abu Dhabi, Muscat',
+'Asia/Baku' => '(UTC+04:00) Baku',
+'Asia/Yerevan' => '(UTC+04:00) Yerevan',
+'Asia/Karachi' => '(UTC+05:00) Islamabad, Karachi',
+'Asia/Tashkent' => '(UTC+05:00) Tashkent',
+'Asia/Kolkata' => '(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi',
+'Asia/Colombo' => '(UTC+05:30) Sri Jayawardenepura',
+'Asia/Katmandu' => '(UTC+05:45) Kathmandu',
+'Asia/Dhaka' => '(UTC+06:00) Dhaka',
+'Asia/Almaty' => '(UTC+06:00) Almaty',
+'Asia/Yekaterinburg' => '(UTC+06:00) Екатеринбург',
+'Asia/Rangoon' => '(UTC+06:30) Yangon (Rangoon)',
+'Asia/Novosibirsk' => '(UTC+07:00) Новосибирск',
+'Asia/Bangkok' => '(UTC+07:00) Bangkok, Jakarta',
+'Asia/Brunei' => '(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi',
+'Asia/Krasnoyarsk' => '(UTC+08:00) Красноярск',
+'Asia/Ulaanbaatar' => '(UTC+08:00) Ulaan Bataar',
+'Asia/Kuala_Lumpur' => '(UTC+08:00) Kuala Lumpur, Singapore',
+'Asia/Taipei' => '(UTC+08:00) Taipei',
+'Australia/Perth' => '(UTC+08:00) Perth',
+'Asia/Irkutsk' => '(UTC+09:00) Иркутск',
+'Asia/Seoul' => '(UTC+09:00) Seoul',
+'Asia/Tokyo' => '(UTC+09:00) Tokyo',
+'Australia/Darwin' => '(UTC+09:30) Darwin',
+'Australia/Adelaide' => '(UTC+09:30) Adelaide',
+'Australia/Canberra' => '(UTC+10:00) Canberra, Melbourne, Sydney',
+'Australia/Brisbane' => '(UTC+10:00) Brisbane',
+'Australia/Hobart' => '(UTC+10:00) Hobart',
+'Asia/Vladivostok' => '(UTC+10:00) Владивосток',
+'Pacific/Guam' => '(UTC+10:00) Guam, Port Moresby',
+'Asia/Yakutsk' => '(UTC+10:00) Якутск',
+'Pacific/Fiji' => '(UTC+12:00) Fiji',
+'Asia/Kamchatka' => '(UTC+12:00) Камчатка',
+'Pacific/Auckland' => '(UTC+12:00) Auckland',
+'Asia/Magadan' => '(UTC+12:00) Магадан',
+'Pacific/Tongatapu' => '(UTC+13:00) Nukualofa',
+
+// User Settings
+'Decimal Separator' => 'Десятичный Разделитель',
+'Symbol Placement' => 'Расположение Символа',
+'Digit Grouping Pattern' => 'Шаблон Группировки Разрядов',
+'Digit Grouping Separator' => 'Разделитель Группировки Разрядов',
+'Secondary Email' => 'Второй Email',
+'Time Zone' => 'Часовой Пояс',
+'Theme' => 'Тема Оформления',
+'Language' => 'Язык',
+// 5.3.0 end
+// SalesPlatform.ru end
+
 );
 
 ?>

@@ -92,10 +92,12 @@
                             <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
                             <td width="80%" class="small cellText"><strong>{$MAILSERVER}&nbsp;</strong></td>
                           </tr>
+{* SalesPlatform.ru begin *}
                           <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER_PORT}</strong></td>
                             <td class="small cellText">{$MAILSERVERPORT}&nbsp;</td>
                           </tr>
+{* SalesPlatform.ru end *}
                           <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USERNAME}</strong></td>
                             <td class="small cellText">{$USERNAME}&nbsp;</td>
@@ -161,12 +163,14 @@
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font>&nbsp;<strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
                             <td width="80%" class="small cellText">
 				<input type="text" class="detailedViewTextBox small" value="{$MAILSERVER}" name="server">
+{* SalesPlatform.ru begin *}
 			    </td>
                           </tr>
                           <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER_PORT}</strong></td>
                             <td class="small cellText">
 				<input type="text" class="detailedViewTextBox small" value="{$MAILSERVERPORT}" name="port">
+{* SalesPlatform.ru end *}
 			    </td>
                           </tr>
                           <tr valign="top">

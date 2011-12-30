@@ -42,7 +42,6 @@ global $company_name_count;
 global $street_address_array;
 global $street_address_count;
 global $city_array;
-//global $state_array;
 global $city_array_count;
 global $campaign_name_array,$campaign_type_array,$campaign_status_array;
 global $adb;
@@ -844,7 +843,7 @@ for($i=0;$i<5;$i++)
 
 //Populate Email Data
 
-$esubj_array =  array ("Русский Vtiger 5.2.1 Вышел", "Попробуйте VtigerCRM!", "Привет!!!", "Добро пожаловать в Open Source", "Нужна помощь в адаптации VtigerCRM");
+$esubj_array =  array ("Русский Vtiger 5.3.0 Вышел", "Попробуйте VtigerCRM!", "Привет!!!", "Добро пожаловать в Open Source", "Нужна помощь в адаптации VtigerCRM");
 $startdate_array =  array ("2011-07-27","2011-05-09","2011-04-05","2011-11-01","2011-08-18");
 $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
 

@@ -15,6 +15,11 @@ global $app_strings,$mod_strings,$current_user,$theme,$adb;
 $image_path = 'themes/'.$theme.'/images/';
 $idlist = vtlib_purify($_REQUEST['idlist']);
 $pmodule=vtlib_purify($_REQUEST['return_module']);
+// SalesPlatform.ru begin : Send Emails to all Records from current filter
+if (strcmp($idlist, '-1:-1') == 0) {
+    $idlist = implode(':', get_filtered_ids($pmodule));
+}
+// SalesPlatform.ru end
 $ids=explode(';',$idlist);
 $single_record = false;
 if(!strpos($idlist,':'))
@@ -36,17 +41,22 @@ for($i = 0; $i < $numrows; $i++)
 {
 	$value = Array();
 	$fieldname = $adb->query_result($res,$i,"fieldname");
+// SalesPlatform.ru begin
+        if($pmodule == 'Users')
+            $permit = '0';
+        else
+// SalesPlatform.ru end
 	$permit = getFieldVisibilityPermission($pmodule, $userid, $fieldname);
 	if($permit == '0')
 	{
 		$temp=$adb->query_result($res,$i,'columnname');
 		$columnlists [] = $temp;
 		$fieldid=$adb->query_result($res,$i,'fieldid');
-                // SalesPlatform.ru begin
-                //$fieldlabel = $adb->query_result($res,$i,'fieldlabel');
-		$fieldlabel = getTranslatedString( $adb->query_result($res,$i,'fieldlabel'), $pmodule );
-                // SalesPlatform.ru end
-                $value[] = $fieldlabel;
+		$fieldlabel =$adb->query_result($res,$i,'fieldlabel');
+        // SalesPlatform.ru begin
+		$value[] = getTranslatedString($fieldlabel, $pmodule);
+		//$value[] = getTranslatedString($fieldlabel);
+        // SalesPlatform.ru end
 		$returnvalue [$fieldid]= $value;
 	}
 }
@@ -123,6 +133,9 @@ $smarty->assign('MAILDATA',$field_value);
 $smarty->assign('MAILINFO',$returnvalue);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("IDLIST", $idlist);
+// SalesPlatform.ru begin : Send Emails to all Records from current filter
+$smarty->assign("IDLIST_SIZE", count(explode(':', $idlist)));
+// SalesPlatform.ru end
 $smarty->assign("APP", $app_strings);
 $smarty->assign("FROM_MODULE", $pmodule);
 $smarty->assign("THEME", $theme);
@@ -135,10 +148,20 @@ if($single_record && count($columnlists) > 0 && $val_cnt > 0) {
 	// SalesPlatform.ru end
 		$smarty->display("SelectEmail.tpl");
 }
-else if(!$single_record && count($columnlists) > 0)
+// SalesPlatform.ru begin : Send Emails to all Records from current filter
+else if(!$single_record && count($columnlists) > 0) {
+        if(strlen($idlist) > 1024) {
+            $_SESSION["salesplatform_idlist"] = $idlist;
+            $smarty->assign("IDLIST", '');
+        }
+
 	$smarty->display("SelectEmail.tpl");
+}
+//else if(!$single_record && count($columnlists) > 0)
+//    $smarty->display("SelectEmail.tpl");
+// SalesPlatform.ru end
 else if($single_record && $val_cnt == 0)
-	echo "No Mail Ids";
+        echo "No Mail Ids";	
 else
 	echo "Mail Ids not permitted";	
 ?>

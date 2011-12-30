@@ -26,8 +26,14 @@ function eMail(module,oButton)
     }
 	else
 	{
-		alert(alert_arr.SELECT);
-		return false;
+                // SalesPlatform.ru begin : Send Emails to all Records from current filter
+		if (!confirm(alert_arr.SELECT_MASS)) {
+                    return false;
+                }
+                document.getElementById('idlist').value='-1:-1';
+		//alert(alert_arr.SELECT);
+		//return false;
+                // SalesPlatform.ru end
 	}
 	allids = document.getElementById('idlist').value;
 	fnvshobj(oButton,'sendmail_cont');
@@ -239,8 +245,14 @@ function rel_eMail(module,oButton,relmod)
 	}
 	else
 	{
-		alert(alert_arr.SELECT);
-		return false;
+                // SalesPlatform.ru begin : Send Emails to all Records from current filter
+		if (!confirm(alert_arr.SELECT_MASS)) {
+                    return false;
+                }
+                allids='-1:-1';
+		//alert(alert_arr.SELECT);
+		//return false;
+                // SalesPlatform.ru end
 	}
 	fnvshobj(oButton,'sendmail_cont');
 	sendmail(relmod,allids);

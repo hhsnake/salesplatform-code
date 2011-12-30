@@ -162,6 +162,7 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 		$summaryModel->set("summaryDiscount", $this->formatPrice($discount));
 		
 		$group_total_tax_percent = '0.00';
+                $overall_tax = 0;
 		//To calculate the group tax amount
 		if($final_details['taxtype'] == 'group') {
 			$group_tax_details = $final_details['taxes'];
@@ -171,6 +172,7 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 			$summaryModel->set("summaryTax", $this->formatPrice($final_details['tax_totalamount']));
 			$summaryModel->set("summaryTaxLiteral", $this->num2str($final_details['tax_totalamount']));
 			$summaryModel->set("summaryTaxPercent", $group_total_tax_percent);
+                        $overall_tax += $final_details['tax_totalamount'];
 		}
 		else {
 		    $summaryModel->set("summaryTax", $this->formatPrice($this->totaltaxes));
@@ -181,6 +183,8 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 		    else {
 			$summaryModel->set("summaryTaxPercent", 0);
 		    }
+
+                    $overall_tax += $this->totaltaxes;
 		}
 		//Shipping & Handling taxes
 		$sh_tax_details = $final_details['sh_taxes'];
@@ -197,6 +201,10 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 		$summaryModel->set("summaryGrandTotal", $this->formatPrice($final_details['grandTotal'])); // TODO add currency string
 
 		$summaryModel->set("summaryGrandTotalLiteral", $this->num2str($final_details['grandTotal']));
+
+                $overall_tax += $final_details['shtax_totalamount'];
+		$summaryModel->set("summaryOverallTax", $this->formatPrice(round($overall_tax)));
+		$summaryModel->set("summaryOverallTaxLiteral", $this->num2str(round($overall_tax)));
 		
 		return $summaryModel;
 	}

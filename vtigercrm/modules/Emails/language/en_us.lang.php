@@ -111,6 +111,7 @@ $mod_strings = Array(
 'Assigned To'=>'Assigned To',
 // SalesPlatform.ru begin
 'Access Count'=>'Access Count',
+'{No Subject}' => '{No Subject}',
 // SalesPlatform.ru end
 'Subject'=>'Subject',
 'Attachment'=>'Attachment',

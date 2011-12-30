@@ -43,8 +43,8 @@ $output ='<div id="roleLay" style="display:block;" class="layerPopup">
 	<td class="small">
 	<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 	<tr>
-		<td width="50%" class="cellLabel small"><b>'.$mod_strings["LBL_EDITLISTPRICE"].'</b></td>
-		<td width="50%" class="cellText small"><input class="dataInput" type="text" id="list_price" name="list_price" value="'.$listprice.'" /></td>
+		<td width="70%" class="cellLabel small"><b>'.$mod_strings["LBL_EDITLISTPRICE"].'</b></td>
+		<td width="30%" class="cellText small"><input size="8" class="dataInput" type="text" id="list_price" name="list_price" value="'.$listprice.'" /></td>
 	</tr>
 	</table>
 	</td>

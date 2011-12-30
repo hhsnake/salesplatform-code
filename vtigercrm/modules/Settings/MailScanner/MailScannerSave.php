@@ -22,9 +22,12 @@ if(!empty($server) && !validateServerName($server)) {
 	$server = '';
 }
 $username   = vtlib_purify(trim($_REQUEST['mailboxinfo_username']));
-if(!empty($username) && !validateEmailId($username) && !validateAlphanumericInput($username)) {
-	$username = '';
-}
+
+// SalesPlatform.ru begin
+//if(!empty($username) && !validateEmailId($username) && !validateAlphanumericInput($username)) {
+//	$username = '';
+//}
+// SalesPlatform.ru end
 
 $newscannerinfo = new Vtiger_MailScannerInfo(false, false);
 $newscannerinfo->scannername = $scannername;

@@ -1,22 +1,15 @@
 <?php
-/***********************************************************
-*  Module       : com_vtiger_workflow
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      :
-Licensed under Vtiger Public License Version 1.1.
-
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 $mod_strings = array (
       'VTEmailTask' => 'Отправить Email',
@@ -54,6 +47,8 @@ $mod_strings = array (
       'VTChangeOwnerTask'=>'Изменить ответственного',
       'VTSMSTask' => 'Отправка SMS',
       'VTChangeFieldValueTask'=>'Изменить значение поля',
+      'VTChangeRelModuleFieldValueTask'=>'Изменить значение поля связанного модуля',
+      'VTEmailPDFTask' => 'Отправить Email с PDF',
 	  'LBL_DESCRIPTION' => 'Описание',
       'LBL_UPDATED_FIELD_NAME' => 'Название обновляемого поля',
 	  'LBL_MODULE' => 'Модуль',
@@ -61,7 +56,49 @@ $mod_strings = array (
 	  'LBL_SETTINGS' => 'Настройки',
 	  'LBL_TOOLS' => 'Инструменты',
 	  'Workflow' => 'Обработчики',
-      // SalesPlatform.ru end
+        'LBL_EMAIL_RECEPIENT' => 'Получатель',
+        'LBL_EMAIL_CC' => 'Копия',
+        'LBL_EMAIL_BCC' => 'Скрытая копия',
+        'LBL_EMAIL_SUBJECT' => 'Тема',
+        'LBL_EMAIL_PDF_ATTACHMENT' => 'PDF вложение',
+        'LBL_RELATION_FIELD_NAME' => 'Связующее поле',
+
+// 5.3.0 begin
+        'LBL_SET_FIELD_VALUES'=>'Установить значения полей',
+        'LBL_ADD_FIELD'=>'Добавить поле',
+
+        'LBL_USE_FIELD_VALUE_DASHDASH'=>'-- Использовать значение поля --',
+        'LBL_USE_FUNCTION_DASHDASH'=>'-- Использовать функцию --',
+
+        'LBL_RAW_TEXT'=>'Простой текст',
+        'LBL_FIELD'=>'Поле',
+        'LBL_EXPRESSION'=>'Выражение',
+        'LBL_SET_EXPRESSION'=>'Задать выражение',
+
+        'LBL_MANUAL'=>'Системный',
+
+        'LBL_NEW_CONDITION_GROUP_BUTTON_LABEL'=>'Новая группа условий',
+
+        'VTUpdateFieldsTask' => 'Изменить поля',
+
+
+        'LBL_VALIDATION_DUPLICATE_FIELDNAMES' => 'Одно и то же поле выбрано более одного раза.',
+        'LBL_VALIDATION_INVALID_FIELD_VALUES' => 'Неверные значения полей',
+        'LBL_CREATE_ENTITY_NOTE_ORDER_MATTERS' => 'Замечание: Выражения вычисляются в порядке написания.
+                                                                                                Поэтому убедитесь, что заданы значения всех полей перед их использованием в выражениях.',
+        'LBL_SET_VALUE' => 'Установить значение',
+
+        'LBL_EMAIL_RECIPIENT' => 'Получатель',
+        'LBL_EMAIL_CC' => 'Копия',
+        'LBL_EMAIL_BCC' => 'Скрытая копия',
+        'LBL_EMAIL_SUBJECT' => 'Тема',
+
+        'LBL_WORKFLOW_NOTE_EVENT_TASK_TIMEZONE' => 'Замечание: Вся информация о дате, времени и повторении события
+                                                                                                                зависит от временного пояса по умолчанию, заданного в config.inc.php',
+
+// 5.3.0 end
+
+// SalesPlatform.ru end
 );
 
 ?>

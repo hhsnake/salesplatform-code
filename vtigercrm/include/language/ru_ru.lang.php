@@ -1,22 +1,15 @@
 <?php
-/***********************************************************
-*  Module       : General
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      : 
-Licensed under vtiger Public License Version 1.1.
-
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 $app_strings = array (
       'LBL_BROWSER_TITLE' => 'Vtiger CRM 5 - Коммерческая Open Source CRM',
@@ -185,7 +178,12 @@ $app_strings = array (
       'ERR_CREATING_FIELDS' => 'Ошибка при создании полей дополнительной информации: ',
       'ERR_MISSING_REQUIRED_FIELDS' => 'Отсутствуют обязательные поля:',
       'ERR_INVALID_EMAIL_ADDRESS' => 'неправильный адрес email.',
-      'ERR_INVALID_YAHOO_EMAIL_ADDRESS' => 'неправильный адрес yahoo email.',
+// SalesPlatform.ru begin
+// 5.3.0 begin
+      'ERR_INVALID_SECONDARY_EMAIL_ADDRESS' => 'неправильный второй адрес email.',
+//      'ERR_INVALID_YAHOO_EMAIL_ADDRESS' => 'неправильный адрес yahoo email.',
+// 5.3.0 end
+// SalesPlatform.ru end
       'ERR_INVALID_DATE_FORMAT' => 'Формат даты должен быть: гггг-мм-дд',
       'ERR_INVALID_MONTH' => 'Пожалуйста введите верный месяц.',
       'ERR_INVALID_DAY' => 'Пожалуйста введите верный день.',
@@ -795,7 +793,12 @@ $app_strings = array (
       'SELECT_VALID_IMAGE' => 'Пожалуйста выберите правильное Изображение',
       'EMAIL_FILED_IS' => ' в поле e-mail ',
       'OTHER_EMAIL_FILED_IS' => ' в поле Другой e-mail ',
-      'YAHOO_EMAIL_FILED_IS' => ' в поле yahoo e-mail ',
+// SalesPlatform.ru begin
+// 5.3.0 begin
+      'SECONDARY_EMAIL_FILED_IS' => ' в поле второй e-mail ',
+//      'YAHOO_EMAIL_FILED_IS' => ' в поле yahoo e-mail ',
+// 5.3.0 end
+// SalesPlatform.ru end
       'INVALID_ADD_IN_EMAILFIELD' => '\" не верный адрес в поле E-mail ',
       'INVALID_ADD_IN_OTHER_EMAILFIELD' => '\" не верный адрес email в поле Другой E-mail',
       'ENTER_VALID_4DIGIT_YEAR' => 'Пожалуйста введите 4-значное значение года между ',
@@ -840,7 +843,7 @@ $app_strings = array (
       'LBL_CLEAR' => 'Очистить',
       'invoice no' => 'счет №',
       'LBL_SELECT_LEAD_BUTTON_LABEL' => 'Выбрать Обращения',
-      'LNK_READ_LICENSE' => 'Прочитать Лицензию',
+      'LNK_READ_LICENSE' => 'Лицензии',
       'ACTIVITIES' => 'Действия',
       'MAP_NAME_EXISTS' => 'Соответствие с таким названием существует. \n Вы хотите перезаписать его?',
       'FOLDER_NAME_ALLOW_20CHARS' => 'Не больше 20 символов в названии Папки',
@@ -925,8 +928,8 @@ $app_strings = array (
       'LBL_ONLY_SELECTED_RECORDS' => 'Экспорт выделенных записей',
       'LBL_YES' => 'Да',
       'Planned' => 'Запланировано',
-      'Held' => 'Приостановлено',
-      'Not Held' => 'Не остановлено',
+      'Held' => 'Проведено',
+      'Not Held' => 'Не проведено',
       'Completed' => 'Завершено',
       'Deferred' => 'Отсрочено',
       'Not Started' => 'Не Начато',
@@ -1159,6 +1162,25 @@ $app_strings = array (
 'DownloadMergeFile'=>'Загрузить сформированный документ',
 // SalesPlatform.ru begin
 'Send SMS'                    => 'Отправить SMS',
+
+// 5.3.0 begin
+'LBL_CRITERIA_AND'=>'и',
+'LBL_CRITERIA_OR'=>'или',
+'LBL_NEW_GROUP'=>'Новая Группа',
+'LBL_DELETE_GROUP'=>'Удалить Группу',
+'LBL_NEW_CONDITION'=>'Новое условие',
+'LBL_ADVANCED_FILTER' => 'Расширенный Поиск',
+
+'LBL_CHANGE'=>'Изменить',
+'LBL_CHANGE_TITLE'=>'Изменить [Alt+C]',
+
+'LBL_NEXT_BUTTON_LABEL' => 'Далее',
+
+'LBL_USER_NAME' => 'Имя пользователя',
+'LBL_PASSWORD' => 'Пароль',
+'LBL_LOGIN' => 'Войти',
+'LBL_CONNECT_WITH_US' => 'Присоединяйтесь к нам',
+// 5.3.0 end
 // SalesPlatform.ru end
 
 );
@@ -1369,6 +1391,14 @@ $app_currency_strings = array(
 	'United Arab Emirates, Dirham' => 'United Arab Emirates, Dirham',
 	'United Republic OF Tanzania, Shilling' => 'United Republic OF Tanzania, Shilling',
 	'Zambia, Kwacha' => 'Zambia, Kwacha',
+
+// SalesPlatform.ru begin
+// 5.3.0 begin
+        'Malawi, kwacha'		=> 'Malawi, kwacha',
+	'Tunisian, Dinar'		=> 'Tunisian, Dinar',
+	'Moroccan, Dirham'		=> 'Moroccan, Dirham',
+// 5.3.0 end
+// SalesPlatform.ru end
 );
 
 ?>

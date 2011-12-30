@@ -1,22 +1,15 @@
 <?php
-/***********************************************************
-*  Module       : Emails
-*  Language     : RU Русский
-*  Version      : 5.2.0
-*  Created Date : 2010-08-23
-*  Author       : Eugene Babiy
-*  License      : 
-Licensed under Vtiger Public License Version 1.1.
-
-If you have a questions or suggestions about this translation module, please contact me.
-
-Если у Вас возникли вопросы или замечания касающиеся этого перевода, пожалуйста свяжитесь со мной любым из удобных для Вас способов.
-
-e-mail: eugene.babiy@gmail.com
-mob: +380660785088
-Skype: eugene.babiy
-***********************************************************/
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * All Rights Reserved.
+ * Description: Defines the Russian language pack.
+ * The Initial Translator is Eugene Babiy (eugene.babiy@gmail.com).
+ * This Language Pack modified and supported by SalesPlatform Ltd
+ * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 $mod_strings = array (
       'LBL_GENERAL_INFORMATION' => 'Общая Информация',
@@ -93,6 +86,7 @@ $mod_strings = array (
       'Access Count'=>'Кол-во обращений',
       'No Mail Ids' => 'Отсутствует e-mail адрес',
       'Mail Ids not permitted' => 'Доступ к e-mail адресам не разрешен',
+      '{No Subject}' => '{Без темы}',
       // SalesPlatform.ru end
       'Subject' => 'Тема',
       'Attachment' => 'Вложение',
@@ -119,10 +113,10 @@ $mod_strings = array (
       'LBL_IN_SUBJECT' => 'в Теме',
       'LBL_IN_SENDER' => 'в Отправителе',
       'LBL_IN_SUBJECT_OR_SENDER' => 'в Теме или Отправителе',
-      'SELECT_EMAIL' => 'Выбрать учетную запись Почты',
+      'SELECT_EMAIL' => 'Выберите тип адреса электронной Почты',
       'Sender' => 'Отправитель',
       'LBL_CONFIGURE_MAIL_SETTINGS' => 'Ваш сервер входящей почты не настроен',
-      'LBL_MAILSELECT_INFO1' => 'Следующие учетные записи асоциированы с выбранным',
+      'LBL_MAILSELECT_INFO1' => 'Следующие учетные записи ассоциированы с выбранным',
       'LBL_MAILSELECT_INFO2' => 'Выберите учетную запись Почты для которой должна быть отправлена почта',
       'LBL_MULTIPLE' => 'Множественное',
       'LBL_COMPOSE_EMAIL' => 'Создать E-Mail',

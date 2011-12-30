@@ -12,10 +12,12 @@ include_once 'include/InventoryPDFController.php';
 
 class Vtiger_QuotePDFController extends Vtiger_InventoryPDFController{
 	function buildHeaderModelTitle() {
-// SalesPlatform.ru begin
-		return sprintf("%s: %s", getTranslatedString('Quote #', $this->moduleName), $this->focusColumnValue('quote_no'));
-//		return sprintf("%s: %s", rtrim($this->moduleName, 's'), $this->focusColumnValue('quote_no'));
-// SalesPlatform.ru end
+		$singularModuleNameKey = 'SINGLE_'.$this->moduleName;
+		$translatedSingularModuleLabel = getTranslatedString($singularModuleNameKey, $this->moduleName);
+		if($translatedSingularModuleLabel == $singularModuleNameKey) {
+			$translatedSingularModuleLabel = getTranslatedString($this->moduleName, $this->moduleName);
+		}
+		return sprintf("%s: %s", $translatedSingularModuleLabel, $this->focusColumnValue('quote_no'));
 	}
 
 	function getWatermarkContent() {

@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 class VTSimpleTemplate{
-
+	
 	function __construct($templateString){
 		$this->template = $templateString;
 	}
-
+	
 	function render($entityCache, $entityId){
 		$this->cache = $entityCache;
 		$this->parent = $this->cache->forId($entityId);
 		return $this->parseTemplate();
 	}
-
+	
 	private function matchHandler($match){
 		preg_match('/\((\w+) : \(([_\w]+)\) (\w+)\)/', $match[1], $matches);
 		if(count($matches)==0){
@@ -49,11 +49,11 @@ class VTSimpleTemplate{
 					$entity = $this->cache->forId($referenceId);
 					if($referenceModule==="Users" && $entity->getModuleName()=="Groups"){
 						list($groupEntityId, $groupId) = vtws_getIdComponents($referenceId);
-
+						
 						require_once('include/utils/GetGroupUsers.php');
 						$ggu = new GetGroupUsers();
 						$ggu->getAllUsersInGroup($groupId);
-
+						
 						$users = $ggu->group_users;
 						$parts = Array();
 						foreach($users as $userId){
@@ -78,11 +78,6 @@ class VTSimpleTemplate{
 				}
 			}
 		}
-                // SalesPlatform.ru begin
-                //if (!empty($result)) {
-                //        $result .= ',';
-                //}
-                // SalesPlatform.ru end
 		return $result;						
 		
 	}
@@ -92,9 +87,12 @@ class VTSimpleTemplate{
 	}
 
 	function parseTemplate(){
-		return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))\s*,?/', array($this,"matchHandler"), $this->template);
+// SalesPlatform.ru begin
+            return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))/', array($this,"matchHandler"), $this->template);
+//            return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))\s*,?/', array($this,"matchHandler"), $this->template);
+// SalesPlatform.ru end
 	}
-
+	
 	function getMetaValue($fieldname){
 		switch($fieldname){
 			case 'date': return getNewDisplayDate();

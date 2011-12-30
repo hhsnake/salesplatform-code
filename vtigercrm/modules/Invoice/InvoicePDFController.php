@@ -12,10 +12,12 @@ include_once 'include/InventoryPDFController.php';
 
 class Vtiger_InvoicePDFController extends Vtiger_InventoryPDFController{
 	function buildHeaderModelTitle() {
-// SalesPlatform.ru begin
-		return sprintf("%s: %s", getTranslatedString('Invoice #', $this->moduleName), $this->focusColumnValue('invoice_no'));
-		//return sprintf("%s: %s", rtrim($this->moduleName, 's'), $this->focusColumnValue('invoice_no'));
-// SalesPlatform.ru end
+		$singularModuleNameKey = 'SINGLE_'.$this->moduleName;
+		$translatedSingularModuleLabel = getTranslatedString($singularModuleNameKey, $this->moduleName);
+		if($translatedSingularModuleLabel == $singularModuleNameKey) {
+			$translatedSingularModuleLabel = getTranslatedString($this->moduleName, $this->moduleName);
+		}
+		return sprintf("%s: %s", $translatedSingularModuleLabel, $this->focusColumnValue('invoice_no'));
 	}
 
 	function buildHeaderModelColumnCenter() {
@@ -56,10 +58,7 @@ class Vtiger_InvoicePDFController extends Vtiger_InventoryPDFController{
 	}
 
 	function getWatermarkContent() {
-// SalesPlatform.ru begin
-		return '';
-		//return $this->focusColumnValue('invoicestatus');
-// SalesPlatform.ru end
+		return $this->focusColumnValue('invoicestatus');
 	}
 }
 ?>

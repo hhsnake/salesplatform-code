@@ -200,7 +200,10 @@ function verify_data(form,company_name)
                 return false;
                 {literal}
 	}
-	else if (! upload_filter("binFile","jpg|jpeg|JPG|JPEG"))
+// SalesPlatform.ru begin
+	else if (! upload_filter("binFile","jpg|jpeg|png|JPG|JPEG|PNG"))
+//	else if (! upload_filter("binFile","jpg|jpeg|JPG|JPEG"))
+// SalesPlatform.ru end
         {
                 form.binFile.focus();
                 return false;
