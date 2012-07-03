@@ -1,10 +1,19 @@
 
 {*<!-- this file displays a widget div - the contents of the div are loaded later usnig javascript -->*}
 {assign var="homepagedashboard_title" value='Home Page Dashboard'|@getTranslatedString:'Home'}
+{* SalesPlatform.ru begin Configuration panel added *}
+{assign var="spconfiguration_title" value='LBL_SP_CONFIGURATION'|@getTranslatedString:'System Configuration'}
+{* SalesPlatform.ru end *}
 {assign var="keymetrics_title" value='Key Metrics'|@getTranslatedString:'Home'}
 {assign var="stitle" value=$tablestuff.Stufftitle}
 <script type="text/javascript">var vtdashboard_defaultDashbaordWidgetTitle = '{$homepagedashboard_title}';</script>
-<div id="stuff_{$tablestuff.Stuffid}" class="MatrixLayer {if $tablestuff.Stufftitle eq $homepagedashboard_title}twoColumnWidget{/if}" style="float:left;overflow-x:hidden;overflow-y:auto;">
+{* SalesPlatform.ru begin Configuration panel added *}
+{if ($tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle eq $spconfiguration_title)}
+<script type="text/javascript">var vtdashboard_defaultDashbaordWidgetTitle = '{$spconfiguration_title}';</script>
+{/if}
+<div id="stuff_{$tablestuff.Stuffid}" class="MatrixLayer {if $tablestuff.Stufftitle eq $homepagedashboard_title}twoColumnWidget{/if} {if $tablestuff.Stufftitle eq $spconfiguration_title}twoColumnWidget{/if}" style="float:left;overflow-x:hidden;overflow-y:auto;">
+{* <div id="stuff_{$tablestuff.Stuffid}" class="MatrixLayer {if $tablestuff.Stufftitle eq $homepagedashboard_title}twoColumnWidget{/if}" style="float:left;overflow-x:hidden;overflow-y:auto;"> *}
+{* SalesPlatform.ru end *}
 	<table width="100%" cellpadding="0" cellspacing="0" class="small" style="padding-right:0px;padding-left:0px;padding-top:0px;">
 		<tr id="headerrow_{$tablestuff.Stuffid}" class="headerrow">
 			<td align="left" class="homePageMatrixHdr" style="height:30px;" nowrap width=60%><b>&nbsp;{$stitle}</b></td>
@@ -14,7 +23,10 @@
 			<td align="right" class="homePageMatrixHdr" style="height:30px;" width=35% nowrap>
 
 {*<!-- the edit button for widgets :: don't show for key metrics and dasboard widget -->*}
-{if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Tag Cloud") && ($tablestuff.Stufftype neq "Notebook")}
+{* SalesPlatform.ru begin Configuration panel added *}
+{if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $spconfiguration_title) && ($tablestuff.Stufftype neq "Tag Cloud") && ($tablestuff.Stufftype neq "Notebook")}
+{* {if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Tag Cloud") && ($tablestuff.Stufftype neq "Notebook")} *}
+{* SalesPlatform.ru end *}
 				<a id="editlink" style='cursor:pointer;' onclick="showEditrow({$tablestuff.Stuffid})">
 					<img src="{'windowSettings.gif'|@vtiger_imageurl:$THEME}" border="0" alt="{$APP.LBL_EDIT_BUTTON}" title="{$APP.LBL_EDIT_BUTTON_TITLE}" hspace="2" align="absmiddle"/>
 				</a>	
@@ -28,6 +40,12 @@
 				<a style='cursor:pointer;' onclick="fetch_homeDB({$tablestuff.Stuffid});">
 					<img src="{'windowRefresh.gif'|@vtiger_imageurl:$THEME}" border="0" alt="{$APP.LBL_REFRESH}" title="{$APP.LBL_REFRESH}" hspace="2" align="absmiddle"/>
 				</a>
+{* SalesPlatform.ru begin Configuration panel added *}
+{elseif $tablestuff.Stufftitle eq $spconfiguration_title}
+				<a style='cursor:pointer;' onclick="fetchConfigurationDiagram({$tablestuff.Stuffid});">
+					<img src="{'windowRefresh.gif'|@vtiger_imageurl:$THEME}" border="0" alt="{$APP.LBL_REFRESH}" title="{$APP.LBL_REFRESH}" hspace="2" align="absmiddle"/>
+				</a>
+{* SalesPlatform.ru end *}
 {else}
 				<a style='cursor:pointer;' onclick="loadStuff({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');">
 					<img src="{'windowRefresh.gif'|@vtiger_imageurl:$THEME}" border="0" alt="{$APP.LBL_REFRESH}" title="{$APP.LBL_REFRESH}" hspace="2" align="absmiddle"/>
@@ -57,13 +75,19 @@
 	<table width="100%" cellpadding="0" cellspacing="0" class="small" style="padding-right:0px;padding-left:0px;padding-top:0px;">
 {if $tablestuff.Stufftype eq "Module"}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkModulesusr">
-{elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle neq $homepagedashboard_title}
+{* SalesPlatform.ru begin Configuration panel added *}
+{elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle neq $homepagedashboard_title && $tablestuff.Stufftitle neq $spconfiguration_title}
+{* {elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle neq $homepagedashboard_title} *}
+{* SalesPlatform.ru end *}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkModulesdef">
 {elseif $tablestuff.Stufftype eq "RSS"}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkRSS">
 {elseif $tablestuff.Stufftype eq "DashBoard"}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkDashboardusr">
-{elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle eq $homepagedashboard_title}
+{* SalesPlatform.ru begin Configuration panel added *}
+{elseif $tablestuff.Stufftype eq "Default" && ($tablestuff.Stufftitle eq $homepagedashboard_title || $tablestuff.Stufftitle eq $spconfiguration_title)}
+{* {elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle eq $homepagedashboard_title} *}
+{* SalesPlatform.ru end *}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkDashboarddef">
 {elseif $tablestuff.Stufftype eq "Notebook" || $tablestuff.Stufftype eq "Tag Cloud"}
 		<tr id="maincont_row_{$tablestuff.Stuffid}">
@@ -77,6 +101,9 @@
 		</tr>
 	</table>
 	
+{* SalesPlatform.ru begin Configuration panel added *}
+{if $tablestuff.Stufftype eq "Module" || ($tablestuff.Stufftype eq "Default" &&  $tablestuff.Stufftitle neq "Key Metrics" && $tablestuff.Stufftitle neq $homepagedashboard_title && $tablestuff.Stufftitle neq $spconfiguration_title && $tablestuff.Stufftitle neq "My Group Allocation" ) || $tablestuff.Stufftype eq "RSS" || $tablestuff.Stufftype eq "DashBoard"}
+{* SalesPlatform.ru end *}
 	<table width="100%" cellpadding="0" cellspacing="0" class="small scrollLink">
 	<tr>
 		<td align="left">
@@ -93,6 +120,9 @@
 {/if}
 	</tr>	
 	</table>
+{* SalesPlatform.ru begin Configuration panel added *}
+{/if}
+{* SalesPlatform.ru end *}
 </div>
 
 <script language="javascript">

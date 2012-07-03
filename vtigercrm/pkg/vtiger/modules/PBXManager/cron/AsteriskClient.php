@@ -149,6 +149,24 @@ function asterisk_handleResponse2($mainresponse, $adb, $asterisk, $state) {
 		$extension = $splits[1];
 		
 		$parseSuccess = true;
+// SalesPlatform.ru begin: Fixed support for pure Asterisk 1.6/1.8 protocol (not trixbox or elastix or somthing like that)
+	} else if( $mainresponse['Event'] == 'Newexten' ) {
+		$uniqueid = $mainresponse['Uniqueid'];
+
+		$channel = $mainresponse['Channel'];
+		$splits = explode('/', $channel);
+		$callerType = $splits[0];
+
+		$redirects = explode('&', $appdata);
+                $extensions = array();
+                foreach($redirects as $r) {
+                    $splits = explode('/', $r);
+                    $longextension = $splits[1];
+                    $splits = explode(',',$longextension); // if you used timeout like dial( sip/4002,20 ) we need juste 4002
+                    $extensions[] = $splits[0];
+                }
+		$parseSuccess = true;
+// SalesPlatform.ru end
 	} else if($mainresponse['Event'] == 'OriginateResponse'){
 		//if the event is OriginateResponse then its an outgoing call and set the flag to 1, so that AsteriskClient does not pick up as incoming call
 		$uniqueid = $mainresponse['Uniqueid'];
@@ -156,7 +174,11 @@ function asterisk_handleResponse2($mainresponse, $adb, $asterisk, $state) {
 	}
 	
 	if($parseSuccess) {	
-		
+                
+                // SalesPlatform.ru begin: Added support for multiple redirects
+                if(!isset($extensions)) $extensions = array($extension);
+                foreach($extensions as $extension) {
+                // SalesPlatform.ru end
 		if(checkExtension($extension, $adb)) {
 			
 			$sql = "UPDATE vtiger_asteriskincomingevents SET to_number=?, callertype=?, timer=?, flag=? WHERE uid=?";
@@ -180,6 +202,9 @@ function asterisk_handleResponse2($mainresponse, $adb, $asterisk, $state) {
 				}			
 			}
 		}
+                // SalesPlatform.ru begin: Added support for multiple redirects
+                }
+                // SalesPlatform.ru end
 		
 		return false;
 	}
@@ -199,6 +224,16 @@ function asterisk_handleResponse3($mainresponse, $adb, $asterisk){
 		$uid2 = $mainresponse['Uniqueid2'];
 		$callerNumber = $mainresponse['CallerID1'];
 		$extensionCalled = $mainresponse['CallerID2'];
+                // SalesPlatform.ru begin: Added support for multiple redirects
+                if(!checkExtension($extensionCalled, $adb)) {
+                    $destChannel = $mainresponse['Channel2'];
+                    $channel_parts = explode('-', $destChannel);
+                    $channel_parts = explode('/', $channel_parts[0]);
+                    $extensionCalled = $channel_parts[1];
+                    if(!checkExtension($extensionCalled, $adb))
+                        $extensionCalled = false;
+                }
+                // SalesPlatform.ru end
 		
 		// Ignore the case wheren CallerIDs are same!
 		if($callerNumber == $extensionCalled) {

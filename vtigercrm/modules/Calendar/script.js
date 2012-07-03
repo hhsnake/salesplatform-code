@@ -1011,6 +1011,16 @@ function fnAssignTo(){
                 {
                         document.getElementById('leadLay').style.visibility = 'visible';
                 }
+                // SalesPlatform.ru begin: Added acts and consignments
+		else if(option_select == "Act" || option_select == "Act&action=Popup")
+                {
+                        document.getElementById('leadLay').style.visibility = 'visible';
+                }
+		else if(option_select == "Consignment" || option_select == "Consignment&action=Popup")
+                {
+                        document.getElementById('leadLay').style.visibility = 'visible';
+                }
+                // SalesPlatform.ru end
 		else if(option_select == "Campaigns" || option_select == "Campaigns&action=Popup")
                 {
                         document.getElementById('leadLay').style.visibility = 'visible';

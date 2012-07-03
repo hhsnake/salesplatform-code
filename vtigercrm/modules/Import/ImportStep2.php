@@ -303,7 +303,7 @@ $translated_column_fields = getImportFieldsList($_REQUEST['module']);//$mod_list
 $cnt=1;
 for($field_count = 0; $field_count < $ret_field_count; $field_count++){
 
-	$smarty->assign("COLCOUNT", $field_count + 1);
+        $smarty->assign("COLCOUNT", $field_count + 1);
 	$suggest = "";
 
 	if($_REQUEST['module']=='Accounts'){
@@ -431,6 +431,10 @@ function validate_import_map()
 	for(loop_count = 0; loop_count<field_count;loop_count++)
 	{
 		tagName = document.getElementById('colnum'+loop_count);
+                // SalesPlatform.ru begin: Fixed bug with different field count
+                // in header and body rows (found in Google contacts csv file)
+                if(tagName == null) continue;
+                // SalesPlatform.ru end
 		optionData = tagName.options[tagName.selectedIndex].value;
 
 		if(optionData != -1)

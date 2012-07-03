@@ -284,6 +284,9 @@ $mod_strings = array (
 'LBL_SHARING_TYPE'=>'Тип Обмена',
 'LBL_SELECT_REPORT_TYPE_TO_CONTROL_ACCESS'=>'Выберите тип Обмена для Контроля Доступа к Отчету', 
 'LBL_ACTION' => 'Действие',
+// SalesPlatform.ru begin: Reports localization
+'ACTION' => 'Действие',
+// SalesPlatform.ru end
 'LBL_VIEW_DETAILS' => 'Просмотр Подробностей',
 'LBL_SHOW_STANDARD_FILTERS' => 'Показать Стандартные Фильтры',
 

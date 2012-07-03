@@ -42,13 +42,19 @@
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="product_id" value="{$PRODUCTID}">
 
-{elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes'}
+{* SalesPlatform.ru begin: Added acts and consignments  *}
+{elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes' || $MODULE eq 'Act' || $MODULE eq 'Consignment'}
+{* {elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes'} *}
+{* SalesPlatform.ru end  *}
 	<!-- (id="frmEditView") content added to form tag and new hidden field added,  -->
 	<form id="frmEditView" name="EditView" method="POST" action="index.php" onSubmit="settotalnoofrows();calcTotal();VtigerJS_DialogBox.block();">
 	<input type="hidden" name="hidImagePath" id="hidImagePath" value="{$IMAGE_PATH}"/>
 	<!-- End of code added -->
 
-	{if $MODULE eq 'Invoice' || $MODULE eq 'PurchaseOrder' ||  $MODULE eq 'SalesOrder'}
+{* SalesPlatform.ru begin: Added acts and consignments *}
+	{if $MODULE eq 'Invoice' || $MODULE eq 'PurchaseOrder' ||  $MODULE eq 'SalesOrder' ||  $MODULE eq 'Act' ||  $MODULE eq 'Consignment'}
+{*	{if $MODULE eq 'Invoice' || $MODULE eq 'PurchaseOrder' ||  $MODULE eq 'SalesOrder'} *}
+{* SalesPlatform.ru end  *}
        		 <input type="hidden" name="convertmode">
 	{/if}
 

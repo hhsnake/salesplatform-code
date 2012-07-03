@@ -791,6 +791,9 @@ $mod_strings = Array(
 'Asia/Magadan' => '(UTC+12:00) Magadan',
 'Pacific/Tongatapu' => '(UTC+13:00) Nukualofa',
 	
+// SalesPlatform.ru begin
+'SPCFG' => 'System Configuration',
+// SalesPlatform.ru end
 );
 
 ?>

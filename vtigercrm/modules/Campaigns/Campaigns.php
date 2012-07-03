@@ -263,6 +263,13 @@ class Campaigns extends CRMEntity {
 		// Send mail button for selected Leads
 		$button .= "<input title='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' class='crmbutton small edit' value='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' type='button' name='button' onclick='rel_eMail(\"$this_module\",this,\"$related_module\")'>";
 		$button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+                
+                // SalesPlatform.ru begin: Send Email button for related Contacts & Leads
+                if (vtlib_isModuleActive('SMSNotifier')) {
+                    $button .= "<input title='".getTranslatedString('Send SMS')."' class='crmbutton small edit' value='".getTranslatedString('Send SMS')."' type='button' name='button' onclick='SMSNotifierCommon.displaySelectWizardRel(this,\"$related_module\")'>";
+                    $button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+                }
+                // SalesPlatform.ru end
 		
 		/* To get Leads CustomView -START */
 		require_once('modules/CustomView/CustomView.php');
@@ -358,6 +365,13 @@ class Campaigns extends CRMEntity {
 		// Send mail button for selected Leads
 		$button .= "<input title='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' class='crmbutton small edit' value='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' type='button' name='button' onclick='rel_eMail(\"$this_module\",this,\"$related_module\")'>";
 		$button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+
+                // SalesPlatform.ru begin: Send Email button for related Contacts & Leads
+                if (vtlib_isModuleActive('SMSNotifier')) {
+                    $button .= "<input title='".getTranslatedString('Send SMS')."' class='crmbutton small edit' value='".getTranslatedString('Send SMS')."' type='button' name='button' onclick='SMSNotifierCommon.displaySelectWizardRel(this,\"$related_module\")'>";
+                    $button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+                }
+                // SalesPlatform.ru end
 		
 		/* To get Leads CustomView -START */
 		require_once('modules/CustomView/CustomView.php');

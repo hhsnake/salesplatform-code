@@ -47,6 +47,20 @@ foreach($versions as $version => $label)
 		$temp[] = $version;
 	}
 }
+
+// SalesPlatform.ru begin: Added versions branch
+if($reach == 0) {
+    foreach($versions_branch2 as $version => $label)
+    {
+            if(strcmp($version, $source_version) == 0 || $reach == 1)
+            {
+                    $reach = 1;
+                    $temp[] = $version;
+            }
+    }
+}
+// SalesPlatform.ru end
+
 $temp[] = $current_version;
 
 if(!isset($continue_42P2))//This variable is used in MigrationInfo.php to avoid display the table tag

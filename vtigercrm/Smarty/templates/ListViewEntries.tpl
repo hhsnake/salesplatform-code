@@ -175,7 +175,10 @@
 			<tr><td style="background-color:#efefef;height:340px" align="center" colspan="{$smarty.foreach.listviewforeach.iteration+1}">
 			<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative; z-index: 10000000;">
 				{assign var=vowel_conf value='LBL_A'}
-				{if $MODULE eq 'Accounts' || $MODULE eq 'Invoice'}
+{* SalesPlatform.ru begin: Added acts and consignments *}
+				{if $MODULE eq 'Accounts' || $MODULE eq 'Invoice' || $MODULE eq 'Act' || $MODULE eq 'Consignment'}
+{*				{if $MODULE eq 'Accounts' || $MODULE eq 'Invoice'} *}
+{* SalesPlatform.ru end  *}
 				{assign var=vowel_conf value='LBL_AN'}
 				{/if}
 				{assign var=MODULE_CREATE value=$SINGLE_MOD}

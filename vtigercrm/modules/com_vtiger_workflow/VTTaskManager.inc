@@ -121,6 +121,7 @@
                         $taskTypes [] = 'VTChangeFieldValueTask';
                         $taskTypes [] = 'VTChangeRelModuleFieldValueTask';
                         $taskTypes [] = 'VTEmailPDFTask';
+                        $taskTypes [] = 'VTActivityReminderTask';
                         // SalesPlatform.ru end
                         // 
 			// Make SMSTask available if module is active

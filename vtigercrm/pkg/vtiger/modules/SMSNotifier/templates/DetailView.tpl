@@ -772,5 +772,8 @@ getTagCloud();
 
 <!-- SMSNotifier customization -->
 <script type="text/javascript">
-Event.observe(window, 'load', function() {ldelim} SMSNotifier.loadstatus('{$ID}'); {rdelim});
+{* SalesPlatform.ru begin *}
+Event.observe(window, 'load', function() {ldelim} SMSNotifier.loadstatus('tbl{$header|replace:' ':''}', '{$ID}'); {rdelim});
+{* Event.observe(window, 'load', function() {ldelim} SMSNotifier.loadstatus('{$ID}'); {rdelim}); *}
+{* SalesPlatform.ru end *}
 </script>

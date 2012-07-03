@@ -681,6 +681,7 @@ $mod_strings = array (
 'Theme' => 'Тема Оформления',
 'Language' => 'Язык',
 // 5.3.0 end
+'SPCFG' => 'Конфигурация Системы',
 // SalesPlatform.ru end
 
 );

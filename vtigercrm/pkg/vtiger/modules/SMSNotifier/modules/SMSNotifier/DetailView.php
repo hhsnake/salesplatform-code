@@ -102,7 +102,10 @@ $smarty->assign('BLOCKS', $blocks);
 
 // Gather the custom link information to display
 include_once('vtlib/Vtiger/Link.php');
-$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
+// SalesPlatform.ru begin (!) Need DB fix: update `vtiger_links` set `linkurl` = 'javascript:SMSNotifier.checkstatus(\'tbl$WRAPPER_NAME$\', $RECORD$)' where `linklabel` = 'LBL_CHECK_STATUS'
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']), 'WRAPPER_NAME'=>str_replace(" ", "", getTranslatedString('StatusInformation', $currentModule)));
+//$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
+// SalesPlatform.ru end
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW','DETAILVIEWWIDGET'), $customlink_params));
 // END
 

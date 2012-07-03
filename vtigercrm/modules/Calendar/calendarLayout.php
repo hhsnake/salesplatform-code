@@ -1115,8 +1115,8 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$arrow_img_name = 'event'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i;
 			$subject = $act[$i]->subject;
 			$id = $act[$i]->record;
-			if($listview_max_textlength && (strlen($subject)>$listview_max_textlength))
-				$subject = substr($subject,0,$listview_max_textlength)."...";
+			if($listview_max_textlength && (mb_strlen($subject,'UTF-8')>$listview_max_textlength))
+				$subject = mb_substr($subject,0,$listview_max_textlength,'UTF-8')."...";
 			$format = $cal['calendar']->hour_format;
 			$duration_hour = $act[$i]->duration_hour;
 			$duration_min =$act[$i]->duration_minute;
@@ -1228,8 +1228,8 @@ function getweekEventLayer(& $cal,$slice)
 			/* fix given by dartagnanlaf END --integrated by Minnie */
 			$id = $act[$i]->record;
                         $subject = $act[$i]->subject;
-			if($listview_max_textlength && (strlen($subject)>$listview_max_textlength))
-				$subject = substr($subject,0,$listview_max_textlength)."...";
+			if($listview_max_textlength && (mb_strlen($subject,'UTF-8')>$listview_max_textlength))
+				$subject = mb_substr($subject,0,$listview_max_textlength,'UTF-8')."...";
 			$format = $cal['calendar']->hour_format;
 			$start_hour = timeString($act[$i]->start_time, $format);
 			$end_hour = timeString($act[$i]->end_time, $format);
@@ -1334,8 +1334,8 @@ function getmonthEventLayer(& $cal,$slice)
                         $arrow_img_name = 'event'.$cal['calendar']->month_array[$slice]->start_time->hour.'_'.$i;
 						$id = $act[$i]->record;
                         $subject = $act[$i]->subject;
-                        if(strlen($subject)>10)
-                                $subject = substr($subject,0,10)."...";
+                        if(mb_strlen($subject,'UTF-8')>10)
+                                $subject = mb_substr($subject,0,10,'UTF-8')."...";
 						$format = $cal['calendar']->hour_format;
 						$start_hour = timeString($act[$i]->start_time,$format);
                         $end_hour = timeString($act[$i]->end_time,$format);
@@ -1569,8 +1569,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 				
 
 		}
-                if($listview_max_textlength && (strlen($subject)>$listview_max_textlength))
-	                $subject = substr($subject,0,$listview_max_textlength)."...";
+                if($listview_max_textlength && (mb_strlen($subject,'UTF-8')>$listview_max_textlength))
+	                $subject = mb_substr($subject,0,$listview_max_textlength,'UTF-8')."...";
 		if($contact_id != '')
 		{
 			$contactname = getContactName($contact_id);

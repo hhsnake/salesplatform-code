@@ -612,10 +612,17 @@ class CRMEntity
 				  $adb->pquery($sql, $params);
 			  }
 		  }
-		  elseif($_REQUEST['module'] == 'PurchaseOrder' || $_REQUEST['module'] == 'SalesOrder' || $_REQUEST['module'] == 'Quotes' || $_REQUEST['module'] == 'Invoice')
+                  // SalesPlatform.ru begin: Added acts and consignments
+		  elseif($_REQUEST['module'] == 'PurchaseOrder' || $_REQUEST['module'] == 'SalesOrder' || $_REQUEST['module'] == 'Quotes' || $_REQUEST['module'] == 'Invoice' || $_REQUEST['module'] == 'Act' || $_REQUEST['module'] == 'Consignment')
+		  //elseif($_REQUEST['module'] == 'PurchaseOrder' || $_REQUEST['module'] == 'SalesOrder' || $_REQUEST['module'] == 'Quotes' || $_REQUEST['module'] == 'Invoice')
+                  // SalesPlatform.ru end
 		  {
 			  //added to update the history for PO, SO, Quotes and Invoice
 			  $history_field_array = Array(
+                                                        // SalesPlatform.ru begin: Added acts and consignments
+                                                        "Act"=>"sp_actstatus",
+                                                        "Consignment"=>"sp_consignmentstatus",
+                                                        // SalesPlatform.ru end
 				  			"PurchaseOrder"=>"postatus",
 							"SalesOrder"=>"sostatus",
 							"Quotes"=>"quotestage",

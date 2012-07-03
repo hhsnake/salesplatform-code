@@ -503,6 +503,18 @@ class Migration_Utils {
 				$temp[] = $version;
 			}
 		}
+// SalesPlatform.ru begin: Added versions branch
+                if($reach == 0) {
+                    foreach($versions_branch2 as $version => $label)
+                    {
+                            if(strcmp($version, $source_version) == 0 || $reach == 1)
+                            {
+                                    $reach = 1;
+                                    $temp[] = $version;
+                            }
+                    }
+                }
+// SalesPlatform.ru end
 		$temp[] = $current_version;
 
 		global $adb, $dbname;

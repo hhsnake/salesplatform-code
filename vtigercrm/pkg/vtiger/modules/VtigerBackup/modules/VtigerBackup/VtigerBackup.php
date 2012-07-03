@@ -39,6 +39,9 @@ class VtigerBackup {
 		$limit = $this->getBackupLimit();
 		if($this->isLocalBackupEnabled()) {
 			$this->location = Vtiger_Location::getInstance(Vtiger_Location::$LOCAL, $limit);
+// SalesPlatform.ru begin
+			if($this->location->getPath())
+// SalesPlatform.ru end
 			$path = $this->location->getPath();
 		}else{
 			$this->location = Vtiger_Location::getInstance(Vtiger_Location::$FTP, $limit);
@@ -49,7 +52,11 @@ class VtigerBackup {
 	}
 
 	public function backup() {
-		if($this->isLocalBackupEnabled() || $this->isFTPBackupEnabled()) {
+// SalesPlatform.ru begin
+		if(($this->isLocalBackupEnabled() && $this->location->getPath()) || 
+		   ($this->isFTPBackupEnabled() && $this->location->getServer())) {
+//		if($this->isLocalBackupEnabled() || $this->isFTPBackupEnabled()) {
+// SalesPlatform.ru end
 			$sourceConfig = DatabaseConfig::getInstanceFromConfigFile();
 			$source = new MysqlSource($sourceConfig);
 			$fileDest = new File($sourceConfig);

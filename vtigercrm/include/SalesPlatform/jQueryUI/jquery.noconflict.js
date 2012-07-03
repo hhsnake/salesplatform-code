@@ -1,0 +1,1 @@
+var newJQuery = jQuery.noConflict(true);

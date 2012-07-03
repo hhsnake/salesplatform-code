@@ -189,6 +189,10 @@ switch($currentModule)
                 $smarty->assign("SINGLE_MOD",'Users');
                 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
                     $smarty->assign("RETURN_MODULE",vtlib_purify($_REQUEST['return_module']));
+                // SalesPlatform.ru begin: Bugfix for popup User selection in Emails
+		else
+                    $smarty->assign("RETURN_MODULE",'Emails');
+                // SalesPlatform.ru end
                 $alphabetical = AlphabeticalSearch($currentModule,'Popup','user_name','true','basic',$popuptype,"","",$url);
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
                 break;	

@@ -23,7 +23,10 @@
    </tr>
 
    <!-- This if condition is added to avoid display Tools heading because now there is no options in Tools. -->
-   {if $MODULE neq 'PurchaseOrder' && $MODULE neq 'Invoice'}
+{* SalesPlatform.ru begin: Added acts and consignments  *}
+   {if ($MODULE neq 'PurchaseOrder' && $MODULE neq 'Act' && $MODULE neq 'Consignment' && $MODULE neq 'Invoice') || ($MODULE eq 'Invoice' && ('Act'|@vtlib_isModuleActive || 'Consignment'|@vtlib_isModuleActive))}
+   {* {if $MODULE neq 'PurchaseOrder' && $MODULE neq 'Invoice'} *}
+{* SalesPlatform.ru end  *}
    <tr>
 	<td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td>
    </tr>
@@ -145,6 +148,26 @@
 		</td>
 	   </tr>
 	   -->
+{* SalesPlatform.ru begin: Added convert Invoice to Act  *}
+           {if 'Act'|@vtlib_isModuleActive}
+	   <tr>
+		<td align="left" style="padding-left:10px;">
+<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='invoicetoact'; document.DetailView.module.value='Act'; document.DetailView.action.value='EditView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu"><img src="{'actionGenerateInvoice.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='invoicetoact'; document.DetailView.module.value='Act'; document.DetailView.action.value='EditView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">{$APP.LBL_GENERATE} {$APP.Act}</a>
+		</td>
+	   </tr>
+           {/if}
+{* SalesPlatform.ru end  *}
+{* SalesPlatform.ru begin: Added convert Invoice to Consignment  *}
+           {if 'Consignment'|@vtlib_isModuleActive}
+	   <tr>
+		<td align="left" style="padding-left:10px;">
+<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='invoicetoconsignment'; document.DetailView.module.value='Consignment'; document.DetailView.action.value='EditView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu"><img src="{'actionGenerateInvoice.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='invoicetoconsignment'; document.DetailView.module.value='Consignment'; document.DetailView.action.value='EditView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">{$APP.LBL_GENERATE} {$APP.Consignment}</a>
+		</td>
+	   </tr>
+           {/if}
+{* SalesPlatform.ru end  *}
 	   <!-- Invoice Actions ends -->
 
 	{/if}
@@ -246,7 +269,7 @@
 
 <!-- Following condition is added to avoid the Tools section in Products and Vendors because we are not providing the Print and Email Now links throughout all the modules. when we provide these links we will remove this if condition -->
 {* SalesPlatform.ru begin  *}
-{if $MODULE neq 'Products' && $MODULE neq 'Services' && $MODULE neq 'Vendors' && $MODULE neq 'PurchaseOrder'}
+{if $MODULE neq 'Products' && $MODULE neq 'Services' && $MODULE neq 'Vendors'}
 {* {if $MODULE neq 'Products' && $MODULE neq 'Services' && $MODULE neq 'Vendors'} *}
 {* SalesPlatform.ru end *}
 
@@ -264,7 +287,7 @@
 
 <!-- To display the Export To PDF link for PO, SO, Quotes and Invoice - starts -->
 {* SalesPlatform.ru begin  *}
-{if $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
+{if $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice' || $MODULE eq 'Act' || $MODULE eq 'Consignment' || $MODULE eq 'PurchaseOrder'}
 {* {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'} *}
 {* SalesPlatform.ru end  *}
 
@@ -298,7 +321,7 @@
    </tr>
 
 {* SalesPlatform.ru begin  *}
-{if $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
+{if $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice' || $MODULE eq 'Act' || $MODULE eq 'Consignment' || $MODULE eq 'PurchaseOrder'}
 {* {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'} *}
 {* SalesPlatform.ru end  *}
 <!-- Added to give link to  send Invoice PDF through mail -->
@@ -363,6 +386,18 @@ function sendpdf_submit()
 		OpenCompose('{$PO_NO}','PurchaseOrder');
 	{elseif $MODULE eq 'SalesOrder'}
 		OpenCompose('{$SO_NO}','SalesOrder');
+{* SalesPlatform.ru begin: Added acts  *}
+	{elseif $MODULE eq 'Act'}
+		OpenCompose('{$ACT_NO}','Act');
+{* SalesPlatform.ru end  *}
+{* SalesPlatform.ru begin: Added consignments  *}
+	{elseif $MODULE eq 'Consignment'}
+		OpenCompose('{$CONSIGNMENT_NO}','Consignment');
+{* SalesPlatform.ru end  *}
+{* SalesPlatform.ru begin: Added PDF to PurchaseOrder  *}
+	{elseif $MODULE eq 'PurchaseOrder'}
+		OpenCompose('{$CONSIGNMENT_NO}','PurchaseOrder');
+{* SalesPlatform.ru end  *}
 	{/if}
 {literal}
 }

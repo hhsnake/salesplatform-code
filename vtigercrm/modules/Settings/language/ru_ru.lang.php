@@ -727,11 +727,11 @@ $mod_strings = array (
       'LBL_BEFORE' => 'До',
       'LBL_TASK_OPERATIONS' => 'Операции Задачи',
       'LBL_CREATE_TASK' => 'Создать Задачу',
-      'LBL_CREATE_TASK_OF_TYPE' => 'Создать новое задае типа',
+      'LBL_CREATE_TASK_OF_TYPE' => 'Создать новое задание типа',
       'LBL_SUMMARY' => 'Итог',
       'LBL_WHEN_TO_RUN_WORKFLOW' => 'Когда запускать Обработчик',
       'LBL_ONLY_ON_FIRST_SAVE' => 'Только после первого сохранения',
-      'LBL_UNTIL_FIRST_TIME_CONDITION_TRUE' => 'Пока не будет достигнуто условие',
+      'LBL_UNTIL_FIRST_TIME_CONDITION_TRUE' => 'При выполнении условия в первый раз',
       'LBL_EVERYTIME_RECORD_SAVED' => 'После каждого сохранения записи',
       'LBL_ON_MODIFY' => 'После каждого изменения записи',
       'LBL_CONDITIONS' => 'Условия',
@@ -881,6 +881,8 @@ $mod_strings = array (
         'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Некоторые виды налогов уже существуют, поэтому не были сохранены.',
 
         'Configuration Editor' => 'Редактор Конфигурации',
+        'LBL_SP_CONFIGURATION' => 'Менеджер Конфигураций',
+        'LBL_SP_CONFIGURATION_DESC' => 'Управление конфигурацией системы',
 	// 5.3.0 end
         // SalesPlatform.ru end
 

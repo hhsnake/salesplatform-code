@@ -38,7 +38,7 @@ class SalesPlatform_PDF_SPFooterViewer extends Vtiger_PDF_FooterViewer {
     			    $template = new Aste_Template($this->template);
 			    $footer = $template->getBlock('footer');
     			    $content = $footer->fetch();
-			    $pdf->writeHTMLCell($headerFrame->w, $headerFrame->h,$headerFrame->x, $headerFrame->y, $content);
+			    $pdf->writeHTMLCell($footerFrame->w, $footerFrame->h,$footerFrame->x, $footerFrame->y, $content);
 			} catch(Aste_Exception $e) {
 			}
 		}	

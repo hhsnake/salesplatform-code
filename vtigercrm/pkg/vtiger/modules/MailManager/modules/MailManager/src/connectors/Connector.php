@@ -152,7 +152,10 @@ class MailManager_Connector {
 		
 		$folders = array();
 		foreach($result as $row) {
-			$folders[] = $this->folderInstance(str_replace($ref, "", $row->name));
+                        // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+			$folders[] = $this->folderInstance(str_replace($ref, "", mb_convert_encoding($row->name, "UTF8", "UTF7-IMAP")));
+                        //$folders[] = $this->folderInstance(str_replace($ref, "", $row->name));
+                        // SalesPlatform.ru end
 		}
 		$this->mFolders = $folders;
 		return $folders;
@@ -269,6 +272,9 @@ class MailManager_Connector {
 		for($i = 0;$i<count($msgno);$i++){
 			@imap_delete($this->mBox, $msgno[$i]);
 		}	
+                // SalesPlatform.ru begin: from Community user vsaranov: Delete all messages marked for deletion
+		@imap_expunge($this->mBox);
+                // SalesPlatform.ru end
 	}
 
 
@@ -280,6 +286,9 @@ class MailManager_Connector {
 	function moveMail($msgno, $folderName){
 		$msgno = trim($msgno,',');
 		$msgno = explode(',',$msgno);
+                // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+		$folderName = mb_convert_encoding($folderName, "UTF7-IMAP", "UTF8");
+                // SalesPlatform.ru end
 		for($i = 0;$i<count($msgno);$i++){
 			@imap_mail_move($this->mBox, $msgno[$i], $folderName);
 		}
@@ -326,7 +335,10 @@ class MailManager_Connector {
 	 * @param Integer $maxLimit - Number of mails
 	 */
 	function searchMails($query, $folder, $start, $maxLimit) {
-		$nos = imap_search($this->mBox, $query);
+                // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+		$nos = imap_search($this->mBox, $query, SE_FREE, 'utf-8');
+		//$nos = imap_search($this->mBox, $query);
+                // SalesPlatform.ru end
 
 		if (!empty($nos)) {
 			$nmsgs = count($nos);
@@ -363,7 +375,10 @@ class MailManager_Connector {
 			$list = @imap_list($this->mBox, $this->mBoxBaseUrl, '*');
 			if (is_array($list)) {
 				foreach ($list as $val) {
-					$folderList[] =  preg_replace("/{(.*?)}/", "", imap_utf7_decode($val));
+                                        // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+					$folderList[] = preg_replace("/{(.*?)}/", "", mb_convert_encoding($val, "UTF8", "UTF7-IMAP"));
+                                        //$folderList[] =  preg_replace("/{(.*?)}/", "", imap_utf7_decode($val));
+                                        // SalesPlatform.ru end
 				}
 			}
 		}

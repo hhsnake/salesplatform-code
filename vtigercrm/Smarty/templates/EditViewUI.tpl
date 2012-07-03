@@ -81,6 +81,37 @@ alt="Select" title="Select" LANGUAGE=javascript  onclick='return window.open("in
 alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.value=''; this.form.{$fldname}_display.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
 			</td>
 		{* END *}
+		{* SalesPlatform.ru begin SPModulePickList support *}
+		{elseif $uitype eq 1001}
+                        <style>.ui-autocomplete-loading {ldelim} background: white url('{'vtbusy.gif'|@vtiger_imageurl:$THEME}') right center no-repeat; {rdelim}</style>
+                        <script>
+                            newJQuery(function() {ldelim}
+                                    var cache = {ldelim}{rdelim}, lastXhr;
+                                    newJQuery( "#{$fldname}" ).autocomplete({ldelim}
+                                            minLength: 2,
+                                            source: function( request, response ) {ldelim}
+                                                var term = request.term;
+                                                if ( term in cache ) {ldelim}
+                                                    response( cache[ term ] );
+                                                    return;
+                                                {rdelim}
+                                                lastXhr = newJQuery.getJSON( "index.php?module=SPModulePickList&action=SPModulePickListAjax&type=GetValues&fieldname={$fldname}", request, function( data, status, xhr ) {ldelim}
+                                                    cache[ term ] = data;
+                                                    if ( xhr === lastXhr ) {ldelim}
+                                                        response( data );
+                                                    {rdelim}
+                                                {rdelim});
+                                            {rdelim}
+                                    {rdelim});
+                            {rdelim});
+                        </script>
+			<td width=20% class="dvtCellLabel" align=right>
+				<font color="red">{$mandatory_field}</font><font color="green">*</font>{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small">{/if}
+			</td>
+			<td width=30% align=left class="dvtCellInfo">
+				<input id="{$fldname}" type="text" name="{$fldname}" tabindex="{$vt_tab}" value="{$fldvalue}" tabindex="{$vt_tab}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'">
+			</td>
+		{* SalesPlatform.ru end *}
 		{elseif $uitype eq 2}
 			<td width=20% class="dvtCellLabel" align=right>
 				<font color="red">{$mandatory_field}</font>{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small">{/if}

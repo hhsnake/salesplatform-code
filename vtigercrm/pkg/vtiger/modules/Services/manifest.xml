@@ -4,7 +4,7 @@
 <name>Services</name>
 <label>Services</label>
 <parent>Inventory</parent>
-<version>1.6</version>
+<version>1.6.201207</version>
 <dependencies>
 <vtiger_version>5.1.0</vtiger_version>
 <vtiger_max_version>5.*</vtiger_max_version>
@@ -34,6 +34,7 @@
   `taxclass` varchar(200) default NULL,
   `currency_id` int(19) NOT NULL default '1',
   `commissionrate` decimal(7,3) default NULL,
+  `unit_code` varchar(100) default NULL,
   PRIMARY KEY  (`serviceid`),
   CONSTRAINT `fk_1_vtiger_service` FOREIGN KEY (`serviceid`) REFERENCES `vtiger_crmentity` (`crmid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
@@ -124,7 +125,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <defaultvalue></defaultvalue>
-<sequence>9</sequence>
+<sequence>10</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O</typeofdata>
 <quickcreate>1</quickcreate>
@@ -144,7 +145,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <defaultvalue></defaultvalue>
-<sequence>10</sequence>
+<sequence>11</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O~OTH~GE~sales_start_date~Sales Start Date</typeofdata>
 <quickcreate>1</quickcreate>
@@ -164,7 +165,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <defaultvalue></defaultvalue>
-<sequence>11</sequence>
+<sequence>12</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O</typeofdata>
 <quickcreate>1</quickcreate>
@@ -184,7 +185,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <defaultvalue></defaultvalue>
-<sequence>12</sequence>
+<sequence>13</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O~OTH~GE~start_date~Start Date</typeofdata>
 <quickcreate>1</quickcreate>
@@ -204,7 +205,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <defaultvalue></defaultvalue>
-<sequence>6</sequence>
+<sequence>7</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
@@ -224,7 +225,7 @@
 <readonly>1</readonly>
 <presence>0</presence>
 <defaultvalue></defaultvalue>
-<sequence>13</sequence>
+<sequence>14</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>T~O</typeofdata>
 <quickcreate>3</quickcreate>
@@ -244,7 +245,7 @@
 <readonly>1</readonly>
 <presence>0</presence>
 <defaultvalue></defaultvalue>
-<sequence>14</sequence>
+<sequence>15</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>T~O</typeofdata>
 <quickcreate>3</quickcreate>
@@ -280,6 +281,26 @@
 </picklistvalues>
 </field>
 <field>
+<fieldname>unit_code</fieldname>
+<uitype>1</uitype>
+<columnname>unit_code</columnname>
+<tablename>vtiger_service</tablename>
+<generatedtype>1</generatedtype>
+<fieldlabel>Unit Code</fieldlabel>
+<readonly>1</readonly>
+<presence>2</presence>
+<defaultvalue></defaultvalue>
+<sequence>5</sequence>
+<maximumlength>100</maximumlength>
+<typeofdata>V~O</typeofdata>
+<quickcreate>1</quickcreate>
+<quickcreatesequence></quickcreatesequence>
+<displaytype>1</displaytype>
+<info_type>BAS</info_type>
+<helpinfo><![CDATA[]]></helpinfo>
+<masseditable>1</masseditable>
+</field>
+<field>
 <fieldname>qty_per_unit</fieldname>
 <uitype>1</uitype>
 <columnname>qty_per_unit</columnname>
@@ -289,7 +310,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <defaultvalue></defaultvalue>
-<sequence>5</sequence>
+<sequence>6</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>N~O</typeofdata>
 <quickcreate>1</quickcreate>
@@ -309,7 +330,7 @@
 <readonly>1</readonly>
 <presence>0</presence>
 <defaultvalue></defaultvalue>
-<sequence>8</sequence>
+<sequence>9</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>I~O</typeofdata>
 <quickcreate>1</quickcreate>
@@ -329,7 +350,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <defaultvalue></defaultvalue>
-<sequence>7</sequence>
+<sequence>8</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>

@@ -21,10 +21,12 @@ $optionalModuleStrings = array(
 	'Assets_description'=>'Активы представляют владение собственностью которая может быть превращена в прибыль',
 	'ModComments_description' => 'Возможность добавления комментариев к любому из относящихся модулей',
 	'Projects_description' => 'Добавляет возможность Управления Проектами',
+	'Act_description' => 'Формирование и печать актов об оказанных услугах',
+	'Consignment_description' => 'Реализация товаров и услуг, формирование и печать счетов-фактур',
 );
 
 $installationStrings = array(
-	'LBL_VTIGER_CRM_5' => 'SalesPlatform VtigerCRM 5.2.1',
+	'LBL_VTIGER_CRM_5' => 'SalesPlatform VtigerCRM 5.3.0',
 	'LBL_CONFIG_WIZARD' => 'Мастер Настройки',
 	'LBL_WELCOME' => 'Добро пожаловать',
 	'LBL_WELCOME_CONFIG_WIZARD' => 'Добро пожаловать в Мастер Настройки',

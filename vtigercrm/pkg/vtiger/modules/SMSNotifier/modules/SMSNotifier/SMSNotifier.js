@@ -8,13 +8,21 @@
  ************************************************************************************/
 if(typeof(SMSNotifier) == 'undefined') {
 	var SMSNotifier = {
-		
-		checkstatus : function(record) {
-			SMSNotifier.loadstatus(record, true);
+
+                // SalesPlatform.ru begin 'wrapper_name' param added instead 'tblStatusInformation' value
+		checkstatus : function(wrapper_name, record) {
+			SMSNotifier.loadstatus(wrapper_name, record, true);
 		},
-		
-		loadstatus : function(record, query) {
-			var wrapper = $('tblStatusInformation');
+
+		loadstatus : function(wrapper_name, record, query) {
+			var wrapper = $(wrapper_name);
+//		checkstatus : function(record) {
+//			SMSNotifier.loadstatus(record, true);
+//		},
+//
+//		loadstatus : function(record, query) {
+//			var wrapper = $('tblStatusInformation');
+                // SalesPlatform.ru end
 			
 			if(typeof(query) == 'undefined') query = false;
 			

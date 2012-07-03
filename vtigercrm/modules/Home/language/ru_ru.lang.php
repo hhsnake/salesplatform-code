@@ -89,6 +89,9 @@ $mod_strings = array (
       'Tag Cloud' => 'Облако Тегов',
       'MSG_NO_FILTERS' => 'Нет Доступных Фильтров',
       'MSG_NO_FIELDS' => 'Нет Доступных Полей',
+      // SalesPlatform.ru begin
+      'LBL_SP_CONFIGURATION' => 'Конфигурация Системы',
+      // SalesPlatform.ru end
 
 
 );

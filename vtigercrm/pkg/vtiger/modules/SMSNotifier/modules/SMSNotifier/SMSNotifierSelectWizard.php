@@ -25,6 +25,11 @@ $smarty->assign("IS_ADMIN", is_admin($current_user));
 if(SMSNotifier::checkServer()) {
 	
 	$idstring = vtlib_purify($_REQUEST['idstring']);
+        // SalesPlatform.ru begin : Send SMS to all Records from current filter
+	if (strcmp(trim($idstring), "-1;-1") == 0) {
+            $idstring = implode(';', get_filtered_ids(vtlib_purify($_REQUEST['sourcemodule'])));
+        }
+        // SalesPlatform.ru end
 	$idstring = trim($idstring, ';');
 	$idlist = explode(';', $idstring);
 	
@@ -63,6 +68,9 @@ if(SMSNotifier::checkServer()) {
 	$smarty->assign('PHONEFIELDS', $capturedFieldInfo);
 	$smarty->assign('FIELDVALUES', $capturedFieldValues);
 	$smarty->assign('IDSTRING', $idstring);
+        // SalesPlatform.ru begin : Send SMS to all Records from current filter
+        $smarty->assign("IDSTRING_SIZE", count($idlist));
+        // SalesPlatform.ru end
 	$smarty->assign('SOURCEMODULE', $sourcemodule);
 
 	$smarty->display(vtlib_getModuleTemplate($currentModule, 'SMSNotifierSelectWizard.tpl'));

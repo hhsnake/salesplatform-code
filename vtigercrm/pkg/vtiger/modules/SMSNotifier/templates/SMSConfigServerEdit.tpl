@@ -42,8 +42,8 @@
 	<tr>
 		<td width="33%" nowrap="nowrap" align="right" class="cellLabel small"><b>{$APP.Active}</b></td>
 		<td align="left" class="cellText small">
-			<input type="radio" class="small" name="smsserver_isactive" value="1" {if $SMSSERVERINFO.isactive}checked=true{/if}> Yes
-			<input type="radio" class="small" name="smsserver_isactive" value="0" {if $SMSSERVERINFO.isactive neq 1}checked=true{/if}> No
+			<input type="radio" class="small" name="smsserver_isactive" value="1" {if $SMSSERVERINFO.isactive}checked=true{/if}> {$MOD.LBL_YES}
+			<input type="radio" class="small" name="smsserver_isactive" value="0" {if $SMSSERVERINFO.isactive neq 1}checked=true{/if}> {$MOD.LBL_NO}
 		</td>
 	</tr>
 
@@ -69,7 +69,10 @@
 		{foreach item=SMSPROVIDERPARAM from=$SMSPROVIDERPARAMS}
 		
 		<tr>
-		<td width="33%" nowrap="nowrap" align="right" class="cellLabel small" style="border: none;"><b>{$SMSPROVIDERPARAM}</b></td>
+		{* SalesPlatform.ru begin *}
+                <td width="33%" nowrap="nowrap" align="right" class="cellLabel small" style="border: none;"><b>{$SMSPROVIDERPARAM|@getTranslatedString}</b></td>
+		{* <td width="33%" nowrap="nowrap" align="right" class="cellLabel small" style="border: none;"><b>{$SMSPROVIDERPARAM}</b></td> *}
+		{* SalesPlatform.ru end *}
 		<td align="left" class="cellText small" style="border: none;">
 			<input type="text" class="detailedViewTextBox" name="smsserverparam_{$SMSPROVIDERPARAMKEY}_{$SMSPROVIDERPARAM}" value="{$SMSSERVERPARAMS.$SMSPROVIDERPARAM}" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'">
 		</td>

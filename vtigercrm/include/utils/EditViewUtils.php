@@ -709,6 +709,22 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$parent_name= $adb->query_result($result,0,"subject");
 				$invoice_selected = "selected";
 			}
+                        // SalesPlatform.ru begin: Added acts and consignments
+			elseif($parent_module == "Act")
+			{
+				$sql = "select * from  vtiger_sp_act where actid=?";
+				$result = $adb->pquery($sql, array($value));
+				$parent_name= $adb->query_result($result,0,"act_no");
+				$act_selected = "selected";
+			}
+			elseif($parent_module == "Consignment")
+			{
+				$sql = "select * from  vtiger_sp_consignment where consignmentid=?";
+				$result = $adb->pquery($sql, array($value));
+				$parent_name= $adb->query_result($result,0,"consignment_no");
+				$consignment_selected = "selected";
+			}
+                        // SalesPlatform.ru end
 			elseif($parent_module == "Quotes")
 			{
 				$sql = "select * from  vtiger_quotes where quoteid=?";
@@ -728,6 +744,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                           $app_strings['COMBO_POTENTIALS'],
                                           $app_strings['COMBO_PRODUCTS'],
                                           $app_strings['COMBO_INVOICES'],
+                                          // SalesPlatform.ru begin: Added acts and consignments
+                                          $app_strings['COMBO_ACTS'],
+                                          $app_strings['COMBO_CONSIGNMENTS'],
+                                          // SalesPlatform.ru end
                                           $app_strings['COMBO_PORDER'],
                                           $app_strings['COMBO_SORDER'],
 					  $app_strings['COMBO_QUOTES'],
@@ -738,12 +758,19 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					  $potential_selected,
                                           $product_selected,
                                           $invoice_selected,
+                                          // SalesPlatform.ru begin: Added acts and consignments
+                                          $act_selected,
+                                          $consignment_selected,
+                                          // SalesPlatform.ru end
                                           $porder_selected,
                                           $sorder_selected,
 					  $quote_selected,
 					  $ticket_selected
                                          );
-                $editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","Products&action=Popup","Invoice&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Quotes&action=Popup","HelpDesk&action=Popup");
+                // SalesPlatform.ru begin: Added acts and consignments
+                $editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","Products&action=Popup","Invoice&action=Popup","Act&action=Popup","Consignment&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Quotes&action=Popup","HelpDesk&action=Popup");
+                //$editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","Products&action=Popup","Invoice&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Quotes&action=Popup","HelpDesk&action=Popup");
+                // SalesPlatform.ru end
 		$fieldvalue[] =$parent_name;
 		$fieldvalue[] =$value;
 
@@ -778,6 +805,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$parentModulesList['PurchaseOrder'] = $app_strings['COMBO_PORDER'];
 			$parentModulesList['SalesOrder'] = $app_strings['COMBO_SORDER'];
 			$parentModulesList['Invoice'] = $app_strings['COMBO_INVOICES'];
+                // SalesPlatform.ru begin: Added acts and consignments
+			$parentModulesList['Act'] = $app_strings['COMBO_ACTS'];
+                        $parentModulesList['Consignment'] = $app_strings['COMBO_CONSIGNMENTS'];
+                // SalesPlatform.ru end
 		}
 		$parentModuleNames = array_keys($parentModulesList);
 		$parentModuleLabels = array_values($parentModulesList);
@@ -1419,6 +1450,87 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 
 }
 
+// SalesPlatform.ru begin: Added convert Invoice to Act
+function getConvertInvoiceToAct($focus,$invoice_focus,$invoiceid)
+{
+	global $log,$current_user;
+	$log->debug("Entering getConvertInvoiceToAct(".get_class($focus).",".get_class($invoice_focus).",".$invoiceid.") method ...");
+        $log->info("in getConvertInvoiceToAct ".$invoiceid);
+    $xyz=array('bill_street','bill_city','bill_code','bill_pobox','bill_country','bill_state','ship_street','ship_city','ship_code','ship_pobox','ship_country','ship_state');
+	for($i=0;$i<12;$i++){
+		if (getFieldVisibilityPermission('Invoice', $current_user->id,$xyz[$i]) == '0'){
+			$invoice_focus->column_fields[$xyz[$i]] = $invoice_focus->column_fields[$xyz[$i]];
+		}
+		else
+			$invoice_focus->column_fields[$xyz[$i]] = '';
+	}
+	$focus->column_fields['account_id'] = $invoice_focus->column_fields['account_id'];
+	$focus->column_fields['bill_street'] = $invoice_focus->column_fields['bill_street'];
+	$focus->column_fields['ship_street'] = $invoice_focus->column_fields['ship_street'];
+	$focus->column_fields['bill_city'] = $invoice_focus->column_fields['bill_city'];
+	$focus->column_fields['ship_city'] = $invoice_focus->column_fields['ship_city'];
+	$focus->column_fields['bill_state'] = $invoice_focus->column_fields['bill_state'];
+	$focus->column_fields['ship_state'] = $invoice_focus->column_fields['ship_state'];
+	$focus->column_fields['bill_code'] = $invoice_focus->column_fields['bill_code'];
+	$focus->column_fields['ship_code'] = $invoice_focus->column_fields['ship_code'];
+	$focus->column_fields['bill_country'] = $invoice_focus->column_fields['bill_country'];
+	$focus->column_fields['ship_country'] = $invoice_focus->column_fields['ship_country'];
+	$focus->column_fields['bill_pobox'] = $invoice_focus->column_fields['bill_pobox'];
+	$focus->column_fields['ship_pobox'] = $invoice_focus->column_fields['ship_pobox'];
+	$focus->column_fields['description'] = $invoice_focus->column_fields['description'];
+        $focus->column_fields['currency_id'] = $invoice_focus->column_fields['currency_id'];
+        $focus->column_fields['conversion_rate'] = $invoice_focus->column_fields['conversion_rate'];
+	$focus->column_fields['contact_id'] = $invoice_focus->column_fields['contact_id'];
+	$focus->column_fields['salesorder_id'] = $invoice_focus->column_fields['salesorder_id'];
+	$focus->column_fields['spregion'] = $invoice_focus->column_fields['spregion'];
+
+	$log->debug("Exiting getConvertInvoiceToAct method ...");
+	return $focus;
+
+}
+// SalesPlatform.ru end
+
+// SalesPlatform.ru begin: Added convert Invoice to Consignment
+function getConvertInvoiceToConsignment($focus,$invoice_focus,$invoiceid)
+{
+	global $log,$current_user;
+	$log->debug("Entering getConvertInvoiceToConsignment(".get_class($focus).",".get_class($invoice_focus).",".$invoiceid.") method ...");
+        $log->info("in getConvertInvoiceToConsignment ".$invoiceid);
+    $xyz=array('bill_street','bill_city','bill_code','bill_pobox','bill_country','bill_state','ship_street','ship_city','ship_code','ship_pobox','ship_country','ship_state');
+	for($i=0;$i<12;$i++){
+		if (getFieldVisibilityPermission('Invoice', $current_user->id,$xyz[$i]) == '0'){
+			$invoice_focus->column_fields[$xyz[$i]] = $invoice_focus->column_fields[$xyz[$i]];
+		}
+		else
+			$invoice_focus->column_fields[$xyz[$i]] = '';
+	}
+	$focus->column_fields['account_id'] = $invoice_focus->column_fields['account_id'];
+	$focus->column_fields['bill_street'] = $invoice_focus->column_fields['bill_street'];
+	$focus->column_fields['ship_street'] = $invoice_focus->column_fields['ship_street'];
+	$focus->column_fields['bill_city'] = $invoice_focus->column_fields['bill_city'];
+	$focus->column_fields['ship_city'] = $invoice_focus->column_fields['ship_city'];
+	$focus->column_fields['bill_state'] = $invoice_focus->column_fields['bill_state'];
+	$focus->column_fields['ship_state'] = $invoice_focus->column_fields['ship_state'];
+	$focus->column_fields['bill_code'] = $invoice_focus->column_fields['bill_code'];
+	$focus->column_fields['ship_code'] = $invoice_focus->column_fields['ship_code'];
+	$focus->column_fields['bill_country'] = $invoice_focus->column_fields['bill_country'];
+	$focus->column_fields['ship_country'] = $invoice_focus->column_fields['ship_country'];
+	$focus->column_fields['bill_pobox'] = $invoice_focus->column_fields['bill_pobox'];
+	$focus->column_fields['ship_pobox'] = $invoice_focus->column_fields['ship_pobox'];
+	$focus->column_fields['description'] = $invoice_focus->column_fields['description'];
+        $focus->column_fields['currency_id'] = $invoice_focus->column_fields['currency_id'];
+        $focus->column_fields['conversion_rate'] = $invoice_focus->column_fields['conversion_rate'];
+	$focus->column_fields['contact_id'] = $invoice_focus->column_fields['contact_id'];
+	$focus->column_fields['salesorder_id'] = $invoice_focus->column_fields['salesorder_id'];
+	$focus->column_fields['spregion'] = $invoice_focus->column_fields['spregion'];
+	$focus->column_fields['invoice_id'] = $invoice_focus->id;
+
+	$log->debug("Exiting getConvertInvoiceToConsignment method ...");
+	return $focus;
+
+}
+// SalesPlatform.ru end
+
 /** This function returns the sales order object populated with the details from quote object.
 * Param $focus - Sales order object
 * Param $quote_focus - Quote order focus
@@ -1490,15 +1602,20 @@ function getAssociatedProducts($module,$focus,$seid='')
 	// DG 15 Aug 2006
 	// Add "ORDER BY sequence_no" to retain add order on all inventoryproductrel items
 	
-	if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice')
+	// SalesPlatform.ru begin: Added acts and consignments
+        if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice' || $module == 'Act' || $module == 'Consignment')
+        //if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice')
+        // SalesPlatform.ru end
 	{
 // SalesPlatform.ru begin
 		$query="SELECT 
 					case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname,
  		            case when vtiger_products.productid != '' then vtiger_products.productcode else vtiger_service.service_no end as productcode, 
 					case when vtiger_products.productid != '' then vtiger_products.usageunit else vtiger_service.service_usageunit end as usageunit,									
+					case when vtiger_products.productid != '' then vtiger_products.unit_code else vtiger_service.unit_code end as unit_code,
 					case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price,									
 					case when vtiger_products.productid != '' then vtiger_products.manuf_country else '--' end as manuf_country,									
+					case when vtiger_products.productid != '' then vtiger_products.manuf_country_code else '--' end as manuf_country_code,
 					case when vtiger_products.productid != '' then vtiger_products.customs_id else '--' end as customs_id,									
  		            case when vtiger_products.productid != '' then vtiger_products.qtyinstock else 'NA' end as qtyinstock,
  		            case when vtiger_products.productid != '' then 'Products' else 'Services' end as entitytype,
@@ -1600,9 +1717,11 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$entitytype=$adb->query_result($result,$i-1,'entitytype');
 		
 // SalesPlatform.ru begin
-		if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice') {
+		if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice' || $module == 'Act' || $module == 'Consignment') {
 		    $manuf_country=$adb->query_result($result,$i-1,'manuf_country');
 		    $customs_id=$adb->query_result($result,$i-1,'customs_id');
+		    $manuf_country_code=$adb->query_result($result,$i-1,'manuf_country_code');
+		    $unit_code=$adb->query_result($result,$i-1,'unit_code');
 		}
 // SalesPlatform.ru end
 
@@ -1663,7 +1782,10 @@ function getAssociatedProducts($module,$focus,$seid='')
             $product_Detail[$i]['comment'.$i]= $comment;
 		}
 
-		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
+		// SalesPlatform.ru begin: Added acts and consignments
+                if($module != 'PurchaseOrder' && $focus->object_name != 'Order' && $module != 'Act' && $module != 'Consignment')
+                //if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
+                // SalesPlatform.ru end
 		{
 			$product_Detail[$i]['qtyInStock'.$i]=$qtyinstock;
 		}
@@ -1709,9 +1831,11 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['totalAfterDiscount'.$i] = $totalAfterDiscount;
 
 // SalesPlatform.ru begin
-		if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice') {
+		if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice' || $module == 'Act' || $module == 'Consignment') {
 		    $product_Detail[$i]['manufCountry'.$i] = $manuf_country;
 		    $product_Detail[$i]['customsId'.$i] = $customs_id;
+		    $product_Detail[$i]['manufCountryCode'.$i] = $manuf_country_code;
+		    $product_Detail[$i]['unitCode'.$i] = $unit_code;
 		}
 // SalesPlatform.ru end
 
@@ -1721,7 +1845,10 @@ function getAssociatedProducts($module,$focus,$seid='')
 		//Calculate netprice
 		$netPrice = $totalAfterDiscount+$taxTotal;
 		//if condition is added to call this function when we create PO/SO/Quotes/Invoice from Product module
-		if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice')
+                // SalesPlatform.ru begin: Added acts and consignments
+		if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice' || $module == 'Act' || $module == 'Consignment')
+		//if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice')
+                // SalesPlatform.ru end
 		{
 			$taxtype = getInventoryTaxType($module,$focus->id);
 			if($taxtype == 'individual')
@@ -1845,7 +1972,10 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$shtax_label = $shtax_details[$shtax_count]['taxlabel'];
 		$shtax_percent = '0.00';
 		//if condition is added to call this function when we create PO/SO/Quotes/Invoice from Product module
-		if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice')
+                // SalesPlatform.ru begin: Added acts and consignments
+		if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice' || $module == 'Act' || $module == 'Consignment')
+		//if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice')
+                // SalesPlatform.ru end
 		{
 			$shtax_percent = getInventorySHTaxPercent($focus->id,$shtax_name);
 		}
@@ -1905,6 +2035,20 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=?";
 		$params = array($focus->id);
 	}
+        // SalesPlatform.ru begin: Added acts
+	elseif($module == 'Act')
+	{
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=?";
+		$params = array($focus->id);
+	}
+        // SalesPlatform.ru end
+        // SalesPlatform.ru begin: Added consignments
+	elseif($module == 'Consignment')
+	{
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=?";
+		$params = array($focus->id);
+	}
+        // SalesPlatform.ru end
 	elseif($module == 'Potentials')
 	{
 		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_seproductsrel.* from vtiger_products inner join vtiger_seproductsrel on vtiger_seproductsrel.productid=vtiger_products.productid where crmid=?";
@@ -1942,7 +2086,10 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 	global $current_user,$mod_strings;
 	
 	$noofrows = $adb->num_rows($result);
-	if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder'|| $module == 'Invoice') && $block == 2)
+        // SalesPlatform.ru begin: Added acts and consignments
+	if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder'|| $module == 'Invoice'|| $module == 'Act'|| $module == 'Consignment') && $block == 2)
+	//if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder'|| $module == 'Invoice') && $block == 2)
+        // SalesPlatform.ru end
 	{
 		 global $log;
                 $log->info("module is ".$module);

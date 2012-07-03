@@ -122,6 +122,16 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	
 	$xlabels = array();
 	$dataset = & Image_Graph::factory('dataset');
+        // SalesPlatform.ru begin: Setup bargraph color from theme
+        $fill = 0;
+        if (file_exists("themes/".$theme."/config.php")) {
+            include_once("themes/".$theme."/config.php");
+            if (function_exists("get_theme_bargraph_color")) {
+                $fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, get_theme_bargraph_color(), 'white'));
+            }
+        }
+        if (!$fill) {
+        // SalesPlatform.ru end
 	if($theme == 'woodspice')
 		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, '#804000', 'white'));
 	elseif($theme == 'bluelagoon')
@@ -130,6 +140,9 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'blue', 'white'));
 	else
 		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'black', 'white'));
+        // SalesPlatform.ru begin: Setup bargraph color from theme
+        }
+        // SalesPlatform.ru end
 	
 	for($i=0;$i<count($datay); $i++)
 	{

@@ -111,7 +111,8 @@ function validate_sendmail_popup(idlist,parentname,module) {
 		{
 			var fieldid = email_type[i];
 			var email = document.SendMail.elements["semail_val_"+fieldid].value;
-			set_return_emails(idlist, fieldid, parentname, email, email, 1);
+                        // Bugfix: Send EMail for User. For more info see mailsend.php at line if($realid[1] == -1)
+			set_return_emails(idlist, (module == 'Users' ? -1 : fieldid), parentname, email, email, 1);
 			window.close();
 		}
 	}
@@ -245,14 +246,8 @@ function rel_eMail(module,oButton,relmod)
 	}
 	else
 	{
-                // SalesPlatform.ru begin : Send Emails to all Records from current filter
-		if (!confirm(alert_arr.SELECT_MASS)) {
-                    return false;
-                }
-                allids='-1:-1';
-		//alert(alert_arr.SELECT);
-		//return false;
-                // SalesPlatform.ru end
+		alert(alert_arr.SELECT);
+		return false;
 	}
 	fnvshobj(oButton,'sendmail_cont');
 	sendmail(relmod,allids);

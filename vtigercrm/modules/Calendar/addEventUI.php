@@ -972,6 +972,8 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 						<option value="PurchaseOrder"><?php echo $app_strings['PurchaseOrder']?></option>
 						<option value="SalesOrder"><?php echo $app_strings['SalesOrder']?></option>
 						<option value="Invoice"><?php echo $app_strings['Invoice']?></option>
+						<option value="Act"><?php echo $app_strings['Act']?></option>
+                                                <option value="Consignment"><?php echo $app_strings['Consignment']?></option>
 						</select>
 				</td>
 				<td>

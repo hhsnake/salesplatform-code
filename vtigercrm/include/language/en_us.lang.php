@@ -410,6 +410,12 @@ $app_strings = array (
 'SalesOrder Status History' => 'SalesOrder Status History',
 'Quote Stage History' => 'Quote Stage History',
 'Invoice Status History' => 'Invoice Status History',
+// SalesPlatform.ru begin: Added acts and consignments
+'Act Status History' => 'Act Status History',
+'Act' => 'Act',
+'Consignment Status History' => 'Consignment Status History',
+'Consignment' => 'Consignment',
+// SalesPlatform.ru end
 'LBL_TROUBLE_TICKET' => 'Trouble Ticket',
 'My Home Page' => 'My Home Page',
 'Marketing' => 'Marketing',
@@ -487,6 +493,12 @@ $app_strings = array (
 'LBL_PORDER_NAME' => 'Purchase Order',
 'LBL_SORDER_NAME' => 'Sales Order',
 'COMBO_INVOICES' => 'Invoice',
+// SalesPlatform.ru begin: Added acts and consignments
+'COMBO_ACTS' => 'Act',
+'LBL_ACT_NAME' => 'Act',
+'COMBO_CONSIGNMENTS' => 'Consignment',
+'LBL_CONSIGNMENT_NAME' => 'Consignment',
+// SalesPlatform.ru end
 'LBL_INVOICE_NAME' => 'Invoice',
 'LBL_QUOTES_NAME' => 'Quote',
 'LBL_HELPDESK_NAME' => 'Trouble Ticket',
@@ -1304,6 +1316,9 @@ $app_strings = array (
 'LBL_PASSWORD' => 'Password',
 'LBL_LOGIN' => 'Login',
 'LBL_CONNECT_WITH_US' => 'Connect with us',
+'SPModulePickList' => 'Module Field PickList',
+'SPPDFTemplates' => 'PDF Templates',
+'SPConfigurationManager' => 'Configuration Manager',
 // SalesPlatform.ru end
 );
 

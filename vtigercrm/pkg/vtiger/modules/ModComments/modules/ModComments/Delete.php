@@ -19,8 +19,14 @@ $parenttab = getParentTab();
 //Added to fix 4600
 $url = getBasic_Advance_SearchURL();
 
+// SalesPlatform.ru begin
 // Forcefully disable deletion of the record
-if (false) {
+// if (false) {
+global $current_user;
+require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
+if ($is_admin == 'true') {
+// SalesPlatform.ru end
 	$focus = CRMEntity::getInstance($currentModule);
 	DeleteEntity($currentModule, $return_module, $focus, $record, $return_id);
 }

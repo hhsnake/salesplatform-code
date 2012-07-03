@@ -81,7 +81,7 @@ $smarty->assign("PARENTTAB", getParentTab());
 
 
 $Modulenames = Array(''=>$mod_strings["LBL_PLS_SELECT"]);
-$sql = "SELECT tabid, name FROM vtiger_tab WHERE name IN ('SalesOrder', 'Invoice', 'Quotes', 'HelpDesk') ORDER BY name ASC";
+$sql = "SELECT tabid, name FROM vtiger_tab WHERE name IN ('SalesOrder', 'Invoice', 'Quotes', 'HelpDesk', 'Act', 'Consignment', 'PurchaseOrder') ORDER BY name ASC";
 $result = $adb->query($sql);
 while($row = $adb->fetchByAssoc($result)){
   $Modulenames[$row['name']] = getTranslatedString($row['name']);

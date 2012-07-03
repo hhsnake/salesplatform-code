@@ -213,13 +213,19 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 			$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
 
 	} elseif($_REQUEST["reply"] == "single"){
-		$replyToInfo = $webmail->getReplyToInformation(); 
-		if(!empty($replyToInfo)){ 
+		$replyToInfo = $webmail->getReplyToInformation();
+                // SalesPlatform.ru begin
+		if(!empty($replyToInfo) && count($replyToInfo) > 0){
+		//if(!empty($replyToInfo)){
+                // SalesPlatform.ru end
 			$smarty->assign('TO_MAIL',$replyToInfo['name']."<".$webmail->reply_to[0].">".","); 
 			$smarty->assign('IDLISTS',$replyToInfo['id'].'@'.$replyToInfo['fieldId'].'|'); 
 		} 
-		else 
-			$smarty->assign('TO_MAIL',$replyToInfo['name']."<".$webmail->reply_to[0].">".","); 
+		else
+                        // SalesPlatform.ru begin
+			$smarty->assign('TO_MAIL',$webmail->reply_to[0].","); 
+			//$smarty->assign('TO_MAIL',$replyToInfo['name']."<".$webmail->reply_to[0].">".",");
+                        // SalesPlatform.ru end
 			
 		//$smarty->assign('BCC_MAIL',$webmail->to[0]);
 		if(preg_match("/RE:/i", $webmail->subject))

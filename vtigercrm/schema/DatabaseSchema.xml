@@ -1198,6 +1198,12 @@
 		<field name="customs_id" type="C" size="100">
 			<default value="" />
 		</field>
+		<field name="manuf_country_code" type="C" size="100">
+			<default value="" />
+		</field>
+		<field name="unit_code" type="C" size="100">
+			<default value="" />
+		</field>
 
 		<opt platform="mysql">ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
 	</table>
@@ -3409,10 +3415,6 @@
 		<field name="enable_recurring" type="I">
 			<default value="0" />
 		</field>
-		<field name="factura_no" type="C" size="100" />
-		<field name="factura_date" type="D" />
-		<field name="payment_no" type="C" size="100" />
-		<field name="payment_date" type="D" />
 
 		<index name="salesorder_vendorid_idx">
 			<col>vendorid</col>
@@ -6262,6 +6264,14 @@
 		<field name="status" type="I" size="2" >
 			<notnull />
 		</field>
+		<field name="rtype" type="I" size="2" >
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="title" type="C" size="255" >
+			<notnull />
+			<default value="" />
+		</field>
 		<opt platform="mysql">ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
 	</table>
 	
@@ -7541,6 +7551,16 @@
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
+	</table>
+
+        <table name="sp_module_picklist_fields_rel">
+		<field name="fieldid" type="I" size="19">
+			<key />
+		</field>
+		<field name="srcfieldid" type="I" size="19">
+			<key />
 		</field>
 		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci</opt>
 	</table>

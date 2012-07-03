@@ -23,7 +23,10 @@ class Vtiger_LocalBackup extends Vtiger_Location{
 		$db = PearDatabase::getInstance();
 		$result = $db->pquery("SELECT * FROM vtiger_systems WHERE server_type = ?",
 				array('local_backup'));
-        $this->path = $db->query_result($result,0,'server_path');
+    		$this->path = $db->query_result($result,0,'server_path');
+// SalesPlatform.ru begin
+		if(isset($this->path) && $this->path != '')
+// SalesPlatform.ru end    		
 		$this->path = $this->addTrailingSlash($this->path);
 	}
 

@@ -8,7 +8,7 @@
   `modulename` varchar(100) default NULL,
   `expression_engine` text,
   PRIMARY KEY  (`expressionid`)
-)]]></sql>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 		</table>
 	</tables>
 </schema>

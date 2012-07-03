@@ -49,6 +49,7 @@ $mod_strings = array (
       'VTChangeFieldValueTask'=>'Изменить значение поля',
       'VTChangeRelModuleFieldValueTask'=>'Изменить значение поля связанного модуля',
       'VTEmailPDFTask' => 'Отправить Email с PDF',
+      'VTActivityReminderTask' => 'Напоминание',
 	  'LBL_DESCRIPTION' => 'Описание',
       'LBL_UPDATED_FIELD_NAME' => 'Название обновляемого поля',
 	  'LBL_MODULE' => 'Модуль',

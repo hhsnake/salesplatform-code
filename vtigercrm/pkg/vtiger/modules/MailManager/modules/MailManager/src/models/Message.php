@@ -99,10 +99,16 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 	    // get all parameters, like charset, filenames of attachments, etc.
     	$params = array();
 	    if ($p->parameters) {
-			foreach ($p->parameters as $x) $params[ strtolower( $x->attribute ) ] = $x->value;
+                        // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+			foreach ($p->parameters as $x) $params[ strtolower( $x->attribute ) ] = $this->handleEncodedFilename($x->value);
+                        //foreach ($p->parameters as $x) $params[ strtolower( $x->attribute ) ] = $x->value;
+                        // SalesPlatform.ru end
 		}
 	    if ($p->dparameters) {
-			foreach ($p->dparameters as $x) $params[ strtolower( $x->attribute ) ] = $x->value;
+                        // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+			foreach ($p->dparameters as $x) $params[ strtolower( $x->attribute ) ] = $this->handleEncodedFilename($x->value);
+                        //foreach ($p->dparameters as $x) $params[ strtolower( $x->attribute ) ] = $x->value;
+                        // SalesPlatform.ru end
 		}
 
 		// ATTACHMENT
@@ -422,8 +428,12 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 	 */
 	function from($maxlen = 0) {
 		$fromString = $this->_from;
-		if ($maxlen && strlen($fromString) > $maxlen) {
-			$fromString = substr($fromString, 0, $maxlen-3).'...';
+                // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+		if ($maxlen && mb_strlen($fromString, 'utf-8') > $maxlen) {
+			$fromString = mb_substr($fromString, 0, $maxlen-3, 'utf-8').'...';
+                //if ($maxlen && strlen($fromString) > $maxlen) {
+                //	$fromString = substr($fromString, 0, $maxlen-3).'...';
+                // SalesPlatform.ru end
 		}
 		return $fromString;
 	}
@@ -535,6 +545,114 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 		$this->mMsgNo = $msgno;
 	}
 
+        // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+	/**
+	 * takes the output from imap_mime_hader_decode() and handles multiple types of encoding
+	 * @param string subject Raw subject string from email
+	 * @return string ret properly formatted UTF-8 string
+	 */
+	function handleMimeHeaderDecode($subject) {
+		$subjectDecoded = imap_mime_header_decode($subject);
+
+		$ret = '';
+		foreach($subjectDecoded as $object) {
+			if($object->charset != 'default') {
+				$ret .= $this->handleCharsetTranslation($object->text, $object->charset);
+			} else {
+				$ret .= $object->text;
+			}
+		}
+		return $ret;
+	}
+	/**
+	 * handles translating message text from orignal encoding into UTF-8
+	 *
+	 * @param string text test to be re-encoded
+	 * @param string charset original character set
+	 * @return string utf8 re-encoded text
+	 */
+	function handleCharsetTranslation($text, $charset) {
+		if(empty($charset)) {
+			return $text;
+		}
+
+		// typical headers have no charset - let destination pick (since it's all ASCII anyways)
+		if(strtolower($charset) == 'default' || strtolower($charset) == 'utf-8') {
+			return $text;
+		}
+
+		return $this->translateCharset($text, $charset);
+	}
+	/**
+	 * translates a character set from one encoding to another encoding
+	 * @param string string the string to be translated
+	 * @param string fromCharset the charset the string is currently in
+	 * @param string toCharset the charset to translate into (defaults to UTF-8)
+	 * @return string the translated string
+	 */
+	function translateCharset($string, $fromCharset, $toCharset='UTF-8') {
+		if(function_exists('mb_convert_encoding')) {
+			return mb_convert_encoding($string, $toCharset, $fromCharset);
+		} elseif(function_exists('iconv')) { // iconv is flakey
+			return iconv($fromCharset, $toCharset, $string);
+		} else {
+			return $string;
+		}
+	}
+	/**
+	 * tries to figure out what character set a given filename is using and
+	 * decode based on that
+	 *
+	 * @param string name Name of attachment
+	 * @return string decoded name
+	 */
+	function handleEncodedFilename($name) {
+	    $string = $name;
+	    if(($pos = strpos($string,"=?")) === false) {
+	        $pos = strpos($string,"'");
+	    	if(!($pos === false)) {
+                	$encoding = substr($string,0,$pos);
+		        $string = substr($string,$pos+1,strlen($string));
+	        	$pos = strpos($string,"'");
+			if(!($pos === false)) {
+	        		$string = substr($string,$pos+1,strlen($string));
+			} else return $name;
+		} else return $name;
+	        $result = urldecode($string);
+		
+	    } else {
+		    while(!($pos === false)) {
+		        $newresult .= substr($string,0,$pos);
+	        	$string = substr($string,$pos+2,strlen($string));
+		        $intpos = strpos($string,"?");
+		        $charset = substr($string,0,$intpos);
+	        	$enctype = strtolower(substr($string,$intpos+1,1));
+		        $string = substr($string,$intpos+3,strlen($string));
+		        $endpos = strpos($string,"?=");
+	        	$mystring = substr($string,0,$endpos);
+		        $string = substr($string,$endpos+2,strlen($string));
+		        if($enctype == "q") $mystring = quoted_printable_decode(ereg_replace("_"," ",$mystring));
+	        	else if ($enctype == "b") $mystring = base64_decode($mystring);
+		        $newresult .= $mystring;
+		        $pos = strpos($string,"=?");
+		    }
+		    $result = $newresult.$string;
+
+		    $imapDecode = imap_mime_header_decode($name);
+		    if($imapDecode[0]->charset != 'default') { // mime-header encoded charset
+	    		$encoding = $imapDecode[0]->charset;
+		    } else {
+			// encoded filenames are formatted as [encoding]''[filename]
+			if(strpos($name, "''") !== false) {
+	        		$encoding = substr($name, 0, strpos($name, "'"));
+			}
+		    }
+	    }
+
+	    return (strtolower($encoding) == 'utf-8') ? $result : mb_convert_encoding($result, 'UTF-8', $encoding);
+  	}
+        // SalesPlatform.ru end
+
 	/**
 	 * Sets the Mail Headers
 	 * @param Object $result
@@ -542,13 +660,18 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 	 */
 	static function parseOverview($result) {
 		$instance = new self();
-		$instance->setSubject($result->subject);
-		$instance->setFrom($result->from);
+                // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+		$instance->setSubject($instance->handleMimeHeaderDecode($result->subject));
+		$instance->setFrom($instance->handleMimeHeaderDecode($result->from));
+                //$instance->setSubject($result->subject);
+                //$instance->setFrom($result->from);
+                // SalesPlatform.ru end
 		$instance->setDate($result->date);
 		$instance->setRead($result->seen);
 		$instance->setMsgNo($result->msgno);
 		return $instance;
 	}
+
 	
 }
 ?>

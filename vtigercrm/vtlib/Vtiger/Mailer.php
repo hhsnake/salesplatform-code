@@ -54,7 +54,13 @@ class Vtiger_Mailer extends PHPMailer {
 			$this->Username = $adb->query_result($result, 0, 'server_username');
 			$this->Password = $adb->query_result($result, 0, 'server_password');
 			$this->SMTPAuth = $adb->query_result($result, 0, 'smtp_auth');
-			if(empty($this->SMTPAuth)) $this->SMTPAuth = false;
+// SalesPlatform.ru begin: Fixed bug with sending mails in Vtiger_Mailer
+                        if($this->SMTPAuth == "true")
+                            $this->SMTPAuth = true;	// turn on SMTP authentication
+                        else
+                            $this->SMTPAuth = false;
+			//if(empty($this->SMTPAuth)) $this->SMTPAuth = false;
+// SalesPlatform.ru end
 // SalesPlatform.ru begin
                         $use_sendmail = $adb->query_result($result,0,'use_sendmail');
                         if(!empty($use_sendmail) && $use_sendmail != 'false')
@@ -71,9 +77,17 @@ class Vtiger_Mailer extends PHPMailer {
                             $this->Port = $mail_server_port;
 // SalesPlatform.ru end
 
-			$this->ConfigSenderInfo($adb->query_result($result, 0, 'from_email_field'));
+// SalesPlatform.ru begin: Fixed bug with sending mails in Vtiger_Mailer
+                        $replyto = $adb->query_result($result, 0, 'from_email_field');
+                        if(empty($replyto)) {
+                            global $HELPDESK_SUPPORT_EMAIL_ID;
+                            $replyto = $HELPDESK_SUPPORT_EMAIL_ID;
+                        }
+                        $this->ConfigSenderInfo($replyto, $replyto, $replyto);
+//                        $this->ConfigSenderInfo($adb->query_result($result, 0, 'from_email_field'));
+// SalesPlatform.ru end
 
-			$this->_serverConfigured = true;
+                        $this->_serverConfigured = true;
 		}
 	}
 
@@ -119,6 +133,9 @@ class Vtiger_Mailer extends PHPMailer {
 
 		$this->From = $fromemail;
 		$this->FromName = $fromname;
+                // SalesPlatform.ru begin: from Community user ilapko: Empty ReplyTo bugfix
+                if (!empty($replyto))
+                // SalesPlatform.ru end
 		$this->AddReplyTo($replyto);
 	}
 

@@ -35,6 +35,10 @@
 					{*<!-- load contents for the widget-->*}
 					{if $tablestuff.Stufftype eq 'Default' && $tablestuff.Stufftitle eq 'Home Page Dashboard'|@getTranslatedString:'Home'}
 						fetch_homeDB({$tablestuff.Stuffid});
+					{* SalesPlatform.ru begin Configuration panel added *}
+					{elseif $tablestuff.Stufftype eq 'Default' && $tablestuff.Stufftitle eq 'LBL_SP_CONFIGURATION'|@getTranslatedString:'System Configuration'}
+						fetchConfigurationDiagram({$tablestuff.Stuffid});
+					{* SalesPlatform.ru end *}
 					{elseif $tablestuff.Stufftype eq 'DashBoard'}
 						loadStuff({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');
 					{/if}
@@ -51,8 +55,13 @@ var Vt_homePageWidgetInfoList = [
 {if $HOMEFRAME|@count > 0}
 	{assign var=HOMEFRAME value=$HOMEFRAME|@array_reverse}
 	{foreach item=tablestuff key=index from=$HOMEFRAME name="homeframe"}
-		{if ($tablestuff.Stufftype neq 'Default' || $tablestuff.Stufftitle neq
-				'Home Page Dashboard'|@getTranslatedString:'Home') && $tablestuff.Stufftype neq 'DashBoard'}
+{* SalesPlatform.ru begin Configuration panel added *}
+		{if ($tablestuff.Stufftype neq 'Default' || ($tablestuff.Stufftitle neq 
+				'Home Page Dashboard'|@getTranslatedString:'Home' && $tablestuff.Stufftitle neq 
+				'LBL_SP_CONFIGURATION'|@getTranslatedString:'System Configuration')) && $tablestuff.Stufftype neq 'DashBoard'} 
+{*		{if ($tablestuff.Stufftype neq 'Default' || $tablestuff.Stufftitle neq *}
+{*				'Home Page Dashboard'|@getTranslatedString:'Home') && $tablestuff.Stufftype neq 'DashBoard'} *}
+{* SalesPlatform.ru end *}
 			{ldelim}
 				'widgetId':{$tablestuff.Stuffid},
 				'widgetType':'{$tablestuff.Stufftype}'

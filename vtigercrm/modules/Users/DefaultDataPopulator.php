@@ -58,6 +58,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values (29,'Users',0,26,'Users',0,1,0)");
 // SalesPlatform.ru begin
                 $this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values (30,'SPPDFTemplates',0,27,'PDF Templates',0,1,0)");
+                $this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values (31,'SPModulePickList',0,28,'SPModulePickList',0,0,0)");
 // SalesPlatform.ru end
 		
 		// Populate the vtiger_blocks vtiger_table
@@ -139,11 +140,6 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_blocks values (".$podescription.",21,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0,1,0)");
 		$sobasicblock = $this->db->getUniqueID('vtiger_blocks');
 		$this->db->query("insert into vtiger_blocks values (".$sobasicblock .",22,'LBL_SO_INFORMATION',1,0,0,0,0,0,1,0)");
-
-// SalesPlatform.ru begin
-                $sofactura = $this->db->getUniqueID('vtiger_blocks');
-		$this->db->query("insert into vtiger_blocks values (".$sofactura.",22,'Facture Invoice',2,0,0,0,0,0,1,0)");
-// SalesPlatform.ru end
 
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_CUSTOM_INFORMATION',3,0,0,0,0,0,1,0)");
 		$soaddressblock = $this->db->getUniqueID('vtiger_blocks');
@@ -477,6 +473,7 @@ class DefaultDataPopulator extends CRMEntity {
 // SalesPlatform.ru begin
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'manuf_country', 'vtiger_products', 1, 1, 'manuf_country', 'Manuf. Country', 1, 2, '', 100, 22, 31, 1, 'V~O', 3, NULL, 'BAS', 0)");
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'customs_id', 'vtiger_products', 1, 1, 'customs_id', 'Customs ID', 1, 2, '', 100, 23, 31, 1, 'V~O', 3, NULL, 'BAS', 0)");
+ 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'manuf_country_code', 'vtiger_products', 1, 1, 'manuf_country_code', 'Mf. Country Code', 1, 2, '', 100, 24, 31, 1, 'V~O', 3, NULL, 'BAS', 0)");
 // SalesPlatform.ru end
 
 		//Block32 Pricing Information
@@ -494,6 +491,10 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'reorderlevel','vtiger_products',1,'1','reorderlevel','Reorder Level',1,2,'',100,4,33,1,'I~O',1,null,'ADV',1)");
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'handler','vtiger_products',1,'52','assigned_user_id','Handler',1,0,'',100,5,33,1,'I~O',1,null,'ADV',1)");
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyindemand','vtiger_products',1,'1','qtyindemand','Qty In Demand',1,2,'',100,6,33,1,'I~O',1,null,'ADV',1)");
+
+                // SalesPlatform.ru begin
+ 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'unit_code','vtiger_products',1,'1','unit_code','Unit Code',1,2,'',100,7,33,1,'V~O',1,null,'ADV',1)");
+                // SalesPlatform.ru end
 
 		//ProductImageInformation
 
@@ -861,13 +862,6 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,'',100,5,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,'',100,6,$sorecurringinvoiceblock,1,'V~M',3,null,'BAS',0)");
 
-// SalesPlatform.ru begin
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'factura_no', 'vtiger_salesorder', 1, 1, 'factura_no', 'Factura No', 1, 2, '', 100, 1, $sofactura, 1, 'V~O', 3, NULL, 'BAS', 0)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'factura_date', 'vtiger_salesorder', 1, 5, 'factura_date', 'Factura Date', 1, 2, '', 100, 2, $sofactura, 1, 'D~O', 3, NULL, 'BAS', 0)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_no', 'vtiger_salesorder', 1, 1, 'payment_no', 'Payment No', 1, 2, '', 100, 3, $sofactura, 1, 'V~O', 3, NULL, 'BAS', 0)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_date', 'vtiger_salesorder', 1, 5, 'payment_date', 'Payment Date', 1, 2, '', 100, 4, $sofactura, 1, 'D~O', 3, NULL, 'BAS', 0)");
-// SalesPlatform.ru end
-		
 		//Sales Order Details -- END
 		
 		//Invoice Details -- START
@@ -991,7 +985,11 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Leads'));
 		$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Contacts'));
 		$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Accounts'));
-		
+
+                // SalesPlatform.ru begin: Fix Users phone fields type
+		$this->db->query("UPDATE vtiger_field SET uitype=11 WHERE columnname LIKE 'phone_%' and tabid=".getTabid('Users'));
+                // SalesPlatform.ru end
+
 		$tab_field_array = array(
 		'Accounts'=>array('accountname'),
 		'Contacts'=>array('imagename'),
@@ -1946,7 +1944,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 
 	//Insert values for vtiger_moduleowners vtiger_table which contains the modules and their vtiger_users. default user id admin - after 4.2 patch 2
 // SalesPlatform.ru begin
-        $module_array = Array('Potentials','Contacts','Accounts','Leads','Documents','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns','SPPDFTemplates');
+        $module_array = Array('Potentials','Contacts','Accounts','Leads','Documents','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns','SPPDFTemplates','SPModulePickList');
         //$module_array = Array('Potentials','Contacts','Accounts','Leads','Documents','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns');
 // SalesPlatform.ru end
 	foreach($module_array as $mod)

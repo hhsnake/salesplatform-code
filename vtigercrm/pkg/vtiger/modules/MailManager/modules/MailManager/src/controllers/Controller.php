@@ -99,6 +99,10 @@ abstract class MailManager_Controller {
 				$draftController = new MailManager_DraftController();
 				$this->mConnector = $draftController->connectorWithModel();
 			} else {
+                                // SalesPlatform.ru begin: from Community user vsaranov: UTF8 support
+				$folder = mb_convert_encoding($folder, "UTF7-IMAP", "UTF8");
+                                // SalesPlatform.ru end
+			
 				if ($this->mConnector) $this->mConnector->close();
 
 				$model = $this->getMailboxModel();

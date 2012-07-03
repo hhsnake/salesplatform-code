@@ -97,7 +97,11 @@ if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && ($_REQUE
 		sendInvitation($invitees_ids_string,$activity_type,$mail_data['subject'],$mail_data);
 	}
 
-
+        // SalesPlatform.ru begin Fix for events generation
+        $focus->retrieve_entity_info($focus->id, $tab_type);
+        $focus->mode = 'edit';
+        $focus->save($tab_type);
+        // SalesPlatform.ru end
 }
 else
 {

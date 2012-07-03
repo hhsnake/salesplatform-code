@@ -127,8 +127,8 @@ function getToolTipText($view,$fieldname,$module,$value){
 			if(empty($fieldvalue)) {
 				$fieldvalue = '&nbsp;';
 			}
-			if(strlen($fieldvalue)>35){
-				$fieldvalue = substr($fieldvalue,0,35).'...';
+			if(mb_strlen($fieldvalue,'UTF-8')>35){
+				$fieldvalue =mb_substr($fieldvalue,0,35,'UTF-8').'...';
 			}
 			$text[$label] = $fieldvalue;
 		}

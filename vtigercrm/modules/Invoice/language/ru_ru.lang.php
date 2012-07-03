@@ -175,6 +175,10 @@ $mod_strings = array (
       'List Price' => 'Цена в Каталоге',
       'Comments' => 'Комментарии',
 
+      // Added acts and consignments
+      'Act' => 'Акт',
+      'Consignment' => 'Реализация',
+
 // 5.3.0 begin
       'SINGLE_Invoice'=>'Счет',
 // 5.3.0 end

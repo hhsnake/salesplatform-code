@@ -34,6 +34,16 @@ $mod_strings = Array (
 'SMSCheckStatus'              => 'Check Status',
 'StatusInformation'           => 'Status Information',
 
+// SalesPlatform.ru begin
+'LBL_YES'                     => 'Yes',
+'LBL_NO'                      => 'No',
+'LBL_SSMS_SENDER'             => 'Sender',
+'LBL_SSMS_TIME'               => 'Time(min)',
+'LBL_SMSPM_AUTH_HASH'         => 'Hash',
+'LBL_SMSPM_SENDER'            => 'Sender',
+'LBL_SMS16_SENDER'            => 'Sender',
+'LBL_INFORMGRAD_ACCOUNT_NUMBER' => 'Account Number',
+// SalesPlatform.ru end
 );
 
 ?>

@@ -36,6 +36,12 @@ class BURAK_Gantt {
 	* @var integer Font type
 	*/
 	var $font;
+        // SalesPlatform.ru begin
+	/**
+	* @var string TTF Font file path
+	*/
+	var $ttf_font_file;
+        // SalesPlatform.ru end
 	/**
 	* @var array Stores component color information
 	*/
@@ -906,7 +912,14 @@ class BURAK_Gantt {
 		$pos = $this->data_gantt[$id]["pos"];
 		imagefilledrectangle($this->im,$pos["x1"],$pos["y1"],$pos["x2"],$pos["y2"], $this->colors["task"]);
 		$d = $this->data_gantt[$id]["label"];
-		imagestring($this->im,2,($pos["x1"]+5),($pos["y1"]-$this->heights["task"]-3),$d,$this->colors["font"]);
+                // SalesPlatform.ru begin
+                if (isset($this->ttf_font_file) && file_exists($this->ttf_font_file)) {
+                    imagettftext($this->im, 8, 0, ($pos["x1"]+5), ($pos["y1"]-3), $this->colors["font"], $this->ttf_font_file, $d);
+                } else {
+                    imagestring($this->im,2,($pos["x1"]+5),($pos["y1"]-$this->heights["task"]-3),$d,$this->colors["font"]);
+                }
+                //imagestring($this->im,2,($pos["x1"]+5),($pos["y1"]-$this->heights["task"]-3),$d,$this->colors["font"]);
+                // SalesPlatform.ru end
 		// border
 		imagerectangle($this->im,$pos["x1"],$pos["y1"],$pos["x2"],$pos["y2"],$this->colors["line"]);
 		// progress
@@ -933,7 +946,14 @@ class BURAK_Gantt {
 			$pos["y4"]
 		);
 		imagefilledpolygon($this->im,$vertices,4,$this->colors["milestone"]);
-		imagestring($this->im,2,($pos["x3"]+5),($pos["y2"]-$this->heights["task"]-3),$this->data_gantt[$id]["label"],$this->colors["font"]);
+                // SalesPlatform.ru begin
+                if (isset($this->ttf_font_file) && file_exists($this->ttf_font_file)) {
+                    imagettftext($this->im, 8, 0, ($pos["x3"]+5), ($pos["y2"]-3), $this->colors["font"], $this->ttf_font_file, $this->data_gantt[$id]["label"]);
+                } else {
+                    imagestring($this->im,2,($pos["x3"]+5),($pos["y2"]-$this->heights["task"]-3),$this->data_gantt[$id]["label"],$this->colors["font"]);
+                }
+		//imagestring($this->im,2,($pos["x3"]+5),($pos["y2"]-$this->heights["task"]-3),$this->data_gantt[$id]["label"],$this->colors["font"]);
+                // SalesPlatform.ru end
 	}
 	
 	/**

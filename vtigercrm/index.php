@@ -878,6 +878,9 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	
 		if($current_user->id!=NULL && isPermitted('Calendar','index') == 'yes' &&
 				vtlib_isModuleActive('Calendar')) {
+                        // SalesPlatform.ru begin Renewable reminders added
+                        $_SESSION['renewable_reminders_displayed'] = 0;
+                        // SalesPlatform.ru end
 			echo "<script type='text/javascript'>if(typeof(ActivityReminderCallback) != ".
 				"'undefined') ";
 			$cur_time = time();

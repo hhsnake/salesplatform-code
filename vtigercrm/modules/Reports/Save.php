@@ -78,7 +78,7 @@ for ($i=0;$i<count($allKeys);$i++)
 //<<<<<<<advancedfilter>>>>>>>>
 $json = new Zend_Json();
 
-$advft_criteria = $_REQUEST['advft_criteria'];
+$advft_criteria = urldecode($_REQUEST['advft_criteria']);
 $advft_criteria = $json->decode($advft_criteria);
 
 $advft_criteria_groups = $_REQUEST['advft_criteria_groups'];

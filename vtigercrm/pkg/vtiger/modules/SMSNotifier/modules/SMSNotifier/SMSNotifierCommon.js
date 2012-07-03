@@ -66,6 +66,53 @@ if(typeof(SMSNotifierCommon) == 'undefined') {
 				if(count > 1) {
 					idstring=select_options;
 				} else {
+                                        // SalesPlatform.ru begin : Send SMS to all Records from current filter
+                                        if (!confirm(alert_arr.SELECT_MASS)) {
+                                            return false;
+                                        }
+                                        idstring = '-1;-1'
+                                        document.getElementById('allselectedboxes').value='';
+					//alert(alert_arr.SELECT);
+					//return false;
+                                        // SalesPlatform.ru end
+				}
+			} else {
+				// Record id sent? Could be from DetailView
+				idstring = recordid;
+			}
+	
+			if(idstring) {
+				var url = 'module=SMSNotifier&action=SMSNotifierAjax&ajax=true&file=SMSNotifierSelectWizard';
+				url += '&sourcemodule=' + encodeURIComponent(sourcemodule);			
+				url += '&idstring=' + encodeURIComponent(idstring);
+							
+				new Ajax.Request('index.php', {
+					queue: {position: 'end', scope: 'command'},
+					method: 'post',
+					postBody:url,
+					onComplete: function(response) {					
+						SMSNotifierCommon.buildSelectWizard(response.responseText, sourcenode);					
+					}
+				});
+			}
+		},
+
+                // SalesPlatform.ru begin: Send Email button for related Contacts & Leads
+		displaySelectWizardRel : function(sourcenode, sourcemodule, recordid) {
+			var idstring = false;
+			
+			// Record id not sent directly? Could be from ListView
+			if(typeof(recordid) == 'undefined' || recordid == null || recordid == '') {
+                                var select_options='';
+                                var cookie_val=get_cookie(sourcemodule + "_all");
+                                if(cookie_val != null)
+                                        select_options=cookie_val;
+				var x = select_options.split(';');
+				var count = x.length;
+				
+				if(count > 1) {
+					idstring=select_options;
+				} else {
 					alert(alert_arr.SELECT);
 					return false;
 				}
@@ -89,7 +136,8 @@ if(typeof(SMSNotifierCommon) == 'undefined') {
 				});
 			}
 		},
-		
+                // SalesPlatform.ru end
+
 		buildSelectWizard : function(content, sourcenode) {
 			var container = SMSNotifierCommon.getWizardContainer();
 			container.innerHTML = content;			

@@ -3723,7 +3723,17 @@ function getModuleSequenceNumber($module,$recordId){
 			$res = $adb->query("SELECT salesorder_no FROM vtiger_salesorder WHERE salesorderid = $recordId");
 			$moduleSeqNo = $adb->query_result($res,0,'salesorder_no');
 			break;
-	}
+                // SalesPlatform.ru begin: Added acts and consignments
+		case "Act":
+			$res = $adb->query("SELECT act_no FROM vtiger_sp_act WHERE actid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'act_no');
+			break;
+		case "Consignment":
+			$res = $adb->query("SELECT consignment_no FROM vtiger_sp_consignment WHERE consignmentid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'consignment_no');
+			break;
+                // SalesPlatform.ru end
+                }
 	return $moduleSeqNo;
 }
 ?>

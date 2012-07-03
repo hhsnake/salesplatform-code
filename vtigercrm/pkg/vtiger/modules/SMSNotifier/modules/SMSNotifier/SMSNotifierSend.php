@@ -14,6 +14,12 @@ include_once dirname(__FILE__) . '/SMSNotifier.php';
 global $currentModule, $mod_strings, $app_strings, $current_user, $adb;
 
 $idstring = vtlib_purify($_REQUEST['idstring']);
+// SalesPlatform.ru begin : Send SMS to all Records from current filter
+$sourcemodule = vtlib_purify($_REQUEST['sourcemodule']);
+if (strcmp(trim($idstring), "-1;-1") == 0) {
+    $idstring = implode(';', get_filtered_ids($sourcemodule));
+}
+// SalesPlatform.ru end
 $idstring = trim($idstring, ';');
 $idlist = explode(';', $idstring);
 

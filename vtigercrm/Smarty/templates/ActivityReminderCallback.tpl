@@ -15,7 +15,10 @@
 <table border='0' cellpadding='2' cellspacing='0'>
 	<tr>
 		<td align='left'><b>
-		<img align="top" src="themes/images/{$activitytype}s.gif"/> {$activitytype} - {$cbstatus}</b> </td>
+                {* SalesPlatform.ru begin Reminder images fix *}
+		<img align="top" src="themes/images/{$cbmodule}.gif"/> {$activitytype} {$cbstatus}</b> </td>
+		{* <img align="top" src="themes/images/{$activitytype}s.gif"/> {$activitytype} - {$cbstatus}</b> </td> *}
+                {* SalesPlatform.ru end *}
 		<td align='right'><b><font color={$cbcolor}>{$cbdate} {$cbtime}</font></b></td>
 		<td align='right'>
 			<a style='padding-left: 10px;' href="javascript:;" onclick="ActivityReminderCallbackReset(0, '{$popupid}');ActivityReminderRemovePopupDOM('{$popupid}');"><img src='{'close.gif'|@vtiger_imageurl:$THEME}' align='absmiddle' border='0'></a></td>
@@ -26,11 +29,14 @@
 	</tr>
 
 	<tr>
-		<td colspan='3' align='left'><b>{$cbsubject}</b><a style='padding: 2px;' href='index.php?action=DetailView&module={$cbmodule}&record={$cbrecord}'>[{$APP.LBL_MORE}...]</a></td>
+		<td colspan='3' align='left'><b>{$cbsubject}</b> <a style='padding: 2px;' href='index.php?action=DetailView&module={$cbmodule}&record={$cbrecord}'>[{$APP.LBL_MORE}...]</a></td>
 	</tr>
 
 	<tr>
-		<td align='center'> 
+		<td colspan='3' align='center'> 
+                        {* SalesPlatform.ru begin Add reminder title *}
+                        {if $title neq ''}<span class="cellLabel">{$title}</span>{/if}
+                        {* SalesPlatform.ru end *}
 			<a style='padding: 0 5px 0 5px;' href='javascript:;' onclick="ActivityReminderPostponeCallback('{$cbmodule}','{$cbrecord}','{$cbreminderid}');ActivityReminderRemovePopupDOM('{$popupid}');"><b>{$APP.LBL_POSTPONE}</b></a> 
 		</td>
 	</tr>

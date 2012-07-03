@@ -16,6 +16,13 @@ function SMSTask($){
 	var concat = fn.concat;
 	var vtinst = new VtigerWebservices("webservice.php");
 	
+        // SalesPlatform.ru begin Mssing function added
+        // Display an error message.
+	function errorDialog(message){
+		alert(message);
+	}
+        // SalesPlatform.ru end
+	
 	function handleError(fn){
 		return function(status, result){
 			if(status){

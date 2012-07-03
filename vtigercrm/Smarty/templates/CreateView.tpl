@@ -161,7 +161,10 @@ function sensex_info()
 
 								   {foreach key=header item=data from=$BASBLOCKS}
 								   <tr>
-									{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+{* SalesPlatform.ru begin: Added acts and consignments  *}
+									{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice'|| $MODULE == 'Act'|| $MODULE == 'Consignment')}
+{*									{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')} *}
+{* SalesPlatform.ru end  *}
                                                                         <td colspan=2 class="detailedViewHeader">
                                                                         <b>{$header}</b></td>
                                                                         <td class="detailedViewHeader">

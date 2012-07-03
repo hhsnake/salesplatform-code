@@ -119,6 +119,10 @@ $mod_strings = Array(
 'MSG_NO_FILTERS' => 'No Filters Available',
 'MSG_NO_FIELDS' => 'No Fields Available',
 
+// SalesPlatform.ru begin
+'LBL_SP_CONFIGURATION' => 'System Configuration',
+// SalesPlatform.ru end
+
 );
 
 ?>

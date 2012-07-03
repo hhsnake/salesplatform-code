@@ -1270,5 +1270,9 @@ $mod_strings = Array(
 'Settings' => 'Settings',
 'LBL_ERR_TAX_LABEL_ALREADY_EXISTS' => 'This tax is already available.',
 'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Some tax labels are already available, hence not saved.',
+// SalesPlatform.ru begin
+'LBL_SP_CONFIGURATION' => 'Configuration Manager',
+'LBL_SP_CONFIGURATION_DESC' => 'Manage the application configuration',
+// SalesPlatform.ru end
 );
 ?>

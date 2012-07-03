@@ -28,79 +28,83 @@ else
 
 
 $adb->println("\n\nMail Sending Process has been started.");
-//This function call is used to send mail to the assigned to user. In this mail CC and BCC addresses will be added.
-if($_REQUEST['assigntype' == 'T'] && $_REQUEST['assigned_group_id']!='')
-{
-	$grp_obj = new GetGroupUsers();
-	$grp_obj->getAllUsersInGroup($_REQUEST['assigned_group_id']);
-	$users_list = constructList($grp_obj->group_users,'INTEGER');
-	if (count($users_list) > 0) {
-		$sql = "select first_name, last_name, email1, email2, secondaryemail  from vtiger_users where id in (". generateQuestionMarks($users_list) .")";
-		$params = array($users_list);
-	} else {
-		$sql = "select first_name, last_name, email1, email2, secondaryemail  from vtiger_users";
-		$params = array();
-	}
-	$res = $adb->pquery($sql, $params);
-	$user_email = '';
-	while ($user_info = $adb->fetch_array($res))
-	{
-		$email = $user_info['email1'];
-		if($email == '' || $email == 'NULL')
-		{
-			$email = $user_info['email2'];
-			if($email == '' || $email == 'NULL')
-			{
-				$email = $user_info['secondaryemail '];
-			}
-		}	
-		if($user_email=='')
-		$user_email .= $user_info['first_name']." ".$user_info['last_name']."<".$email.">";
-		else
-		$user_email .= ",".$user_info['first_name']." ".$user_info['last_name']."<".$email.">";
-		$email='';
-	}
-	$to_email = $user_email;
-}
-else
-{
-	$to_email = getUserEmailId('id',$focus->column_fields["assigned_user_id"]);
-}
-$cc = $_REQUEST['ccmail'];
-$bcc = $_REQUEST['bccmail'];
-if($to_email == '' && $cc == '' && $bcc == '')
-{
-	$adb->println("Mail Error : send_mail function not called because To email id of assigned to user, CC and BCC are empty");
-	$mail_status_str = "'".$to_email."'=0&&&";
-	$errorheader1 = 1;
-}
-else
-{
-	$query1 = "select email1 from vtiger_users where id =?";
-	$res1 = $adb->pquery($query1, array($current_user->id));
-	$val = $adb->query_result($res1,0,"email1");
-//	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc,'all',$focus->id);
-	
-	$query = 'update vtiger_emaildetails set email_flag ="SENT",from_email =? where emailid=?';
-	$adb->pquery($query, array($val, $focus->id));
-	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
-	if($mail_status != 1)//when mail send fails
-	{
-		$errorheader1 = 1;
-		$mail_status_str = $to_email."=".$mail_status."&&&";
-	}
-	elseif($mail_status == 1 && $to_email == '')//Mail send success only for CC and BCC but the 'to' email is empty 
-	{
-		$adb->pquery($query, array($val, $focus->id));
-		$errorheader1 = 1;
-		$mail_status_str = "cc_success=0&&&";
-	}
-	else
-	{
-		$mail_status_str = $to_email."=".$mail_status."&&&";
-	}
-}
 
+// SalesPlatform.ru begin Dead code commented
+$errorheader1 = 0;
+$mail_status_str = "";
+//This function call is used to send mail to the assigned to user. In this mail CC and BCC addresses will be added.
+//if($_REQUEST['assigntype' == 'T'] && $_REQUEST['assigned_group_id']!='')
+//{
+//	$grp_obj = new GetGroupUsers();
+//	$grp_obj->getAllUsersInGroup($_REQUEST['assigned_group_id']);
+//	$users_list = constructList($grp_obj->group_users,'INTEGER');
+//	if (count($users_list) > 0) {
+//		$sql = "select first_name, last_name, email1, email2, secondaryemail  from vtiger_users where id in (". generateQuestionMarks($users_list) .")";
+//		$params = array($users_list);
+//	} else {
+//		$sql = "select first_name, last_name, email1, email2, secondaryemail  from vtiger_users";
+//		$params = array();
+//	}
+//	$res = $adb->pquery($sql, $params);
+//	$user_email = '';
+//	while ($user_info = $adb->fetch_array($res))
+//	{
+//		$email = $user_info['email1'];
+//		if($email == '' || $email == 'NULL')
+//		{
+//			$email = $user_info['email2'];
+//			if($email == '' || $email == 'NULL')
+//			{
+//				$email = $user_info['secondaryemail '];
+//			}
+//		}	
+//		if($user_email=='')
+//		$user_email .= $user_info['first_name']." ".$user_info['last_name']."<".$email.">";
+//		else
+//		$user_email .= ",".$user_info['first_name']." ".$user_info['last_name']."<".$email.">";
+//		$email='';
+//	}
+//	$to_email = $user_email;
+//}
+//else
+//{
+//	$to_email = getUserEmailId('id',$focus->column_fields["assigned_user_id"]);
+//}
+//$cc = $_REQUEST['ccmail'];
+//$bcc = $_REQUEST['bccmail'];
+//if($to_email == '' && $cc == '' && $bcc == '')
+//{
+//	$adb->println("Mail Error : send_mail function not called because To email id of assigned to user, CC and BCC are empty");
+//	$mail_status_str = "'".$to_email."'=0&&&";
+//	$errorheader1 = 1;
+//}
+//else
+//{
+//	$query1 = "select email1 from vtiger_users where id =?";
+//	$res1 = $adb->pquery($query1, array($current_user->id));
+//	$val = $adb->query_result($res1,0,"email1");
+////	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc,'all',$focus->id);
+//	
+//	$query = 'update vtiger_emaildetails set email_flag ="SENT",from_email =? where emailid=?';
+//	$adb->pquery($query, array($val, $focus->id));
+//	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
+//	if($mail_status != 1)//when mail send fails
+//	{
+//		$errorheader1 = 1;
+//		$mail_status_str = $to_email."=".$mail_status."&&&";
+//	}
+//	elseif($mail_status == 1 && $to_email == '')//Mail send success only for CC and BCC but the 'to' email is empty 
+//	{
+//		$adb->pquery($query, array($val, $focus->id));
+//		$errorheader1 = 1;
+//		$mail_status_str = "cc_success=0&&&";
+//	}
+//	else
+//	{
+//		$mail_status_str = $to_email."=".$mail_status."&&&";
+//	}
+//}
+// SalesPlatform.ru end
 
 //Added code from mysendmail.php which is contributed by Raju(rdhital)
 $parentid= vtlib_purify($_REQUEST['parent_id']);

@@ -39,7 +39,10 @@
 			{assign var="_TDBGCOLOR" value="#FFE2AF"}
 		{/if}
 		
-		<td nowrap="nowrap" bgcolor="{$_TDBGCOLOR}" width="25%">{$RESULT.tonumber}</td>
+                {* SalesPlatform.ru begin : status message added*}
+		<td nowrap="nowrap" bgcolor="{$_TDBGCOLOR}" width="25%" title="{$RESULT.statusmessage}">{$RESULT.tonumber}</td>
+		{* <td nowrap="nowrap" bgcolor="{$_TDBGCOLOR}" width="25%">{$RESULT.tonumber}</td> *}
+                {* SalesPlatform.ru end *}
 		
 		{/foreach}
 	

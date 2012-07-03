@@ -40,7 +40,7 @@ $numrows = $adb->num_rows($result);
 	{
 		$temp=$adb->query_result($result,$i,'columnname');
 		$temp1=br2nl($myfocus->column_fields[$temp]);
-		echo '<tr><td>'.$adb->query_result($result,$i,'fieldlabel').' </td><td>&nbsp;&nbsp;&nbsp;<input name="emails'.$i.'" type="checkbox" title="Raju"></td><td>'.$temp1.'</tr>';
+		echo '<tr><td>'.$adb->query_result($result,$i,'fieldlabel').' </td><td>&nbsp;&nbsp;&nbsp;<input name="emails'.$i.'" type="checkbox"></td><td>'.$temp1.'</tr>';
 	}
 	?>
 

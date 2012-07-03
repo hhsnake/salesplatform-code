@@ -56,7 +56,10 @@
         	{/if}
 			{foreach key=index item=_RECORD_DATA from=$_RECORD}
 				 {* vtlib customization: Trigger events on listview cell *}
-                 <td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$_RECORD_DATA}</td>
+                 {* SalesPlatform.ru begin: Related List localization *}
+                 <td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$_RECORD_DATA|@getTranslatedString}</td>
+                 {* <td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$_RECORD_DATA}</td> *}
+                 {* SalesPlatform.ru end *}
                  {* END *}
 			{/foreach}
 		</tr>

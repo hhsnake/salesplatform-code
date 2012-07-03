@@ -161,7 +161,10 @@
 {* SalesPlatform.ru begin  *}
         <input type="hidden" name="pdf_template">
 {* SalesPlatform.ru end  *}
-{elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+{* SalesPlatform.ru begin: Added acts and consignments  *}
+{elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Act' || $MODULE eq 'Consignment'}
+{* {elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'} *}
+{* SalesPlatform.ru end  *}
 	<input type="hidden" name="module" value="{$MODULE}">
         <input type="hidden" name="record" value="{$ID}">
         <input type="hidden" name="isDuplicate" value=false>
@@ -178,7 +181,10 @@
         <input type="hidden" name="email_id">
         <input type="hidden" name="source_module">
         <input type="hidden" name="entity_id">
-	{if $MODULE eq 'SalesOrder'}
+{* SalesPlatform.ru begin: Added convert Invoice to Act and Consignment  *}
+	{if $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+{*	{if $MODULE eq 'SalesOrder'} *}
+{* SalesPlatform.ru end  *}
         	<input type="hidden" name="convertmode">
 	{/if}
 {* SalesPlatform.ru begin  *}

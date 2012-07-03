@@ -1965,7 +1965,10 @@ class ReportRun extends CRMEntity
 							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
 						}
 					}
-					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
+                                        // SalesPlatform.ru begin: Reports localization
+					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString(trim($headerLabel_tmp));
+					//if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
+                                        // SalesPlatform.ru end
 					else $headerLabel = $headerLabel_tmp;
 					/*STRING TRANSLATION ends */
 					$header .= "<td class='rptCellLabel'>".$headerLabel."</td>";
@@ -2470,7 +2473,10 @@ class ReportRun extends CRMEntity
 							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
 						}
 					}
-					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
+                                        // SalesPlatform.ru begin: Reports localization
+					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString(trim($headerLabel_tmp));
+					//if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
+                                        // SalesPlatform.ru end
 					else $headerLabel = $headerLabel_tmp;
 					/*STRING TRANSLATION ends */
 					$header .= "<th>".$headerLabel."</th>";

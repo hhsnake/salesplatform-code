@@ -155,6 +155,12 @@ class Users extends CRMEntity {
         $this->column_fields['currency_code'] = '';
         $this->column_fields['currency_symbol'] = '';
         $this->column_fields['conv_rate'] = '';
+                // SalesPlatform.ru begin Configuration panel added
+                include_once('vtlib/Vtiger/Utils.php');
+                if (vtlib_isModuleActive('SPConfigurationManager')) {
+                    array_unshift($this->homeorder_array, 'SPCFG');
+                }
+                // SalesPlatform.ru end
 		$this->log->debug("Exiting Users() method ...");
 	}
 
@@ -1154,6 +1160,12 @@ class Users extends CRMEntity {
 		if(!is_array($this->homeorder_array)) {
 			$this->homeorder_array = array('UA', 'PA', 'ALVT','HDB','PLVT','QLTQ','CVLVT','HLT',
 				'GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
+                        // SalesPlatform.ru begin Configuration panel added
+                        include_once('vtlib/Vtiger/Utils.php');
+                        if (vtlib_isModuleActive('SPConfigurationManager')) {
+                            array_unshift($this->homeorder_array, 'SPCFG');
+                        }
+                        // SalesPlatform.ru end
 		}
 		$return_array = Array();
 		$homeorder=Array();
@@ -1287,6 +1299,18 @@ class Users extends CRMEntity {
 			$adb->pquery($sql, $params);
 		}
 		// END
+
+                // SalesPlatform.ru begin Configuration panel added
+                include_once('vtlib/Vtiger/Utils.php');
+                if (vtlib_isModuleActive('SPConfigurationManager')) {
+                    $s101 = $adb->getUniqueID("vtiger_homestuff");
+                    $visibility = $this->getDefaultHomeModuleVisibility('SPCFG', $inVal);
+                    $sql = "insert into vtiger_homestuff values(?,?,?,?,?,?)";
+                    $res=$adb->pquery($sql, array($s101, 101, 'Default', $uid, $visibility, 'LBL_SP_CONFIGURATION'));
+                    $sql="insert into vtiger_homedefault values(".$s101.", 'SPCFG', 5, 'Dashboard')";
+                    $adb->query($sql);
+                }
+                // SalesPlatform.ru end
 
 
 		$sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";

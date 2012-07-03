@@ -6,8 +6,8 @@
 			<sql><![CDATA[CREATE TABLE `vtiger_assets` (
   `assetsid` int(11) NOT NULL,
   `asset_no` varchar(30) NOT NULL,
-  `accountid` int(19) NOT NULL,
-  `product_id` int(19) NOT NULL,
+  `account` int(19) NOT NULL,
+  `product` int(19) NOT NULL,
   `serialnumber` varchar(200) NOT NULL,
   `datesold` date NOT NULL,
   `dateinservice` date NOT NULL,
@@ -16,6 +16,7 @@
   `invoiceid` int(19) default NULL,
   `shippingmethod` varchar(200) default NULL,
   `shippingtrackingnumber` varchar(200) default NULL,
+  `assetname` varchar(100) default NULL,
   PRIMARY KEY  (`assetsid`),
   CONSTRAINT `fk_1_vtiger_assets` FOREIGN KEY (`assetsid`) REFERENCES `vtiger_crmentity` (`crmid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>

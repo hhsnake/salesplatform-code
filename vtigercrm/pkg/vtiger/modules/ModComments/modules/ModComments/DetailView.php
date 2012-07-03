@@ -87,7 +87,16 @@ if($singlepane_view == 'true') {
 }
 
 $smarty->assign('EDIT_DUPLICATE', 'notpermitted');
-$smarty->assign('DELETE', 'notpermitted');
+// SalesPlatform.ru begin
+global $current_user;
+require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
+// $smarty->assign('DELETE', 'notpermitted');
+if ($is_admin == 'true')
+	$smarty->assign('DELETE', 'permitted');
+else
+	$smarty->assign('DELETE', 'notpermitted');
+// SalesPlatform.ru end
 
 $smarty->assign('BLOCKS', getBlocks($currentModule,'detail_view','',$focus->column_fields));
 

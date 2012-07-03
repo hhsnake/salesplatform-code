@@ -589,6 +589,9 @@ class Project extends CRMEntity {
 		// set Gantt colors
 		$g->setColor("group","000000");
 		$g->setColor("progress","660000");
+                // SalesPlatform.ru begin
+                $g->ttf_font_file = "Image/Canvas/Fonts/DejaVuSans.ttf";
+                // SalesPlatform.ru end
 		
 		$related_projecttasks = $adb->pquery("SELECT pt.* FROM vtiger_projecttask AS pt 
 												INNER JOIN vtiger_crmentity AS crment ON pt.projecttaskid=crment.crmid 
@@ -603,7 +606,10 @@ class Project extends CRMEntity {
 				$percentage = str_replace("%","",$rec_related_projecttasks['projecttaskprogress']);
 			}
 
-            $rec_related_projecttasks['projecttaskname'] = iconv($default_charset, "ISO-8859-2//TRANSLIT",$rec_related_projecttasks['projecttaskname']);		
+                // SalesPlatform.ru begin
+            $rec_related_projecttasks['projecttaskname'] = iconv($default_charset, "UTF-8",$rec_related_projecttasks['projecttaskname']);
+            //$rec_related_projecttasks['projecttaskname'] = iconv($default_charset, "ISO-8859-2//TRANSLIT",$rec_related_projecttasks['projecttaskname']);
+                // SalesPlatform.ru end
 			$g->addTask($rec_related_projecttasks['projecttaskid'],$rec_related_projecttasks['startdate'],$rec_related_projecttasks['enddate'],$percentage,$rec_related_projecttasks['projecttaskname']);
 		}
 		
@@ -614,7 +620,10 @@ class Project extends CRMEntity {
 											array($record)) or die("Please install the ProjectMilestone and ProjectTasks modules first.");
 		
 		while($rec_related_projectmilestones = $adb->fetchByAssoc($related_projectmilestones)){
-            $rec_related_projectmilestones['projectmilestonename'] = iconv($default_charset, "ISO-8859-2//TRANSLIT",$rec_related_projectmilestones['projectmilestonename']);
+                // SalesPlatform.ru begin
+            $rec_related_projectmilestones['projectmilestonename'] = iconv($default_charset, "UTF-8",$rec_related_projectmilestones['projectmilestonename']);
+            //$rec_related_projectmilestones['projectmilestonename'] = iconv($default_charset, "ISO-8859-2//TRANSLIT",$rec_related_projectmilestones['projectmilestonename']);
+                // SalesPlatform.ru end
             $g->addMilestone($rec_related_projectmilestones['projectmilestoneid'],$rec_related_projectmilestones['projectmilestonedate'],$rec_related_projectmilestones['projectmilestonename']);
 		}
 		

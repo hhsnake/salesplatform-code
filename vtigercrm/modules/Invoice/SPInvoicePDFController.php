@@ -59,7 +59,7 @@ class SalesPlatform_InvoicePDFController extends SalesPlatform_PDF_ProductListDo
 	$date=explode("-", $date);
 	switch ($date[1]){
 	    case 1: $m='Января'; break;
-	    case 2: $m='Ффевраля'; break;
+	    case 2: $m='Февраля'; break;
 	    case 3: $m='Марта'; break;
 	    case 4: $m='Апреля'; break;
 	    case 5: $m='Мая'; break;

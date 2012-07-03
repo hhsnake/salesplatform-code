@@ -1019,5 +1019,32 @@ class QueryGenerator {
 		}
 		return array('conditions'=>$conditionList,'relatedConditions'=>$relatedConditionList);
 	}
+
+	public function initForGlobalSearchByType($type, $value, $operator='s') {
+		$fieldList = $this->meta->getFieldNameListByType($type);
+		if($this->conditionInstanceCount <= 0) {
+			$this->startGroup('');
+		} else {
+			$this->startGroup(self::$AND);
+		}
+		$nameFieldList = explode(',',$this->getModuleNameFields($this->module));
+		foreach ($nameFieldList as $nameList) {
+			$field = $this->meta->getFieldByColumnName($nameList);
+			$this->fields[] = $field->getFieldName();
+		}
+		foreach ($fieldList as $index => $field) {
+			$fieldName = $this->meta->getFieldByColumnName($field);
+			$this->fields[] = $fieldName->getFieldName();
+			if($index > 0) {
+				$this->addConditionGlue(self::$OR);
+			}
+			$this->addCondition($fieldName->getFieldName(), $value, $operator);
+		}
+		$this->endGroup();
+		if(!in_array('id', $this->fields)) {
+				$this->fields[] = 'id';
+		}
+	}
+
 }
 ?>

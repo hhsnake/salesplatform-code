@@ -76,6 +76,7 @@ $mod_strings = array(
 'VTChangeFieldValueTask'=>'Change Field Value',
 'VTChangeRelModuleFieldValueTask'=>'Change Field Value of related module',
 'VTEmailPDFTask' => 'Send Email with PDF',
+'VTActivityReminderTask' => 'Reminder',
 'LBL_DESCRIPTION' => 'Description',
 'LBL_UPDATED_FIELD_NAME' => 'Updated Field Name',
 'LBL_MODULE' => 'Module',

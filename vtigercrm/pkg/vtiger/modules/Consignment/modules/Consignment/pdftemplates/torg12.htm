@@ -1,0 +1,413 @@
+{header}
+<!-- Table marking up header, goods table and footer -->
+<table>
+<tr><td colspan="2">
+
+  <table>
+    <tr>
+      <td colspan="3" rowspan="2" style="width:470px">
+      </td>
+      <td style="text-align:right; font-size:x-small; width:70px">
+        Унифицированная форма № ТОРГ-12
+        Утверждена постановлением Госкомстата России от 25.12.98 № 132
+      </td>
+    </tr>
+    <tr>
+      <td style="width:70px">
+        <table border="1">
+          <tr><td style="text-align:center">Коды</td></tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size:x-small; width:70px">Грузоотправитель</td>
+      <td style="font-size:x-small; font-weight:bold; width:290px">{$orgName}, {$orgBillingAddress}, тел. : {$orgPhone}, р/с {$orgBankAccount}, {$orgBankName}, БИК {$orgBankId}, к/с {$orgCorrAccount}</td>
+      <td rowspan="8" style="width:110px">
+        <table style="text-align:right; font-size:small">
+          <tr><td>Форма по ОКУД</td></tr>
+          <tr><td>по ОКПО</td></tr>
+          <tr><td></td></tr>
+          <tr><td>Вид деятельности по ОКДП</td></tr>
+          <tr><td>по ОКПО</td></tr>
+          <tr><td>по ОКПО</td></tr>
+          <tr><td>по ОКПО</td></tr>
+          <tr><td rowspan="4">
+            <table border="1">
+              <tr><td>номер</td></tr>
+              <tr><td>дата</td></tr>
+              <tr><td>номер</td></tr>
+              <tr><td>дата</td></tr>
+            </table>
+            <table>
+              <tr><td>Вид операции</td></tr>
+            </table>
+            </td></tr>
+        </table>
+      </td>
+      <td rowspan="8" style="width:70px">
+        <table border="2" style="text-align:center; font-size:small">
+          <tr><td style="font-weight:bold">0330212</td></tr>
+          <tr><td>44649871</td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+          <tr><td></td></tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size:x-small; width:70px">Структурное подразделение</td>
+      <td style="font-size:x-small; width:290px"></td>
+      <!-- 3rd and 4th <td>'s are in the previous <tr> (<td rowspan="12">) -->
+    </tr>
+    <tr>
+      <td style="font-size:x-small; width:70px">Грузополучатель</td>
+      <td style="font-size:x-small; width:290px">{$account_accountname}</td>
+      <!-- 3rd and 4th <td>'s are in the one of the previous <tr> (<td rowspan="12">) -->
+    </tr>
+    <tr>
+      <td style="font-size:x-small; width:70px">Поставщик</td>
+      <td style="font-size:x-small; width:290px">{$orgName}</td>
+      <!-- 3rd and 4th <td>'s are in the one of the previous <tr> (<td rowspan="12">) -->
+    </tr>
+    <tr>
+      <td style="font-size:x-small; width:70px">Плательщик</td>
+      <!-- И покупатель, и плательщик - account_accountname? -->
+      <td style="font-size:x-small; width:290px">{$account_accountname}</td>
+      <!-- 3rd and 4th <td>'s are in the one of the previous <tr> (<td rowspan="12">) -->
+    </tr>
+    <tr>
+      <td style="font-size:x-small; width:70px">Основание</td>
+      <td style="font-size:x-small; width:290px"></td>
+      <!-- 3rd and 4th <td>'s are in the one of the previous <tr> (<td rowspan="12">) -->
+    </tr>
+    <tr>
+      <td style="width:70px"></td>
+      <td style="text-align: center; font-size:xx-small; width:260px">наименование документа (договор, контракт, заказ-наряд)</td>
+      <!-- 3rd and 4th <td>'s are in the one of the previous <tr> (<td rowspan="12">) -->
+    </tr>
+  </table>
+
+</td></tr>
+<tr>
+  <td colspan="2" style="text-align:center; width:380px">
+    <!-- Markup inside heading elements -->
+    <table cellspacing="5" style="font-size:x-small">
+      <tr>
+        <td></td>
+        <td rowspan="2">
+          <table border="1" style="text-align:center">
+            <tr>
+              <td>Номер документа</td>
+              <td>Дата составления</td>
+            </tr>
+            <tr>
+              <td>{$consignment_no}</td>
+              <td>{$consignment_consignmentdate_short}</td>
+            </tr>
+          </table>
+        </td>
+        <td>Транспортная накладная</td>
+      </tr>
+      <tr>
+        <td style="font-weight:bold; text-align:right">ТОВАРНАЯ НАКЛАДНАЯ</td>
+        <td></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr><td>
+<!-- Whitespace between header and goods table -->
+</td></tr>
+{/header}
+{table_head}
+<tr><td colspan="2">
+
+  <!-- Goods table -->
+  <table border="1" style="font-size:x-small; text-align:center; width:540px">
+    <tr style="text-align:center">
+      <td style="width:30px">Номер<br />по<br />порядку</td>
+      <td colspan="2" style="width:120px">Товар</td>
+      <td colspan="2" style="width:55px">Единица измерения</td>
+      <td style="width:35px">Вид упаковки</td>
+      <td colspan="2" style="width:50px">Количество</td>
+      <td style="width:30px">Масса брутто</td>
+      <td style="width:40px">Количество<br />(масса нетто)</td>
+      <td style="width:40px">Цена, руб. коп.</td>
+      <td style="width:40px">Сумма без учёта НДС, руб. коп.</td>
+      <td colspan="2" style="width:60px">НДС</td>
+      <td style="width:40px">Сумма с учётом НДС, руб. коп.</td>
+    </tr>
+    <tr>
+      <td style="width:30px"></td>
+      <td style="width:100px">наименование, характеристика, сорт, артикул товара</td>
+      <td style="width:20px">код</td>
+      <td style="width:35px">наимено-<br />вание</td>
+      <td style="width:20px">код по ОКЕИ</td>
+      <td style="width:35px"></td>
+      <td style="width:25px">в одном<br />месте</td>
+      <td style="width:25px">мест,<br />штук</td>
+      <td style="width:30px"></td>
+      <td style="width:40px"></td>
+      <td style="width:40px"></td>
+      <td style="width:40px"></td>
+      <td style="width:25px">ставка, %</td>
+      <td style="width:35px">сумма, руб. коп.</td>
+      <td style="width:40px"></td>
+    </tr>
+    <tr>
+      <td style="width:30px">1</td>
+      <td style="width:100px">2</td>
+      <td style="width:20px">3</td>
+      <td style="width:35px">4</td>
+      <td style="width:20px">5</td>
+      <td style="width:35px">6</td>
+      <td style="width:25px">7</td>
+      <td style="width:25px">8</td>
+      <td style="width:30px">9</td>
+      <td style="width:40px">10</td>
+      <td style="width:40px">11</td>
+      <td style="width:40px">12</td>
+      <td style="width:25px">13</td>
+      <td style="width:35px">14</td>
+      <td style="width:40px">15</td>
+    </tr>
+{/table_head}
+{table_row}
+    <tr>
+      <td style="width:30px">{$productNumber}</td>
+      <td style="width:100px">{$productName}</td>
+      <td style="width:20px">{$productCode}</td>
+      <td style="width:35px">{$productUnits}</td>
+      <td style="width:20px">{$productUnitsCode}</td>
+      <td style="width:35px"></td>
+      <td style="width:25px"></td>
+      <td style="width:25px">{$productQuantityInt}</td>
+      <td style="width:30px"></td>
+      <td style="width:40px"></td>
+      <td style="width:40px">{$productPrice}</td>
+      <td style="width:40px">{$productNetTotal}</td>
+      <td style="width:25px">{$productTaxPercent}</td>
+      <td style="width:35px">{$productTax}</td>
+      <td style="width:40px">{$productTotal}</td>
+    </tr>
+{/table_row}
+{summary}
+  </table>
+
+</td></tr>
+<!-- Total subtable -->
+<tr style="font-size:x-small">
+  <!-- Whitespace in the left -->
+  <td style="width: 265px">
+
+    <table>
+      <tr>
+        <td colspan="7" style="text-align:right">Итого:</td>
+      </tr>
+      <tr>
+        <td colspan="7" style="text-align:right">Всего по накладной:</td>
+      </tr>
+    </table>
+
+  </td>
+  <!-- Total subtable itself -->
+  <td>
+
+    <table border="1" style="text-align:center">
+      <tr>
+        <td style="width:25px"></td>
+        <td style="width:30px"></td>
+        <td style="width:40px"></td>
+        <td style="width:40px">X</td>
+        <td style="width:40px">{$summaryNetTotal}</td>
+        <td style="width:25px">X</td>
+        <td style="width:35px">{$summaryTax}</td>
+        <td style="width:40px">{$summaryGrandTotal}</td>
+      </tr>
+      <tr>
+        <td style="width:25px"></td>
+        <td style="width:30px"></td>
+        <td style="width:40px"></td>
+        <td style="width:40px">X</td>
+        <td style="width:40px">{$summaryNetTotal}</td>
+        <td style="width:25px">X</td>
+        <td style="width:35px">{$summaryTax}</td>
+        <td style="width:40px">{$summaryGrandTotal}</td>
+      </tr>
+    </table>
+
+  </td>
+</tr>
+<tr><td>
+<!-- Whitespace -->
+</td></tr>
+<tr><td colspan="2">
+
+  <table style="font-size:x-small">
+    <tr>
+      <td rowspan="2">Товарная накладная имеет приложение на </td>
+      <td>_______________________________________</td>
+      <td rowspan="2"> листах</td>
+    </tr>
+    <tr>
+      <td style="text-align:center">прописью</td>
+    </tr>
+    <tr>
+      <td rowspan="2">и содержит </td>
+      <td>_______________________________________</td>
+      <td rowspan="2"> порядковых номеров записей</td>
+    </tr>
+    <tr>
+      <td style="text-align:center">прописью</td>
+    </tr>
+  </table>
+
+</td></tr>
+<tr><td colspan="2" style="text-align:center">
+
+  <table style="font-size:x-small">
+    <tr>
+      <td colspan="2" rowspan="2" style="width:130px"></td>
+      <td rowspan="2" style="text-align:right; width:100px">Масса груза (нетто)</td>
+      <td style="text-align:center; width:180px">_______________________________________</td>
+    </tr>
+    <tr>
+      <td style="text-align:center; width:180px">прописью</td>
+    </tr>
+    <tr>
+      <td rowspan="2" style="text-align:right; width:100px">Всего мест</td>
+      <td rowspan="2" style="width:30px">{$summaryTotalItems}</td>
+      <td rowspan="2" style="text-align:right; width:100px">Масса груза (брутто)</td>
+      <td style="text-align:center; width:180px">_______________________________________</td>
+    </tr>
+    <tr>
+      <td style="text-align:center; width:180px">прописью</td>
+    </tr>
+    <tr>
+      <td colspan="3" style="width:300px">
+        <table>
+          <tr>
+            <td rowspan="2" style="width:170px">Приложение (паспорта, сертификаты и т.п.) на </td>
+            <td style="text-align:center; width:100px">_____________________</td>
+            <td rowspan="2" style="width:30px"> листах</td>
+          </tr>
+          <tr>
+            <td style="text-align:center; width:100px">прописью</td>
+          </tr>
+        </table>
+      </td>
+      <td></td>
+    </tr>
+  </table>
+
+</td></tr>
+<tr><td>
+</td></tr>
+<!-- Footer (sent/received, stamps, etc.) -->
+<tr style="font-size:small">
+  <td style="text-align:center; width:270px">
+    <!-- "Sent" part on the left -->
+    <table>
+      <tr><td>
+        Всего отпущено на сумму {$summaryGrandTotalLiteral}<br />
+      </td></tr>
+{/summary}
+{ending}
+      <tr><td>
+        <table>
+          <tr>
+            <td rowspan="2">Отпуск груза разрешил</td>
+            <td>Директор</td>
+            <td></td>
+            <td>{$orgDirector}</td>
+          </tr>
+          <tr style="font-size:x-small">
+            <td>должность</td>
+            <td>подпись</td>
+            <td>расшифровка подписи</td>
+          </tr>
+          <tr>
+            <td colspan="2" rowspan="2" style="font-weight:bold">Главный (старший) бухгалтер</td>
+            <td></td>
+            <td>{$orgBookkeeper}</td>
+          </tr>
+          <tr style="font-size:x-small">
+            <td>подпись</td>
+            <td>расшифровка подписи</td>
+          </tr>
+          <tr>
+            <td rowspan="2">Отпуск груза произвёл</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr style="font-size:x-small">
+            <td>должность</td>
+            <td>подпись</td>
+            <td>расшифровка подписи</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        М.П. "   " _____________ 20   года
+      </td></tr>
+    </table>
+  </td>
+  <!-- "Received" part on the right -->
+  <td style="text-align:center; width:270px">
+    <table>
+      <tr><td>
+        По доверенности № _______ от   "   " _____________ 20   года
+      </td></tr>
+      <tr><td>
+        выданной ________________________________________________
+      </td></tr>
+      <tr><td style="text-align:center; font-size:x-small">
+        кем, кому (организация, место работы, должность, фамилия, и. о.)
+      </td></tr>
+      <tr><td>
+        <table>
+          <tr>
+            <td rowspan="2">Груз принял</td>
+            <td>__________</td>
+            <td>__________</td>
+            <td>__________</td>
+          </tr>
+          <tr style="font-size:x-small">
+            <td>должность</td>
+            <td>подпись</td>
+            <td>расшифровка подписи</td>
+          </tr>
+          <!-- Whitespace to aline with left-side clauses -->
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td rowspan="2">Груз получил<br />грузополучатель</td>
+            <td>__________</td>
+            <td>__________</td>
+            <td>__________</td>
+          </tr>
+          <tr style="font-size:x-small">
+            <td>должность</td>
+            <td>подпись</td>
+            <td>расшифровка подписи</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        М.П. "   " _____________ 20   года
+      </td></tr>
+    </table>
+  </td>
+</tr>
+
+</table>
+{/ending}

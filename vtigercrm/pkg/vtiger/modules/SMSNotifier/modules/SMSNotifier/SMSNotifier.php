@@ -218,9 +218,13 @@ class SMSNotifier extends SMSNotifierBase {
 		global $log;
 		$provider = SMSNotifierManager::getActiveProviderInstance();
 		if($provider) {
+                        // SalesPlatform.ru begin Fix phone number
+                        array_walk($tonumbers, 'fixRussianPhone');
+                        // SalesPlatform.ru end
 			return $provider->send($message, $tonumbers);
 		}
 	}
+        
 	
 	static function getSMSStatusInfo($record) {
 		global $adb;
@@ -234,6 +238,24 @@ class SMSNotifier extends SMSNotifierBase {
 		return $results;
 	}
 }
+
+// SalesPlatform.ru begin Fix phone number
+/*
+ * Fix phone number
+ * 
+ * raw phone numbers exmpl: +7(812)394-42-35 +79217567744 911-7241966 (960)636-2622 8-812-188-6512
+ * fixed phone number exmpl: 78123944235 79217567744 79117241966 79606362622 78121886512
+ */
+function fixRussianPhone(&$to, $key) {
+    $to = trim($to);
+    $to = preg_replace('/[^0-9,]/', '', $to);
+    if ((strlen($to) == 11) && $to[0] == '8') {
+        $to[0] = '7';   // Replace 8 with 7 for Russia
+    } else if (strlen($to) == 10) {
+        $to = "7".$to;  // Russia code
+    }
+}
+// SalesPlatform.ru end
 
 class SMSNotifierManager {
 	

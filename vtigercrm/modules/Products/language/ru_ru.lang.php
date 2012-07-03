@@ -189,6 +189,8 @@ $mod_strings = array (
 // SalesPlatform.ru begin
 	'Manuf. Country' => 'Страна происхождения',
 	'Customs ID' => 'Номер ГТД',
+        'Mf. Country Code' => 'Код страны',
+        'Unit Code' => 'Код единицы измерения',
 // SalesPlatform.ru end
 
 );

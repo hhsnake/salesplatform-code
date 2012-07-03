@@ -2503,7 +2503,7 @@ function get_details($id,$module,$customerid,$sessionid)
 			continue;
 		}
 		$fieldper = getFieldVisibilityPermission($module,$current_user->id,$fieldname);
-		if($fieldper == '1'){
+		if($fieldper == '1' /* SalesPlatform.ru begin */ &&  (strcmp($fieldname, 'total') != 0)/* SalesPlatform.ru end */){
 			continue;
 		}
 

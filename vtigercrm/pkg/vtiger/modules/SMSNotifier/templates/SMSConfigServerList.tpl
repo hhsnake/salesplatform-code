@@ -61,7 +61,10 @@ DIV.fixedLay {
 			<tr>
 				<td style="padding-left:5px;" class="big">{$MOD.SMS_SERVER_CONFIGURATION}</td>                    
 				<td valign=top class="small" align="right">
-				<input id="_smsserver_add_button_" type="button" class="small create" value="Add New" onclick="_SMSConfigServerFetchEdit('');fnvshobj(this,'editdiv');">
+                                {* SalesPlatform.ru begin *}
+				<input id="_smsserver_add_button_" type="button" class="small create" value="{'LBL_ADDNEW'|@getTranslatedString:''}" onclick="_SMSConfigServerFetchEdit('');fnvshobj(this,'editdiv');">
+				{* <input id="_smsserver_add_button_" type="button" class="small create" value="Add New" onclick="_SMSConfigServerFetchEdit('');fnvshobj(this,'editdiv');"> *}
+                                {* SalesPlatform.ru end *}
 				</td>
 			</tr>
 			</table>

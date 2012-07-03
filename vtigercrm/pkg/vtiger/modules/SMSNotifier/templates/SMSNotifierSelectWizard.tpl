@@ -16,7 +16,10 @@
 
 	<table width="100%" cellpadding="5" cellspacing="0" border="0" class="layerHeadingULine">
 	<tr>
-		<td class="genHeaderSmall" width="90%" align="left">Select Phone Numbers</td>
+                {* SalesPlatform.ru begin: SMSNotifier localization *}
+		<td class="genHeaderSmall" width="90%" align="left">{'Select Phone Numbers'|getTranslatedString:$MODULE}</td>
+		{* <td class="genHeaderSmall" width="90%" align="left">Select Phone Numbers</td> *}
+                {* SalesPlatform.ru end *}
 		<td width="10%" align="right">
 			<a href="javascript:void(0);" onclick="SMSNotifierCommon.hideSelectWizard();"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0"/></a>
 		</td>
@@ -28,7 +31,10 @@
 		
 			<table width="100%" cellpadding="5" cellspacing="0" border="0" align="center" bgcolor="white">
 			<tr>
-				<td align="left">Please select the number types to send the SMS<br/><br/>
+                                {* SalesPlatform.ru begin: SMSNotifier localization *}
+				<td align="left">{'Please select the number types to send the'|getTranslatedString:$MODULE} {$IDSTRING_SIZE} SMS<br/><br/>
+				{* <td align="left">Please select the number types to send the SMS<br/><br/> *}
+                                {* SalesPlatform.ru end *}
 				
 				<div align="center" style="height: 120px; overflow-y: auto; overflow-x: hidden;">
 					<table width="90%" cellpadding="5" cellspacing="0" border="0" align="left">

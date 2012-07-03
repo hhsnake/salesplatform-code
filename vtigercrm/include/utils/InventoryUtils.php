@@ -282,6 +282,10 @@ function addInventoryHistory($module, $id, $relatedname, $total, $history_fldval
 	$log->debug("Entering into function addInventoryHistory($module, $id, $relatedname, $total, $history_fieldvalue)");
 
 	$history_table_array = Array(
+                                        // SalesPlatform.ru begin: Added acts and consignments
+                                        "Act"=>"vtiger_sp_actstatushistory",
+                                        "Consignment"=>"vtiger_sp_consignmentstatushistory",
+                                        // SalesPlatform.ru end
 					"PurchaseOrder"=>"vtiger_postatushistory",
 					"SalesOrder"=>"vtiger_sostatushistory",
 					"Quotes"=>"vtiger_quotestagehistory",
@@ -754,8 +758,12 @@ function getInventoryTaxType($module, $id)
 
 	$log->debug("Entering into function getInventoryTaxType($module, $id).");
 
-	$inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice');
-	$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+        // SalesPlatform.ru begin: Added acts and consignments
+        $inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice','Act'=>'vtiger_sp_act','Consignment'=>'vtiger_sp_consignment');
+	$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid','Act'=>'actid','Consignment'=>'consignmentid');
+        //$inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice');
+	//$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+        // SalesPlatform.ru end
 	
 	$res = $adb->pquery("select taxtype from $inv_table_array[$module] where $inv_id_array[$module]=?", array($id));
 
@@ -777,8 +785,12 @@ function getInventoryCurrencyInfo($module, $id)
 
 	$log->debug("Entering into function getInventoryCurrencyInfo($module, $id).");
 
-	$inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice');
-	$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+        // SalesPlatform.ru begin: Added acts and consignments
+	$inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice','Act'=>'vtiger_sp_act','Consignment'=>'vtiger_sp_consignment');
+	$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid','Act'=>'actid','Consignment'=>'consignmentid');
+	//$inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice');
+	//$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+        // SalesPlatform.ru end
 	
 	$inventory_table = $inv_table_array[$module];
 	$inventory_id = $inv_id_array[$module];

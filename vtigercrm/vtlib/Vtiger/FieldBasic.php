@@ -270,6 +270,14 @@ class Vtiger_FieldBasic {
 		self::log("Updated masseditable information of $this->name ... DONE");
 	}
 
+        // SalesPlatform.ru begin: Added presence control to field API
+	function setPresence($value) {
+		global $adb;
+		$adb->pquery('UPDATE vtiger_field SET presence=? WHERE fieldid=?', Array($value, $this->id));
+		self::log("Updated presence information of $this->name ... DONE");
+	}
+        // SalesPlatform.ru end
+
 	/**
 	 * Helper function to log messages
 	 * @param String Message to log

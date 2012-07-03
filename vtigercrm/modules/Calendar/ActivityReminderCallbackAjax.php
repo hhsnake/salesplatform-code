@@ -65,6 +65,12 @@ if(isPermitted('Calendar','index') == 'yes'){
 				$reminderid = $adb->query_result($result, $index, "reminderid");
 				$cbrecord = $adb->query_result($result, $index, "recordid");
 				$cbmodule = $adb->query_result($result, $index, "semodule");
+                                // SalesPlatform.ru begin Renewable reminders added
+				$rtype = $adb->query_result($result, $index, "rtype");
+                                if ($rtype == 1 && $_SESSION['renewable_reminders_displayed']) {
+                                    continue;
+                                }
+                                // SalesPlatform.ru end
 
 				$focus = CRMEntity::getInstance($cbmodule);
 
@@ -115,13 +121,22 @@ if(isPermitted('Calendar','index') == 'yes'){
 				$smarty->assign("cbcolor", $cbcolor);
 				$smarty->assign("cblinkdtl", $cblinkdtl);
 				$smarty->assign("activitytype", $cbactivitytype);
+                                // SalesPlatform.ru begin Add reminder title
+				$smarty->assign("title", $adb->query_result($result, $index, 'title'));
+                                // SalesPlatform.ru end
 				$smarty->display("ActivityReminderCallback.tpl");
 
-				$mark_reminder_as_read = "UPDATE vtiger_activity_reminder_popup set status = 1 where reminderid = ?";
+                                // SalesPlatform.ru begin Renewable reminders added
+				$mark_reminder_as_read = "UPDATE vtiger_activity_reminder_popup set status = 1 where reminderid = ? AND rtype=0";
+				//$mark_reminder_as_read = "UPDATE vtiger_activity_reminder_popup set status = 1 where reminderid = ?";
+                                // SalesPlatform.ru end
 				$adb->pquery($mark_reminder_as_read, array($reminderid));
 				echo "<script type='text/javascript'>window.top.document.title= '".
-					$app_strings['LBL_NEW_BUTTON_LABEL'].$app_strings['LBL_Reminder']."';</script>";
+					$app_strings['LBL_NEW_BUTTON_LABEL']." ".$app_strings['LBL_Reminder']."';</script>";
 			}
+                        // SalesPlatform.ru begin Renewable reminders added
+                        $_SESSION['renewable_reminders_displayed'] = 1;
+                        // SalesPlatform.ru end
 		} else {
 			$callback_query =
 			"SELECT * FROM vtiger_activity_reminder_popup inner join vtiger_crmentity where " .

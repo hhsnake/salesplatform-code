@@ -123,6 +123,11 @@ function vtlib_RecreateUserPrivilegeFiles() {
 	$userres = $adb->query('SELECT id FROM vtiger_users WHERE deleted = 0');
 	if($userres && $adb->num_rows($userres)) {
 		while($userrow = $adb->fetch_array($userres)) {
+                        // SalesPlatform.ru begin Bugfix for 'Call to undefined function createUserPrivilegesfile'
+                        if (!function_exists("createUserPrivilegesfile")) {
+                            include_once 'modules/Users/CreateUserPrivilegeFile.php';
+                        }
+                        // SalesPlatform.ru end
 			createUserPrivilegesfile($userrow['id']);
 		}
 	}

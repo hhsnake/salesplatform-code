@@ -139,7 +139,10 @@ function sensex_info()
 
 								   {foreach key=header item=data from=$blockInfo}
 								   <tr>
-									{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+{* SalesPlatform.ru begin: Added acts and consignments *}
+									{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice'|| $MODULE == 'Act'|| $MODULE == 'Consignment')}
+{*									{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')} *}
+{* SalesPlatform.ru end  *}
                                                                         <td colspan=2 class="detailedViewHeader">
                                                                         <b>{$header}</b></td>
                                                                         <td class="detailedViewHeader">
@@ -161,7 +164,10 @@ function sensex_info()
 
 								   <!-- This if is added to restrict display in more tab-->
 								   {if $divName eq 'basicTab'}
-								   {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
+{* SalesPlatform.ru begin: Added acts and consignments *}
+								   {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice' || $MODULE eq 'Act' || $MODULE eq 'Consignment'}
+{*								   {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'} *}
+{* SalesPlatform.ru end  *}
 								   	<!-- Added to display the product details -->
 									<!-- This if is added when we want to populate product details from the related entity  for ex. populate product details in new SO page when select Quote -->
 									{if $AVAILABLE_PRODUCTS eq true}

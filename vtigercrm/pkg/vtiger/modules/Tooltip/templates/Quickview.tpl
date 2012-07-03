@@ -11,12 +11,12 @@
 		<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tbody>
 			<tr>
-				<td rowspan="2" valign="top" width="50"><img src="{'quickview.png'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
+				<td rowspan="2" valign="top" width="50"><img src="{'quickview.png'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_TOOLTIP_MANAGEMENT}" title="{$MOD.LBL_TOOLTIP_MANAGEMENT}" border="0" height="48" width="48"></td>
 				<td class="heading2" valign="bottom">
 				
 				<b><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">{'VTLIB_LBL_MODULE_MANAGER'|@getTranslatedString:'Settings'}</a> > 
 			<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$FORMODULE}&parenttab=Settings">{$FORMODULE|@getTranslatedString:$FORMODULE}</a> > 
-				{$MOD.LBL_TOOLTIP_MANAGEMENT}			
+				{$MOD.LBL_TOOLTIP_MANAGEMENT}
 			</tr>
 	
 			<tr>

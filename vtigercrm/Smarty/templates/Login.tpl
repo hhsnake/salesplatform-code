@@ -17,8 +17,13 @@
 			<br />
 			<a target="_blank" href="http://{$COMPANY_DETAILS.website}">{$COMPANY_DETAILS.name}</a>
 		</td>
+{* SalesPlatform.ru begin : Center Login form *}
+	</tr>
+	<tr align="center" valign="top">
 
-		<td rowspan="2">
+		<td>
+{*		<td rowspan="2">*}
+{* SalesPlatform.ru end *}
 			<div class="loginForm">
 				<div class="poweredBy">SalesPlatform vtiger CRM - {$VTIGER_VERSION}</div>
 				<form action="index.php" method="post" name="DetailView" id="form">

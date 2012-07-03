@@ -585,6 +585,25 @@ function fetch_homeDB(stuffid){
 	);
 }
 
+// SalesPlatform.ru begin Configuration panel added
+function fetchConfigurationDiagram(stuffid) {
+	$('refresh_'+stuffid).innerHTML=$('vtbusy_homeinfo').innerHTML;
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Dashboard&action=DashboardAjax&file=SPConfiguration',
+			onComplete: function(response){
+				$('stuffcont_'+stuffid).style.display = 'none';
+				$('stuffcont_'+stuffid).innerHTML=response.responseText;
+				$('refresh_'+stuffid).innerHTML='';
+				Effect.Appear('stuffcont_'+stuffid);
+			}
+		}
+	);
+}
+// SalesPlatform.ru end
+
 /**
  * this function initializes the homepage
  */

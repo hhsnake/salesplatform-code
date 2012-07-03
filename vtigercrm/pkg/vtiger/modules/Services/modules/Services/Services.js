@@ -75,11 +75,14 @@ function add_data_to_relatedlist(entity_id,recordid) {
         opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parentid="+recordid;
 }
 
-function set_return_inventory(product_id,product_name,unitprice,taxstr,curr_row,desc) {
+function set_return_inventory(product_id,product_name,unitprice,taxstr,curr_row, desc,product_code) {
+	//crm-now added to display order code for services
+ 	window.opener.document.EditView.elements["hdnProductcode"+curr_row].value = product_code;
+
 	window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
 	window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
-	window.opener.document.EditView.elements["comment"+curr_row].value = desc;
+	window.opener.document.EditView.elements["productDescription"+curr_row].value = desc.replace("&quot;", "\"");
 
 	// Apply decimal round-off to value
 	if(!isNaN(parseFloat(unitprice))) unitprice = roundPriceValue(unitprice);
@@ -134,11 +137,12 @@ function InventorySelectAllServices(mod,z,image_pth)
 				var prod_array = JSON.parse($('popup_product_'+c).attributes['vt_prod_arr'].nodeValue);
 				var prod_id = prod_array['entityid'];
 				var prod_name = prod_array['prodname'];
+				var prod_code = prod_array['prod_code'];
 				var unit_price = prod_array['unitprice'];
 				var taxstring = prod_array['taxstring'];
 				var desc = prod_array['desc'];
 				var row_id = prod_array['rowid'];
-				set_return_inventory(prod_id,prod_name,unit_price,taxstring,parseInt(row_id),desc);
+				set_return_inventory(prod_id,prod_name,unit_price,taxstring,parseInt(row_id),desc,prod_code);
 				y=1;
 			} else {
 				alert(alert_arr.SELECT);
@@ -153,6 +157,7 @@ function InventorySelectAllServices(mod,z,image_pth)
 					var prod_array = JSON.parse($('popup_product_'+c).attributes['vt_prod_arr'].nodeValue);
 					var prod_id = prod_array['entityid'];
 					var prod_name = prod_array['prodname'];
+					var prod_code = prod_array['prod_code'];
 					var unit_price = prod_array['unitprice'];
 					var taxstring = prod_array['taxstring'];
 					var desc = prod_array['desc'];
@@ -162,7 +167,7 @@ function InventorySelectAllServices(mod,z,image_pth)
 						var row_id = prod_array['rowid'];
 					}	
 							
-					set_return_inventory(prod_id,prod_name,unit_price,taxstring,parseInt(row_id),desc);
+					set_return_inventory(prod_id,prod_name,unit_price,taxstring,parseInt(row_id),desc,prod_code);
 					y=y+1;
 				}
 			}
@@ -275,13 +280,20 @@ function fnAddServiceRow(module,image_path){
 	}
 	/* Product Re-Ordering Feature Code Addition ends */
 	
-	//Product Name with Popup image to select product
+	//Product Name with Popup image to select product, crm-now: Product Code and description added
 	coltwo.className = "crmTableRow small"
-	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text" />'+
-						'<input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden" /><input type="hidden" id="lineItemType'+count+'" name="lineItemType'+count+'" value="Services" />'+
+// SalesPlatform.ru begin
+	//coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text" />'+
+	//					'<input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden" /><input type="hidden" id="lineItemType'+count+'" name="lineItemType'+count+'" value="Services" />'+
+	//					'&nbsp;<img id="searchIcon'+count+'" title="Services" src="themes/images/services.gif" style="cursor: pointer;" onclick="servicePickList(this,\''+module+'\','+count+')" align="absmiddle">'+
+	//					'</td></tr><tr><td class="small"><input type="hidden" value="" id="subproduct_ids'+count+'" name="subproduct_ids'+count+'" /><span id="subprod_names'+count+'" name="subprod_names'+count+'" style="color:#C0C0C0;font-style:italic;"> </span>'+
+	//					'</td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><img src="themes/images/clear_field.gif" onClick="getObj(\'comment'+count+'\').value=\'\'"; style="cursor:pointer;" /></td></tr></tbody></table>';	
+	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small" width="80">'+alert_arr.LBL_PRODUCT_CODE+'</td><td class="small" id="viewproductcode"><input id="hdnProductcode'+count+'" name="hdnProductcode'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"></td></tr><tr><td class="small" width="80">'+alert_arr.LBL_PRODUCT_NAME+'</td><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text">'+
+						'<input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><input type="hidden" id="lineItemType'+count+'" name="lineItemType'+count+'" value="Services" />'+
 						'&nbsp;<img id="searchIcon'+count+'" title="Services" src="themes/images/services.gif" style="cursor: pointer;" onclick="servicePickList(this,\''+module+'\','+count+')" align="absmiddle">'+
-						'</td></tr><tr><td class="small"><input type="hidden" value="" id="subproduct_ids'+count+'" name="subproduct_ids'+count+'" /><span id="subprod_names'+count+'" name="subprod_names'+count+'" style="color:#C0C0C0;font-style:italic;"> </span>'+
-						'</td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><img src="themes/images/clear_field.gif" onClick="getObj(\'comment'+count+'\').value=\'\'"; style="cursor:pointer;" /></td></tr></tbody></table>';	
+						'</td></tr><tr><td class="small" width="80"></td><td class="small"><input type="hidden" value="" id="subproduct_ids'+count+'" name="subproduct_ids'+count+'" /><span id="subprod_names'+count+'" name="subprod_names'+count+'" style="color:#C0C0C0;font-style:italic;"> </span>'+
+						'</td></tr><tr><td class="small" width="80">'+alert_arr.LBL_PRODUCT_DESCRIPTION+'</td><td><textarea id="productDescription'+count+'" name="productDescription'+count+'" class=small style="width:70%;height:80px"></textarea><img src="themes/images/clear_field.gif" onClick="getObj(\'productDescription'+count+'\').value=\'\'"; style="cursor:pointer;" /></td></tr><tr><td class="small" width="80">'+alert_arr.LBL_PRODUCT_COMMENT+'</td><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><img src="themes/images/clear_field.gif" onClick="getObj(\'comment'+count+'\').value=\'\'"; style="cursor:pointer;" /></td></tr></tbody></table>';	
+// SalesPlatform.ru end
 					
 	//Quantity In Stock - only for SO, Quotes and Invoice
 	if(module != "PurchaseOrder"){

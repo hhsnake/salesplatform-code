@@ -57,7 +57,8 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 	
 	function buildContentModels() {
 		$associated_products = $this->associated_products;
-		$contentModels = array();
+                $final_details = $associated_products[1]['final_details'];
+                $contentModels = array();
 		$productLineItemIndex = 0;
 		$totaltaxes = 0;
 		foreach($associated_products as $productLineItem) {
@@ -92,8 +93,18 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 					$producttotal_taxes += $tax_amount;
 					$priceWithTax += (($priceWithDiscount * $tax_percent)/100);
 				}
-			}
-
+                        } else {
+                            // Recalculate tax when group mode is enabled
+                            $group_tax_details = $final_details['taxes'];
+                            $group_total_tax_percent = '0.00';
+                            for($i=0;$i<count($group_tax_details);$i++) {
+                                    $group_total_tax_percent += $group_tax_details[$i]['percentage'];
+                            }
+                            $total_tax_percent += $group_total_tax_percent;
+                            $tax_amount = (($taxable_total*$group_total_tax_percent)/100);
+                            $producttotal_taxes += $tax_amount;
+                            $priceWithTax += (($priceWithDiscount * $group_total_tax_percent)/100);
+                        }
 			$producttotal = $taxable_total+$producttotal_taxes;
 			$tax = $producttotal_taxes;
 			$totaltaxes += $tax;
@@ -112,6 +123,7 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 			$contentModel->set('productQuantity', $this->formatNumber($quantity, 3));
 			$contentModel->set('productQuantityInt', $this->formatNumber($quantity, 0));
 			$contentModel->set('productUnits', getTranslatedString($usageunit, 'Products'));
+			$contentModel->set('productUnitsCode', $productLineItem["unitCode{$productLineItemIndex}"]);
 			$contentModel->set('productPrice',     $this->formatPrice($priceWithDiscount));
 			$contentModel->set('productPriceWithTax', $this->formatPrice($priceWithTax));
 			$contentModel->set('productDiscount',  $this->formatPrice($discount)."\n ($discountPercentage%)");
@@ -122,6 +134,7 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 			$contentModel->set('productDescription',   nl2br($productLineItem["productDescription{$productLineItemIndex}"]));
 			$contentModel->set('productComment',   nl2br($productLineItem["comment{$productLineItemIndex}"]));
 			$contentModel->set('manufCountry', $productLineItem["manufCountry{$productLineItemIndex}"]);
+			$contentModel->set('manufCountryCode', $productLineItem["manufCountryCode{$productLineItemIndex}"]);
 			$contentModel->set('customsId', $productLineItem["customsId{$productLineItemIndex}"]);
 
 			$contentModels[] = $contentModel;

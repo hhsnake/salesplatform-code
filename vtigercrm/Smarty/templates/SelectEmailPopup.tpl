@@ -66,7 +66,7 @@
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 		<tr><td align=center class="small">
-			<input type="button" name="{$APP.LBL_SELECT_BUTTON_LABEL}" value=" {$APP.LBL_SELECT_BUTTON_LABEL} " class="crmbutton small create" onclick="validate_sendmail_popup({$IDLIST},'{$ENTITY_NAME}','{$MODULE}');"/>&nbsp;&nbsp;
+			<input type="button" name="{$APP.LBL_SELECT_BUTTON_LABEL}" value=" {$APP.LBL_SELECT_BUTTON_LABEL} " class="crmbutton small create" onclick="validate_sendmail_popup({$IDLIST},'{$ENTITY_NAME}','{$FROM_MODULE}');"/>&nbsp;&nbsp;
 			<input type="button" name="{$APP.LBL_CANCEL_BUTTON_LABEL}" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="fninvsh('roleLay');" />
 		</td></tr>
 	</table>

@@ -40,6 +40,12 @@ class Vtiger_FTPBackup extends Vtiger_Location{
 		}
 	}
 
+// SalesPlatform.ru begin
+	public function getServer() {
+	    return $server;
+	}
+// SalesPlatform.ru end
+
 	public function init() {
 		$this->connection = @ftp_connect($this->server);
 		if(empty($this->connection)) {

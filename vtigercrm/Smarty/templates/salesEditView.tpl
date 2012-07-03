@@ -164,7 +164,10 @@ function AddressSync(Addform,id)
 
 
 									      <tr>
-										{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+{* SalesPlatform.ru begin: Added acts and consignments *}
+										{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice'|| $MODULE == 'Act'|| $MODULE == 'Consignment')}
+{*										{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')} *}
+{* SalesPlatform.ru end  *}
                                                                                 <td colspan=2 class="detailedViewHeader">
                                                                                 <b>{$header}</b></td>
                                                                                 <td class="detailedViewHeader">
@@ -192,7 +195,10 @@ function AddressSync(Addform,id)
 
 
 									   <!-- Added to display the Product Details in Inventory-->
-									   {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
+{* SalesPlatform.ru begin: Added acts and consignments *}
+									   {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice' || $MODULE eq 'Act' || $MODULE eq 'Consignment'}
+{*									   {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'} *}
+{* SalesPlatform.ru end  *}
 							   		   <tr>
 										<td colspan=4>
 											{include file="ProductDetailsEditView.tpl"}

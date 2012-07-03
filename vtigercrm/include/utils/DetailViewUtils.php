@@ -726,6 +726,22 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 				$invoicename = $adb->query_result($result, 0, "subject");
 
 				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $invoicename . '</a>';
+                        // SalesPlatform.ru begin: Added acts and consignments
+			} elseif ($parent_module == "Act") {
+				$label_fld[] = $app_strings['LBL_ACT_NAME'];
+				$sql = "select * from  vtiger_sp_act where actid=?";
+				$result = $adb->pquery($sql, array($value));
+				$actname = $adb->query_result($result, 0, "act_no");
+
+				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $actname . '</a>';
+			} elseif ($parent_module == "Consignment") {
+				$label_fld[] = $app_strings['LBL_CONSIGNMENT_NAME'];
+				$sql = "select * from  vtiger_sp_consignment where consignmentid=?";
+				$result = $adb->pquery($sql, array($value));
+				$consignmentname = $adb->query_result($result, 0, "consignment_no");
+
+				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $consignmentname . '</a>';
+                        // SalesPlatform.ru end
 			} elseif ($parent_module == "Quotes") {
 				$label_fld[] = $app_strings['LBL_QUOTES_NAME'];
 				$sql = "select * from  vtiger_quotes where quoteid=?";
@@ -810,6 +826,22 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 				$invoicename = $adb->query_result($result, 0, "subject");
 
 				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $invoicename . '</a>';
+                        // SalesPlatform.ru begin: Added acts and consignments
+			} elseif ($parent_module == "Act") {
+				$label_fld[] = $app_strings['LBL_ACT_NAME'];
+				$sql = "select * from  vtiger_sp_act where actid=?";
+				$result = $adb->pquery($sql, array($value));
+				$actname = $adb->query_result($result, 0, "act_no");
+
+				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $actname . '</a>';
+			} elseif ($parent_module == "Consignment") {
+				$label_fld[] = $app_strings['LBL_CONSIGNMENT_NAME'];
+				$sql = "select * from  vtiger_sp_consignment where consignmentid=?";
+				$result = $adb->pquery($sql, array($value));
+				$consignmentname = $adb->query_result($result, 0, "consignment_no");
+
+				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $consignmentname . '</a>';
+                        // SalesPlatform.ru end
 			} elseif ($parent_module == "Campaigns") {
 				$label_fld[] = $app_strings['LBL_CAMPAIGN_NAME'];
 				$sql = "select * from  vtiger_campaign where campaignid=?";
@@ -1175,7 +1207,10 @@ function getDetailAssociatedProducts($module, $focus) {
 	$theme_path = "themes/" . $theme . "/";
 	$image_path = $theme_path . "images/";
 
-	if ($module != 'PurchaseOrder') {
+        // SalesPlatform.ru begin: Added acts and consignments
+        if ($module != 'PurchaseOrder' && $module != 'Act' && $module != 'Consignment') {
+        //if ($module != 'PurchaseOrder') {
+        // SalesPlatform.ru end
 		$colspan = '2';
 	} else {
 		$colspan = '1';
@@ -1221,7 +1256,10 @@ function getDetailAssociatedProducts($module, $focus) {
 	// DG 15 Aug 2006
 	// Add "ORDER BY sequence_no" to retain add order on all inventoryproductrel items
 
-	if ($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice') {
+	// SalesPlatform.ru begin: Added acts and consignments
+        if ($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice' || $module == 'Act' || $module == 'Consignment') {
+        //if ($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice') {
+        // SalesPlatform.ru end
 		$query = "select case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname," .
 				" case when vtiger_products.productid != '' then 'Products' else 'Services' end as entitytype," .
 				" case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price," .
@@ -1341,7 +1379,10 @@ function getDetailAssociatedProducts($module, $focus) {
 		//Upto this added to display the Product name and comment
 
 
-		if ($module != 'PurchaseOrder') {
+		// SalesPlatform.ru begin: Added acts and consignments
+                if ($module != 'PurchaseOrder' && $module != 'Act' && $module != 'Consignment') {
+                //if ($module != 'PurchaseOrder') {
+                // SalesPlatform.ru end
 			$output .= '<td class="crmTableRow small lineOnTop">' . $qtyinstock . '</td>';
 		}
 		$output .= '<td class="crmTableRow small lineOnTop">' . $qty . '</td>';

@@ -45,7 +45,9 @@ a:hover {
 
 .loginForm {
 	padding: 30px;
-	margin-top:100px;
+/* SalesPlatform.ru begin : Center Login form */
+/*	margin-top:100px; */
+/* SalesPlatform.ru end */
 }
 
 .importantLinks {
@@ -85,7 +87,10 @@ a:hover {
 }
 
 .loginForm .input input {
-	width: 20em;
+/* SalesPlatform.ru begin : Center Login form */
+	width: 90%;
+/*	width: 20em; */
+/* SalesPlatform.ru end */
 	font-size: large;
 	color: #3D698E;
 }
