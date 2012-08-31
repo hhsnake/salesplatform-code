@@ -22,7 +22,7 @@ $conn = $_SESSION['adodb_current_object'];
 $migrationlog->debug("\n\nDB Changes from 5.2.1-20110411 to 5.2.1-20110506 -------- Starts \n\n");
 
 require_once 'include/utils/CommonUtils.php';
-global $adb;
+//global $adb;
 
 ExecuteQuery("CREATE TABLE `sp_templates` (
   `templateid` int(11) unsigned NOT NULL AUTO_INCREMENT,

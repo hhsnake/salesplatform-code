@@ -166,6 +166,8 @@ $mod_strings = array (
       'SINGLE_PurchaseOrder'=>'Заказ на Закупку',
 // 5.3.0 end
     // SalesPlatform.ru end
+
+      'PurchaseOrder ID'=>'ID Заказа на Закупку',
 );
 
 ?>

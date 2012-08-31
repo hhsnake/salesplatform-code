@@ -64,7 +64,7 @@ $phone = $phone; // This line is useless, but gets around a code analyzer warnin
 	add_digits(3, $phone);
 	$phone .= "-";
 	add_digits(4, $phone);
-	
+
 	return $phone;
 }
 
@@ -76,7 +76,7 @@ function create_date()
 	$date .= rand(1,9);
 	$date .= "-";
 	$date .= rand(1,28);
-	
+
 	return $date;
 }
 
@@ -136,7 +136,7 @@ $adb->println($company_name_array);
 $cloudtag = Array ('СУПЕР', 'VIP', 'VIP', 'лицензия');
 
 for($i = 0; $i < $company_name_count; $i++) {
-	
+
 	$account_name = $company_name_array[$i];
 
 	// Create new accounts.
@@ -148,7 +148,7 @@ for($i = 0; $i < $company_name_count; $i++) {
 	$whitespace = array(" ", ".", "&", "\/");
 	$website = str_replace($whitespace, "", strtolower($account->column_fields["accountname"]));
 	$account->column_fields["website"] = $website.".рф";
-	
+
 	$account->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
 	$account->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
 	$account->column_fields["bill_state"] = "";
@@ -159,29 +159,29 @@ for($i = 0; $i < $company_name_count; $i++) {
 	$account->column_fields["ship_city"] = $account->column_fields["bill_city"];
 	$account->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$account->column_fields["ship_code"] = $account->column_fields["bill_code"];
-	$account->column_fields["ship_country"] = $account->column_fields["bill_country"];	
-	
+	$account->column_fields["ship_country"] = $account->column_fields["bill_country"];
+
 	$key = array_rand($comboFieldArray['industry_dom']);
 	$account->column_fields["industry"] = $comboFieldArray['industry_dom'][$key];
 
 	$account->column_fields["account_type"] = "Customer";
 
 	$account->save("Accounts");
-	
+
 	$account_ids[] = $account->id;
-	
+
 	if ($i > 3) {
 		$freetag = $adb->getUniqueId('vtiger_freetags');
 		$query = "insert into vtiger_freetags values (?,?,?)";
 		$qparams = array($freetag, $cloudtag[1], $cloudtag[1]);
 		$res = $adb->pquery($query, $qparams);
 
-		$date = $adb->formatDate(date('YmdHis'), true); 
+		$date = $adb->formatDate(date('YmdHis'), true);
 		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
 		$tag_params = array($freetag, 1, $account->id, $date, Accounts);
 		$result = $adb->pquery($query_tag, $tag_params);
 	}
-		
+
 	//Create new opportunities
 	$opp = new Potentials();
 
@@ -199,13 +199,13 @@ for($i = 0; $i < $company_name_count; $i++) {
 	$key = array_rand($comboFieldArray['opportunity_type_dom']);
 	$opp->column_fields["opportunity_type"] = $comboFieldArray['opportunity_type_dom'][$key];
 
-	$amount = array("10000", "25000", "50000", "75000"); 
+	$amount = array("10000", "25000", "50000", "75000");
 	$key = array_rand($amount);
 	$opp->column_fields["amount"] = $amount[$key];
 	$opp->column_fields["related_to"] = $account->id;
 
 	$opp->save("Potentials");
-	
+
 	$opportunity_ids[] = $opp->id;
 }
 
@@ -226,7 +226,7 @@ for($i=0; $i<10; $i++)
 	$contact->column_fields["phone"] = create_phone_number();
 	$contact->column_fields["homephone"] = create_phone_number();
 	$contact->column_fields["mobile"] = create_phone_number();
-	
+
 	// Fill in a bogus address
 	$key = array_rand($street_address_array);
 	$contact->column_fields["mailingstreet"] = $street_address_array[$key];
@@ -248,7 +248,7 @@ for($i=0; $i<10; $i++)
 					"");
 	$key = array_rand($titles);
 	$contact->column_fields["title"] = $titles[$key];
-	
+
 	$account_key = array_rand($account_ids);
 	$contact->column_fields["account_id"] = $account_ids[$account_key];
 
@@ -256,7 +256,7 @@ for($i=0; $i<10; $i++)
 	$contact->save("Contacts");
 	$contact_ids[] = $contact->id;
 
-	
+
 	if ($i > 8)
 	{
 		$freetag = $adb->getUniqueId('vtiger_freetags');
@@ -264,14 +264,14 @@ for($i=0; $i<10; $i++)
 		$qparams = array($freetag, $cloudtag[2], $cloudtag[2]);
 		$res1 = $adb->pquery($query, $qparams);
 
-		$date = $adb->formatDate(date('YmdHis'), true); 
+		$date = $adb->formatDate(date('YmdHis'), true);
 		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
 		$tag_params = array($freetag, 1, $contact->id, $date, 'Contacts');
 		$result1 = $adb->pquery($query_tag, $tag_params);
 	}
 	// This assumes that there will be one opportunity per company in the seed data.
 	$opportunity_key = array_rand($opportunity_ids);
-	
+
 	$query = "insert into vtiger_contpotentialrel ( contactid, potentialid ) values (?,?)";
 	$adb->pquery($query, array($contact->id, $opportunity_ids[$opportunity_key]));
 }
@@ -299,13 +299,13 @@ for($i=0; $i<10; $i++)
 	//TODO vtiger-ru-fork Eugene Babiy. добавлен транслит на имена.
 	// SalesPlatform.ru - добавили
 	$lead->column_fields["email"] = strtolower(translit($lead->column_fields["firstname"]))."_".strtolower(translit($lead->column_fields["lastname"]))."@mail.ru";
-	
+
 	$website = str_replace($whitespace, "", strtolower(ucfirst(strtolower($company_name_array[$i]))));
         $lead->column_fields["website"] = $website.".рф";
-	
+
 	$lead->column_fields["phone"] = create_phone_number();
 	$lead->column_fields["mobile"] = create_phone_number();
-	
+
 	// Fill in a bogus address
 	$key = array_rand($street_address_array);
 	//$lead->address_street = $street_address_array[$key];
@@ -315,7 +315,7 @@ for($i=0; $i<10; $i++)
 	$lead->column_fields["state"] = "";
 	$lead->column_fields["code"] = '99999';
 	$lead->column_fields["country"] = '';
-	
+
 	$key = array_rand($comboFieldArray['leadsource_dom']);
 	$lead->column_fields["leadsource"] = $comboFieldArray['leadsource_dom'][$key];
 
@@ -323,7 +323,7 @@ for($i=0; $i<10; $i++)
 	$lead->column_fields["leadstatus"] = $comboFieldArray['lead_status_dom'][$key];
 
 	$key = array_rand($comboFieldArray['rating_dom']);
-	$lead->column_fields["rating"] = $comboFieldArray['rating_dom'][$key];	
+	$lead->column_fields["rating"] = $comboFieldArray['rating_dom'][$key];
 
 	$titles = array("Директор", 
 					"Руководитель отдела продаж", 
@@ -349,9 +349,9 @@ for($i=0; $i<10; $i++)
 	$vendor->column_fields["website"] = $website.".рф";
 
 	$vendor->column_fields["assigned_user_id"] = $assigned_user_id;
-	
+
 	// Fill in a bogus address
-	$vendor->column_fields["street"] = $street_address_array[rand(0,$street_address_count-1)]; 
+	$vendor->column_fields["street"] = $street_address_array[rand(0,$street_address_count-1)];
 	$key = array_rand($city_array);
 	$vendor->column_fields["city"] = $city_array[$key];
 	$vendor->column_fields["state"] = "";
@@ -381,7 +381,7 @@ for($i=0; $i<10; $i++) {
 		$usageunit	=	"Each";
 		$qty_per_unit	=	1;
 		$qty_in_stock	=	rand(10000, 99999);
-		$category 	= 	"Hardware";		
+		$category 	= 	"Hardware";
 		$website 	=	"";
 		$manufacturer	= 	"";
 		$commission_rate=	rand(10,20);
@@ -395,7 +395,7 @@ for($i=0; $i<10; $i++) {
 		$qty_per_unit	=	1;
 		$qty_in_stock	=	rand(10000, 99999);
 		$category 	= 	"Software";	
-		$website 	=	"http://salesplatform.ru";
+		$website 	=	"salesplatform.ru";
 		$manufacturer	= 	"LexPon Inc.";
 		$commission_rate=	rand(1,10);
 		$unit_price	=	$subscription_rate[$i];
@@ -448,34 +448,34 @@ for($i=0; $i<10; $i++) {
 	 - Разработка стандартного сайта или интернет-магазина c CRM под ключ
 	 - Разработка сайта или интернет-магазина с CRM по индивидуальному проекту
 	 - Техническая поддержка",
-	
+
 	"Очевидно, что внедрение CRM позволяет сократить затраты за счет автоматизации множества операций, связанных с продажами. Но основная сила CRM именно в увеличении продаж. За счет чего это увеличение становится возможным? 
 	 Вот основные причины:
 	  * Сбор и обмен информацией обо всех клиентах и первичных контактах (обращениях). Многие компании теряют клиентов просто из-за того, что информация о том или ином обращении клиента не была зафиксирована и потерялась. Также часто один менеджер не знает о контактах, которые имел с клиентом другой менеджер той же компании. CRM позволяет систематизировать и централизовать информацию обо всех клиентах компании, не теряя ценных покупателей.
 	  * Повышение уровня сервиса. При наличии CRM менеджеры быстрее исполняют заказы клиентов, более квалифицированно отвечают на их вопросы за счет использования базы знаний, существует возможность централизованно отслеживать состояние каждого заказа. Как результат, клиенты охотнее повторно обращаются к Вашей компании.
 	  * Персонализация. Интеграция CRM с сайтом продаж позволяет изменять информацию на сайте с учетом истории предыдущих взаимодействий с клиентом. Например, сохранять контактные данные или историю покупок (особенно ценно для товаров, которые покупают периодически, таких как расходные материалы или контактные линзы), отображать в первую очередь товары, которые более всего могут заинтересовать покупателя, предоставлять персональные скидки. Все это способствует принятию решения о покупке и повышает лояльность клиентов, стимулируя их возвращаться на Ваш сайт за покупками снова и снова. ",
-	
+
 	"CRM по запросу (CRM on demand) - это способ предоставления программного обеспечения CRM как сервиса. При этом само программное обеспечение клиенту не предоставляется, а исполняется в центрах обработки данных поставщика услуг, предоставляя клиенту стандартный web-доступ через интернет. Такой подход имеет ряд преимуществ, основными из которых являются простота старта (не нужно устанавливать и настраивать ПО), а также отсутствие необходимости для клиента самостоятельно заниматься покупкой и обслуживанием сервера. Но такой подход имеет и недостатки. Во-первых, все важные данные Вашей системы находятся у поставщика услуг, что отпугивает многие компании. Но основной недостаток состоит в том, что программное обеспечение Вам не принадлежит и, как следствие, нет возможности вносить изменения по своему усмотрению, и нет возможности отказаться от абонентской платы без потери доступа к системе. Возможности интеграции с другими информационными системами Вашего предприятия также ограничены.
 	 Предоставляемая нами услуга \"Виртуальный офис продаж\" обеспечивает практически такую же простоту для клиента, как и CRM по запросу. Во-первых, нет необходимости обслуживать физический сервер - вместо этого арендуется виртуальный VPS-сервер у поставщика услуг. Во-вторых, благодаря нашей платформе SkyAdmin развертывание ПО на VPS-сервере занимает столько же времени, как и регистрация на сервисе CRM по запросу. В третьих, мы полностью берем на себя обслуживание VPS-сервера по цене даже ниже обычной ежемесячной стоимости CRM по запросу. Но при этом снимаются основные недостатки сервиса CRM по запросу. Во-первых, несмотря на то, что VPS-сервер находится у поставщика услуг, все данные полностью принадлежат Вам, как если бы они находились на Вашем собственном сервере. Более того, платформа SkyAdmin позволяет Вам организовать резервное копирование данных на собственный жесткий диск и не зависеть от поставщика услуг. Во-вторых, Ваш виртуальный офис продаж может быть в любой момент перемещен к другому поставщику VPS-хостинга или на Ваш собственный физический сервер. В-третьих, Вы используете свободное ПО, которое полностью принадлежит Вам и может быть свободно модифицировано без согласования с кем-либо. В случае, если функциональности свободного ПО окажется недостаточно или потребуется интеграция CRM с внешними информационными системами, Вы сможете воспользоваться услугами нашей или любой другой компании по расширению возможностей. В-четвертых, Вы не обязаны платить абонентскую плату нам или кому-либо еще - Ваша CRM и Ваши данные принадлежат Вам независимо от выбора поставщика услуг.",
-	
+
 	"Заказы от клиентов задают основной ритм деятельности компании по онлайн продажам и задачей компании является соответствовать этому ритму без сбоев и задержек, постоянно наращивая темпы. Поэтому именно управление заказами в первую очередь требует автоматизации. Посмотрим, как это сделать с помощью «Виртуального офиса продаж» и системы vTiger CRM.
-	 
+
 	 Возьмем за основу типичный сценарий: заказы поступают по двум основным каналам — по телефону и с формы заказа на интернет-сайте.
-	 
+
 	 При оформлении заказов по телефону главное — это скорость, с которой оператор сможет ввести имя и контактные данные клиента, осуществить поиск в базе уже зарегистрированных клиентов, ввести параметры заказа и проверить доступность товара на складе, выбрать способ доставки, рассчитать стоимость заказа с учетом доставки и действующих скидок, передать заказ на исполнение.
-	     
+
 	 Шаг 1. Поиск контакта
-	       
+
 	 Клиент по телефону называет свою фамилию, менеджер переходит в модуль «Продажи > Контакты» и выполняет поиск по фамилии.
-	         
+
 	 Контакт найден, переходим к шагу 3.
-	           
+
 	 Шаг 2. Ввод нового обращения
-	         
+
 	 Если контакт не найден, менеджер использует быстрое создание обращения, выбрав в выпадающем списке «Нов. Обращение».
-	               
+
 	 В появившемся всплывающем окне менеджер вводит данные клиента.
-	                 
+
 	 После создания обращение следует автоматически преобразовать в контрагента.
 	                   
 	 Шаг 3. Ввод параметров заказа
@@ -516,7 +516,7 @@ for($i=0; $i<10; $i++) {
 $num_array=array(0,1,2,3);
 for($i=0;$i<4;$i++) {
 	$faq = new Faq();
-	
+
 	$rand=array_rand($num_array);
 	$faq->column_fields["product_id"]	= $product_ids[$i];
 	$faq->column_fields["faqcategories"]	= "General";
@@ -539,7 +539,7 @@ $validtill_array = array ("2010-09-21", "2010-10-29", "2010-12-11", "2010-03-29"
 for($i=0;$i<5;$i++)
 {
 	$quote = new Quotes();
-	
+
 	$quote->column_fields["assigned_user_id"] = $assigned_user_id;
 	$account_key = array_rand($account_ids);
 	$quote->column_fields["account_id"] = $account_ids[$account_key];
@@ -549,7 +549,7 @@ for($i=0;$i<5;$i++)
         $quote->column_fields["contact_id"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$quote->column_fields["subject"] = $sub_array[$i];
-	$quote->column_fields["quotestage"] = $stage_array[$i];	
+	$quote->column_fields["quotestage"] = $stage_array[$i];
 	$quote->column_fields["carrier"] = $carrier_array[$i];
 	$quote->column_fields["validtill"] = $validtill_array[$i];
 
@@ -563,26 +563,26 @@ for($i=0;$i<5;$i++)
 	$quote->column_fields["ship_city"] = $account->column_fields["bill_city"];
 	$quote->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$quote->column_fields["ship_code"] = $account->column_fields["bill_code"];
-	$quote->column_fields["ship_country"] = $account->column_fields["bill_country"];	
-	
-	$quote->column_fields["currency_id"] = '1';	
+	$quote->column_fields["ship_country"] = $account->column_fields["bill_country"];
+
+	$quote->column_fields["currency_id"] = '1';
 	$quote->column_fields["conversion_rate"] = '1';
-	
+
 	$quote->save("Quotes");
 
 	$quote_ids[] = $quote->id;
 
-	$product_key = array_rand($product_ids); 
+	$product_key = array_rand($product_ids);
 	$productid = $product_ids[$product_key];
 
-	//set the inventory product details in request then just call the saveInventoryProductDetails function 
+	//set the inventory product details in request then just call the saveInventoryProductDetails function
 	$_REQUEST['totalProductCount']	 = 1;
 
 	$_REQUEST['hdnProductId1'] = $productid;
 	$_REQUEST['qty1'] = $qty = 1;
 	$_REQUEST['listPrice1'] = $listprice = 130;
 	$_REQUEST['comment1'] = "Это тестовый комментарий для позиции Предложения";
-	
+
 	$_REQUEST['deleted1'] = 0;
 	$_REQUEST['discount_type1'] = 'amount';
 	$_REQUEST['discount_amount1'] = $discount_amount = '20';
@@ -591,7 +591,7 @@ for($i=0;$i<5;$i++)
 	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
 	$_REQUEST['discount_type_final'] = 'amount';
 	$_REQUEST['discount_amount_final'] = $discount_amount_final = '10';
-	
+
 	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
 	$_REQUEST['adjustmenttype'] = '+';
 	$_REQUEST['adjustment'] = $adjustment = '10';
@@ -614,7 +614,7 @@ $duedate_array = array ("2011-04-21", "2011-05-29", "2011-08-11", "2011-09-09", 
 for($i=0;$i<5;$i++)
 {
 	$so = new SalesOrder();
-	
+
 	$so->column_fields["assigned_user_id"] = $assigned_user_id;
 	$account_key = array_rand($account_ids);
 	$so->column_fields["account_id"] = $account_ids[$account_key];
@@ -624,7 +624,7 @@ for($i=0;$i<5;$i++)
         $so->column_fields["contact_id"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$so->column_fields["subject"] = $subj_array[$i];
-	$so->column_fields["sostatus"] = $status_array[$i];	
+	$so->column_fields["sostatus"] = $status_array[$i];
 	$so->column_fields["hdnGrandTotal"] = $sototal_array[$i];
 	$so->column_fields["carrier"] = $carrier_array[$i];
 	$so->column_fields["duedate"] = $duedate_array[$i];
@@ -639,26 +639,26 @@ for($i=0;$i<5;$i++)
 	$so->column_fields["ship_city"] = $account->column_fields["bill_city"];
 	$so->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$so->column_fields["ship_code"] = $account->column_fields["bill_code"];
-	$so->column_fields["ship_country"] = $account->column_fields["bill_country"];	
-	
-	$so->column_fields["currency_id"] = '1';	
+	$so->column_fields["ship_country"] = $account->column_fields["bill_country"];
+
+	$so->column_fields["currency_id"] = '1';
 	$so->column_fields["conversion_rate"] = '1';
-	
+
 	$so->save("SalesOrder");
 
 	$salesorder_ids[] = $so->id;
 
-	$product_key = array_rand($product_ids); 
+	$product_key = array_rand($product_ids);
 	$productid = $product_ids[$product_key];
 
-	//set the inventory product details in request then just call the saveInventoryProductDetails function 
+	//set the inventory product details in request then just call the saveInventoryProductDetails function
 	$_REQUEST['totalProductCount']	 = 1;
 
 	$_REQUEST['hdnProductId1'] = $productid;
 	$_REQUEST['qty1'] = $qty = 1;
 	$_REQUEST['listPrice1'] = $listprice = 1230;
 	$_REQUEST['comment1'] = "Это тестовый комментарий для позиции Заказа на Продажу";
-	
+
 	$_REQUEST['deleted1'] = 0;
 	$_REQUEST['discount_type1'] = 'amount';
 	$_REQUEST['discount_amount1'] = $discount_amount = '200';
@@ -667,7 +667,7 @@ for($i=0;$i<5;$i++)
 	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
 	$_REQUEST['discount_type_final'] = 'amount';
 	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
-	
+
 	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
 	$_REQUEST['adjustmenttype'] = '+';
 	$_REQUEST['adjustment'] = $adjustment = '100';
@@ -686,12 +686,12 @@ $psubj_array = array ("Установка и Настройка SalesPlatform Vt
 $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Received Shipment");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
-$duedate_array = array ("2011-04-21", "2011-05-29", "2011-07-11", "2011-04-09", "2011-08-18");
+$duedate_array = array ("2012-04-21", "2012-05-29", "2012-07-11", "2012-04-09", "2012-08-18");
 
 for($i=0;$i<5;$i++)
 {
 	$po = new PurchaseOrder();
-	
+
 	$po->column_fields["assigned_user_id"] = $assigned_user_id;
 	$vendor_key = array_rand($vendor_ids);
 	$po->column_fields["vendor_id"] = $vendor_ids[$vendor_key];
@@ -699,7 +699,7 @@ for($i=0;$i<5;$i++)
         $po->column_fields["contact_id"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$po->column_fields["subject"] = $psubj_array[$i];
-	$po->column_fields["postatus"] = $pstatus_array[$i];	
+	$po->column_fields["postatus"] = $pstatus_array[$i];
 	$po->column_fields["carrier"] = $carrier_array[$i];
 	$po->column_fields["tracking_no"] = $trkno_array[$i];
 	$po->column_fields["duedate"] = $duedate_array[$i];
@@ -714,26 +714,26 @@ for($i=0;$i<5;$i++)
 	$po->column_fields["ship_city"] = $account->column_fields["bill_city"];
 	$po->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$po->column_fields["ship_code"] = $account->column_fields["bill_code"];
-	$po->column_fields["ship_country"] = $account->column_fields["bill_country"];	
-	
-	$po->column_fields["currency_id"] = '1';	
-	$po->column_fields["conversion_rate"] = '1';		
-	
+	$po->column_fields["ship_country"] = $account->column_fields["bill_country"];
+
+	$po->column_fields["currency_id"] = '1';
+	$po->column_fields["conversion_rate"] = '1';
+
 	$po->save("PurchaseOrder");
 
 	$purchaseorder_ids[] = $po->id;
 
-	$product_key = array_rand($product_ids); 
+	$product_key = array_rand($product_ids);
 	$productid = $product_ids[$product_key];
 
-	//set the inventory product details in request then just call the saveInventoryProductDetails function 
+	//set the inventory product details in request then just call the saveInventoryProductDetails function
 	$_REQUEST['totalProductCount']	 = 1;
 
 	$_REQUEST['hdnProductId1'] = $productid;
 	$_REQUEST['qty1'] = $qty = 1;
 	$_REQUEST['listPrice1'] = $listprice = 2200;
 	$_REQUEST['comment1'] = "Это демонстрационный комментарий для позиции Заказа на Закупку";
-	
+
 	$_REQUEST['deleted1'] = 0;
 	$_REQUEST['discount_type1'] = 'amount';
 	$_REQUEST['discount_amount1'] = $discount_amount = '200';
@@ -742,7 +742,7 @@ for($i=0;$i<5;$i++)
 	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
 	$_REQUEST['discount_type_final'] = 'amount';
 	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
-	
+
 	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
 	$_REQUEST['adjustmenttype'] = '+';
 	$_REQUEST['adjustment'] = $adjustment = '100';
@@ -764,7 +764,7 @@ $itotal_array = array ("4842.000", "4842.000", "4842.000", "4842.000", "4842.000
 for($i=0;$i<5;$i++)
 {
 	$invoice = new Invoice();
-	
+
 	$invoice->column_fields["assigned_user_id"] = $assigned_user_id;
 	$account_key = array_rand($account_ids);
 	$invoice->column_fields["account_id"] = $account_ids[$account_key];
@@ -774,7 +774,7 @@ for($i=0;$i<5;$i++)
         $invoice->column_fields["contactid"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$invoice->column_fields["subject"] = $isubj_array[$i];
-	$invoice->column_fields["invoicestatus"] = $istatus_array[$i];	
+	$invoice->column_fields["invoicestatus"] = $istatus_array[$i];
 	$invoice->column_fields["hdnGrandTotal"] = $itotal_array[$i];
 
 	$invoice->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
@@ -787,11 +787,11 @@ for($i=0;$i<5;$i++)
 	$invoice->column_fields["ship_city"] = $account->column_fields["bill_city"];
 	$invoice->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$invoice->column_fields["ship_code"] = $account->column_fields["bill_code"];
-	$invoice->column_fields["ship_country"] = $account->column_fields["bill_country"];		
-	
-	$invoice->column_fields["currency_id"] = '1';	
-	$invoice->column_fields["conversion_rate"] = '1';	
-	
+	$invoice->column_fields["ship_country"] = $account->column_fields["bill_country"];
+
+	$invoice->column_fields["currency_id"] = '1';
+	$invoice->column_fields["conversion_rate"] = '1';
+
 	$invoice->save("Invoice");
 
 	$invoice_ids[] = $invoice->id;
@@ -802,23 +802,23 @@ for($i=0;$i<5;$i++)
 		$qparams = array($freetag, $cloudtag[0], $cloudtag[0]);
 		$res_inv = $adb->pquery($query, $qparams);
 
-		$date = $adb->formatDate(date('YmdHis'), true); 
+		$date = $adb->formatDate(date('YmdHis'), true);
 		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
 		$tag_params = array($freetag, 1, $invoice->id, $date, 'Invoice');
 		$result_inv = $adb->pquery($query_tag, $tag_params);
 	}
 
-	$product_key = array_rand($product_ids); 
+	$product_key = array_rand($product_ids);
 	$productid = $product_ids[$product_key];
 
-	//set the inventory product details in request then just call the saveInventoryProductDetails function 
+	//set the inventory product details in request then just call the saveInventoryProductDetails function
 	$_REQUEST['totalProductCount']	 = 1;
 
 	$_REQUEST['hdnProductId1'] = $productid;
 	$_REQUEST['qty1'] = $qty = 1;
 	$_REQUEST['listPrice1'] = $listprice = 4300;
 	$_REQUEST['comment1'] = "Это демонстрационный комментарий для позиции Счета";
-	
+
 	$_REQUEST['deleted1'] = 0;
 	$_REQUEST['discount_type1'] = 'amount';
 	$_REQUEST['discount_amount1'] = $discount_amount = '300';
@@ -827,7 +827,7 @@ for($i=0;$i<5;$i++)
 	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
 	$_REQUEST['discount_type_final'] = 'amount';
 	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
-	
+
 	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
 	$_REQUEST['adjustmenttype'] = '+';
 	$_REQUEST['adjustment'] = $adjustment = '100';
@@ -843,7 +843,7 @@ for($i=0;$i<5;$i++)
 
 //Populate Email Data
 
-$esubj_array =  array ("Русский Vtiger 5.3.0 Вышел", "Попробуйте VtigerCRM!", "Привет!!!", "Добро пожаловать в Open Source", "Нужна помощь в адаптации VtigerCRM");
+$esubj_array =  array ("Русский Vtiger 5.4.0 Вышел", "Попробуйте VtigerCRM!", "Привет!!!", "Добро пожаловать в Open Source", "Нужна помощь в адаптации VtigerCRM");
 $startdate_array =  array ("2011-07-27","2011-05-09","2011-04-05","2011-11-01","2011-08-18");
 $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
 
@@ -864,14 +864,14 @@ for($i=0;$i<5;$i++)
 	$email = new Emails();
 
 	$email->column_fields["assigned_user_id"] = $assigned_user_id;
-	
+
 	$rand = array_rand($num_array);
 	$email->column_fields["subject"] = $esubj_array[$i];
-	$email->column_fields["filename"] = $filename_array[$i];	
+	$email->column_fields["filename"] = $filename_array[$i];
 	$email->column_fields["date_start"] = $startdate_array[$i];
 	$email->column_fields["semodule"] = 'Tasks';
 	$email->column_fields["activitytype"] = 'Emails';
-	$email->column_fields["description"] = $body_array[$i];	
+	$email->column_fields["description"] = $body_array[$i];
 	$email->column_fields["saved_toid"] = $to_array[$i];
 	$focus->column_fields['ccmail'] = $cc_array[$i];
 	$focus->column_fields['bccmail'] = $bcc_array[$i];
@@ -909,7 +909,7 @@ $ticket_title_array=array("Ошибка загрузки вложений",
 for($i=0;$i<5;$i++)
 {
 	$helpdesk= new HelpDesk();
-	
+
 	$rand=array_rand($num_array);
 	$contact_key = array_rand($contact_ids);
     $helpdesk->column_fields["parent_id"] 	= 	$contact_ids[$contact_key];
@@ -921,13 +921,12 @@ for($i=0;$i<5;$i++)
 	$helpdesk->column_fields["ticketstatus"]	= $status_array[$i];
 	$helpdesk->column_fields["ticketcategories"]	= $category_array[$i];
 	//$rand_key = array_rand($s);$contact_key = array_rand($contact_ids);
-	$notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
+	$helpdesk->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
 	$helpdesk->column_fields["ticket_title"]	= $ticket_title_array[$i];
 	$helpdesk->column_fields["assigned_user_id"] = $assigned_user_id;
-	
+
 	$helpdesk->save("HelpDesk");
-	$helpdesk_ids[] = $helpdesk->id;
-	
+
 	if ($i > 3)
 	{
 		$freetag = $adb->getUniqueId('vtiger_freetags');
@@ -935,7 +934,7 @@ for($i=0;$i<5;$i++)
 		$qparams = array($freetag, $cloudtag[3], $cloudtag[3]);
 		$res_tkt = $adb->pquery($query, $qparams);
 
-		$date = $adb->formatDate(date('YmdHis'), true); 
+		$date = $adb->formatDate(date('YmdHis'), true);
 		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
 		$tag_params = array($freetag, 1, $helpdesk->id, $date, 'HelpDesk');
 		$result_tkt = $adb->pquery($query_tag, $tag_params);
@@ -953,7 +952,7 @@ $visibility=array("","","Private","Public","Private","Public");
 for($i=0;$i<6;$i++)
 {
 	$event = new Activity();
-	
+
 	$rand_num=array_rand($num_array);
 
 	$rand_date = & create_date();
@@ -982,31 +981,31 @@ for($i=0;$i<6;$i++)
 	$start_time=$start_time_hr.":".$start_time_min;
 	if($i<2)
 	{
-		$event->column_fields["subject"]	= $task_array[$i];	
+		$event->column_fields["subject"]	= $task_array[$i];
 		if($i==1)
 		{
 			$account_key = array_rand($account_ids);
-			$event->column_fields["parent_id"]	= $account_ids[$account_key];;	
+			$event->column_fields["parent_id"]	= $account_ids[$account_key];;
 		}
-		$event->column_fields["taskstatus"]	= $task_status_array[$i];	
-		$event->column_fields["taskpriority"]	= $task_priority_array[$i];	
+		$event->column_fields["taskstatus"]	= $task_status_array[$i];
+		$event->column_fields["taskpriority"]	= $task_priority_array[$i];
 		$event->column_fields["activitytype"]	= "Task";
-		$event->column_fields["visibility"] = $visibility[$i];	
-				
+		$event->column_fields["visibility"] = $visibility[$i];
+
 	}
 	else
 	{
-		$event->column_fields["subject"]	= $event_array[$i];	
+		$event->column_fields["subject"]	= $event_array[$i];
 		$event->column_fields["visibility"] = $visibility[$i];
-		$event->column_fields["duration_hours"]	= rand(0,3);	
-		$event->column_fields["duration_minutes"]= rand(0,59);	
-		$event->column_fields["eventstatus"]	= "Planned";	
+		$event->column_fields["duration_hours"]	= rand(0,3);
+		$event->column_fields["duration_minutes"]= rand(0,59);
+		$event->column_fields["eventstatus"]	= "Planned";
 		$event->column_fields["time_end"]     = $end_time;
 	}
-	$event->column_fields["date_start"]	= $rand_date;	
+	$event->column_fields["date_start"]	= $rand_date;
 	$_REQUEST["date_start"] = $rand_date;
-	$event->column_fields["time_start"]	= $start_time;	
-	$event->column_fields["due_date"]	= $rand_date;	
+	$event->column_fields["time_start"]	= $start_time;
+	$event->column_fields["due_date"]	= $rand_date;
 	$_REQUEST["due_date"] = $rand_date;
 	$contact_key = array_rand($contact_ids);
         $event->column_fields["contact_id"]	= 	$contact_ids[$contact_key];
@@ -1014,19 +1013,19 @@ for($i=0;$i<6;$i++)
 	{
         	$event->column_fields["recurringtype"] 	= "Daily";
 		$_REQUEST["recurringtype"]  = "Daily";
-		$event->column_fields["activitytype"]	= "Meeting";	
-		$event->column_fields["due_date"]	= $recur_daily_date;	
+		$event->column_fields["activitytype"]	= "Meeting";
+		$event->column_fields["due_date"]	= $recur_daily_date;
 	}
 	elseif($i==5)
-	{	
+	{
         	$event->column_fields["recurringtype"] 	= "Weekly";
 		$_REQUEST["recurringtype"]  = "Weekly";
-		$event->column_fields["activitytype"]	= "Meeting";	
-		$event->column_fields["due_date"]	= $recur_week_date;	
+		$event->column_fields["activitytype"]	= "Meeting";
+		$event->column_fields["due_date"]	= $recur_week_date;
 	}
-	elseif($i>1) 
+	elseif($i>1)
 	{
-		$event->column_fields["activitytype"]	= "Call";	
+		$event->column_fields["activitytype"]	= "Call";
 	}
 	$event->column_fields["assigned_user_id"] = $assigned_user_id;
 	$event->save("Calendar");
@@ -1071,7 +1070,7 @@ for($i=0;$i<count($campaign_name_array);$i++)
 	$campaign->column_fields["closingdate"] = $clo_date[$i];
 	$campaign->column_fields["expectedresponse"] = $expected_response[$i];
 	$campaign->column_fields["assigned_user_id"] = $assigned_user_id;
-	
+
 	$campaign->column_fields["expectedresponsecount"] = $expected_response_count[$i];
 	$campaign->column_fields["expectedsalescount"] = $expected_sales_count[$i];
 	$campaign->column_fields["expectedroi"] = $expected_roi[$i];
@@ -1081,11 +1080,11 @@ for($i=0;$i<count($campaign_name_array);$i++)
 	$campaign->column_fields["sponsor"] = $sponsor[$i];
 	$campaign->column_fields["targetsize"] = $targetsize[$i];
 	$campaign->column_fields["targetaudience"] = $targetaudience[$i];
-	
+
 	$campaign->save("Campaigns");
 }
 
-//Populate My Sites Data 
+//Populate My Sites Data
 
 $portalname = array ("SalesPlatform.ru", "Сообщество SalesPlatform.ru");
 $portalurl = array ("http://salesplatform.ru",
@@ -1110,5 +1109,5 @@ for($i=0;$i<0;$i++)
 	$rss_params = array($rssid, $rssurl[$i], $rssname[$i], 0, 0);
 	$result_qry = $adb->pquery($rss_qry, $rss_params);
 }
-$adb->query("DELETE FROM com_vtiger_workflowtask_queue"); 
+$adb->query("DELETE FROM com_vtiger_workflowtask_queue");
 ?>

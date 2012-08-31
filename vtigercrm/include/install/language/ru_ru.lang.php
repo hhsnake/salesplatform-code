@@ -26,7 +26,7 @@ $optionalModuleStrings = array(
 );
 
 $installationStrings = array(
-	'LBL_VTIGER_CRM_5' => 'SalesPlatform VtigerCRM 5.3.0',
+	'LBL_VTIGER_CRM_5' => 'SalesPlatform VtigerCRM 5.4.0',
 	'LBL_CONFIG_WIZARD' => 'Мастер Настройки',
 	'LBL_WELCOME' => 'Добро пожаловать',
 	'LBL_WELCOME_CONFIG_WIZARD' => 'Добро пожаловать в Мастер Настройки',

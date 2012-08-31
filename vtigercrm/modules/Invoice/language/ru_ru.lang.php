@@ -183,6 +183,8 @@ $mod_strings = array (
       'SINGLE_Invoice'=>'Счет',
 // 5.3.0 end
 // SalesPlatform.ru end
+
+      'Invoice ID'=>'ID Счета',
 );
 
 ?>

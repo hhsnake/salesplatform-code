@@ -15,8 +15,13 @@
 	<tr>
 	{if $SELECT eq 'enable' && ($POPUPTYPE neq 'inventory_prod' && $POPUPTYPE neq 'inventory_prod_po' && $POPUPTYPE neq 'inventory_service')}
 {* SalesPlatform.ru begin: Added select possibility for contacts activities *}
-            <td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$MODULE|@getTranslatedString:$MODULE}" onclick="if(SelectAllRL('{$MODULE}','{$RETURN_MODULE}')) window.close();"/></td>
-{*            <td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$MODULE|@getTranslatedString:$MODULE}" onclick="if(SelectAll('{$MODULE}','{$RETURN_MODULE}')) window.close();"/></td> *}
+            {if $MODULE eq 'Calendar' && $RETURN_MODULE eq 'Contacts'}
+                <td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$MODULE|@getTranslatedString:$MODULE}" onclick="if(SelectAllRL('{$MODULE}','{$RETURN_MODULE}')) window.close();"/></td>
+            {else}
+{* SalesPlatform.end *}
+            <td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$MODULE|@getTranslatedString:$MODULE}" onclick="if(SelectAll('{$MODULE}','{$RETURN_MODULE}')) window.close();"/></td>
+{* SalesPlatform.ru begin: Added select possibility for contacts activities *}
+            {/if}
 {* SalesPlatform.end *}
 	{elseif $SELECT eq 'enable' && ($POPUPTYPE eq 'inventory_prod' || $POPUPTYPE eq 'inventory_prod_po')}
 		{if $RECORD_ID}

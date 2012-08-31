@@ -105,6 +105,7 @@ $mod_strings = array (
       'Published' => 'Опубликовано',
       'Obsolete' => 'Устарело',
       'Faq No' => 'ЧаВо №',
+      'Faq ID' => 'ID ЧаВо',
 );
 
 ?>

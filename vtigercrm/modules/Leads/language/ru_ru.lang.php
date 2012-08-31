@@ -103,7 +103,7 @@ $mod_strings = array (
       'LBL_HOT' => 'Горячий',
       'LBL_COLD' => 'Холодный',
       'LBL_TOOL_FORM_TITLE' => 'Иструменты',
-      'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE' => 'Выберите Шаблон для писем:',
+      'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE' => 'Выберите шаблон документа:',
       'Salutation' => 'Обращение',
       'First Name' => 'Имя',
       'Phone' => 'Телефон',
@@ -206,6 +206,13 @@ $mod_strings = array (
       'Secondary Email'                 => 'Второй Email',
 // 5.3.0 end
 // SalesPlatform.ru end
+
+      'LBL_FOLLOWING_ARE_POSSIBLE_REASONS' => 'Следующее может быть одной из возможных причин',
+      'LBL_LEADS_FIELD_MAPPING_INCOMPLETE' => 'Не для всех обязательных полей найдено Соответствие',
+      'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Отсутсвуют значения для некоторых из обязательных полей',
+      'LBL_LEADS_FIELD_MAPPING' => 'Пользовательское соответствие полей для Обращений',
+      'LBL_FIELD_SETTINGS' => 'Свойства полей',
+      'Leads ID' => 'ID Обращения',
 );
 
 ?>

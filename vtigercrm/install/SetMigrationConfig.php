@@ -38,6 +38,7 @@ include("modules/Migration/versions.php");
 $version_sorted = $versions;
 // SalesPlatform.ru begin: Added versions branch
 foreach($versions_branch2 as $k=>$v) $version_sorted[$k] = $v;
+foreach($versions_branch3 as $k=>$v) $version_sorted[$k] = $v;
 // SalesPlatform.ru end
 uasort($version_sorted,'version_compare');
 $version_sorted = array_reverse($version_sorted,true);

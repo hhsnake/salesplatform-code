@@ -341,6 +341,18 @@ $mod_strings = array (
 
 // SalesPlatform.ru end
 
+    //Report Charts
+    'LBL_VIEW_CHARTS' => 'Просмотреть графики',
+    'LBL_ADD_CHARTS' => 'Добавить график на Домашнюю страницу',
+    'LBL_HOME_REPORT_NAME' => 'Имя отчета',
+    'LBL_HOME_HORIZONTAL_BARCHART' => 'Горизонтальный шкальный график',
+    'LBL_HOME_VERTICAL_BARCHART' => 'Вертикальный шкальный график',
+    'LBL_HOME_PIE_CHART' => 'Круговая диаграмма',
+    'LBL_HOME_REPORT_TYPE' => 'Тип отчета',
+    'LBL_HOME_WINDOW_TITLE' => 'Заголовок окна',
+    'LBL_GROUPING_TIME' => 'Группировать по времени',
+    'LBL_WIDGET_ADDED' => 'Виджет добавлен успешно.',
+
 );
 
 ?>

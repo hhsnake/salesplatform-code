@@ -77,15 +77,26 @@ function productPickList(currObj,module, row_no) {
 	
 	var currencyid = document.getElementById("inventory_currency").value;
 	popuptype = 'inventory_prod';
-	if(module == 'PurchaseOrder')
+        if(module == 'Act' || module == 'Consignment') popuptype = 'inventory_prod_po';
+	if(module == 'PurchaseOrder') {
 		popuptype = 'inventory_prod_po';
-	var record_id = '';
-    if(document.getElementsByName("account_id").length != 0)
-    	record_id= document.EditView.account_id.value;
-    if(record_id != '')
-    	window.open("index.php?module=Products&action=Popup&html=Popup_picker&select=enable&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&relmod_id="+record_id+"&parent_module=Accounts&return_module="+module+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
-    else
-		window.open("index.php?module=Products&action=Popup&html=Popup_picker&select=enable&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&return_module="+module+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+		module_string = "&parent_module=Vendor";
+		parent_id = document.EditView.vendor_id.value;
+		
+		if(parent_id != '')
+			window.open("index.php?module=Products&action=Popup&html=Popup_picker&select=enable&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&return_module="+module+"&currencyid="+currencyid+"&relmod_id="+parent_id+module_string,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+		else
+			window.open("index.php?module=Products&action=Popup&html=Popup_picker&select=enable&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&return_module="+module+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+	}
+	else {
+		var record_id = '';
+		if(document.getElementsByName("account_id").length != 0)
+			record_id= document.EditView.account_id.value;
+		if(record_id != '')
+			window.open("index.php?module=Products&action=Popup&html=Popup_picker&select=enable&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&relmod_id="+record_id+"&parent_module=Accounts&return_module="+module+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+		else
+			window.open("index.php?module=Products&action=Popup&html=Popup_picker&select=enable&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&return_module="+module+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+	}
 }
 
 function priceBookPickList(currObj, row_no) {
@@ -234,6 +245,7 @@ function calcGrandTotal() {
 		}
 	}
 //	alert(netTotal);
+	netTotal = netTotal.toFixed(2);
 	document.getElementById("netTotal").innerHTML = netTotal;
 	document.getElementById("subtotal").value = netTotal;
 	setDiscount(this,'_final');
@@ -599,7 +611,7 @@ function fnAddProductRow(module,image_path){
 	
 	var colone = row.insertCell(0);
 	var coltwo = row.insertCell(1);
-	if(module == "PurchaseOrder"){
+	if(module == "PurchaseOrder" || module == "Act" || module == "Consignment"){
 		var colfour = row.insertCell(2);
 		var colfive = row.insertCell(3);
 		var colsix = row.insertCell(4);
@@ -630,11 +642,11 @@ function fnAddProductRow(module,image_path){
 	//Delete link
 	colone.className = "crmTableRow small";
 	colone.id = row.id+"_col1";
-	colone.innerHTML='<img src="themes/images/delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+',\'themes/images/\')"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0"><br/><br/>&nbsp;<a href="javascript:moveUpDown(\'UP\',\''+module+'\','+count+')" title="Move Upward"><img src="themes/images/up_layout.gif" border="0"></a>';
+	colone.innerHTML='<img src="themes/images/delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+',\'themes/images/\')" style="cursor:pointer;"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0"><br/><br/>&nbsp;<a href="javascript:moveUpDown(\'UP\',\''+module+'\','+count+')" title="Move Upward"><img src="themes/images/up_layout.gif" border="0"></a>';
 	/* Product Re-Ordering Feature Code Addition Starts */
 	if(iPrevCount != 1)
 	{
-		oPrevRow.cells[0].innerHTML = '<img src="themes/images/delete.gif" border="0" onclick="deleteRow(\''+module+'\','+iPrevCount+')"><input id="deleted'+iPrevCount+'" name="deleted'+iPrevCount+'" type="hidden" value="0"><br/><br/>&nbsp;<a href="javascript:moveUpDown(\'UP\',\''+module+'\','+iPrevCount+')" title="Move Upward"><img src="themes/images/up_layout.gif" border="0"></a>&nbsp;&nbsp;<a href="javascript:moveUpDown(\'DOWN\',\''+module+'\','+iPrevCount+')" title="Move Downward"><img src="themes/images/down_layout.gif" border="0"></a>';
+		oPrevRow.cells[0].innerHTML = '<img src="themes/images/delete.gif" border="0" onclick="deleteRow(\''+module+'\','+iPrevCount+')" style="cursor:pointer;"><input id="deleted'+iPrevCount+'" name="deleted'+iPrevCount+'" type="hidden" value="0"><br/><br/>&nbsp;<a href="javascript:moveUpDown(\'UP\',\''+module+'\','+iPrevCount+')" title="Move Upward"><img src="themes/images/up_layout.gif" border="0"></a>&nbsp;&nbsp;<a href="javascript:moveUpDown(\'DOWN\',\''+module+'\','+iPrevCount+')" title="Move Downward"><img src="themes/images/down_layout.gif" border="0"></a>';
 	}
 	else
 	{
@@ -658,7 +670,7 @@ function fnAddProductRow(module,image_path){
 // SalesPlatform.ru end
 
 	//Quantity In Stock - only for SO, Quotes and Invoice
-	if(module != "PurchaseOrder"){
+	if(module != "PurchaseOrder" && module != "Act" && module != "Consignment"){
 	colthree.className = "crmTableRow small"
 	colthree.innerHTML='<span id="qtyInStock'+count+'">&nbsp;</span>';
 	}
@@ -1211,7 +1223,7 @@ function InventorySelectAll(mod,image_pth)
 				var desc = prod_array['desc'];
 				var row_id = prod_array['rowid'];
 				var subprod_ids = prod_array['subprod_ids'];
-				if(mod!='PurchaseOrder') {
+				if(mod!='PurchaseOrder' && mod!='Act' && mod!='Consignment') {
 					var qtyinstk = prod_array['qtyinstk'];
 					set_return_inventory(prod_id,prod_name,unit_price,qtyinstk,taxstring,parseInt(row_id),desc,subprod_ids,prod_code);
 				} else {
@@ -1242,7 +1254,7 @@ function InventorySelectAll(mod,image_pth)
 						var row_id = prod_array['rowid'];
 					}	
 								
-					if(mod!='PurchaseOrder') {
+					if(mod!='PurchaseOrder' && mod!='Act' && mod!='Consignment') {
 						var qtyinstk = prod_array['qtyinstk'];
 						set_return_inventory(prod_id,prod_name,unit_price,qtyinstk,taxstring,parseInt(row_id),desc,subprod_ids,prod_code);
 					} else {

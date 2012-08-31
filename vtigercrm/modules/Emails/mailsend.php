@@ -124,7 +124,11 @@ for ($i=0;$i<(count($myids)-1);$i++)
                 $emailadd = $adb->query_result($adb->pquery("select email1 from vtiger_users where id=?", array($mycrmid)),0,'email1');
                 $pmodule = 'Users';
 		$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
-                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id);
+                // SalesPlatform.ru begin: Add template processing to email subject
+                $processed_subject = getMergedDescription($_REQUEST['subject'],$mycrmid,$pmodule);
+                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$processed_subject,$description,'','','all',$focus->id);
+                //$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id);
+                // SalesPlatform.ru end
                 $all_to_emailids []= $emailadd;
                 $mail_status_str .= $emailadd."=".$mail_status."&&&";
         }
@@ -192,7 +196,10 @@ for ($i=0;$i<(count($myids)-1);$i++)
 				}
 				if(isPermitted($pmodule,'DetailView',$mycrmid) == 'yes')
 				{
-					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id,$logo);
+                                        // SalesPlatform.ru begin: Add template processing to email subject
+                                        $processed_subject = getMergedDescription($_REQUEST['subject'],$mycrmid,$pmodule);
+					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$processed_subject,$description,'','','all',$focus->id,$logo);
+                                        // SalesPlatform.ru end
 				}	
 
 				$all_to_emailids []= $emailadd;

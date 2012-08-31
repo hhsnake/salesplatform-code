@@ -206,6 +206,8 @@ $mod_strings = array (
       'Secondary Email'                 => 'Второй Email',
 // 5.3.0 end
 // SalesPlatform.ru end
+
+    'Contacts ID'=>'ID Контакта',
 );
 
 ?>

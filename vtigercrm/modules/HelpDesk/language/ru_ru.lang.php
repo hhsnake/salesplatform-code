@@ -173,6 +173,9 @@ $mod_strings = array (
 // 5.3.0 end
 // SalesPlatform.ru end
 
+    'From Portal' => 'Из Портала',
+    'HelpDesk ID' => 'ID Заявки',
+
 );
 
 ?>

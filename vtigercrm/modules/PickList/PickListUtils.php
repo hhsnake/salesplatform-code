@@ -106,10 +106,7 @@ function get_available_module_picklist($picklist_details){
  * @param string $fieldName - the name of the field
  * @return array $arr - the array containing the picklist values 
  */
-// SalesPlatform.ru begin
-function getAllPickListValues($fieldName, $lang = null){
-//function getAllPickListValues($fieldName){
-// SalesPlatform.ru end
+function getAllPickListValues($fieldName,$lang = Array() ){
 	global $adb;
 	$sql = 'SELECT * FROM vtiger_'.$adb->sql_escape_string($fieldName);
 	$result = $adb->query($sql);
@@ -117,19 +114,13 @@ function getAllPickListValues($fieldName, $lang = null){
 	
 	$arr = array();
 	for($i=0;$i<$count;$i++){
-                // SalesPlatform.ru begin
-                $pick_val = $adb->query_result($result, $i, $fieldName);
-                if ($lang === null) {
-                    $arr[] = $pick_val;
-                } else {
-                    if($lang[$pick_val] != ''){
-                            $arr[$pick_val]=$lang[$pick_val];
-                    }else{
-                            $arr[$pick_val]=$pick_val;
-                    }
-                }
-		//$arr[] = $adb->query_result($result, $i, $fieldName);
-                // SalesPlatform.ru end
+		$pick_val = decode_html($adb->query_result($result, $i, $fieldName));
+		if($lang[$pick_val] != ''){
+			$arr[$pick_val] = $lang[$pick_val];
+		}
+		else{
+			$arr[$pick_val] = $pick_val;
+		}
 	}
 	return $arr;
 }
@@ -142,7 +133,7 @@ function getAllPickListValues($fieldName, $lang = null){
  * @param object $adb - the peardatabase object
  * @return array $pick - the editable picklist values
  */
-function getEditablePicklistValues($fieldName, $lang, $adb){
+function getEditablePicklistValues($fieldName, $lang= array(), $adb){
 	$values = array();
 	$fieldName = $adb->sql_escape_string($fieldName);
 	$sql="select $fieldName from vtiger_$fieldName where presence=1 and $fieldName <> '--None--'";
@@ -152,15 +143,9 @@ function getEditablePicklistValues($fieldName, $lang, $adb){
 		for($i=0;$i<$RowCount;$i++){
 			$pick_val = $adb->query_result($res,$i,$fieldName);
 			if($lang[$pick_val] != ''){
-                                // SalesPlatform.ru begin
 				$values[$pick_val]=$lang[$pick_val];
-				//$values[]=$lang[$pick_val];
-                                // SalesPlatform.ru end
 			}else{
-                                // SalesPlatform.ru begin
 				$values[$pick_val]=$pick_val;
-				//$values[]=$pick_val;
-                                // SalesPlatform.ru end
 			}
 		}
 	}
@@ -174,7 +159,7 @@ function getEditablePicklistValues($fieldName, $lang, $adb){
  * @param object $adb - the peardatabase object
  * @return array $pick - the no-editable picklist values
  */
-function getNonEditablePicklistValues($fieldName, $lang, $adb){
+function getNonEditablePicklistValues($fieldName, $lang=array(), $adb){
 	$values = array();
 	$fieldName = $adb->sql_escape_string($fieldName);
 	$sql = "select $fieldName from vtiger_$fieldName where presence=0";
@@ -207,10 +192,7 @@ function getNonEditablePicklistValues($fieldName, $lang, $adb){
  * @param object $adb - the peardatabase object
  * @return array $val - the assigned picklist values in array format
  */
-// SalesPlatform.ru begin
-function getAssignedPicklistValues($tableName, $roleid, $adb, $lang = null){
-//function getAssignedPicklistValues($tableName, $roleid, $adb){
-// SalesPlatform.ru end
+function getAssignedPicklistValues($tableName, $roleid, $adb, $lang=array()){
 	$arr = array();
 	
 	$sub = getSubordinateRoleAndUsers($roleid);
@@ -236,19 +218,13 @@ function getAssignedPicklistValues($tableName, $roleid, $adb, $lang = null){
 		
 		if($count) {
 			while($resultrow = $adb->fetch_array($result)) {
-                                // SalesPlatform.ru begin
-                                if ($lang === null) {
-                                    $arr[] = decode_html($resultrow[$tableName]);
-                                } else {
-                                    $pick_val = decode_html($resultrow[$tableName]);
-                                    if($lang[$pick_val] != ''){
-                                            $arr[$pick_val]=$lang[$pick_val];
-                                    } else {
-                                            $arr[$pick_val]=$pick_val;
-                                    }
-                                }
-                                // $arr[] = $resultrow[$tableName];
-                                // SalesPlatform.ru end
+				$pick_val = decode_html($resultrow[$tableName]);
+				if($lang[$pick_val] != '') {
+					$arr[$pick_val] = $lang[$pick_val];
+				}
+				else {
+					$arr[$pick_val] = $pick_val;
+				}
 			}
 		}
 	}

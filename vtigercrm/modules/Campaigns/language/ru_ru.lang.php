@@ -73,8 +73,9 @@ $mod_strings = array (
 '--None--'=>'--Нет--',
 'Contacted - Successful' => 'Успешный Контакт',
 'Contacted - Unsuccessful' => 'Неудачный Контакт',
-'Contacted - Never Contact Again' => 'Никогда не Контактировать'
+'Contacted - Never Contact Again' => 'Никогда не Контактировать',
 // END
+'Campaigns ID' => 'ID Кампании',
 );
 
 ?>

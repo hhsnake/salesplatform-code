@@ -118,9 +118,6 @@ EOQ;
  */
 function get_mini_calendar(& $cal){
 	global $current_user,$adb,$cal_log,$mod_strings,$theme;
-// SalesPlatform.ru begin
-	global $sunday_first;
-// SalesPlatform.ru end
 	$category = getParentTab();
 	$cal_log->debug('Entering get_mini_calendar() method...');
 	$count = 0;
@@ -141,13 +138,7 @@ function get_mini_calendar(& $cal){
 	$minical .= "<tr class='hdrNameBg'>";
 	//To display days in week 
 	$minical .= '<th width="12%">'.$mod_strings['LBL_WEEK'].'</th>';
-// SalesPlatform.ru begin
-	for($d=0;$d<7;$d++)
-	{
-		$i = $d;
-		if (!$sunday_first) $i= ($d+1)%7;
-//	for ($i = 0; $i < 7; $i ++){
-// SalesPlatform.ru end
+	for ($i = 0; $i < 7; $i ++){
 		$weekday = $mod_strings['cal_weekdays_short'][$i];
 		$minical .= '<th width="12%">'.$weekday.'</th>';
 	}
@@ -156,7 +147,7 @@ function get_mini_calendar(& $cal){
 	$class = '';
 	for ($i = 0; $i < $rows; $i++){
 		$minical .= "<tr>";
-		
+
 		//calculate blank days for first week
 		for ($j = 0; $j < 7; $j ++){
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
@@ -482,8 +473,8 @@ function display_date($view,$date_time)
         }
 	elseif ($view == 'week')
         {
-                $week_start = $date_time->getThisweekDaysbyIndex(0);
-                $week_end = $date_time->getThisweekDaysbyIndex(6);
+                $week_start = $date_time->getThisweekDaysbyIndex(1);
+                $week_end = $date_time->getThisweekDaysbyIndex(7);
                 $label = $week_start->get_Date()." ";
                 $label .= $week_start->getmonthName()." ";
                 $label .= $week_start->year;
@@ -813,7 +804,7 @@ function getWeekViewLayout(& $cal)
 			$cal['slice'] = $cal['calendar']->week_array[$cal['calendar']->slices[$col-1]];
 // SalesPlatform.ru begin
 			$date = $cal['slice']->start_time; // Bugfix: Show the day of the column. Not always sunday!
-//			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col-1);
+//			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col);
 			$day = $date->getdayofWeek();
 //			$day = $date->getdayofWeek_inshort();
 // SalesPlatform.ru end
@@ -973,9 +964,6 @@ function getMonthViewLayout(& $cal)
 function getYearViewLayout(& $cal)
 {
 	global $mod_strings,$cal_log;
-// SalesPlatform.ru begin
-	global $sunday_first;
-// SalesPlatform.ru end
 	$category = getParentTab();
 	$cal_log->debug("Entering getYearViewLayout() method...");
 	$yearview_layout = '';
@@ -997,14 +985,8 @@ function getYearViewLayout(& $cal)
 									</b></a>
 								</td>
 							</tr><tr class="hdrNameBg">';
-// SalesPlatform.ru begin
-			for($d=0;$d<7;$d++)
+			for($w=0;$w<7;$w++)
 			{
-				$w = $d;
-				if (!$sunday_first) $w= ($d+1)%7;
-//			for($w=0;$w<7;$w++)
-//			{
-// SalesPlatform.ru end
 				$yearview_layout .= '<th width="14%">'.$mod_strings['cal_weekdays_short'][$w].'</th>';
 			}
 			$yearview_layout .= '</tr>';
@@ -1165,8 +1147,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$assigned_role_id = $adb->query_result($assigned_role_query,0,"roleid");			
 			$role_list = $adb->pquery("SELECT * from vtiger_role WHERE parentrole LIKE '". formatForSqlLike($current_user->column_fields['roleid']) . formatForSqlLike($assigned_role_id) ."'",array());
 			$is_shared = $adb->pquery("SELECT * from vtiger_sharedcalendar where userid=? and sharedid=?",array($userid,$current_user->id));
-			$userName = getDisplayName(array('f'=>$current_user->column_fields
-							['first_name'], 'l'=>$current_user->column_fields['last_name']));
+			$userName = getFullNameFromArray('Users', $current_user->column_fields);
 			if(($current_user->column_fields['is_admin']!='on' && $adb->num_rows($role_list)==0 && (($adb->num_rows($is_shared)==0 && ($visibility=='Public' || $visibility=='Private')) || $visibility=='Private')) && $userName!=$user)
 			{
 				$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;">';
@@ -1264,8 +1245,7 @@ function getweekEventLayer(& $cal,$slice)
 			$assigned_role_id = $adb->query_result($assigned_role_query,0,"roleid");			
 			$role_list = $adb->pquery("SELECT * from vtiger_role WHERE parentrole LIKE '". formatForSqlLike($current_user->column_fields['roleid']) . formatForSqlLike($assigned_role_id) ."'",array());
 			$is_shared = $adb->pquery("SELECT * from vtiger_sharedcalendar where userid=? and sharedid=?",array($userid,$current_user->id));
-			$userName = getDisplayName(array('f'=>$current_user->column_fields
-							['first_name'], 'l'=>$current_user->column_fields['last_name']));
+			$userName = getFullNameFromArray('Users', $current_user->column_fields);
 			if(($current_user->column_fields['is_admin']!='on' && $adb->num_rows($role_list)==0 && (($adb->num_rows($is_shared)==0 && ($visibility=='Public' || $visibility=='Private')) || $visibility=='Private')) && $userName!=$user)
 			{
 				$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;">';
@@ -1412,8 +1392,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 					)
 				)";
 
-	$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
-			'vtiger_users.last_name'));
+	$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 	$query = "SELECT vtiger_groups.groupname, $userNameSql as user_name,vtiger_crmentity.smownerid, vtiger_crmentity.crmid,
        		vtiger_activity.* FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
@@ -1573,7 +1553,12 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	                $subject = mb_substr($subject,0,$listview_max_textlength,'UTF-8')."...";
 		if($contact_id != '')
 		{
-			$contactname = getContactName($contact_id);
+			$displayValueArray = getEntityName('Contacts', $contact_id);
+			if (!empty($displayValueArray)) {
+				foreach ($displayValueArray as $key => $field_value) {
+					$contactname = $field_value;
+				}
+			}
 			$contact_data = "<b>".$contactname."</b>,";
 		}
 		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Events&viewtype=calendar&parenttab=".$category."' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
@@ -1662,8 +1647,8 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 
-	$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
-			'vtiger_users.last_name'));
+	$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
    $query = "SELECT vtiger_groups.groupname, $userNameSql as user_name, vtiger_crmentity.crmid, vtiger_cntactivityrel.contactid,
 				vtiger_activity.* FROM vtiger_activity
                 INNER JOIN vtiger_crmentity
@@ -1943,13 +1928,13 @@ function constructEventListView(& $cal,$entry_list,$navigation_array='')
 	$list_view .="</tr>";
 	$rows = count($entry_list);
 	if($rows != 0) {
-		$userName = getDisplayName(array('f'=>$current_user->column_fields
-							['first_name'], 'l'=>$current_user->column_fields['last_name']));
+		$userName = getFullNameFromArray('Users', $current_user->column_fields);
 		
 		for($i=0;$i<count($entry_list);$i++) {
 			$list_view .="<tr class='lvtColData' onmouseover='this.className=\"lvtColDataHover\"' onmouseout='this.className=\"lvtColData\"' bgcolor='white'>";
 
-			$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 'vtiger_users.last_name'));
+			$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 			$assigned_role_query=$adb->pquery("select vtiger_user2role.roleid,vtiger_user2role.userid
 												from vtiger_user2role
 												INNER JOIN vtiger_users ON vtiger_users.id=vtiger_user2role.userid

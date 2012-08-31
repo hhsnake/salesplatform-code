@@ -22,7 +22,7 @@ $conn = $_SESSION['adodb_current_object'];
 $migrationlog->debug("\n\nDB Changes from 5.2.1-20110624 to 5.2.1-20110824 -------- Starts \n\n");
 
 require_once 'include/utils/CommonUtils.php';
-global $adb;
+//global $adb;
 
 ExecuteQuery("alter table `vtiger_systems` add `server_tls` varchar(20) default NULL");
 ExecuteQuery("alter table `vtiger_systems` add `from_name` varchar(200) COLLATE utf8_unicode_ci DEFAULT ''");

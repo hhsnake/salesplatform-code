@@ -27,6 +27,7 @@ require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
 
 require("class.smtp.php");
 require("class.phpmailer.php");
+require_once 'include/utils/CommonUtils.php';
 
 // SalesPlatform.ru begin
 function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$filename,$smtp_auth='',$mail_server_port=25,$mail_server_tls='no',$use_sendmail="false")
@@ -81,7 +82,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 	$mail->IsHTML(true);                                  // set email format to HTML
 	
 	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
-
+	$mail->Sender= getReturnPath($mail->Host);
 	if(!$mail->Send()) 
 	{
 	   echo "Message could not be sent. <p>";

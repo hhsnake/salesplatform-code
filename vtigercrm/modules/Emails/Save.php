@@ -171,6 +171,10 @@ $focus->save("Emails");
 $return_id = $focus->id;
 
 require_once("modules/Emails/mail.php");
+// SalesPlatform.ru begin
+// Added flag to control sending mails back to originating user
+if(isset($sp_global_send_email_to_user) && $sp_global_send_email_to_user)
+// SalesPlatform.ru end
 if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_id'] != '') 
 {
 	$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);

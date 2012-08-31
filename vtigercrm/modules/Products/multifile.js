@@ -71,8 +71,8 @@ function MultiSelector( list_target, max ){
 			// Add reference to this object
 			element.multi_selector = this;
 
-                        // SalesPlatform.ru begin
-                        element.setHiddenValue = function(att_id, att_name){
+            // SalesPlatform.ru begin
+            element.setHiddenValue = function(att_id, att_name){
 				// New file input
 				var new_element = document.createElement( 'input' );
 				new_element.type = 'file';
@@ -105,8 +105,8 @@ function MultiSelector( list_target, max ){
 				// Hide this: we can't use display:none because Safari doesn't like it
 				this.style.position = 'absolute';
 				this.style.left = '-1000px';
-                        }
-                        // SalesPlatform.ru end
+            }
+            // SalesPlatform.ru end
 
 			// What to do when a file is selected
 			element.onchange = function(){

@@ -205,6 +205,11 @@ $mod_strings = array (
       'SINGLE_SalesOrder'=>'Заказ на Продажу',
 // 5.3.0 end
 // SalesPlatform.ru end
+
+      'Net 30 days' => 'Всего 30 дней',
+      'Net 45 days' => 'Всего 45 дней',
+      'Net 60 days' => 'Всего 60 дней',
+      'SalesOrder ID' => 'ID Заказа на Продажу',
       
       );
 

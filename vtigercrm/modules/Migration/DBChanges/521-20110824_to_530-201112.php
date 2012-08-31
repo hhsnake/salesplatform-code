@@ -18,7 +18,7 @@ $conn = $_SESSION['adodb_current_object'];
 $migrationlog->debug("\n\nDB Changes from 5.2.1-20110824 to 5.3.0-201112 -------- Starts \n\n");
 
 require_once 'include/utils/CommonUtils.php';
-global $adb;
+//global $adb;
 
 // Fix of previous migration bug that "forgot" to add organizationdetails.bankaccount
 $columnNames = $adb->getColumnNames('vtiger_organizationdetails');
@@ -141,7 +141,7 @@ for($i=0;$i<$usersCount;$i++){
 	$firstname = $adb->query_result($usersInfo,$i,'first_name');
 	$lastname = $adb->query_result($usersInfo,$i,'last_name');
 	$usernames[$i] = $username;
-	$fullname = getDisplayName(array('f'=>$firstname,'l'=>$lastname));
+	$fullname = getFullNameFromArray('Users', array('first_name'=>$firstname, 'last_name'=>$lastname));
 	$fullnames[$i] = $fullname;
 }
 

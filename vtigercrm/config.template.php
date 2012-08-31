@@ -197,12 +197,15 @@ if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set($default_timezone);
 }
 
+/** minimum cron frequency -- In minutes */
+$MINIMUM_CRON_FREQUENCY = 15;
+
 // SalesPlatform.ru begin
 // Flag that controls where to put currency symbol: true - before money value, false - after
 $currency_symbol_before = false;
 
-// define the first day of week for all PHP and JavaScript calendars
-$sunday_first = false;
+// Controls whether to send emails to sending user
+$sp_global_send_email_to_user = true;
 // SalesPlatform.ru end
 
 ?>

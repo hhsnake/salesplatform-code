@@ -18,14 +18,14 @@ function getSharedUserId($id)
 {
 	global $adb;
         $sharedid = Array();
-        $query = "SELECT vtiger_users.user_name,vtiger_sharedcalendar.* from vtiger_sharedcalendar left join vtiger_users on vtiger_sharedcalendar.sharedid=vtiger_users.id where userid=?";
+        $query = "SELECT vtiger_users.*,vtiger_sharedcalendar.* from vtiger_sharedcalendar left join vtiger_users on vtiger_sharedcalendar.sharedid=vtiger_users.id where userid=?";
         $result = $adb->pquery($query, array($id));
         $rows = $adb->num_rows($result);
         for($j=0;$j<$rows;$j++)
         {
 
                 $id = $adb->query_result($result,$j,'sharedid');
-                $sharedname = $adb->query_result($result,$j,'user_name');
+                $sharedname = getFullNameFromQResult($result, $j, 'Users');
                 $sharedid[$id]=$sharedname;
 
         }
@@ -67,7 +67,7 @@ function getOtherUserName($id)
 		for($i=0;$i<$num_rows;$i++)
 		{
 			$userid=$adb->query_result($result,$i,'id');
-			$username=$adb->query_result($result,$i,'user_name');
+			$username = getFullNameFromQResult($result, $i, 'Users');
 			$user_details[$userid]=$username;
 		}
 		return $user_details;
@@ -342,26 +342,20 @@ function getActivityDetails($description,$user_id,$from='')
 		$end_date_lable=$mod_strings['Due Date'];
 	}
 
-	// SalesPlatform.ru begin
-	//$name = getUserName($user_id);
 	$name = getUserFullName($user_id);
-	// SalesPlatform.ru end
-
+	
 	if($from == "invite")
 		$msg = getTranslatedString($mod_strings['LBL_ACTIVITY_INVITATION']);
 	else
 		$msg = getTranslatedString($mod_strings['LBL_ACTIVITY_NOTIFICATION']);
 
-	// SalesPlatform.ru begin
-	//$current_username = getUserName($current_user->id);
 	$current_username = getUserFullName($current_user->id);
-	// SalesPlatform.ru end
 	$status = getTranslatedString($description['status'],'Calendar');
 	$list = $name.',';
 	$list .= '<br><br>'.$msg.' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':<br>';
 	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_SUBJECT"].' : '.$description['subject'];
-	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Start date and time"].' : '.$description['st_date_time'];
-	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$end_date_lable.' : '.$description['end_date_time'];
+	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Start date and time"].' : '.$description['st_date_time'] .' '.DateTimeField::getDBTimeZone();
+	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$end_date_lable.' : '.$description['end_date_time'].' '.DateTimeField::getDBTimeZone();
 	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_STATUS"].': '.$status;
 	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Priority"].': '.getTranslatedString($description['taskpriority']);
 	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].': '.getTranslatedString($description['relatedto']);
@@ -421,44 +415,6 @@ function formatUserTimeString($datetime,$fmt){
 		$timeStr = $hour.':'.twoDigit($min).$am_pm[($hr/12)%2];
 	}
 	return $timeStr;
-}
-//added to fix Ticket#3068
-function getEventNotification($mode,$subject,$desc)
-{
-	global $current_user,$adb;
-	require_once("modules/Emails/mail.php");
-	// SalesPlatform.ru begin
-	//$subject = $mode.' : '.$subject;
-	$subject = getTranslatedString( $mode, 'Calendar' ) .' : '. getTranslatedString( $subject, 'Calendar' );
-	// SalesPlatform.ru end
-	$crmentity = new CRMEntity();
-	if(getUserName($desc['user_id']))
-	{
-		$to_email = getUserEmailId('id',$desc['user_id']);
-		$description = getActivityDetails($desc,$desc['user_id']);
-		send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
-	}
-	else
-	{
-		$groupid = $desc['user_id'];
-		require_once('include/utils/GetGroupUsers.php');
-		$getGroupObj=new GetGroupUsers();
-		$getGroupObj->getAllUsersInGroup($groupid);
-		$userIds=$getGroupObj->group_users;
-		if (count($userIds) > 0) {
-			$groupqry="select email1,id from vtiger_users where id in(".generateQuestionMarks($userIds).")";
-			$groupqry_res=$adb->pquery($groupqry, array($userIds));
-			$noOfRows = $adb->num_rows($groupqry_res);
-			for($z=0;$z < $noOfRows;$z++)
-			{
-				$emailadd = $adb->query_result($groupqry_res,$z,'email1');
-				$curr_userid = $adb->query_result($groupqry_res,$z,'id');
-				$description = getActivityDetails($desc,$curr_userid);
-				$mail_status = send_mail('Calendar',$emailadd,getUserName($curr_userid),'',$subject,$description);
-	
-			}
-		}
-	}
 }
 
 function sendInvitation($inviteesid,$mode,$subject,$desc)

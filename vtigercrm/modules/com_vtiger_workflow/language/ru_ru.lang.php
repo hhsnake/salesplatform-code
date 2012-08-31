@@ -49,7 +49,6 @@ $mod_strings = array (
       'VTChangeFieldValueTask'=>'Изменить значение поля',
       'VTChangeRelModuleFieldValueTask'=>'Изменить значение поля связанного модуля',
       'VTEmailPDFTask' => 'Отправить Email с PDF',
-      'VTActivityReminderTask' => 'Напоминание',
 	  'LBL_DESCRIPTION' => 'Описание',
       'LBL_UPDATED_FIELD_NAME' => 'Название обновляемого поля',
 	  'LBL_MODULE' => 'Модуль',
@@ -100,6 +99,22 @@ $mod_strings = array (
 // 5.3.0 end
 
 // SalesPlatform.ru end
+
+        'Select Meta Variables' => 'Выберите мета-переменные',
+        'Current Date' => 'Текущая дата',
+        'Current Time' => 'Текущее время',
+        'System Timezone' => 'Системная временная зона',
+        'CRM Detail View URL' => 'URL подробного описания сущности CRM',
+        'Portal Detail View URL' => 'URL подробного описания сущности Портала',
+        'Site Url' => 'URL сайта',
+        'Portal Url' => 'URL Портала',
+
+        'Workflow'=>'Обработчики',
+
+        'VTCreateEntityTask' => 'Создать сущность',
+        'LBL_ENTITY_TYPE' => 'Тип сущности',
+        'LBL_SELECT_ENTITY_TYPE' => '-- Выберите тип сущности --',
+        'LBL_NO_ENTITIES_FOUND' => 'Не найдено ни одной сущности для создания',
 );
 
 ?>

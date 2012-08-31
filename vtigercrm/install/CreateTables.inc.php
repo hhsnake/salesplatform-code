@@ -45,7 +45,7 @@ function create_default_users_access() {
 		$role4_id = $adb->getUniqueID("vtiger_role");
 		$role5_id = $adb->getUniqueID("vtiger_role");
 		$role6_id = $adb->getUniqueID("vtiger_role");
-		
+
 		$profile1_id = $adb->getUniqueID("vtiger_profile");
 		$profile2_id = $adb->getUniqueID("vtiger_profile");
 		$profile3_id = $adb->getUniqueID("vtiger_profile");
@@ -66,21 +66,21 @@ function create_default_users_access() {
         $adb->query("insert into vtiger_role values('H".$role4_id."','Заместитель Директора','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."',3)");
         $adb->query("insert into vtiger_role values('H".$role5_id."','Менеджер по Продажам','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',4)");
         $adb->query("insert into vtiger_role values('H".$role6_id."','Продавец','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."::H".$role6_id."',5)");
-        
+
 		//Insert into vtiger_role2profile
 		$adb->query("insert into vtiger_role2profile values ('H".$role2_id."',".$profile1_id.")");
 		$adb->query("insert into vtiger_role2profile values ('H".$role3_id."',".$profile1_id.")");
 	  	$adb->query("insert into vtiger_role2profile values ('H".$role4_id."',".$profile2_id.")");
 		$adb->query("insert into vtiger_role2profile values ('H".$role5_id."',".$profile2_id.")");
 		$adb->query("insert into vtiger_role2profile values ('H".$role6_id."',".$profile2_id.")");  
-	   
+
 		//New Security Start
 		//Inserting into vtiger_profile vtiger_table
 		$adb->query("insert into vtiger_profile values ('".$profile1_id."','Администратор','Профиль Администратора Системы')");	
 		$adb->query("insert into vtiger_profile values ('".$profile2_id."','Продажи','Профиль относящийся к Продажам')");
 		$adb->query("insert into vtiger_profile values ('".$profile3_id."','Поддержка','Профиль относящийся к Поддержке')");
 		$adb->query("insert into vtiger_profile values ('".$profile4_id."','Гости','Гостевой профиль для Тестирования')");
-		
+
 		//Inserting into vtiger_profile2gloabal permissions
 		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile1_id."',1,0)");
 		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile1_id."',2,0)");
@@ -189,7 +189,7 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",26,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",27,0)");
 		//Inserting into vtiger_profile2standardpermissions  Adminsitrator
-		
+
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,0,0)");
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,1,0)");
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,2,0)");
@@ -329,7 +329,7 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,2,0)");
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,3,0)");
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,4,0)");
-		
+
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,0,1)");
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,1,1)");
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,2,1)");
@@ -501,7 +501,7 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",26,2,0)");
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",26,3,0)");
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",26,4,0)");
-        
+
 		//Inserting into vtiger_profile2stdper for Profile Guest Profile
 		//All Read-Only
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",2,0,1)");
@@ -723,7 +723,7 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",13,10,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",14,10,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",18,10,0)");
-	
+
 		 // Invalidate any cached information
     	VTCacheUtils::clearRoleSubordinates();
 
@@ -790,14 +790,14 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_groups values ('".$group3_id."','Отдел Поддержки','Группа сервисной поддержки Клиентов')");
 		$adb->query("insert into vtiger_group2role values ('".$group3_id."','H".$role3_id."')");
 		$adb->query("insert into vtiger_group2rs values ('".$group3_id."','H".$role3_id."')");
-		
+
 		// Setting user group relation for admin user
 	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $admin_user_id));
 
 		//Creating the flat files for admin user
 		createUserPrivilegesfile($admin_user_id);
 		createUserSharingPrivilegesfile($admin_user_id);
-		
+
 		//Insert into vtiger_profile2field
 		insertProfile2field($profile1_id);
         insertProfile2field($profile2_id);	
@@ -805,7 +805,7 @@ function create_default_users_access() {
         insertProfile2field($profile4_id);
 
 	insert_def_org_field();
-	
+
 }
 
 $modules = array("DefaultDataPopulator");
@@ -875,7 +875,7 @@ $success = $adb->createTables("schema/DatabaseSchema.xml");
  	"vtiger_shippingtaxinfo_seq",
  	"vtiger_inventorytaxinfo_seq"
  	);
- 
+
      foreach ($sequences as $sequence ) {
  	$log->info( "Creating sequence ".$sequence);
  	$adb->query( "CREATE SEQUENCE ".$sequence." INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;");
@@ -893,7 +893,7 @@ foreach ($modules as $module ) {
 	$focus = new $module();
 	$focus->create_tables();
 }
-			
+
 create_default_users_access();
 
 // create and populate combo tables
@@ -945,6 +945,20 @@ populateLinks();
 // Set Help Information for Fields
 setFieldHelpInfo();
 
+// Register Cron Jobs
+registerCronTasks();
+
+// Register all the Cron Tasks
+function registerCronTasks() {
+	include_once 'vtlib/Vtiger/Cron.php';
+
+	Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', 1, 1, 'Recommended frequency for Workflow is 15 mins');
+	Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', 1, 2, 'Recommended frequency for RecurringInvoice is 12 hours');
+	Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calendar', 1, 3, 'Recommended frequency for SendReminder is 15 mins');
+	Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', 1, 4, 'Recommended frequency for ScheduleReports is 15 mins');
+	Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings', 1, 5, 'Recommended frequency for MailScanner is 15 mins');
+}
+
 // Register all the events here
 function registerEvents($adb) {
 	require_once('include/events/include.inc');
@@ -956,15 +970,18 @@ function registerEvents($adb) {
 	//Registering Entity Delta handler for before save and after save events of the record to track the field value changes
 	$em->registerHandler('vtiger.entity.beforesave', 'data/VTEntityDelta.php', 'VTEntityDelta');
 	$em->registerHandler('vtiger.entity.aftersave', 'data/VTEntityDelta.php', 'VTEntityDelta');
-	
+
 	// Workflow manager
 	$dependentEventHandlers = array('VTEntityDelta');
 	$dependentEventHandlersJson = Zend_Json::encode($dependentEventHandlers);
 	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler',
 								'',$dependentEventHandlersJson);
-	
+
 	//Registering events for On modify
 	$em->registerHandler('vtiger.entity.afterrestore', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
+
+	// Registering event for HelpDesk - To reset from_portal value
+	$em->registerHandler('vtiger.entity.aftersave.final', 'modules/HelpDesk/HelpDeskHandler.php', 'HelpDeskHandler');
 }
 
 // Register all the entity methods here
@@ -973,10 +990,25 @@ function registerEntityMethods($adb) {
 	require_once("modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
 	require_once("modules/com_vtiger_workflow/VTEntityMethodManager.inc");
 	$emm = new VTEntityMethodManager($adb);
-	
+
 	// Registering method for Updating Inventory Stock
 	$emm->addEntityMethod("SalesOrder","UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");//Adding EntityMethod for Updating Products data after creating SalesOrder
 	$emm->addEntityMethod("Invoice","UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");//Adding EntityMethod for Updating Products data after creating Invoice
+
+	// Register Entity Method for Customer Portal Login details email notification task
+	$emm->addEntityMethod("Contacts","SendPortalLoginDetails","modules/Contacts/ContactsHandler.php","Contacts_sendCustomerPortalLoginDetails");
+
+	// Register Entity Method for Email notification on ticket creation from Customer portal
+	$emm->addEntityMethod("HelpDesk","NotifyOnPortalTicketCreation","modules/HelpDesk/HelpDeskHandler.php","HelpDesk_nofifyOnPortalTicketCreation");
+
+	// Register Entity Method for Email notification on ticket comment from Customer portal
+	$emm->addEntityMethod("HelpDesk","NotifyOnPortalTicketComment","modules/HelpDesk/HelpDeskHandler.php","HelpDesk_notifyOnPortalTicketComment");
+
+	// Register Entity Method for Email notification to Record Owner on ticket change, which is not from Customer portal
+	$emm->addEntityMethod("HelpDesk","NotifyOwnerOnTicketChange","modules/HelpDesk/HelpDeskHandler.php","HelpDesk_notifyOwnerOnTicketChange");
+
+	// Register Entity Method for Email notification to Related Customer on ticket change, which is not from Customer portal
+	$emm->addEntityMethod("HelpDesk","NotifyParentOnTicketChange","modules/HelpDesk/HelpDeskHandler.php","HelpDesk_notifyParentOnTicketChange");
 }
 
 function populateDefaultWorkflows($adb) {
@@ -997,18 +1029,19 @@ function populateDefaultWorkflows($adb) {
 	$task->active=true;
 	$task->methodName = "UpdateInventory";
 	$tm->saveTask($task);
-	
-	
+
+
 	// Creating Workflow for Accounts when Notifyowner is true
-	
+
 	$vtaWorkFlow = new VTWorkflowManager($adb);
 	$accWorkFlow = $vtaWorkFlow->newWorkFlow("Accounts");
 	$accWorkFlow->test = '[{"fieldname":"notify_owner","operation":"is","value":"true:boolean"}]';
 	$accWorkFlow->description = "Отправить Email пользователю, если указано Уведомлять ответственного";
-	$accWorkFlow->executionCondition=2;	
+	$accWorkFlow->executionCondition=2;
+	$accWorkFlow->defaultworkflow = 1;
 	$vtaWorkFlow->save($accWorkFlow);
 	$id1=$accWorkFlow->id;
-	
+
 	$tm = new VTTaskManager($adb);
 	$task = $tm->createTask('VTEmailTask',$accWorkFlow->id);
 	$task->active=true;
@@ -1022,16 +1055,16 @@ function populateDefaultWorkflows($adb) {
 	$task->summary="Создан Контрагент ";
 	$tm->saveTask($task);
 	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
-	
+
 	// Creating Workflow for Contacts when Notifyowner is true
-	
+
 	$vtcWorkFlow = new VTWorkflowManager($adb);
 	$conWorkFlow = 	$vtcWorkFlow->newWorkFlow("Contacts");
 	$conWorkFlow->summary="Создан Контакт ";
 	$conWorkFlow->executionCondition=2;
 	$conWorkFlow->test = '[{"fieldname":"notify_owner","operation":"is","value":"true:boolean"}]';
 	$conWorkFlow->description = "Отправить Email пользователю, если указано Уведомлять ответственного";
-	
+	$conWorkFlow->defaultworkflow = 1;
 	$vtcWorkFlow->save($conWorkFlow);
 	$id1=$conWorkFlow->id;
 	$tm = new VTTaskManager($adb);
@@ -1048,21 +1081,22 @@ function populateDefaultWorkflows($adb) {
 	$task->summary="Создан Контакт ";
 	$tm->saveTask($task);
 	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
-	
-	
+
+
 	// Creating Workflow for Contacts when PortalUser is true
-	
+
 	$vtcWorkFlow = new VTWorkflowManager($adb);
 	$conpuWorkFlow = $vtcWorkFlow->newWorkFlow("Contacts");
 	$conpuWorkFlow->test = '[{"fieldname":"portal","operation":"is","value":"true:boolean"}]';
 	$conpuWorkFlow->description = "Отправить Email пользователю, если контакт стал пользователем портала";
 	$conpuWorkFlow->executionCondition=2;
+	$conpuWorkFlow->defaultworkflow = 1;
 	$vtcWorkFlow->save($conpuWorkFlow);
 	$id1=$conpuWorkFlow->id;
-	
+
 	$tm = new VTTaskManager($adb);
 	$task = $tm->createTask('VTEmailTask',$conpuWorkFlow->id);
-	
+
 	$task->active=true;
 	$task->methodName = "NotifyOwner";
 	$task->recepient = "\$(assigned_user_id : (Users) email1)";
@@ -1084,6 +1118,7 @@ function populateDefaultWorkflows($adb) {
 	$potentialWorkFlow = $vtcWorkFlow->newWorkFlow("Potentials");
 	$potentialWorkFlow->description = "Отправить Email пользователю при создании Сделки";
 	$potentialWorkFlow->executionCondition=1;
+	$potentialWorkFlow->defaultworkflow = 1;
 	$vtcWorkFlow->save($potentialWorkFlow);
 	$id1=$potentialWorkFlow->id;
 
@@ -1102,13 +1137,131 @@ function populateDefaultWorkflows($adb) {
 
 	$task->summary="Создана сделка ";
 	$tm->saveTask($task);
-	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+
+	$workflowManager = new VTWorkflowManager($adb);
+	$taskManager = new VTTaskManager($adb);
+
+	// Contact workflow on creation/modification
+	$contactWorkFlow = $workflowManager->newWorkFlow("Contacts");
+	$contactWorkFlow->test = '';
+	$contactWorkFlow->description = "Workflow for Contact Creation or Modification";
+	$contactWorkFlow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
+	$contactWorkFlow->defaultworkflow = 1;
+	$workflowManager->save($contactWorkFlow);
+
+	$task = $taskManager->createTask('VTEntityMethodTask', $contactWorkFlow->id);
+	$task->active = true;
+	$task->summary = 'Email Customer Portal Login Details';
+	$task->methodName = "SendPortalLoginDetails";
+	$taskManager->saveTask($task);
+
+	// Trouble Tickets workflow on creation from Customer Portal
+	$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
+	$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';
+	$helpDeskWorkflow->description = "Workflow for Ticket Created from Portal";
+	$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_FIRST_SAVE;
+	$helpDeskWorkflow->defaultworkflow = 1;
+	$workflowManager->save($helpDeskWorkflow);
+
+	$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
+	$task->active = true;
+	$task->summary = 'Notify Record Owner and the Related Contact when Ticket is created from Portal';
+	$task->methodName = "NotifyOnPortalTicketCreation";
+	$taskManager->saveTask($task);
+
+	// Trouble Tickets workflow on ticket update from Customer Portal
+	$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
+	$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';
+	$helpDeskWorkflow->description = "Workflow for Ticket Updated from Portal";
+	$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_MODIFY;
+	$helpDeskWorkflow->defaultworkflow = 1;
+	$workflowManager->save($helpDeskWorkflow);
+
+	$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
+	$task->active = true;
+	$task->summary = 'Notify Record Owner when Comment is added to a Ticket from Customer Portal';
+	$task->methodName = "NotifyOnPortalTicketComment";
+	$taskManager->saveTask($task);
+
+	// Trouble Tickets workflow on ticket change, which is not from Customer Portal - Both Record Owner and Related Customer
+	$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
+	$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"false:boolean"}]';
+	$helpDeskWorkflow->description = "Workflow for Ticket Change, not from the Portal";
+	$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
+	$helpDeskWorkflow->defaultworkflow = 1;
+	$workflowManager->save($helpDeskWorkflow);
+
+	$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
+	$task->active = true;
+	$task->summary = 'Notify Record Owner on Ticket Change, which is not done from Portal';
+	$task->methodName = "NotifyOwnerOnTicketChange";
+	$taskManager->saveTask($task);
+
+	$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
+	$task->active = true;
+	$task->summary = 'Notify Related Customer on Ticket Change, which is not done from Portal';
+	$task->methodName = "NotifyParentOnTicketChange";
+	$taskManager->saveTask($task);
+
+	// Events workflow when Send Notification is checked
+	$eventsWorkflow = $workflowManager->newWorkFlow("Events");
+	$eventsWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
+	$eventsWorkflow->description = "Workflow for Events when Send Notification is True";
+	$eventsWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
+	$eventsWorkflow->defaultworkflow = 1;
+	$workflowManager->save($eventsWorkflow);
+
+	$task = $taskManager->createTask('VTEmailTask', $eventsWorkflow->id);
+	$task->active = true;
+	$task->summary = 'Send Notification Email to Record Owner';
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Event :  \$subject";
+	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
+					.'<b>Activity Notification Details:</b><br/>'
+					.'Subject             : $subject<br/>'
+					.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'End date and time   : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Status              : $eventstatus <br/>'
+					.'Priority            : $taskpriority <br/>'
+					.'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+											.'$(parent_id : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+					.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+					.'Location            : $location <br/>'
+					.'Description         : $description';
+	$taskManager->saveTask($task);
+
+	// Calendar workflow when Send Notification is checked
+	$calendarWorkflow = $workflowManager->newWorkFlow("Calendar");
+	$calendarWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
+	$calendarWorkflow->description = "Workflow for Calendar Todos when Send Notification is True";
+	$calendarWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
+	$calendarWorkflow->defaultworkflow = 1;
+	$workflowManager->save($calendarWorkflow);
+
+	$task = $taskManager->createTask('VTEmailTask', $calendarWorkflow->id);
+	$task->active = true;
+	$task->summary = 'Send Notification Email to Record Owner';
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Task :  \$subject";
+	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
+					.'<b>Task Notification Details:</b><br/>'
+					.'Subject : $subject<br/>'
+					.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'End date and time   : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Status              : $taskstatus <br/>'
+					.'Priority            : $taskpriority <br/>'
+					.'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+					.'$(parent_id         : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+					.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+					.'Location            : $location <br/>'
+					.'Description         : $description';
+	$taskManager->saveTask($task);
 }
 
 // Function to populate Links
 function populateLinks() {
 	include_once('vtlib/Vtiger/Module.php');
-	
+
 	// Links for Accounts module
 	$accountInstance = Vtiger_Module::getInstance('Accounts');
 	// Detail View Custom link
@@ -1118,14 +1271,14 @@ function populateLinks() {
 		'themes/images/bookMark.gif'
 	);
 	$accountInstance->addLink('DETAILVIEWBASIC', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
-	
+
 	$leadInstance = Vtiger_Module::getInstance('Leads');
 	$leadInstance->addLink(
 		'DETAILVIEWBASIC', 'LBL_ADD_NOTE', 
 		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
 		'themes/images/bookMark.gif'
 	);
-	
+
 	$contactInstance = Vtiger_Module::getInstance('Contacts');
 	$contactInstance->addLink(
 		'DETAILVIEWBASIC', 'LBL_ADD_NOTE', 
@@ -1133,14 +1286,14 @@ function populateLinks() {
 		'themes/images/bookMark.gif'
 	);
 }
-	
+
 function setFieldHelpInfo() {
 	// Added Help Info for Hours and Days fields of HelpDesk module.
 	require_once('vtlib/Vtiger/Module.php');
 	$tt_module = Vtiger_Module::getInstance('HelpDesk');
 	$field1 = Vtiger_Field::getInstance('hours',$tt_module);
 	$field2 = Vtiger_Field::getInstance('days',$tt_module);
-	
+
 	$field1->setHelpInfo('Это оценка трудоемкости заявки в часах.'.
 				'<br>При добавлении заявки к Сервисному Контракту '. 
 				'число использованных единиц обслуживания автоматически увеличивается при закрытии заявки '.

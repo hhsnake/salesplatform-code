@@ -22,7 +22,7 @@ $conn = $_SESSION['adodb_current_object'];
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.3.0-201112 -------- Starts \n\n");
 
 require_once 'include/utils/CommonUtils.php';
-global $adb;
+//global $adb;
 
 // 5.2.1-20110411
 

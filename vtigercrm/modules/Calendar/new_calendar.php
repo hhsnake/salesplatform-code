@@ -18,10 +18,7 @@ $subtab = vtlib_purify($_REQUEST['subtab']);
 $viewBox = vtlib_purify($_REQUEST['viewOption']);
 $viewOptions = array('listview','hourview');
 if(empty($viewBox) || !in_array($viewBox, $viewOptions)) {
-        // SalesPlatform.ru begin : hourview by default
 	$viewBox = 'hourview';
-	//$viewBox = 'listview';
-        // SalesPlatform.ru end
 }
 if($subtab != 'todo') {
 	$subtab = 'event';

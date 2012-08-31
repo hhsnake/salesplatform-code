@@ -637,7 +637,7 @@ if(!$skipHeaders) {
 		{
 			$category = getParentTabFromModule($currentModule);
 		}
-		include('themes/'.$theme.'/header.php');
+		include('modules/Vtiger/header.php');
 	}
 	
 	if(isset($_SESSION['administrator_error']))
@@ -711,6 +711,11 @@ else
 
 if($display == "no")
 {
+// SalesPlatform.ru begin: Fixed ugly error screen when user has no PBX access
+    if(($action == 'TraceIncomingCall' || $_REQUEST['file'] == 'TraceIncomingCall') && $module == 'PBXManager') {
+        echo 'failure';
+    } else {
+// SalesPlatform.ru end
 	echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";	
 	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
 	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
@@ -727,6 +732,9 @@ if($display == "no")
 		</tbody></table> 
 		</div>";
 	echo "</td></tr></table>";
+// SalesPlatform.ru begin: Fixed ugly error screen when user has no PBX access
+    }
+// SalesPlatform.ru end
 } 
 // vtlib customization: Check if module has been de-activated
 else if(!vtlib_isModuleActive($currentModule)) {
@@ -833,8 +841,8 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
 // SalesPlatform.ru begin
-                echo "<tr><td class=small align=left><span>SalesPlatform vtiger CRM - $vtiger_current_version</span></td>";
-//                echo "<tr><td class=small align=left><span>Powered by vtiger CRM - $vtiger_current_version</span></td>";
+        echo "<tr><td class=small align=left><span>SalesPlatform vtiger CRM - $vtiger_current_version</span></td>";
+//		echo "<tr><td class=small align=left><span style='color: rgb(153, 153, 153);'>Powered by vtiger CRM <span id='_vtiger_product_version_'>$vtiger_current_version</span></span></td>";
 // SalesPlatform.ru end
                 echo "<td class=small align=right><span>&copy; 2004-".date('Y')." <a href='http://www.vtiger.com' target='_blank'>vtiger.com</a>,<a href='http://www.salesplatform.ru' target='_blank'>salesplatform.ru</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a> | <a href='http://community.salesplatform.ru/vtiger_links.php/privacy_policy' target='_blank'>".getTranslatedString('LNK_PRIVACY_POLICY')."</a></span> $statimage</td></tr></table>";
 			
@@ -899,6 +907,6 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	// End
 	
 	if((!$skipFooters) && ($action != "body") && ($action != $module."Ajax") && ($action != "ActivityAjax"))
-		include('themes/'.$theme.'/footer.php');
+		include('modules/Vtiger/footer.php');
 }
 ?>

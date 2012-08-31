@@ -110,9 +110,10 @@ $mod_strings = array (
       'PickList' => 'Список',
       'LBL_MULTISELECT_COMBO' => 'Список с возможностью Множественнного Выбора',
       'Skype' => 'Skype',
+      'Time'=>'Время',
       'USERGROUPLIST' => 'Группы',
       'EMAILTEMPLATES' => 'Шаблоны Email',
-      'WORDINTEGRATION' => 'Шаблоны документов для объединения',
+      'WORDINTEGRATION' => 'Шаблоны документов',
       'LBL_MAIL_MERGE' => 'Шаблоны Документов',
       'NOTIFICATIONSCHEDULERS' => 'Настройки Уведомлений',
       'LBL_ACTIVE' => 'Активен',
@@ -366,7 +367,7 @@ $mod_strings = array (
       'LBL_CUSTOM_FIELDS_DESCRIPTION' => 'Управление типами пользовательских полей',
       'LBL_PICKLIST_DESCRIPTION' => 'Настройка значений Списков в каждом Модуле',
       'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Управление Шаблонами Модуля Email',
-      'LBL_MAIL_MERGE_DESCRIPTION' => 'Управление Шаблонами Документов для объединения',
+      'LBL_MAIL_MERGE_DESCRIPTION' => 'Управление Шаблонами Документов',
       'LBL_NOTIF_SCHED_DESCRIPTION' => 'Управление Уведомлениями в случае важных Событий',
       'LBL_INV_NOTIF_DESCRIPTION' => 'Изменить Настройки Уведомлений о запасах Товара',
       'LBL_INV_TANDC_DESCRIPTION' => 'Укажите Сроки и Условия для предложений, заказов и счетов',
@@ -386,7 +387,7 @@ $mod_strings = array (
       'LBL_BACKUP_SERVER_DESC' => 'Управление Сервером Резервного Копирования',
       'LBL_MODULES_AND_OWNERS' => 'Модули и Владельцы',
       'LBL_GROUP_DESC' => 'Управление группами Вашей организации',
-      'LBL_MAIL_MERGE_DESC' => 'Управление Шаблонами Документов для объединения',
+      'LBL_MAIL_MERGE_DESC' => 'Управление Шаблонами Документов',
       'LBL_REQUIRE_SMTP_AUTHENTICATION' => 'Требует аутентификацию SMTP?',
       'LBL_ANNOUNCEMENT' => 'Оповещения',
       'LBL_SETTING_ANNOUNCEMENT' => 'Оповещения',
@@ -464,7 +465,7 @@ $mod_strings = array (
       'LBL_MODULENAMES' => 'Модуль',
       'LBL_DOWNLOAD' => 'Загрузить',
       'LBL_ADD_TEMPLATE' => 'Добавить Шаблон',
-      'LBL_WORD_TEMPLATES' => 'Шаблоны документов для объединения',
+      'LBL_WORD_TEMPLATES' => 'Шаблоны документов',
       'LBL_TASK_NOTIFICATION' => 'Уведомление о Задержке События',
       'LBL_BIG_DEAL' => 'Уведомление о крупной Сделке',
       'LBL_PENDING_TICKETS' => 'Уведомление о Заявке',
@@ -881,11 +882,24 @@ $mod_strings = array (
         'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Некоторые виды налогов уже существуют, поэтому не были сохранены.',
 
         'Configuration Editor' => 'Редактор Конфигурации',
+	// 5.3.0 end
         'LBL_SP_CONFIGURATION' => 'Менеджер Конфигураций',
         'LBL_SP_CONFIGURATION_DESC' => 'Управление конфигурацией системы',
-	// 5.3.0 end
         // SalesPlatform.ru end
 
+        'LBL_EDIT_COMPANY_INFO' => "Чтобы изменить информацию о компании, пожалуйста, нажмите на <span style='font-style:italic;color:blue;'>Настройки> OD-Админ> Компания</span>",
+
+        'ModTracker' => 'Трекер',
+        'LBL_MODTRACKER_DESCRIPTION' => 'Выберите модули для трекинга',
+
+        'LBL_MENUS_TO_SHOW'=>'Выберите модули, отображемые в Главном меню',
+        'LBL_MENU_DESC'=>'Изменить последовательность пунктов меню',
+        'LBL_MENU_EDITOR'=>'Редактор меню',
+        'LBL_MENUS_TO_SHOW_DESCRIPTION' => 'Вы можете использовать стрелки для упорядочивания пунктов меню. 10 первых элементов появляются в главном меню, а остальные отображаются в выпадающем меню <b><i>Больше</i></b>',
+        'LBL_ALL_MODULES' => 'Все модули',
+        'LBL_SELECTED_MODULES' => 'Выбранные модули',
+
+        'LBL_CRM_SETTINGS' => 'Свойства CRM',
 
 );
 

@@ -132,5 +132,8 @@ $mod_strings = Array(
 'Internal'=>'Загрузить файл',
 'External'=>'Внешняя ссылка на файл',
 // SalesPlatform.ru end
+
+'Documents' => 'Документы',
+'Documents ID' => 'ID Документа',
 );
 ?>

@@ -172,7 +172,7 @@ include("modules/Migration/versions.php");
 											</tr>
 											<tr>
 												<td width="40%"><?php echo $installationStrings['LBL_PREVIOUS_INSTALLATION_VERSION']; ?></td>
-												<td align="left"> <i><?php foreach($versions_branch2 as $k=>$v) $versions[$k] = $v; echo $versions[$old_version]; ?></i></td>
+												<td align="left"> <i><?php foreach($versions_branch2 as $k=>$v) $versions[$k] = $v; foreach($versions_branch3 as $k=>$v) $versions[$k] = $v; echo $versions[$old_version]; ?></i></td>
 											</tr>
 											<tr>
 												<td width="40%"><?php echo $installationStrings['LBL_PREVIOUS_INSTALLATION_PATH']; ?></td>

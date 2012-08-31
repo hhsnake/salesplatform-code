@@ -52,15 +52,19 @@ function showHideStatus(sId,anchorImgId,sImagePath)
 	{
 		oObj.style.display = 'none';
 		eval(document.getElementById(anchorImgId)).src =  'themes/images/inactivate.gif';
-		eval(document.getElementById(anchorImgId)).alt = 'Display';
-		eval(document.getElementById(anchorImgId)).title = 'Display';
+                {/literal}
+		eval(document.getElementById(anchorImgId)).alt = '{"Display"|@getTranslatedString}';
+		eval(document.getElementById(anchorImgId)).title = '{"Display"|@getTranslatedString}';
+                {literal}
 	}
 	else
 	{
 		oObj.style.display = 'block';
 		eval(document.getElementById(anchorImgId)).src =  'themes/images/activate.gif';
-		eval(document.getElementById(anchorImgId)).alt = 'Hide';
-		eval(document.getElementById(anchorImgId)).title = 'Hide';
+                {/literal}
+		eval(document.getElementById(anchorImgId)).alt = '{"Hide"|@getTranslatedString}';
+		eval(document.getElementById(anchorImgId)).title = '{"Hide"|@getTranslatedString}';
+                {literal}
 	}
 }
 function setCoOrdinate(elemId)
@@ -154,7 +158,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 								
 								<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD|@getTranslatedString:$MODULE} {$APP.LBL_INFORMATION}</td>	
 								<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-								{if $SinglePane_View eq 'false' && $IS_REL_LIST neq false}
+								{if $SinglePane_View eq 'false' && $IS_REL_LIST neq false && $IS_REL_LIST|@count > 0}
 									<td class="dvtUnSelectedCell" onmouseout="fnHideDrop('More_Information_Modules_List');" onmouseover="fnDropDown(this,'More_Information_Modules_List');" align="center" nowrap>
 										<a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a>
 										<div onmouseover="fnShowDrop('More_Information_Modules_List')" onmouseout="fnHideDrop('More_Information_Modules_List')"
@@ -233,9 +237,9 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 							
 							<div style="float:left;font-weight:bold;"><div style="float:left;"><a href="javascript:showHideStatus('tbl{$header|replace:' ':''}','aid{$header|replace:' ':''}','{$IMAGE_PATH}');">
 							{if $BLOCKINITIALSTATUS[$header] eq 1}
-								<img id="aid{$header|replace:' ':''}" src="{'activate.gif'|@vtiger_imageurl:$THEME}" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
+								<img id="aid{$header|replace:' ':''}" src="{'activate.gif'|@vtiger_imageurl:$THEME}" style="border: 0px solid #000000;" alt="{'Hide'|@getTranslatedString}" title="{'Hide'|@getTranslatedString}"/>
 							{else}
-								<img id="aid{$header|replace:' ':''}" src="{'inactivate.gif'|@vtiger_imageurl:$THEME}" style="border: 0px solid #000000;" alt="Display" title="Display"/>
+								<img id="aid{$header|replace:' ':''}" src="{'inactivate.gif'|@vtiger_imageurl:$THEME}" style="border: 0px solid #000000;" alt="{'Display'|@getTranslatedString}" title="{'Display'|@getTranslatedString}"/>
 							{/if}
 								</a></div><b>&nbsp;
 						        	{$header}
@@ -275,6 +279,8 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 					{elseif $label neq 'Tax Class'}<!-- Avoid to display the label Tax Class -->
 						{if $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
 							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label} ({$keycursymb})</td>
+						{elseif $keyid eq '9'}
+							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label} {$APP.COVERED_PERCENTAGE}</td>
 						{else}
 							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
 						{/if}
@@ -355,7 +361,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 								
 								<td class="dvtSelectedCellBottom" align=center nowrap>{$SINGLE_MOD|@getTranslatedString:$MODULE} {$APP.LBL_INFORMATION}</td>	
 								<td class="dvtTabCacheBottom" style="width:10px">&nbsp;</td>
-								{if $SinglePane_View eq 'false'}
+								{if $SinglePane_View eq 'false' && $IS_REL_LIST neq false && $IS_REL_LIST|@count > 0}
 								<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
 								{/if}
 								<td class="dvtTabCacheBottom" align="right" style="width:100%">
@@ -404,17 +410,20 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 <script>
 function getTagCloud()
 {ldelim}
-new Ajax.Request(
-        'index.php',
-        {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-        method: 'post',
-        postBody: 'module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD&recordid={$ID}',
-        onComplete: function(response) {ldelim}
-                                $("tagfields").innerHTML=response.responseText;
-                                $("txtbox_tagfields").value ='';
+	var obj = $("tagfields");
+	if(obj != null && typeof(obj) != undefined) {ldelim}
+		new Ajax.Request(
+        	'index.php',
+        	{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+      		method: 'post',
+			postBody: 'module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD&recordid={$ID}',
+			onComplete: function(response) {ldelim}
+							$("tagfields").innerHTML=response.responseText;
+                            $("txtbox_tagfields").value ='';
                         {rdelim}
-        {rdelim}
-);
+        	{rdelim}
+		);
+	{rdelim}
 {rdelim}
 getTagCloud();
 </script>

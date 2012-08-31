@@ -73,7 +73,7 @@ $mod_strings = array (
       'Part Number' => 'Код товара',
 // SalesPlatform.ru end
       'Product Active' => 'Активен',
-      'Commission Rate' => 'Комиссия (%)',
+      'Commission Rate' => 'Комиссия',
       'Qty/Unit' => 'Кол-во/Ед.',
       'Unit Price' => 'Цена за Единицу',
       'Manufacturer' => 'Производитель',
@@ -189,10 +189,11 @@ $mod_strings = array (
 // SalesPlatform.ru begin
 	'Manuf. Country' => 'Страна происхождения',
 	'Customs ID' => 'Номер ГТД',
-        'Mf. Country Code' => 'Код страны',
-        'Unit Code' => 'Код единицы измерения',
+    'Mf. Country Code' => 'Код страны',
+    'Unit Code' => 'Код единицы измерения',
 // SalesPlatform.ru end
 
+    'Products ID' => 'ID Товара',
 );
 
 ?>

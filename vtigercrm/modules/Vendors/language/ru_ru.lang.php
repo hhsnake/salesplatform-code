@@ -56,6 +56,8 @@ $mod_strings = array (
 //Добавлено в 5.2.0
 
       'LBL_MODULE_NAME'=>'Поставщики',
+
+      'Vendors ID'=>'ID Поставщика',
 );
 
 ?>

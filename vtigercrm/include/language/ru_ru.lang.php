@@ -200,6 +200,11 @@ $app_strings = array (
       'NTC_LOGIN_MESSAGE' => 'Вход',
       'LBL_NONE' => '--нет--',
       'LBL_BACK' => 'Назад',
+// SalesPlatform.ru begin
+// 5.4.0 begin
+      'LBL_TIMEFIELD'=>'(ЧЧ:мм:сс)',
+// 5.4.0 end
+// SalesPlatform.ru end
       'LBL_IMPORT' => 'Импорт',
       'LBL_EXPORT' => 'Экспорт',
       'LBL_EXPORT_ALL' => 'Экспорт Всех',
@@ -214,12 +219,12 @@ $app_strings = array (
       'LBL_TAG_SEARCH' => ' -- Тег для ',
       'LBL_NO_DATA' => 'Ничего не найдено',
       'NTC_MERGE_CONFIRMATION' => 'Вы уверены что хотите объединить эту запись?',
-      'LBL_MERGE_BUTTON_TITLE' => 'Объединить',
-      'LBL_MERGE_BUTTON_KEY' => 'Объединить',
+      'LBL_MERGE_BUTTON_TITLE' => 'Сформировать',
+      'LBL_MERGE_BUTTON_KEY' => 'Сформировать',
       'LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE' => 'Выбрать Шаблон Письма',
       'LBL_SELECTEMAILTEMPLATE_BUTTON_KEY' => 'Выбрать Шаблон Письма',
       'LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL' => 'Выбрать Шаблон Письма',
-      'LBL_MERGE_BUTTON_LABEL' => 'Объединить',
+      'LBL_MERGE_BUTTON_LABEL' => 'Сформировать',
       'LBL_SENDMAIL_BUTTON_TITLE' => 'Отправить',
       'LBL_SENDMAIL_BUTTON_KEY' => 'Отправить',
       'LBL_SENDMAIL_BUTTON_LABEL' => 'Отправить',
@@ -450,7 +455,7 @@ $app_strings = array (
       'Webmail' => 'ВебПочта',
       'LBL_NONE_INCLUDED' => 'Ничего не включено',
       'LBL_ADD_TO' => 'Добавить к',
-      'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE' => 'Выберите шаблон для объединения:',
+      'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE' => 'Выберите шаблон документа:',
       'LBL_TITLE_OR_DESCRIPTION' => 'Заголовок / Описание',
       'LBL_RSS_FEEDS' => 'RSS Ленты',
       'LBL_ADD_RSS_FEEDS' => 'Добавить Новую RSS Ленту',
@@ -513,7 +518,7 @@ $app_strings = array (
       'LBL_PRODUCT_DESCRIPTION' => 'Описание',
       'LBL_PRODUCT_COMMENT' => 'Комментарий',
       'LBL_SELECT_DOC_FILE' => 'Документ',
-// SalesPlatform.ru  end
+// SalesPlatform.ru end
       'LBL_QTY_IN_STOCK' => 'Количество в Наличии',
       'LBL_QTY' => 'Кол-во',
       'LBL_UNIT_PRICE' => 'Цена Единицы',
@@ -534,10 +539,15 @@ $app_strings = array (
       'LBL_JSCALENDAR_LANG' => 'ru-utf8',
       'LNK_CV_EDIT' => 'Редактировать',
       'LNK_CV_DELETE' => 'Удалить',
-      'LNK_CV_CREATEVIEW' => 'Новый',
+      'LNK_CV_CREATEVIEW' => 'Создать фильтр',
       'LBL_UPD_FIELD_ORD' => 'Обновить порядок Полей',
       'LBL_SEND_CUSTOM_MAIL_BUTTON' => 'Отправить Пользовательское Письмо',
       'LBL_UPDATED_TODAY' => 'Обновлено сегодня',
+// SalesPlatform.ru begin
+// 5.4.0 begin
+     'LBL_BY' => 'По ',
+// 5.4.0 end
+// SalesPlatform.ru end
       'LBL_UPDATED' => 'Обновлено',
       'LBL_DAY_AGO' => 'день назад',
       'LBL_DAYS_AGO' => 'дней назад',
@@ -699,7 +709,7 @@ $app_strings = array (
       'Dear_Team_Time_to_Party' => 'Уважаемая Команда,<br>Поздравляем! Время праздновать! <br>Мы завершили сделку стоимостью больше 10000!!!!<br> Время взорвать танцпол!<br>',
       'Task_Not_completed' => 'Задача не завершена',
       'Too_many_pending_tickets' => 'Слишком много Ожидающих Заявок',
-      'Dear_Admin_too_ many_tickets_pending' => 'Уважаемый Админ,<br> Это предупреждение о том что много Ожидающих Заявок. Примите необходимые меры для их обработки<br><br>С уважением, <br> Служба поддержки<br>',
+      'Dear_Admin_too_many_tickets_pending' => 'Уважаемый Админ,<br> Это предупреждение о том что много Ожидающих Заявок. Примите необходимые меры для их обработки<br><br>С уважением, <br> Служба поддержки<br>',
       'DELETE_CONFIRMATION' => 'Вы уверены, что хотите удалить выбранное ',
       'SELECT_ATLEAST_ONE' => 'Пожалуйста, выберите хотя бы одну запись',
       'DELETING_ACCOUNT' => 'Удаление этих Контрагентов удалит связанные с ними Сделки, Предложения, Заказы на Продажу и Счета. Вы уверены, что хотите удалить выбранные',
@@ -1154,6 +1164,7 @@ $app_strings = array (
 	'Assets' => 'Активы',
 	'CustomerPortal' => 'Клиентский Портал',
 	'FieldFormulas' => 'Формулы Полей',
+	'ModComments' => '',
 	'Project' => 'Проекты',
 	'ProjectMilestone' => 'Контрольные Точки',
 	'ProjectTask' => 'Проектные Задачи',
@@ -1192,11 +1203,56 @@ $app_strings = array (
 'LBL_PASSWORD' => 'Пароль',
 'LBL_LOGIN' => 'Войти',
 'LBL_CONNECT_WITH_US' => 'Присоединяйтесь к нам',
+
+'Comments' => 'Комментарии',
 // 5.3.0 end
 'LBL_Reminder' => 'Напоминание',
 'SPModulePickList' => 'Список поля Модуля',
 'SPPDFTemplates' => 'Шаблоны PDF',
 'SPConfigurationManager' => 'Менеджер Конфигураций',
+'Hide' => 'Свернуть',
+'Display' => 'Показать',
+'LBL_JUMP_TO_IN_MODULE' => 'Перейти в модуле',
+
+// 5.4.0 begin
+'LBL_MAX_SIZE'=> 'Максимальный размер закачиваемого файла', //added for uploadsize limit message
+'LBL_FILESIZEIN_MB'=> 'Мб', //added to show filesize in MB
+
+// Unified Cron Job language strings
+'LBL_DISABLED' => 'Отключено',
+'LBL_RUNNING' => 'Запущено',
+'LBL_LAST_SCAN_TIMED_OUT' => 'Тайм-аут последнего сканирования',
+'LBL_LAST_SCAN_AT' => 'Последнее сканирование @',
+'LBL_TIME_TAKEN' => 'Затраченное время',
+'LBL_SHORT_SECONDS' => 'сек',
+
+//Added missing labels in the vtigercrm
+'Projects' => 'Проекты',
+'End Time' => 'Время окончания',
+'Start Time' => 'Время начала',
+'Email2' => 'Второй Email',
+'Comments' => 'Комментарии',
+'Issued Date' => 'Дата создания',
+'Shipping & Handling Charges' => 'Стоимость доставки',
+'Shipping & Handling Tax:' => 'Налоги на доставку:',
+'Quantity' => 'Количество',
+'Net Total' => 'Итого',
+'Send SMS' => 'Послать SMS',
+
+'LBL_MORE'=>'Ещё',
+'LBL_CRM_SETTINGS' => 'Настройки CRM',
+'LBL_RELATED_TO_THIS' =>'связаны с этим',
+'LBL_DESELECT_ALL' => 'Сбросить выделение',
+'LBL_RECORDS_IN' => 'записи в',
+'LBL_FOLDER' => 'папка',
+
+'Last Modified By' => 'Кем изменено',
+
+//added for creating a custom lead map row in UI
+'LBL_ADD_MAPPING'=> 'Добавить Соответствие',
+'LBL_FIELD_MAPPING' => 'Соответствие полей',
+'View History' => 'История изменений',
+// 5.4.0 end
 // SalesPlatform.ru end
 
 );

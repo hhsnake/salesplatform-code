@@ -89,10 +89,20 @@ $mod_strings = array (
       'Tag Cloud' => 'Облако Тегов',
       'MSG_NO_FILTERS' => 'Нет Доступных Фильтров',
       'MSG_NO_FIELDS' => 'Нет Доступных Полей',
+
+      //Customization Phase 6 -- Monolithic
+      'LBL_REPORTCHARTS' => 'Отчет с диаграммами',
+      'LBL_HOME_REPORT_NAME'=> 'Имя Очета',
+      'LBL_HOME_REPORT_TYPE' => 'Тип Отчета',
+      //END
+
+      //added for Default Widgets
+      'LBL_DEFAULT_WIDGET'=>'Виджеты по умолчанию',
+      'LBL_NO_WIDGETS_HIDDEN'=>'Нет скрытых виджетов по умолчанию',
+
       // SalesPlatform.ru begin
       'LBL_SP_CONFIGURATION' => 'Конфигурация Системы',
       // SalesPlatform.ru end
-
 
 );
 

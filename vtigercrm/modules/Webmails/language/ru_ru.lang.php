@@ -145,5 +145,9 @@ $mod_strings = array (
 
       'LBL_LIST_COUNT'=>'Отображение',
 
+      'LBL_INSTEAD_OF_WEBMAILS_USE' => 'Вместо ВебПочты вы можете использовать',
+      'LBL_PLEASE_CLICK_HERE_TO_GO_TO' => 'Нажмите здесь для перехода ',
+
 );
 ?>
+	

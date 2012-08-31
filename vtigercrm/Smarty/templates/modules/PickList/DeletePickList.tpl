@@ -21,16 +21,9 @@
 	<table border=0 cellspacing=0 cellpadding=5 >
 		<tr><td valign=top align=left>
 				<select id="delete_availPickList" multiple="multiple" wrap size="20" name="availList" style="width:250px;border:1px solid #666666;font-family:Arial, Helvetica, sans-serif;font-size:11px;">
-                                        {* SalesPlatform.ru begin *}
-					{foreach item=pick_val key=pick_id from=$PICKVAL}
-						<option value="{$pick_id}">{$pick_val}</option>
+					{foreach item=pick_val key=pick_key from=$PICKVAL}
+						<option value="{$pick_key}">{$pick_val}</option>
 					{/foreach}
-                                        {*
-					{foreach item=pick_val from=$PICKVAL}
-						<option value="{$pick_val}">{$pick_val}</option>
-					{/foreach}
-                                        *}
-                                        {* SalesPlatform.ru end *}
 				</select>
 			</td>
 		</tr>
@@ -39,22 +32,19 @@
 				<b>{$MOD.LBL_REPLACE_WITH}</b>&nbsp;
 				<select id="replace_picklistval" name="replaceList" style="border:1px solid #666666;font-family:Arial, Helvetica, sans-serif;font-size:11px;">
 					<option value=""></option>
-                                        {* SalesPlatform.ru begin *}
-					{foreach item=pick_val key=pick_id from=$PICKVAL}
-						<option value="{$pick_id}">{$pick_val}</option>
+					{foreach item=pick_val key=pick_key from=$PICKVAL}
+						<option value="{$pick_key}">{$pick_val}</option>
 					{/foreach}
+                    {* SalesPlatform.ru begin *}
 					{foreach item=nonedit key=pick_id from=$NONEDITPICKLIST}
 						<option value="{$pick_id}">{$nonedit}</option>
 					{/foreach}
-                                        {*
-					{foreach item=pick_val from=$PICKVAL}
-						<option value="{$pick_val}">{$pick_val}</option>
-					{/foreach}
+					{*
 					{foreach item=nonedit from=$NONEDITPICKLIST}
 						<option value="{$nonedit}">{$nonedit}</option>
 					{/foreach}
-                                        *}
-                                        {* SalesPlatform.ru end *}
+					*}
+                    {* SalesPlatform.ru end *}
 				</select>
 			</td>
 		</tr>

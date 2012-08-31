@@ -369,21 +369,30 @@ class Vtiger_MailScannerAction {
 				// Link file attached to document
 				$adb->pquery("INSERT INTO vtiger_seattachmentsrel(crmid, attachmentsid) VALUES(?,?)", 
 					Array($document->id, $attachid));
-
+				
 // SalesPlatform.ru begin
-                                if(empty($linkfocus)) {
+                if(empty($linkfocus)) {
 // SalesPlatform.ru end
 				// Link document to base record
-				$adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)",
+				$adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)", 
 					Array($basefocus->id, $document->id));
-// SalesPlatform.ru begin
-                                } else {
-                                    $adb->pquery("INSERT INTO vtiger_seattachmentsrel(crmid, attachmentsid) VALUES(?,?)",
-                                            Array($basefocus->id, $attachid));
 
-                                    $adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)",
-                                            Array($linkfocus->id, $document->id));
-                                }
+				// Link document to Parent entity - Account/Contact/...
+				list($eid,$junk)=explode('@',$basefocus->column_fields['parent_id']);
+				$adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)",
+					Array($eid, $document->id));
+
+				// Link Attachement to the Email
+				$adb->pquery("INSERT INTO vtiger_seattachmentsrel(crmid, attachmentsid) VALUES(?,?)",
+					Array($basefocus->id, $attachid));
+// SalesPlatform.ru begin
+                } else {
+                	$adb->pquery("INSERT INTO vtiger_seattachmentsrel(crmid, attachmentsid) VALUES(?,?)",
+                    		Array($basefocus->id, $attachid));
+
+                    $adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)",
+                    		Array($linkfocus->id, $document->id));
+                }
 // SalesPlatform.ru end
 			}
 		}	

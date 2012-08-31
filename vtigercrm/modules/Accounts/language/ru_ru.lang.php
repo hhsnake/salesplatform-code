@@ -198,6 +198,8 @@ $mod_strings = array (
 	'INN' => 'ИНН',
 	'KPP' => 'КПП',
 // SalesPlatform.ru end
+
+    'Accounts ID' => 'ID Контрагента',
 );
 
 ?>

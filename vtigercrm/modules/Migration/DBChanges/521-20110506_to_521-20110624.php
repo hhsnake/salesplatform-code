@@ -22,7 +22,7 @@ $conn = $_SESSION['adodb_current_object'];
 $migrationlog->debug("\n\nDB Changes from 5.2.1-20110506 to 5.2.1-20110624 -------- Starts \n\n");
 
 require_once 'include/utils/CommonUtils.php';
-global $adb;
+//global $adb;
 
 $query=$adb->pquery("select * from vtiger_links where linklabel = 'LBL_CHECK_STATUS'",array());
 $numOfRows=$adb->num_rows($query);

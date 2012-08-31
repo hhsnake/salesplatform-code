@@ -174,8 +174,8 @@ function verify_data(form) {
 	}
 	form.email1.value = trim(form.email1.value);
 // SalesPlatform.ru begin
-//	if (form.email1.value != "" && !/^\w+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-	if (form.email1.value != "" && !/^(\w|[А-Яа-я])+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.email1.value)) {
+//	if (form.email1.value != "" && !/^[a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/.test(form.email1.value)) {
+	if (form.email1.value != "" && !/^[a-zA-Z0-9А-Яа-я]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9А-Яа-я])*@[a-zA-Z0-9А-Яа-я]+([\_\-\.]?[a-zA-Z0-9А-Яа-я]+)*\.([\-\_]?[a-zA-Z0-9А-Яа-я])+(\.?[a-zA-Z0-9А-Яа-я]+)?$/.test(form.email1.value)) {
 // SalesPlatform.ru end
 		alert("$the_emailid"+form.email1.value+"$email_field_is");
 		form.email1.focus();
@@ -183,8 +183,8 @@ function verify_data(form) {
 	}
 	form.email2.value = trim(form.email2.value);
 // SalesPlatform.ru begin
-//	if (form.email2.value != "" && !/^\w+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-	if (form.email2.value != "" && !/^(\w|[А-Яа-я])+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.email2.value)) {
+//	if (form.email2.value != "" && !/^[a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/.test(form.email2.value)) {
+	if (form.email2.value != "" && !/^[a-zA-Z0-9А-Яа-я]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9А-Яа-я])*@[a-zA-Z0-9А-Яа-я]+([\_\-\.]?[a-zA-Z0-9А-Яа-я]+)*\.([\-\_]?[a-zA-Z0-9А-Яа-я])+(\.?[a-zA-Z0-9А-Яа-я]+)?$/.test(form.email2.value)) {
 // SalesPlatform.ru end
 		alert("$the_emailid"+form.email2.value+"$other_email_field_is");
 		form.email2.focus();
@@ -192,8 +192,8 @@ function verify_data(form) {
 	}
 	form.secondaryemail.value = trim(form.secondaryemail.value); 
 // SalesPlatform.ru begin
-//	if (form.secondaryemail.value != "" && !/^\w+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.secondaryemail.value)){
-	if (form.secondaryemail.value != "" && !/^(\w|[А-Яа-я])+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?(\w|[А-Яа-я])+)*@(\w|[А-Яа-я])+([\.-]?(\w|[А-Яа-я])+)*(\.(\w|[А-Яа-я]){2,4})+$/.test(form.secondaryemail.value)){
+//	if (form.secondaryemail.value != "" && !/^[a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/.test(form.secondaryemail.value)){
+	if (form.secondaryemail.value != "" && !/^[a-zA-Z0-9А-Яа-я]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9А-Яа-я])*@[a-zA-Z0-9А-Яа-я]+([\_\-\.]?[a-zA-Z0-9А-Яа-я]+)*\.([\-\_]?[a-zA-Z0-9А-Яа-я])+(\.?[a-zA-Z0-9А-Яа-я]+)?$/.test(form.secondaryemail.value)){
 // SalesPlatform.ru end
 		alert("$the_emailid"+form.secondaryemail.value+"$secondary_email_field_is");
 		form.secondaryemail.focus();

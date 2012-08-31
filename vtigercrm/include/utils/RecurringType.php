@@ -349,15 +349,7 @@ class RecurringType {
 				}
 
 				for ($i = 0; $i < count($this->dayofweek_to_rpt); $i++) {
-                                        // SalesPlatform.ru begin
-                                        global $sunday_first;
-                                        $index = (!$sunday_first) ? $this->dayofweek_to_rpt[$i] - 1 : $this->dayofweek_to_rpt[$i];
-                                        if ($index == -1) {
-                                            $index = 6;
-                                        }
-					$repeatDay = $tempdateObj->getThisweekDaysbyIndex($index);
-					//$repeatDay = $tempdateObj->getThisweekDaysbyIndex($this->dayofweek_to_rpt[$i]);
-                                        // SalesPlatform.ru end
+					$repeatDay = $tempdateObj->getThisweekDaysbyIndex($this->dayofweek_to_rpt[$i]);
 					$repeatDate = $repeatDay->get_DB_formatted_date();
 					if ($repeatDate > $startdate && $repeatDate <= $enddate) {
 						$recurringDates[] = $repeatDate;

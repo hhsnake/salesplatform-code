@@ -34,7 +34,7 @@ require_once("VTWorkflowApplication.inc");
 			$task = $tm->createTask($taskType, $workflowId);
 		}
 		$task->summary = $request["summary"];
-		
+
 		if($request["active"]=="true"){
 			$task->active=true;
 		}else if($request["active"]=="false"){
@@ -47,10 +47,13 @@ require_once("VTWorkflowApplication.inc");
 			$trigger = array(
 				'days'=>($request['select_date_direction']=='after'?1:-1)*(int)$request['select_date_days'],
 				'field'=>$request['select_date_field']
-				); 
+				);
 			$task->trigger=$trigger;
+		} else {
+			$task->trigger=null;
 		}
-                // SalesPlatform.ru begin
+
+        // SalesPlatform.ru begin
 		if (isset($request['check_select_period'])){
 			$trigger = array(
 				'days'=>null,
@@ -60,8 +63,8 @@ require_once("VTWorkflowApplication.inc");
 				);
 			$task->trigger=$trigger;
 		}
-                // SalesPlatform.ru end
-		
+        // SalesPlatform.ru end
+
 		$fieldNames = $task->getFieldNames();
 		foreach($fieldNames as $fieldName){
 			$task->$fieldName = $request[$fieldName];
@@ -70,13 +73,13 @@ require_once("VTWorkflowApplication.inc");
 			}
 		}
 		$tm->saveTask($task);
-		
+
 		if(isset($request["return_url"])){
 			$returnUrl=$request["return_url"];
 		}else{
 			$returnUrl=$module->editTaskUrl($task->id);
 		}
-		
+
 		?>
 		<script type="text/javascript" charset="utf-8">
 			window.location="<?php echo $returnUrl?>";

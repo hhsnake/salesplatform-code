@@ -83,7 +83,7 @@ $mod_strings = array (
       'Lead Source' => 'Источник',
       'Sales Stage' => 'Стадия',
       'Assigned To' => 'Ответственный',
-      'Probability' => 'Вероятность (%)',
+      'Probability' => 'Вероятность',
       'Campaign Source' => 'Кампания Источник',
       'Description' => 'Описание',
       'Created Time' => 'Создано',
@@ -117,6 +117,8 @@ $mod_strings = array (
       'New Business' => 'Новый Бизнес',
       'Potential No' => 'Сделка №',
       'Related To' => 'Клиент',
+
+      'Potentials ID' => 'ID Сделки',
 );
 
 ?>

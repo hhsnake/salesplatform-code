@@ -69,7 +69,7 @@ $mod_strings = array(
 
 'LBL_WORKFLOW_NOTE_EVENT_TASK_TIMEZONE' => 'Note: All the date, time and recurring information configured for the event,
 													will be with respect to default time zone, configured in config.inc.php',
-	
+
 // SalesPlatform.ru begin
 'LBL_METHOD_NAME'=>'Method Name',
 'VTChangeOwnerTask'=>'Change Owner',
@@ -87,6 +87,22 @@ $mod_strings = array(
 'LBL_EMAIL_PDF_ATTACHMENT' => 'PDF Attachment',
 'LBL_RELATION_FIELD_NAME' => 'Relation Field Name',
 // SalesPlatform.ru end
+
+'Select Meta Variables' => 'Select Meta Variables',
+'Current Date' => 'Current Date',
+'Current Time' => 'Current Time',
+'System Timezone' => 'System Timezone',
+'CRM Detail View URL' => 'CRM Detail View URL',
+'Portal Detail View URL' => 'Portal Detail View URL',
+'Site Url' => 'Site Url',
+'Portal Url' => 'Portal Url',
+
+'Workflow'=>'Workflow',
+
+'VTCreateEntityTask' => 'Create Entity',
+'LBL_ENTITY_TYPE' => 'Entity Type',
+'LBL_SELECT_ENTITY_TYPE' => '-- Select Entity Type --',
+'LBL_NO_ENTITIES_FOUND' => 'No Entities Found to Create',
 );
 
 

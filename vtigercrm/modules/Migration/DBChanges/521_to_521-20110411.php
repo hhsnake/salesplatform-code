@@ -22,7 +22,7 @@ $conn = $_SESSION['adodb_current_object'];
 $migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.2.1-20110411 -------- Starts \n\n");
 
 require_once 'include/utils/CommonUtils.php';
-global $adb;
+//global $adb;
 
 $query=$adb->pquery("select * from vtiger_language where prefix='ru_ru'",array());
 $numOfRows=$adb->num_rows($query);

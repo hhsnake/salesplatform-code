@@ -119,64 +119,23 @@ class vt_DateTime
 		$datetimevalue = new vt_DateTime($day_array,true);
 		return $datetimevalue;
 	}
-
-// SalesPlatform.ru begin
+	
 	/**
 	 * function to get days in week using index
-	 * @param integer       $index - number between 0 to 6
-	 * returns a vt_DateTime of the corresponding weekday always in the same week as $this
-
-	 The ISO 8601 week ALWAYS starts with MONDAY.
-	 The PHP week starts with 0 = SUNDAY, but PHP uses the ISO week number!
-
-	 $sunday_first = true (PHP week)               |  $sunday_first = false (ISO week)
-	 -----------------------------------------------------------------------------------------------
-	 $index = 0 -> Sun of PHP week X = ISO week X-1 |  $index = 0 -> Mon of ISO week X = PHP week X
-	 $index = 1 -> Mon of PHP week X = ISO week X   |  $index = 1 -> Tue of ISO week X = PHP week X
-	 $index = 2 -> Tue of PHP week X = ISO week X   |  $index = 2 -> Wed of ISO week X = PHP week X
-	 $index = 3 -> Wed of PHP week X = ISO week X   |  $index = 3 -> Thu of ISO week X = PHP week X
-	 $index = 4 -> Thu of PHP week X = ISO week X   |  $index = 4 -> Fri of ISO week X = PHP week X
-	 $index = 5 -> Fri of PHP week X = ISO week X   |  $index = 5 -> Sat of ISO week X = PHP week X
-	 $index = 6 -> Sat of PHP week X = ISO week X   |  $index = 6 -> Sun of ISO week X = PHP week X+1
+	 * @param integer       $index - number between 1 to 7
+	 * return vt_DateTime obj  $datetimevalue
 	 */
-	function getThisweekDaysbyIndex($index)
-	{
+	function getThisweekDaysbyIndex($index){
 		$week_array = array();
-		if($index < 0 || $index > 6)
+		if($index < 1 || $index > 7){
 			die("day is invalid");
-
-		// If monday is the first week day: $this = sunday returns the previous PHP week
-		global $sunday_first;
-		if (!$sunday_first)
-		{
-			$index += 1;
-			if ($this->dayofweek == 0)
-				$index -= 7;
 		}
-
-		$week_array['day']   = $this->day + $index - $this->dayofweek;
+		$week_array['day'] = $this->day + ($index - $this->dayofweek);
 		$week_array['month'] = $this->month;
-		$week_array['year']  = $this->year;
+		$week_array['year'] = $this->year;
 		$datetimevalue = new vt_DateTime($week_array,true);
 		return $datetimevalue;
 	}
-//	/**
-//	 * function to get days in week using index
-//	 * @param integer       $index - number between 0 to 6
-//	 * return vt_DateTime obj  $datetimevalue
-//	 */
-//	function getThisweekDaysbyIndex($index){
-//		$week_array = array();
-//		if($index < 0 || $index > 6){
-//			die("day is invalid");
-//		}
-//		$week_array['day'] = $this->day + ($index - $this->dayofweek);
-//		$week_array['month'] = $this->month;
-//		$week_array['year'] = $this->year;
-//		$datetimevalue = new vt_DateTime($week_array,true);
-//		return $datetimevalue;
-//	}
-// SalesPlatform.ru end
 
 	/**
 	 * function to get days in month using index
@@ -350,12 +309,12 @@ class vt_DateTime
 
 		$this->ts = $ts;
 		$this->ts_def = $this->ts;
-		$date_string = date('i::G::H::j::d::t::w::z::L::W::n::m::Y::Z::T::s',$ts);
+		$date_string = date('i::G::H::j::d::t::N::z::L::W::n::m::Y::Z::T::s',$ts);
 		
 		list($this->minute,$this->hour,$this->z_hour,$this->day,$this->z_day,$this->daysinmonth,$this->dayofweek,$this->dayofyear,$is_leap,$this->week,$this->month,$this->z_month,$this->year,$this->offset,$this->tz,$this->second) = explode('::',$date_string);
 
-		$this->dayofweek_inshort =$mod_strings['cal_weekdays_short'][$this->dayofweek];
-		$this->dayofweek_inlong=$mod_strings['cal_weekdays_long'][$this->dayofweek];
+		$this->dayofweek_inshort =$mod_strings['cal_weekdays_short'][$this->dayofweek-1];
+		$this->dayofweek_inlong=$mod_strings['cal_weekdays_long'][$this->dayofweek-1];
 		$this->month_inshort=$mod_strings['cal_month_short'][$this->month];
 		$this->month_inlong=$mod_strings['cal_month_long'][$this->month];
 
@@ -491,7 +450,7 @@ class vt_DateTime
 	 * return vt_DateTime obj
 	 */
 	function get_first_day_of_changed_week($mode){
-		$first_day = $this->getThisweekDaysbyIndex(0);
+		$first_day = $this->getThisweekDaysbyIndex(1);
 		if($mode == 'increment')
 			$day = $first_day->day + 7;
 		else

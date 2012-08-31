@@ -318,6 +318,41 @@ var alert_arr = {
         'ERR_SELECT_MODULE_FOR_DEPENDENCY' : 'Пожалуйста, выберите модуль для добавления зависимости',
 // 5.3.0 end
 
+// 5.4.0 begin
+	'LBL_SIZE_SHOULDNOTBE_GREATER':'Размер файла не должен превышать ', //added for upload error message
+	'LBL_MAX_SIZE':'Максимальный размер закачиваемого файла',
+	'LBL_FILESIZEIN_KB':'Кб', // added to show filesize limit in KB
+	'LBL_FILESIZEIN_B':'б', // added to show filesize limit in B
+	//Contexual help page
+    'LBL_HELP_TITLE' : 'Помощь',
+    'LBL_WIKI_TITLE' : 'Руководства',
+    'LBL_FAQ_TITLE'   : 'ЧаВо',
+    'LBL_VIDEO_TITLE' : 'Видео',
+    'LBL_CLOSE_TITLE' : 'Закрыть',
+	'LBL_SELECT':'Выберите виджеты для показа по умолчанию',
+
+	'ERR_SELECT_ATLEAST_ONE_MERGE_CRITERIA_FIELD' : 'Выберите хотя бы одно поле в качестве критерия слияния',
+	'ERR_PLEASE_MAP_MANDATORY_FIELDS' : 'Пожалуйста, укажите Соответствие для следующих обязательных для заполнения полей',
+	'ERR_MAP_NAME_ALREADY_EXISTS' : 'Такое имя Соответствия уже существует. Пожалуйста, задайте другое имя',
+	'ERR_MAP_NAME_CANNOT_BE_EMPTY' : 'Имя Соответсвия не может быть пустым',
+	'ERR_FIELDS_MAPPED_MORE_THAN_ONCE' : 'Для этого поля Соответсвие задано более одного раза. Пожалуйста, проверьте Соответствие.',
+
+	//error messages for lead conversion
+	'ERR_SELECT_EITHER':'Выберите Контрагента или Контакт для преобразования Обращения',
+	'ERR_SELECT_ACCOUNT':'Выберите Контрагента для продолжения',
+	'ERR_SELECT_CONTACT':'Выберите Контакт для продолжения',
+	'ERR_MANDATORY_FIELD_VALUE':'Значения для обязательных полей отсутствуют',
+	'ERR_POTENTIAL_AMOUNT':'Сумма Сделки должна быть числом',
+	'ERR_EMAILID':'Введите действительный Email',
+	'ERR_TRANSFER_TO_ACC':'Должен быть выбран Контрагент для переноса связанных записей',
+	'ERR_TRANSFER_TO_CON':'Должен быть выбран Контакт для переноса связанных записей',
+	'SURE_TO_DELETE_CUSTOM_MAP':'Вы действительно хотите удалить Соответствие полей?',
+	'LBL_CLOSE_DATE':'Дата закрытия',
+	'LBL_EMAIL':'Email',
+	'MORE_THAN_500' : 'Вы выбрали более 500 записей. Для этого действия может потребоваться много времени. Вы уверены, что хотите продолжить?',
+	'LBL_MAPPEDALERT':'Для поля уже задано Соответствие',
+// 5.4.0 end
+
       'LBL_PRODUCT_CODE':'Код товара',
       'LBL_PRODUCT_NAME':'Наименование',
       'LBL_PRODUCT_DESCRIPTION':'Описание',

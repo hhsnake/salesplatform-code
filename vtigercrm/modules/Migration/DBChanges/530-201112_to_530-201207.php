@@ -18,7 +18,7 @@ $conn = $_SESSION['adodb_current_object'];
 $migrationlog->debug("\n\nDB Changes from 5.3.0-201112 to 5.3.0-201207 -------- Starts \n\n");
 
 require_once 'include/utils/CommonUtils.php';
-global $adb;
+//global $adb;
 
 create_tab_data_file();
 
@@ -50,7 +50,8 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS `sp_module_picklist_fields_rel` (
 $result = $adb->pquery('select max(tabid)+1 as maxtabid, max(tabsequence)+1 as seq from vtiger_tab', array());
 $maxtabid =  $adb->query_result($result, 0, 'maxtabid');
 $seq =  $adb->query_result($result, 0, 'seq');
-ExecuteQuery("INSERT INTO vtiger_tab VALUES ($maxtabid,'SPModulePickList',0,$seq,'SPModulePickList',null,null,0,0,0,'1.0')");
+ExecuteQuery("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,modifiedby,modifiedtime,customized,ownedby,isentitytype,version)
+              VALUES ($maxtabid,'SPModulePickList',0,$seq,'SPModulePickList',null,null,0,0,0,'1.0')");
 ExecuteQuery("insert into vtiger_moduleowners values($maxtabid,1)");
 
 // Add manufacturing country code and units code to Products

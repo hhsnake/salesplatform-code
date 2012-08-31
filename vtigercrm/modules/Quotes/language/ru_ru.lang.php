@@ -164,6 +164,8 @@ $mod_strings = array (
       'SINGLE_Quotes'=>'Предложение',
 // 5.3.0 end
 // SalesPlatform.ru end
+      'Add Service Contract'=>'Добавить Сервисный Контракт',
+      'Quotes ID'=>'ID Предложения',
 );
 
 ?>
