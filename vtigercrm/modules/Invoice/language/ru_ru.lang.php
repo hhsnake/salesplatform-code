@@ -185,6 +185,15 @@ $mod_strings = array (
 // SalesPlatform.ru end
 
       'Invoice ID'=>'ID Счета',
+      // SalesPlatform.ru begin localization for 5.4.0
+      'Conversion Rate' => 'Обменный курс',
+      'Currency' => 'Валюта', 
+      // SalesPlatform.ru end
+
+    // SalesPlatform.ru begin
+    'INVOICE_' => 'Счет_',
+    // SalesPlatform.ru end
+
 );
 
 ?>

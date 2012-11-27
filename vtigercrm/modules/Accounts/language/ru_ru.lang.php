@@ -200,6 +200,10 @@ $mod_strings = array (
 // SalesPlatform.ru end
 
     'Accounts ID' => 'ID Контрагента',
+
+    // SalesPlatform.ru begin
+    'ACCOUNT_' => 'Контрагент_',
+    // SalesPlatform.ru end
 );
 
 ?>

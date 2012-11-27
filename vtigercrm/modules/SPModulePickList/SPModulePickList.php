@@ -43,7 +43,7 @@ class SPModulePickList {
                         `srcfieldid` int(19) NOT NULL,
                         KEY `fieldid_idx` (`fieldid`),
                         KEY `srcfieldid_idx` (`srcfieldid`)
-                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;", array());
+                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;", array());
                 
             $tabid = getTabid($modulename);
             

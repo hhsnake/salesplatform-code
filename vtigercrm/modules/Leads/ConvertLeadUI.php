@@ -26,7 +26,10 @@ class ConvertLeadUI {
 	var $contact_fields;
 	var $potential_fields;
 	static $industry = false;
-
+        //SalesPlatform.ru begin
+        var $describe_cach = null;
+        //SalesPlatform.ru endy
+        
 	function __construct($leadid, $current_user) {
 		global$adb;
 		$this->leadid = $leadid;
@@ -42,7 +45,7 @@ class ConvertLeadUI {
 		}
 		$this->setAssignedToInfo();
 	}
-
+  
 	function isModuleActive($module) {
 		include_once 'include/utils/VtlibUtils.php';
 		if (vtlib_isModuleActive($module) && ((isPermitted($module, 'EditView') == 'yes'))) {
@@ -71,17 +74,25 @@ class ConvertLeadUI {
 		return false;
 	}
 
-	function getFieldInfo($module, $fieldname) {
+        function getFieldInfo($module, $fieldname) {
 		global $current_user;
-		$describe = vtws_describe($module, $current_user);
-		foreach ($describe['fields'] as $index => $fieldInfo) {
+                //SalesPlatform.ru begin
+                if ($this->describe_cach[$module][$fieldname]) {
+                    return $this->describe_cach[$module][$fieldname];
+                }
+		//SalesPlatform.ru end
+                $describe = vtws_describe($module, $current_user);
+                foreach ($describe['fields'] as $index => $fieldInfo) {
 			if ($fieldInfo['name'] == $fieldname) {
-				return $fieldInfo;
+                                //SalesPlatform.ru begin
+                                $this->describe_cach[$module][$fieldname] = $fieldInfo;
+				//SalesPlatform.ru end
+                                return $fieldInfo;
 			}
 		}
 		return false;
 	}
-
+        
 	function setAssignedToInfo() {
 		$userid = $this->row["smownerid"];
 		//Retreiving the current user id

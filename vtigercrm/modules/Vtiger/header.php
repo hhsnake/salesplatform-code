@@ -102,5 +102,13 @@ $result = $adb->pquery($sql, array());
 $organization_logo = decode_html($adb->query_result($result,0,'logoname'));
 $smarty->assign("LOGO",$organization_logo);
 
+//SalesPlatform.ru begin
+//Assign clock data
+require_once("include/utils/SPWorldTime.php");
+$clockData = sp_worldTimeData();
+$smarty->assign("COUNTRYSTIMEDATATRANSL",$clockData[0]);
+$smarty->assign("MONTHSTRANSL",$clockData[1]);
+//SalesPlatform.ru end
+
 $smarty->display("Header.tpl");
 ?>

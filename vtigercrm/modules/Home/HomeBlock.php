@@ -47,6 +47,13 @@ if($stufftype=='Tag Cloud'){
 	$smarty->assign("URL",$url);
 	$smarty->assign("WIDGETID", $stuffid);
 	$smarty->display("Home/HomeWidgetURL.tpl");
+// SalesPlatform.ru begin html widget added 
+}elseif($stufftype == 'SP_HTML'){
+	$contents = $homeObj->getHtmlWidgetContents($stuffid);
+	$smarty->assign("HTMLWIDGET_CONTENTS",$contents);
+	$smarty->assign("WIDGETID", $stufid);
+	$smarty->display("Home/sp_html.tpl");
+// SalesPlatform.ru end
 }else{
 	$homestuff_values=$homeObj->getHomePageStuff($stuffid,$stufftype);
 	if($stufftype=="DashBoard"){

@@ -65,6 +65,13 @@ else{
 	if(!vtlib_isDirWriteable('cron/modules')) $dir_notwritable[] = 'cron/modules';
 	if(!vtlib_isDirWriteable('modules')) $dir_notwritable[] = 'modules';
 	if(!vtlib_isDirWriteable('Smarty/templates/modules')) $dir_notwritable[] = 'Smarty/templates/modules';
+        // SalesPlatform.ru begin Check all permissions
+        include_once('include/install/resources/utils.php');
+        $failed_permissions = Common_Install_Wizard_Utils::getFailedPermissionsFiles();
+        foreach ($failed_permissions as $index => $value) {
+            $dir_notwritable[] = $value;
+        }
+        // SalesPlatform.ru end
 	
 	$smarty->assign("DIR_NOTWRITABLE_LIST", $dir_notwritable);
 	// END

@@ -107,6 +107,13 @@
 				{'LBL_DEFAULT_WIDGET'|@getTranslatedString:$MODULE}
 			</a>
 		</li>
+                {* SalesPlatform.ru begin html widget added *}
+                <li>
+			<a href='javascript:;' class='drop_down' id="addSP_HTML">
+				{$MOD.LBL_SP_HTML}
+			</a>
+		</li>
+                {* SalesPlatform.ru end *}
 		{*<!-- this has been commented as some websites are opening up in full page (they have a target="_top")
 		<li>
 			<a href='javascript:;' class='drop_down' id="addURL">
@@ -117,7 +124,10 @@
 	</div>
 
 	{*<!-- the following div is used to display the contents for the add widget window -->*}
-	<div id="addWidgetsDiv" class="layerPopup" style="z-index:2000; display:none; width:400px;">
+        {* SalesPlatform.ru begin Add Widgets Div with fixed *}
+	<div id="addWidgetsDiv" class="layerPopup" style="z-index:2000; display:none; width:500px;">
+	{* <div id="addWidgetsDiv" class="layerPopup" style="z-index:2000; display:none; width:400px;"> *}
+        {* SalesPlatform.ru end *}
 		<input type="hidden" name="stufftype" id="stufftype_id">
 		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 		<tr>
@@ -139,6 +149,17 @@
 					<input type="text" name="stufftitle" id="stufftitle_id" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style="width:57%">
 				</td>
 			</tr>
+                        {* SalesPlatform.ru begin html widget added *}
+                        <tr id="StuffHTML" style="display:block;">
+				<td class="dvtCellLabel"  width="110" align="right">
+					{$MOD.LBL_SP_HTML}
+					<font color='red'>*</font>
+				</td>
+				<td class="dvtCellInfo" colspan="2" width="300">
+                                       <textarea name="html_edit" id="stuff_html_id" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style='width: 100%; overflow: auto; min-height: 50px; padding-left: 2%; padding-right: 2%;'></textarea>
+				</td>
+			</tr>
+                        {* SalesPlatform.ru end *}                       
 			{*<!--
 			<tr id="homeURLField" style="display:block;">
 				<td class="dvtCellLabel"  width="110" align="right">

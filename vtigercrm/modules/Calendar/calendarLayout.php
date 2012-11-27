@@ -1117,6 +1117,11 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$eventstatus = $act[$i]->eventstatus;
 			$color = $act[$i]->color;
 			$image = vtiger_imageurl($act[$i]->image_name, $theme);
+                        // SalesPlatform.ru begin New Calendar event types fixes
+                        if (!$image || $image == $act[$i]->image_name) {
+                            $image = vtiger_imageurl('Calendar.gif', $theme);
+                        }
+                        // SalesPlatform.ru end
 			if($act[$i]->recurring)
 				$recurring = '<img src="'.vtiger_imageurl($act[$i]->recurring, $theme).'" align="middle" border="0"></img>';
 			else
@@ -1219,6 +1224,11 @@ function getweekEventLayer(& $cal,$slice)
 			$user = $act[$i]->owner;
 			$priority = $act[$i]->priority;
 			$image =  vtiger_imageurl($act[$i]->image_name, $theme);
+                        // SalesPlatform.ru begin New Calendar event types fixes
+                        if (!$image || $image == $act[$i]->image_name) {
+                            $image = vtiger_imageurl('Calendar.gif', $theme);
+                        }
+                        // SalesPlatform.ru end
 			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";
 			if($act[$i]->recurring)
 				$recurring = '<img src="'.vtiger_imageurl($act[$i]->recurring, $theme).'" align="middle" border="0"></img>';
@@ -1246,12 +1256,40 @@ function getweekEventLayer(& $cal,$slice)
 			$role_list = $adb->pquery("SELECT * from vtiger_role WHERE parentrole LIKE '". formatForSqlLike($current_user->column_fields['roleid']) . formatForSqlLike($assigned_role_id) ."'",array());
 			$is_shared = $adb->pquery("SELECT * from vtiger_sharedcalendar where userid=? and sharedid=?",array($userid,$current_user->id));
 			$userName = getFullNameFromArray('Users', $current_user->column_fields);
-			if(($current_user->column_fields['is_admin']!='on' && $adb->num_rows($role_list)==0 && (($adb->num_rows($is_shared)==0 && ($visibility=='Public' || $visibility=='Private')) || $visibility=='Private')) && $userName!=$user)
+			
+                        //SalesPlatform.ru begin
+                        //Search for end date of event layer, 
+                        //compares with the current date and sets the style for the outdated finished and current events.
+                        $endDateTsOfEventLayer = $act[$i]->end_time->ts;
+                        $curTs = time();
+                        $curDateTs = $curTs - ($curTs % 86400);
+                        
+                        if ($eventstatus == "Planned") {
+                            if ($endDateTsOfEventLayer < $curDateTs) {
+                                $EventStyle = "eventOutdated";
+                            } else {
+                                $EventStyle = "eventNormal";      
+                            }
+                        } else {
+                            $EventStyle = "eventFinished";
+                        }
+                        //SalesPlatform.ru end
+                        if(($current_user->column_fields['is_admin']!='on' && $adb->num_rows($role_list)==0 && (($adb->num_rows($is_shared)==0 && ($visibility=='Public' || $visibility=='Private')) || $visibility=='Private')) && $userName!=$user)
 			{
-				$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;">';
+				//SalesPlatform.ru begin
+                                //Set style for layer.
+                                $eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="'.$EventStyle.'" style="height:'.$height.'px;">';
+                                //vtiger commented code
+                                //$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;">';
+                                //SalesPlatform.ru end
 			}
 			else{
-				$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" '.$javacript_str.'>';
+				//SalesPlatform.ru begin
+                                //Set style for layer.
+                                $eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="'.$EventStyle.'" style="height:'.$height.'px;" '.$javacript_str.'>';
+                                //vtiger commented code
+                                //$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" '.$javacript_str.'>';
+			        //SalesPlatform.ru end
 			}
 												 
 			$eventlayer .='<table border="0" cellpadding="1" cellspacing="0" width="100%">
@@ -1321,6 +1359,11 @@ function getmonthEventLayer(& $cal,$slice)
                         $end_hour = timeString($act[$i]->end_time,$format);
                         $account_name = $act[$i]->accountname;
                         $image = vtiger_imageurl($act[$i]->image_name, $theme);
+                        // SalesPlatform.ru begin New Calendar event types fixes
+                        if (!$image || $image == $act[$i]->image_name) {
+                            $image = vtiger_imageurl('Calendar.gif', $theme);
+                        }
+                        // SalesPlatform.ru end
 						$color = $act[$i]->color;
 						//Added for User Based Customview for Calendar Module
 						$visibility_query=$adb->pquery('SELECT visibility from vtiger_activity where activityid=?',array($id));

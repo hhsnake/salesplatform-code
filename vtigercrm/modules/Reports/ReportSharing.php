@@ -66,6 +66,21 @@ foreach($user_groups as $grpid=>$groupname){
 	$groupNameStr .= "'".escape_single_quotes(decode_html($groupname))."'";
 	$l++;
 }
+// SalesPlatform.ru begin: Add reports role sharing
+$user_roles = getAllRoleDetails();
+$roleIdStr = "";
+$roleNameStr = "";
+$l=0;
+foreach($user_roles as $roleid=>$roledetails){
+	if($l!=0){
+		$roleIdStr .= ",";
+		$roleNameStr .= ",";
+	}
+	$roleIdStr .= "'".$roleid."'";
+	$roleNameStr .= "'".escape_single_quotes(decode_html($roledetails[0]))."'";
+	$l++;
+}
+// SalesPlatform.ru end
 if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
 	$reportid = vtlib_purify($_REQUEST["record"]);
@@ -81,6 +96,10 @@ $report_std_filter->assign("GROUPNAMESTR", $groupNameStr);
 $report_std_filter->assign("USERNAMESTR", $userNameStr);
 $report_std_filter->assign("GROUPIDSTR", $groupIdStr);
 $report_std_filter->assign("USERIDSTR", $userIdStr);
+// SalesPlatform.ru begin: Add reports role sharing
+$report_std_filter->assign("ROLENAMESTR", $roleNameStr);
+$report_std_filter->assign("ROLEIDSTR", $roleIdStr);
+// SalesPlatform.ru end
 
 
 //include("modules/Reports/StandardFilter.php");
@@ -165,7 +184,21 @@ function getShareInfo($recordid=''){
 			$member_data[] = Array('id'=>$setype."::".$grpid,'name'=>$setype."::".$grpname);
 		}
 	}
-	return $member_data;
+
+        // SalesPlatform.ru begin: Add reports role sharing
+	$member_query = $adb->pquery("SELECT vtiger_reportsharing.setype,vtiger_role.roleid,vtiger_role.rolename FROM vtiger_reportsharing INNER JOIN vtiger_role on vtiger_role.roleid = vtiger_reportsharing.shareid WHERE vtiger_reportsharing.setype='roles' AND vtiger_reportsharing.reportid = ?",array($recordid));
+	$noofrows = $adb->num_rows($member_query);
+	if($noofrows > 0){
+		for($i=0;$i<$noofrows;$i++){
+			$roleid = $adb->query_result($member_query,$i,'roleid');
+			$rolename = $adb->query_result($member_query,$i,'rolename');
+			$setype = $adb->query_result($member_query,$i,'setype');
+			$member_data[] = Array('id'=>$setype."::".$roleid,'name'=>$setype."::".$rolename);
+		}
+	}
+        // SalesPlatform.ru end
+
+        return $member_data;
 }
 
 ?>

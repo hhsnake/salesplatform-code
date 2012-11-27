@@ -30,7 +30,20 @@
 <div id="theCities" class="citystyle">
 <form action="" name="frmtimezone">
 <input name="PHPSESSID" value="162c0ab587f6c555aaaa30d681b61f7c" type="hidden">
+{*SalesPlatform.ru begin*}
+<input type="hidden" name="monthstransl" value={$MONTHSTRANSL}>
+{*SalesPlatform.ru end*}
 <select name="clockcity" size="1" class="importBox small"   id="clockcity" style="width:125px;"  onchange="lcl(this.selectedIndex,this.options[0].selected)">
+{*SalesPlatform.ru begin*}
+{foreach from=$COUNTRYSTIMEDATATRANSL item=COUNTRYVALUE}
+    {if $smarty.foreach.foo.index == 0}
+        <option value="{$COUNTRYVALUE[0]}" selected="selected">{$COUNTRYVALUE[1]}</option>
+    {else}  
+        <option value="{$COUNTRYVALUE[0]}">{$COUNTRYVALUE[1]}</option>
+    {/if}    
+{/foreach}
+</select>
+{*commented vtiger code
 <option value="0" selected="selected">Local time</option>
 <option value="4.30">Afghanistan</option>
 <option value="1">Algeria</option>
@@ -136,6 +149,8 @@
 <option value="2">Zambia</option>
 <option value="2">Zimbabwe</option>
 </select>
+*}
+{*SalesPlatform.ru end*}
 </form>
 </div>
 <script type="text/javascript">

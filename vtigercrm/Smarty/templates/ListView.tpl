@@ -19,6 +19,9 @@
 <script type="text/javascript">
 	jQuery.noConflict();
 </script>
+{* SalesPlatform.ru begin Smart filters implementation *}
+<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+{* SalesPlatform.ru end *}
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
 typeofdata['E'] = ['e','n','s','ew','c','k'];
@@ -284,6 +287,167 @@ function alphabetic(module,url,dataid)
 </div>
 </div>		
 {*<!-- Searching UI -->*}
+
+{*SalesPlatform.ru begin Smart filters implementation*}	
+{if $smartfilterExists}
+<table style="margin-top:5px; border:1px solid #dedede;" cellspacing=0 align="center">
+<tr>   
+{foreach item=dataArr from=$spFilterTplArr}
+    
+{*Create filter for numeric field*}	
+{if $dataArr[2] eq 'N' || $dataArr[2] eq 'NN' || $dataArr[2] eq 'I'}
+  <td style="border-right:1px solid #dedede;"> 
+    <table>
+     <tr>
+       <td style="padding-left:5px" align=left>{$dataArr[4]|@getTranslatedString:$dataArr[4]}:</td>
+       <td style="padding-left:3px" align=left>{"LBL_FROM_VALUE"|@getTranslatedString:"LBL_FROM_VALUE"}</td>
+       <td style="padding-left:3px" class="small"><input type="text" name="{$dataArr[0]}_from" id="{$dataArr[0]}_from" style="width:70px" class="txtBox"></td>
+       <td style="padding-left:5px" align=left>{"LBL_TO_VALUE"|@getTranslatedString:"LBL_TO_VALUE"}</td>
+       <td style="padding-left:5px" class="small"><input  type="text" name="{$dataArr[0]}_to" id="{$dataArr[0]}_to" style="width:70px" class="txtBox"></td>
+     </tr>
+    </table>
+   </td>
+{/if}
+
+{*Create filter for date field*}	
+{if $dataArr[1] eq 23 || $dataArr[1] eq 5 || $dataArr[1] eq 6 || $dataArr[1] eq 30 || $dataArr[1] eq 64 || $dataArr[1] eq 70}
+  <td style="border-right:1px solid #dedede;"> 
+    <table>
+     <tr>
+       <td style="padding-left:5px" align=left>{$dataArr[4]|@getTranslatedString:$dataArr[4]}:</td>
+       <td style="padding-left:3px; padding-bottom:10px;" align=left>{"LBL_FROM_VALUE"|@getTranslatedString:"LBL_FROM_VALUE"}</td>
+       <td style="padding-left:3px" class="small">
+           
+           <input name="from{$dataArr[0]}" tabindex="" id="jscal_field_from{$dataArr[0]}" type="text" style="width:60px" class="txtBox">
+      
+           {if $uitype eq 6}
+	         <input name="time_start" tabindex="" style="width:60px" class="txtBox" type="text">
+           {/if}
+				
+           {if $uitype eq 6 && $dataArr[8] eq 'Event'}
+	         <input name="dateFormat" type="hidden">
+           {/if}
+
+           {if $uitype eq 23 && $dataArr[8] eq 'Event'}
+	         <input name="time_end" style="width:60px" class="txtBox" type="text">
+           {/if}
+           
+           {if $uitype eq 5 || $uitype eq 23}
+	         <br><font size=1><em old="(yyyy-mm-dd)">({$dataArr[7]})</em></font></br>
+           {else}
+	         <br><font size=1><em old="(yyyy-mm-dd)">({$dataArr[7]})</em></font></br>
+           {/if}
+       </td> 
+       <td style="padding-left:3px" class="small">
+           <img style="vertical-align: bottom;" src="{'btnL3Calendar.gif'|@vtiger_imageurl:$THEME}" id="jscal_trigger_from{$dataArr[0]}">
+
+           <script type="text/javascript" id='massedit_calendar_from{$dataArr[0]}'>
+	         Calendar.setup ({ldelim}
+			             inputField : "jscal_field_from{$dataArr[0]}", ifFormat : "{$dataArr[6]}", showsTime : false, button : "jscal_trigger_from{$dataArr[0]}", singleClick : true, step : 1
+			         {rdelim})
+           </script>
+       </td>
+       <td style="padding-left:5px; padding-bottom:10px;" align=left>{"LBL_TO_VALUE"|@getTranslatedString:"LBL_TO_VALUE"}</td>
+       <td style="padding-left:5px" class="small">
+           <input name="to{$dataArr[0]}" tabindex="" id="jscal_field_to{$dataArr[0]}" type="text" style="width:60px" class="txtBox">
+				
+           {if $uitype eq 6}
+	         <input name="time_start" tabindex="" style="width:60px" class="txtBox" type="text">
+           {/if}
+				
+           {if $uitype eq 6 && $dataArr[8] eq 'Event'}
+	         <input name="dateFormat" type="hidden">
+           {/if}
+
+           {if $uitype eq 23 && $dataArr[8] eq 'Event'}
+	         <input name="time_end" style="width:60px" class="txtBox" type="text">
+           {/if}
+				
+           {if $uitype eq 5 || $uitype eq 23}
+	         <br><font size=1><em old="(yyyy-mm-dd)">({$dataArr[7]})</em></font></br>
+           {else}
+	         <br><font size=1><em old="(yyyy-mm-dd)">({$dataArr[7]})</em></font></br>
+           {/if}
+       </td>
+       <td style="padding-left:3px" class="small">
+           <img style="vertical-align: bottom;" src="{'btnL3Calendar.gif'|@vtiger_imageurl:$THEME}" id="jscal_trigger_to{$dataArr[0]}">
+           
+           <script type="text/javascript" id='massedit_calendar_to{$dataArr[0]}'>
+	         Calendar.setup ({ldelim}
+			             inputField : "jscal_field_to{$dataArr[0]}", ifFormat : "{$dataArr[6]}", showsTime : false, button : "jscal_trigger_to{$dataArr[0]}", singleClick : true, step : 1
+			         {rdelim})
+           </script>
+       </td>
+     </tr>
+    </table>
+   </td>
+{/if}
+
+{*Create filter for checkbox field*}
+{if $dataArr[2] eq 'C' || $dataArr[1] eq 56}
+  <td style="border-right:1px solid #dedede;"> 
+  <table>
+   <tr>  
+    <td style="padding-left:5px" align=left>{$dataArr[4]|@getTranslatedString:$dataArr[4]}:</td>
+    <td align=left >       
+        <select id="{$dataArr[0]}" name="{$dataArr[0]}" tabindex="" class="small">
+	     <option value=""></option>
+             <option value="yes">
+                {"yes"|@getTranslatedString:"yes"}
+             </option>	
+             <option value="no">
+                {"no"|@getTranslatedString:"no"}
+             </option>	
+        </select>
+    </td>
+   </tr>
+  </table>
+ </td>
+{/if}
+
+{*Create filter for text field*}
+{if ($dataArr[2] eq 'V' || $dataArr[2] eq 'E') && not $dataArr[1]|@in_array:$spUiTypesListTplArr[0] && not $dataArr[1]|@in_array:$spUiTypesListTplArr[1] && $dataArr[1] neq 56}
+  <td style="border-right:1px solid #dedede;"> 
+    <table>
+     <tr>
+       <td style="padding-left:5px" align=left>{$dataArr[4]|@getTranslatedString:$dataArr[4]}:</td>
+       <td style="padding-left:3px" class="small"><input type="text" name="{$dataArr[0]}" id="{$dataArr[0]}" style="width:70px" class="txtBox"></td>
+     </tr>
+    </table>
+   </td>
+{/if}
+
+{*Create filter for combobox field*}
+{if $dataArr[1]|@in_array:$spUiTypesListTplArr[0]}
+ <td style="border-right:1px solid #dedede;"> 
+  <table>
+   <tr>  
+    <td style="padding-left:5px" align=left>{$dataArr[4]|@getTranslatedString:$dataArr[4]}:</td>
+    <td align=left >       
+        <select id="{$dataArr[0]}" name="{$dataArr[0]}" tabindex="" class="small">
+	     <option value=""></option>
+             {foreach item=listitem from=$dataArr[3]}
+		     <option value="{$listitem}">
+                             {$listitem|@getTranslatedString:$listitem}
+                     </option>	
+	     {foreachelse}
+		     <option value=""></option>
+		     <option value="" style='color: #777777' disabled>{$APP.LBL_NONE}</option>
+	     {/foreach}
+        </select>
+    </td>
+   </tr>
+  </table>
+ </td>
+{/if}
+{/foreach} 
+
+{*Create filter button*}
+<td style="padding-left:10px; padding-right:10px;" align=left><input name="submit" type="button" class="crmbutton small create" onClick="sp_smartfilter('{$MODULE}','{$spFilterJsStr}','{$spUiTypesListJsStr}');" value=" {$APP.LBL_BUTTON_FILTER} "></td>
+</tr>
+</table>
+{/if}
+{* SalesPlatform.ru end *}
 
 <div id="mergeDup" style="z-index:1;display:none;position:relative;">
 	{include file="MergeColumns.tpl"}

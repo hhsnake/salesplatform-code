@@ -88,7 +88,9 @@ class Vtiger_Mailer extends PHPMailer {
 // SalesPlatform.ru end
 
 			$this->_serverConfigured = true;
-			$this->Sender= getReturnPath($this->Host);
+                        // SalesPlatform.ru begin: Removed as it causes problems when mail server specified by ip
+			//$this->Sender= getReturnPath($this->Host);
+                        // SalesPlatform.ru end
 		}
 	}
 

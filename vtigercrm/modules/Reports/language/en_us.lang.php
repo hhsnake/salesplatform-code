@@ -214,6 +214,9 @@ $mod_strings = Array(
 'SELECT_FILTER_TYPE'=>'Select Report Type',
 'LBL_USERS'=>'Users',
 'LBL_GROUPS'=>'Groups',
+// SalesPlatform.ru begin: Add reports role sharing
+'LBL_ROLES' => 'Roles',
+// SalesPlatform.ru end
 'LBL_SELECT_FIELDS'=>'Select Fields',
 'LBL_MEMBERS'=>'Members',
 'LBL_RELATED_FIELDS'=>'Related Fields',

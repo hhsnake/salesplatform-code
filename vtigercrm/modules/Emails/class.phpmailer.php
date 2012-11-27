@@ -586,7 +586,7 @@ class PHPMailer {
         throw $e;
       }
 // SalesPlatform.ru begin
-//      error_log($e->getMessage());
+      error_log($e->getMessage());
 // SalesPlatform.ru end
       return false;
     }

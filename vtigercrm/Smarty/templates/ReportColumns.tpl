@@ -59,7 +59,10 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 		</tbody>
 	</table> 
 	</td>
-	</tr> 
-	<tr><td colspan="4" height="215"></td></tr>
+	</tr>
+        {* SalesPlatform.ru begin hide scroll *}
+	<tr><td colspan="4" height="210"></td></tr>
+        {* <tr><td colspan="4" height="215"></td></tr> *}
+        {* SalesPlatform.ru end *}
 	</tbody>
 </table>

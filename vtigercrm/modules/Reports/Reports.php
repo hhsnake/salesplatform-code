@@ -135,7 +135,16 @@ class Reports extends CRMEntity{
 					array_push($params, $user_groups);
 				}
 
-				$non_admin_query = " vtiger_report.reportid IN (SELECT reportid from vtiger_reportsharing WHERE $user_group_query (shareid=? AND setype='users'))";
+                                // SalesPlatform.ru begin: Add reports role sharing
+                                $roleid = $current_user->column_fields['roleid'];
+                                if(!empty($roleid) && $is_admin==false){
+                                        $user_role_query = " (shareid=? AND setype='roles') OR";
+                                        array_push($params, $roleid);
+                                }
+
+                                $non_admin_query = " vtiger_report.reportid IN (SELECT reportid from vtiger_reportsharing WHERE $user_group_query $user_role_query (shareid=? AND setype='users'))";
+                                //$non_admin_query = " vtiger_report.reportid IN (SELECT reportid from vtiger_reportsharing WHERE $user_group_query (shareid=? AND setype='users'))";
+                                // SalesPlatform.ru end
 				if($is_admin==false){
 					$ssql .= " and ( (".$non_admin_query.") or vtiger_report.sharingtype='Public' or vtiger_report.owner = ? or vtiger_report.owner in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'))";
 					array_push($params, $current_user->id);
@@ -434,8 +443,17 @@ class Reports extends CRMEntity{
 			$user_group_query = " (shareid IN (".generateQuestionMarks($user_groups).") AND setype='groups') OR";
 			array_push($params, $user_groups);
 		}
+                
+                // SalesPlatform.ru begin: Add reports role sharing
+                $roleid = $current_user->column_fields['roleid'];
+		if(!empty($roleid) && $is_admin==false){
+			$user_role_query = " (shareid=? AND setype='roles') OR";
+			array_push($params, $roleid);
+		}
 
-		$non_admin_query = " vtiger_report.reportid IN (SELECT reportid from vtiger_reportsharing WHERE $user_group_query (shareid=? AND setype='users'))";
+		$non_admin_query = " vtiger_report.reportid IN (SELECT reportid from vtiger_reportsharing WHERE $user_group_query $user_role_query (shareid=? AND setype='users'))";
+		//$non_admin_query = " vtiger_report.reportid IN (SELECT reportid from vtiger_reportsharing WHERE $user_group_query (shareid=? AND setype='users'))";
+                // SalesPlatform.ru end
 		if($is_admin==false){
 			$sql .= " and ( (".$non_admin_query.") or vtiger_report.sharingtype='Public' or vtiger_report.owner = ? or vtiger_report.owner in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'))";
 			array_push($params, $current_user->id);
@@ -667,7 +685,10 @@ class Reports extends CRMEntity{
 				$module_columnlist[$optionvalue] = $fieldlabel;
 		}
 		$blockname = getBlockName($block);
-		if($blockname == 'LBL_RELATED_PRODUCTS' && ($module=='PurchaseOrder' || $module=='SalesOrder' || $module=='Quotes' || $module=='Invoice')){
+                // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+		if($blockname == 'LBL_RELATED_PRODUCTS' && ($module=='PurchaseOrder' || $module=='SalesOrder' || $module=='Quotes' || $module=='Invoice' || $module=='Act' || $module=='Consignment')){
+		//if($blockname == 'LBL_RELATED_PRODUCTS' && ($module=='PurchaseOrder' || $module=='SalesOrder' || $module=='Quotes' || $module=='Invoice')){
+                // SalesPlatform.ru end
 			$fieldtablename = 'vtiger_inventoryproductrel';
 			$fields = array('productid'=>getTranslatedString('Product Name',$module),
 							'serviceid'=>getTranslatedString('Service Name',$module),
@@ -1237,7 +1258,13 @@ function getEscapedColumns($selectedfields)
 				$mod_lbl = getTranslatedString($mod,$module); //module
 				$fld_lbl = getTranslatedString($fieldlabel,$module); //fieldlabel
 				$fieldlabel = $mod_lbl." ".$fld_lbl;
-				if(CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid")
+
+                                // SalesPlatform.ru begin: Fixed incorrect permissions decision for related products fields in Reports
+				if(CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid" &&
+                                        !(in_array($module, array('PurchaseOrder','SalesOrder','Quotes','Invoice','Act','Consignment')) && 
+                                          in_array($fieldname, array('productid','serviceid','listprice','discount','quantity','comment'))))
+				//if(CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid")
+                                // SalesPlatform.ru end
 				{
 						$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$fieldlabel."</option>";
 				}
@@ -1489,13 +1516,25 @@ function getEscapedColumns($selectedfields)
 				$ssql.= " and vtiger_field.fieldname not in ('potential_id','account_id','contact_id','quote_id','currency_id')";
 				break;
 			case 23://Invoice
-				$ssql.= " and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id','currency_id')";
+                                // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+				$ssql.= " and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id','currency_id','sp_act_id')";
+				//$ssql.= " and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id','currency_id')";
+                                // SalesPlatform.ru end
 				break;
 			case 26://Campaigns
 				$ssql.= " and vtiger_field.fieldname not in ('product_id')";
 				break;
 
 		}
+
+                // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+                if($module == 'Act') {
+                    $ssql.= " and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id','currency_id')";
+                }
+                else if($module == 'Consignment') {
+                    $ssql.= " and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id','currency_id', 'invoice_id')";
+                }
+                // SalesPlatform.ru end
 
 		$ssql.= " order by sequence";
 
@@ -1505,7 +1544,9 @@ function getEscapedColumns($selectedfields)
 		do
 		{
 			$typeofdata = explode("~",$columntototalrow["typeofdata"]);
-
+                        // SalesPlatform.ru begin localization for 5.4.0  
+                            $columntototalrow['fieldlabel'] = html_entity_decode($columntototalrow['fieldlabel']);
+                        // SalesPlatform.ru end 
 			if($typeofdata[0] == "N" || $typeofdata[0] == "I")
 			{
 				$options = Array();
@@ -1536,7 +1577,7 @@ function getEscapedColumns($selectedfields)
 
 					$columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldlabel']);
 					$options []= getTranslatedString($columntototalrow['tablabel'],$columntototalrow['tablabel']).' - '.getTranslatedString($columntototalrow['fieldlabel'],$columntototalrow['tablabel']);
-					if($selectedcolumn1[2] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_SUM:2")
+                                        if($selectedcolumn1[2] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_SUM:2")
 					{
 						$options []=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';
 					}else
@@ -1592,9 +1633,15 @@ function getEscapedColumns($selectedfields)
 
 		foreach($adv_filter_options as $key=>$value) {
 			if($selected == $key) {
-				$shtml .= "<option selected value=\"".$key."\">".$value."</option>";
+                                // SalesPlatform.ru begin localization for 5.4.0 
+				$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($value)."</option>";
+                                //$shtml .= "<option selected value=\"".$key."\">".$value."</option>";
+                                // SalesPlatform.ru end
 			} else {
-				$shtml .= "<option value=\"".$key."\">".$value."</option>";
+                                // SalesPlatform.ru begin localization for 5.4.0
+				$shtml .= "<option value=\"".$key."\">".getTranslatedString($value)."</option>";
+                                //$shtml .= "<option value=\"".$key."\">".$value."</option>";
+                                // SalesPlatform.ru end
 			}
 		}
 		return $shtml;

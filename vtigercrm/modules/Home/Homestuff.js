@@ -45,6 +45,9 @@ function chooseType(typeName){
 				$('vtbusy_info').style.display="none";
 				$('reportNameRow').style.display="none";
 				$('reportTypeRow').style.display="none";
+                                // SalesPlatform.ru begin html widget added
+                                $('StuffHTML').style.display="none";
+                                // SalesPlatform.ru end
 			}
 			}
 		);
@@ -64,6 +67,9 @@ function chooseType(typeName){
 		$('reportNameRow').style.display="none";
 		$('reportTypeRow').style.display="none";
 		//$('homeURLField').style.display = "none";
+                // SalesPlatform.ru begin html widget added
+                $('StuffHTML').style.display="none";
+                // SalesPlatform.ru end
 	}else if(typeName=='DashBoard'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
@@ -77,6 +83,9 @@ function chooseType(typeName){
         $('reportTypeRow').style.display="none";
 		$('homewidget').style.display="none";
 		//$('homeURLField').style.display = "none";
+                // SalesPlatform.ru begin html widget added
+                $('StuffHTML').style.display="none";
+                // SalesPlatform.ru end
 		new Ajax.Request(
 			'index.php',
 			{queue: {position: 'end', scope: 'command'},
@@ -105,6 +114,9 @@ function chooseType(typeName){
 		$('reportNameRow').style.display="none";
 		$('reportTypeRow').style.display="none";
 		//$('homeURLField').style.display = "none";
+                // SalesPlatform.ru begin html widget added
+                $('StuffHTML').style.display="none";
+                // SalesPlatform.ru end
 	}else if(typeName=='Default'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
@@ -118,6 +130,9 @@ function chooseType(typeName){
 		$('url_id').style.display = "none";
 		$('reportNameRow').style.display="none";
 		$('reportTypeRow').style.display="none";
+                // SalesPlatform.ru begin html widget added
+                $('StuffHTML').style.display="none";
+                // SalesPlatform.ru end
 	}else if(typeName == 'Notebook'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
@@ -132,6 +147,9 @@ function chooseType(typeName){
 		$('reportNameRow').style.display="none";
 		$('reportTypeRow').style.display="none";
 		//$('homeURLField').style.display = "none";
+                // SalesPlatform.ru begin html widget added
+                $('StuffHTML').style.display="none";
+                // SalesPlatform.ru end
 	}
 	else if(typeName == 'ReportCharts'){
 		$('moduleNameRow').style.display="none";
@@ -143,9 +161,12 @@ function chooseType(typeName){
 		$('reportNameRow').style.display="block";
 		$('reportTypeRow').style.display="block";
 		$('vtbusy_info').style.display="none";
-        $('dashNameRow').style.display="none";
+                $('dashNameRow').style.display="none";
 		$('dashTypeRow').style.display="none";
 		$('homewidget').style.display="none";
+                // SalesPlatform.ru begin html widget added
+                $('StuffHTML').style.display="none";
+                // SalesPlatform.ru end
 		new Ajax.Request(
                     'index.php',
                     {queue: {position: 'end', scope: 'command'},
@@ -160,6 +181,23 @@ function chooseType(typeName){
                     }
                  );
 	}
+        // SalesPlatform.ru begin html widget added
+        else if(typeName == 'SP_HTML'){
+                $('moduleNameRow').style.display="none";
+		$('moduleFilterRow').style.display="none";
+		$('modulePrimeRow').style.display="none";
+		$('showrow').style.display="none";
+		$('rssRow').style.display="none";
+		$('dashNameRow').style.display="none";
+		$('dashTypeRow').style.display="none";
+		$('StuffTitleId').style.display="block";
+                $('StuffHTML').style.display="block";
+		$('vtbusy_info').style.display="none";                 
+                $('homewidget').style.display="none";
+                $('reportNameRow').style.display="none";
+                $('reportTypeRow').style.display="none";
+        }
+        // SalesPlatform.ru end
 	/*else if(typeName == 'URL'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
@@ -489,6 +527,15 @@ function frmValidate(){
 				return false;
 			}
 		}
+                // SalesPlatform.ru begin html widget added
+                if($('stufftype_id').value=="SP_HTML"){			
+                        if($('stuff_html_id').value==""){
+                                alert(alert_arr.LBL_ENTER_HTML_CODE);
+                                $('stuff_html_id').focus();
+                                return false;
+                        }
+                }
+                // SalesPlatform.ru end
 		/*if($('stufftype_id').value=="URL"){
 			if($('url_id').value==""){
 				alert("Please enter URL");
@@ -529,6 +576,9 @@ function frmValidate(){
     	var selreport='';
     	var selreportcharttype='';
 		//var txtURL = '';
+                // SalesPlatform.ru begin html widget added
+                var  htmlCode = '';
+                // SalesPlatform.ru end
 
 		if(stufftype=="Module"){
 			selFiltername =document.Homestuff.selFiltername[document.Homestuff.selFiltername.selectedIndex].value;
@@ -546,12 +596,20 @@ function frmValidate(){
 		}else if(stufftype=="Default"){
 			seldeftype=document.Homestuff.seldeftype[document.Homestuff.seldeftype.selectedIndex].value;
 		}
+                // SalesPlatform.ru begin html widget added
+                else if(stufftype=="SP_HTML"){
+                        htmlCode = $('stuff_html_id').value;
+                }
+                // SalesPlatform.ru end
     else if(stufftype=="ReportCharts"){
     	selreport = $('selreportchart_id').value;
         selreportcharttype = $('selreportcharttype_id').value;
     }
-
-	var url="stufftype="+stufftype+"&stufftitle="+stufftitle+"&selmodule="+selmodule+"&maxentries="+maxentries+"&selFiltername="+selFiltername+"&fldname="+encodeURIComponent(fldname)+"&txtRss="+txtRss+"&seldashbd="+seldashbd+"&seldashtype="+seldashtype+"&seldeftype="+seldeftype+"&selreport="+selreport+"&selreportcharttype="+selreportcharttype;//+'&txtURL='+txtURL;
+        
+        // SalesPlatform.ru begin html widget added
+        var url="stufftype="+stufftype+"&stufftitle="+stufftitle+"&selmodule="+selmodule+"&maxentries="+maxentries+"&selFiltername="+selFiltername+"&fldname="+encodeURIComponent(fldname)+"&txtRss="+txtRss+"&seldashbd="+seldashbd+"&seldashtype="+seldashtype+"&seldeftype="+seldeftype+"&selreport="+selreport+"&selreportcharttype="+selreportcharttype+"&htmlCode="+htmlCode;
+	//var url="stufftype="+stufftype+"&stufftitle="+stufftitle+"&selmodule="+selmodule+"&maxentries="+maxentries+"&selFiltername="+selFiltername+"&fldname="+encodeURIComponent(fldname)+"&txtRss="+txtRss+"&seldashbd="+seldashbd+"&seldashtype="+seldashtype+"&seldeftype="+seldeftype+"&selreport="+selreport+"&selreportcharttype="+selreportcharttype;//+'&txtURL='+txtURL;
+        // SalesPlatform.ru end
 		var stuffarr=new Array();
 		$('vtbusy_info').style.display="inline";
 
@@ -567,12 +625,18 @@ function frmValidate(){
 						$('vtbusy_info').style.display="none";
 						$('stufftitle_id').value='';
 						$('txtRss_id').value='';
+                                                // SalesPlatform.ru begin html widget added
+                                                $('stuff_html_id').value='';
+                                                // SalesPlatform.ru end
 						return false;
 					}else{
 						hide('addWidgetsDiv');
 						$('vtbusy_info').style.display="none";
 						$('stufftitle_id').value='';
 						$('txtRss_id').value='';
+                                                // SalesPlatform.ru begin html widget added
+                                                $('stuff_html_id').value='';
+                                                // SalesPlatform.ru end
 						eval(response.responseText);
 					}
 				}
@@ -655,7 +719,10 @@ function positionDivInAccord(targetDiv,stufftitle,stufftype){
 			break;
 	}
 	var mainX = parseInt(document.getElementById("MainMatrix").style.width);
-	if(stufftitle != vtdashboard_defaultDashbaordWidgetTitle && stufftype != "DashBoard" && stufftype != "ReportCharts"){
+	// SalesPlatform.ru begin html widget added
+        if(stufftitle != vtdashboard_defaultDashbaordWidgetTitle && stufftype != "DashBoard" && stufftype != "ReportCharts" && stufftype != "SP_HTML"){ 
+        //if(stufftitle != vtdashboard_defaultDashbaordWidgetTitle && stufftype != "DashBoard" && stufftype != "ReportCharts"){
+        // SalesPlatform.ru end
 		var dx = mainX *  widgetWidth/ 100;
 	}else{
 		var dx = mainX * dashWidth / 100;

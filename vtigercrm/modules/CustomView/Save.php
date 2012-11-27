@@ -223,8 +223,13 @@ if($cvmodule != "") {
 								}
 							}
 							$adv_filter_value = implode(",",$val);
+						} 
+                                                // SalesPlatform.ru begin
+						else {
+							decodeLocalizedFilterValues(&$temp_val, $cv_tabid, $cvmodule, $fieldName);
+							$adv_filter_value = implode(",",$temp_val);
 						}
-
+						// SalesPlatform.ru end
 						$irelcriteriasql = "INSERT INTO vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value,groupid,column_condition) values (?,?,?,?,?,?,?)";
 						$irelcriteriaresult = $adb->pquery($irelcriteriasql, array($genCVid, $column_index, $adv_filter_column, $adv_filter_comparator, $adv_filter_value, $adv_filter_groupid, $adv_filter_column_condition));
 

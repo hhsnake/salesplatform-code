@@ -89,6 +89,11 @@ $other_email_field_is = $app_strings['OTHER_EMAIL_FILED_IS'].$err_invalid_email_
 $secondary_email_field_is = $app_strings['SECONDARY_EMAIL_FILED_IS'].$err_invalid_secondary_email_address; 
 $lbl_asterisk_details_not_set = $app_strings['LBL_ASTERISK_SET_ERROR'];
 
+//SalesPlatform.ru begin
+//Checking for equal separators
+$lbl_equal_separators = $mod_strings['LBL_EQUAL_SEPARATORS'];
+//SalesPlatform.ru end
+
 //check asteriskdetails start
 $checkAsteriskDetails = checkAsteriskDetails();
 // Fix : 6362
@@ -190,7 +195,16 @@ function verify_data(form) {
 		form.email2.focus();
 		return false;
 	}
-	form.secondaryemail.value = trim(form.secondaryemail.value); 
+	form.secondaryemail.value = trim(form.secondaryemail.value);
+
+//SalesPlatform.ru begin  
+//Checking for equal separators
+        if (form.currency_decimal_separator.value == form.currency_grouping_separator.value) {
+            alert("$lbl_equal_separators");
+            return false;
+        }
+//SalesPlatform.ru end
+
 // SalesPlatform.ru begin
 //	if (form.secondaryemail.value != "" && !/^[a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/.test(form.secondaryemail.value)){
 	if (form.secondaryemail.value != "" && !/^[a-zA-Z0-9А-Яа-я]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9А-Яа-я])*@[a-zA-Z0-9А-Яа-я]+([\_\-\.]?[a-zA-Z0-9А-Яа-я]+)*\.([\-\_]?[a-zA-Z0-9А-Яа-я])+(\.?[a-zA-Z0-9А-Яа-я]+)?$/.test(form.secondaryemail.value)){

@@ -102,8 +102,12 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	else
 	{
 		$mail_error = $mail_status;
+                // SalesPlatform.ru begin corrected date of sending
+                $query = 'UPDATE vtiger_emaildetails SET email_flag ="SENT" WHERE emailid=?';
+                $adb->pquery($query, array($emailid));
+                // SalesPlatform.ru end
 	}
-
+        
 	return $mail_error;
 }
 
@@ -240,7 +244,9 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	
 	$mail->FromName = decode_html($from_name);
 
-	$mail->Sender= getReturnPath($mail->Host);
+        // SalesPlatform.ru begin: Removed as it causes problems when mail server specified by ip
+        //$mail->Sender= getReturnPath($mail->Host);
+        // SalesPlatform.ru end
 
 	if($to_email != '')
 	{

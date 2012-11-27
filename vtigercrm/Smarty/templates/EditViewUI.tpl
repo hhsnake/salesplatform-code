@@ -621,6 +621,9 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 				{$APP.Salutation}<input type="checkbox" name="salutationtype_mass_edit_check" id="salutationtype_mass_edit_check" class="small" ><br />
 			{/if}
 			{if $uitype eq 55}
+                                {* SalesPlatform.ru begin: Fixed mandatory asterisk for name field *}
+                                <font color="red">{$mandatory_field}</font>
+                                {* SalesPlatform.ru end *}
 				{$usefldlabel}{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
 			{elseif $uitype eq 255}
 				<font color="red">{$mandatory_field}</font>{$usefldlabel}{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}

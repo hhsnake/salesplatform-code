@@ -379,7 +379,10 @@ class ListViewController {
 						'Settings&roleid='.$value.'">'.textlength_check(getRoleName($value)).'</a>';
 				} elseif($field->getFieldDataType() == 'multipicklist') {
 					$value = ($value != "") ? str_replace(' |##| ',', ',$value) : "";
-					if(!$is_admin && $value != '') {
+					//SalesPlatform.ru begin
+                                        if($value != '') {
+                                        //if(!$is_admin && $value != '') {
+                                        //SalesPlatform.ru end    
 						$valueArray = ($rawValue != "") ? explode(' |##| ',$rawValue) : array();
 						$notaccess = '<font color="red">'.getTranslatedString('LBL_NOT_ACCESSIBLE',
 								$module)."</font>";
@@ -394,8 +397,14 @@ class ListViewController {
 									$tmpArray[] = $notaccess;
 									$tmp .= ', '.$notaccess;
 								} else {
-									$tmpArray[] = $val;
-									$tmp .= ', '.$val;
+                                                                        //SalesPlatform.ru begin
+                                                                        //translate picklist values
+                                                                        $transl_val = getTranslatedString($val,$module);
+                                                                        $tmpArray[] = $transl_val;
+									$tmp .= ', '.$transl_val;
+									//$tmpArray[] = $val;
+									//$tmp .= ', '.$val;
+                                                                        //SalesPlatform.ru end
 								}
 							} else {
 								$tmpArray[] = '...';

@@ -59,6 +59,9 @@ function getNewLeads($maxval,$calCnt) {
 		vtiger_leaddetails.leadstatus not in ("Lost Lead", "Junk Lead","'.$current_module_strings['Lost Lead'].'","'.$current_module_strings['Junk Lead'].'")
 		AND vtiger_crmentity.createdtime >=? AND vtiger_crmentity.smownerid = ?';
 
+        //SalesPlatform.ru begin
+        $list_query .= " ORDER BY vtiger_leaddetails.leadid DESC";
+        //SalesPlatform.ru end
 	$list_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
 
 	if($calCnt == 'calculateCnt') {

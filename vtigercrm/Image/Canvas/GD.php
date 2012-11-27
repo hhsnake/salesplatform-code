@@ -1691,7 +1691,7 @@ class Image_Canvas_GD extends Image_Canvas_WithMap
             return 0;
         }
     }
-
+    
 }
 
 ?>

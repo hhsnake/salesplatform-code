@@ -80,7 +80,6 @@ a:hover {
 	-webkit-box-shadow: 3px 3px 3px 3px rgba(150, 150, 150, 0.5);
 	-moz-box-shadow: 3px 3px 3px 3px rgba(150, 150, 150, 0.5);
 	box-shadow: 3px 3px 3px 3px rgba(150, 150, 150, 0.5);
-	text-align: left;
 }
 
 .loginForm .poweredBy {

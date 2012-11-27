@@ -46,8 +46,8 @@ $adb->pquery("update vtiger_emailtemplates set body=? where templateid=?", array
 
 
 //for Customer Portal Login details
+//SalesPlatform.ru begin
 $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="center" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; text-decoration: none; background-color: rgb(122, 122, 254);">
-    
         <tr>
             <td> </td>
             <td> </td>
@@ -67,11 +67,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
             <td width="50"> </td>
             <td>
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(255, 255, 255); font-weight: normal; line-height: 25px;">
-                            
                                 <tr>
                                     <td align="center" rowspan="4">$logo$</td>
                                     <td align="center"> </td>
@@ -91,11 +89,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
-                            
                                 <tr>
                                     <td valign="top">
                                     <table width="100%" cellspacing="0" cellpadding="5" border="0">
-                                        
                                             <tr>
                                                 <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);"> </td>
                                             </tr>
@@ -103,20 +99,19 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                                 <td> </td>
                                             </tr>
                                             <tr>
-                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(22, 72, 134); font-weight: bolder; line-height: 15px;">Dear $contact_name$, </td>
+                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(22, 72, 134); font-weight: bolder; line-height: 15px;">Уважаемый(ая) $contact_name$, </td>
                                             </tr>
                                             <tr>
-                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"> Thank you very much for subscribing to the vtiger CRM - annual support service.<br />Here is your self service portal login details:</td>
+                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"> Выражаем вам благодарность за подключение услуги ежегодного сервисного обслуживания Vtiger CRM.<br />Далее приведена информация для регистрации на портале самообслуживания:</td>                                            
                                             </tr>
                                             <tr>
                                                 <td align="center">
                                                 <table width="75%" cellspacing="0" cellpadding="10" border="0" style="border: 2px solid rgb(180, 180, 179); background-color: rgb(226, 226, 225); font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal;">
-                                                    
                                                         <tr>
-                                                            <td><br />User ID     : <font color="#990000"><strong> $login_name$</strong></font> </td>
+                                                            <td><br />ID Пользователя     : <font color="#990000"><strong> $login_name$</strong></font> </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Password: <font color="#990000"><strong> $password$</strong></font> </td>
+                                                            <td>Пароль: <font color="#990000"><strong> $password$</strong></font> </td>
                                                         </tr>
                                                         <tr>
                                                             <td align="center"> <strong>  $URL$<br /> </strong> </td>
@@ -125,27 +120,27 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"><strong>NOTE:</strong> We suggest you to change your password after logging in first time. <br /><br /> <strong><u>Help Documentation</u></strong><br />  <br /> After logging in to vtiger Self-service Portal first time, you can access the vtiger CRM documents from the <strong>Documents</strong> tab. Following documents are available for your reference:<br />
+                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"><strong>Примечание:</strong> Мы предлагаем вам изменить пароль после первой авторизации. <br /><br /> <strong><u>Справочная информация</u></strong><br />  <br /> После первой авторизации на портале самообслуживания вы можете воспользоваться документацией Vtiger CRM, расположенной во вкладке <strong>Документация(Documents)</strong>. Для ознакомления доступны следующие документы:<br />
                                                 <ul>
-                                                    <li>Installation Manual (Windows &amp; Linux OS)<br /> </li>
-                                                    <li>User &amp; Administrator Manual<br /> </li>
-                                                    <li>vtiger Customer Portal - User Manual<br /> </li>
-                                                    <li>vtiger Outlook Plugin - User Manual<br /> </li>
-                                                    <li>vtiger Office Plug-in - User Manual<br /> </li>
-                                                    <li>vtiger Thunderbird Extension - User Manual<br /> </li>
-                                                    <li>vtiger Web Forms - User Manual<br /> </li>
-                                                    <li>vtiger Firefox Tool bar - User Manual<br /> </li>
+                                                    <li>Руководство по установке (Windows и Linux ОС)<br /> </li>
+                                                    <li>Руководство пользователя и администратора<br /> </li>
+                                                    <li>Клиентский портал Vtiger CRM - Руководство пользователя<br /> </li>
+                                                    <li>Vtiger CRM плагин для Outlook - Руководство пользователя<br /> </li>
+                                                    <li>Vtiger CRM Office плагин - Руководство пользователя<br /> </li>
+                                                    <li>Vtiger CRM дополнение Thunderbird - Руководство пользователя<br /> </li>
+                                                    <li>Vtiger CRM Веб формы - Руководство пользователя<br /> </li>
+                                                    <li>Vtiger CRM панель инструментов Firefox - Руководство пользователя<br /> </li>
                                                 </ul>
-                                                <br />  <br /> <strong><u>Knowledge Base</u></strong><br /> <br /> Periodically we update frequently asked question based on our customer experiences. You can access the latest articles from the <strong>FAQ</strong> tab.<br /> <br /> <strong><u>vtiger CRM - Details</u></strong><br /> <br /> Kindly let us know your current vtiger CRM version and system specification so that we can provide you necessary guidelines to enhance your vtiger CRM system performance. Based on your system specification we alert you about the latest security &amp; upgrade patches.<br />  <br />			 Thank you once again and wish you a wonderful experience with vtiger CRM.<br /> </td>
+                                                <br />  <br /> <strong><u>Базовые знания</u></strong><br /> <br /> Мы периодически обновляем часто задаваемые вопросы, основываясь на опыте наших клиентов. Вы можете получить доступ к последним статьям через вкладку <strong>ЧаВо(FAQ)</strong>.<br /> <br /> <strong><u>Vtiger CRM - Информация</u></strong><br /> <br /> Пожалуйста, предоставьте информаию о вашей текущей версии vtiger CRM и о особенностях вашей системы, чтобы мы могли дать вам рекомендации по увеличению производительности работы Vtiger CRM. Основываясь на особенностях вашей системы, мы сообщим вам о последних обновлениях Vtiger CRM.<br />  <br />			 Еще раз благодарим вас и желаем приятной работы с системой Vtiger CRM.<br /> </td>                                                
                                             </tr>
                                             <tr>
-                                                <td align="right"><strong style="padding: 2px; font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: bold;"><br /><br />Best Regards</strong></td>
+                                                <td align="right"><strong style="padding: 2px; font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: bold;"><br /><br />С уважением,</strong></td>                               
                                             </tr>
                                             <tr>
                                                 <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; line-height: 20px;">$support_team$ </td>
                                             </tr>
                                             <tr>
-                                                <td align="right"><a style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);" href="http://www.vtiger.com">www.vtiger.com</a></td>
+                                                <td align="right"><a style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);" href="http://www.salesplatform.ru">www.salesplatform.ru</a></td>
                                             </tr>
                                             <tr>
                                                 <td> </td>
@@ -158,20 +153,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                        <table width="100%" cellspacing="0" cellpadding="5" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(255, 255, 255); font-weight: normal; line-height: 15px; background-color: rgb(51, 51, 51);">
-                            
-                                <tr>
-                                    <td align="center">Shree Narayana Complex, No 11 Sarathy Nagar, Vijaya Nagar , Velachery, Chennai - 600 042 India </td>
-                                </tr>
-                                <tr>
-                                    <td align="center">Telephone No: +91 - 44 - 4202 - 1990     Toll Free No: +1 877 788 4437</td>
-                                </tr>
-                                <tr>
-                                    <td align="center">Email Id: <a style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(255, 255, 255);" href="mailto:support@vtiger.com">support@vtiger.com</a></td>
-                                </tr>
-                        </table>
-                        </td>
+                        <td align="left" style="background-color: rgb(27, 77, 140);"><br /> </td>
                     </tr>
             </table>
             </td>
@@ -193,11 +175,13 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
             <td> </td>
         </tr>
 </table>';
-	       
+//SalesPlatform.ru end	       
 $fieldid = $adb->getUniqueID('vtiger_emailtemplates');
 $login_id=$fieldid;
-$adb->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Customer Login Details','Customer Portal Login Details','Send Portal login details to customer','".$body."',0,".$fieldid.")");
-
+//SalesPlatform.ru begin
+$adb->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Регистрационная информация клиента','Регистрационная информация клиентского портала','Посылает регистрационную информацию портала клиенту','".$body."',0,".$fieldid.")");
+//$adb->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Customer Login Details','Customer Portal Login Details','Send Portal login details to customer','".$body."',0,".$fieldid.")");
+//SalesPlatform.ru end
 
 //for Support end notification before a week	       
 $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="center" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; text-decoration: none; background-color: rgb(122, 122, 254);">

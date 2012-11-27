@@ -265,11 +265,12 @@ class jpgraph {
 			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL, 'white', '#E5E5E5')));
 
 			// Setup title
-// SalesPlatform.ru begin					
-			if(isset($currency_symbol_before) && $currency_symbol_before)
-			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-    			else
-			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+// SalesPlatform.ru begin
+                        $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;					
+//			if(isset($currency_symbol_before) && $currency_symbol_before)
+//			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+//    			else
+//			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
 //			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 // SalesPlatform.ru end
 				//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;
@@ -610,11 +611,12 @@ class jpgraph {
 			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
 
 			// Setup title
-// SalesPlatform.ru begin					
-			if(isset($currency_symbol_before) && $currency_symbol_before)
-			    $titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			else
-			    $titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+// SalesPlatform.ru begin
+                        $titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			if(isset($currency_symbol_before) && $currency_symbol_before)
+//			    $titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+//			else
+//			    $titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
 //			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 // SalesPlatform.ru end
 			//$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total;
@@ -920,11 +922,12 @@ class jpgraph {
 			$font->setColor($font_color);
 
 			// Setup title
-// SalesPlatform.ru begin					
-			if(isset($currency_symbol_before) && $currency_symbol_before)
-			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			else
-			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+// SalesPlatform.ru begin
+                        $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			if(isset($currency_symbol_before) && $currency_symbol_before)
+//			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+//			else
+//			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
 //			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 // SalesPlatform.ru end
 			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;
@@ -1178,11 +1181,12 @@ $log->debug("Exiting pipeline_by_lead_source method ...");
 			$gbplot->setFillStyle($fills);
 
 			// Setup title
-// SalesPlatform.ru begin					
-			if(isset($currency_symbol_before) && $currency_symbol_before)
-			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			else
-			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+// SalesPlatform.ru begin	
+                        $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
+//			if(isset($currency_symbol_before) && $currency_symbol_before)
+//			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+//			else
+//			    $titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$total.' '.$app_strings['LBL_THOUSANDS_SYMBOL'].' '.$current_user->currency_symbol;
 //			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 // SalesPlatform.ru end
 			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;

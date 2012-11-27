@@ -139,6 +139,16 @@ if((isset($_REQUEST['type']) && $_REQUEST['type'] !='') || (isset($_REQUEST['n_t
 					$invitees_ids_string = implode(';',$invitees_ids);
 					sendInvitation($invitees_ids_string,$activity_type,$mail_data['subject'],$mail_data);
 				}
+                        
+                                // SalesPlatform.ru begin Fix for events generation
+                                $focus = new Activity();
+                                $focus->column_fields["activitytype"] = $activity_type;
+                                $focus->id = $return_id;
+                                $tab_type = 'Calendar';
+                                $focus->retrieve_entity_info($focus->id, $tab_type);
+                                $focus->mode = 'edit';
+                                $focus->save($tab_type);
+                                // SalesPlatform.ru end
 			}
 			if($type == 'activity_postpone')
 			{

@@ -72,12 +72,17 @@ $mod_strings = array (
       '- Event Description' => '- Описание События',
       '- Task Information' => '- Информация о Задаче',
       '- Task Description' => '- Описание Задачи',
-      'Title' => 'Должность',
+      //SalesPlatform.ru begin correct localization for Title
+      //'Title' => 'Должность',
+      //SalesPlatform.ru end
       'Assigned To' => 'Ответственный',
       'Related to' => 'Относится к',
       'Priority' => 'Приоритет',
       'Product Name' => 'Название Товара',
-      'Severity' => 'Трудность',
+      // SalesPlatform.ru begin localization for 5.4.0 
+      'Severity' => 'Важность',
+      // 'Severity' => 'Трудность',
+      // SalesPlatform.ru end
       'Status' => 'Статус',
       'Category' => 'Категория',
       'Created Time' => 'Создано',
@@ -221,6 +226,19 @@ $mod_strings = array (
 // 5.3.0 begin
       'LBL_ADVANCED_FILTER' => 'Правило',
 // 5.3.0 end
+// SalesPlatform.ru end
+    
+// SalesPlatform.ru begin localization for 5.4.0 
+    'Act Date' => 'Дата',
+    'Date Sold' => 'Дата продажи',
+    'Date in Service' => 'Дата сервиса',
+    'Due date' => 'Дата Выполнения',
+    'Milestone Date' => 'Дата',
+    'Target End Date' => 'Плановая Дата Завершения',
+    'Actual End Date' => 'Фактическая Дата Завершения',
+    'Consignment Date' => 'Дата',
+    'Start Period' => 'Начало',
+    'End Period' => 'Конец',
 // SalesPlatform.ru end
 );
 

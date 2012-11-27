@@ -797,6 +797,25 @@ $mod_strings = Array(
 // SalesPlatform.ru begin
 'SPCFG' => 'System Configuration',
 // SalesPlatform.ru end
+// SalesPlatform.ru begin Widgets added
+'SP_ACC' => 'Recent Organizations',
+'SP_POT' => 'Recent Potentials',
+'SP_EVENTS' => 'Recent Events',
+'SP_EXT_EVENTS' => 'Events Subordinates',
+// SalesPlatform.ru end
+//SalesPlatform.ru begin
+//Alert for equal separators
+'LBL_EQUAL_SEPARATORS' => 'Decimal separator and grouping separator can not be equal',
+//Reminder interval localization
+'None' => 'None',
+'1 Minute' => '1 Minute',
+'5 Minutes' => '5 Minutes',
+'15 Minutes' => '15 Minutes',
+'30 Minutes' => '30 Minutes',
+'45 Minutes' => '45 Minutes',
+'1 Hour' => '1 Hour',
+'1 Day' => '1 Day',
+//SalesPlatform.ru end  
 );
 
 ?>

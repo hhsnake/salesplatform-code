@@ -24,8 +24,10 @@ $migrationlog->debug("\n\nDB Changes from 5.2.1-20110624 to 5.2.1-20110824 -----
 require_once 'include/utils/CommonUtils.php';
 //global $adb;
 
+changeDBCollation('utf8_general_ci');
+
 ExecuteQuery("alter table `vtiger_systems` add `server_tls` varchar(20) default NULL");
-ExecuteQuery("alter table `vtiger_systems` add `from_name` varchar(200) COLLATE utf8_unicode_ci DEFAULT ''");
+ExecuteQuery("alter table `vtiger_systems` add `from_name` varchar(200) DEFAULT ''");
 ExecuteQuery("alter table `vtiger_systems` add `use_sendmail` varchar(5) DEFAULT 'false'");
 ExecuteQuery("update vtiger_systems set use_sendmail='false'");
 

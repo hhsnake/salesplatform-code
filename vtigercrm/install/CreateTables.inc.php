@@ -113,8 +113,11 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",23,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",24,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",25,0)");
-       	$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",26,0)");
-       	$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",27,0)");
+                $adb->query("insert into vtiger_profile2tab values (".$profile1_id.",26,0)");
+                $adb->query("insert into vtiger_profile2tab values (".$profile1_id.",27,0)");
+                // SalesPlatform.ru end Added perms to PDF templates in installer
+                $adb->query("insert into vtiger_profile2tab values (".$profile1_id.",30,1)");
+                // SalesPlatform.ru end
 
 		//Inserting into vtiger_profile2tab
 		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",1,0)");
@@ -138,8 +141,11 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",23,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",24,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",25,0)");
-        $adb->query("insert into vtiger_profile2tab values (".$profile2_id.",26,0)");
-       	$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",27,0)");
+                $adb->query("insert into vtiger_profile2tab values (".$profile2_id.",26,0)");
+                $adb->query("insert into vtiger_profile2tab values (".$profile2_id.",27,0)");
+                // SalesPlatform.ru end Added perms to PDF templates in installer
+                $adb->query("insert into vtiger_profile2tab values (".$profile2_id.",30,1)");
+                // SalesPlatform.ru end
 
 		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",1,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",2,0)");
@@ -162,8 +168,11 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",23,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",24,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",25,0)");
-        $adb->query("insert into vtiger_profile2tab values (".$profile3_id.",26,0)");
-       	$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",27,0)");
+                $adb->query("insert into vtiger_profile2tab values (".$profile3_id.",26,0)");
+                $adb->query("insert into vtiger_profile2tab values (".$profile3_id.",27,0)");
+                // SalesPlatform.ru end Added perms to PDF templates in installer
+                $adb->query("insert into vtiger_profile2tab values (".$profile3_id.",30,1)");
+                // SalesPlatform.ru end
 
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",1,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",2,0)");
@@ -188,6 +197,10 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",25,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",26,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",27,0)");
+                // SalesPlatform.ru end Added perms to PDF templates in installer
+                $adb->query("insert into vtiger_profile2tab values (".$profile4_id.",30,1)");
+                // SalesPlatform.ru end
+
 		//Inserting into vtiger_profile2standardpermissions  Adminsitrator
 
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,0,0)");
@@ -608,6 +621,9 @@ function create_default_users_access() {
 		//Inserting into vtiger_profile 2 utility Admin
         $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",2,5,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",2,6,0)");
+        // SalesPlatform.ru begin Added Potentials merge perms
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",2,8,0)");
+        // SalesPlatform.ru end
         $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",4,5,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",4,6,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",6,5,0)");
@@ -638,6 +654,9 @@ function create_default_users_access() {
 		//Import Export Not Allowed.	
 		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",2,5,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",2,6,1)");
+        // SalesPlatform.ru begin Added Potentials merge perms
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",2,8,0)");
+        // SalesPlatform.ru end
         $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",4,5,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",4,6,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",6,5,1)");
@@ -668,6 +687,9 @@ function create_default_users_access() {
 		//Import Export Not Allowed.	
 		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",2,5,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",2,6,1)");
+        // SalesPlatform.ru begin Added Potentials merge perms
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",2,8,0)");
+        // SalesPlatform.ru end
         $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",4,5,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",4,6,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",6,5,1)");
@@ -698,6 +720,9 @@ function create_default_users_access() {
 		//Import Export BusinessCar Not Allowed.	
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",2,5,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",2,6,1)");
+        // SalesPlatform.ru begin Added Potentials merge perms
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",2,8,1)");
+        // SalesPlatform.ru end
         $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",4,5,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",4,6,1)");
         $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",6,5,1)");
@@ -927,7 +952,7 @@ $adb->getUniqueID("sp_templates");
 $adb->getUniqueID("sp_templates");
 $adb->getUniqueID("sp_templates");
 $adb->getUniqueID("sp_templates");
-$adb->pquery('INSERT INTO `sp_templates` VALUES (1,\'Счет\',\'Invoice\',\'{header}\n\n<table border=\"1\" cellpadding=\"2\">\n<tr>\n<td colspan=\"2\" rowspan=\"2\" width=\"280\">{$orgBankName}<br/><span style=\"font-size: 8pt\">Банк получателя</span></td>\n<td width=\"50\">БИК</td>\n<td rowspan=\"2\" width=\"200\">{$orgBankId}<br/>{$orgCorrAccount}</td>\n</tr>\n<tr>\n<td width=\"50\">Сч. №</td>\n</tr>\n<tr>\n<td width=\"140\">ИНН {$orgInn}</td><td width=\"140\">КПП {$orgKpp}</td><td rowspan=\"2\" width=\"50\">Сч. №</td><td rowspan=\"2\" width=\"200\">{$orgBankAccount}</td>\n</tr>\n<tr>\n<td colspan=\"2\" width=\"280\">{$orgName}<br/><span style=\"font-size: 8pt\">Получатель</span></td>\n</tr>\n</table>\n\n<h1>Счет на оплату № {$invoice_no} от {$invoice_invoicedate}</h1>\n<hr size=\"2\">\n<table border=\"0\">\n<tr>\n<td width=\"80\">Поставщик:</td><td width=\"450\"><span style=\"font-weight: bold\">{$orgName}, ИНН {$orgInn}, КПП {$orgKpp},<br/>{$orgBillingAddress}</span></td>\n</tr>\n<tr>\n<td width=\"80\">Покупатель:</td><td width=\"450\"><span style=\"font-weight: bold\">{$account_accountname}, {$billingAddress}</span></td>\n</tr>\n</table>\n\n{/header}\n\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"30\">№</td>\n	<td width=\"260\">Товары (работы, услуги)</td>\n	<td width=\"70\">Ед.</td>\n	<td width=\"30\">Кол-во</td>\n	<td width=\"70\">Цена</td>\n	<td width=\"70\">Сумма</td>\n	</tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width=\"30\">{$productNumber}</td>\n	<td width=\"260\">{$productName}</td>\n	<td width=\"70\">{$productUnits}</td>\n	<td width=\"30\" style=\"text-align: right\">{$productQuantity}</td>\n	<td width=\"70\" style=\"text-align: right\">{$productPrice}</td>\n	<td width=\"70\" style=\"text-align: right\">{$productNetTotal}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<p></p>\n<table border=\"0\" style=\"font-weight: bold\">\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Итого:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryNetTotal}</td>\n    </tr>\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Сумма НДС:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryTax}</td>\n    </tr>\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Всего к оплате:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryGrandTotal}</td>\n    </tr>\n</table>\n\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style=\"font-weight: bold\">{$summaryGrandTotalLiteral}</span>\n</p>\n\n{/summary}\n\n{ending}\n    <hr size=\"2\">\n    <p>Руководитель предприятия  __________ ( {$orgDirector} ) <br/>\n    <br/>\n    Главный бухгалтер  __________ ( {$orgBookkeeper} )\n    </p>\n{/ending}\',85,50,\'P\'),(2,\'Накладная\',\'SalesOrder\',\'{header}\n<h1 style=\"font-size: 14pt\">Расходная накладная № {$salesorder_no}</h1>\n<hr>\n<table border=\"0\" style=\"font-size: 9pt\">\n<tr>\n<td width=\"80\">Поставщик:</td><td width=\"450\"><span style=\"font-weight: bold\">{$orgName}</span></td>\n</tr>\n<tr>\n<td width=\"80\">Покупатель:</td><td width=\"450\"><span style=\"font-weight: bold\">{$account_accountname}</span></td>\n</tr>\n</table>\n{/header}\n\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"30\" rowspan=\"2\">№</td>\n	<td width=\"200\" rowspan=\"2\">Товар</td>\n	<td width=\"50\" rowspan=\"2\" colspan=\"2\">Мест</td>\n	<td width=\"60\" rowspan=\"2\" colspan=\"2\">Количество</td>\n	<td width=\"60\" rowspan=\"2\">Цена</td>\n	<td width=\"60\" rowspan=\"2\">Сумма</td>\n	<td width=\"70\">Номер ГТД</td>\n    </tr>\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"70\">Страна<br/>происхождения</td>\n    </tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width=\"30\" rowspan=\"2\">{$productNumber}</td>\n	<td width=\"200\" rowspan=\"2\">{$productName}</td>\n	<td width=\"25\" rowspan=\"2\"></td>\n	<td width=\"25\" rowspan=\"2\">шт.</td>\n	<td width=\"30\" rowspan=\"2\" style=\"text-align: right\">{$productQuantityInt}</td>\n	<td width=\"30\" rowspan=\"2\">{$productUnits}</td>\n	<td width=\"60\" rowspan=\"2\" style=\"text-align: right\">{$productPrice}</td>\n	<td width=\"60\" rowspan=\"2\" style=\"text-align: right\">{$productNetTotal}</td>\n	<td width=\"70\">{$customsId}</td>\n    </tr>\n    <tr>\n	<td width=\"70\">{$manufCountry}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<p></p>\n<table border=\"0\" style=\"font-weight: bold\">\n    <tr>\n	<td width=\"400\" style=\"text-align: right\">Итого:</td>\n	<td width=\"60\" style=\"text-align: right\">{$summaryNetTotal}</td>\n    </tr>\n    <tr>\n	<td width=\"400\" style=\"text-align: right\">Сумма НДС:</td>\n	<td width=\"60\" style=\"text-align: right\">{$summaryTax}</td>\n    </tr>\n</table>\n\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style=\"font-weight: bold\">{$summaryGrandTotalLiteral}</span>\n</p>\n\n{/summary}\n\n{ending}\n    <hr size=\"2\">\n    <table border=\"0\">\n    <tr>\n	<td>Отпустил  __________ </td><td>Получил  __________ </td>\n    </tr>\n    </table>\n{/ending}\n\',50,0,\'P\'),(3,\'Предложение\',\'Quotes\',\'\n{header}\n\n<p style=\"font-weight: bold\">\n{$orgName}<br/>\nИНН {$orgInn}<br/>\nКПП {$orgKpp}<br/>\n{$orgBillingAddress}<br/>\nТел.: {$orgPhone}<br/>\nФакс: {$orgFax}<br/>\n{$orgWebsite}\n</p>\n\n<h1>Коммерческое предложение № {$quote_no}</h1>\n<p>Действительно до: {$quote_validtill}</p>\n<hr size=\"2\">\n\n<p style=\"font-weight: bold\">\n{$account_accountname}<br/>\n{$billingAddress}\n</p>\n{/header}\n\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"30\">№</td>\n	<td width=\"260\">Товары (работы, услуги)</td>\n	<td width=\"70\">Ед.</td>\n	<td width=\"30\">Кол-во</td>\n	<td width=\"70\">Цена</td>\n	<td width=\"70\">Сумма</td>\n	</tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width=\"30\">{$productNumber}</td>\n	<td width=\"260\">{$productName}</td>\n	<td width=\"70\">{$productUnits}</td>\n	<td width=\"30\" style=\"text-align: right\">{$productQuantity}</td>\n	<td width=\"70\" style=\"text-align: right\">{$productPrice}</td>\n	<td width=\"70\" style=\"text-align: right\">{$productNetTotal}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<p></p>\n<table border=\"0\">\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Итого:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryNetTotal}</td>\n    </tr>\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Сумма НДС:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryTax}</td>\n    </tr>\n</table>\n\n<p style=\"font-weight: bold\">\nВсего: {$summaryGrandTotal} руб. ( {$summaryGrandTotalLiteral} )\n</p>\n\n{/summary}\n\n{ending}\n    <hr size=\"2\">\n    <p>Руководитель предприятия  __________ ( {$orgDirector} ) <br/>\n    </p>\n{/ending}\n\',85,0,\'P\'),(4,\'Заказ на закупку\',\'PurchaseOrder\',\'{header}\n<h1 style=\"font-size: 14pt\">Заказ на закупку № {$purchaseorder_no}</h1>\n<hr>\n<table border=\"0\" style=\"font-size: 9pt\">\n<tr>\n<td width=\"80\">Поставщик:</td><td width=\"450\"><span style=\"font-weight: bold\">{$vendor_vendorname}</span></td>\n</tr>\n<tr>\n<td width=\"80\">Покупатель:</td><td width=\"450\"><span style=\"font-weight: bold\">{$orgName}</span></td>\n</tr>\n</table>\n{/header}\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n<tr style=\"text-align: center; font-weight: bold\">\n<td width=\"30\">№</td>\n<td width=\"200\">Товар</td>\n<td width=\"60\" colspan=\"2\">Количество</td>\n<td width=\"60\">Цена</td>\n<td width=\"60\">Сумма</td>\n</tr>\n{/table_head}\n{table_row}\n<tr>\n<td width=\"30\">{$productNumber}</td>\n<td width=\"200\">{$productName}</td>\n<td width=\"30\" style=\"text-align: right\">{$productQuantityInt}</td>\n<td width=\"30\">{$productUnits}</td>\n<td width=\"60\" style=\"text-align: right\">{$productPrice}</td>\n<td width=\"60\" style=\"text-align: right\">{$productNetTotal}</td>\n</tr>\n{/table_row}\n{summary}\n</table>\n<p></p>\n<table border=\"0\" style=\"font-weight: bold\">\n<tr>\n<td width=\"350\" style=\"text-align: right\">Итого:</td>\n<td width=\"60\" style=\"text-align: right\">{$summaryNetTotal}</td>\n</tr>\n<tr>\n<td width=\"350\" style=\"text-align: right\">Сумма НДС:</td>\n<td width=\"60\" style=\"text-align: right\">{$summaryTax}</td>\n</tr>\n</table>\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style=\"font-weight: bold\">{$summaryGrandTotalLiteral}</span>\n</p>\n{/summary}\n{ending}\n{/ending}\',50,0,\'P\')', array());
+$adb->pquery('INSERT INTO `sp_templates` VALUES (1,\'Счет\',\'Invoice\',\'{header}\n\n<p style="font-weight: bold; text-decoration: underline">{$orgName}</p>\n\n<p style="font-weight: bold">Адрес: {$orgBillingAddress}, тел.: {$orgPhone}</p>\n\n<div style="font-weight: bold; text-align: center">Образец заполнения платежного поручения</div>\n\n<table border="1" cellpadding="2">\n<tr>\n  <td width="140">ИНН {$orgInn}</td><td width="140">КПП {$orgKpp}</td><td rowspan="2" width="50"><br/><br/>Сч. №</td><td rowspan="2" width="200"><br/><br/>{$orgBankAccount}</td>\n</tr>\n<tr>\n<td colspan="2" width="280"><span style="font-size: 8pt">Получатель</span><br/>{$orgName}</td>\n</tr>\n<tr>\n<td colspan="2" rowspan="2" width="280"><span style="font-size: 8pt">Банк получателя</span><br/>{$orgBankName}</td>\n<td width="50">БИК</td>\n<td rowspan="2" width="200">{$orgBankId}<br/>{$orgCorrAccount}</td>\n</tr>\n<tr>\n<td width="50">Сч. №</td>\n</tr>\n</table>\n<br/>\n<h1 style="text-align: center">СЧЕТ № {$invoice_no} от {$invoice_invoicedate}</h1>\n<br/><br/>\n<table border="0">\n<tr>\n<td width="100">Плательщик:</td><td width="450"><span style="font-weight: bold">{$account_accountname}</span></td>\n</tr>\n<tr>\n<td width="100">Грузополучатель:</td><td width="450"><span style="font-weight: bold">{$account_accountname}</span></td>\n</tr>\n</table>\n\n{/header}\n\n{table_head}\n<table border="1" style="font-size: 8pt" cellpadding="2">\n    <tr style="text-align: center; font-weight: bold">\n	<td width="30">№</td>\n      <td width="260">Наименование<br/>товара</td>\n      <td width="65">Единица<br/>изме-<br/>рения</td>\n      <td width="35">Коли-<br/>чество</td>\n	<td width="70">Цена</td>\n	<td width="70">Сумма</td>\n	</tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width="30">{$productNumber}</td>\n      <td width="260">{$productName} {$productComment}</td>\n	<td width="65" style="text-align: center">{$productUnits}</td>\n	<td width="35" style="text-align: right">{$productQuantityInt}</td>\n	<td width="70" style="text-align: right">{$productPrice}</td>\n	<td width="70" style="text-align: right">{$productNetTotal}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<table border="0" style="font-size: 8pt;font-weight: bold">\n    <tr>\n      <td width="460">\n        <table border="0" cellpadding="2">\n          <tr><td width="460" style="text-align: right">Итого:</td></tr>\n          <tr><td width="460" style="text-align: right">Сумма НДС:</td></tr>\n          <tr><td width="460" style="text-align: right">Всего к оплате:</td></tr>\n        </table>\n      </td>\n      <td width="70">\n        <table border="1" cellpadding="2">\n          <tr><td width="70" style="text-align: right">{$summaryNetTotal}</td></tr>\n          <tr><td width="70" style="text-align: right">{$summaryTax}</td></tr>\n          <tr><td width="70" style="text-align: right">{$summaryGrandTotal}</td></tr>\n        </table>\n      </td>\n  </tr>\n</table>\n\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style="font-weight: bold">{$summaryGrandTotalLiteral}</span>\n</p>\n\n{/summary}\n\n{ending}\n<br/>\n    <p>Руководитель предприятия  __________________ ( {$orgDirector} ) <br/>\n    <br/>\n    Главный бухгалтер  __________________ ( {$orgBookkeeper} )\n    </p>\n{/ending}\',110,50,\'P\'),(2,\'Накладная\',\'SalesOrder\',\'{header}\n<h1 style=\"font-size: 14pt\">Расходная накладная № {$salesorder_no}</h1>\n<hr>\n<table border=\"0\" style=\"font-size: 9pt\">\n<tr>\n<td width=\"80\">Поставщик:</td><td width=\"450\"><span style=\"font-weight: bold\">{$orgName}</span></td>\n</tr>\n<tr>\n<td width=\"80\">Покупатель:</td><td width=\"450\"><span style=\"font-weight: bold\">{$account_accountname}</span></td>\n</tr>\n</table>\n{/header}\n\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"30\" rowspan=\"2\">№</td>\n	<td width=\"200\" rowspan=\"2\">Товар</td>\n	<td width=\"50\" rowspan=\"2\" colspan=\"2\">Мест</td>\n	<td width=\"60\" rowspan=\"2\" colspan=\"2\">Количество</td>\n	<td width=\"60\" rowspan=\"2\">Цена</td>\n	<td width=\"60\" rowspan=\"2\">Сумма</td>\n	<td width=\"70\">Номер ГТД</td>\n    </tr>\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"70\">Страна<br/>происхождения</td>\n    </tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width=\"30\" rowspan=\"2\">{$productNumber}</td>\n	<td width=\"200\" rowspan=\"2\">{$productName}</td>\n	<td width=\"25\" rowspan=\"2\"></td>\n	<td width=\"25\" rowspan=\"2\">шт.</td>\n	<td width=\"30\" rowspan=\"2\" style=\"text-align: right\">{$productQuantityInt}</td>\n	<td width=\"30\" rowspan=\"2\">{$productUnits}</td>\n	<td width=\"60\" rowspan=\"2\" style=\"text-align: right\">{$productPrice}</td>\n	<td width=\"60\" rowspan=\"2\" style=\"text-align: right\">{$productNetTotal}</td>\n	<td width=\"70\">{$customsId}</td>\n    </tr>\n    <tr>\n	<td width=\"70\">{$manufCountry}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<p></p>\n<table border=\"0\" style=\"font-weight: bold\">\n    <tr>\n	<td width=\"400\" style=\"text-align: right\">Итого:</td>\n	<td width=\"60\" style=\"text-align: right\">{$summaryNetTotal}</td>\n    </tr>\n    <tr>\n	<td width=\"400\" style=\"text-align: right\">Сумма НДС:</td>\n	<td width=\"60\" style=\"text-align: right\">{$summaryTax}</td>\n    </tr>\n</table>\n\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style=\"font-weight: bold\">{$summaryGrandTotalLiteral}</span>\n</p>\n\n{/summary}\n\n{ending}\n    <hr size=\"2\">\n    <table border=\"0\">\n    <tr>\n	<td>Отпустил  __________ </td><td>Получил  __________ </td>\n    </tr>\n    </table>\n{/ending}\n\',50,0,\'P\'),(3,\'Предложение\',\'Quotes\',\'\n{header}\n\n<p align="right">{$orgLogo}</p>\n<p style=\"font-weight: bold\">\n{$orgName}<br/>\nИНН {$orgInn}<br/>\nКПП {$orgKpp}<br/>\n{$orgBillingAddress}<br/>\nТел.: {$orgPhone}<br/>\nФакс: {$orgFax}<br/>\n{$orgWebsite}\n</p>\n\n<h1>Коммерческое предложение № {$quote_no}</h1>\n<p>Действительно до: {$quote_validtill}</p>\n<hr size=\"2\">\n\n<p style=\"font-weight: bold\">\n{$account_accountname}<br/>\n{$billingAddress}\n</p>\n{/header}\n\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"30\">№</td>\n	<td width=\"260\">Товары (работы, услуги)</td>\n	<td width=\"70\">Ед.</td>\n	<td width=\"30\">Кол-во</td>\n	<td width=\"70\">Цена</td>\n	<td width=\"70\">Сумма</td>\n	</tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width=\"30\">{$productNumber}</td>\n	<td width=\"260\">{$productName}</td>\n	<td width=\"70\">{$productUnits}</td>\n	<td width=\"30\" style=\"text-align: right\">{$productQuantity}</td>\n	<td width=\"70\" style=\"text-align: right\">{$productPrice}</td>\n	<td width=\"70\" style=\"text-align: right\">{$productNetTotal}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<p></p>\n<table border=\"0\">\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Итого:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryNetTotal}</td>\n    </tr>\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Сумма НДС:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryTax}</td>\n    </tr>\n</table>\n\n<p style=\"font-weight: bold\">\nВсего: {$summaryGrandTotal} руб. ( {$summaryGrandTotalLiteral} )\n</p>\n\n{/summary}\n\n{ending}\n    <hr size=\"2\">\n    <p>Руководитель предприятия  __________ ( {$orgDirector} ) <br/>\n    </p>\n{/ending}\n\',100,0,\'P\'),(4,\'Заказ на закупку\',\'PurchaseOrder\',\'{header}\n<h1 style=\"font-size: 14pt\">Заказ на закупку № {$purchaseorder_no}</h1>\n<hr>\n<table border=\"0\" style=\"font-size: 9pt\">\n<tr>\n<td width=\"80\">Поставщик:</td><td width=\"450\"><span style=\"font-weight: bold\">{$vendor_vendorname}</span></td>\n</tr>\n<tr>\n<td width=\"80\">Покупатель:</td><td width=\"450\"><span style=\"font-weight: bold\">{$orgName}</span></td>\n</tr>\n</table>\n{/header}\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n<tr style=\"text-align: center; font-weight: bold\">\n<td width=\"30\">№</td>\n<td width=\"200\">Товар</td>\n<td width=\"60\" colspan=\"2\">Количество</td>\n<td width=\"60\">Цена</td>\n<td width=\"60\">Сумма</td>\n</tr>\n{/table_head}\n{table_row}\n<tr>\n<td width=\"30\">{$productNumber}</td>\n<td width=\"200\">{$productName}</td>\n<td width=\"30\" style=\"text-align: right\">{$productQuantityInt}</td>\n<td width=\"30\">{$productUnits}</td>\n<td width=\"60\" style=\"text-align: right\">{$productPrice}</td>\n<td width=\"60\" style=\"text-align: right\">{$productNetTotal}</td>\n</tr>\n{/table_row}\n{summary}\n</table>\n<p></p>\n<table border=\"0\" style=\"font-weight: bold\">\n<tr>\n<td width=\"350\" style=\"text-align: right\">Итого:</td>\n<td width=\"60\" style=\"text-align: right\">{$summaryNetTotal}</td>\n</tr>\n<tr>\n<td width=\"350\" style=\"text-align: right\">Сумма НДС:</td>\n<td width=\"60\" style=\"text-align: right\">{$summaryTax}</td>\n</tr>\n</table>\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style=\"font-weight: bold\">{$summaryGrandTotalLiteral}</span>\n</p>\n{/summary}\n{ending}\n{/ending}\',50,0,\'P\')', array());
 // SalesPlatform.ru end
 
 // Register All the Events
@@ -951,12 +976,20 @@ registerCronTasks();
 // Register all the Cron Tasks
 function registerCronTasks() {
 	include_once 'vtlib/Vtiger/Cron.php';
-
-	Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', 1, 1, 'Recommended frequency for Workflow is 15 mins');
-	Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', 1, 2, 'Recommended frequency for RecurringInvoice is 12 hours');
-	Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calendar', 1, 3, 'Recommended frequency for SendReminder is 15 mins');
-	Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', 1, 4, 'Recommended frequency for ScheduleReports is 15 mins');
-	Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings', 1, 5, 'Recommended frequency for MailScanner is 15 mins');
+        
+        // SalesPlatform.ru begin localization for 5.4.0
+        Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', 1, 1, 'Рекомендуемая частота обновления для Обработчиков - 15 минут.');
+	Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', 1, 2, 'Рекомендуемая частота обновления для RecurringInvoice - 12 часов.');
+	Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calendar', 1, 3, 'Рекомендуемая частота обновления для SendReminder - 15 минут.');
+	Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', 1, 4, 'Рекомендуемая частота обновления для ScheduleReports - 15 минут.');
+	Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings', 1, 5, 'Рекомендуемая частота обновления для MailScanner - 15 минут.');
+	// Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', 1, 1, 'Recommended frequency for Workflow is 15 mins');
+	// Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', 1, 2, 'Recommended frequency for RecurringInvoice is 12 hours');
+	// Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calendar', 1, 3, 'Recommended frequency for SendReminder is 15 mins');
+	// Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', 1, 4, 'Recommended frequency for ScheduleReports is 15 mins');
+	// Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings', 1, 5, 'Recommended frequency for MailScanner is 15 mins');
+        // SalesPlatform.ru end
+        
 }
 
 // Register all the events here
@@ -1144,78 +1177,127 @@ function populateDefaultWorkflows($adb) {
 	// Contact workflow on creation/modification
 	$contactWorkFlow = $workflowManager->newWorkFlow("Contacts");
 	$contactWorkFlow->test = '';
-	$contactWorkFlow->description = "Workflow for Contact Creation or Modification";
-	$contactWorkFlow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
+	//SalesPlatform.ru begin
+        $contactWorkFlow->description = "Автоматические обработчики для создания и модификации контактов";
+        //$contactWorkFlow->description = "Workflow for Contact Creation or Modification";
+	//SalesPlatform.ru end
+        $contactWorkFlow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 	$contactWorkFlow->defaultworkflow = 1;
 	$workflowManager->save($contactWorkFlow);
 
 	$task = $taskManager->createTask('VTEntityMethodTask', $contactWorkFlow->id);
 	$task->active = true;
-	$task->summary = 'Email Customer Portal Login Details';
+        //SalesPlatform.ru begin
+        $task->summary = 'Сообщение с регистрационными данными клиентского портала';
+	//$task->summary = 'Email Customer Portal Login Details';
+        //SalesPlatform.ru end
 	$task->methodName = "SendPortalLoginDetails";
 	$taskManager->saveTask($task);
 
 	// Trouble Tickets workflow on creation from Customer Portal
 	$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 	$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';
-	$helpDeskWorkflow->description = "Workflow for Ticket Created from Portal";
-	$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_FIRST_SAVE;
+	//SalesPlatform.ru begin
+        $helpDeskWorkflow->description = "Автоматический обработчик для создаваемой заявки из портала";
+        //$helpDeskWorkflow->description = "Workflow for Ticket Created from Portal";
+	//SalesPlatform.ru end
+        $helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_FIRST_SAVE;
 	$helpDeskWorkflow->defaultworkflow = 1;
 	$workflowManager->save($helpDeskWorkflow);
 
 	$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 	$task->active = true;
-	$task->summary = 'Notify Record Owner and the Related Contact when Ticket is created from Portal';
-	$task->methodName = "NotifyOnPortalTicketCreation";
+	//SalesPlatform.ru begin
+        $task->summary = 'Уведомляет ответственного за заявку и связанный контакт при создании заявки из портала';
+        //$task->summary = 'Notify Record Owner and the Related Contact when Ticket is created from Portal';
+	//SalesPlatform.ru end
+        $task->methodName = "NotifyOnPortalTicketCreation";
 	$taskManager->saveTask($task);
 
 	// Trouble Tickets workflow on ticket update from Customer Portal
 	$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 	$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';
-	$helpDeskWorkflow->description = "Workflow for Ticket Updated from Portal";
-	$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_MODIFY;
+	//SalesPlatform.ru begin
+        $helpDeskWorkflow->description = "Автоматические обработчики для обновляемых заявок из портала";
+        //$helpDeskWorkflow->description = "Workflow for Ticket Updated from Portal";
+	//SalesPlatform.ru end
+        $helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_MODIFY;
 	$helpDeskWorkflow->defaultworkflow = 1;
 	$workflowManager->save($helpDeskWorkflow);
 
 	$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 	$task->active = true;
-	$task->summary = 'Notify Record Owner when Comment is added to a Ticket from Customer Portal';
-	$task->methodName = "NotifyOnPortalTicketComment";
+	//SalesPlatform.ru begin
+        $task->summary = 'Уведомляет ответственного за заявку при добавлении комментариев к заявке через клиентский портал';
+        //$task->summary = 'Notify Record Owner when Comment is added to a Ticket from Customer Portal';
+        //SalesPlatform.ru end
+        $task->methodName = "NotifyOnPortalTicketComment";
 	$taskManager->saveTask($task);
 
 	// Trouble Tickets workflow on ticket change, which is not from Customer Portal - Both Record Owner and Related Customer
 	$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 	$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"false:boolean"}]';
-	$helpDeskWorkflow->description = "Workflow for Ticket Change, not from the Portal";
-	$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
+	//SalesPlatform.ru begin
+        $helpDeskWorkflow->description = "Обработчик для изменяемых заявок, не из портала";
+        //$helpDeskWorkflow->description = "Workflow for Ticket Change, not from the Portal";
+	//SalesPlatform.ru end
+        $helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 	$helpDeskWorkflow->defaultworkflow = 1;
 	$workflowManager->save($helpDeskWorkflow);
 
 	$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 	$task->active = true;
-	$task->summary = 'Notify Record Owner on Ticket Change, which is not done from Portal';
-	$task->methodName = "NotifyOwnerOnTicketChange";
+        //SalesPlatform.ru begin
+        $task->summary = 'Уведомляет ответственного за заявку, созданную не из портала, при ее изменении';
+	//$task->summary = 'Notify Record Owner on Ticket Change, which is not done from Portal';
+	//SalesPlatform.ru end
+        $task->methodName = "NotifyOwnerOnTicketChange";
 	$taskManager->saveTask($task);
 
 	$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 	$task->active = true;
-	$task->summary = 'Notify Related Customer on Ticket Change, which is not done from Portal';
-	$task->methodName = "NotifyParentOnTicketChange";
+	//SalesPlatform.ru begin
+        $task->summary = 'Уведомляет связанного клиента при изменении заявки, которая создана не из портала';
+        //$task->summary = 'Notify Related Customer on Ticket Change, which is not done from Portal';
+	//SalesPlatform.ru end
+        $task->methodName = "NotifyParentOnTicketChange";
 	$taskManager->saveTask($task);
 
 	// Events workflow when Send Notification is checked
 	$eventsWorkflow = $workflowManager->newWorkFlow("Events");
 	$eventsWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
-	$eventsWorkflow->description = "Workflow for Events when Send Notification is True";
-	$eventsWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
+	//SalesPlatform.ru begin
+        $eventsWorkflow->description = "Автоматические обработчики для событий при выбранной опции Отправить уведомление";
+        //$eventsWorkflow->description = "Workflow for Events when Send Notification is True";
+	//SalesPlatform.ru end
+        $eventsWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 	$eventsWorkflow->defaultworkflow = 1;
 	$workflowManager->save($eventsWorkflow);
 
 	$task = $taskManager->createTask('VTEmailTask', $eventsWorkflow->id);
 	$task->active = true;
-	$task->summary = 'Send Notification Email to Record Owner';
+	//SalesPlatform.ru begin
+        $task->summary = 'Отправляет письмо с уведомлением приглашенным пользователям';
+        //$task->summary = 'Send Notification Email to Record Owner';
+        //SalesPlatform.ru end
 	$task->recepient = "\$(assigned_user_id : (Users) email1)";
-	$task->subject = "Event :  \$subject";
+	//SalesPlatform.ru begin
+        $task->subject = "Событие :  \$subject";
+	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
+					.'<b>Детали события:</b><br/>'
+					.'Название события       : $subject<br/>'
+					.'Дата и Время Начала    : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Дата и Время Окончания : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Статус                 : $eventstatus <br/>'
+					.'Приоритет              : $taskpriority <br/>'
+					.'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+					.'$(parent_id            : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+					.'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+					.'Место проведения       : $location <br/>'
+					.'Описание               : $description';
+        //vtiger commented code 
+        /*
+        $task->subject = "Event :  \$subject";
 	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
 					.'<b>Activity Notification Details:</b><br/>'
 					.'Subject             : $subject<br/>'
@@ -1228,21 +1310,45 @@ function populateDefaultWorkflows($adb) {
 					.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
 					.'Location            : $location <br/>'
 					.'Description         : $description';
-	$taskManager->saveTask($task);
+         */
+	//SalesPlatform.ru end
+        $taskManager->saveTask($task);
 
 	// Calendar workflow when Send Notification is checked
 	$calendarWorkflow = $workflowManager->newWorkFlow("Calendar");
 	$calendarWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
-	$calendarWorkflow->description = "Workflow for Calendar Todos when Send Notification is True";
-	$calendarWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
+        //SalesPlatform.ru begin
+        $calendarWorkflow->description = "Автоматические обработчики для задач Календаря при выбранной опции Отправить уведомление";
+        //$calendarWorkflow->description = "Workflow for Calendar Todos when Send Notification is True";
+	//SalesPlatform.ru end
+        $calendarWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 	$calendarWorkflow->defaultworkflow = 1;
 	$workflowManager->save($calendarWorkflow);
 
 	$task = $taskManager->createTask('VTEmailTask', $calendarWorkflow->id);
 	$task->active = true;
-	$task->summary = 'Send Notification Email to Record Owner';
+        //SalesPlatform.ru begin
+        $task->summary = 'Отправляет письмо с уведомлением ответственному за задачу';
+        //$task->summary = 'Send Notification Email to Record Owner';
+        //SalesPlatform.ru end
 	$task->recepient = "\$(assigned_user_id : (Users) email1)";
-	$task->subject = "Task :  \$subject";
+	//SalesPlatform.ru begin
+        $task->subject = "Задача :  \$subject";
+	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
+					.'<b>Детали задачи:</b><br/>'
+					.'Название задачи        : $subject<br/>'
+					.'Дата и Время Начала    : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Дата и Время Окончания : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Статус                 : $taskstatus <br/>'
+					.'Приоритет              : $taskpriority <br/>'
+					.'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+					.'$(parent_id            : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+					.'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+					.'Место проведения       : $location <br/>'
+					.'Описание               : $description';
+        //vtiger commented code
+        /*
+        $task->subject = "Task :  \$subject";
 	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
 					.'<b>Task Notification Details:</b><br/>'
 					.'Subject : $subject<br/>'
@@ -1255,7 +1361,9 @@ function populateDefaultWorkflows($adb) {
 					.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
 					.'Location            : $location <br/>'
 					.'Description         : $description';
-	$taskManager->saveTask($task);
+         */
+	//SalesPlatform.ru end
+        $taskManager->saveTask($task);
 }
 
 // Function to populate Links

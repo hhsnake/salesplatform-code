@@ -126,4 +126,71 @@ function getTopPotentials($maxval,$calCnt)
 		return $values;
 	}
 }
+
+// SalesPlatform.ru begin Widgets added
+function getSP_POT_TopPotentials($maxval,$calCnt)
+{
+        global $log;
+	$log->debug("Entering getSP_POT_TopPotentials() method ...");
+	require_once("data/Tracker.php");
+	require_once("include/utils/utils.php");
+        require_once('modules/Potentials/Potentials.php');
+	require_once('include/logging.php');
+	require_once('include/ListView/ListView.php');
+       
+	global $adb;
+	global $current_language;
+	global $current_user;
+	$current_module_strings = return_module_language($current_language, "Potentials");
+
+	$list_query = 'select vtiger_potential.potentialname, vtiger_potential.potentialtype, vtiger_potential.potentialid
+		from vtiger_potential inner join vtiger_crmentity on vtiger_potential.potentialid = vtiger_crmentity.crmid 
+		where vtiger_crmentity.deleted =0 AND vtiger_crmentity.smownerid = ?';
+	
+        $list_query .=" ORDER BY vtiger_potential.potentialid DESC";
+        
+	$list_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+        	
+	$list_result = $adb->pquery($list_query, array($current_user->id));
+	$noofrows = $adb->num_rows($list_result);
+	
+	$open_potential_list =array();
+	if ($noofrows > 0) {
+		for($i=0;$i<$noofrows && $i<$maxval;$i++) 
+		{
+			$open_potential_list[] = Array('name' => $adb->query_result($list_result,$i,'potentialname'), 
+                                        'type' => $adb->query_result($list_result,$i,'potentialtype'), 
+					'id' => $adb->query_result($list_result,$i,'potentialid')
+					);
+		}
+	}
+	
+	$header=array();
+	$header[] =$current_module_strings['Potential Name'];
+	$header[] =$current_module_strings['Type'];
+	
+    $entries=array();
+    foreach($open_potential_list as $potential)
+	{
+		$value=array();
+		$potential_fields = array(
+				'NAME' => $potential['name'],
+				'TYPE' => $potential['type'],
+				'ID' => $potential['id'],
+				);
+	
+		$Top_name = (mb_strlen($potential['name'], 'UTF-8') > 40) ? (mb_substr($potential['name'],0,20).'...') : $potential['name'];
+		$value[]= '<a href="index.php?action=DetailView&module=Potentials&record='.$potential_fields['ID'].'">'.$Top_name.'</a>';
+                $value[] = getTranslatedString($potential['type'], 'Potentials');        
+		$entries[$potential_fields['ID']]=$value;
+	}
+	
+        $search_qry = "&action=ListView&from_homepage=upcoming_activities";
+
+	$values=Array('ModuleName'=>'Potentials','Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
+	$log->debug("Exiting getNewLeads method ...");
+	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
+		return $values; 
+}
+// SalesPlatform.ru end
 ?>

@@ -211,6 +211,13 @@ $mod_strings = array (
       'Net 60 days' => 'Всего 60 дней',
       'SalesOrder ID' => 'ID Заказа на Продажу',
       
+      // SalesPlatform.ru begin localization for 5.4.0
+      'Currency' => 'Валюта', 
+      // SalesPlatform.ru end  
+
+    // SalesPlatform.ru begin
+    'SALESORDER_' => 'ЗаказНаПродажу_',
+    // SalesPlatform.ru end
       );
 
 ?>

@@ -124,7 +124,10 @@
 			<tr>
 				<td align="left">
 					<a href="{$details.1}" target="_blank">
-						{$details.0|truncate:50}...
+					        {* SalesPlatform.ru begin RSS title string truncation removed *}
+						{$details.0}
+						{* {$details.0|truncate:50}... *}
+					        {* SalesPlatform.ru end *}
 					</a>
 				</td>
 			</tr>
@@ -133,14 +136,24 @@
 
 {elseif $HOME_STUFFTYPE eq "DashBoard"}
 	<input type=hidden id=more_{$HOME_STUFFID} value="{$DASHDETAILS[$HOME_STUFFID].DashType}"/>
-	<table border=0 cellspacing=0 cellpadding=5 width=100%>
+	{*SalesPlatform.ru begin*}
+        <table border=0 cellspacing=0 cellpadding=0 width=100%>
+        {*vtiger commented code
+        <table border=0 cellspacing=0 cellpadding=5 width=100%>
+        *}
+        {*SalesPlatform.ru end*}
 		<tr>
 			<td align="left">{$HOME_STUFF}</td>
 		</tr>
 	</table>
 {elseif $HOME_STUFFTYPE eq "ReportCharts"}
         <input type=hidden id=more_{$HOME_STUFFID} value="{$DASHDETAILS[$HOME_STUFFID].ReportId}"/>
-	<table border=0 cellspacing=0 cellpadding=5 width=100%>
+	{*SalesPlatform.ru begin*}
+        <table border=0 cellspacing=0 cellpadding=0 width=100%>
+        {*vtiger commented code
+        <table border=0 cellspacing=0 cellpadding=5 width=100%>
+        *}
+        {*SalesPlatform.ru end*}
 		<tr>
 			<td align="left">{$HOME_STUFF}</td>
 		</tr>

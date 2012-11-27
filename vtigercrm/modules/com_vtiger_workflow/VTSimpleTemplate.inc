@@ -27,7 +27,11 @@ class VTSimpleTemplate{
 			if($this->useValue($data, $fieldname)){
 				// SalesPlatform.ru begin
 				//$result = $data[$fieldname];
-				$result = getTranslatedString( $data[$fieldname], $this->parent->getModuleName());
+                                $modulename = $this->parent->getModuleName();
+                                if ($modulename == 'Events') {
+                                    $modulename = 'Calendar';
+                                }
+				$result = getTranslatedString($data[$fieldname], $modulename);
 				// SalesPlatform.ru end
 			}else{
 				$result ='';

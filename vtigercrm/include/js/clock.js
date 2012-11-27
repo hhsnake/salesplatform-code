@@ -37,7 +37,14 @@ var getOddMinutes;
 var addOddMinutes;
 plusMinus=false;
 
-var mon=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
+
+//SalesPlatform.ru begin
+//Traslated months 
+var months_str = document.frmtimezone.monthstransl.value;
+var mon = months_str.split(';');
+//commented vtiger code
+//var mon=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
+//SalesPlatform.ru end
 
 document.write('<div id="theDate" class="datestyle" style="color:'+cCol+'">\!<\/div>');
 document.write('<div id="amOrPm" class="ampmstyle" style="color:'+aCol+'">\!<\/div>');

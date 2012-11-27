@@ -111,6 +111,9 @@ var alert_arr = {
       DOES_NOT_CONTAINS:'не содержит',
       LESS_THAN:'меньше чем',
       GREATER_THAN:'больше чем',
+      // SalesPlatform.ru begin localization for 5.4.0 
+      NONE:'--нет--',
+      // SalesPlatform.ru end
       LESS_OR_EQUALS:'меньше или равно',
       GREATER_OR_EQUALS:'больше или равно',
       NO_SPECIAL_CHARS:'Специальные знаки не разрешаются в строке Инвойса',
@@ -197,7 +200,7 @@ var alert_arr = {
 	FOLDER_NAME_TOO_LONG:'Название папки слишком длинное. Исправте и попробуйте еще!',
 	FOLDERNAME_EMPTY:'Название Папки не может быть пустым',
 	DUPLICATE_FOLDER_NAME:'Попытка дублировать существующее наTrying to duзвание папки. Исправте и попробуйте еще !',
-	FOLDER_DESCRIPTION_TOO_LONG:'Описание Ппапки слишком длинное. Исправте и попробуйте еще!',
+	FOLDER_DESCRIPTION_TOO_LONG:'Описание Папки слишком длинное. Исправте и попробуйте еще!',
 	NOT_PERMITTED:'Вам не разрешено выполнять эту операцию.',
 	
 	ALL_FILTER_CREATION_DENIED:'Невозможно создать Пользовательский Вид используя название "Все", попробуйте использовать другое Название Вида',
@@ -230,7 +233,10 @@ var alert_arr = {
 	FIELD_IS_MANDATORY : 'Обязательное Поле',
 	FIELD_IS_ACTIVE : 'Поле доступное для использования',
 	FIELD_IN_QCREATE : 'Пресутствует в Быстром Создании',
-	FIELD_IS_MASSEDITABLE : 'Доступно для Массового Изменения',	
+	FIELD_IS_MASSEDITABLE : 'Доступно для Массового Изменения',
+        // SalesPlatform.ru begin added fieldname
+        FIELD_NAME : 'Системное имя:',	
+        // SalesPlatform.ru end
 		
 	IS_MANDATORY_FIELD : 'есть Обязательным Полем',
 	CLOSEDATE_CANNOT_BE_EMPTY : 'Дата Закрытия не может быть Пустой',
@@ -300,13 +306,16 @@ var alert_arr = {
 
 	BETWEEN: 'между',
 	BEFORE: 'перед',
-	AFTER: 'после',
+	AFTER: 'после',   
 	'ERROR_DELETING_TRY_AGAIN': 'Ошибка при удалении. Пожалуйста, попробуйте еще раз.',
 	'LBL_ENTER_WINDOW_TITLE': 'Пожалуйста, введите Заголовок Окна.',
 	'LBL_SELECT_ONLY_FIELDS': 'Пожалуйста, выберите только два поля.',
 	'LBL_ENTER_RSS_URL':'Пожалуйста, введите адрес RSS',
 	'LBL_ADD_HOME_WIDGET': 'Невозможно добавить объект! Пожалуйста, попробуйте еще',
-
+        // SalesPlatform.ru begin html widget added
+        SP_HTML: 'HTML код',
+        'LBL_ENTER_HTML_CODE':'Пожалуйста, введите HTML код',
+        // SalesPlatform.ru end
 // SalesPlatform.ru begin
 // 5.3.0 begin
         'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Значение для поля по умолчанию',
@@ -319,6 +328,22 @@ var alert_arr = {
 // 5.3.0 end
 
 // 5.4.0 begin
+// SalesPlatform.ru begin localization for workflow filters
+        'LBL_NEW_CONDITION':'Новое условие',
+        "is" : "соответствует",
+        "is not" : "не соответствует",
+        "contains" : "содержит",
+        "does not contain" : "не содержит",
+        "starts with" : "начинается с",
+        "ends with" : "заканчивается на",
+        "equal to" : "равно",
+        "less than" : "меньше",
+        "greater than" : "больше",
+        "does not equal" : "не равно",
+        "less than or equal to" : "меньше или равно",
+        "greater than or equal to" : "больше или равно",
+        "has changed" : "изменено",   
+// SalesPlatform.ru end
 	'LBL_SIZE_SHOULDNOTBE_GREATER':'Размер файла не должен превышать ', //added for upload error message
 	'LBL_MAX_SIZE':'Максимальный размер закачиваемого файла',
 	'LBL_FILESIZEIN_KB':'Кб', // added to show filesize limit in KB
@@ -363,23 +388,11 @@ var alert_arr = {
 	  'LBL_MOV_EMAIL1':'Перемещение писем из папки ',
 	  'LBL_MOV_EMAIL2':' в папку ',
 	  'LBL_MOV_EMAIL3':'',
-      'SELECT_MASS':'Не выбрано ни одного значения. Сделать рассылку по всем записям текущего фильтра?'
+      'SELECT_MASS':'Не выбрано ни одного значения. Сделать рассылку по всем записям текущего фильтра?',
 // SalesPlatform.ru end
 
+//SalesPlatform.ru begin localization for ReportCharts 
+        ReportCharts: 'Отчет с диаграммой'
+//SalesPlatform.ru end
 	};
 
-// SalesPlatform.ru begin
-var operationsTranslated = {
-	"is" : "соответствует",
-	"contains" : "содержит",
-	"does not contain" : "не содержит",
-	"starts with" : "начинается с",
-	"ends with" : "заканчивается на",
-	"equal to" : "равно",
-	"less than" : "меньше",
-	"greater than" : "больше",
-	"does not equal" : "не равно",
-	"less than or equal to" : "меньше или равно",
-	"greater than or equal to" : "больше или равно"
-};
-// SalesPlatform.ru end

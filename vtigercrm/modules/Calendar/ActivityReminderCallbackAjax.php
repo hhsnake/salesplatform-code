@@ -25,6 +25,9 @@ require_once('modules/Calendar/Activity.php');
 $cur_time = time();
 $_SESSION['last_reminder_check_time'] = $cur_time;
 $_SESSION['next_reminder_interval'] = 60;
+// SalesPlatform.ru begin Renewable reminders added
+if ($_SESSION['reset_reminder_time'] == 1) {
+// SalesPlatform.ru end
 if($_SESSION['next_reminder_time'] == 'None') {
 	return;
 } elseif(isset($_SESSION['next_reminder_interval']) && (($_SESSION['next_reminder_time'] -
@@ -33,6 +36,10 @@ if($_SESSION['next_reminder_time'] == 'None') {
 		($_SESSION['next_reminder_interval'] * 1000)."</script>";
 	return;
 }
+// SalesPlatform.ru begin Renewable reminders added
+    $_SESSION['reset_reminder_time'] = 0;
+}
+// SalesPlatform.ru end
 $log = LoggerManager::getLogger('Activity_Reminder');
 $smarty = new vtigerCRM_Smarty;
 if(isPermitted('Calendar','index') == 'yes'){
@@ -54,8 +61,13 @@ if(isPermitted('Calendar','index') == 'yes'){
 		" vtiger_activity_reminder_popup.status = 0 and " .
 		" vtiger_activity_reminder_popup.recordid = vtiger_crmentity.crmid " .
 		" and vtiger_crmentity.smownerid = ".$current_user->id." and vtiger_crmentity.deleted = 0 " .
-		" and ((DATE_FORMAT(vtiger_activity_reminder_popup.date_start,'%Y-%m-%d') <= '" . $date . "')" .
-		" AND (TIME_FORMAT(vtiger_activity_reminder_popup.time_start,'%H:%i') <= '" . $time . "'))";
+                // SalesPlatform.ru begin Check reminders date/time bugfix
+		" and ((DATE_FORMAT(vtiger_activity_reminder_popup.date_start,'%Y-%m-%d') < '" . $date . "') OR ".
+                        "((DATE_FORMAT(vtiger_activity_reminder_popup.date_start,'%Y-%m-%d') = '" . $date . "')" .
+                            " AND (TIME_FORMAT(vtiger_activity_reminder_popup.time_start,'%H:%i') <= '" . $time . "')))";
+		//" and ((DATE_FORMAT(vtiger_activity_reminder_popup.date_start,'%Y-%m-%d') <= '" . $date . "')" .
+		//" AND (TIME_FORMAT(vtiger_activity_reminder_popup.time_start,'%H:%i') <= '" . $time . "'))";
+                // SalesPlatform.ru end
 
 		$result = $adb->query($callback_query);
 
@@ -94,8 +106,10 @@ if(isPermitted('Calendar','index') == 'yes'){
 					$date = new DateTimeField($cbdate.' '.$cbtime);
 					$cbtime = $date->getDisplayTime();
 					$cbdate = $date->getDisplayDate();
-					$cbtimeArr = getaddEventPopupTime($cbtime, '', 'am/pm');
-					$cbtime = $cbtimeArr['starthour'].':'.$cbtimeArr['startmin'].''.$cbtimeArr['startfmt'];
+                                        // SalesPlatform.ru begin Use user date format
+					//$cbtimeArr = getaddEventPopupTime($cbtime, '', 'am/pm');
+					//$cbtime = $cbtimeArr['starthour'].':'.$cbtimeArr['startmin'].''.$cbtimeArr['startfmt'];
+                                        // SalesPlatform.ru end
 				}
 
 				if($cbactivitytype=='Task')
@@ -108,10 +122,12 @@ if(isPermitted('Calendar','index') == 'yes'){
 
 				// Appending recordid we can get unique callback dom id for that record.
 				$popupid = "ActivityReminder_$cbrecord";
-				if($cbdate <= date('Y-m-d')){
-					if($cbdate == date('Y-m-d') && $cbtime > date('H:i')) $cbcolor = '';
-					else $cbcolor= '#FF1515';
-				}
+                                // SalesPlatform.ru begin Use user date format
+				//if($cbdate <= date('Y-m-d')){
+				//	if($cbdate == date('Y-m-d') && $cbtime > date('H:i')) $cbcolor = '';
+				//	else $cbcolor= '#FF1515';
+				//}
+                                // SalesPlatform.ru end
 				$smarty->assign("THEME", $theme);
 				$smarty->assign("popupid", $popupid);
 				$smarty->assign("APP", $app_strings);

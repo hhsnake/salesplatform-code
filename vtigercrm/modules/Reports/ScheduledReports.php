@@ -131,11 +131,18 @@ class VTScheduledReport extends Reports {
 		}
 
 		$currentTime = date('Y-m-d H:i:s');
-		$subject = $this->reportname .' - '. $currentTime .' ('. DateTimeField::getDBTimeZone() .')';
+                // SalesPlatform.ru begin Report name and description localization
+		$subject = getTranslatedString($this->reportname, $currentModule) .' - '. $currentTime .' ('. DateTimeField::getDBTimeZone() .')';
+		//$subject = $this->reportname .' - '. $currentTime .' ('. DateTimeField::getDBTimeZone() .')';
+                // SalesPlatform.ru end
 
 		$contents = getTranslatedString('LBL_AUTO_GENERATED_REPORT_EMAIL', $currentModule) .'<br/><br/>';
-		$contents .= '<b>'.getTranslatedString('LBL_REPORT_NAME', $currentModule) .' :</b> '. $this->reportname .'<br/>';
-		$contents .= '<b>'.getTranslatedString('LBL_DESCRIPTION', $currentModule) .' :</b><br/>'. $this->reportdescription .'<br/><br/>';
+                // SalesPlatform.ru begin Report name and description localization
+		$contents .= '<b>'.getTranslatedString('LBL_REPORT_NAME', $currentModule) .' :</b> '. getTranslatedString($this->reportname, $currentModule) .'<br/>';
+		$contents .= '<b>'.getTranslatedString('LBL_DESCRIPTION', $currentModule) .' :</b><br/>'. getTranslatedString($this->reportdescription, $currentModule) .'<br/><br/>';
+		//$contents .= '<b>'.getTranslatedString('LBL_REPORT_NAME', $currentModule) .' :</b> '. $this->reportname .'<br/>';
+		//$contents .= '<b>'.getTranslatedString('LBL_DESCRIPTION', $currentModule) .' :</b><br/>'. $this->reportdescription .'<br/><br/>';
+                // SalesPlatform.ru end
 
 		$vtigerMailer->Subject = $subject;
 		$vtigerMailer->Body    = $contents;
@@ -364,6 +371,10 @@ class VTScheduledReport extends Reports {
 
 		global $currentModule, $current_language;
 		if(empty($currentModule)) $currentModule = 'Reports';
+                // SalesPlatform.ru begin Use default language instead en_us
+		global $default_language;
+		if(empty($current_language)) $current_language = $default_language;
+                // SalesPlatform.ru end
 		if(empty($current_language)) $current_language = 'en_us';
 
 		$scheduledReports = self::getScheduledReports($adb, $adminUser);

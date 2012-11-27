@@ -168,6 +168,13 @@ $mod_strings = array (
     // SalesPlatform.ru end
 
       'PurchaseOrder ID'=>'ID Заказа на Закупку',
+      // SalesPlatform.ru begin localization for 5.4.0
+      'Currency' => 'Валюта', 
+      // SalesPlatform.ru end
+
+    // SalesPlatform.ru begin
+    'PURCHASEORDER_' => 'ЗаказНаЗакупку_',
+    // SalesPlatform.ru end
 );
 
 ?>

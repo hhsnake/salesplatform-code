@@ -93,7 +93,31 @@ $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-       
+
+// SalesPlatform.ru begin: Add document merge to Potentials
+if(isPermitted("Potentials","Merge",'') == 'yes')
+{
+	global $current_user;
+        require("user_privileges/user_privileges_".$current_user->id.".php");
+        require_once('include/utils/UserInfoUtil.php');
+        $wordTemplateResult = fetchWordTemplateList("Potentials");
+        $tempCount = $adb->num_rows($wordTemplateResult);
+        $tempVal = $adb->fetch_array($wordTemplateResult);
+        for($templateCount=0;$templateCount<$tempCount;$templateCount++)
+        {
+                $optionString[$tempVal["templateid"]]=$tempVal["filename"];
+                $tempVal = $adb->fetch_array($wordTemplateResult);
+        }
+	 if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+	elseif($tempCount >0)
+		$smarty->assign("MERGEBUTTON","permitted");
+	 $smarty->assign("TEMPLATECOUNT",$tempCount);
+	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
+        $smarty->assign("TOPTIONS",$optionString);
+}
+// SalesPlatform.ru end
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
@@ -138,5 +162,20 @@ $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModul
 
 $smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
 
+// SalesPlatform.ru begin
+
+global $adb;
+
+$templates_html = '';
+$templates_result = $adb->pquery("select * from sp_templates where module='$currentModule'", array());
+if($templates_result) {
+    while($templates_row = $adb->fetch_array($templates_result)) {
+	$templates_html .= '<option value="' . $templates_row['templateid'] . '">' . $templates_row['name'] . "</option>\n";
+    }
+}
+
+$smarty->assign('PDF_TEMPLATES_LIST', $templates_html);
+
+// SalesPlatform.ru end
 $smarty->display("DetailView.tpl");
 ?>

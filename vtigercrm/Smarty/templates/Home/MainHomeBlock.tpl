@@ -4,6 +4,9 @@
 {* SalesPlatform.ru begin Configuration panel added *}
 {assign var="spconfiguration_title" value='LBL_SP_CONFIGURATION'|@getTranslatedString:'System Configuration'}
 {* SalesPlatform.ru end *}
+{* SalesPlatform.ru begin html widget added *}
+{assign var="sphtml_title" value='LBL_SP_HTML'|@getTranslatedString:'HTML Widget'}
+{* SalesPlatform.ru end *}
 {assign var="keymetrics_title" value='Key Metrics'|@getTranslatedString:'Home'}
 {assign var="stitle" value=$tablestuff.Stufftitle}
 <script type="text/javascript">var vtdashboard_defaultDashbaordWidgetTitle = '{$homepagedashboard_title}';</script>
@@ -11,7 +14,9 @@
 {if ($tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle eq $spconfiguration_title)}
 <script type="text/javascript">var vtdashboard_defaultDashbaordWidgetTitle = '{$spconfiguration_title}';</script>
 {/if}
-<div id="stuff_{$tablestuff.Stuffid}" class="MatrixLayer {if $tablestuff.Stufftitle eq $homepagedashboard_title}twoColumnWidget{/if} {if $tablestuff.Stufftitle eq $spconfiguration_title}twoColumnWidget{/if}" style="float:left;overflow-x:hidden;overflow-y:auto;">
+{* SalesPlatform.ru begin html widget added *}
+<div id="stuff_{$tablestuff.Stuffid}" class="MatrixLayer {if $tablestuff.Stufftitle eq $homepagedashboard_title}twoColumnWidget{/if} {if $tablestuff.Stufftitle eq $spconfiguration_title}twoColumnWidget{/if} {if $tablestuff.Stufftitle eq $sphtml_title} twoColumnWidget{/if}" style="float:left;overflow-x:hidden;overflow-y:auto;">
+{*<div id="stuff_{$tablestuff.Stuffid}" class="MatrixLayer {if $tablestuff.Stufftitle eq $homepagedashboard_title}twoColumnWidget{/if} {if $tablestuff.Stufftitle eq $spconfiguration_title}twoColumnWidget{/if}" style="float:left;overflow-x:hidden;overflow-y:auto;">*}
 {* <div id="stuff_{$tablestuff.Stuffid}" class="MatrixLayer {if $tablestuff.Stufftitle eq $homepagedashboard_title}twoColumnWidget{/if}" style="float:left;overflow-x:hidden;overflow-y:auto;"> *}
 {* SalesPlatform.ru end *}
 	<table width="100%" cellpadding="0" cellspacing="0" class="small" style="padding-right:0px;padding-left:0px;padding-top:0px;">
@@ -24,7 +29,8 @@
 
 {*<!-- the edit button for widgets :: don't show for key metrics and dasboard widget -->*}
 {* SalesPlatform.ru begin Configuration panel added *}
-{if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $spconfiguration_title) && ($tablestuff.Stufftype neq "Tag Cloud") && ($tablestuff.Stufftype neq "Notebook")}
+{if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $spconfiguration_title) && ($tablestuff.Stufftype neq "Tag Cloud") && ($tablestuff.Stufftype neq "Notebook") && ($tablestuff.Stufftype neq "SP_HTML")}
+{* {if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $spconfiguration_title) && ($tablestuff.Stufftype neq "Tag Cloud") && ($tablestuff.Stufftype neq "Notebook")} *}
 {* {if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Tag Cloud") && ($tablestuff.Stufftype neq "Notebook")} *}
 {* SalesPlatform.ru end *}
 				<a id="editlink" style='cursor:pointer;' onclick="showEditrow({$tablestuff.Stuffid})">
@@ -76,7 +82,7 @@
 {if $tablestuff.Stufftype eq "Module"}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkModulesusr">
 {* SalesPlatform.ru begin Configuration panel added *}
-{elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle neq $homepagedashboard_title && $tablestuff.Stufftitle neq $spconfiguration_title}
+{elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle neq $homepagedashboard_title && $tablestuff.Stufftitle neq $spconfiguration_title && $tablestuff.Stufftype neq $sphtml_title}
 {* {elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle neq $homepagedashboard_title} *}
 {* SalesPlatform.ru end *}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkModulesdef">
@@ -85,7 +91,7 @@
 {elseif $tablestuff.Stufftype eq "DashBoard" || $tablestuff.Stufftype eq "ReportCharts"}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkDashboardusr">
 {* SalesPlatform.ru begin Configuration panel added *}
-{elseif $tablestuff.Stufftype eq "Default" && ($tablestuff.Stufftitle eq $homepagedashboard_title || $tablestuff.Stufftitle eq $spconfiguration_title)}
+{elseif $tablestuff.Stufftype eq "Default" && ($tablestuff.Stufftitle eq $homepagedashboard_title || $tablestuff.Stufftitle eq $spconfiguration_title || $tablestuff.Stufftype neq $sphtml_title)}
 {* {elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle eq $homepagedashboard_title} *}
 {* SalesPlatform.ru end *}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkDashboarddef">
@@ -102,7 +108,7 @@
 	</table>
 	
 {* SalesPlatform.ru begin Configuration panel added *}
-{if $tablestuff.Stufftype eq "Module" || ($tablestuff.Stufftype eq "Default" &&  $tablestuff.Stufftitle neq "Key Metrics" && $tablestuff.Stufftitle neq $homepagedashboard_title && $tablestuff.Stufftitle neq $spconfiguration_title && $tablestuff.Stufftitle neq "My Group Allocation" ) || $tablestuff.Stufftype eq "RSS" || $tablestuff.Stufftype eq "DashBoard"}
+{if $tablestuff.Stufftype eq "Module" || ($tablestuff.Stufftype eq "Default" &&  $tablestuff.Stufftitle neq "Key Metrics" && $tablestuff.Stufftitle neq $homepagedashboard_title && $tablestuff.Stufftitle neq $spconfiguration_title && $tablestuff.Stufftitle neq "My Group Allocation" ) || $tablestuff.Stufftype eq "RSS" || $tablestuff.Stufftype eq "DashBoard" || $tablestuff.Stufftype eq "ReportCharts"}
 {* SalesPlatform.ru end *}
 	<table width="100%" cellpadding="0" cellspacing="0" class="small scrollLink">
 	<tr>

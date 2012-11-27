@@ -55,6 +55,11 @@ class VTWorkflowEntity{
 			$rowData = $adb->raw_query_result_rowdata($result, 0);
 			$this->moduleName = $rowData['name'];
 		}
+                // SalesPlatform.ru begin Calendar workflow turn on
+                if ($this->moduleName == "Events") {
+                    $this->moduleName = "Calendar";
+                }
+                // SalesPlatform.ru end
 		return $this->moduleName;
 	}
 

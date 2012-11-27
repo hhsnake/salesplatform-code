@@ -97,6 +97,12 @@ class Vtiger_Block {
 	 * @internal TODO
 	 */
 	function __update() {
+                // SalesPlatform.ru begin Block sequence tag supported in XML
+		global $adb;
+		if($this->sequence) {
+                    $adb->pquery("UPDATE vtiger_blocks SET sequence = ? WHERE blockid = ? ", Array($this->sequence, $this->id));
+                }
+                // SalesPlatform.ru end
 		self::log("Updating Block $this->label ... DONE");
 	}
 

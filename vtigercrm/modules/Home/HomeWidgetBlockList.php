@@ -55,6 +55,13 @@ foreach ($widgetInfoList as $widgetInfo) {
 		$smarty->assign("URL",$url);
 		$smarty->assign("WIDGETID", $widgetId);
 		$html = $smarty->fetch("Home/HomeWidgetURL.tpl");
+        // SalesPlatform.ru begin html widget added
+        }elseif($widgetType == 'SP_HTML'){
+		$contents = $homeObj->getHtmlWidgetContents($widgetId);
+		$smarty->assign("HTMLWIDGET_CONTENTS",$contents);
+		$smarty->assign("WIDGETID", $widgetId);
+                $html = $smarty->fetch("Home/sp_html.tpl");
+        // SalesPlatform.ru end
 	}else{
 		$homestuff_values=$homeObj->getHomePageStuff($widgetId,$widgetType);
 		$html = '';

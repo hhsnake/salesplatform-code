@@ -66,6 +66,11 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		} elseif($_REQUEST['return_module'] == 'HelpDesk') {
 			$parent_type = 'HelpDesk';
 		}
+		// SalesPlatform.ru begin: Add document merge to Potentials
+		elseif($_REQUEST['return_module'] == 'Potentials') {
+			$parent_type = 'Potential';
+		}
+		// SalesPlatform.ru end
 	 
 		$genQueryId = $adb->getUniqueID("vtiger_wordtemplates");
 		if($genQueryId != '') {

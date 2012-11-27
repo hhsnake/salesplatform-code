@@ -305,6 +305,33 @@ function fetchCurrency($id) {
 	return $currencyid;
 }
 
+// SalesPlatform.ru begin
+function getCurrencyInfo($currencyid) {
+	global $log;
+	$log->debug("Entering getCurrencyInfo(" . $currencyid . ") method ...");
+
+	// Look at cache first
+	$currencyinfo = VTCacheUtils::lookupCurrencyInfo($currencyid);
+
+	if ($currencyinfo === false) {
+		global $adb;
+		$sql1 = "select * from vtiger_currency_info where id= ?";
+		$result = $adb->pquery($sql1, array($currencyid));
+
+		$resultinfo = $adb->fetch_array($result);
+
+		// Update cache
+		VTCacheUtils::updateCurrencyInfo($currencyid, $resultinfo['currency_name'], $resultinfo['currency_code'], $resultinfo['currency_symbol'], $resultinfo['conversion_rate']
+		);
+
+		// Re-look at the cache now
+		$currencyinfo = VTCacheUtils::lookupCurrencyInfo($currencyid);
+	}
+
+        return $currencyinfo;
+}
+// SalesPlatform.ru end
+
 /** Function to get the Currency name from the vtiger_currency_info
  * @param $currencyid -- vtiger_currencyid:: Type integer
  * @returns $currencyname -- Currency Name:: Type varchar
@@ -1359,7 +1386,10 @@ function updateInfo($id) {
 	$result = $adb->pquery($query, array($id));
 	$modifiedtime = $adb->query_result($result, 0, 'modifiedtime');
 	$modifiedby_id = $adb->query_result($result, 0, 'modifiedby');
-	$modifiedby = $app_strings['LBL_BY'] . getOwnerName($modifiedby_id);
+        // SalesPlatform.ru begin localization for 5.4.0 
+        $modifiedby = getOwnerName($modifiedby_id);
+	// $modifiedby = $app_strings['LBL_BY'] . getOwnerName($modifiedby_id);
+        // SalesPlatform.ru end
 	$date = new DateTimeField($modifiedtime);
 	$modifiedtime = DateTimeField::convertToDBFormat($date->getDisplayDate());
 	$current_time = date('Y-m-d H:i:s');
@@ -2352,6 +2382,26 @@ function getTranslatedString($str, $module = '') {
 	return $trans_str;
 }
 
+// SalesPlatform.ru begin displaying of picklists related to roles is fixed
+/**
+ * Function used to get the reverse translated string 
+ * 
+ * @param string $str - string for the reverse translation
+ * @param array $src_str_arr - an array of localization
+ * @return string $trans_str - translated string
+ */
+function getSpBackTranslatedString($str, $src_str_arr, $module = '') {
+    global $app_strings, $mod_strings, $current_language;
+    $temp_mod_strings = ($module != '' ) ? return_module_language($current_language, $module) : $mod_strings;
+    foreach ($src_str_arr as $columnname) {
+        $val_translate[$columnname] = ($temp_mod_strings[$columnname] != '') ? $temp_mod_strings[$columnname] : (($app_strings[$columnname] != '') ? $app_strings[$columnname] : $columnname);
+    }
+    $result = array_search($str, $val_translate);
+    $trans_str = $result ? $result : $str;
+    return $trans_str;
+}
+// SalesPlatform.ru end
+
 /**
  * Get translated currency name string.
  * @param String $str - input currency name
@@ -3341,4 +3391,170 @@ function getReturnPath($host){
 	$Return_Path='noreply@'.$domain;
 	return $Return_Path;
 }
+
+// SalesPlatform.ru begin 
+// Smart filters implementation
+/**
+ * This function checks for specific filters for the current user role, 
+ * parental roles, and for the current module. If a filter is specified, 
+ * the function returns an array of data to create a filter. 
+ * If the filter is not specified, the function returns false.
+ * 
+ * @param string $moduleName Сontains the name of the current module
+ * @return boolean|array  Returns an array of data to create a filter, or false if the filter is not specified for this module
+ */
+function sp_smartfilter_data($moduleName) {
+        global $adb, $current_user, $mod_strings, $app_strings;	
+        
+        //Checks for filters for the current user role, parental roles, 
+        //and for the current module. 
+        //If a filter is specified, the code save filter id.
+        $cur_tabid_res = $adb->pquery("SELECT tabid FROM vtiger_tab WHERE name='$moduleName'", array());
+        $cur_tabid = $adb->query_result($cur_tabid_res,0,'tabid');
+                
+        $user_role_res = $adb->pquery("SELECT roleid FROM vtiger_user2role WHERE userid='$current_user->id'", array());
+        $user_role = $adb->query_result($user_role_res,0,'roleid');
+        
+        $roles_res = $adb->pquery("SELECT parentrole FROM vtiger_role WHERE roleid='$user_role'", array());
+        $roles = $adb->query_result($roles_res,0,'parentrole');
+        $roles = explode("::", $roles);
+        $module_filterid = 0;
+        if(count($roles) > 0) {
+            $iter = count($roles)-1;
+            while($iter >= 0) {
+                $role = $roles[$iter];
+                $role_filters_res = $adb->pquery("SELECT filterid FROM sp_role2smartfilter WHERE roleid='$role'", array());
+                $role_filters_count= $adb->num_rows($role_filters_res);
+                if ($role_filters_count>0) {
+                    $tabid = 0;
+                    for($i=0; $i < $role_filters_count; $i++) {
+                        $filterid = $adb->query_result($role_filters_res,$i,'filterid');
+                        $tabid_res = $adb->pquery("SELECT tabid FROM sp_smartfilter WHERE filterid='$filterid'", array());
+                        $tabid = $adb->query_result($tabid_res,0,'tabid');
+                        if ($cur_tabid == $tabid) {
+                            $module_filterid = $filterid;
+                            break 2; 
+                        }     
+                    }    
+                }
+                if ($iter == 0) {
+                    return false;
+                }
+                $iter--;
+            }
+        } else {
+            return false;
+        }
+        
+        if ($module_filterid != 0) {
+            //Select required data for filter
+            $filter_fieldid_res = $adb->pquery("SELECT fieldid,sequence FROM sp_smartfilterfield WHERE filterid='$module_filterid' ORDER BY sequence", array());
+            $filter_fieldid_count= $adb->num_rows($filter_fieldid_res);
+            if ($filter_fieldid_count > 0) {
+                $vtiger_field_query = "SELECT fieldid,columnname,tablename,uitype,fieldname,fieldlabel,typeofdata FROM vtiger_field WHERE";
+                $filter_fieldid = $adb->query_result($filter_fieldid_res,0,'fieldid');
+                $where = " fieldid='$filter_fieldid'";
+                
+                for ($i=1; $i < $filter_fieldid_count; $i++) {
+                    $filter_fieldid = $adb->query_result($filter_fieldid_res,$i,'fieldid');
+                    $where .= " OR fieldid='$filter_fieldid'"; 
+                }
+                
+                $vtiger_field_query .= $where; 
+                $vtiger_field_result = $adb->pquery($vtiger_field_query, array());
+                $vf_rowsCount = $adb->num_rows($vtiger_field_result);
+                $filter_tpl_arr = array();
+                $temp_arr = array();
+                $filter_js_str = "";
+                
+                $picklistUiTypes = Array('15','16','33','34','57','58','59','63','76','78','80','111','115','357');
+                $dateUiTypes = Array('5','6','23','30','64','70');
+                
+                //Data for jsCalendar
+                $dateFormat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
+                $datestr = $current_user->date_format;
+                $qc_modules = getQuickCreateModules();
+                
+                //Сreates an array of filter data for the ListView.tpl and 
+                //a string of filter data for the javascript function.
+                for($i=0; $i < $vf_rowsCount; $i++) {
+                    $columnname = $adb->query_result($vtiger_field_result,$i,'columnname');
+                    $tablename = $adb->query_result($vtiger_field_result,$i,'tablename');
+                    $uitype = $adb->query_result($vtiger_field_result,$i,'uitype');
+                    $fieldname = $adb->query_result($vtiger_field_result,$i,'fieldname');
+                    $fieldlabel = $adb->query_result($vtiger_field_result,$i,'fieldlabel');
+                    $fieldid = $adb->query_result($vtiger_field_result,$i,'fieldid');
+                    
+                    $typeofdata = explode('~',$adb->query_result($vtiger_field_result,$i,'typeofdata'));
+                    $typeofdata = $typeofdata[0];
+                     
+                    $sub_arr = array();
+                    $sub_arr[0] = $fieldname;
+                    $sub_arr[1] = $uitype;
+                    $sub_arr[2] = $typeofdata;
+                    
+                    $str = $tablename.":".$columnname.":".$fieldname.":".$moduleName."_".str_replace(" ","_",$fieldlabel).":".$typeofdata.":".$uitype;
+                    if ($filter_js_str == "") {
+                       $filter_js_str = $str;
+                    } else {
+                        $filter_js_str .= ";".$str;
+                    }
+                    
+                    if (in_array($uitype,$picklistUiTypes)) {
+                        $qry_res = $adb->pquery("select $fieldname from vtiger_$fieldname",array());
+                        $rowsCount = $adb->num_rows($qry_res);
+               
+                        $list_arr = array();
+	                for($j=0; $j < $rowsCount; $j++){
+                            $list_item = $adb->query_result($qry_res,$j,$fieldname);	
+                            if ($list_item != '--None--' && $list_item != $mod_strings['--None--']) {
+                                array_push($list_arr,$list_item);
+                            }
+	                }
+                        $sub_arr[3] = $list_arr;
+                    } else {
+                        $sub_arr[3] = "none";
+                    }
+                    
+                    $sub_arr[4] = $fieldlabel;
+                    $sub_arr[5] = $fieldid;
+                    
+                    if (in_array($uitype,$dateUiTypes)) {
+                        $sub_arr[6] = $dateFormat;
+                        $sub_arr[7] = $datestr;
+                        $sub_arr[8] = $qc_modules;
+                    }
+                    
+                    $temp_arr[$i] = $sub_arr;
+                }
+                
+                $temp_arrCount = count($temp_arr);
+                for($fieldid_iter=0; $fieldid_iter < $filter_fieldid_count; $fieldid_iter++) {
+                    $fieldid = $adb->query_result($filter_fieldid_res,$fieldid_iter,'fieldid');
+                    for($item=0; $item < $temp_arrCount; $item++) {
+                       if ($temp_arr[$item][5] == $fieldid) {
+                           array_push($filter_tpl_arr,$temp_arr[$item]);
+                       }
+                   }
+                }
+                
+                $filter_arr = array();
+                $filter_arr[0] = $filter_tpl_arr;
+                $filter_arr[1] = $filter_js_str;
+                
+                $uiTypesList_tpl_arr = array();
+                array_push($uiTypesList_tpl_arr,$picklistUiTypes,$dateUiTypes);
+                $uiTypesList_js_str = "15:16:57:58:59:63:76:78:80:111:115:357;5:6:23:30:64:70";
+                
+                $filter_arr[2] = $uiTypesList_tpl_arr;
+                $filter_arr[3] = $uiTypesList_js_str;
+                return $filter_arr;	
+                
+            } else {
+                return false;
+            }  
+            
+        }            
+}
+//SalesPlatform.ru end
 ?>

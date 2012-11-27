@@ -1287,5 +1287,11 @@ $mod_strings = Array(
 'LBL_SP_CONFIGURATION' => 'Configuration Manager',
 'LBL_SP_CONFIGURATION_DESC' => 'Manage the application configuration',
 // SalesPlatform.ru end
+// SalesPlatform.ru begin Widgets added
+'LBL_SP_ACC' => 'Recent Organizations',
+'LBL_SP_POT' => 'Recent Potentials',
+'LBL_SP_EVENTS' => 'Recent Events',
+'LBL_SP_EXT_EVENTS' => 'Events Subordinates',
+// SalesPlatform.ru end
 );
 ?>

@@ -20,6 +20,8 @@ $migrationlog->debug("\n\nDB Changes from 5.2.1-20110824 to 5.3.0-201112 -------
 require_once 'include/utils/CommonUtils.php';
 //global $adb;
 
+changeDBCollation('utf8_general_ci');
+
 // Fix of previous migration bug that "forgot" to add organizationdetails.bankaccount
 $columnNames = $adb->getColumnNames('vtiger_organizationdetails');
 if(!in_array('bankaccount',$columnNames)){

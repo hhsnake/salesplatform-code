@@ -90,6 +90,9 @@ function fnAddWindow(obj,CurrObj){
 	document.getElementById("addmodule").href="javascript:chooseType('Module');fnRemoveWindow();setFilter($('selmodule_id'))";
 	document.getElementById("addNotebook").href="javascript:chooseType('Notebook');fnRemoveWindow();show('addWidgetsDiv');placeAtCenter($('addWidgetsDiv'));";
     document.getElementById("defaultwidget").href="javascript:chooseType('defaultwidget');fnRemoveWindow();";
+        // SalesPlatform.ru begin html widget added     
+        document.getElementById("addSP_HTML").href="javascript:chooseType('SP_HTML');fnRemoveWindow();show('addWidgetsDiv');placeAtCenter($('addWidgetsDiv'));"; 
+        // SalesPlatform.ru end 
 	//document.getElementById("addURL").href="javascript:chooseType('URL');fnRemoveWindow();show('addWidgetsDiv');placeAtCenter($('addWidgetsDiv'));";
 {/literal}
 {if $ALLOW_RSS eq "yes"}

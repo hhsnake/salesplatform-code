@@ -71,6 +71,7 @@
 						<option value="Accounts" {$ACCOUNTS_SELECTED}>{$APP.COMBO_ACCOUNTS}</option>
 						<option value="Contacts" {$CONTACTS_SELECTED}>{$APP.COMBO_CONTACTS}</option>
 						<option value="HelpDesk" {$HELPDESK_SELECTED}>{$APP.COMBO_HELPDESK}</option>
+						<option value="Potentials" {$POTENTIALS_SELECTED}>{$APP.COMBO_POTENTIALS}</option>
 			                      </select>
 						</td>
 					  </tr>

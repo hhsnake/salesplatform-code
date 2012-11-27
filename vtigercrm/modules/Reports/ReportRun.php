@@ -44,8 +44,12 @@ class ReportRun extends CRMEntity
 						'Invoice_Total', 'Invoice_Sub_Total', 'Invoice_S&H_Amount', 'Invoice_Discount_Amount', 'Invoice_Adjustment',
 						'Quotes_Total', 'Quotes_Sub_Total', 'Quotes_S&H_Amount', 'Quotes_Discount_Amount', 'Quotes_Adjustment',
 						'SalesOrder_Total', 'SalesOrder_Sub_Total', 'SalesOrder_S&H_Amount', 'SalesOrder_Discount_Amount', 'SalesOrder_Adjustment',
-						'PurchaseOrder_Total', 'PurchaseOrder_Sub_Total', 'PurchaseOrder_S&H_Amount', 'PurchaseOrder_Discount_Amount', 'PurchaseOrder_Adjustment'
-						);
+						'PurchaseOrder_Total', 'PurchaseOrder_Sub_Total', 'PurchaseOrder_S&H_Amount', 'PurchaseOrder_Discount_Amount', 'PurchaseOrder_Adjustment',
+                                                // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+                                                'Act_Total', 'Act_Sub_Total', 'Act_S&H_Amount', 'Act_Discount_Amount', 'Act_Adjustment',
+                                                'Consignment_Total', 'Consignment_Sub_Total', 'Consignment_S&H_Amount', 'Consignment_Discount_Amount', 'Consignment_Adjustment',
+                                                // SalesPlatform.ru end
+                                                );
 	var $ui10_fields = array();
 	var $ui101_fields = array();
 	var $groupByTimeParent = array( 'Quarter'=>array('Year'),
@@ -99,7 +103,10 @@ class ReportRun extends CRMEntity
 			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
 			list($module,$field) = split("_",$module_field,2);
 			$inventory_fields = array('quantity','listprice','serviceid','productid','discount','comment');
-			$inventory_modules = array('SalesOrder','Quotes','PurchaseOrder','Invoice');
+                        // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+			$inventory_modules = array('SalesOrder','Quotes','PurchaseOrder','Invoice','Act','Consignment');
+			//$inventory_modules = array('SalesOrder','Quotes','PurchaseOrder','Invoice');
+                        // SalesPlatform.ru end
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
 			if(sizeof($permitted_fields[$module]) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
@@ -1320,7 +1327,10 @@ class ReportRun extends CRMEntity
 				$selectedfields = explode(":",$fieldcolname);
 				if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					$selectedfields[0] = "vtiger_crmentity";
-				if(stripos($selectedfields[1],'cf_')==0 && stristr($selectedfields[1],'cf_')==true){
+                                // SalesPlatform.ru begin fixed display of custom fields in reports
+                                $selectedfields[2] = "\'".$selectedfields[2]."\'";
+                                // SalesPlatform.ru end
+                                if(stripos($selectedfields[1],'cf_')==0 && stristr($selectedfields[1],'cf_')==true){
 					$sqlvalue = "".$adb->sql_escape_string(decode_html($selectedfields[2]))." ".$sortorder;
 				} else {
 					$sqlvalue = "".self::replaceSpecialChar($selectedfields[2])." ".$sortorder;
@@ -1712,6 +1722,61 @@ class ReportRun extends CRMEntity
 
 
 		}
+                // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+		else if($module == "Act")
+		{
+
+                    $query = "from vtiger_sp_act
+                            inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_sp_act.actid
+                            inner join vtiger_sp_actbillads on vtiger_sp_act.actid=vtiger_sp_actbillads.actbilladdressid
+                            inner join vtiger_sp_actshipads on vtiger_sp_act.actid=vtiger_sp_actshipads.actshipaddressid
+                            left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = vtiger_sp_act.currency_id";
+                    if($type !== 'COLUMNSTOTOTAL') {
+                            $query .=" left join vtiger_inventoryproductrel as vtiger_inventoryproductrelAct on vtiger_sp_act.actid = vtiger_inventoryproductrelAct.id
+                                    left join vtiger_products as vtiger_productsAct on vtiger_productsAct.productid = vtiger_inventoryproductrelAct.productid
+                                    left join vtiger_service as vtiger_serviceAct on vtiger_serviceAct.serviceid = vtiger_inventoryproductrelAct.productid";
+                    }
+                    $query .= " left join vtiger_salesorder as vtiger_salesorderAct on vtiger_salesorderAct.salesorderid=vtiger_sp_act.salesorderid
+                            left join vtiger_sp_actcf on vtiger_sp_act.actid = vtiger_sp_actcf.actid
+                            left join vtiger_groups as vtiger_groupsAct on vtiger_groupsAct.groupid = vtiger_crmentity.smownerid
+                            left join vtiger_users as vtiger_usersAct on vtiger_usersAct.id = vtiger_crmentity.smownerid
+                            left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
+                            left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+                            left join vtiger_users as vtiger_lastModifiedByAct on vtiger_lastModifiedByAct.id = vtiger_crmentity.modifiedby
+                            left join vtiger_account as vtiger_accountAct on vtiger_accountAct.accountid = vtiger_sp_act.accountid
+                            left join vtiger_contactdetails as vtiger_contactdetailsAct on vtiger_contactdetailsAct.contactid = vtiger_sp_act.contactid
+                            ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+                                                getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
+                            where vtiger_crmentity.deleted=0";
+                }
+		else if($module == "Consignment")
+		{
+
+                    $query = "from vtiger_sp_consignment
+                            inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_sp_consignment.consignmentid
+                            inner join vtiger_sp_consignmentbillads on vtiger_sp_consignment.consignmentid=vtiger_sp_consignmentbillads.consignmentbilladdressid
+                            inner join vtiger_sp_consignmentshipads on vtiger_sp_consignment.consignmentid=vtiger_sp_consignmentshipads.consignmentshipaddressid
+                            left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = vtiger_sp_consignment.currency_id";
+                    if($type !== 'COLUMNSTOTOTAL') {
+                            $query .=" left join vtiger_inventoryproductrel as vtiger_inventoryproductrelConsignment on vtiger_sp_consignment.consignmentid = vtiger_inventoryproductrelConsignment.id
+                                    left join vtiger_products as vtiger_productsConsignment on vtiger_productsConsignment.productid = vtiger_inventoryproductrelConsignment.productid
+                                    left join vtiger_service as vtiger_serviceConsignment on vtiger_serviceConsignment.serviceid = vtiger_inventoryproductrelConsignment.productid";
+                    }
+                    $query .= " left join vtiger_salesorder as vtiger_salesorderConsignment on vtiger_salesorderConsignment.salesorderid=vtiger_sp_consignment.salesorderid
+                            left join vtiger_sp_consignmentcf on vtiger_sp_consignment.consignmentid = vtiger_sp_consignmentcf.consignmentid
+                            left join vtiger_groups as vtiger_groupsConsignment on vtiger_groupsConsignment.groupid = vtiger_crmentity.smownerid
+                            left join vtiger_users as vtiger_usersConsignment on vtiger_usersConsignment.id = vtiger_crmentity.smownerid
+                            left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
+                            left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+                            left join vtiger_users as vtiger_lastModifiedByConsignment on vtiger_lastModifiedByConsignment.id = vtiger_crmentity.modifiedby
+                            left join vtiger_account as vtiger_accountConsignment on vtiger_accountConsignment.accountid = vtiger_sp_consignment.accountid
+                            left join vtiger_contactdetails as vtiger_contactdetailsConsignment on vtiger_contactdetailsConsignment.contactid = vtiger_sp_consignment.contactid
+                            left join vtiger_invoice as vtiger_invoiceConsignment on vtiger_invoiceConsignment.invoiceid = vtiger_sp_consignment.invoiceid
+                            ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+                                                getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
+                            where vtiger_crmentity.deleted=0";
+                }
+                // SalesPlatform.ru end
 		else if($module == "Campaigns")
 		{
 		 $query = "from vtiger_campaign
@@ -1825,8 +1890,12 @@ class ReportRun extends CRMEntity
 				$selectedcolumns = "''"; // "''" to get blank column name
                                 $allColumnsRestricted = true;
                         }
-			if(in_array($this->primarymodule, array('Invoice', 'Quotes',
-					'SalesOrder', 'PurchaseOrder'))) {
+                        // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+ 			if(in_array($this->primarymodule, array('Invoice', 'Quotes',
+					'SalesOrder', 'PurchaseOrder', 'Act', 'Consignment'))) {
+ 			//if(in_array($this->primarymodule, array('Invoice', 'Quotes',
+			//		'SalesOrder', 'PurchaseOrder'))) {
+                        // SalesPlatform.ru end
 				$selectedcolumns = ' distinct '. $selectedcolumns;
 			}
 			$reportquery = "select DISTINCT ".$selectedcolumns." ".$reportquery." ".$wheresql;
@@ -2768,8 +2837,12 @@ class ReportRun extends CRMEntity
 						// Query needs to be rebuild to get the value in user preferred currency. [innerProduct and actual_unit_price are table and column alias.]
 						$field =  " innerService.actual_unit_price";
 					}
-					if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder')
+					// SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+                                        if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder' || $field_tablename == 'vtiger_sp_act' || $field_tablename == 'vtiger_sp_consignment')
 							&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount')) {
+                                        //if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder')
+					//		&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount')) {
+                                        // SalesPlatform.ru end
 						$field =  " $field_tablename.$field_columnname/$field_tablename.conversion_rate ";
 					}
 					if($fieldlist[4] == 2)
@@ -3096,7 +3169,7 @@ class ReportRun extends CRMEntity
 		if(isset($arr_val)) {
 			foreach($arr_val[0] as $key=>$value) {
 // SalesPlatform.ru begin
-                                $worksheet->write(0, $count, iconv("UTF-8", "CP1251", $key), $header);
+                                $worksheet->write(0, $count, iconv("UTF-8", "CP1251", preg_replace("/^=/","'=",$key)), $header);
                                 //$worksheet->write(0, $count, $key , $header);
 // SalesPlatform.ru end
 				$count = $count + 1;
@@ -3108,7 +3181,7 @@ class ReportRun extends CRMEntity
 					//$worksheet->write($key+1, $dcount, iconv("UTF-8", "ISO-8859-1", $value));
 					$value = decode_html($value);
 // SalesPlatform.ru begin
-                                        $worksheet->write($key+1, $dcount, iconv("UTF-8", "CP1251", $value));
+                                        $worksheet->write($key+1, $dcount, iconv("UTF-8", "CP1251", preg_replace("/^=/","'=",$value)));
                                         //$worksheet->write($key+1, $dcount, utf8_decode($value));
 // SalesPlatform.ru end
 					$dcount = $dcount + 1;
@@ -3123,7 +3196,7 @@ class ReportRun extends CRMEntity
 					$chdr=substr($key,-3,3);
 					$translated_str = in_array($chdr ,array_keys($mod_strings))?$mod_strings[$chdr]:$key;
 // SalesPlatform.ru begin
-                                        $worksheet->write($rowcount, $count, iconv("UTF-8", "CP1251", $translated_str));
+                                        $worksheet->write($rowcount, $count, iconv("UTF-8", "CP1251", preg_replace("/^=/","'=",$translated_str)));
 					//$worksheet->write($rowcount, $count, $translated_str);
 // SalesPlatform.ru end
 					$count = $count + 1;
@@ -3138,7 +3211,7 @@ class ReportRun extends CRMEntity
 					//		$worksheet->write($key+$rowcount, 0, utf8_decode(substr($hdr,0,strlen($hdr)-4)));
 					$value = decode_html($value);
 // SalesPlatform.ru begin
-					$worksheet->write($key+$rowcount, $dcount, iconv("UTF-8", "CP1251", $value));
+					$worksheet->write($key+$rowcount, $dcount, iconv("UTF-8", "CP1251", preg_replace("/^=/","'=",$value)));
 					//worksheet->write($key+$rowcount, $dcount, utf8_decode($value));
 // SalesPlatform.ru end
 					$dcount = $dcount + 1;
@@ -3319,6 +3392,24 @@ class ReportRun extends CRMEntity
 					$referenceTableName = 'vtiger_contactdetailsPotentials';
 				} elseif ($moduleName == 'Potentials' && $referenceModule == 'Accounts') {
 					$referenceTableName = 'vtiger_accountPotentials';
+
+                                // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+				} elseif ($moduleName == 'Act' && $referenceModule == 'SalesOrder') {
+					$referenceTableName = 'vtiger_salesorderAct';
+				} elseif ($moduleName == 'Act' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsAct';
+				} elseif ($moduleName == 'Act' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountAct';
+				} elseif ($moduleName == 'Consignment' && $referenceModule == 'SalesOrder') {
+					$referenceTableName = 'vtiger_salesorderConsignment';
+				} elseif ($moduleName == 'Consignment' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsConsignment';
+				} elseif ($moduleName == 'Consignment' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountConsignment';
+				} elseif ($moduleName == 'Consignment' && $referenceModule == 'Invoice') {
+					$referenceTableName = 'vtiger_invoiceConsignment';
+                                // SalesPlatform.ru end
+
 				} elseif (in_array($referenceModule, $reportSecondaryModules)) {
 					$referenceTableName = "{$entityTableName}Rel$referenceModule";
 				} elseif (in_array($moduleName, $reportSecondaryModules)) {

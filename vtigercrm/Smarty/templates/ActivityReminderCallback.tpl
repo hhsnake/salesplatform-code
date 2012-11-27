@@ -16,7 +16,7 @@
 	<tr>
 		<td align='left'><b>
                 {* SalesPlatform.ru begin Reminder images fix *}
-		<img align="top" src="themes/images/{$cbmodule}.gif"/> {$activitytype} {$cbstatus}</b> </td>
+		<img align="top" src="themes/images/{$cbmodule}.gif"/> {$activitytype|@getTranslatedString} {$cbstatus|@getTranslatedString}</b> </td>
 		{* <img align="top" src="themes/images/{$activitytype}s.gif"/> {$activitytype} - {$cbstatus}</b> </td> *}
                 {* SalesPlatform.ru end *}
 		<td align='right'><b><font color={$cbcolor}>{$cbdate} {$cbtime}</font></b></td>
@@ -29,13 +29,16 @@
 	</tr>
 
 	<tr>
-		<td colspan='3' align='left'><b>{$cbsubject}</b> <a style='padding: 2px;' href='index.php?action=DetailView&module={$cbmodule}&record={$cbrecord}'>[{$APP.LBL_MORE}...]</a></td>
+                {* SalesPlatform.ru begin Reminder link fix *}
+		<td colspan='3' align='left'><b>{$cbsubject}</b> <a style='padding: 2px;' href='index.php?action=DetailView&module={$cbmodule}&record={$cbrecord}'>[{$APP.LBL_MORE} {$APP.LBL_INFORMATION}...]</a></td>
+		{* <td colspan='3' align='left'><b>{$cbsubject}</b> <a style='padding: 2px;' href='index.php?action=DetailView&module={$cbmodule}&record={$cbrecord}'>[{$APP.LBL_MORE}...]</a></td> *}
+                {* SalesPlatform.ru end *}
 	</tr>
 
 	<tr>
 		<td colspan='3' align='center'> 
                         {* SalesPlatform.ru begin Add reminder title *}
-                        {if $title neq ''}<span class="cellLabel">{$title}</span>{/if}
+                        {if $title neq ''}{$APP.Reminder}<span class="cellLabel">{$title}</span>{/if}
                         {* SalesPlatform.ru end *}
 			<a style='padding: 0 5px 0 5px;' href='javascript:;' onclick="ActivityReminderPostponeCallback('{$cbmodule}','{$cbrecord}','{$cbreminderid}');ActivityReminderRemovePopupDOM('{$popupid}');"><b>{$APP.LBL_POSTPONE}</b></a> 
 		</td>

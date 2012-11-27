@@ -71,6 +71,9 @@
         <input type="hidden" name="entity_id">
         <input type="hidden" name="convertmode">
         <input type="hidden" name="account_id" value="{$ACCOUNTID}">
+{* SalesPlatform.ru begin  *}
+        <input type="hidden" name="pdf_template">
+{* SalesPlatform.ru end  *}
 {elseif $MODULE eq 'Leads'}
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="record" value="{$ID}">

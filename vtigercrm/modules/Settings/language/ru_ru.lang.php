@@ -113,7 +113,7 @@ $mod_strings = array (
       'Time'=>'Время',
       'USERGROUPLIST' => 'Группы',
       'EMAILTEMPLATES' => 'Шаблоны Email',
-      'WORDINTEGRATION' => 'Шаблоны документов',
+      'WORDINTEGRATION' => 'Шаблоны документов для автоматического формирования',
       'LBL_MAIL_MERGE' => 'Шаблоны Документов',
       'NOTIFICATIONSCHEDULERS' => 'Настройки Уведомлений',
       'LBL_ACTIVE' => 'Активен',
@@ -367,7 +367,7 @@ $mod_strings = array (
       'LBL_CUSTOM_FIELDS_DESCRIPTION' => 'Управление типами пользовательских полей',
       'LBL_PICKLIST_DESCRIPTION' => 'Настройка значений Списков в каждом Модуле',
       'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Управление Шаблонами Модуля Email',
-      'LBL_MAIL_MERGE_DESCRIPTION' => 'Управление Шаблонами Документов',
+      'LBL_MAIL_MERGE_DESCRIPTION' => 'Управление Шаблонами документов для автоматического формирования',
       'LBL_NOTIF_SCHED_DESCRIPTION' => 'Управление Уведомлениями в случае важных Событий',
       'LBL_INV_NOTIF_DESCRIPTION' => 'Изменить Настройки Уведомлений о запасах Товара',
       'LBL_INV_TANDC_DESCRIPTION' => 'Укажите Сроки и Условия для предложений, заказов и счетов',
@@ -465,7 +465,7 @@ $mod_strings = array (
       'LBL_MODULENAMES' => 'Модуль',
       'LBL_DOWNLOAD' => 'Загрузить',
       'LBL_ADD_TEMPLATE' => 'Добавить Шаблон',
-      'LBL_WORD_TEMPLATES' => 'Шаблоны документов',
+      'LBL_WORD_TEMPLATES' => 'Шаблоны документов для автоматического формирования',
       'LBL_TASK_NOTIFICATION' => 'Уведомление о Задержке События',
       'LBL_BIG_DEAL' => 'Уведомление о крупной Сделке',
       'LBL_PENDING_TICKETS' => 'Уведомление о Заявке',
@@ -900,7 +900,19 @@ $mod_strings = array (
         'LBL_SELECTED_MODULES' => 'Выбранные модули',
 
         'LBL_CRM_SETTINGS' => 'Свойства CRM',
-
+        // SalesPlatform.ru begin Widgets added
+        'LBL_SP_ACC' => 'Последние Контрагенты',
+        'LBL_SP_POT' => 'Последние Сделки',
+        'LBL_SP_EVENTS' => 'Последние События',
+        'LBL_SP_EXT_EVENTS' => 'События подчиненных',
+        // SalesPlatform.ru end
+        
+        // SalesPlatform.ru begin localization settings
+        'Scheduler' => 'Планировщик',
+        'Allows you to Configure Cron Task' => 'Настройка Планировщика',
+        'Update configuration file of the application' => 'Настройка конфигурационного файла', 
+        'Allows you to manage Webforms' => 'Управление ВебФормами', 
+        // SalesPlatform.ru end
 );
 
 ?>

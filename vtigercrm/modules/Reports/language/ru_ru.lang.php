@@ -192,8 +192,11 @@ $mod_strings = array (
       'SELECT_FILTER_TYPE' => 'Выберите Тип Отчета',
       'LBL_USERS' => 'Пользователи',
       'LBL_GROUPS' => 'Группы',
+      // SalesPlatform.ru begin: Add reports role sharing
+      'LBL_ROLES' => 'Роли',
+      // SalesPlatform.ru end
       'LBL_SELECT_FIELDS' => 'Выбрать Поля',
-      'LBL_MEMBERS' => 'Учасники',
+      'LBL_MEMBERS' => 'Участники',
       'LBL_RELATED_FIELDS' => 'Относящиеся Поля',
       'LBL_NO_ACCESS' => ' Доступ Запрещен для модуля(ей) ',
       'LBL_NOT_ACTIVE' => ' Доступ Запрещен для модуля(ей) ',

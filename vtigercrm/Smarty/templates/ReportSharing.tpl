@@ -15,7 +15,10 @@
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 {$BLOCKJS_STD}
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height='530' width="100%">
+{* SalesPlatform.ru begin hide scroll *}
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height='525' width="100%">
+{* <table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height='530' width="100%"> *} 
+{* SalesPlatform.ru end *}
 	<tbody>
 	<tr valign='top'>
 		<td colspan="2">
@@ -66,6 +69,9 @@
 													<select id="memberType" name="memberType" class="small" onchange="show_Options()">
 													<option value="groups" selected>{$MOD.LBL_GROUPS}</option>
 													<option value="users">{$MOD.LBL_USERS}</option>
+                                                                                                        {* SalesPlatform.ru begin: Add reports role sharing *}
+                                                                                                        <option value="roles">{$MOD.LBL_ROLES}</option>
+                                                                                                        {* SalesPlatform.ru begin: Add reports role sharing *}
 													</select>
 													<input type="hidden" name="findStr" class="small">&nbsp;
 												</td>
@@ -112,7 +118,10 @@ var userIdArr=new Array({$USERIDSTR});
 var userNameArr=new Array({$USERNAMESTR});
 var grpIdArr=new Array({$GROUPIDSTR});
 var grpNameArr=new Array({$GROUPNAMESTR});
-
+{* SalesPlatform.ru begin: Add reports role sharing *}
+var roleIdArr=new Array({$ROLEIDSTR});
+var roleNameArr=new Array({$ROLENAMESTR});
+{* SalesPlatform.ru end: Add reports role sharing *}
 </script>
 {literal}
 <script>
@@ -143,6 +152,11 @@ function show_Options() {
 	} else if(selectedOption == 'users') {
 		constructSelectOptions('users',userIdArr,userNameArr);		
 	}
+        // SalesPlatform.ru begin: Add reports role sharing
+        else if(selectedOption == 'roles') {
+		constructSelectOptions('roles',roleIdArr,roleNameArr);
+	}
+        // SalesPlatform.ru end
 }
 
 function constructSelectOptions(selectedMemberType,idArr,nameArr)
@@ -178,6 +192,11 @@ function constructSelectOptions(selectedMemberType,idArr,nameArr)
 		} else if(selectedMemberType == 'users') {
 			nowNamePrefix = 'User::'
 		}
+                // SalesPlatform.ru begin: Add reports role sharing
+		else if(selectedMemberType == 'roles') {
+			nowNamePrefix = 'Role::'
+		}
+                // SalesPlatform.ru end
 
 		var nowName = nowNamePrefix + constructedOptionName[j];
 		var nowId = selectedMemberType + '::'  + constructedOptionValue[j]

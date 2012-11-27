@@ -4601,7 +4601,7 @@ function fnvshobjMore(obj,Lay,announcement){
 	if(announcement){
 		tagName.style.top = 110+'px';
 	}else{
-		tagName.style.top = 76+'px';
+		tagName.style.top = 72+'px';
 	}
 	tagName.style.display = 'block';
 	tagName.style.visibility = "visible";
@@ -4816,3 +4816,125 @@ function getviewId()
 	}
 	return viewid;
 }
+
+// SalesPlatform.ru begin 
+//Search element in array
+function in_array(what, where) {
+    for(var i=0; i < where.length; i++) {
+        if(what == where[i]) { 
+            return true;
+        }
+    }    
+    return false;
+}
+
+// Smart filters implementation
+function sp_smartfilter(module,dataStr,uiTypesListStr)
+{
+    var str_arr = dataStr.split(';');
+    var uiTypesListStr_arr = uiTypesListStr.split(';');
+    var picklistUiTypes = uiTypesListStr_arr[0].split(':');
+    var dateUiTypes = uiTypesListStr_arr[1].split(':');
+    var criteriaConditions = [];
+    var crConIter = 0;
+    var columnGroupId = 1; 
+    for(var i=0; i < str_arr.length; i++) {
+        var data_arr = str_arr[i].split(':');
+        var selectedColumn = trim(str_arr[i]);
+        var glueCondition = '';
+        var comparatorValue = '';
+        var specifiedValue = '';
+        
+        if ((data_arr[4] == 'N') || (data_arr[4] == 'NN') || (data_arr[4] == 'I') || in_array(data_arr[5],dateUiTypes)) {
+            
+            if ((data_arr[4] == 'N') || (data_arr[4] == 'NN') || (data_arr[4] == 'I')){
+                specifiedValue = trim(document.getElementById(data_arr[2] + "_from").value);
+            } else {
+                specifiedValue = trim(document.getElementById("jscal_field_from" + data_arr[2]).value);
+            } 
+            if (specifiedValue !='') {
+                comparatorValue = 'h';
+	        criteriaConditions[crConIter] = {
+                                                   "groupid":columnGroupId, 
+				                   "columnname":selectedColumn,
+				                   "comparator":comparatorValue,
+				                   "value":specifiedValue,
+				                   "columncondition":glueCondition
+				                };
+                crConIter++;                     
+            }
+          
+            specifiedValue = '';
+            comparatorValue = '';
+            if ((data_arr[4] == 'N') || (data_arr[4] == 'NN') || (data_arr[4] == 'I')){
+                specifiedValue = trim(document.getElementById(data_arr[2] + "_to").value);
+            } else {
+                specifiedValue = trim(document.getElementById("jscal_field_to" + data_arr[2]).value);
+            }
+            if (specifiedValue !='') {
+                comparatorValue = 'm';
+	        criteriaConditions[crConIter] = { 
+                                                    "groupid":columnGroupId, 
+				                    "columnname":selectedColumn,
+				                    "comparator":comparatorValue,
+				                    "value":specifiedValue,
+				                    "columncondition":glueCondition
+				                };
+                crConIter++;                     
+           }
+       } else {    
+           specifiedValue = trim(document.getElementById(data_arr[2]).value);
+           if (specifiedValue !='') {
+               if ( ((data_arr[5] == '33') || (data_arr[5] == '34') || (data_arr[4] == 'V') || (data_arr[4] == 'E')) && !in_array(data_arr[5],picklistUiTypes) ) {
+                   comparatorValue = 'c';
+               } else {
+                   comparatorValue = 'e';
+               }
+	       glueCondition = '';
+               criteriaConditions[crConIter] = {
+                                                   "groupid":columnGroupId, 
+				                   "columnname":selectedColumn,
+				                   "comparator":comparatorValue,
+				                   "value":specifiedValue,
+				                   "columncondition":glueCondition
+				               };
+               crConIter++;                     
+           }
+       }
+    }
+        
+    if (criteriaConditions.length>1) {
+        for(crConIter=0; crConIter < criteriaConditions.length-1; crConIter++) {
+              criteriaConditions[crConIter].columncondition = "and";
+        }
+    }
+    var advft_criteria = encodeURIComponent(JSON.stringify(criteriaConditions));
+    var criteriaGroups = [];
+    criteriaGroups[0] = {"groupcondition":''};
+    var advft_criteria_groups = JSON.stringify(criteriaGroups);
+      
+    var urlstring = '';
+    urlstring += '&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups+'&';
+    urlstring += 'searchtype=advance&'
+       
+    var moduleName = trim(module);
+    $("status").style.display="inline";
+    new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:urlstring +'query=true&file=index&module='+moduleName+'&action='+moduleName+'Ajax&ajax=true&search=true',
+			onComplete: function(response) {
+				$("status").style.display="none";
+                                result = response.responseText.split('&#&#&#');
+                                $("ListViewContents").innerHTML= result[2];
+                                if(result[1] != '') {
+				    alert(result[1]);
+                                }
+				$('basicsearchcolumns').innerHTML = '';
+			}
+	       }
+    );
+    return false
+}
+//SalesPlatform.ru end

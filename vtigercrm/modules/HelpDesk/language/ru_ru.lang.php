@@ -127,14 +127,23 @@ $mod_strings = array (
       'In Progress' => 'В Прогрессе',
       'Wait For Response' => 'Ожидание Ответа',
       'Closed' => 'Закрыто',
-      'Hi' => 'Привет',
+      //SalesPlatform.ru begin
+      'Hi' => 'Здравствуйте',  
+      //'Hi' => 'Привет',
+      //SalesPlatform.ru end
       'Dear' => 'Уважаемый(ая)',
       'LBL_PORTAL_BODY_MAILINFO' => 'Ваша заявка',
-      'LBL_DETAIL' => 'детали :',
+      //SalesPlatform.ru begin
+      'LBL_DETAIL' => 'Данные заявки:',
+      //'LBL_DETAIL' => 'детали :',
+      //SalesPlatform.ru end
       'LBL_REGARDS' => 'С уважением',
       'LBL_TEAM' => 'Служба поддержки',
       'LBL_TICKET_DETAILS' => 'Детали Заявки',
-      'created' => 'создано',
+      //SalesPlatform.ru begin
+      'created' => 'создана',
+      //'created' => 'создано',
+      //SalesPlatform.ru end
       'replied' => 'отвечено',
       'reply' => 'Добавлен новый комментарий для заявки ',
       'customer_portal' => ' в клиентском портале SalesPlatform.ru. ',
@@ -175,7 +184,14 @@ $mod_strings = array (
 
     'From Portal' => 'Из Портала',
     'HelpDesk ID' => 'ID Заявки',
+    
+    // SalesPlatform.ru begin localization for 5.4.0 
+    'Service Contracts' => 'Сервисные Контракты',
+    // SalesPlatform.ru end
 
+    // SalesPlatform.ru begin
+    'HELPDESK_' => 'Заявка_',
+    // SalesPlatform.ru end
 );
 
 ?>

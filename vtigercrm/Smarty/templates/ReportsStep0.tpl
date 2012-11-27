@@ -64,7 +64,10 @@
 										<tr>
 											<td colspan="2">
 												<span class="genHeaderGray">{$MOD.LBL_REPORT_DETAILS}</span><br>
-												{$MOD.LBL_TYPE_THE_NAME} &amp; {$MOD.LBL_DESCRIPTION_FOR_REPORT}<hr>
+                                                                                                {* SalesPlatform.ru begin localization for 5.4.0 *}
+                                                                                                {$MOD.LBL_TYPE_THE_NAME} {$MOD.LBL_AND} {$MOD.LBL_DESCRIPTION_FOR_REPORT}<hr>
+												{* {$MOD.LBL_TYPE_THE_NAME} &amp; {$MOD.LBL_DESCRIPTION_FOR_REPORT}<hr> *}
+                                                                                                {* SalesPlatform.ru end *}
 											</td>
 										</tr>
 										<tr>
@@ -131,7 +134,10 @@
 												<td style="padding-right: 5px;" align="left" nowrap width="25%"><b>{$MOD.NO_REL_MODULES}</b></td>
 											{/if}
 										</tr>
-										<tr><td colspan="2" height="350">&nbsp;</td></tr>
+                                                                                {* SalesPlatform.ru begin hide scroll *}
+										<tr><td colspan="2" height="100">&nbsp;</td></tr>
+                                                                                {* <tr><td colspan="2" height="350">&nbsp;</td></tr> *}
+                                                                                {* SalesPlatform.ru end *}
 									</table>
 							</div>
 						</td>

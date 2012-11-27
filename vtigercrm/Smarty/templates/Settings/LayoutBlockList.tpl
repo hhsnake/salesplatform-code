@@ -372,9 +372,16 @@ function callRelatedList(module){
 		
 	);
 }
-
-function showProperties(field,man,pres,quickc,massed){
+// SalesPlatform.ru begin added fieldname
+function showProperties(field,man,pres,quickc,massed,fieldname){
+//function showProperties(field,man,pres,quickc,massed){
+// SalesPlatform.ru end  
 	var str='<table class="small" cellpadding="2" cellspacing="0" border="0"><tr><th>'+field+'</th></tr>';
+        // SalesPlatform.ru begin added fieldname
+        if (fieldname != '') {
+            str = str+'<tr><td>'+alert_arr.FIELD_NAME +' '+fieldname+'</td></tr>';    
+        }
+        // SalesPlatform.ru end  
 	if (man == 0 || man == 2)
  		str = str+'<tr><td>'+alert_arr.FIELD_IS_MANDATORY+'</td></tr>';
 	if (pres == 0 || pres == 2)

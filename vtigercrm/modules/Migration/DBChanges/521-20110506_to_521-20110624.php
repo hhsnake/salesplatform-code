@@ -24,6 +24,8 @@ $migrationlog->debug("\n\nDB Changes from 5.2.1-20110506 to 5.2.1-20110624 -----
 require_once 'include/utils/CommonUtils.php';
 //global $adb;
 
+changeDBCollation('utf8_general_ci');
+
 $query=$adb->pquery("select * from vtiger_links where linklabel = 'LBL_CHECK_STATUS'",array());
 $numOfRows=$adb->num_rows($query);
 if($numOfRows > 0){

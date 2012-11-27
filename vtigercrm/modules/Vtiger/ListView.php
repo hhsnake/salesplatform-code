@@ -222,6 +222,21 @@ if(isPermitted($currentModule, "Merge") == 'yes' && file_exists("modules/$curren
 
 $smarty->assign('IS_ADMIN', is_admin($current_user));
 
+// SalesPlatform.ru begin Smart filters implementation
+//if the filter is specified, send to smarty array for template 
+//and a string for javascript function.
+$temp_arr = sp_smartfilter_data($currentModule);
+if ($temp_arr) {
+    $smarty->assign('smartfilterExists',true);
+    $smarty->assign('spFilterTplArr',$temp_arr[0]);
+    $smarty->assign('spFilterJsStr',$temp_arr[1]);
+    $smarty->assign('spUiTypesListTplArr',$temp_arr[2]);
+    $smarty->assign('spUiTypesListJsStr',$temp_arr[3]);
+} else {
+    $smarty->assign('smartfilterExists',false);
+}
+// SalesPlatform.ru end
+
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else

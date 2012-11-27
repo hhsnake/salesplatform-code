@@ -241,4 +241,149 @@ function getNumberOfColumns(){
 	}
 	return $data;
 }
+
+// SalesPlatform.ru begin Widgets added
+function homepage_getSP_EVENTS_UpcomingActivities($maxval,$calCnt){
+        global $log;
+        $log->debug("Entering homepage_getSP_EVENTS_UpcomingActivities() method ...");
+	require_once("data/Tracker.php");
+	require_once("include/utils/utils.php");
+	global $adb;
+	global $current_language;
+	global $current_user;
+	$current_module_strings = return_module_language($current_language, "Calendar");
+ 	
+	$list_query = 'select vtiger_activity.subject, vtiger_activity.activitytype, vtiger_activity.activityid
+		from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid 
+		where vtiger_crmentity.deleted =0 AND vtiger_crmentity.smownerid = ?';
+	
+        $list_query .=" ORDER BY vtiger_activity.activityid DESC";
+       
+	$list_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+	
+        $list_result = $adb->pquery($list_query, array($current_user->id));
+	$noofrows = $adb->num_rows($list_result);
+	
+	$open_events_list =array();
+	if ($noofrows > 0) {
+		for($i=0;$i<$noofrows && $i<$maxval;$i++) 
+		{
+			$open_events_list[] = Array('subject' => $adb->query_result($list_result,$i,'subject'),  
+                                        'type' => $adb->query_result($list_result,$i,'activitytype'), 
+					'id' => $adb->query_result($list_result,$i,'activityid')
+					);
+		}
+	}
+	
+	$header=array();
+	$header[] =$current_module_strings['LBL_ACTIVITY'];
+	$header[] =$current_module_strings['Type'];
+	
+    $entries=array();
+    foreach($open_events_list as $event)
+	{
+		$value=array();
+		$event_fields = array(
+				'SUBJECT' => $event['subject'],    
+				'TYPE' => $event['type'],
+				'ID' => $event['id'],
+				);
+
+                // SalesPlatform.ru begin UTF-8 support
+		$Top_firstname = (mb_strlen($event['subject'], 'UTF-8') > 40) ? (mb_substr($event['subject'],0,40,'UTF-8').'...') : $event['subject'];
+		//$Top_firstname = (mb_strlen($event['subject'], 'UTF-8') > 40) ? (mb_substr($event['subject'],0,20).'...') : $event['subject'];
+                // SalesPlatform.ru end
+		$value[]= '<a href="index.php?action=DetailView&module=Calendar&record='.$event_fields['ID'].'">'.$Top_firstname.'</a>';
+                  
+                $value[] = getTranslatedString($event['type'], 'Calendar');
+           
+		$entries[$event_fields['ID']]=$value;
+	}
+	
+	$search_qry = "&action=ListView&from_homepage=pending_activities";
+
+	$values=Array('ModuleName'=>'Calendar','Header'=>$header,'Entries'=>$entries, 'search_qry'=>$search_qry);
+	$log->debug("Exiting getNewLeads method ...");
+	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
+		return $values;     
+}
+// SalesPlatform.ru end 
+
+// SalesPlatform.ru begin Widgets added
+function homepage_getSP_EXT_EVENTS_UpcomingActivities($maxval,$calCnt){
+        global $log;
+        $log->debug("Entering homepage_getSP_EXT_EVENTS_UpcomingActivities() method ...");
+	require_once("data/Tracker.php");
+	require_once("include/utils/utils.php");
+	global $adb;
+	global $current_language;
+	global $current_user;
+	$current_module_strings = return_module_language($current_language, "Calendar");
+
+	$list_query = 'select vtiger_activity.subject, vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_users.first_name, vtiger_users.last_name, vtiger_activity.activityid
+                        from vtiger_activity inner join vtiger_crmentity 
+                        on vtiger_activity.activityid = vtiger_crmentity.crmid 
+                        inner join vtiger_users 
+                        on vtiger_crmentity.smownerid = vtiger_users.id
+                        where vtiger_crmentity.deleted =0 AND vtiger_users.reports_to_id=?';
+	
+        $list_query .=" ORDER BY vtiger_activity.activityid DESC";
+	 
+	$list_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+        	
+	$list_result = $adb->pquery($list_query, array($current_user->id));
+	$noofrows = $adb->num_rows($list_result);
+	$open_events_list =array();
+	if ($noofrows > 0) {
+		for($i=0;$i<$noofrows && $i<$maxval;$i++) 
+		{
+			$open_events_list[] = Array('subject' => $adb->query_result($list_result,$i,'subject'), 
+                                        'date' => $adb->query_result($list_result,$i,'date_start'),
+                                        'type' => $adb->query_result($list_result,$i,'activitytype'), 
+                                        'firstname' => $adb->query_result($list_result,$i,'first_name'), 
+                                        'lastname' => $adb->query_result($list_result,$i,'last_name'),
+					'id' => $adb->query_result($list_result,$i,'activityid')
+					);
+		}
+	}
+	
+	$header=array();
+	$header[] =$current_module_strings['LBL_ACTIVITY'];
+        $header[] =$current_module_strings['Start Date'];
+	$header[] =$current_module_strings['Type'];
+        $header[] =$current_module_strings['Assigned To'];
+	
+    $entries=array();
+    foreach($open_events_list as $event)
+	{
+		$value=array();
+		$event_fields = array(
+				'SUBJECT' => $event['subject'],
+                                'DATE' => $event['date'],
+				'TYPE' => $event['type'],
+                                'FIRSTNAME' => $event['firstname'],
+                                'LASTNAME' => $event['lastname'],
+				'ID' => $event['id'],
+				);
+	
+                // SalesPlatform.ru begin UTF-8 support
+		$Top_subject = (mb_strlen($event['subject'], 'UTF-8') > 40) ? (mb_substr($event['subject'],0,40,'UTF-8').'...') : $event['subject'];
+		//$Top_subject = (mb_strlen($event['subject'], 'UTF-8') > 40) ? (mb_substr($event['subject'],0,20).'...') : $event['subject'];
+                // SalesPlatform.ru end
+                $value[]= '<a href="index.php?action=DetailView&module=Calendar&record='.$event_fields['ID'].'">'.$Top_subject.'</a>';
+                $value[] = getTranslatedString($event['date'], 'Calendar'); 
+                $value[] = getTranslatedString($event['type'], 'Calendar'); 
+                $Top_FL = $event['firstname'].' '.$event['lastname'];
+                $value[] = $Top_FL;
+		$entries[$event_fields['ID']]=$value;
+	}
+	
+	$search_qry = "&action=ListView&from_homepage=upcoming_activities";
+
+	$values=Array('ModuleName'=>'Calendar','Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
+	$log->debug("Exiting getNewLeads method ...");
+	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
+		return $values;   
+}
+// SalesPlatform.ru end
 ?>

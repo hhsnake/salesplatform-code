@@ -79,6 +79,9 @@ function getTopQuotes($maxval,$calCnt)
 
 	//<<<<<<<<customview>>>>>>>>>
 
+        //SalesPlatform.ru begin
+        $query .= " ORDER BY vtiger_quotes.quoteid DESC";
+        //SalesPlatform.ru end
 	$query .= " LIMIT " . $adb->sql_escape_string($maxval);
 
 	if($calCnt == 'calculateCnt') {

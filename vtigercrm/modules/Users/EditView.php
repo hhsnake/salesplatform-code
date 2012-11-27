@@ -48,6 +48,13 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	$mode='create';
 }
 
+//SalesPlatform.ru begin
+//Default fields values added
+$focus->column_fields['currency_decimal_separator'] = ".";
+$focus->column_fields['currency_symbol_placement'] = "1.0$";
+$focus->column_fields['reminder_interval'] = "1 Minute";
+//SalesPlatform.ru end
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 	$focus->user_name = "";

@@ -27,6 +27,11 @@ require_once("modules/Emails/mail.php");
 require_once('include/logging.php');
 require_once("config.php");
 
+// SalesPlatform.ru begin current_user global var fix
+global $current_user;
+global $current_language;
+global $default_language;
+// SalesPlatform.ru end
 $current_user = Users::getActiveAdminUser();
 // Set the default sender email id
 global $HELPDESK_SUPPORT_EMAIL_ID;
@@ -45,7 +50,10 @@ $log->debug(" invoked SendReminder ");
 
 // retrieve the translated strings.
 if(empty($current_language))
-	$current_language = 'en_us';
+        // SalesPlatform.ru begin current_language global var fix
+	$current_language = $default_language;
+	//$current_language = 'en_us';
+        // SalesPlatform.ru end
 $app_strings = return_application_language($current_language);
 
 //modified query for recurring events -Jag
@@ -86,7 +94,10 @@ if($adb->num_rows($result) >= 1)
 		$date = new DateTimeField("$date_start $time_start");
 		$activity_time = strtotime($date->getDisplayDateTimeValue())/60;
 
-		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) <= $reminder_time)
+                // SalesPlatform.ru begin Fixed Email reminder last interval
+		if (($activity_time - $curr_time) <= $reminder_time)
+		//if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) <= $reminder_time)
+                // SalesPlatform.ru end
 		{
 			$log->debug(" InSide  REMINDER");
 			$query_user="SELECT vtiger_users.email1,vtiger_salesmanactivityrel.smid FROM vtiger_salesmanactivityrel inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid where vtiger_salesmanactivityrel.activityid =? and vtiger_users.deleted=0"; 

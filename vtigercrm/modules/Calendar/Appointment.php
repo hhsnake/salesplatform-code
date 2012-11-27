@@ -233,6 +233,9 @@ class Appointment
 			}
 		}	
 		$this->image_name = $act_array["activitytype"].".gif";
+                // SalesPlatform.ru begin Event image name fix
+                $this->image_name = str_replace(' ', '', $this->image_name);
+                // SalesPlatform.ru end
 		if(!empty($act_array["recurringid"]) && !empty($act_array["recurringtype"]))
 			$this->recurring="Recurring.gif";
 		

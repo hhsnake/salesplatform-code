@@ -603,11 +603,15 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 		}
 		$prod_seq++;
 
+                // SalesPlatform.ru begin For sending PrdStckMail use workflow!
+                /*
 		if($module != 'PurchaseOrder')
 		{
 			//update the stock with existing details
 			updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr,$module);
 		}
+                */
+                // SalesPlatform.ru begin
 
 		//we should update discount and tax details
 		$updatequery = "update vtiger_inventoryproductrel set ";

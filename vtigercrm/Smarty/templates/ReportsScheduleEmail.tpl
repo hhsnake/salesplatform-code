@@ -10,7 +10,10 @@
 -->*}
 <script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height='530' width="100%">
+{* SalesPlatform.ru begin hide scroll *}
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height='525' width="100%">
+{* <table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height='530' width="100%"> *}
+{* SalesPlatform.ru end *}
 	<tr valign='top'>
 		<td colspan="1">
 			<span class="genHeaderGray">{'LBL_SCHEDULE_EMAIL'|@getTranslatedString:'Reports'}</span>

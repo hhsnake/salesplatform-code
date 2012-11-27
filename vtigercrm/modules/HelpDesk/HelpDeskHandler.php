@@ -44,11 +44,16 @@ function HelpDesk_nofifyOnPortalTicketCreation($entityData) {
 	$wsParentId = $entityData->get('parent_id');
 	$parentIdParts = explode('x', $wsParentId);
 	$parentId = $parentIdParts[1];
-
-	$subject = "[From Portal] " .$entityData->get('ticket_no')." [ Ticket ID : $entityId ] ".$entityData->get('ticket_title');
+        
+        //SalesPlatform.ru begin
+        $subject = "[".getTranslatedString('From Portal')."] " .$entityData->get('ticket_no')." [ ".getTranslatedString('Ticket ID')." : ".$entityId." ] ".$entityData->get('ticket_title');
+	$contents = " ".getTranslatedString('Ticket No')." : ".$entityData->get('ticket_no'). "<br> ".getTranslatedString('Ticket ID')." : ".$entityId."<br> ".getTranslatedString('Ticket Title')." : ".
+							$entityData->get('ticket_title')."<br><br>".$entityData->get('description');
+	/*$subject = "[From Portal] " .$entityData->get('ticket_no')." [ Ticket ID : $entityId ] ".$entityData->get('ticket_title');
 	$contents = ' Ticket No : '.$entityData->get('ticket_no'). '<br> Ticket ID : '.$entityId.'<br> Ticket Title : '.
-							$entityData->get('ticket_title').'<br><br>'.$entityData->get('description');
-
+							$entityData->get('ticket_title').'<br><br>'.$entityData->get('description');*/
+        //SalesPlatform.ru end 
+        
 	//get the contact email id who creates the ticket from portal and use this email as from email id in email
 	$result = $adb->pquery("SELECT email FROM vtiger_contactdetails WHERE contactid=?", array($parentId));
 	$contact_email = $adb->query_result($result,0,'email');

@@ -241,7 +241,10 @@ function editworkflowscript($, conditions){
 	function fillOptions(el,options){
 		el.empty();
 		$.each(options, function(k, v){
-			el.append('<option value="'+k+'">'+v+'</option>');
+                        // SalesPlatform.ru begin localization for workflow filters
+			el.append('<option value="'+k+'">'+getTranslatedString(v)+'</option>');
+                        // el.append('<option value="'+k+'">'+v+'</option>');
+                        // SalesPlatform.ru end
 		});
 	}
 
@@ -479,7 +482,7 @@ function editworkflowscript($, conditions){
 					var referenceFields = reduceR(concat, map(fieldReferenceNames, referenceFieldTypes), []);
 					var fieldLabels = dict(parentFields.concat(referenceFields));
 
-					function addCondition(groupid, condid){
+					function addCondition(groupid, condid){         
 						if($("#save_condition_group_"+groupid).length <= 0) {
 							var group_condition_html = '';
 							if($(".condition_group_block").length > 0) {
@@ -501,7 +504,10 @@ function editworkflowscript($, conditions){
                                     <div id="save_condition_group_'+groupid+'" class="save_condition_group"> \
                                     </div> \
                                     <div> \
-                                        <input type="button" id="add_group_condition_'+groupid+'" value="New Condition" class="small edit" /> \
+\                                   <!-- SalesPlatform.ru begin localization for 5.4.0 --> \
+                                        <input type="button" id="add_group_condition_'+groupid+'" value= "'+getTranslatedString("LBL_NEW_CONDITION")+'" class="small edit" /> \
+                                    <!-- <input type="button" id="add_group_condition_'+groupid+'" value="New Condition" class="small edit" /> \--> \
+                                    <!-- SalesPlatform.ru end --> \
                                     </div> \
                                 </div>'
 								);

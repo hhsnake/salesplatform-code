@@ -48,6 +48,9 @@
 	 {$MOD.LBL_SUMMARY_REPORT_VIEW_DATA_WITH_SUBTOTALS}
 	</td>
 	</tr>
-	<tr><td colspan="2" height="235">&nbsp;</td></tr>
+        {* SalesPlatform.ru begin hide scroll *}
+	<tr><td colspan="2" height="230">&nbsp;</td></tr>
+        {* <tr><td colspan="2" height="235">&nbsp;</td></tr> *}
+        {* SalesPlatform.ru end *}
 	</tbody>
 </table>

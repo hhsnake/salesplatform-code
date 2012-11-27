@@ -590,23 +590,40 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 
 		if($mode != 'edit')//this will be updated when we create new ticket
 		{
-			$updatelog = "Ticket created. Assigned to ";
+                        // SalesPlatform.ru begin localization for tickets
+                        $updatelog = getTranslatedString('Create_Tickets').' ';
+			//$updatelog = "Ticket created. Assigned to ";
+                        // SalesPlatform.ru end
 
 			if(!empty($assigned_group_name) && $assigntype == 'T')
 			{
-				$updatelog .= " group ".(is_array($assigned_group_name)? $assigned_group_name[0] : $assigned_group_name);
+                                // SalesPlatform.ru begin localization for tickets
+                                $updatelog .= getTranslatedString('LBL_GROUP_NAME').': '.(is_array($assigned_group_name)? $assigned_group_name[0] : $assigned_group_name);
+				//$updatelog .= " group ".(is_array($assigned_group_name)? $assigned_group_name[0] : $assigned_group_name);
+                                // SalesPlatform.ru end
 			}
 			elseif($focus->column_fields['assigned_user_id'] != '')
 			{
-				$updatelog .= " user ".getUserFullName($focus->column_fields['assigned_user_id']);
-			}
+                                // SalesPlatform.ru begin localization for tickets
+                                $updatelog .= getTranslatedString('User Name').': '.getUserFullName($focus->column_fields['assigned_user_id']);
+				//$updatelog .= " user ".getUserFullName($focus->column_fields['assigned_user_id']);
+                                // SalesPlatform.ru end                    
+                        }
 			else
-			{
-				$updatelog .= " user ".getUserFullName($current_user->id);
+			{       
+                                // SalesPlatform.ru begin localization for tickets
+                                $updatelog .= getTranslatedString('User Name').': '.getUserFullName($current_user->id);
+				//$updatelog .= " user ".getUserFullName($current_user->id);
+                                // SalesPlatform.ru end 
 			}
 
-			$fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
-			$updatelog .= " -- ".$fldvalue."--//--";
+                        // SalesPlatform.ru begin localization for tickets
+                        $fldvalue = getTranslatedString(date("l")).' '.date("d").' '
+                                .getTranslatedString(date("F")).' '.date("Y h:i:s A");	
+			$updatelog .= ". ".$fldvalue."--//--";
+                        //$fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
+                        //$updatelog .= " -- ".$fldvalue."--//--";
+                        // SalesPlatform.ru end 
 		}
 		else
 		{
@@ -629,33 +646,56 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 			{
 				$owner_name = getOwnerName($focus->column_fields['assigned_user_id']);
 				if($assigntype == 'T')
-					$updatelog .= ' Transferred to group '.$owner_name.'\.';
+                                        // SalesPlatform.ru begin localization for tickets
+                                        $updatelog .= '<br>'.getTranslatedString('Change_Responsible').' '.$owner_name.'.';
+					//$updatelog .= ' Transferred to group '.$owner_name.'\.';
+                                        // SalesPlatform.ru end
 				else
-					$updatelog .= ' Transferred to user '.decode_html($owner_name).'\.'; // Need to decode UTF characters which are migrated from versions < 5.0.4.
-			}
+                                        // SalesPlatform.ru begin localization for tickets
+                                        $updatelog .= '<br>'.getTranslatedString('Change_Responsible').' '.decode_html($owner_name).'.';
+					//$updatelog .= ' Transferred to user '.decode_html($owner_name).'\.'; // Need to decode UTF characters which are migrated from versions < 5.0.4.
+                                        // SalesPlatform.ru end              
+                        }               
 			//Status change log
 			if($old_status != $focus->column_fields['ticketstatus'] && $focus->column_fields['ticketstatus'] != '')
 			{
-				$updatelog .= ' Status Changed to '.$focus->column_fields['ticketstatus'].'\.';
+                                // SalesPlatform.ru begin localization for tickets
+                                $updatelog .= '<br>'.getTranslatedString('Change_State').' '.getTranslatedString($focus->column_fields['ticketstatus']).'".';
+				//$updatelog .= ' Status Changed to '.$focus->column_fields['ticketstatus'].'\.';
+                                // SalesPlatform.ru end
 			}
 			//Priority change log
 			if($old_priority != $focus->column_fields['ticketpriorities'] && $focus->column_fields['ticketpriorities'] != '')
 			{
-				$updatelog .= ' Priority Changed to '.$focus->column_fields['ticketpriorities'].'\.';
+                                // SalesPlatform.ru begin localization for tickets
+                                $updatelog .= '<br>'.getTranslatedString('Change_Priority').' '.getTranslatedString($focus->column_fields['ticketpriorities']).'".';
+				//$updatelog .= ' Priority Changed to '.$focus->column_fields['ticketpriorities'].'\.';
+                                // SalesPlatform.ru end
 			}
 			//Severity change log
 			if($old_severity != $focus->column_fields['ticketseverities'] && $focus->column_fields['ticketseverities'] != '')
 			{
-				$updatelog .= ' Severity Changed to '.$focus->column_fields['ticketseverities'].'\.';
-			}
+                                // SalesPlatform.ru begin localization for tickets
+                                $updatelog .= '<br>'.getTranslatedString('Change_Severity').' '.getTranslatedString($focus->column_fields['ticketseverities']).'".';
+				//$updatelog .= ' Severity Changed to '.$focus->column_fields['ticketseverities'].'\.';
+                                // SalesPlatform.ru end         
+                        }
 			//Category change log
 			if($old_category != $focus->column_fields['ticketcategories'] && $focus->column_fields['ticketcategories'] != '')
 			{
-				$updatelog .= ' Category Changed to '.$focus->column_fields['ticketcategories'].'\.';
-			}
-
-			$updatelog .= ' -- '.date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
-		}
+                                // SalesPlatform.ru begin localization for tickets
+                                $updatelog .= '<br>'.getTranslatedString('Change_Category').' '.getTranslatedString($focus->column_fields['ticketcategories']).'".';
+				//$updatelog .= ' Category Changed to '.$focus->column_fields['ticketcategories'].'\.';
+                                // SalesPlatform.ru end         
+                        }
+                        
+                        // SalesPlatform.ru begin localization for tickets
+                        $updatelog .= ' '.getTranslatedString(date("l")).' '.date("d").' '
+                                .getTranslatedString(date("F")).' '.date("Y h:i:s A").'. '
+                                .getTranslatedString('User Name').': '.getUserFullName($current_user->id).'</br>';
+			//$updatelog .= ' -- '.date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
+                        // SalesPlatform.ru end                     
+                }
 		return $updatelog;
 	}
 
@@ -776,9 +816,13 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		$desc = getTranslatedString('Ticket ID', $moduleName) . ' : ' . $entityId . '<br>'
 				. getTranslatedString('Ticket Title', $moduleName) . ' : ' . $temp . ' '
 				. $entityData->get('ticket_title');
-		$desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . getParentName($parentId) . ",<br><br>"
-				. getTranslatedString('LBL_PORTAL_BODY_MAILINFO', $moduleName) . " " . $reply . " " . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";
-		$desc .= "<br>" . getTranslatedString('Ticket No', $moduleName) . " : " . $entityData->get('ticket_no');
+		//SalesPltaform.ru begin
+                $desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . getParentName($parentId) . "! "
+				. getTranslatedString('LBL_PORTAL_BODY_MAILINFO', $moduleName) . " " .$reply . ".<br><br>" . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";
+                /*$desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . getParentName($parentId) . ",<br><br>"
+				. getTranslatedString('LBL_PORTAL_BODY_MAILINFO', $moduleName) . " " . $reply . " " . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";*/
+		//SalesPltaform.ru end
+                $desc .= "<br>" . getTranslatedString('Ticket No', $moduleName) . " : " . $entityData->get('ticket_no');
 		$desc .= "<br>" . getTranslatedString('Status', $moduleName) . " : " . $entityData->get('ticketstatus');
 		$desc .= "<br>" . getTranslatedString('Category', $moduleName) . " : " . $entityData->get('ticketcategories');
 		$desc .= "<br>" . getTranslatedString('Severity', $moduleName) . " : " . $entityData->get('ticketseverities');

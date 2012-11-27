@@ -55,7 +55,10 @@ $template = Array(
 		"Leads"=>"LEADS_SELECTED",
 		"Accounts"=>"ACCOUNTS_SELECTED",
 		"Contacts"=>"CONTACTS_SELECTED",
-		"HelpDesk"=>"HELPDESK_SELECTED"
+		"HelpDesk"=>"HELPDESK_SELECTED",
+// SalesPlatform.ru begin: Add document merge to Potentials
+		"Potentials"=>"POTENTIALS_SELECTED",
+// SalesPlatform.ru end
 	   );
 
 $smarty->assign($template[$tempModule],"selected");

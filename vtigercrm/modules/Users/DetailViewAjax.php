@@ -30,7 +30,18 @@ if($ajaxaction == "DETAILVIEW")
 	{
 		$userObj = new Users();
 		$userObj->retrieve_entity_info($userid,"Users");
-		$userObj->column_fields[$fieldname] = $fieldvalue;
+		
+                //SalesPlatform.ru begin
+                //Checking for equal separators
+                if (($fieldname == 'currency_decimal_separator' || $fieldname == 'currency_grouping_separator') && $fieldvalue != $userObj->column_fields[$fieldname]) {
+                    if ($fieldvalue == $userObj->column_fields['currency_decimal_separator'] || $fieldvalue == $userObj->column_fields['currency_grouping_separator']) {
+                        echo ":#:ERR".$mod_strings['LBL_EQUAL_SEPARATORS'];
+		        return false;
+                    }
+                }
+                //SalesPlatform.ru end
+                
+                $userObj->column_fields[$fieldname] = $fieldvalue;
 
                 if($fieldname=='asterisk_extension'){
 			$query = "select 1 from vtiger_asteriskextensions

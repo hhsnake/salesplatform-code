@@ -53,10 +53,25 @@ function assignValues($picklistid, $roleid, $values, $tableName){
 	$sql = 'DELETE FROM vtiger_role2picklist WHERE roleid=? AND picklistid=?';
 	$adb->pquery($sql, array($roleid,$picklistid));
 	
+        // SalesPlatform.ru begin displaying of picklists related to roles is fixed  
+        $tableName = $adb->sql_escape_string($tableName);
+	$sql_req = "SELECT * FROM vtiger_$tableName";
+        $result = $adb->pquery($sql_req, array());
+        $noofrows = $adb->num_rows($result);
+        for($y=0;$y<$noofrows;$y++) {
+            $val_type[] = $adb->query_result($result, $y, $tableName);
+        }
+        // SalesPlatform.ru end
 	//insert the new values
 	for($i=0;$i<$count;$i++){
-		$pickVal = htmlentities($values[$i],ENT_QUOTES,$default_charset);
-		
+                // SalesPlatform.ru begin displaying of picklists related to roles is fixed
+                $moduleName = vtlib_purify($_REQUEST['moduleName']);
+		$pickVal = getSpBackTranslatedString(
+                        htmlentities($values[$i],ENT_QUOTES,$default_charset), 
+                        $val_type, $moduleName);
+                //$pickVal = htmlentities($values[$i],ENT_QUOTES,$default_charset);
+		// SalesPlatform.ru end
+                
 		$tableName = $adb->sql_escape_string($tableName);
 		$sql = "SELECT * FROM vtiger_$tableName WHERE $tableName=?";
 		$result = $adb->pquery($sql, array($pickVal));

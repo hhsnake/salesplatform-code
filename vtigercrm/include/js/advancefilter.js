@@ -62,7 +62,10 @@ function updatefOptions(sel, opSelName) {
 			for(nLoop = 0; nLoop < nMaxVal; nLoop++) {
 				selObj.remove(0);
 			}
-			selObj.options[0] = new Option ('None', '');
+                        // SalesPlatform.ru begin localization for 5.4.0 
+                        selObj.options[0] = new Option (alert_arr.NONE, '');
+			//selObj.options[0] = new Option ('None', '');
+                        // SalesPlatform.ru end                       
 			if (currField.value == '') {
 				selObj.options[0].selected = true;
 			}

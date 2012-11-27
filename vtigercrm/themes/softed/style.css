@@ -15,7 +15,10 @@
 
 .small {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
+    /* SalesPlatform.ru begin correct interface */
+    font-size: 10px;
+    /*font-size: 11px;*/
+    /* SalesPlatform.ru end */
     color: #000000;
 }
 
@@ -219,7 +222,6 @@ a:hover {
 }
 
 .searchBtn {
-	border :0px #cccccc solid;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	font-weight:bold;
@@ -1427,6 +1429,44 @@ a.calMnu:Hover{
 }
 .style1 {color: #FF0000}
 
+/*SalesPlatform.ru begin*/
+/*Event styles*/
+.eventNormal{
+	background-color:#D3EAF0;
+	border:1px solid #999999;
+	text-align:left;
+	width:95%;
+	position:relative;
+	left:0px;
+	top:0px;
+	vertical-align:middle;
+	padding:1px;
+}
+
+.eventOutdated{
+	background-color:#ff0000;
+	border:1px solid #999999;
+	text-align:left;
+	width:95%;
+	position:relative;
+	left:0px;
+	top:0px;
+	vertical-align:middle;
+	padding:1px;
+}
+
+.eventFinished{
+	background-color:#bbbbbb;
+	border:1px solid #999999;
+	text-align:left;
+	width:95%;
+	position:relative;
+	left:0px;
+	top:0px;
+	vertical-align:middle;
+	padding:1px;
+}
+/*SalesPlatform.ru end*/
 .event{
     background-color:#fb802f;
     border:2px solid #dddddd;
@@ -1871,6 +1911,15 @@ ul {
     border-right:1px solid #555555;
     border-bottom:1px solid #555555;
 }
+
+/* SalesPlatform.ru begin correct interface */
+.crmbutton{
+    border-left:1px solid #ffffff;
+    border-top:1px solid #ffffff;
+    border-right:1px solid #555555;
+    border-bottom:1px solid #555555;
+}
+/* SalesPlatform.ru end */
 
 .create{
     background-color:#5774b0;
@@ -2344,7 +2393,9 @@ a.drop_downnew_parent{
 
 .multiCurrencyEditUI{
     border:3px solid #CCCCCC;
+    /*SalesPlatform.ru begin : vtiger comented code
     width:500px;
+    SalesPlatform.ru end*/
     padding:5px;
     position:absolute;
     background-color:#FFFFFF;
@@ -2760,9 +2811,8 @@ a.allMnu:Hover{
 	color:#333;
 }
 #search{
-	border:3px solid #4E8DCC;
+	border:1px solid #4E8DCC;
 	background-color:#ffffef;
-	width :50%;
 }
 .drop_mnu_user{
 	top:0px;
@@ -2821,10 +2871,6 @@ a.allMnu:Hover{
     overflow-y:hidden;
     background-color:#ffffcc;
 	margin-top: 0px; /* added */
-}
-.searchBtn{
-	width:48px;
-	height:31px;
 }
 
 .selectall{

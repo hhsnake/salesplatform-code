@@ -207,6 +207,9 @@ if($reportid == "")
 					//<<<<step4 columnstototal>>>>>>>
 
 					//<<<<step5 advancedfilter>>>>>>>
+                                        // SalesPlatform.ru begin Check array is empty
+                                        if ($advft_criteria)
+                                        // SalesPlatform.ru end
 					foreach($advft_criteria as $column_index => $column_condition) {
 
 						if(empty($column_condition)) continue;
@@ -269,6 +272,9 @@ if($reportid == "")
 						$advft_criteria_groups[$adv_filter_groupid]["conditionexpression"] = $groupConditionExpression;
 					}
 
+                                        // SalesPlatform.ru begin Check array is empty
+                                        if ($advft_criteria_groups)
+                                        // SalesPlatform.ru end
 					foreach($advft_criteria_groups as $group_index => $group_condition_info) {
 
 						if(empty($group_condition_info)) continue;
@@ -418,6 +424,9 @@ if($reportid == "")
 			$idelrelcriteriagroupsql = "delete from vtiger_relcriteria_grouping where queryid=?";
 			$idelrelcriteriagroupsqlresult = $adb->pquery($idelrelcriteriagroupsql, array($reportid));
 
+                        // SalesPlatform.ru begin Check array is empty
+                        if ($advft_criteria)
+                        // SalesPlatform.ru end
 			foreach($advft_criteria as $column_index => $column_condition) {
 
 				if(empty($column_condition)) continue;
@@ -481,6 +490,9 @@ if($reportid == "")
 				$advft_criteria_groups[$adv_filter_groupid]["conditionexpression"] = $groupConditionExpression;
 			}
 
+                        // SalesPlatform.ru begin Check array is empty
+                        if ($advft_criteria_groups)
+                        // SalesPlatform.ru end
 			foreach($advft_criteria_groups as $group_index => $group_condition_info) {
 
 				if(empty($group_condition_info)) continue;

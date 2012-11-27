@@ -61,6 +61,10 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
                 $contentModels = array();
 		$productLineItemIndex = 0;
 		$totaltaxes = 0;
+		$totaltaxesGoods = 0;
+		$totaltaxesServices = 0;
+                $goodsNumber = 0;
+                $serviceNumber = 0;
 		foreach($associated_products as $productLineItem) {
 			++$productLineItemIndex;
 
@@ -117,6 +121,18 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 					$productName .="\n"." - ".decode_html($subProduct);
                     }
 			}
+			$contentModel->set('entityType', $productLineItem["entityType{$productLineItemIndex}"]);
+                        if($productLineItem["entityType{$productLineItemIndex}"] == 'Products') {
+                            ++$goodsNumber;
+                            $contentModel->set('goodsNumber', $goodsNumber);
+                            $totaltaxesGoods += $tax;
+                        }
+                        else if($productLineItem["entityType{$productLineItemIndex}"] == 'Services') {
+                            ++$serviceNumber;
+                            $contentModel->set('serviceNumber', $serviceNumber);
+                            $totaltaxesServices += $tax;
+                        }
+
         		$contentModel->set('productNumber', $productLineItemIndex);
             		$contentModel->set('productName', $productName);
 			$contentModel->set('productCode', $productLineItem["hdnProductcode{$productLineItemIndex}"]);
@@ -140,18 +156,28 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 			$contentModels[] = $contentModel;
 		}
 		$this->totaltaxes = $totaltaxes; //will be used to add it to the net total
+		$this->totaltaxesGoods = $totaltaxesGoods;
+		$this->totaltaxesServices = $totaltaxesServices;
 		
 		return $contentModels;
 	}
 
 
 	function buildSummaryModel() {
+
+                if(isset($this->focus->column_fields['currency_id'])) {
+                    $currencyInfo = getCurrencyInfo($this->focus->column_fields['currency_id']);
+                    $currency = $currencyInfo['code'];
+                } else {
+                    $currency = 'RUB';
+                }
+
 		$associated_products = $this->associated_products;
 		$final_details = $associated_products[1]['final_details'];
 
 		$summaryModel = new Vtiger_PDF_Model();
 
-		$netTotal = $discount = $handlingCharges =  $handlingTaxes = 0;
+		$netTotal = $netTotalGoods = $netTotalServices = $discount = $handlingCharges =  $handlingTaxes = 0;
 		$adjustment = $grandTotal = 0;
 
 		$productLineItemIndex = 0;
@@ -159,23 +185,42 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 		foreach($associated_products as $productLineItem) {
 			++$productLineItemIndex;
 			$netTotal += $productLineItem["netPrice{$productLineItemIndex}"];
+
+                        if($productLineItem["entityType{$productLineItemIndex}"] == 'Products') {
+                            $netTotalGoods += $productLineItem["netPrice{$productLineItemIndex}"];
+                        }
+                        if($productLineItem["entityType{$productLineItemIndex}"] == 'Services') {
+                            $netTotalServices += $productLineItem["netPrice{$productLineItemIndex}"];
+                        }
 		}
 
 		$summaryModel->set("summaryNetTotal", $this->formatPrice($netTotal));
+		$summaryModel->set("summaryNetTotalGoods", $this->formatPrice($netTotalGoods));
+		$summaryModel->set("summaryNetTotalServices", $this->formatPrice($netTotalServices));
 		
 		$discount_amount = $final_details["discount_amount_final"];
 		$discount_percent = $final_details["discount_percentage_final"];
 
 		$discount = 0.0;
+		$discountGoods = 0.0;
+		$discountServices = 0.0;
 		if(!empty($discount_amount)) {
 			$discount = $discount_amount;
+			$discountGoods = $discount_amount;
+			$discountServices = $discount_amount;
 		} else if(!empty($discount_percent)) {
 			$discount = (($discount_percent*$final_details["hdnSubTotal"])/100);
+			$discountGoods = (($discount_percent*$netTotalGoods)/100);
+			$discountServices = (($discount_percent*$netTotalServices)/100);
 		}
 		$summaryModel->set("summaryDiscount", $this->formatPrice($discount));
+		$summaryModel->set("summaryDiscountGoods", $this->formatPrice($discountGoods));
+		$summaryModel->set("summaryDiscountServices", $this->formatPrice($discountServices));
 		
 		$group_total_tax_percent = '0.00';
                 $overall_tax = 0;
+                $overall_tax_goods = 0;
+                $overall_tax_services = 0;
 		//To calculate the group tax amount
 		if($final_details['taxtype'] == 'group') {
 			$group_tax_details = $final_details['taxes'];
@@ -183,22 +228,51 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 				$group_total_tax_percent += $group_tax_details[$i]['percentage'];
 			}
 			$summaryModel->set("summaryTax", $this->formatPrice($final_details['tax_totalamount']));
-			$summaryModel->set("summaryTaxLiteral", $this->num2str($final_details['tax_totalamount']));
+			$summaryModel->set("summaryTaxLiteral", $this->num2str($final_details['tax_totalamount'], false, $currency));
 			$summaryModel->set("summaryTaxPercent", $group_total_tax_percent);
                         $overall_tax += $final_details['tax_totalamount'];
+
+                        $summaryModel->set("summaryTaxGoods", $this->formatPrice(($netTotalGoods - $discountGoods) * $group_total_tax_percent / 100.0));
+			$summaryModel->set("summaryTaxGoodsLiteral", $this->num2str(($netTotalGoods - $discountGoods) * $group_total_tax_percent / 100.0, false, $currency));
+			$summaryModel->set("summaryTaxGoodsPercent", $group_total_tax_percent);
+                        $overall_tax_goods += ($netTotalGoods - $discountGoods) * $group_total_tax_percent / 100.0;
+
+                        $summaryModel->set("summaryTaxServices", $this->formatPrice(($netTotalServices - $discountServices) * $group_total_tax_percent / 100.0));
+			$summaryModel->set("summaryTaxServicesLiteral", $this->num2str(($netTotalServices - $discountServices) * $group_total_tax_percent / 100.0, false, $currency));
+			$summaryModel->set("summaryTaxServicesPercent", $group_total_tax_percent);
+                        $overall_tax_services += ($netTotalServices - $discountServices) * $group_total_tax_percent / 100.0;
 		}
 		else {
 		    $summaryModel->set("summaryTax", $this->formatPrice($this->totaltaxes));
-    		    $summaryModel->set("summaryTaxLiteral", $this->num2str($this->totaltaxes));
+    		    $summaryModel->set("summaryTaxLiteral", $this->num2str($this->totaltaxes, false, $currency));
 		    if($netTotal > 0) {
 			$summaryModel->set("summaryTaxPercent", $this->totaltaxes / $netTotal * 100);
 		    }
 		    else {
 			$summaryModel->set("summaryTaxPercent", 0);
 		    }
-
                     $overall_tax += $this->totaltaxes;
-		}
+
+		    $summaryModel->set("summaryTaxGoods", $this->formatPrice($this->totaltaxesGoods));
+    		    $summaryModel->set("summaryTaxGoodsLiteral", $this->num2str($this->totaltaxesGoods, false, $currency));
+		    if($netTotalGoods > 0) {
+			$summaryModel->set("summaryTaxGoodsPercent", $this->totaltaxesGoods / $netTotalGoods * 100);
+		    }
+		    else {
+			$summaryModel->set("summaryTaxGoodsPercent", 0);
+		    }
+                    $overall_tax_goods += $this->totaltaxesGoods;
+
+                    $summaryModel->set("summaryTaxServices", $this->formatPrice($this->totaltaxesServices));
+    		    $summaryModel->set("summaryTaxServicesLiteral", $this->num2str($this->totaltaxesServices, false, $currency));
+		    if($netTotalServices > 0) {
+			$summaryModel->set("summaryTaxServicesPercent", $this->totaltaxesServices / $netTotalServices * 100);
+		    }
+		    else {
+			$summaryModel->set("summaryTaxServicesPercent", 0);
+		    }
+                    $overall_tax_services += $this->totaltaxesServices;
+                }
 		//Shipping & Handling taxes
 		$sh_tax_details = $final_details['sh_taxes'];
 		for($i=0;$i<count($sh_tax_details);$i++) {
@@ -212,13 +286,23 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 		$summaryModel->set("summaryShippingTaxPercent", $sh_tax_percent);
 		$summaryModel->set("summaryAdjustment", $this->formatPrice($final_details['adjustment']));
 		$summaryModel->set("summaryGrandTotal", $this->formatPrice($final_details['grandTotal'])); // TODO add currency string
-
-		$summaryModel->set("summaryGrandTotalLiteral", $this->num2str($final_details['grandTotal']));
+		$summaryModel->set("summaryGrandTotalLiteral", $this->num2str($final_details['grandTotal'], false, $currency));
 
                 $overall_tax += $final_details['shtax_totalamount'];
+                $overall_tax_goods += $final_details['shtax_totalamount'];
 		$summaryModel->set("summaryOverallTax", $this->formatPrice(round($overall_tax)));
-		$summaryModel->set("summaryOverallTaxLiteral", $this->num2str(round($overall_tax)));
+		$summaryModel->set("summaryOverallTaxLiteral", $this->num2str(round($overall_tax), false, $currency));
+		$summaryModel->set("summaryOverallTaxGoods", $this->formatPrice(round($overall_tax_goods)));
+		$summaryModel->set("summaryOverallTaxGoodsLiteral", $this->num2str(round($overall_tax_goods), false, $currency));
+		$summaryModel->set("summaryOverallTaxServices", $this->formatPrice(round($overall_tax_services)));
+		$summaryModel->set("summaryOverallTaxServicesLiteral", $this->num2str(round($overall_tax_services), false, $currency));
 		
+		$summaryModel->set("summaryGrandTotalGoods", $this->formatPrice($netTotalGoods - $discountGoods + $overall_tax_goods + $final_details['shipping_handling_charge'] + $final_details['adjustment']));
+		$summaryModel->set("summaryGrandTotalGoodsLiteral", $this->num2str($netTotalGoods - $discountGoods + $overall_tax_goods + $final_details['shipping_handling_charge'] + $final_details['adjustment'], false, $currency));
+
+                $summaryModel->set("summaryGrandTotalServices", $this->formatPrice($netTotalServices - $discountServices + $overall_tax_services + $final_details['adjustment']));
+		$summaryModel->set("summaryGrandTotalServicesLiteral", $this->num2str($netTotalServices - $discountServices + $overall_tax_services + $final_details['adjustment'], false, $currency));
+
 		return $summaryModel;
 	}
 

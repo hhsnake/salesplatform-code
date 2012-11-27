@@ -271,7 +271,12 @@
 								 		{assign var="rightcellclass" value="class='rightCell'"}
 								 	{/if}
 								<td width="30%" id="colourButton" >&nbsp;
-							 	<span onmouseover="tooltip.tip(this, showProperties('{$value.label}',{$value.mandatory},{$value.presence},{$value.quickcreate},{$value.massedit}));" onmouseout="tooltip.untip(false);" >{$value.label}</span>
+                                                                {* SalesPlatform.ru begin added fieldname *}   
+                                                                <span onmouseover="tooltip.tip(this, showProperties('{$value.label}',{$value.mandatory},{$value.presence},{$value.quickcreate},{$value.massedit},'{$value.fieldname}'));" onmouseout="tooltip.untip(false);" >{$value.label}</span>
+							 	{*
+                                                                <span onmouseover="tooltip.tip(this, showProperties('{$value.label}',{$value.mandatory},{$value.presence},{$value.quickcreate},{$value.massedit}));" onmouseout="tooltip.untip(false);" >{$value.label}</span>
+                                                                *}
+                                                                {* SalesPlatform.ru end*}
 							 		{if $value.fieldtype eq 'M'}
 							 			<font color='red'> *</font>
 							 		{/if}

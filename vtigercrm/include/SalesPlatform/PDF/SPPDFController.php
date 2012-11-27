@@ -163,7 +163,7 @@ class SalesPlatform_PDF_SPPDFController {
 			    $model->set('orgEntrepreneurreg', str_repeat('_', 50));
 			}
 
-			$model->set('orgLogo', '<img src="test/logo/'.$resultrow['logoname'].'">');
+			$model->set('orgLogo', '<img src="test/logo/'.$resultrow['logoname'].'" />');
 			$model->set('orgLogoPath', 'test/logo/'.$resultrow['logoname']);
 			$model->set('orgName', decode_html($resultrow['organizationname']));
 		}
@@ -221,22 +221,30 @@ class SalesPlatform_PDF_SPPDFController {
        * Сумма прописью
        * @author runcore
        */
-      function num2str($inn, $stripkop=false) {
-        $nol = 'ноль';
-        $str[100]= array('','сто','двести','триста','четыреста','пятьсот','шестьсот', 'семьсот', 'восемьсот','девятьсот');
-        $str[11] = array('','десять','одиннадцать','двенадцать','тринадцать', 'четырнадцать','пятнадцать','шестнадцать','семнадцать', 'восемнадцать','девятнадцать','двадцать');
-        $str[10] = array('','десять','двадцать','тридцать','сорок','пятьдесят', 'шестьдесят','семьдесят','восемьдесят','девяносто');
-        $sex = array(
-            array('','один','два','три','четыре','пять','шесть','семь', 'восемь','девять'),// m
-            array('','одна','две','три','четыре','пять','шесть','семь', 'восемь','девять') // f
-        );
+      function num2str($inn, $stripkop=false, $currency='RUB') {
+
+        global $current_language, $default_language;
+        if(empty($current_language)) {
+            $lang = $default_language;
+        } else {
+            $lang = $current_language;
+        }
+
+        require 'include/SalesPlatform/PDF/CurrencyForms.php';
+
+        $nol = $sp_numeric_forms[$lang]['0'];
+        $str[100]= $sp_numeric_forms[$lang]['100'];
+        $str[11] = $sp_numeric_forms[$lang]['11'];
+        $str[10] = $sp_numeric_forms[$lang]['10'];
+        $sex = $sp_numeric_forms[$lang]['1'];
+
         $forms = array(
-           array('копейка', 'копейки', 'копеек', 1), // 10^-2
-           array('рубль', 'рубля', 'рублей',  0), // 10^ 0
-           array('тысяча', 'тысячи', 'тысяч', 1), // 10^ 3
-           array('миллион', 'миллиона', 'миллионов',  0), // 10^ 6
-           array('миллиард', 'миллиарда', 'миллиардов',  0), // 10^ 9
-           array('триллион', 'триллиона', 'триллионов',  0), // 10^12
+           $sp_currency_forms[$lang][$currency][1],
+           $sp_currency_forms[$lang][$currency][0],
+           $sp_numeric_forms[$lang]['10^3'],
+           $sp_numeric_forms[$lang]['10^6'],
+           $sp_numeric_forms[$lang]['10^9'],
+           $sp_numeric_forms[$lang]['10^12'],
        );
        $out = $tmp = array();
        // Поехали!
@@ -286,7 +294,11 @@ class SalesPlatform_PDF_SPPDFController {
            $o[] = $kop;
            $o[] = $this->morph($kop,$forms[ 0][ 0],$forms[ 0][1],$forms[ 0][2]);
        }
-       return $this->rus_ucfirst(preg_replace("/\s{2,}/",' ',implode(' ',$o)));
+       if($lang == 'ru_ru') {
+            return $this->rus_ucfirst(preg_replace("/\s{2,}/",' ',implode(' ',$o)));
+       } else {
+            return ucfirst(preg_replace("/\s{2,}/",' ',implode(' ',$o)));
+       }
        
    }
    
@@ -393,6 +405,10 @@ class SalesPlatform_PDF_SPPDFController {
 		default: $model->set($prefix.$fieldname, $entity->column_fields[$fieldname]);
 			   break;
 		}
+
+                // Add human-readable variables
+                $model->set(strtoupper($prefix).strtoupper(str_replace(" ","",$fieldinfo['fieldlabel'])), $model->get($prefix.$fieldname));
+                $model->set(getTranslatedString(strtoupper($prefix), $module).str_replace(" ","",getTranslatedString($fieldinfo['fieldlabel'], $module)), $model->get($prefix.$fieldname));
 	    }
 	}
     }

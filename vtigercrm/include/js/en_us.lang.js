@@ -316,7 +316,10 @@ var alert_arr = {
 	'ERR_SAME_SOURCE_AND_TARGET' : 'Source field and Target field should not be same',
 	'ERR_ATLEAST_ONE_VALUE_FOR' : 'You need to select at least one value for',
 	'ERR_SELECT_MODULE_FOR_DEPENDENCY' : 'Please select a module to add Dependency',
-
+        // SalesPlatform.ru begin html widget added
+        SP_HTML: 'HTML code',
+        'LBL_ENTER_HTML_CODE':'Please enter HTML code',
+        // SalesPlatform.ru end
 // SalesPlatform.ru begin
 	'LBL_OFF':'off',
 	'LBL_ON':'on',
@@ -366,19 +369,3 @@ var alert_arr = {
 	'LBL_MAPPEDALERT':'The field has been already mapped'
 
 };
-
-// SalesPlatform.ru begin
-var operationsTranslated = {
-	"is" : "is",
-	"contains" : "contains",
-	"does not contain" : "does not contain",
-	"starts with" : "starts with",
-	"ends with" : "ends with",
-	"equal to" : "equal to",
-	"less than" : "less than",
-	"greater than" : "greater than",
-	"does not equal" : "does not equal",
-	"less than or equal to" : "less than or equal to",
-	"greater than or equal to" : "greater than or equal to"
-};
-// SalesPlatform.ru end

@@ -16,8 +16,12 @@ if(!empty($_REQUEST['stufftype'])){
 } 
 
 if(!empty($_REQUEST['stufftitle'])){
-	if(strlen($_REQUEST['stufftitle'])>100){
-		$temp_str = substr($_REQUEST['stufftitle'],0,97)."...";
+        // SalesPlatform.ru begin UTF-8 support
+	if(mb_strlen($_REQUEST['stufftitle'],'UTF-8')>100){
+		$temp_str = mb_substr($_REQUEST['stufftitle'],0,97,'UTF-8')."...";
+	//if(strlen($_REQUEST['stufftitle'])>100){
+	//	$temp_str = substr($_REQUEST['stufftitle'],0,97)."...";
+        // SalesPlatform.ru end
 		$oHomestuff->stufftitle= $temp_str;
 	}else{
 		$oHomestuff->stufftitle=$_REQUEST['stufftitle'];
@@ -79,6 +83,12 @@ if(isset($_REQUEST['selreport']) && $_REQUEST['selreport']!=""){
 if(isset($_REQUEST['selreportcharttype']) && $_REQUEST['selreportcharttype']!=""){
     $oHomestuff->selreportcharttype = $_REQUEST['selreportcharttype'];
 }
+
+// SalesPlatform.ru begin html widget added
+if(!empty($_REQUEST['htmlCode'])){
+	$oHomestuff->htmlCode = $_REQUEST['htmlCode'];
+}
+// SalesPlatform.ru end
 
 $loaddetail=$oHomestuff->addStuff();
 echo $loaddetail;	

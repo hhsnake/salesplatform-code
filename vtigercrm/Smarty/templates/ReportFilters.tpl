@@ -21,7 +21,10 @@
 
 {$BLOCKJS_STD}
 
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" height="532" width="100%" valign="top">
+{* SalesPlatform.ru begin hide scroll *}
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" height="525" width="100%" valign="top">
+{* <table class="small" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" height="532" width="100%" valign="top"> *}   
+{* SalesPlatform.ru end *}
 	<tr>
 		<td colspan="2" valign="top" height="50">
 			<span class="genHeaderGray">{$MOD.LBL_FILTERS}</span><br>

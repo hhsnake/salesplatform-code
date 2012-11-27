@@ -74,11 +74,19 @@
                         <div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 99%;position: relative; z-index: 10000000;">
                         <table border="0" cellpadding="5" cellspacing="0" width="98%">
                                 <tr>
-                                        <td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61%"></td>
+                                        {* SalesPlatform.ru begin Stretch "empty" picture removed *}
+                                        {* <td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61%"></td> *}
+                                        {* SalesPlatform.ru end *}
                                         {if $recid_var_value neq '' && $mod_var_value neq '' && $RECORD_COUNTS eq 0 }
+                                        {* SalesPlatform.ru begin Stretch "empty" picture removed *}
+                                        <td rowspan="2" width="25%"><img src="{'plsWaitAnimated.gif'|@vtiger_imageurl:$THEME}"></td>
+                                        {* SalesPlatform.ru end *}
 					<script>redirectWhenNoRelatedRecordsFound();</script>
                                         <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$MODULE|@getTranslatedString:$MODULE} {$APP.RELATED} !</td>
                                         {else}
+                                        {* SalesPlatform.ru begin Stretch "empty" picture removed *}
+                                        <td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}"></td>
+                                        {* SalesPlatform.ru end *}
                                         <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$MODULE|@getTranslatedString:$MODULE} {$APP.LBL_FOUND} !</td>
                                         {/if}
                                 </tr>

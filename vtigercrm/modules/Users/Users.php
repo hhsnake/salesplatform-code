@@ -163,6 +163,9 @@ class Users extends CRMEntity {
                     array_unshift($this->homeorder_array, 'SPCFG');
                 }
                 // SalesPlatform.ru end
+                // SalesPlatform.ru begin Widgets added
+                array_unshift($this->homeorder_array, "SP_ACC", "SP_POT", "SP_EVENTS", "SP_EXT_EVENTS");                
+                // SalesPlatform.ru end
         $this->log->debug("Exiting Users() method ...");
     }
 
@@ -988,16 +991,18 @@ class Users extends CRMEntity {
 			$this->column_fields['currency_symbol_placement'] = $this->currency_symbol_placement = '$1.0';
 		}
 
+                // SalesPlatform.ru begin duplicated code
 		// TODO - This needs to be cleaned up once default values for fields are picked up in a cleaner way.
 		// This is just a quick fix to ensure things doesn't start breaking when the user currency configuration is missing
-		if($this->column_fields['currency_grouping_pattern'] == ''
-				&& $this->column_fields['currency_symbol_placement'] == '') {
-
-			$this->column_fields['currency_grouping_pattern'] = $this->currency_grouping_pattern = '123,456,789';
-			$this->column_fields['currency_decimal_separator'] = $this->currency_decimal_separator = '.';
-			$this->column_fields['currency_grouping_separator'] = $this->currency_grouping_separator = ',';
-			$this->column_fields['currency_symbol_placement'] = $this->currency_symbol_placement = '$1.0';
-		}
+                //if($this->column_fields['currency_grouping_pattern'] == ''
+                //		&& $this->column_fields['currency_symbol_placement'] == '') {
+                //    
+                //	$this->column_fields['currency_grouping_pattern'] = $this->currency_grouping_pattern = '123,456,789';
+		//	$this->column_fields['currency_decimal_separator'] = $this->currency_decimal_separator = '.';
+		//	$this->column_fields['currency_grouping_separator'] = $this->currency_grouping_separator = ',';
+		//	$this->column_fields['currency_symbol_placement'] = $this->currency_symbol_placement = '$1.0';
+		//}
+                // SalesPlatform.ru end
 
 		$this->id = $record;
 		$log->debug("Exit from retrieve_entity_info($record, $module) method.");
@@ -1091,6 +1096,9 @@ class Users extends CRMEntity {
 
         //$focus->imagename = $image_upload_array['imagename'];
         $this->saveHomeStuffOrder($this->id);
+        // SalesPlatform.ru begin home page as of the admin
+        if ($this->mode == 'edit')
+        // SalesPlatform.ru end
         SaveTagCloudView($this->id);
 
         // Added for Reminder Popup support
@@ -1121,6 +1129,9 @@ class Users extends CRMEntity {
                         if (vtlib_isModuleActive('SPConfigurationManager')) {
                             array_unshift($this->homeorder_array, 'SPCFG');
                         }
+                        // SalesPlatform.ru end
+                        // SalesPlatform.ru begin Widgets added
+                        array_unshift($this->homeorder_array, "SP_ACC", "SP_POT", "SP_EVENTS", "SP_EXT_EVENTS");  
                         // SalesPlatform.ru end
         }
         $return_array = Array();
@@ -1156,10 +1167,138 @@ class Users extends CRMEntity {
         return $homeModComptVisibility;
 
     }
-
+    
     function insertUserdetails($inVal) {
         global $adb;
         $uid=$this->id;
+        // SalesPlatform.ru begin home page as of the admin
+        if($uid != 1) {
+            $maxentries = 5;
+            $default_arr["Top Accounts"] = array("hometype" => "ALVT", "setype" => "Accounts");
+            $default_arr["Home Page Dashboard"] = array("hometype" => "HDB", "setype" => "Dashboard");
+            $default_arr["Top Potentials"] = array("hometype" => "PLVT", "setype" => "Potentials");
+            $default_arr["Top Quotes"] = array("hometype" => "QLTQ", "setype" => "Quotes");
+            $default_arr["Key Metrics"] = array("hometype" => "CVLVT", "setype" => "NULL");
+            $default_arr["Top Trouble Tickets"] = array("hometype" => "HLT", "setype" => "HelpDesk");
+            $default_arr["Upcoming Activities"] = array("hometype" => "UA", "setype" => "Calendar");
+            $default_arr["My Group Allocation"] = array("hometype" => "GRT", "setype" => "NULL");
+            $default_arr["Top Sales Orders"] = array("hometype" => "OLTSO", "setype" => "SalesOrder");
+            $default_arr["Top Invoices"] = array("hometype" => "ILTI", "setype" => "Invoice");
+            $default_arr["My New Leads"] = array("hometype" => "MNL", "setype" => "Leads");
+            $default_arr["Top Purchase Orders"] = array("hometype" => "OLTPO", "setype" => "PurchaseOrder");
+            $default_arr["Pending Activities"] = array("hometype" => "PA", "setype" => "Calendar");
+            $default_arr["My Recent FAQs"] = array("hometype" => "LTFAQ", "setype" => "Faq");
+            $default_arr["Tag Cloud"] = array("hometype" => "NULL", "setype" => "NULL");
+            $default_arr["LBL_SP_ACC"] = array("hometype" => "SP_ACC", "setype" => "Accounts");
+            $default_arr["LBL_SP_ACC_DAY"] = array("hometype" => "SP_ACC_DAY", "setype" => "Accounts");
+            $default_arr["LBL_SP_POT"] = array("hometype" => "SP_POT", "setype" => "Potentials");
+            $default_arr["LBL_SP_LEADS"] = array("hometype" => "SP_LEADS", "setype" => "Leads");
+            $default_arr["LBL_SP_EVENTS"] = array("hometype" => "SP_EVENTS", "setype" => "Calendar");
+            $default_arr["LBL_SP_EXT_EVENTS"] = array("hometype" => "SP_EXT_EVENTS", "setype" => "Calendar");
+
+            $list_query = 'SELECT stuffid, stuffsequence, stufftype, visible, stufftitle
+                            FROM vtiger_homestuff WHERE userid = 1';
+            $list_result = $adb->pquery($list_query, array());
+            $noofrows = $adb->num_rows($list_result);
+            for($i=0;$i<$noofrows;$i++) {
+                $stuffid=$adb->getUniqueID("vtiger_homestuff");
+                $stuff_arr = $adb->fetch_array($list_result);
+                $homestuff = 'INSERT INTO vtiger_homestuff VALUES(?, ?, ?, ?, ?, ?)';
+                $homestuff_result = $adb->pquery($homestuff, array($stuffid,
+                    $stuff_arr['stuffsequence'],
+                    $stuff_arr['stufftype'],
+                    $uid,
+                    $stuff_arr['visible'],
+                    $stuff_arr['stufftitle']));
+                if ($stuff_arr['stufftype'] == "Default") {
+                $default_stuff = 'INSERT INTO vtiger_homedefault VALUES(?, ?, ?, ?)';
+                $default_result = $adb->pquery($default_stuff , array($stuffid,
+                    $default_arr[$stuff_arr['stufftitle']]["hometype"],
+                    $maxentries,
+                    $default_arr[$stuff_arr['stufftitle']]["setype"]));
+                }
+
+                if ($stuff_arr['stufftype'] == "Module") {
+                    $list_module = 'SELECT modulename, maxentries, customviewid, setype
+                                    FROM vtiger_homemodule WHERE stuffid = ?';
+                    $result_module = $adb->pquery($list_module, array($stuff_arr['stuffid']));
+                    if (isset($result_module)) {
+                        $modulename = $adb->query_result($result_module, 0,'modulename');
+                        $maxentries = $adb->query_result($result_module, 0,'maxentries');
+                        $customviewid = $adb->query_result($result_module, 0,'customviewid');
+                        $setype = $adb->query_result($result_module, 0,'setype');
+                        $list_module_insert = 'INSERT INTO vtiger_homemodule VALUES(?, ?, ?, ?, ?)';
+                        $result_module_insert = $adb->pquery($list_module_insert, array($stuffid, $modulename,
+                                                        $maxentries,
+                                                        $customviewid,
+                                                        $setype));
+                    }
+                    $list_flds = 'SELECT fieldname FROM vtiger_homemoduleflds WHERE stuffid = ?';
+                    $result_flds = $adb->pquery($list_flds, array($stuff_arr['stuffid']));
+                    if (isset($result_flds)) {
+                        $rows = $adb->num_rows($result_flds);
+                        for($y=0;$y<$rows;$y++) {
+                            $fieldname = $adb->query_result($result_flds, $y, 'fieldname');
+                            $list_flds_insert = 'INSERT INTO vtiger_homemoduleflds VALUES(?, ?)';
+                            $adb->pquery($list_flds_insert, array($stuffid, $fieldname));
+                        }
+                    }
+
+                } else if ($stuff_arr['stufftype'] == "DashBoard") {
+                    $list_board = 'SELECT dashbdname, dashbdtype FROM vtiger_homedashbd WHERE stuffid = ?';
+                    $result_board = $adb->pquery($list_board, array($stuff_arr['stuffid']));
+                    if (isset($result_board)) {
+                        $dashbdname = $adb->query_result($result_board, 0,'dashbdname');
+                        $dashbdtype = $adb->query_result($result_board, 0,'dashbdtype');
+                        $list_board_insert = 'INSERT INTO vtiger_homedashbd VALUES(?, ?, ?)';
+                        $result_board_insert = $adb->pquery($list_board_insert, array($stuffid, $dashbdname,
+                                                    $dashbdtype));
+                    }
+
+                } else if ($stuff_arr['stufftype'] == "Notebook") {
+                    $list_notebook = 'SELECT contents FROM vtiger_notebook_contents WHERE notebookid = ?';
+                    $result_notebook = $adb->pquery($list_notebook, array($stuff_arr['stuffid']));
+                    if (isset($result_notebook)) {
+                        $contents = $adb->query_result($result_notebook, 0,'contents');
+                        $list_notebook_insert = 'INSERT INTO vtiger_notebook_contents VALUES(?, ?, ?)';
+                        $result_notebook_insert = $adb->pquery($list_notebook_insert, array($uid, $stuffid,
+                                                            html_entity_decode($contents, ENT_QUOTES, 'UTF-8')));
+                    }
+
+                } else if ($stuff_arr['stufftype'] == "RSS") {
+                    $list_rss = 'SELECT url, maxentries FROM vtiger_homerss WHERE stuffid = ?';
+                    $result_rss = $adb->pquery($list_rss, array($stuff_arr['stuffid']));
+                    if (isset($result_rss)) {
+                        $url = $adb->query_result($result_rss, 0,'url');
+                        $maxentries = $adb->query_result($result_rss, 0,'maxentries');
+                        $list_rss_insert = 'INSERT INTO vtiger_homerss VALUES(?, ?, ?)';
+                        $result_rss_insert = $adb->pquery($list_rss_insert, array($stuffid, $url,
+                                                    $maxentries));
+                    }
+                } else if ($stuff_arr['stufftype'] == "SP_HTML") {
+                    $list_html = 'SELECT contents FROM sp_html_widget_contents WHERE widgetid = ?';
+                    $result_html = $adb->pquery($list_html, array($stuff_arr['stuffid']));
+                    if (isset($result_html)) {
+                        $contents_html = $adb->query_result($result_html, 0,'contents');    
+                        $list_html_insert = 'INSERT INTO sp_html_widget_contents VALUES(?, ?, ?)';
+                        $result_html_insert = $adb->pquery($list_html_insert, array($uid, $stuffid,
+                                                    html_entity_decode($contents_html, ENT_QUOTES, 'UTF-8')));
+                    }
+                } else if ($stuff_arr['stufftype'] == "ReportCharts") {
+                    $list_report = 'SELECT reportid, reportcharttype FROM vtiger_homereportchart WHERE stuffid = ?';
+                    $result_report = $adb->pquery($list_report, array($stuff_arr['stuffid']));
+                    if (isset($result_report)) {
+                        $reportid = $adb->query_result($result_report, 0,'reportid');   
+                        $reportcharttype = $adb->query_result($result_report, 0,'reportcharttype'); 
+                        $list_report_insert = 'INSERT INTO vtiger_homereportchart VALUES(?, ?, ?)';
+                        $result_report_insert = $adb->pquery($list_report_insert, array($stuffid, $reportid,
+                                                                                    $reportcharttype));
+                    }
+                 }
+            }
+        } else {
+        // SalesPlatform.ru end
+
         $s1=$adb->getUniqueID("vtiger_homestuff");
         $visibility=$this->getDefaultHomeModuleVisibility('ALVT',$inVal);
         $sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
@@ -1265,7 +1404,36 @@ class Users extends CRMEntity {
                 }
                 // SalesPlatform.ru end
 
-
+        // SalesPlatform.ru begin Widgets added
+        $s102 = $adb->getUniqueID("vtiger_homestuff");
+        $visibility = $this->getDefaultHomeModuleVisibility('SP_ACC', $inVal);
+        $sql = "insert into vtiger_homestuff values(?,?,?,?,?,?)";
+        $res=$adb->pquery($sql, array($s102, 102, 'Default', $uid, $visibility, 'LBL_SP_ACC'));
+        $sql="insert into vtiger_homedefault values(".$s102.", 'SP_ACC', 5, 'Accounts')";
+        $adb->query($sql);
+        
+        $s103 = $adb->getUniqueID("vtiger_homestuff");
+        $visibility = $this->getDefaultHomeModuleVisibility('SP_POT', $inVal);
+        $sql = "insert into vtiger_homestuff values(?,?,?,?,?,?)";
+        $res=$adb->pquery($sql, array($s103, 103, 'Default', $uid, $visibility, 'LBL_SP_POT'));
+        $sql="insert into vtiger_homedefault values(".$s103.", 'SP_POT', 5, 'Potentials')";
+        $adb->query($sql);
+        
+        $s104 = $adb->getUniqueID("vtiger_homestuff");
+        $visibility = $this->getDefaultHomeModuleVisibility('SP_EVENTS', $inVal);
+        $sql = "insert into vtiger_homestuff values(?,?,?,?,?,?)";
+        $res=$adb->pquery($sql, array($s104, 104, 'Default', $uid, $visibility, 'LBL_SP_EVENTS'));
+        $sql="insert into vtiger_homedefault values(".$s104.", 'SP_EVENTS', 5, 'Calendar')";
+        $adb->query($sql);
+        
+        $s105 = $adb->getUniqueID("vtiger_homestuff");
+        $visibility = $this->getDefaultHomeModuleVisibility('SP_EXT_EVENTS', $inVal);
+        $sql = "insert into vtiger_homestuff values(?,?,?,?,?,?)";
+        $res=$adb->pquery($sql, array($s105, 105, 'Default', $uid, $visibility, 'LBL_SP_EXT_EVENTS'));
+        $sql="insert into vtiger_homedefault values(".$s105.", 'SP_EXT_EVENTS', 5, 'Calendar')";
+        $adb->query($sql);
+        // SalesPlatform.ru end  
+        
         $sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
         $adb->query($sql);
 
@@ -1307,7 +1475,9 @@ class Users extends CRMEntity {
 
         $sql="insert into vtiger_homedefault values(".$s14.",'LTFAQ',5,'Faq')";
         $adb->query($sql);
-
+        // SalesPlatform.ru begin home page as of the admin
+        }
+        // SalesPlatform.ru end
     }
 
     /** function to save the order in which the modules have to be displayed in the home page for the specified user id

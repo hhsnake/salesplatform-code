@@ -444,8 +444,12 @@ function sendfile_email()
 														{if $CONVERTINVOICE eq 'permitted'}
 															<tr>
 																<td align="left" style="padding-left:10px;">
-																	<a class="webMnu" href="index.php?return_module={$MODULE}&return_action=DetailView&return_id={$ID}&convertmode={$CONVERTMODE}&module=Invoice&action=EditView&account_id={$ACCOUNTID}"><img src="{'actionGenerateInvoice.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle"  border="0"/></a>
-																	<a class="webMnu" href="index.php?return_module={$MODULE}&return_action=DetailView&return_id={$ID}&convertmode={$CONVERTMODE}&module=Invoice&action=EditView&account_id={$ACCOUNTID}">{$APP.LBL_CREATE} {$APP.Invoice}</a>
+                                                                                                                                        {* SalesPlatform.ru begin: Added Potentials to Invoice relation *}
+																	<a class="webMnu" href="index.php?return_module={$MODULE}&return_action=DetailView&return_id={$ID}&convertmode={$CONVERTMODE}&module=Invoice&action=EditView&account_id={$ACCOUNTID}&createmode=link"><img src="{'actionGenerateInvoice.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle"  border="0"/></a>
+																	<a class="webMnu" href="index.php?return_module={$MODULE}&return_action=DetailView&return_id={$ID}&convertmode={$CONVERTMODE}&module=Invoice&action=EditView&account_id={$ACCOUNTID}&createmode=link">{$APP.LBL_CREATE} {$APP.Invoice}</a>
+																	{* <a class="webMnu" href="index.php?return_module={$MODULE}&return_action=DetailView&return_id={$ID}&convertmode={$CONVERTMODE}&module=Invoice&action=EditView&account_id={$ACCOUNTID}"><img src="{'actionGenerateInvoice.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle"  border="0"/></a>
+																	<a class="webMnu" href="index.php?return_module={$MODULE}&return_action=DetailView&return_id={$ID}&convertmode={$CONVERTMODE}&module=Invoice&action=EditView&account_id={$ACCOUNTID}">{$APP.LBL_CREATE} {$APP.Invoice}</a> *}
+                                                                                                                                        {* SalesPlatform.ru end *}
 																</td>
 															</tr>
 														{/if}
@@ -543,9 +547,10 @@ function sendfile_email()
 
 														{/if}
 
+                								{/if}
 {* SalesPlatform.ru begin *}
 				<!-- Start: Actions for PDF Templates -->
-                                {if $PDF_TEMPLATES_LIST && $MODULE eq 'HelpDesk'}
+                                {if $PDF_TEMPLATES_LIST && ($MODULE eq 'HelpDesk' || $MODULE eq 'Potentials')}
                                    <tr>
                                         <td align="left">
                                                 <span class="genHeaderSmall">{$APP.PrintingOptions}</span><br />
@@ -579,7 +584,6 @@ function sendfile_email()
 
 				<!-- End: Actions for PDF Templates -->
 {* SalesPlatform.ru end *}
-                								{/if}
 												</table>
 												{* vtlib customization: Avoid line break if custom links are present *}
 												{if !isset($CUSTOM_LINKS) || empty($CUSTOM_LINKS)}
@@ -816,6 +820,9 @@ function sendpdf_submit()
 
 	{if $MODULE eq 'HelpDesk'}
 		OpenCompose('{$ID}','HelpDesk');
+	{/if}
+	{if $MODULE eq 'Potentials'}
+		OpenCompose('{$ID}','Potentials');
 	{/if}
 {literal}
 }

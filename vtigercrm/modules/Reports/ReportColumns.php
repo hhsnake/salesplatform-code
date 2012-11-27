@@ -100,6 +100,11 @@ function getPrimaryColumnsHTML($module)
 					$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
 				}else
 				{
+                                        // SalesPlatform.ru begin localization of fields outside the module
+                                        if (!empty($app_strings[$fieldlabel])) {
+                                            $fieldlabel = $app_strings[$fieldlabel];
+                                        }
+                                        // SalesPlatform.ru end
 					$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
 				}
 			}
@@ -142,6 +147,11 @@ function getSecondaryColumnsHTML($module)
 								$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
 							}else
 							{
+                                                                // SalesPlatform.ru begin localization of fields outside the module
+                                                                    if (!empty($app_strings[$fieldlabel])) {
+                                                                        $fieldlabel = $app_strings[$fieldlabel];
+                                                                    }
+                                                                // SalesPlatform.ru end
 								$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
 							}
 						}

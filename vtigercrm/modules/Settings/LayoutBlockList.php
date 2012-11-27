@@ -262,6 +262,9 @@ function getFieldListEntries($module) {
 						$cf_element[$count]['uitype']=$uitype;
 						$cf_element[$count]['columnname']=$row_field['columnname'];
 						$cf_element[$count]['defaultvalue']= array('permitted' => $defaultPermitted, 'value' => $defaultValue, '_allvalues' => $allValues);
+                                                // SalesPlatform.ru begin added fieldname
+                                                $cf_element[$count]['fieldname']=$fieldname;
+                                                // SalesPlatform.ru end 
 						$cf_element[$count] = array_merge($cf_element[$count], $visibility);
 
 						$count++;

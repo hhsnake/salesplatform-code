@@ -322,6 +322,9 @@ function getSecondaryStdFilterHTML($module,$selected="")
 
 function getPrimaryColumns_AdvFilter_HTML($module, $ogReport, $selected='') {
     global $app_list_strings, $current_language;
+    // SalesPlatform.ru begin localization of fields outside the module
+    global $app_strings;
+    // SalesPlatform.ru end
 	$mod_strings = return_module_language($current_language,$module);
 	$block_listed = array();
     foreach($ogReport->module_list[$module] as $key=>$value)
@@ -347,6 +350,11 @@ function getPrimaryColumns_AdvFilter_HTML($module, $ogReport, $selected='') {
 					}
 				}else
 				{
+                                        // SalesPlatform.ru begin localization of fields outside the module
+                                        if (!empty($app_strings[$fieldlabel])) {
+                                            $fieldlabel = $app_strings[$fieldlabel];
+                                        }
+                                        // SalesPlatform.ru end
 					if($selected == $field)
 					{
 						$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
@@ -365,7 +373,9 @@ function getPrimaryColumns_AdvFilter_HTML($module, $ogReport, $selected='') {
 function getSecondaryColumns_AdvFilter_HTML($module, $ogReport, $selected="") {
 	global $app_list_strings;
     global $current_language;
-
+    // SalesPlatform.ru begin localization of fields outside the module
+    global $app_strings;
+    // SalesPlatform.ru end
     if($module != "")
     {
     	$secmodule = explode(":",$module);
@@ -393,6 +403,11 @@ function getSecondaryColumns_AdvFilter_HTML($module, $ogReport, $selected="") {
 								}
 							}else
 							{
+                                                                // SalesPlatform.ru begin localization of fields outside the module
+                                                                if (!empty($app_strings[$fieldlabel])) {
+                                                                    $fieldlabel = $app_strings[$fieldlabel];
+                                                                }
+                                                                // SalesPlatform.ru end
 								if($selected == $field)
 								{
 									$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";

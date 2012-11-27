@@ -119,77 +119,126 @@ $taskManager = new VTTaskManager($adb);
 // Contact workflow on creation/modification
 $contactWorkFlow = $workflowManager->newWorkFlow("Contacts");
 $contactWorkFlow->test = '';
-$contactWorkFlow->description = "Workflow for Contact Creation or Modification";
+//SalesPlatform.ru begin
+$contactWorkFlow->description = "Автоматические обработчики для создания и модификации контактов";
+//$contactWorkFlow->description = "Workflow for Contact Creation or Modification";
+//SalesPlatform.ru end
 $contactWorkFlow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 $contactWorkFlow->defaultworkflow = 1;
 $workflowManager->save($contactWorkFlow);
 
 $task = $taskManager->createTask('VTEntityMethodTask', $contactWorkFlow->id);
 $task->active = true;
-$task->summary = 'Email Customer Portal Login Details';
+//SalesPlatform.ru begin
+$task->summary = 'Сообщение с регистрационными данными клиентского портала';
+//$task->summary = 'Email Customer Portal Login Details';
+//SalesPlatform.ru end
 $task->methodName = "SendPortalLoginDetails";
 $taskManager->saveTask($task);
 
 // Trouble Tickets workflow on creation from Customer Portal
 $helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 $helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';
-$helpDeskWorkflow->description = "Workflow for Ticket Created from Portal";
+//SalesPlatform.ru begin
+$helpDeskWorkflow->description = "Автоматический обработчик для создаваемой заявки из портала";
+//$helpDeskWorkflow->description = "Workflow for Ticket Created from Portal";
+//SalesPlatform.ru end
 $helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_FIRST_SAVE;
 $helpDeskWorkflow->defaultworkflow = 1;
 $workflowManager->save($helpDeskWorkflow);
 
 $task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 $task->active = true;
-$task->summary = 'Notify Record Owner and the Related Contact when Ticket is created from Portal';
+//SalesPlatform.ru begin
+$task->summary = 'Уведомляет ответственного за заявку и связанный контакт при создании заявки из портала';
+//$task->summary = 'Notify Record Owner and the Related Contact when Ticket is created from Portal';
+//SalesPlatform.ru end
 $task->methodName = "NotifyOnPortalTicketCreation";
 $taskManager->saveTask($task);
 
 // Trouble Tickets workflow on ticket update from Customer Portal
 $helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 $helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';
-$helpDeskWorkflow->description = "Workflow for Ticket Updated from Portal";
+//SalesPlatform.ru begin
+$helpDeskWorkflow->description = "Автоматические обработчики для обновляемых заявок из портала";
+//$helpDeskWorkflow->description = "Workflow for Ticket Updated from Portal";
+//SalesPlatform.ru end
 $helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_MODIFY;
 $helpDeskWorkflow->defaultworkflow = 1;
 $workflowManager->save($helpDeskWorkflow);
 
 $task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 $task->active = true;
-$task->summary = 'Notify Record Owner when Comment is added to a Ticket from Customer Portal';
+//SalesPlatform.ru begin
+$task->summary = 'Уведомляет ответственного за заявку при добавлении комментариев к заявке через клиентский портал';
+//$task->summary = 'Notify Record Owner when Comment is added to a Ticket from Customer Portal';
+//SalesPlatform.ru end
 $task->methodName = "NotifyOnPortalTicketComment";
 $taskManager->saveTask($task);
 
 // Trouble Tickets workflow on ticket change, which is not from Customer Portal - Both Record Owner and Related Customer
 $helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 $helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"false:boolean"}]';
-$helpDeskWorkflow->description = "Workflow for Ticket Change, not from the Portal";
+//SalesPlatform.ru begin
+$helpDeskWorkflow->description = "Обработчик для изменяемых заявок, не из портала";
+//$helpDeskWorkflow->description = "Workflow for Ticket Change, not from the Portal";
+//SalesPlatform.ru end
 $helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 $helpDeskWorkflow->defaultworkflow = 1;
 $workflowManager->save($helpDeskWorkflow);
 
 $task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 $task->active = true;
-$task->summary = 'Notify Record Owner on Ticket Change, which is not done from Portal';
+//SalesPlatform.ru begin
+$task->summary = 'Уведомляет ответственного за заявку, созданную не из портала, при ее изменении';
+//$task->summary = 'Notify Record Owner on Ticket Change, which is not done from Portal';
+//SalesPlatform.ru end
 $task->methodName = "NotifyOwnerOnTicketChange";
 $taskManager->saveTask($task);
 
 $task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 $task->active = true;
-$task->summary = 'Notify Related Customer on Ticket Change, which is not done from Portal';
+//SalesPlatform.ru begin
+$task->summary = 'Уведомляет связанного клиента при изменении заявки, которая создана не из портала';
+//$task->summary = 'Notify Related Customer on Ticket Change, which is not done from Portal';
+//SalesPlatform.ru end
 $task->methodName = "NotifyParentOnTicketChange";
 $taskManager->saveTask($task);
 
 // Events workflow when Send Notification is checked
 $eventsWorkflow = $workflowManager->newWorkFlow("Events");
 $eventsWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
-$eventsWorkflow->description = "Workflow for Events when Send Notification is True";
+//SalesPlatform.ru begin
+$eventsWorkflow->description = "Автоматические обработчики для событий при выбранной опции Отправить уведомление";
+//$eventsWorkflow->description = "Workflow for Events when Send Notification is True";
+//SalesPlatform.ru end
 $eventsWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 $eventsWorkflow->defaultworkflow = 1;
 $workflowManager->save($eventsWorkflow);
 
 $task = $taskManager->createTask('VTEmailTask', $eventsWorkflow->id);
 $task->active = true;
-$task->summary = 'Send Notification Email to Record Owner';
+//SalesPlatform.ru begin
+$task->summary = 'Отправляет письмо с уведомлением приглашенным пользователям';
+//$task->summary = 'Send Notification Email to Record Owner';
+//SalesPlatform.ru end
 $task->recepient = "\$(assigned_user_id : (Users) email1)";
+//SalesPlatform.ru begin
+$task->subject = "Событие :  \$subject";
+$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
+					.'<b>Детали события:</b><br/>'
+					.'Название события       : $subject<br/>'
+					.'Дата и Время Начала    : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Дата и Время Окончания : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Статус                 : $eventstatus <br/>'
+					.'Приоритет              : $taskpriority <br/>'
+					.'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+					.'$(parent_id            : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+					.'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+					.'Место проведения       : $location <br/>'
+					.'Описание               : $description';
+//vtiger commented code 
+/*
 $task->subject = "Event :  \$subject";
 $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (Users) first_name) ,<br/>'
 		. '<b>Activity Notification Details:</b><br/>'
@@ -203,20 +252,44 @@ $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (
 		. 'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
 		. 'Location            : $location <br/>'
 		. 'Description         : $description';
+*/
+//SalesPlatform.ru end
 $taskManager->saveTask($task);
 
 // Calendar workflow when Send Notification is checked
 $calendarWorkflow = $workflowManager->newWorkFlow("Calendar");
 $calendarWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
-$calendarWorkflow->description = "Workflow for Calendar Todos when Send Notification is True";
+//SalesPlatform.ru begin
+$calendarWorkflow->description = "Автоматические обработчики для задач Календаря при выбранной опции Отправить уведомление";
+//$calendarWorkflow->description = "Workflow for Calendar Todos when Send Notification is True";
+//SalesPlatform.ru end
 $calendarWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 $calendarWorkflow->defaultworkflow = 1;
 $workflowManager->save($calendarWorkflow);
 
 $task = $taskManager->createTask('VTEmailTask', $calendarWorkflow->id);
 $task->active = true;
-$task->summary = 'Send Notification Email to Record Owner';
+//SalesPlatform.ru begin
+$task->summary = 'Отправляет письмо с уведомлением ответственному за задачу';
+//$task->summary = 'Send Notification Email to Record Owner';
+//SalesPlatform.ru end
 $task->recepient = "\$(assigned_user_id : (Users) email1)";
+//SalesPlatform.ru begin
+$task->subject = "Задача :  \$subject";
+$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
+					.'<b>Детали задачи:</b><br/>'
+					.'Название задачи        : $subject<br/>'
+					.'Дата и Время Начала    : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Дата и Время Окончания : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+					.'Статус                 : $taskstatus <br/>'
+					.'Приоритет              : $taskpriority <br/>'
+					.'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+					.'$(parent_id            : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+					.'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+					.'Место проведения       : $location <br/>'
+					.'Описание               : $description';
+//vtiger commented code
+/*
 $task->subject = "Task :  \$subject";
 $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (Users) first_name) ,<br/>'
 		. '<b>Task Notification Details:</b><br/>'
@@ -230,6 +303,8 @@ $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (
 		. 'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
 		. 'Location            : $location <br/>'
 		. 'Description         : $description';
+*/
+//SalesPlatform.ru end
 $taskManager->saveTask($task);
 
 ExecutePQuery("UPDATE com_vtiger_workflows SET defaultworkflow=1 WHERE

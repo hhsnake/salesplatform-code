@@ -73,6 +73,9 @@ function getMyFaq($maxval,$calCnt)
 
 	//<<<<<<<<customview>>>>>>>>>
 
+        //SalesPlatform.ru begin
+        $query .= " ORDER BY vtiger_faq.id DESC";
+        //SalesPlatform.ru end
 	$query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
 
 	if($calCnt == 'calculateCnt') {

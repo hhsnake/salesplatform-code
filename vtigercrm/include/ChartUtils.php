@@ -11,6 +11,10 @@
 require_once('include/utils/utils.php');
 require_once 'include/utils/CommonUtils.php';
 
+//SalesPlatform.ru begin
+require_once('include/phputf8/utf8.php');
+//SalesPlatform.ru end
+
 Class ChartUtils {
 
 	// Function to generate Bar Chart
@@ -32,7 +36,11 @@ Class ChartUtils {
 		if (empty($width))
 			$width = '400';
 		if (empty($height))
-			$height = '300';
+                        //SalesPlatform.ru begin
+                        $height = '285';
+			//vtiger commented code
+                        //$height = '300';
+                        //SalesPlatform.ru end
 		if ($target === false)
 			$target = array();
 		if (empty($color))
@@ -45,8 +53,15 @@ Class ChartUtils {
 			$pos = substr_count($name, " ");
 			$alts[] = $name;
 			//If the daatx value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
-			if (strlen($name) >= 14)
-				$name = substr($name, 0, 44);
+                        
+			//SalesPlatform.ru begin
+                        if (utf8_strlen($name) >= 14)
+                                $name = utf8_substr($name, 0, 44);
+                        //vtiger commented code
+                        //if (strlen($name) >= 14)
+				//$name = substr($name, 0, 44);
+                        //SalesPlatform.ru end
+                        
 			if ($pos >= 2) {
 				$val = explode(" ", $name);
 				$n = count($val) - 1;
@@ -231,8 +246,15 @@ Class ChartUtils {
 			$pos = substr_count($name, " ");
 			$alts[] = $name;
 			//If the datax value of a string is greater, adding '\n' to it so that it'll come in 2nd line
-			if (strlen($name) >= 14)
-				$name = substr($name, 0, 34);
+                        
+			//SalesPlatform.ru begin
+                        if (utf8_strlen($name) >= 14)
+                                $name = utf8_substr($name, 0, 34);
+                        //vtiger commented code
+                        //if (strlen($name) >= 14)
+				//$name = substr($name, 0, 34);
+                        //SalesPlatform.ru end
+                        
 			if ($pos >= 2) {
 				$val = explode(" ", $name);
 				$n = count($val) - 1;
@@ -496,8 +518,12 @@ Class ChartUtils {
 		if(!empty($BarChartDetails['error'])) {
 			return $BarChartDetails['error'];
 		} else {
-			$barChart = ChartUtils::getBarChart($groupbyFields, $yaxisArray, '', '350', '300', $charttype, false, $targerLinks, $font_color);
-			return $barChart;
+			//SalesPlatform.ru begin
+                        $barChart = ChartUtils::getBarChart($groupbyFields, $yaxisArray, '', '350', '285', $charttype, false, $targerLinks, $font_color);                       
+                        //vtiger commented code
+                        //$barChart = ChartUtils::getBarChart($groupbyFields, $yaxisArray, '', '350', '300', $charttype, false, $targerLinks, $font_color);
+			//SalesPlatform.ru end
+                        return $barChart;
 		}
 	}
 

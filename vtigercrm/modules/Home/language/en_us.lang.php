@@ -132,7 +132,15 @@ $mod_strings = Array(
 // SalesPlatform.ru begin
 'LBL_SP_CONFIGURATION' => 'System Configuration',
 // SalesPlatform.ru end
-
+// SalesPlatform.ru begin Widgets added
+ 'LBL_SP_ACC' => 'Recent Organizations',
+ 'LBL_SP_POT' => 'Recent Potentials',
+ 'LBL_SP_EVENTS' => 'Recent Events',
+ 'LBL_SP_EXT_EVENTS' => 'Events Subordinates',
+// SalesPlatform.ru end
+// SalesPlatform.ru begin html widget added    
+'LBL_SP_HTML' => 'HTML Widget',
+// SalesPlatform.ru end  
 );
 
 ?>

@@ -479,6 +479,9 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 
 		$blockInstance = new Vtiger_Block();
 		$blockInstance->label = $blocklabel;
+                // SalesPlatform.ru begin Block sequence tag supported in XML
+		$blockInstance->sequence = $blocknode->sequence;
+                // SalesPlatform.ru end
 		$moduleInstance->addBlock($blockInstance);
 		return $blockInstance;
 	}
@@ -588,11 +591,17 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 
 		foreach($customviewnode->fields->field as $fieldnode) {
 			$fieldInstance = $this->__GetModuleFieldFromCache($moduleInstance, $fieldnode->fieldname);
+                        // SalesPlatform.ru begin: Hack to support conditions on fields not in list view
+                        if($fieldnode->columnindex >= 0)
+                        // SalesPlatform.ru end
 			$filterInstance->addField($fieldInstance, $fieldnode->columnindex);
 
 			if(!empty($fieldnode->rules->rule)) {
 				foreach($fieldnode->rules->rule as $rulenode) {
-					$filterInstance->addRule($fieldInstance, $rulenode->comparator, $rulenode->value, $rulenode->columnindex);
+                                        // SalesPlatform.ru begin column_condition supported for rules
+					$filterInstance->addRule($fieldInstance, $rulenode->comparator, $rulenode->value, $rulenode->columnindex, $rulenode->columncondition);
+					//$filterInstance->addRule($fieldInstance, $rulenode->comparator, $rulenode->value, $rulenode->columnindex);
+                                        // SalesPlatform.ru end
 				}
 			}
 		}
@@ -708,6 +717,9 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 										"$customlinknode->handler_class",
 										"$customlinknode->handler");
 			}
+                        // SalesPlatform.ru begin Check mandatory fields
+                        if (!$handlerInfo && !$customlinknode->linkurl) continue;
+                        // SalesPlatform.ru end
 			$moduleInstance->addLink(
 				"$customlinknode->linktype",
 				"$customlinknode->linklabel",

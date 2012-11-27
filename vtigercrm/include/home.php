@@ -110,6 +110,17 @@ class Homestuff{
 				return false;
 			}
 		}
+                // SalesPlatform.ru begin html widget added
+                else if($this->stufftype=='SP_HTML'){   
+			$userid = $current_user->id;           
+			$query="insert into sp_html_widget_contents values(?,?,?)";
+                        $params= array($userid,$stuffid,$this->htmlCode);
+                        $result=$adb->pquery($query, $params);
+			if(!$result){
+				return false;
+			}
+		}
+                // SalesPlatform.ru end
 	 	return "loadAddedDiv($stuffid,'".$this->stufftype."')";
 	}
 
@@ -173,8 +184,12 @@ class Homestuff{
 			$nontrans_stufftitle = $adb->query_result($resultstuff,$i,'stufftitle');
 			$trans_stufftitle = getTranslatedString($nontrans_stufftitle);
 			$stufftitle=decode_html($trans_stufftitle);
-			if(strlen($stufftitle)>100){
-				$stuff_title=substr($stufftitle,0,97)."...";
+                        // SalesPlatform.ru begin UTF-8 support
+			if(mb_strlen($stufftitle,'UTF-8')>100){
+				$stuff_title=mb_substr($stufftitle,0,97,'UTF-8')."...";
+			//if(strlen($stufftitle)>100){
+			//	$stuff_title=substr($stufftitle,0,97)."...";
+                        // SalesPlatform.ru end
 			}else{
 				$stuff_title = $stufftitle;
 			}
@@ -304,7 +319,10 @@ class Homestuff{
                         if($pos==true){
                             $fldlabel=str_replace("_"," ",$fldlabel);
                         }
-                        $field_label = isset($app_strings[$fldlabel])?$app_strings[$fldlabel]:(isset($fieldmod_strings[$fldlabel])?$fieldmod_strings[$fldlabel]:$fldlabel);
+                        // SalesPlatform.ru begin localization for Calendar
+                        $field_label = isset($fieldmod_strings[$fldlabel])?$fieldmod_strings[$fldlabel]:(isset($app_strings[$fldlabel])?$app_strings[$fldlabel]:$fldlabel);
+                        //$field_label = isset($app_strings[$fldlabel])?$app_strings[$fldlabel]:(isset($fieldmod_strings[$fldlabel])?$fieldmod_strings[$fldlabel]:$fldlabel);
+                        // SalesPlatform.ru end
                         $cv_presence = $adb->pquery("SELECT * from vtiger_cvcolumnlist WHERE cvid = ? and columnname LIKE '%".$fldname."%'", array($cvid));
                         if($is_admin == false){
                             $fld_permission = getFieldVisibilityPermission($modname,$current_user->id,$fldname);
@@ -312,6 +330,9 @@ class Homestuff{
                         if($fld_permission == 0 && $adb->num_rows($cv_presence)){
                             $field_query = $adb->pquery("SELECT fieldlabel FROM vtiger_field WHERE fieldname = ? AND tablename = ? and vtiger_field.presence in (0,2)", array($fldname,$tabname));
                             $field_label = $adb->query_result($field_query,0,'fieldlabel');
+                            // SalesPlatform.ru begin localization for Calendar                        
+                            $field_label = isset($fieldmod_strings[$field_label])?$fieldmod_strings[$field_label]:(isset($app_strings[$field_label])?$app_strings[$field_label]:$field_label);
+                            // SalesPlatform.ru end
                             $header[] = $field_label;
                         }
                         $fieldcolumns[$fldlabel] = Array($tabname=>$colname);
@@ -477,8 +498,23 @@ class Homestuff{
 		}elseif($hometype == 'PA' && vtlib_isModuleActive("Calendar")){
 			require_once "modules/Home/HomeUtils.php";
 			$home_values = homepage_getPendingActivities($maxval, $calCnt);
-		}
-
+		}// SalesPlatform.ru begin Widgets added
+                elseif($hometype=="SP_ACC" && vtlib_isModuleActive("Accounts")){
+                        include_once("modules/Accounts/ListViewTop.php");	
+                        $home_values = getSP_ACC_TopAccounts($maxval,$calCnt);
+                }elseif($hometype=="SP_POT" && vtlib_isModuleActive("Potentials")){
+			if(isPermitted('Potentials','index') == "yes"){
+				 include_once("modules/Potentials/ListViewTop.php");
+				 $home_values=getSP_POT_TopPotentials($maxval,$calCnt);
+			}
+                }elseif($hometype == 'SP_EVENTS' && vtlib_isModuleActive("Calendar")){
+			require_once "modules/Home/HomeUtils.php"; 
+                        $home_values = homepage_getSP_EVENTS_UpcomingActivities($maxval, $calCnt);
+                }elseif($hometype == 'SP_EXT_EVENTS' && vtlib_isModuleActive("Calendar")){
+			require_once "modules/Home/HomeUtils.php"; 
+                        $home_values = homepage_getSP_EXT_EVENTS_UpcomingActivities($maxval, $calCnt);
+                }
+                // SalesPlatform.ru end
 		if($calCnt == 'calculateCnt'){
 			return $home_values;
 		}
@@ -506,6 +542,21 @@ class Homestuff{
 		}
 		return $contents;
 	}
+        
+        // SalesPlatform.ru begin html widget added
+        function getHtmlWidgetContents($widgetid){
+		global $adb, $current_user;
+		
+		$sql = "select * from sp_html_widget_contents where widgetid=? and userid=?";
+		$result = $adb->pquery($sql, array($widgetid,$current_user->id));
+		
+		$contents = "";
+		if($adb->num_rows($result)>0){
+			$contents = $adb->query_result($result,0,"contents");
+		}
+		return $contents;
+	}
+        // SalesPlatform.ru end
 
 	/**
 	 * this function returns the URL for a given widget id from the database

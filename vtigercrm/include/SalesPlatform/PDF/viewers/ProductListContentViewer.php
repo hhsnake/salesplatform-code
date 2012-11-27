@@ -16,6 +16,8 @@ class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_P
 		$models = $this->contentModels;
 
 		$totalModels = count($models);
+                $totalGoods = 0;
+                $totalServices = 0;
 		$pdf = $parent->getPDF();
 		$pdf->setPageOrientation($this->orientation);
 		$pdf->SetAutoPageBreak(true, 10);
@@ -34,12 +36,38 @@ class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_P
 			
 			$contentHeight = 1;
 
-			$table_row = $template->getBlock('table_row', true);
-			foreach($model->keys() as $key) {
-    			    $table_row->setVar($key, $model->get($key));
-    			}
-			$content .= $table_row->fetch();
+			try {
+                            $table_row = $template->getBlock('table_row', true);
+                            foreach($model->keys() as $key) {
+                                $table_row->setVar($key, $model->get($key));
+                            }
+                            $content .= $table_row->fetch();
+                        }catch(Aste_Exception $e) {
+                        }
+
+                        try {
+                            if($model->get('entityType') == 'Products') {
+                                $table_row = $template->getBlock('goods_row', true);
+                                foreach($model->keys() as $key) {
+                                    $table_row->setVar($key, $model->get($key));
+                                }
+                                $content .= $table_row->fetch();
+                                $totalGoods++;
+                            }
+                        }catch(Aste_Exception $e) {
+                        }
 			
+                        try {
+                            if($model->get('entityType') == 'Services') {
+                                $table_row = $template->getBlock('services_row', true);
+                                foreach($model->keys() as $key) {
+                                    $table_row->setVar($key, $model->get($key));
+                                }
+                                $content .= $table_row->fetch();
+                                $totalServices++;
+                            }
+                        }catch(Aste_Exception $e) {
+                        }
 		    }
 		
 		
@@ -48,6 +76,8 @@ class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_P
     		        $summary->setVar($key, $this->contentSummaryModel->get($key));
     		    }
     		    $summary->setVar('summaryTotalItems', $totalModels);
+    		    $summary->setVar('summaryTotalGoods', $totalGoods);
+    		    $summary->setVar('summaryTotalServices', $totalServices);
 		    $content .= $summary->fetch();
 
 		    $ending = $template->getBlock('ending');

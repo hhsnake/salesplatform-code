@@ -72,20 +72,20 @@ $mod_strings = array (
       'LBL_TWO_COLUMN' => 'Две Колонки',
       'LBL_THREE_COLUMN' => 'Три Колонки',
       'LBL_FOUR_COLUMN' => 'Четыре Колонки',
-      'Top Accounts' => 'Последние Контрагенты',
-      'Top Potentials' => 'Последние Сделки',
+      'Top Accounts' => 'Важные Контрагенты',
+      'Top Potentials' => 'Важные Сделки',
       'Top Quotes' => 'Последние Предложения',
       'Top Trouble Tickets' => 'Последние Заявки',
       'Top Invoices' => 'Последние Счета',
       'Top Sales Orders' => 'Последние Заказы на Продажу',
       'Top Purchase Orders' => 'Последние Заказы на Закупку',
-      'My New Leads' => 'Мои Новые Обращения',
+      'My New Leads' => 'Мои новые Обращения',
       'Key Metrics' => 'Ключевые Показатели',
-      'My Group Allocation' => 'Положение Моей Группы',
-      'My Recent FAQs' => 'Мои Частые ЧаВо',
-      'Upcoming Activities' => 'Ближайшие События',
-      'Pending Activities' => 'События в Ожидании',
-      'Home Page Dashboard' => 'Панель Главной Страницы',
+      'My Group Allocation' => 'Активность моей группы',
+      'My Recent FAQs' => 'Мои последние ЧаВо',
+      'Upcoming Activities' => 'Действия сегодня',
+      'Pending Activities' => 'Действия в ожидании',
+      'Home Page Dashboard' => 'Активность пользователя',
       'Tag Cloud' => 'Облако Тегов',
       'MSG_NO_FILTERS' => 'Нет Доступных Фильтров',
       'MSG_NO_FIELDS' => 'Нет Доступных Полей',
@@ -103,7 +103,23 @@ $mod_strings = array (
       // SalesPlatform.ru begin
       'LBL_SP_CONFIGURATION' => 'Конфигурация Системы',
       // SalesPlatform.ru end
-
+      // SalesPlatform.ru begin Widgets added
+      'LBL_SP_ACC' => 'Последние Контрагенты',
+      'LBL_SP_POT' => 'Последние Сделки',
+      'LBL_SP_EVENTS' => 'Последние События',
+      'LBL_SP_EXT_EVENTS' => 'События подчиненных',
+      // SalesPlatform.ru end
+      //SalesPlatform.ru begin localization for ReportCharts 
+      'Lead by Source' => 'Обращения по источникам',
+      'Pipeline' => 'Конвейер Сделок',
+      'Potential Pipeline' => 'Конвейер Сделок',
+      'Lead Status Report' => 'Обращения по статусу',
+      'Tickets by Priority' => 'Заявки по приоритетам',
+      //SalesPlatform.ru end 
+      // SalesPlatform.ru begin html widget added
+      'LBL_SP_HTML' => 'HTML код',
+      // SalesPlatform.ru end
+    
 );
 
 ?>

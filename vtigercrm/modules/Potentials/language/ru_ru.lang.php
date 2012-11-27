@@ -119,6 +119,8 @@ $mod_strings = array (
       'Related To' => 'Клиент',
 
       'Potentials ID' => 'ID Сделки',
+
+      'POTENTIAL_' => 'Сделка_',
 );
 
 ?>

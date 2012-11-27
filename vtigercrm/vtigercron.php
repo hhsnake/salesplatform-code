@@ -16,6 +16,14 @@
 include_once 'vtlib/Vtiger/Cron.php';
 require_once 'config.inc.php';
 if(PHP_SAPI === "cli" || (isset($_SESSION["authenticated_user_id"]) &&	isset($_SESSION["app_unique_key"]) && $_SESSION["app_unique_key"] == $application_unique_key)){
+                
+// SalesPlatform.ru begin : bugfix for current language
+require_once('include/utils/utils.php');
+global $current_language;
+// Set the current language and the language strings
+setCurrentLanguage();
+vtws_preserveGlobal('current_language', $current_language);
+// SalesPlatform.ru end
 
 $cronTasks = false;
 if (isset($_REQUEST['service'])) {
