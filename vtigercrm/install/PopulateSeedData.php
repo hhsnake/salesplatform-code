@@ -71,7 +71,7 @@ $phone = $phone; // This line is useless, but gets around a code analyzer warnin
 function create_date()
 {
 	$date = "";
-	$date .= "2011";
+	$date .= "2013";
 	$date .= "-";
 	$date .= rand(1,9);
 	$date .= "-";
@@ -534,7 +534,7 @@ for($i=0;$i<4;$i++) {
 $sub_array = array ("Предложение по периферии", "Устройства", "Настройка сети", "Супер предложение", "Цены от поставщиков");
 $stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$validtill_array = array ("2010-09-21", "2010-10-29", "2010-12-11", "2010-03-29", "2010-06-18");
+$validtill_array = array ("2013-09-21", "2013-10-29", "2013-12-11", "2013-03-29", "2013-06-18");
 
 for($i=0;$i<5;$i++)
 {
@@ -568,9 +568,11 @@ for($i=0;$i<5;$i++)
 	$quote->column_fields["currency_id"] = '1';
 	$quote->column_fields["conversion_rate"] = '1';
 
-	$quote->save("Quotes");
-
-	$quote_ids[] = $quote->id;
+        // SalesPlatform.ru begin
+        //$quote->save("Quotes");
+        //
+	//$quote_ids[] = $quote->id;
+        // SalesPlatform.ru end
 
 	$product_key = array_rand($product_ids);
 	$productid = $product_ids[$product_key];
@@ -590,18 +592,23 @@ for($i=0;$i<5;$i++)
 	$_REQUEST['taxtype'] = $taxtype = 'individual';
 	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
 	$_REQUEST['discount_type_final'] = 'amount';
-	$_REQUEST['discount_amount_final'] = $discount_amount_final = '10';
+	$_REQUEST['discount_amount_final'] = $discount_amount_final = '0';
 
-	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
+	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '0';
 	$_REQUEST['adjustmenttype'] = '+';
-	$_REQUEST['adjustment'] = $adjustment = '10';
+	$_REQUEST['adjustment'] = $adjustment = '0';
 
 	$_REQUEST['total'] = $subtotal-$discount_amount_final+$shipping_handling_charge+$adjustment;
 
 	//Upto this added to set the request values which will be used to save the inventory product details
 
-	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails($quote, 'Quotes');
+        // SalesPlatform.ru begin
+        $quote->save("Quotes");
+
+	$quote_ids[] = $quote->id;
+	////Now call the saveInventoryProductDetails function
+	//saveInventoryProductDetails($quote, 'Quotes');
+        // SalesPlatform.ru end
 }
 
 //Populate SalesOrder Data
@@ -609,7 +616,7 @@ for($i=0;$i<5;$i++)
 $subj_array = array ("Первая Продажа", "Сервисная поддержка", "Пакет на 5 пользователей", "Пакет на 100 пользователей", "Новый Заказ");
 $status_array = array ("Created",  "Delivered", "Approved" , "Cancelled" , "Created");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$duedate_array = array ("2011-04-21", "2011-05-29", "2011-08-11", "2011-09-09", "2011-02-28");
+$duedate_array = array ("2013-04-21", "2013-05-29", "2013-08-11", "2013-09-09", "2013-02-28");
 
 for($i=0;$i<5;$i++)
 {
@@ -644,9 +651,11 @@ for($i=0;$i<5;$i++)
 	$so->column_fields["currency_id"] = '1';
 	$so->column_fields["conversion_rate"] = '1';
 
-	$so->save("SalesOrder");
-
-	$salesorder_ids[] = $so->id;
+        // SalesPlatform.ru begin
+        //$so->save("SalesOrder");
+        //
+	//$salesorder_ids[] = $so->id;
+        // SalesPlatform.ru end
 
 	$product_key = array_rand($product_ids);
 	$productid = $product_ids[$product_key];
@@ -666,18 +675,23 @@ for($i=0;$i<5;$i++)
 	$_REQUEST['taxtype'] = $taxtype = 'individual';
 	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
 	$_REQUEST['discount_type_final'] = 'amount';
-	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
+	$_REQUEST['discount_amount_final'] = $discount_amount_final = '0';
 
-	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
+	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '0';
 	$_REQUEST['adjustmenttype'] = '+';
-	$_REQUEST['adjustment'] = $adjustment = '100';
+	$_REQUEST['adjustment'] = $adjustment = '0';
 
 	$_REQUEST['total'] = $subtotal-$discount_amount_final+$shipping_handling_charge+$adjustment;
 
 	//Upto this added to set the request values which will be used to save the inventory product details
 
-	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails($so, 'SalesOrder');
+        // SalesPlatform.ru begin
+        $so->save("SalesOrder");
+
+	$salesorder_ids[] = $so->id;
+	////Now call the saveInventoryProductDetails function
+	//saveInventoryProductDetails($so, 'SalesOrder');
+        // SalesPlatform.ru end
 }
 
 //Populate PurchaseOrder Data
@@ -686,7 +700,7 @@ $psubj_array = array ("Установка и Настройка SalesPlatform Vt
 $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Received Shipment");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
-$duedate_array = array ("2012-04-21", "2012-05-29", "2012-07-11", "2012-04-09", "2012-08-18");
+$duedate_array = array ("2013-04-21", "2013-05-29", "2013-07-11", "2013-04-09", "2013-08-18");
 
 for($i=0;$i<5;$i++)
 {
@@ -719,9 +733,11 @@ for($i=0;$i<5;$i++)
 	$po->column_fields["currency_id"] = '1';
 	$po->column_fields["conversion_rate"] = '1';
 
-	$po->save("PurchaseOrder");
-
-	$purchaseorder_ids[] = $po->id;
+        // SalesPlatform.ru begin
+        //$po->save("PurchaseOrder");
+        //
+	//$purchaseorder_ids[] = $po->id;
+        // SalesPlatform.ru end
 
 	$product_key = array_rand($product_ids);
 	$productid = $product_ids[$product_key];
@@ -741,18 +757,23 @@ for($i=0;$i<5;$i++)
 	$_REQUEST['taxtype'] = $taxtype = 'individual';
 	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
 	$_REQUEST['discount_type_final'] = 'amount';
-	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
+	$_REQUEST['discount_amount_final'] = $discount_amount_final = '0';
 
-	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
+	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '0';
 	$_REQUEST['adjustmenttype'] = '+';
-	$_REQUEST['adjustment'] = $adjustment = '100';
+	$_REQUEST['adjustment'] = $adjustment = '0';
 
 	$_REQUEST['total'] = $subtotal-$discount_amount_final+$shipping_handling_charge+$adjustment;
 
 	//Upto this added to set the request values which will be used to save the inventory product details
 
-	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails($po, 'PurchaseOrder');
+        // SalesPlatform.ru begin
+        $po->save("PurchaseOrder");
+
+	$purchaseorder_ids[] = $po->id;
+	////Now call the saveInventoryProductDetails function
+	//saveInventoryProductDetails($po, 'PurchaseOrder');
+        // SalesPlatform.ru end
 }
 
 //Populate Invoice Data
@@ -760,6 +781,7 @@ for($i=0;$i<5;$i++)
 $isubj_array = array ("vtiger_invoice201", "zoho_inv7841", "vtiger5usrp_invoice71134", "vt100usrpk_inv113", "vendtl_inv214");
 $istatus_array = array ("Created",  "Sent", "Approved" , "Credit Invoice", "Paid");
 $itotal_array = array ("4842.000", "4842.000", "4842.000", "4842.000", "4842.000");
+$invoicedate_array = array ("2013-08-15", "2013-10-11", "2013-12-01", "2013-04-15", "2013-06-10");
 
 for($i=0;$i<5;$i++)
 {
@@ -776,6 +798,7 @@ for($i=0;$i<5;$i++)
 	$invoice->column_fields["subject"] = $isubj_array[$i];
 	$invoice->column_fields["invoicestatus"] = $istatus_array[$i];
 	$invoice->column_fields["hdnGrandTotal"] = $itotal_array[$i];
+	$invoice->column_fields["invoicedate"] = $invoicedate_array[$i];
 
 	$invoice->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
 	$invoice->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
@@ -792,21 +815,23 @@ for($i=0;$i<5;$i++)
 	$invoice->column_fields["currency_id"] = '1';
 	$invoice->column_fields["conversion_rate"] = '1';
 
-	$invoice->save("Invoice");
-
-	$invoice_ids[] = $invoice->id;
-	if ($i > 3)
-	{
-		$freetag = $adb->getUniqueId('vtiger_freetags');
-		$query = "insert into vtiger_freetags values (?,?,?)";
-		$qparams = array($freetag, $cloudtag[0], $cloudtag[0]);
-		$res_inv = $adb->pquery($query, $qparams);
-
-		$date = $adb->formatDate(date('YmdHis'), true);
-		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
-		$tag_params = array($freetag, 1, $invoice->id, $date, 'Invoice');
-		$result_inv = $adb->pquery($query_tag, $tag_params);
-	}
+        // SalesPlatform.ru begin
+//        $invoice->save("Invoice");
+//
+//	$invoice_ids[] = $invoice->id;
+//	if ($i > 3)
+//	{
+//		$freetag = $adb->getUniqueId('vtiger_freetags');
+//		$query = "insert into vtiger_freetags values (?,?,?)";
+//		$qparams = array($freetag, $cloudtag[0], $cloudtag[0]);
+//		$res_inv = $adb->pquery($query, $qparams);
+//
+//		$date = $adb->formatDate(date('YmdHis'), true);
+//		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
+//		$tag_params = array($freetag, 1, $invoice->id, $date, 'Invoice');
+//		$result_inv = $adb->pquery($query_tag, $tag_params);
+//	}
+        // SalesPlatform.ru end
 
 	$product_key = array_rand($product_ids);
 	$productid = $product_ids[$product_key];
@@ -826,25 +851,42 @@ for($i=0;$i<5;$i++)
 	$_REQUEST['taxtype'] = $taxtype = 'individual';
 	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
 	$_REQUEST['discount_type_final'] = 'amount';
-	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
+	$_REQUEST['discount_amount_final'] = $discount_amount_final = '0';
 
-	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
+	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '0';
 	$_REQUEST['adjustmenttype'] = '+';
-	$_REQUEST['adjustment'] = $adjustment = '100';
+	$_REQUEST['adjustment'] = $adjustment = '0';
 
 	$_REQUEST['total'] = $subtotal-$discount_amount_final+$shipping_handling_charge+$adjustment;
 
 	//Upto this added to set the request values which will be used to save the inventory product details
 
-	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails($invoice, 'Invoice');
+        // SalesPlatform.ru begin
+        $invoice->save("Invoice");
+
+	$invoice_ids[] = $invoice->id;
+	if ($i > 3)
+	{
+		$freetag = $adb->getUniqueId('vtiger_freetags');
+		$query = "insert into vtiger_freetags values (?,?,?)";
+		$qparams = array($freetag, $cloudtag[0], $cloudtag[0]);
+		$res_inv = $adb->pquery($query, $qparams);
+
+		$date = $adb->formatDate(date('YmdHis'), true);
+		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
+		$tag_params = array($freetag, 1, $invoice->id, $date, 'Invoice');
+		$result_inv = $adb->pquery($query_tag, $tag_params);
+	}
+	////Now call the saveInventoryProductDetails function
+	//saveInventoryProductDetails($invoice, 'Invoice');
+        // SalesPlatform.ru end
 
 }
 
 //Populate Email Data
 
 $esubj_array =  array ("Русский Vtiger 5.4.0 Вышел", "Попробуйте VtigerCRM!", "Привет!!!", "Добро пожаловать в Open Source", "Нужна помощь в адаптации VtigerCRM");
-$startdate_array =  array ("2011-07-27","2011-05-09","2011-04-05","2011-11-01","2011-08-18");
+$startdate_array =  array ("2013-07-27","2013-05-09","2013-04-05","2013-11-01","2013-08-18");
 $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
 
 $to_array = array("a@a.com","b@b.com", "tester@testvtiger.com","xanth@yaz.com","violet@bing.com");
@@ -1041,7 +1083,7 @@ $expected_revenue = Array("250000","750000","500000");
 $budget_cost = Array("25000","50000","90000");
 $actual_cost = Array("23500","45000","80000");
 $num_sent = Array("2000","2500","3000");
-$clo_date = Array('2011-1-2','2011-2-3','2011-4-12');
+$clo_date = Array('2013-1-2','2013-2-3','2013-4-12');
 
 $expected_response_count = Array("2500","7500","5000");
 $expected_sales_count = Array("25000","50000","90000");

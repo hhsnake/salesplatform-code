@@ -38,6 +38,9 @@ class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_P
 
 			try {
                             $table_row = $template->getBlock('table_row', true);
+                    	    foreach($this->documentModel->keys() as $key) {
+                        	$table_row->setVar($key, $this->documentModel->get($key));
+                    	    }
                             foreach($model->keys() as $key) {
                                 $table_row->setVar($key, $model->get($key));
                             }
@@ -48,6 +51,9 @@ class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_P
                         try {
                             if($model->get('entityType') == 'Products') {
                                 $table_row = $template->getBlock('goods_row', true);
+                    		foreach($this->documentModel->keys() as $key) {
+                        	    $table_row->setVar($key, $this->documentModel->get($key));
+                    		}
                                 foreach($model->keys() as $key) {
                                     $table_row->setVar($key, $model->get($key));
                                 }
@@ -60,6 +66,9 @@ class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_P
                         try {
                             if($model->get('entityType') == 'Services') {
                                 $table_row = $template->getBlock('services_row', true);
+                    		foreach($this->documentModel->keys() as $key) {
+                        	    $table_row->setVar($key, $this->documentModel->get($key));
+                    		}
                                 foreach($model->keys() as $key) {
                                     $table_row->setVar($key, $model->get($key));
                                 }
@@ -72,6 +81,9 @@ class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_P
 		
 		
 		    $summary = $template->getBlock('summary');
+                    foreach($this->documentModel->keys() as $key) {
+                        $summary->setVar($key, $this->documentModel->get($key));
+                    }
 		    foreach($this->contentSummaryModel->keys() as $key) {
     		        $summary->setVar($key, $this->contentSummaryModel->get($key));
     		    }

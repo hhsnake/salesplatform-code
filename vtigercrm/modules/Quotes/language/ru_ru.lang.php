@@ -104,16 +104,16 @@ $mod_strings = array (
       'Assigned To' => 'Ответственный',
       'Billing Address' => 'Юридический адрес',
       'Shipping Address' => 'Фактический адрес',
-      'Billing City' => 'Город',
-      'Billing State' => 'Область',
-      'Billing Code' => 'Индекс',
-      'Billing Country' => 'Страна',
-      'Billing Po Box' => 'А/я',
-      'Shipping Po Box' => 'А/я',
-      'Shipping City' => 'Город',
-      'Shipping State' => 'Область',
-      'Shipping Code' => 'Индекс',
-      'Shipping Country' => 'Страна',
+      'Billing City' => 'Ю/А Город',
+      'Billing State' => 'Ю/А Область',
+      'Billing Code' => 'Ю/А Индекс',
+      'Billing Country' => 'Ю/А Страна',
+      'Billing Po Box' => 'Ю/А А/я',
+      'Shipping Po Box' => 'Ф/А А/я',
+      'Shipping City' => 'Ф/А Город',
+      'Shipping State' => 'Ф/А Область',
+      'Shipping Code' => 'Ф/А Индекс',
+      'Shipping Country' => 'Ф/А Страна',
       'Created Time' => 'Создано',
       'Modified Time' => 'Изменено',
       'Description' => 'Описание',
@@ -172,4 +172,7 @@ $mod_strings = array (
     // SalesPlatform.ru end
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

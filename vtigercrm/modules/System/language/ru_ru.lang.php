@@ -15,4 +15,7 @@ $mod_strings = array (
       'LBL_SYSTEM_CONFIG' => 'Конфигурация Системы',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

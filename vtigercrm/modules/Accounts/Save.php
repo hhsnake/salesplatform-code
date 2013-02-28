@@ -29,24 +29,28 @@ require_once('include/database/PearDatabase.php');
 $search=vtlib_purify($_REQUEST['search_url']);
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
-	//started
-	$value = $_REQUEST['accountname'];
-	$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
-	$params = array($value);
-	$id = $_REQUEST['record'];
-	if(isset($id) && $id !='') {
-		$query .= " and vtiger_account.accountid != ?";
-		array_push($params, $id);
-	}
-	$result = $adb->pquery($query, $params);
-        if($adb->num_rows($result) > 0)
-	{
-		echo $mod_strings['LBL_ACCOUNT_EXIST'];
-	}
-	else
-	{
-		echo 'SUCCESS';
-	}
+// SalesPlatform.ru begin: Turn off standard duplicate check -
+// to replace with flexible mechanism
+//	//started
+//	$value = $_REQUEST['accountname'];
+//	$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+//	$params = array($value);
+//	$id = $_REQUEST['record'];
+//	if(isset($id) && $id !='') {
+//		$query .= " and vtiger_account.accountid != ?";
+//		array_push($params, $id);
+//	}
+//	$result = $adb->pquery($query, $params);
+//        if($adb->num_rows($result) > 0)
+//	{
+//		echo $mod_strings['LBL_ACCOUNT_EXIST'];
+//	}
+//	else
+//	{
+//		echo 'SUCCESS';
+//	}
+        echo 'SUCCESS';
+// SalesPlatform.ru end
 	die;
 }
 //Ended

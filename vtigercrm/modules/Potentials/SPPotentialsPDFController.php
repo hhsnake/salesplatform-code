@@ -32,6 +32,9 @@ class SalesPlatform_PotentialsPDFController extends SalesPlatform_PDF_SPPDFContr
                 $this->generateEntityModel($account, 'Accounts', 'account_', $model);
                 $this->generateEntityModel($contact, 'Contacts', 'contact_', $model);
 
+                $this->generateUi10Models($model);
+                $this->generateRelatedListModels($model);
+
 		$model->set('potential_no', $this->focusColumnValue('potential_no'));
                 $model->set('potential_owner', getUserFullName($this->focusColumnValue('assigned_user_id')));
 

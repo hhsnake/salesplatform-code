@@ -222,6 +222,7 @@ class DefaultDataPopulator extends CRMEntity {
 // SalesPlatform.ru begin
 		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'inn', 'vtiger_account', 1, 1, 'inn', 'INN', 1, 2, '', 30, 24, 9, 1, 'V~O', 3, NULL, 'BAS', 0)");
 		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'kpp', 'vtiger_account', 1, 1, 'kpp', 'KPP', 1, 2, '', 30, 25, 9, 1, 'V~O', 3, NULL, 'BAS', 0)");
+		$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'splastsms', 'vtiger_account', 1, 70, 'splastsms', 'Last SMS Date', 1, 0, '', 100, 26, 9, 2, 'DT~O', 3, NULL, 'BAS', 0)");
 // SalesPlatform.ru end
 
 		//Block 11
@@ -273,6 +274,9 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (7," . $this->db->getUniqueID("vtiger_field") . ",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,'',100,21,13,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (7," . $this->db->getUniqueID("vtiger_field") . ",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,'',100,20,13,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (7," . $this->db->getUniqueID("vtiger_field") . ",'modifiedby','vtiger_crmentity',1,'52','modifiedby','Last Modified By',1,0,'',100,23,13,3,'V~O',3,null,'BAS',0)");
+                // SalesPlatform.ru begin
+      		$this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'splastsms', 'vtiger_leaddetails', 1, 70, 'splastsms', 'Last SMS Date', 1, 0, '', 100, 24, 13, 2, 'DT~O', 3, NULL, 'BAS', 0)");
+                // SalesPlatform.ru end
 		//Block13 -- End
 		//Block15 -- Start
 		$this->db->query("insert into vtiger_field values (7," . $this->db->getUniqueID("vtiger_field") . ",'lane','vtiger_leadaddress',1,'21','lane','Street',1,2,'',100,1,15,1,'V~O',1,null,'BAS',1)");
@@ -316,6 +320,9 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (4," . $this->db->getUniqueID("vtiger_field") . ",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,'',100,25,4,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (4," . $this->db->getUniqueID("vtiger_field") . ",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,'',100,27,4,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (4," . $this->db->getUniqueID("vtiger_field") . ",'modifiedby','vtiger_crmentity',1,'52','modifiedby','Last Modified By',1,0,'',100,28,4,3,'V~O',3,null,'BAS',0)");
+                // SalesPlatform.ru begin
+       		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'splastsms', 'vtiger_contactdetails', 1, 70, 'splastsms', 'Last SMS Date', 1, 0, '', 100, 29, 4, 2, 'DT~O', 3, NULL, 'BAS', 0)");
+                // SalesPlatform.ru end
 		//Block4 -- End
 		//Block6 - Begin Customer Portal
 
@@ -421,7 +428,10 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'status','vtiger_troubletickets',1,'15','ticketstatus','Status',1,2,'',100,7,25,1,'V~M',1,2,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'category','vtiger_troubletickets',1,'15','ticketcategories','Category',1,2,'',100,10,25,1,'V~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'update_log','vtiger_troubletickets',1,'19','update_log','Update History',1,0,'',100,11,25,3,'V~O',1,null,'BAS',0)");
-		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'hours','vtiger_troubletickets',1,'1','hours','Hours',1,2,'',100,9,25,1,'I~O',1,null,'BAS',1)");
+                // SalesPlatform.ru begin: Change ticket hours data type
+                $this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'hours','vtiger_troubletickets',1,'1','hours','Hours',1,2,'',100,9,25,1,'N~O',1,null,'BAS',1)");
+                //$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'hours','vtiger_troubletickets',1,'1','hours','Hours',1,2,'',100,9,25,1,'I~O',1,null,'BAS',1)");
+                // SalesPlatform.ru end
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'days','vtiger_troubletickets',1,'1','days','Days',1,2,'',100,10,25,1,'I~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,'',100,9,25,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,'',100,12,25,2,'DT~O',3,null,'BAS',0)");
@@ -1987,6 +1997,10 @@ Should any need arise,please do give us a call.';
 		$this->db->query("alter table vtiger_inventoryproductrel add column tax$vatid decimal(7,3) default NULL");
 		$this->db->query("alter table vtiger_inventoryproductrel add column tax$salesid decimal(7,3) default NULL");
 		$this->db->query("alter table vtiger_inventoryproductrel add column tax$serviceid decimal(7,3) default NULL");
+
+                // SalesPlatform.ru begin: Add inventory product subtotal
+                $this->db->query("ALTER TABLE vtiger_inventoryproductrel ADD prod_subtotal decimal(25, 3)");
+                // SalesPlatform.ru end
 
 		//Added to handle picklist uniqueid for the picklist values
 		//$this->db->query("insert into vtiger_picklistvalues_seq values(1)");

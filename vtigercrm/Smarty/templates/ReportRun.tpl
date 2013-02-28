@@ -22,6 +22,8 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-ru-utf8.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
+{$BLOCKJS}
+
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
@@ -85,11 +87,99 @@
 
 <!-- Generate Report UI Filter -->
 <table class="small reportGenerateTable" align="center" cellpadding="5" cellspacing="0" width="95%" border=0>
+<tr>
+	<td align=center class=small>
+	
+	<table border=0 cellspacing=0 cellpadding=0 width=80%>
+		<tr>
+			<td align=left class=small><b>{$MOD.LBL_SELECT_COLUMN} </b></td><td class=small>&nbsp;</td>
+			<td align=left class=small><b>{$MOD.LBL_SELECT_TIME} </b></td><td class=small>&nbsp;</td>
+			<td align=left class=small><b>{$MOD.LBL_SF_STARTDATE} </b></td><td class=small>&nbsp;</td>
+			<td align=left class=small><b>{$MOD.LBL_SF_ENDDATE} </b>
+		</tr>
+		<tr>
+			<td align="left" width="30%">
+			<select name="stdDateFilterField" class="small" style="width:98%" onchange="standardFilterDisplay();">
+			{$BLOCK1}
+			</select>
+			</td>
+			<td class=small>&nbsp;</td>			
+			<td align=left width="30%">
+			<select name="stdDateFilter" class="small" onchange='showDateRange( this.options[ this.selectedIndex ].value )' style="width:98%">
+			{$BLOCKCRITERIA}
+			</select>
+			</td>
+			<td class=small>&nbsp;</td>
+			<td align=left width="20%">
+				<table border=0 cellspacing=0 cellpadding=2>
+				<tr>
+					<td align=left><input name="startdate" id="jscal_field_date_start" type="text" size="10" class="importBox" style="width:70px;" value="{$STARTDATE}"></td>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_start"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+						<script type="text/javascript">
+							Calendar.setup ({ldelim}
+							inputField : "jscal_field_date_start", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+							{rdelim});
+						</script>
+
+					</td>
+				</tr>
+				</table>
+			</td>
+			<td align=left class=small>&nbsp;</td>
+			<td align=left width=20%>
+				<table border=0 cellspacing=0 cellpadding=2>
+				<tr>
+					<td align=left><input name="enddate" id="jscal_field_date_end" type="text" size="10" class="importBox" style="width:70px;" value="{$ENDDATE}"></td>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_end"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+						<script type="text/javascript">
+							Calendar.setup ({ldelim}
+							inputField : "jscal_field_date_end", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
+							{rdelim});
+						</script>
+					</td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	
+	</td>
+</tr>
 	<tr>
 		<td align="left" style="padding:5px" width="80%">
 			{include file='AdvanceFilter.tpl' SOURCE='reports'}
 		</td>
 	</tr>
+{* SalesPlatform.ru begin *}
+		{if $OWNERCRITERIA}
+		<tr>
+			<td align=left class=small style="padding-left: 50px">
+			<b>{$MOD.LBL_SELECT_OWNER} </b>
+			</td>
+		</tr>
+		<tr>
+			<td align=left class=small style="padding-left: 50px">
+			<select name="ownerFilter" class="small" style="width:300px">
+			{$OWNERCRITERIA}
+			</select>
+			</td>
+		</tr>
+		{/if}
+		{if $ACCOUNTCRITERIA}
+		<tr>
+			<td align=left class=small style="padding-left: 50px">
+			<b>{$MOD.LBL_SELECT_ACCOUNT} </b>
+			</td>
+		</tr>
+		<tr>
+			<td align=left class=small style="padding-left: 50px">
+			<select name="accountFilter" class="small" style="width:300px">
+			{$ACCOUNTCRITERIA}
+			</select>
+			</td>
+		</tr>
+		{/if}
+{* SalesPlatform.ru end *}
 	<tr>
 		<td align="center">
 			<input type="button" class="small create" onclick="generateReport({$REPORTID});" value="{$MOD.LBL_GENERATE_NOW}" title="{$MOD.LBL_GENERATE_NOW}" />
@@ -179,18 +269,49 @@
 
 <script type="text/javascript">
 function CrearEnlace(tipo,id){
+	var stdDateFilterFieldvalue = '';
+	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
+		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
+
+	var stdDateFiltervalue = '';
+	if(document.NewReport.stdDateFilter.selectedIndex != -1)
+		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
 
 	if(!checkAdvancedFilter()) return false;
 	var advft_criteria = $('advft_criteria').value;
 	var advft_criteria_groups = $('advft_criteria_groups').value;
 
-	return "index.php?module=Reports&action="+tipo+"&record="+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups;
+// SalesPlatform.ru begin
+	if(document.NewReport.ownerFilter && document.NewReport.ownerFilter.selectedIndex != -1)
+		ownerFiltervalue = document.NewReport.ownerFilter.options[document.NewReport.ownerFilter.selectedIndex].value;
+        else
+            ownerFiltervalue = '';
+	
+        if(document.NewReport.accountFilter && document.NewReport.accountFilter.selectedIndex != -1)
+            accountFiltervalue = document.NewReport.accountFilter.options[document.NewReport.accountFilter.selectedIndex].value;
+        else
+            accountFiltervalue = '';
+
+	return "index.php?module=Reports&action="+tipo+"&record="+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups+'&ownerFilter='+ownerFiltervalue+'&accountFilter='+accountFiltervalue+"&stdDateFilterField="+stdDateFilterFieldvalue+"&stdDateFilter="+stdDateFiltervalue+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value;
+//	return "index.php?module=Reports&action="+tipo+"&record="+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups;
+// SalesPlatform.ru end
 
 }
 
 function goToURL(url) {
 	document.location.href = url;
 }
+					
+var filter = getObj('stdDateFilter').options[document.NewReport.stdDateFilter.selectedIndex].value
+    if( filter != "custom" )
+    {
+        showDateRange( filter );
+    }
+
+// If current user has no access to date fields, we should disable selection
+// Fix for: #4670
+standardFilterDisplay();
+
 
 function saveReportAs(oLoc,divid) {
 	$('newreportname').value = '';
@@ -267,17 +388,59 @@ function generateReport(id) {
 	var advft_criteria = $('advft_criteria').value;
 	var advft_criteria_groups = $('advft_criteria_groups').value;
 
+	var stdDateFilterFieldvalue = '';
+	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
+		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
+
+	var stdDateFiltervalue = '';
+	if(document.NewReport.stdDateFilter.selectedIndex != -1)
+		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
+	var startdatevalue = document.NewReport.startdate.value;
+	var enddatevalue = document.NewReport.enddate.value;
+
+// SalesPlatform.ru begin
+	if(document.NewReport.ownerFilter && document.NewReport.ownerFilter.selectedIndex != -1)
+		ownerFiltervalue = document.NewReport.ownerFilter.options[document.NewReport.ownerFilter.selectedIndex].value;
+        else
+                ownerFiltervalue = '';
+	if(document.NewReport.accountFilter && document.NewReport.accountFilter.selectedIndex != -1)
+		accountFiltervalue = document.NewReport.accountFilter.options[document.NewReport.accountFilter.selectedIndex].value;
+        else
+                accountFiltervalue = '';
+// SalesPlatform.ru end
+
+	var date1=getObj("startdate")
+        var date2=getObj("enddate")
+	
+if ((date1.value != '') || (date2.value != ''))
+{
+
+        if(!dateValidate("startdate","Start Date","D"))
+                return false
+
+        if(!dateValidate("enddate","End Date","D"))
+                return false
+
+	if(!dateComparison("startdate",'Start Date',"enddate",'End Date','LE'))
+                return false;
+}
+
+
 	new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=ReportsAjax&file=SaveAndRun&mode=ajax&module=Reports&submode=generateReport&record='+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups,
+// SalesPlatform.ru begin
+                        postBody: 'action=ReportsAjax&file=SaveAndRun&mode=ajax&module=Reports&submode=saveCriteria&record='+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups+'&ownerFilter='+ownerFiltervalue+'&accountFilter='+accountFiltervalue+'&stdDateFilterField='+stdDateFilterFieldvalue+'&stdDateFilter='+stdDateFiltervalue+'&startdate='+startdatevalue+'&enddate='+enddatevalue,
+//                        postBody: 'action=ReportsAjax&file=SaveAndRun&mode=ajax&module=Reports&submode=saveCriteria&record='+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups,
+// SalesPlatform.ru end
                         onComplete: function(response) {
 							getObj('Generate').innerHTML = response.responseText;
 							// Performance Optimization: To update record count of the report result 
 							var __reportrun_directoutput_recordcount_scriptnode = $('__reportrun_directoutput_recordcount_script');
 							if(__reportrun_directoutput_recordcount_scriptnode) { eval(__reportrun_directoutput_recordcount_scriptnode.innerHTML); }
 							// END
+							setTimeout("ReportInfor()",1);
 							VtigerJS_DialogBox.unblock();
                         }
                 }
@@ -317,16 +480,72 @@ function selectReport() {
 	url ='index.php?action=SaveAndRun&module=Reports&record='+id+'&folderid='+folderid;
 	goToURL(url);
 }
+function ReportInfor()
+{
+	var stdDateFilterFieldvalue = '';
+	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
+		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].text;
+
+	var stdDateFiltervalue = '';
+	if(document.NewReport.stdDateFilter.selectedIndex != -1)
+		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].text;
+
+	var startdatevalue = document.NewReport.startdate.value;
+	var enddatevalue = document.NewReport.enddate.value;
+
+	if(startdatevalue != '' && enddatevalue=='')
+	{
+		{/literal}
+		var reportinfr = '{'Reporting'|@getTranslatedString}  "'+stdDateFilterFieldvalue+'"   ({'from'|@getTranslatedString}  '+startdatevalue+' )';
+                {literal}
+	}else if(startdatevalue == '' && enddatevalue !='')
+	{
+		{/literal}
+		var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"   (  {'till'|@getTranslatedString}  '+enddatevalue+')';
+                {literal}
+	}else if(startdatevalue == '' && enddatevalue =='')
+	{
+		{/literal}
+                var reportinfr = "{$MOD.NO_FILTER_SELECTED}";
+                {literal}
+	}else if(startdatevalue != '' && enddatevalue !='')
+	{
+		{/literal}
+	var reportinfr = '{'Reporting'|@getTranslatedString} "'+stdDateFilterFieldvalue+'"  {'of'|@getTranslatedString}  "'+stdDateFiltervalue+'"  ( '+startdatevalue+'  {'to'|@getTranslatedString}  '+enddatevalue+' )';
+                {literal}
+	}
+	getObj('report_info').innerHTML = reportinfr;
+}
+ReportInfor();
 
 {/literal}
 
 function goToPrintReport(id) {ldelim}
+	var stdDateFilterFieldvalue = '';
+	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
+	stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
+
+	var stdDateFiltervalue = '';
+if(document.NewReport.stdDateFilter.selectedIndex != -1)
+	stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
 
 	if(!checkAdvancedFilter()) return false;
 	var advft_criteria = $('advft_criteria').value;
 	var advft_criteria_groups = $('advft_criteria_groups').value;
-	
-	window.open("index.php?module=Reports&action=ReportsAjax&file=PrintReport&record="+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups,"{$MOD.LBL_Print_REPORT}","width=800,height=650,resizable=1,scrollbars=1,left=100");
+
+// SalesPlatform.ru begin
+	if(document.NewReport.ownerFilter && document.NewReport.ownerFilter.selectedIndex != -1)
+		ownerFiltervalue = document.NewReport.ownerFilter.options[document.NewReport.ownerFilter.selectedIndex].value;
+        else
+                ownerFiltervalue = '';
+	if(document.NewReport.accountFilter && document.NewReport.accountFilter.selectedIndex != -1)
+		accountFiltervalue = document.NewReport.accountFilter.options[document.NewReport.accountFilter.selectedIndex].value;
+        else
+                accountFiltervalue = '';
+	window.open("index.php?module=Reports&action=ReportsAjax&file=PrintReport&record="+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups+"&ownerFilter="+ownerFiltervalue+"&accountFilter="+accountFiltervalue+"&stdDateFilterField="+stdDateFilterFieldvalue+"&stdDateFilter="+stdDateFiltervalue+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value,"{$MOD.LBL_Print_REPORT}","width=800,height=650,resizable=1,scrollbars=1,left=100");
+//	window.open("index.php?module=Reports&action=ReportsAjax&file=PrintReport&record="+id+'&advft_criteria='+advft_criteria+'&advft_criteria_groups='+advft_criteria_groups,"{$MOD.LBL_Print_REPORT}","width=800,height=650,resizable=1,scrollbars=1,left=100");
+// SalesPlatform.ru end
+
 {rdelim}
 
 </script>

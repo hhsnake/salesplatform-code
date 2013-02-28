@@ -300,6 +300,28 @@ else if($extension == "odt")
         remove_dir($wordtemplatedownloadpath.$temp_dir);
     }
 }
+else if($extension == "docx")
+{
+    //delete old .docx files in the wordtemplatedownload directory
+    foreach (glob("$wordtemplatedownloadpath/*.docx") as $delefile) 
+    {
+        unlink($delefile);
+    }
+    if (!is_array($mass_merge)) $mass_merge = array($mass_merge);
+    foreach($mass_merge as $idx => $entityid) {
+        $temp_dir=entpack($filename,$wordtemplatedownloadpath,$fileContent);
+        $concontent=file_get_contents($wordtemplatedownloadpath.$temp_dir.'/word/document.xml');
+        unlink($wordtemplatedownloadpath.$temp_dir.'/word/document.xml');
+        $new_filecontent=crmmerge($csvheader,$concontent,$idx,'htmlspecialchars');
+        $stycontent=file_get_contents($wordtemplatedownloadpath.$temp_dir.'/word/styles.xml');
+        unlink($wordtemplatedownloadpath.$temp_dir.'/word/styles.xml');
+        $new_filestyle=crmmerge($csvheader,$stycontent,$idx,'htmlspecialchars');
+        packendocx($entityid.$filename,$wordtemplatedownloadpath,$temp_dir,$new_filecontent,$new_filestyle);
+
+        echo "&nbsp;&nbsp;<font size=+1><b><a href=test/wordtemplatedownload/$entityid$filename>".$app_strings['DownloadMergeFile']."</a></b></font><br>";
+        remove_dir($wordtemplatedownloadpath.$temp_dir);
+    }
+}
 else if($extension == "rtf")
 {
     foreach (glob("$wordtemplatedownloadpath/*.rtf") as $delefile) 

@@ -78,4 +78,7 @@ $mod_strings = array (
 'Campaigns ID' => 'ID Кампании',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

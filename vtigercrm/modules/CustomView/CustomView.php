@@ -225,6 +225,9 @@ class CustomView extends CRMEntity {
 
 			$option = '';
 			$viewname = $cvrow['viewname'];
+                        // SalesPlatform.ru begin Filter name localization
+                        $viewname = getTranslatedString($viewname, $this->customviewmodule);
+                        // SalesPlatform.ru end
 			if ($cvrow['status'] == CV_STATUS_DEFAULT || $cvrow['userid'] == $current_user->id) {
 				$disp_viewname = $viewname;
 			} else {

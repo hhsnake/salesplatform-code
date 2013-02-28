@@ -385,6 +385,7 @@
 		<field name="kpp" type="C" size="30">
 			<default value="" />
 		</field>
+		<field name="splastsms" type="T" />
 
 		<index name="account_account_type_idx">
 			<col>account_type</col>
@@ -496,6 +497,7 @@
 		<field name="notify_owner" type="C" size="3">
 			<default value="0"/>
 		</field>
+		<field name="splastsms" type="T" />
 
 		<index name="contactdetails_accountid_idx">
 			<col>accountid</col>
@@ -672,6 +674,7 @@
 		<field name="assignleadchk" type="I" size="1">
 			<default value="0" />
 		</field>
+		<field name="splastsms" type="T" />
 
 		<index name="leaddetails_converted_leadstatus_idx">
 			<col>converted</col>
@@ -7602,6 +7605,25 @@
 		<field name="userid" type="I" size="19" />
 		<field name="widgetid" type="I" size="19" />
 		<field name="contents" type="X" />
+		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci</opt>
+	</table>
+
+        <table name="sp_custom_reports">
+		<field name="reporttype" type="C" size="50">
+			<key />
+                </field>
+		<field name="datefilter" type="I" size="1">
+			<default value="0" />
+                </field>
+		<field name="ownerfilter" type="I" size="1">
+			<default value="0" />
+                </field>
+		<field name="accountfilter" type="I" size="1">
+			<default value="0" />
+                </field>
+		<field name="functionname" type="C" size="255">
+			<notnull />
+                </field>
 		<opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci</opt>
 	</table>
 

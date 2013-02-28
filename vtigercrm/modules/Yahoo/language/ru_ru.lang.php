@@ -20,4 +20,7 @@ $mod_strings = array (
       'ERR_DELETE_RECORD' => 'Необходимо указать номер записи для удаления.',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

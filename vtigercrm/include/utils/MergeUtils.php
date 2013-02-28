@@ -33,7 +33,10 @@ function crmmerge($csvheader,$content,$index_in_csvdata,$function_name='')
     $numfields = count($Values);
     for($i=0;$i<$numfields;$i++)
     {
-        $content = str_replace($Header[$i], call_user_func($f,$Values[$i]), $content);
+	// SalesPlatform.ru begin: Fix of RTF unicode sequences for document merge
+        $content = str_replace(call_user_func($f,$Header[$i]), call_user_func($f,$Values[$i]), $content);
+        //$content = str_replace($Header[$i], call_user_func($f,$Values[$i]), $content);
+	// SalesPlatform.ru end
     }
     return $content;
 }
@@ -82,6 +85,30 @@ function packen($filename,$wordtemplatedownloadpath,$temp_dir, $concontent,$styl
     }
 }
 
+// SalesPlatform.ru begin: Add support for DOCX merge
+function packendocx($filename,$wordtemplatedownloadpath,$temp_dir, $concontent,$stylecontent)
+{
+    //global $filename, $wordtemplatedownloadpath;
+    //write a new content.xml
+    $handle=fopen($wordtemplatedownloadpath.'/'.$temp_dir.'/word/document.xml',"w");
+    fwrite($handle,$concontent);
+    fclose($handle);
+
+    //write a new styles.xml
+    $handle2=fopen($wordtemplatedownloadpath.'/'.$temp_dir.'/word/styles.xml',"w");
+    fwrite($handle2,$stylecontent);
+    fclose($handle2);
+
+    $archive = new PclZip($wordtemplatedownloadpath.'/'.$filename);
+    //make a new archive (or .odt file)
+    $v_list = $archive->add($wordtemplatedownloadpath.'/'.$temp_dir,PCLZIP_OPT_REMOVE_PATH, $wordtemplatedownloadpath.'/'.$temp_dir);
+    if ($v_list == 0) 
+    {
+        die("Error : ".$archive->errorInfo(true));
+    }
+}
+// SalesPlatform.ru end
+
 function remove_dir($dir)
 {
     $handle = opendir($dir);
@@ -107,6 +134,25 @@ function remove_dir($dir)
     return $success;
 }
 
+// SalesPlatform.ru begin: CP1251 support for Word-generated RTF
+function utf8ToCP1251($str) {
+    return iconv("UTF-8", "CP1251", $str);
+}
+
+function cp1251ToEntitiesPreservingAscii($str) {
+    $entities = '';
+    for($i = 0; $i < strlen($str); $i++) {
+	$value = ord($str[$i]);
+        $entities .= ( $value > 127 ) ? "\\'" . dechex($value) : chr( $value );
+    }
+    return $entities;
+}
+
+function rtf1251($str) {
+        return cp1251ToEntitiesPreservingAscii(utf8ToCP1251($str));
+}
+// SalesPlatform.ru end
+
 
 /**
 * @see http://sourceforge.net/projects/phprtf
@@ -123,7 +169,10 @@ function unicodeToEntitiesPreservingAscii($unicode) {
     $entities = '';
     foreach( $unicode as $value ) {
                 if ($value != 65279) {
-                $entities .= ( $value > 127 ) ? '\uc0\u' . $value . ' ' : chr( $value );
+		// SalesPlatform.ru begin: Fix of RTF unicode sequences for document merge
+                $entities .= ( $value > 127 ) ? '\u' . $value . "\\'3f" : chr( $value );
+                //$entities .= ( $value > 127 ) ? '\uc0\u' . $value . ' ' : chr( $value );
+		// SalesPlatform.ru end
             }
     }
     return $entities;

@@ -15,10 +15,7 @@
 
 .small {
     font-family: Arial, Helvetica, sans-serif;
-    /* SalesPlatform.ru begin correct interface */
-    font-size: 10px;
-    /*font-size: 11px;*/
-    /* SalesPlatform.ru end */
+    font-size: 11px;
     color: #000000;
 }
 

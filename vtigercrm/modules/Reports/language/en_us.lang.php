@@ -38,6 +38,9 @@ $mod_strings = Array(
 'LBL_CONTINUE_BUTTON'=>'Continue',
 'LBL_NEW_REP1_HDR1'=>'Provide the following report information',
 'LBL_SELECT_COLUMNS'=>'Select Columns',
+// SalesPlatform.ru begin
+'LBL_SELECT_OWNER'=>'Select Owner',
+// SalesPlatform.ru end
 'LBL_SPECIFY_GROUPING'=>'Specify Grouping',
 'LBL_COLUMNS_TO_TOTAL'=>'Choose Columns To Total',
 'LBL_SPECIFY_CRITERIA'=>'Specify Criteria',

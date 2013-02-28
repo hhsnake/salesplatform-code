@@ -123,4 +123,7 @@ $mod_strings = array (
       'POTENTIAL_' => 'Сделка_',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

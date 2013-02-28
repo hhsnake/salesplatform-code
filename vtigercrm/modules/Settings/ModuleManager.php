@@ -69,7 +69,9 @@ else{
         include_once('include/install/resources/utils.php');
         $failed_permissions = Common_Install_Wizard_Utils::getFailedPermissionsFiles();
         foreach ($failed_permissions as $index => $value) {
-            $dir_notwritable[] = $value;
+            if (substr_count($value, './install') == 0) {
+                $dir_notwritable[] = $value;
+            }
         }
         // SalesPlatform.ru end
 	

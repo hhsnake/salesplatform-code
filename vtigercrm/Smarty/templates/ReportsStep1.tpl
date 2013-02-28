@@ -57,6 +57,12 @@
 					<tr>
 					<td width="25%" valign="top">
 						<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+                                                        {* SalesPlatform.ru begin: Special customization of custom reports *}
+                                                        {if $SP_CUSTOM_REPORT eq 'true'}
+							<tr><td id="step6label" class="settingsTabList" style="padding-left:10px;">1. {$MOD.LBL_SHARING} </td></tr>
+							<tr><td id="step7label" class="settingsTabList" style="padding-left:10px;">2. {$MOD.LBL_SCHEDULE_EMAIL} </td></tr>
+                                                        {else}
+                                                        {* SalesPlatform.ru end: Special customization of custom reports *}
 							<tr><td class="settingsTabList" style="padding-left:10px;">1. {$MOD.LBL_REPORT_DETAILS}</td></tr>
 							<tr><td class="settingsTabList" style="padding-left:10px;">2. {$MOD.LBL_RELATIVE_MODULE} </td></tr>
 							<tr><td id="step1label" class="settingsTabSelected" style="padding-left:10px;">3. {$MOD.LBL_REPORT_TYPE} </td></tr>
@@ -66,11 +72,22 @@
 							<tr><td id="step5label" class="settingsTabList" style="padding-left:10px;">7. {$MOD.LBL_FILTERS} </td></tr>
 							<tr><td id="step6label" class="settingsTabList" style="padding-left:10px;">8. {$MOD.LBL_SHARING} </td></tr>
 							<tr><td id="step7label" class="settingsTabList" style="padding-left:10px;">9. {$MOD.LBL_SCHEDULE_EMAIL} </td></tr>
+                                                        {* SalesPlatform.ru begin: Special customization of custom reports *}
+                                                        {/if}
+                                                        {* SalesPlatform.ru end: Special customization of custom reports *}
 						</table>
 					</td>
 					<td width="75%" valign="top" bgcolor=white>
 						<!-- Step 1 -->
+                                                {* SalesPlatform.ru begin: Special customization of custom reports *}
+                                                {if $SP_CUSTOM_REPORT eq 'true'}
+						<div id="step1" style="display:none;">
+                                                {else}
+                                                {* SalesPlatform.ru end: Special customization of custom reports *}
 						<div id="step1" style="display:block;">
+                                                {* SalesPlatform.ru begin: Special customization of custom reports *}
+                                                {/if}
+                                                {* SalesPlatform.ru end: Special customization of custom reports *}
 						<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
 							<tbody><tr>
 							<td colspan="2">
@@ -124,7 +141,15 @@
 						</table>
 						</div>
 
+                                                {* SalesPlatform.ru begin: Special customization of custom reports *}
+                                                {if $SP_CUSTOM_REPORT eq 'true'}
+						<div id="step6" style="display:block;">
+                                                {else}
+                                                {* SalesPlatform.ru end: Special customization of custom reports *}
 						<div id="step6" style="display:none;">
+                                                {* SalesPlatform.ru begin: Special customization of custom reports *}
+                                                {/if}
+                                                {* SalesPlatform.ru end: Special customization of custom reports *}
 						<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
 							<tbody><tr>
 							<td colspan="2">
@@ -153,7 +178,15 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td align="right" style="padding:10px;" >
+                                                {* SalesPlatform.ru begin: Special customization of custom reports *}
+                                                {if $SP_CUSTOM_REPORT eq 'true'}
+						<input type="button" id="back_rep" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="crmbutton small cancel" onClick="changeStepsback1();" disabled>&nbsp;
+                                                {else}
+                                                {* SalesPlatform.ru end: Special customization of custom reports *}
 						<input type="button" id="back_rep" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="crmbutton small cancel" onClick="changeStepsback1();">&nbsp;
+                                                {* SalesPlatform.ru begin: Special customization of custom reports *}
+                                                {/if}
+                                                {* SalesPlatform.ru end: Special customization of custom reports *}
 						<input type="button" id="next" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="crmbutton small save" onClick="changeSteps1();">
 						&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="crmbutton small cancel" onClick="self.close();">
 						</td>

@@ -67,6 +67,13 @@ function getListViewHeader($focus, $module, $sort_qry = '', $sorder = '', $order
 	// Remove fields which are made inactive
 	$focus->filterInactiveFields($module);
 
+        // SalesPlatform.ru begin fields of the related list from the database
+        if ($module == 'Accounts' || $module == 'Potentials') {
+            $focus->list_fields = getEntityForListView($module, true);                                                                            
+            $focus->list_fields_name = getEntityForListView($module, false);  
+        }    
+        // SalesPlatform.ru end
+        
 	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
 	$field_list = array();
 	$j = 0;
@@ -273,6 +280,14 @@ function getSearchListViewHeader($focus, $module, $sort_qry = '', $sorder = '', 
 	$arrow = '';
 	$list_header = Array();
 	$tabid = getTabid($module);
+        
+        // SalesPlatform.ru begin fields of the related list from the database
+        if ($module == 'Accounts' || $module == 'Potentials') {
+            $focus->search_fields = getEntityForListView($module, true); 
+            $focus->search_fields_name = getEntityForListView($module, false);
+        }
+        // SalesPlatform.ru end
+        
 	if (isset($_REQUEST['task_relmod_id'])) {
 		$task_relmod_id = vtlib_purify($_REQUEST['task_relmod_id']);
 		$pass_url .="&task_relmod_id=" . $task_relmod_id;
@@ -498,6 +513,14 @@ function getListViewEntries($focus, $module, $list_result, $navigation_array, $r
 			$focus->list_fields = $oCv->list_fields;
 		}
 	}
+        
+        // SalesPlatform.ru begin fields of the related list from the database
+        if ($module == 'Accounts' || $module == 'Potentials') {
+            $focus->list_fields = getEntityForListView($module, true);
+            $focus->list_fields_name = getEntityForListView($module, false);
+        }
+        // SalesPlatform.ru end
+        
 	if (is_array($selectedfields) && $selectedfields != '') {
 		$focus->list_fields = $selectedfields;
 	}
@@ -1029,7 +1052,14 @@ function getSearchListViewEntries($focus, $module, $list_result, $navigation_arr
 	$theme_path = "themes/" . $theme . "/";
 	$image_path = $theme_path . "images/";
 	$list_block = Array();
-
+        
+        // SalesPlatform.ru begin fields of the related list from the database
+        if ($module == 'Accounts' || $module == 'Potentials') {
+            $focus->search_fields = getEntityForListView($module, true);
+            $focus->search_fields_name = getEntityForListView($module, false); 
+        }
+        // SalesPlatform.ru end
+        
 	//getting the vtiger_fieldtable entries from database
 	$tabid = getTabid($module);
 	require('user_privileges/user_privileges_' . $current_user->id . '.php');
@@ -2336,7 +2366,28 @@ function getListQuery($module, $where = '') {
 
 		Case "Accounts":
 			//Query modified to sort by assigned to
+                        // SalesPlatform.ru begin fields of the related list from the database
 			$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+			vtiger_account.*,
+			vtiger_accountbillads.bill_city,
+			vtiger_accountscf.*
+			FROM vtiger_account
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_account.accountid
+			INNER JOIN vtiger_accountbillads
+				ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
+			INNER JOIN vtiger_accountshipads
+				ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
+			INNER JOIN vtiger_accountscf
+				ON vtiger_account.accountid = vtiger_accountscf.accountid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_account vtiger_account2
+				ON vtiger_account.parentid = vtiger_account2.accountid";
+                        /*
+                        $query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_account.accountname, vtiger_account.email1,
 			vtiger_account.email2, vtiger_account.website, vtiger_account.phone,
 			vtiger_accountbillads.bill_city,
@@ -2356,6 +2407,8 @@ function getListQuery($module, $where = '') {
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_account vtiger_account2
 				ON vtiger_account.parentid = vtiger_account2.accountid";
+                        */
+                        // SalesPlatform.ru end
 			$query .= getNonAdminAccessControlQuery($module, $current_user);
 			$query .= "WHERE vtiger_crmentity.deleted = 0 " . $where;
 			break;

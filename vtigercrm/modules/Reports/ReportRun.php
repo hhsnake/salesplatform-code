@@ -103,6 +103,9 @@ class ReportRun extends CRMEntity
 			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
 			list($module,$field) = split("_",$module_field,2);
 			$inventory_fields = array('quantity','listprice','serviceid','productid','discount','comment');
+                        // SalesPlatform.ru begin prod_subtotal field added
+                        $inventory_fields[] = 'prod_subtotal';
+                        // SalesPlatform.ru end
                         // SalesPlatform.ru begin: Fixed reports for Consignments and Acts
 			$inventory_modules = array('SalesOrder','Quotes','PurchaseOrder','Invoice','Act','Consignment');
 			//$inventory_modules = array('SalesOrder','Quotes','PurchaseOrder','Invoice');
@@ -601,7 +604,10 @@ class ReportRun extends CRMEntity
 		return $advft_criteria;
 	}
 
-	function generateAdvFilterSql($advfilterlist) {
+// SalesPlatform.ru begin
+	function generateAdvFilterSql($advfilterlist, $params=array()) {
+//	function generateAdvFilterSql($advfilterlist) {
+// SalesPlatform.ru end
 
 		global $adb;
 
@@ -619,6 +625,14 @@ class ReportRun extends CRMEntity
 					$comparator = $columninfo["comparator"];
 					$value = $columninfo["value"];
 					$columncondition = $columninfo["column_condition"];
+
+// SalesPlatform.ru begin
+					if(in_array($value, array_keys($params))) {
+					    $value = $params[$value];
+
+					    if($value == '') continue;
+					}
+// SalesPlatform.ru end
 
 					if($fieldcolname != "" && $comparator != "") {
 						$selectedfields = explode(":",$fieldcolname);
@@ -737,7 +751,10 @@ class ReportRun extends CRMEntity
 		return $advfiltersql;
 	}
 
-	function getAdvFilterSql($reportid) {
+// SalesPlatform.ru begin
+        function getAdvFilterSql($reportid,$params=array()) {
+//        function getAdvFilterSql($reportid) {
+// SalesPlatform.ru end
 		// Have we initialized information already?
 		if($this->_advfiltersql !== false) {
 			return $this->_advfiltersql;
@@ -745,7 +762,10 @@ class ReportRun extends CRMEntity
 		global $log;
 
 		$advfilterlist = $this->getAdvFilterList($reportid);
-		$advfiltersql = $this->generateAdvFilterSql($advfilterlist);
+                // SalesPlatform.ru begin
+		$advfiltersql = $this->generateAdvFilterSql($advfilterlist,$params);
+		//$advfiltersql = $this->generateAdvFilterSql($advfilterlist);
+                // SalesPlatform.ru end
 
 		// Save the information
 		$this->_advfiltersql = $advfiltersql;
@@ -881,9 +901,34 @@ class ReportRun extends CRMEntity
 			}
 
 		}
+                // SalesPlatform.ru begin
+                if(isset($stdfilterlist[$filtercolumn]) && $stdfilterlist[$filtercolumn] != '')
+                    return '('.$stdfilterlist[$filtercolumn].')';
+                else
+                    return '';
+                //return $stdfilterlist;
+                // SalesPlatform.ru end
+	}
+	
+// SalesPlatform.ru begin
+	function GenericFilter($filtercolumn,$op,$value)
+	{
+		if($filtercolumn != "none")
+		{
+			$selectedfields = explode(":",$filtercolumn);
+			if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
+				$selectedfields[0] = "vtiger_crmentity";
+				
+			if($op != "" && $value != "" && $selectedfields[0] != "" && $selectedfields[1] != "")
+			{
+				$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." ".$op." '".$value."'";
+			}
+
+		}
 		return $stdfilterlist;
 
 	}
+// SalesPlatform.ru end
 
 	/** Function to get the RunTime Advanced filter conditions
 	 *  @ param $advft_criteria : Type Array
@@ -891,7 +936,10 @@ class ReportRun extends CRMEntity
 	 *  This function returns  $advfiltersql
 	 *
 	 */
-	function RunTimeAdvFilter($advft_criteria,$advft_criteria_groups) {
+// SalesPlatform.ru begin
+        function RunTimeAdvFilter($advft_criteria,$advft_criteria_groups,$params=array()) {
+//        function RunTimeAdvFilter($advft_criteria,$advft_criteria_groups) {
+// SalesPlatform.ru end
 		$adb = PearDatabase::getInstance();
 
 		$advfilterlist = array();
@@ -970,7 +1018,10 @@ class ReportRun extends CRMEntity
 				$advfilterlist[$noOfGroups]['condition'] = '';
 			}
 
-			$advfiltersql = $this->generateAdvFilterSql($advfilterlist);
+                        // SalesPlatform.ru begin
+                        $advfiltersql = $this->generateAdvFilterSql($advfilterlist,$params);
+                        //$advfiltersql = $this->generateAdvFilterSql($advfilterlist);
+                        // SalesPlatform.ru end
 		}
 		return $advfiltersql;
 
@@ -1327,13 +1378,16 @@ class ReportRun extends CRMEntity
 				$selectedfields = explode(":",$fieldcolname);
 				if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					$selectedfields[0] = "vtiger_crmentity";
-                                // SalesPlatform.ru begin fixed display of custom fields in reports
-                                $selectedfields[2] = "\'".$selectedfields[2]."\'";
-                                // SalesPlatform.ru end
                                 if(stripos($selectedfields[1],'cf_')==0 && stristr($selectedfields[1],'cf_')==true){
-					$sqlvalue = "".$adb->sql_escape_string(decode_html($selectedfields[2]))." ".$sortorder;
+                                        // SalesPlatform.ru begin fixed display of custom fields in reports
+					$sqlvalue = "`".$adb->sql_escape_string(decode_html($selectedfields[2]))."` ".$sortorder;
+                                        //$sqlvalue = "".$adb->sql_escape_string(decode_html($selectedfields[2]))." ".$sortorder;
+                                        // SalesPlatform.ru end
 				} else {
-					$sqlvalue = "".self::replaceSpecialChar($selectedfields[2])." ".$sortorder;
+                                        // SalesPlatform.ru begin fixed display of custom fields in reports
+					$sqlvalue = "`".self::replaceSpecialChar($selectedfields[2])."` ".$sortorder;
+                                        //$sqlvalue = "".self::replaceSpecialChar($selectedfields[2])." ".$sortorder;
+                                        // SalesPlatform.ru end
 				}
 				/************** MONOLITHIC phase 6 customization********************************/
 				if($selectedfields[4]=="D" && strtolower($reportsortrow["dategroupbycriteria"])!="none"){
@@ -1355,7 +1409,16 @@ class ReportRun extends CRMEntity
 				{
 					$grouplist[$fieldcolname] = $sqlvalue;
 				} else {
-					$grouplist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1];
+                                        // SalesPlatform.ru begin fixed display of custom fields in reports
+                                        $module_product = array('SalesOrder', 'PurchaseOrder', 'Invoice', 'Act', 'Consignment', 'Quotes');
+                                        $fields_product = array('quantity','listprice','discount','productid','serviceid', 'comment', 'prod_subtotal');
+                                        if (in_array($fieldname, $fields_product) && in_array($module, $module_product)) {
+                                                $grouplist[$fieldcolname] = $sqlvalue;
+                                        } else {
+                                                $grouplist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1];
+                                        }
+					//$grouplist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1];
+                                        // SalesPlatform.ru end
 				}
 			}
 		}
@@ -1680,7 +1743,22 @@ class ReportRun extends CRMEntity
 					left join vtiger_products as vtiger_productsInvoice on vtiger_productsInvoice.productid = vtiger_inventoryproductrelInvoice.productid
 					left join vtiger_service as vtiger_serviceInvoice on vtiger_serviceInvoice.serviceid = vtiger_inventoryproductrelInvoice.productid";
 			}
-			$query .= " left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid
+                        // SalesPlatform.ru begin support for additional modules
+                        $query .= " left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid
+				left join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid
+				left join vtiger_groups as vtiger_groupsInvoice on vtiger_groupsInvoice.groupid = vtiger_crmentity.smownerid
+				left join vtiger_users as vtiger_usersInvoice on vtiger_usersInvoice.id = vtiger_crmentity.smownerid
+				left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+                left join vtiger_users as vtiger_lastModifiedByInvoice on vtiger_lastModifiedByInvoice.id = vtiger_crmentity.modifiedby
+				left join vtiger_account as vtiger_accountInvoice on vtiger_accountInvoice.accountid = vtiger_invoice.accountid
+				left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_contactdetailsInvoice.contactid = vtiger_invoice.contactid
+                                left join vtiger_sp_act as vtiger_sp_actRelInvoice657 on vtiger_sp_actRelInvoice657.actid = vtiger_invoice.sp_act_id
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
+				where vtiger_crmentity.deleted=0";
+                        
+			/*$query .= " left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid
 				left join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid
 				left join vtiger_groups as vtiger_groupsInvoice on vtiger_groupsInvoice.groupid = vtiger_crmentity.smownerid
 				left join vtiger_users as vtiger_usersInvoice on vtiger_usersInvoice.id = vtiger_crmentity.smownerid
@@ -1692,6 +1770,8 @@ class ReportRun extends CRMEntity
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
+                        */
+                        // SalesPlatform.ru end
 		}
 		else if($module == "SalesOrder")
 		{
@@ -1815,16 +1895,22 @@ class ReportRun extends CRMEntity
 	 *  this returns join query for the report
 	 */
 
-	function sGetSQLforReport($reportid,$filtersql,$type='',$chartReport=false)
+// SalesPlatform.ru begin
+	function sGetSQLforReport($reportid,$filtersql,$type='',$chartReport=false,$params=array())
+//	function sGetSQLforReport($reportid,$filtersql,$type='',$chartReport=false)
+// SalesPlatform.ru end
 	{
 		global $log;
 
-		$columnlist = $this->getQueryColumnsList($reportid,$type);
-		$groupslist = $this->getGroupingList($reportid);
+                $columnlist = $this->getQueryColumnsList($reportid,$type);		
+                $groupslist = $this->getGroupingList($reportid);
 		$groupTimeList = $this->getGroupByTimeList($reportid);
 		$stdfilterlist = $this->getStdFilterList($reportid);
 		$columnstotallist = $this->getColumnsTotal($reportid);
-		$advfiltersql = $this->getAdvFilterSql($reportid);
+// SalesPlatform.ru begin
+		$advfiltersql = $this->getAdvFilterSql($reportid, $params);
+//		$advfiltersql = $this->getAdvFilterSql($reportid);
+// SalesPlatform.ru end
 
 		$this->totallist = $columnstotallist;
 		global $current_user;
@@ -1922,7 +2008,7 @@ class ReportRun extends CRMEntity
             $reportquery = $this->replaceSpecialChar($report);
         }
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
-		return $reportquery;
+                return $reportquery;
 
 	}
 
@@ -1938,7 +2024,10 @@ class ReportRun extends CRMEntity
 	 */
 
 	// Performance Optimization: Added parameter directOutput to avoid building big-string!
-	function GenerateReport($outputformat,$filtersql, $directOutput=false)
+// SalesPlatform.ru begin
+	function GenerateReport($outputformat,$filtersql, $directOutput=false, $params=array())
+//	function GenerateReport($outputformat,$filtersql, $directOutput=false)
+// SalesPlatform.ru end
 	{
 		global $adb,$current_user,$php_max_execution_time;
 		global $modules,$app_strings;
@@ -1969,9 +2058,29 @@ class ReportRun extends CRMEntity
 			}
 		}
 
+// SalesPlatform.ru begin
+		if($outputformat == "CAPTION_HTML") {
+                    $caption = nl2br($this->getReportCaption($this->reportid,$filterlist,$params));
+                    if($directOutput) {
+                        echo $caption;
+                    }
+                    return $caption;
+                }
+		elseif($outputformat == "CAPTION") {
+                    $caption = $this->getReportCaption($this->reportid,$filterlist,$params);
+                    if($directOutput) {
+                        echo $caption;
+                    }
+                    return $caption;
+                }
+		else
+// SalesPlatform.ru end
 		if($outputformat == "HTML")
 		{
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,$outputformat);
+// SalesPlatform.ru begin
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,$outputformat,false,$params);
+//			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,$outputformat);
+// SalesPlatform.ru end
 			$result = $adb->query($sSQL);
 			$error_msg = $adb->database->ErrorMsg();
 			if(!$result && $error_msg!=''){
@@ -2197,7 +2306,10 @@ class ReportRun extends CRMEntity
 		}elseif($outputformat == "PDF")
 		{
 
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql);
+// SalesPlatform.ru begin
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,'',false,$params);
+//			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql);
+// SalesPlatform.ru end
 			$result = $adb->query($sSQL);
 			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			$picklistarray = $this->getAccessPickListValues();
@@ -2261,7 +2373,10 @@ class ReportRun extends CRMEntity
 		{
 				$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
 				$totalpdf=array();
-				$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
+// SalesPlatform.ru begin
+				$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL",false,$params);
+//				$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
+// SalesPlatform.ru end
 				if(isset($this->totallist))
 				{
 						if($sSQL != "")
@@ -2306,6 +2421,9 @@ class ReportRun extends CRMEntity
 										} else{
 												$convert_price = false;
 										}
+// SalesPlatform.ru begin
+										$totalpdf[$rowcount]['col_header'] = $col_header;
+// SalesPlatform.ru end
 										$value = trim($key);
 										$arraykey = $value.'_SUM';
 										if(isset($keyhdr[$arraykey]))
@@ -2366,7 +2484,10 @@ class ReportRun extends CRMEntity
 		}elseif($outputformat == "TOTALHTML")
 		{
 			$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
+// SalesPlatform.ru begin
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL",false,$params);
+//			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
+// SalesPlatform.ru end
 			if(isset($this->totallist))
 			{
 				if($sSQL != "")
@@ -2496,7 +2617,10 @@ class ReportRun extends CRMEntity
 			return $coltotalhtml;
 		}elseif($outputformat == "PRINT")
 		{
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql);
+// SalesPlatform.ru begin
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,'',false,$params);
+//			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql);
+// SalesPlatform.ru end
 			$result = $adb->query($sSQL);
 			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			$picklistarray = $this->getAccessPickListValues();
@@ -2639,7 +2763,10 @@ class ReportRun extends CRMEntity
 		}elseif($outputformat == "PRINT_TOTAL")
 		{
 			$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
+// SalesPlatform.ru begin
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL",false,$params);
+//			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
+// SalesPlatform.ru end
 			if(isset($this->totallist))
 			{
 				if($sSQL != "")
@@ -3035,10 +3162,17 @@ class ReportRun extends CRMEntity
 		return $fieldlists;
 	}
 
-	function getReportPDF($filterlist=false) {
+// SalesPlatform.ru begin
+        function getReportPDF($filterlist=false,$reportParams=array()) {
+//        function getReportPDF($filterlist=false) {
+// SalesPlatform.ru end
 		require_once 'include/tcpdf/tcpdf.php';
 
-		$arr_val = $this->GenerateReport("PDF",$filterlist);
+                // SalesPlatform.ru begin
+                $caption_html = $this->GenerateReport("CAPTION_HTML",$filterlist,false,$reportParams);
+                $arr_val = $this->GenerateReport("PDF",$filterlist,false,$reportParams);
+		//$arr_val = $this->GenerateReport("PDF",$filterlist);
+                // SalesPlatform.ru end
 
 		if(isset($arr_val)) {
 			foreach($arr_val as $wkey=>$warray_value) {
@@ -3088,7 +3222,13 @@ class ReportRun extends CRMEntity
 		}
 
 		$totalpdf = $this->GenerateReport("PRINT_TOTAL",$filterlist);
-		$html = '<table border="1"><tr>'.$headerHTML.'</tr>'.$dataHTML.'<tr><td>'.$totalpdf.'</td></tr>'.'</table>';
+                // SalesPlatform.ru begin
+                if($totalpdf)
+                    $html = $caption_html.'<br/><table border="1"><tr>'.$headerHTML.'</tr>'.$dataHTML.'<tr><td>'.$totalpdf.'</td></tr>'.'</table>';
+                else
+                    $html = $caption_html.'<br/><table border="1"><tr>'.$headerHTML.'</tr>'.$dataHTML.'</table>';
+                //$html = '<table border="1"><tr>'.$headerHTML.'</tr>'.$dataHTML.'<tr><td>'.$totalpdf.'</td></tr>'.'</table>';
+                // SalesPlatform.ru end
 		$columnlength = array_sum($col_width);
 		if($columnlength > 14400) {
 			die("<br><br><center>".$app_strings['LBL_PDF']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
@@ -3143,7 +3283,10 @@ class ReportRun extends CRMEntity
 		return $pdf;
 	}
 
-	function writeReportToExcelFile($fileName, $filterlist='') {
+// SalesPlatform.ru begin
+        function writeReportToExcelFile($fileName, $filterlist='', $reportParams=array()) {
+//        function writeReportToExcelFile($fileName, $filterlist='') {
+// SalesPlatform.ru end
 
 		global $currentModule, $current_language;
 		$mod_strings = return_module_language($current_language, $currentModule);
@@ -3163,25 +3306,44 @@ class ReportRun extends CRMEntity
 		$header->set_size(12);
 		$header->set_color('blue');
 
-		$arr_val = $this->GenerateReport("PDF",$filterlist);
+                // SalesPlatform.ru begin
+                $caption = $this->GenerateReport("CAPTION",$filterlist,false,$reportParams);
+                $arr_val = $this->GenerateReport("PDF",$filterlist,false,$reportParams);
+                //$arr_val = $this->GenerateReport("PDF",$filterlist);
+                // SalesPlatform.ru end
 		$totalxls = $this->GenerateReport("TOTALXLS",$filterlist);
+
+// SalesPlatform.ru begin
+                $rowcount = 0;
+                if(!empty($caption)) {
+                    $cap_lines = explode("\n", $caption);
+                    foreach($cap_lines as $line) {
+                        $worksheet->write($rowcount, 0, iconv("UTF-8", "CP1251", $line));
+                        $rowcount++;
+                    }
+                    $rowcount++;
+                }
+// SalesPlatform.ru end
 
 		if(isset($arr_val)) {
 			foreach($arr_val[0] as $key=>$value) {
 // SalesPlatform.ru begin
-                                $worksheet->write(0, $count, iconv("UTF-8", "CP1251", preg_replace("/^=/","'=",$key)), $header);
+                                $worksheet->write($rowcount, $count, iconv("UTF-8", "CP1251", preg_replace("/^=/","'=",$key)), $header);
                                 //$worksheet->write(0, $count, $key , $header);
 // SalesPlatform.ru end
 				$count = $count + 1;
 			}
-			$rowcount=1;
+// SalesPlatform.ru begin
+                        $rowcount++;
+//                      $rowcount=1;
+// SalesPlatform.ru end
 			foreach($arr_val as $key=>$array_value) {
 				$dcount = 0;
 				foreach($array_value as $hdr=>$value) {
 					//$worksheet->write($key+1, $dcount, iconv("UTF-8", "ISO-8859-1", $value));
 					$value = decode_html($value);
 // SalesPlatform.ru begin
-                                        $worksheet->write($key+1, $dcount, iconv("UTF-8", "CP1251", preg_replace("/^=/","'=",$value)));
+                                        $worksheet->write($rowcount, $dcount, iconv("UTF-8", "CP1251", preg_replace("/^=/","'=",$value)));
                                         //$worksheet->write($key+1, $dcount, utf8_decode($value));
 // SalesPlatform.ru end
 					$dcount = $dcount + 1;
@@ -3268,7 +3430,10 @@ class ReportRun extends CRMEntity
             $fieldcolname = $adb->query_result($sortFieldResult,0,'columnname');
             list($tablename,$colname,$module_field,$fieldname,$typeOfData) = explode(":",$fieldcolname);
 			list($modulename,$fieldlabel) = explode('_', $module_field, 2);
-            $groupByField = $module_field;
+            // SalesPlatform.ru begin fixed display of custom fields in reports
+            $groupByField = "`".$module_field."`";
+            //$groupByField = $module_field;
+            // SalesPlatform.ru end
             if($typeOfData == "D"){
                 $groupCriteria = $adb->query_result($sortFieldResult,0,'dategroupbycriteria');
                 if(strtolower($groupCriteria)!='none'){
@@ -3283,7 +3448,14 @@ class ReportRun extends CRMEntity
                 }
 
             } elseif(CheckFieldPermission($fieldname,$modulename) != 'true') {
-				$groupByField = $tablename.".".$colname;
+                                // SalesPlatform.ru begin fixed display of custom fields in reports
+                                $module_product = array('SalesOrder', 'PurchaseOrder', 'Invoice', 'Act', 'Consignment', 'Quotes');
+                                $fields_product = array('quantity','listprice','discount','productid','serviceid', 'comment', 'prod_subtotal');
+                                if (!in_array($fieldname, $fields_product) && !in_array($modulename, $module_product)) {
+                                    $groupByField = $tablename.".".$colname;
+                                } 
+				//$groupByField = $tablename.".".$colname;
+                                // SalesPlatform.ru end
 			}
         }
         return $groupByField;

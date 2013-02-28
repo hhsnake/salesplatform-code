@@ -52,7 +52,10 @@ function mandatoryCheck()
                         alert("{$MOD.Missing_required_fields}:" + errorMessage);
                         return false;
                 {rdelim}
-		
+// SalesPlatform.ru begin
+                if(manCheck.length == 0)
+                    mandatorycheck = true;
+// SalesPlatform.ru end
 		for(i=1;i<=9;i++)
                 {ldelim}
                         var columnvalue = document.getElementById("column"+i).value;

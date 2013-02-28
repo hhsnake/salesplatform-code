@@ -29,6 +29,9 @@ $priceBooksTabId = getTabid('PriceBooks');
 $salesOrderTabId = getTabid('SalesOrder');
 $result = $adb->pquery('select max(sequence)+1 as seq from vtiger_customerportal_tabs', array());
 $seq =  $adb->query_result($result, 0, 'seq');
+// SalesPlatform.ru begin Check initial seq value
+$seq = $seq ? $seq : 1;
+// SalesPlatform.ru end
 ExecuteQuery("INSERT INTO `vtiger_customerportal_tabs` (`tabid`, `visible`, `sequence`) VALUES ($priceBooksTabId, 1, $seq)");
 ExecuteQuery("INSERT INTO `vtiger_customerportal_prefs` (`tabid`, `prefkey`, `prefvalue`) VALUES ($priceBooksTabId, 'showrelatedinfo', 1)");
 $seq++;

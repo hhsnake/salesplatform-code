@@ -196,4 +196,7 @@ $mod_strings = array (
     'Products ID' => 'ID Товара',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

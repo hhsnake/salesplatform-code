@@ -104,9 +104,11 @@ foreach($mass_merge as $idx => $entityid) {
         $csvheader = implode(',', $model->keys());
     }
 
+    $keys_array = explode(',', $csvheader);
+
     $x = 0;
     $actual_values = array();
-    foreach($model->keys() as $key) {
+    foreach($keys_array as $key) {
         $value = $model->get($key);
 
         if(trim($value) == "--None--" || trim($value) == "--none--")
@@ -122,7 +124,12 @@ foreach($mass_merge as $idx => $entityid) {
         {
             $actual_values[$x] = '"'.$actual_values[$x].'"';
         }
-        $actual_values[$x] = decode_html(str_replace(","," ",$actual_values[$x]));
+        
+        if (preg_match ("/^[0-9, ]+$/", $actual_values[$x])) {
+    	    $actual_values[$x] = decode_html(str_replace(",",".",$actual_values[$x]));
+        } else {
+    	    $actual_values[$x] = decode_html(str_replace(","," ",$actual_values[$x]));
+    	}
 
         $x++;
     }
@@ -160,6 +167,28 @@ else if($extension == "odt")
         unlink($wordtemplatedownloadpath.$temp_dir.'/styles.xml');
         $new_filestyle=crmmerge($csvheader,$stycontent,$idx,'htmlspecialchars');
         packen($entityid.$filename,$wordtemplatedownloadpath,$temp_dir,$new_filecontent,$new_filestyle);
+
+        echo "&nbsp;&nbsp;<font size=+1><b><a href=test/wordtemplatedownload/$entityid$filename>".$app_strings['DownloadMergeFile']."</a></b></font><br>";
+        remove_dir($wordtemplatedownloadpath.$temp_dir);
+    }
+}
+else if($extension == "docx")
+{
+    //delete old .docx files in the wordtemplatedownload directory
+    foreach (glob("$wordtemplatedownloadpath/*.docx") as $delefile) 
+    {
+        unlink($delefile);
+    }
+    if (!is_array($mass_merge)) $mass_merge = array($mass_merge);
+    foreach($mass_merge as $idx => $entityid) {
+        $temp_dir=entpack($filename,$wordtemplatedownloadpath,$fileContent);
+        $concontent=file_get_contents($wordtemplatedownloadpath.$temp_dir.'/word/document.xml');
+        unlink($wordtemplatedownloadpath.$temp_dir.'/word/document.xml');
+        $new_filecontent=crmmerge($csvheader,$concontent,$idx,'htmlspecialchars');
+        $stycontent=file_get_contents($wordtemplatedownloadpath.$temp_dir.'/word/styles.xml');
+        unlink($wordtemplatedownloadpath.$temp_dir.'/word/styles.xml');
+        $new_filestyle=crmmerge($csvheader,$stycontent,$idx,'htmlspecialchars');
+        packendocx($entityid.$filename,$wordtemplatedownloadpath,$temp_dir,$new_filecontent,$new_filestyle);
 
         echo "&nbsp;&nbsp;<font size=+1><b><a href=test/wordtemplatedownload/$entityid$filename>".$app_strings['DownloadMergeFile']."</a></b></font><br>";
         remove_dir($wordtemplatedownloadpath.$temp_dir);

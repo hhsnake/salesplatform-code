@@ -44,4 +44,9 @@ if($ajaxaction == "DETAILVIEW")
 } elseif($ajaxaction == "LOADRELATEDLIST" || $ajaxaction == "DISABLEMODULE"){
 	require_once 'include/ListView/RelatedListViewContents.php';
 }
+// SalesPlatform.ru begin Related records widget
+elseif($ajaxaction == "LOADRELATEDLISTWIDGET"){
+	require_once 'include/ListView/RelatedListWidgetContents.php';
+}
+// SalesPlatform.ru end
 ?>

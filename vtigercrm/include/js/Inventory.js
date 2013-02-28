@@ -249,7 +249,9 @@ function calcGrandTotal() {
 	document.getElementById("netTotal").innerHTML = netTotal;
 	document.getElementById("subtotal").value = netTotal;
 	setDiscount(this,'_final');
-	calcGroupTax();
+	// SalesPlatform.ru begin
+	// calcGroupTax();
+	// SalesPlatform.ru end
 	//Tax and Adjustment values will be taken when they are valid integer or decimal values
 	//if(/^-?(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("txtTax").value))
 	//	txtTaxVal = parseFloat(getObj("txtTax").value);	
@@ -260,8 +262,16 @@ function calcGrandTotal() {
 
 	//get the final tax based on the group or individual tax selection
 	var taxtype = document.getElementById("taxtype").value;
-	if(taxtype == 'group')
+	if(taxtype == 'group') {
+		// SalesPlatform.ru begin
+		calcGroupTax();
+		// SalesPlatform.ru end
 		finalTax = document.getElementById("tax_final").innerHTML
+	// SalesPlatform.ru begin
+	} else if(taxtype == 'group_tax_inc') {
+		calcGroupTaxInc();
+	}
+	// SalesPlatform.ru end
 
 	sh_amount = getObj("shipping_handling_charge").value
 	sh_tax = document.getElementById("shipping_handling_tax").innerHTML
@@ -273,6 +283,11 @@ function calcGrandTotal() {
 	
 	grandTotal = eval(netTotal)-eval(discountTotal_final)+eval(finalTax);
 	if (sh_amount != '') {
+		// SalesPlatform.ru begin
+		if (taxtype == "group_tax_inc")
+			grandTotal = grandTotal + eval(sh_amount);
+		else
+		// SalesPlatform.ru end
 		grandTotal = grandTotal + eval(sh_amount)+eval(sh_tax);
 	}
 	if (adjustment != '') {
@@ -720,8 +735,15 @@ function decideTaxDiv()
 		calcGroupTax();
 	}
 	else if(taxtype == 'individual')
-		hideGroupTax()
-
+		hideGroupTax();
+	// SalesPlatform.ru begin
+	// Group, tax included
+	else if(taxtype == 'group_tax_inc') {
+		hideIndividualTaxes();
+		calcGroupTaxInc();
+		calcSHTax();
+	}
+	// SalesPlatform.ru end
 }
 
 function hideIndividualTaxes()
@@ -872,17 +894,54 @@ function calcGroupTax()
 
 }
 
+// SalesPlatform.ru begin
+function calcGroupTaxInc()
+{
+	var group_tax_count = document.getElementById("group_tax_count").value;
+	
+	var netTotal_value = document.getElementById("netTotal").innerHTML;
+	if(netTotal_value == '') netTotal_value = 0;
+	
+	var discountTotal_final_value = document.getElementById("discountTotal_final").innerHTML;
+	if(discountTotal_final_value == '') discountTotal_final_value = 0;
+	
+	var net_total_after_discount = eval(netTotal_value)-eval(discountTotal_final_value);
+	var group_tax_total = 0.00, tax_amount=0.00;
+	
+	for(var i=1;i<=group_tax_count;i++)
+	{
+		var group_tax_percentage = document.getElementById("group_tax_percentage"+i).value;
+		if(group_tax_percentage == '') group_tax_percentage = '0';		
+		tax_amount = eval(net_total_after_discount)*eval(group_tax_percentage)/(100.0+eval(group_tax_percentage) );
+		document.getElementById("group_tax_amount"+i).value = tax_amount;
+		group_tax_total = eval(group_tax_total) + eval(tax_amount);
+	}
+
+	document.getElementById("tax_final").innerHTML = roundValue(group_tax_total);
+
+}
+
+// SalesPlatform.ru end
+
 function calcSHTax()
 {
 	var sh_tax_count = document.getElementById("sh_tax_count").value;
 	var sh_charge = document.getElementById("shipping_handling_charge").value;
 	var sh_tax_total = 0.00, tax_amount=0.00;
+	// SalesPlatform.ru begin
+	var tax_type = document.getElementById("taxtype").value;
+	// SalesPlatform.ru end
 
 	for(var i=1;i<=sh_tax_count;i++)
 	{
 		if(sh_charge == '') sh_charge = '0';
 		var sh_tax_percentage = document.getElementById("sh_tax_percentage"+i).value;
 		if(sh_tax_percentage == '') sh_tax_percentage = '0'; 
+		// SalesPlatform.ru begin
+		if(tax_type == "group_tax_inc")
+			tax_amount = eval(sh_charge)*eval(sh_tax_percentage)/( eval(100.0)+eval(sh_tax_percentage) );
+		else
+		// SalesPlatform.ru end
 		tax_amount = eval(sh_charge)*eval(sh_tax_percentage)/eval(100);
 		//Rounded the decimal part of S&H Tax amount to two digits
 		document.getElementById("sh_tax_amount"+i).value = roundValue(tax_amount.toString());

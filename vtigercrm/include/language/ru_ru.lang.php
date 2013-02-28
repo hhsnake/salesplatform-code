@@ -24,6 +24,7 @@ $app_strings = array (
       'LBL_SHOW' => 'Показать :',
       'today' => 'Сегодняшнее',
       'all' => 'Все',
+      'All' => 'Все',
       'LBL_UPCOMING_EVENTS' => 'Ближайшие События',
       'LBL_PENDING_EVENTS' => 'Ожидающие События',
       'NTC_WELCOME_MESSAGE' => 'Добро пожаловать в vtiger CRM!',
@@ -325,6 +326,11 @@ $app_strings = array (
       'LBL_USER' => 'Пользователь',
       'LBL_TEAM' => 'Команда',
       'LBL_GROUP' => 'Группа',
+      // SalesPlatform.ru begin
+      'LBL_GROUP_TAX_INC' => 'В т.ч. налоги',
+      'group_tax_inc' => 'В т.ч. налоги',
+      'LBL_INC_TAX' => 'В т.ч.',
+      // SalesPlatform.ru end
       'LBL_NONE_NO_LINE' => 'нет',
       'LBL_SELECT_GROUP' => 'Выбрать группу',
       'LBL_HOUR_AND_MINUTE' => '(часы/минуты)',
@@ -1416,6 +1422,14 @@ $app_strings = array (
 'after' => 'после',
 'before' => 'раньше',
 // SalesPlatform.ru end  
+
+// SalesPlatform.ru begin: Add last SMS date
+'Last SMS Date' => 'Дата отправки SMS',
+// SalesPlatform.ru end
+
+// SalesPlatform.ru begin: Added literal form for all numbers on PDF
+'_literal' => '_прописью',
+// SalesPlatform.ru end
 );
 $app_list_strings = array (
       'moduleList' => array(
@@ -1634,4 +1648,7 @@ $app_currency_strings = array(
 // SalesPlatform.ru end
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

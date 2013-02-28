@@ -531,7 +531,10 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	$ext_prod_arr = Array();
 	if($focus->mode == 'edit')
 	{
-		if($_REQUEST['taxtype'] == 'group')
+                // SalesPlatform.ru begin
+                if($_REQUEST['taxtype'] == 'group' || $_REQUEST['taxtype'] == 'group_tax_inc')
+                //if($_REQUEST['taxtype'] == 'group')
+                // SalesPlatform.ru end
 			$all_available_taxes = getAllTaxes('available','','edit',$id);
 		$return_old_values = '';
 		if($module != 'PurchaseOrder')
@@ -545,7 +548,10 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	}
 	else
 	{
-	if($_REQUEST['taxtype'] == 'group')
+        // SalesPlatform.ru begin
+        if($_REQUEST['taxtype'] == 'group' || $_REQUEST['taxtype'] == 'group_tax_inc')
+        //if($_REQUEST['taxtype'] == 'group')
+        // SalesPlatform.ru end
 		$all_available_taxes = getAllTaxes('available','','edit',$id);
 	}
 	$tot_no_prod = $_REQUEST['totalProductCount'];
@@ -629,7 +635,20 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 			$discount_amount = $_REQUEST['discount_amount'.$i];
 			array_push($updateparams, $discount_amount);
 		}
-		if($_REQUEST['taxtype'] == 'group')
+                // SalesPlatform.ru begin prod_subtotal field added
+                $prod_subtotal = $listprice * $qty;
+		if ($_REQUEST['discount_type'.$i] == 'percentage') {
+			$prod_subtotal -= ($_REQUEST['discount_percentage'.$i] * $prod_subtotal / 100);
+		} elseif ($_REQUEST['discount_type'.$i] == 'amount') {
+			$prod_subtotal -= $_REQUEST['discount_amount'.$i];
+		}
+                $updatequery .= " prod_subtotal=?,";
+                array_push($updateparams, $prod_subtotal);
+                // SalesPlatform.ru end
+                // SalesPlatform.ru begin
+                if($_REQUEST['taxtype'] == 'group' || $_REQUEST['taxtype'] == 'group_tax_inc')
+                //if($_REQUEST['taxtype'] == 'group')
+                // SalesPlatform.ru end
 		{
 			for($tax_count=0;$tax_count<count($all_available_taxes);$tax_count++)
 			{

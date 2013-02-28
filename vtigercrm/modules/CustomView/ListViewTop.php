@@ -117,6 +117,9 @@ function getKeyMetrics($maxval,$calCnt)
 		foreach($metriclists as $metriclist)
 		{
 			$value=array();
+                        // SalesPlatform.ru begin Filter name localization
+                        $metriclist['name'] = getTranslatedString($metriclist['name'], $metriclist['module']);
+                        // SalesPlatform.ru end
 // SalesPlatform.ru begin - adjust key metric name length for russian words
 			$CVname = (utf8_strlen($metriclist['name']) > 20) ? (utf8_substr($metriclist['name'],0,20).'...') : $metriclist['name'];
 			//$CVname = (strlen($metriclist['name']) > 20) ? (substr($metriclist['name'],0,20).'...') : $metriclist['name'];

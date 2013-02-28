@@ -29,7 +29,7 @@ $mod_strings = array (
       'LBL_USE24' => 'Использовать 24-часовой формат',
       'LBL_CALSTART' => 'Начало дня в календаре',
       'LBL_TIMESETTINGS' => 'Настройки Времени',
-      'LBL_HOLDFOLLOWUP' => 'Получать предупреждение в:',
+      'LBL_HOLDFOLLOWUP' => 'Последующее напоминание в',
       'LBL_CALL' => 'Звонок',
       'LBL_MEET' => 'Встреча',
       'LBL_APPNT' => 'Событие',
@@ -245,6 +245,7 @@ $mod_strings = array (
       'End Time' => 'Время Завершения',
 	  'no' => 'нет',
 	  'yes' => 'да',
+      'LBL_FIELD_SETTINGS' => 'Пользовательские Поля',
       // SalesPlatform.ru end
       'Recurrence' => 'Повторение',
       'Recurring Type' => 'Тип Повторения',
@@ -391,4 +392,8 @@ $mod_strings = array (
                              ),
    'Calendar ID' => 'ID Календаря',
 );
+
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

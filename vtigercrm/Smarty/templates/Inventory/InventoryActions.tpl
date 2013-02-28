@@ -59,12 +59,18 @@
 
 	{elseif $MODULE eq 'Vendors'}
 	   <!-- Vendors Actions starts -->
+           {* SalesPlatform.ru begin *}
+           {if 'PurchaseOrder'|@vtlib_isModuleActive}
+           {* SalesPlatform.ru end *}
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Vendors'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.vendor_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">	<img src="{'actionGenPurchaseOrder.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
 			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Vendors'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.vendor_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.PurchaseOrder}</a> 
 		</td>
 	   </tr>
+           {* SalesPlatform.ru begin *}
+           {/if}
+           {* SalesPlatform.ru end *}
 	   <!--
 	   <tr>
 		<td align="left" style="padding-left:10px;">

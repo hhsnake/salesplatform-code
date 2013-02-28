@@ -15,7 +15,10 @@ require_once('modules/CustomView/CustomView.php');
 require_once("config.php");
 require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
-require_once("modules/Reports/ReportRun.php");
+// SalesPlatform.ru begin
+require_once("modules/Reports/SPReportRun.php");
+//require_once("modules/Reports/ReportRun.php");
+// SalesPlatform.ru end
 require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
 
@@ -24,6 +27,8 @@ global $adb,$mod_strings,$app_strings;
 $reportid = vtlib_purify($_REQUEST["record"]);
 $folderid = vtlib_purify($_REQUEST["folderid"]);
 $now_action = vtlib_purify($_REQUEST['action']);
+$filtercolumn = vtlib_purify($_REQUEST["stdDateFilterField"]);
+$filter = vtlib_purify($_REQUEST["stdDateFilter"]);
 
 $sql = "select * from vtiger_report where reportid=?";
 $res = $adb->pquery($sql, array($reportid));
@@ -40,6 +45,32 @@ if($reporttype == 'summary'){
 $numOfRows = $adb->num_rows($res);
 
 if($numOfRows > 0) {
+    // SalesPlatform.ru begin
+    if (!empty($_REQUEST['startdate']) && !empty($_REQUEST['enddate'])) {
+        $date = new DateTimeField($_REQUEST['startdate']);
+        $endDate = new DateTimeField($_REQUEST['enddate']);
+        $startdate = $date->getDBInsertDateValue();
+        $enddate = $endDate->getDBInsertDateValue();
+    }
+    // SalesPlatform.ru end
+
+// SalesPlatform.ru begin
+    $reportParams = array();
+
+    if(isset($_REQUEST["ownerFilter"])) {
+	$selected_owner = vtlib_purify($_REQUEST["ownerFilter"]);
+	$reportParams['{$owner}'] = $selected_owner;
+    } else {
+	$reportParams['{$owner}'] = '';
+    }
+
+    if(isset($_REQUEST["accountFilter"])) {
+	$selected_account = vtlib_purify($_REQUEST["accountFilter"]);
+	$reportParams['{$account}'] = $selected_account;
+    } else {
+	$reportParams['{$account}'] = '';
+    }
+// SalesPlatform.ru end
 
 	global $primarymodule,$secondarymodule,$orderbylistsql,$orderbylistcolumns,$ogReport;
 	//added to fix the ticket #5117
@@ -54,6 +85,10 @@ if($numOfRows > 0) {
 	else
 		$rep_modules = array();
 
+        // SalesPlatform.ru begin: Fixed default time filter for custom reports
+	$ogReport->getSelectedStandardCriteria($reportid);
+        // SalesPlatform.ru end
+
 	array_push($rep_modules,$primarymodule);
 	$modules_permitted = true;
 	$modules_export_permitted = true;
@@ -67,7 +102,17 @@ if($numOfRows > 0) {
 	}
 
 	if(isPermitted($primarymodule,'index') == "yes" && $modules_permitted == true) {
-		$oReportRun = new ReportRun($reportid);
+// SalesPlatform.ru begin
+                $oReportRun = new SPReportRun($reportid);
+                if(in_array($reporttype, getCustomReportsListWithDateFilter())) {
+                    if(empty($filtercolumn)) $filtercolumn = 'date:date:date:date';
+                    if(empty($filter)) $filter = $ogReport->stdselectedfilter;
+                    if(empty($startdate)) $startdate = '0000-00-00';
+                    if(empty($enddate)) $enddate = '0000-00-00';
+                }
+//                $oReportRun = new ReportRun($reportid);
+// SalesPlatform.ru end
+		$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
 
 		require_once 'include/Zend/Json.php';
 		$json = new Zend_Json();
@@ -81,7 +126,10 @@ if($numOfRows > 0) {
 			updateAdvancedCriteria($reportid,$advft_criteria,$advft_criteria_groups);
 		}
 
-		$filtersql = $oReportRun->RunTimeAdvFilter($advft_criteria,$advft_criteria_groups);
+                // SalesPlatform.ru begin
+                $filtersql = $oReportRun->RunTimeAdvFilter($advft_criteria,$advft_criteria_groups,$reportParams);
+                //$filtersql = $oReportRun->RunTimeAdvFilter($advft_criteria,$advft_criteria_groups);
+                // SalesPlatform.ru end
 
 		$list_report_form = new vtigerCRM_Smarty;
 		//Monolithic phase 6 changes
@@ -125,12 +173,47 @@ if($numOfRows > 0) {
         if($_REQUEST['submode'] == 'generateReport' && empty($advft_criteria)) {
 			$filtersql = '';
 		}
+
+                // SalesPlatform.ru begin
+                if($filterlist != '') {
+                    if($filtersql != '')
+                        $filtersql = $filterlist . ' AND ' . $filtersql;
+                    else
+                        $filtersql = $filterlist;
+                }
+                // SalesPlatform.ru end
+
         $sshtml = array();
 		$totalhtml = '';
 		$list_report_form->assign("DIRECT_OUTPUT", true);
 		$list_report_form->assign_by_ref("__REPORT_RUN_INSTANCE", $oReportRun);
 		$list_report_form->assign_by_ref("__REPORT_RUN_FILTER_SQL", $filtersql);
+// SalesPlatform.ru begin
+		$list_report_form->assign_by_ref("__REPORT_RUN_PARAMS", $reportParams);
+// SalesPlatform.ru end
         //Ends
+
+                // SalesPlatform.ru begin: Fixed default time filter for custom reports
+		//$ogReport->getSelectedStandardCriteria($reportid);
+                // SalesPlatform.ru end
+		//commented to omit dashboards for vtiger_reports
+		//require_once('modules/Dashboard/ReportsCharts.php');
+		//$image = get_graph_by_type('Report','Report',$primarymodule,'',$sshtml[2]);
+		//$list_report_form->assign("GRAPH", $image);
+
+		$BLOCK1 = getPrimaryStdFilterHTML($ogReport->primodule,$reporttype,$ogReport->stdselectedcolumn);
+		$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
+		// Check if selectedcolumn is found in the filters (Fix for ticket #4866)
+		$selectedcolumnvalue = '"'. decode_html($ogReport->stdselectedcolumn) . '"';
+                // SalesPlatform.ru begin: Fixed bug with special date field combo in custom reports
+		if (!in_array($Report_Type, getCustomReportsListWithDateFilter()) && !$is_admin && isset($ogReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false) {
+		//if (!$is_admin && isset($ogReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false) {
+                // SalesPlatform.ru end
+			$BLOCK1 .= "<option selected value='Not Accessible'>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
+		}
+		$list_report_form->assign("BLOCK1",$BLOCK1);
+		$BLOCKJS = $ogReport->getCriteriaJS();
+		$list_report_form->assign("BLOCKJS",$BLOCKJS);
 
 		$ogReport->getPriModuleColumnsList($ogReport->primodule);
 		$ogReport->getSecModuleColumnsList($ogReport->secmodule);
@@ -148,6 +231,75 @@ if($numOfRows > 0) {
 
 		$list_report_form->assign("CRITERIA_GROUPS",$ogReport->advft_criteria);
 
+// SalesPlatform.ru begin
+		$filterres = $adb->pquery("select * from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid".
+					  " left join vtiger_relcriteria on vtiger_relcriteria.queryid = vtiger_selectquery.queryid".
+					  " where vtiger_report.reportid = ? and vtiger_relcriteria.value = ?", array($reportid, '{$owner}'));
+		if($adb->num_rows($filterres) > 0 || in_array($reporttype, getCustomReportsListWithOwnerFilter())) {
+
+		    $ownerssql = "select user_name,concat(last_name,' ',first_name) as full_name from vtiger_users";
+                    $ownerparams = array();
+                    
+                    // Add subordinate users filter for report owners list
+                    if(!$is_admin) {
+                        $parentRole = fetchUserRole($current_user->id);
+                        $ownerssql .= " inner join vtiger_user2role on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid";
+                        $ownerssql .= " where vtiger_role.parentrole like ?";
+                        $ownerparams[] = "%".$parentRole."%";
+                    }
+
+                    $ownersres = $adb->pquery($ownerssql, $ownerparams);
+		    $numOfOwners = $adb->num_rows($ownersres);
+
+		    $OWNERCRITERIA .= '<option value="" selected>'.getTranslatedString('LBL_ALL').'</option>';
+
+		    if($numOfOwners > 0)
+		    {
+			$ownerrow = $adb->fetch_array($ownersres);
+			do
+			{
+			    $OWNERCRITERIA .= '<option value="'.$ownerrow['full_name'].'">'.$ownerrow['full_name'].'</option>';
+			}while($ownerrow = $adb->fetch_array($ownersres));
+
+		    }
+		    $list_report_form->assign("OWNERCRITERIA",$OWNERCRITERIA);
+		}
+
+                if(in_array($reporttype, getCustomReportsListWithAccountFilter())) {
+		    $accountsres = $adb->pquery("select distinct vtiger_account.* from vtiger_account
+                                         inner join vtiger_salesorder on vtiger_account.accountid=vtiger_salesorder.accountid
+                                         inner join vtiger_crmentity as entity1 on vtiger_account.accountid=entity1.crmid
+                                         inner join vtiger_crmentity as entity2 on vtiger_salesorder.salesorderid=entity2.crmid
+                                         where entity1.deleted = 0 and entity2.deleted = 0", array());
+		    $numOfAccounts = $adb->num_rows($accountsres);
+
+		    $ACCOUNTCRITERIA = '';
+                    $ACCOUNTCRITERIA .= '<option value="" selected>'.getTranslatedString('LBL_ALL').'</option>';
+
+		    if($numOfAccounts > 0)
+		    {
+			$accountrow = $adb->fetch_array($accountsres);
+			do
+			{
+			    $ACCOUNTCRITERIA .= '<option value="'.$accountrow['accountid'].'">'.$accountrow['accountname'].'</option>';
+			}while($accountrow = $adb->fetch_array($accountsres));
+
+		    }
+		    $list_report_form->assign("ACCOUNTCRITERIA",$ACCOUNTCRITERIA);
+                }
+// SalesPlatform.ru end
+
+		$BLOCKCRITERIA = $ogReport->getSelectedStdFilterCriteria($ogReport->stdselectedfilter);
+		$list_report_form->assign("BLOCKCRITERIA",$BLOCKCRITERIA);
+		if(isset($ogReport->startdate) && isset($ogReport->enddate))
+		{
+			$list_report_form->assign("STARTDATE",getDisplayDate($ogReport->startdate));
+			$list_report_form->assign("ENDDATE",getDisplayDate($ogReport->enddate));
+		}else
+		{
+			$list_report_form->assign("STARTDATE",$ogReport->startdate);
+			$list_report_form->assign("ENDDATE",$ogReport->enddate);	
+		}	
 		$list_report_form->assign("MOD", $mod_strings);
 		$list_report_form->assign("APP", $app_strings);
 		$list_report_form->assign("IMAGE_PATH", $image_path);
@@ -231,8 +383,13 @@ if($numOfRows > 0) {
  *  This Generates the HTML Combo strings for the standard filter for the given reports module
  *  This Returns a HTML sring
  */
-function getPrimaryStdFilterHTML($module,$selected="")
+function getPrimaryStdFilterHTML($module,$reporttype,$selected="")
 {
+// SalesPlatform.ru begin
+        if(in_array($reporttype, getCustomReportsListWithDateFilter())) {
+            return '<option selected value="date:date:date:date">Дата</option>';
+        }
+// SalesPlatform.ru end
 
 	global $app_list_strings;
 	global $ogReport;

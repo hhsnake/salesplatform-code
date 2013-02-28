@@ -113,6 +113,23 @@
 										</table>
 									</td>	
 								</tr>
+                                                                {* SalesPlatform.ru begin: Export encoding conversion *}
+                                                                <tr>
+                                                                    <td align="center" colspan="2" border=0 cellspacing=0 cellpadding=5 width=98%>
+                                                                    <b>{'LBL_DELIMITER'|@getTranslatedString:'Import'}</b>&nbsp;
+                                                                            <select name="delimiter" class="small" style="font-family:Times;">
+                                                                                    <option value=";" selected>;</option>
+                                                                                    <option value=",">,</option>
+                                                                            </select>
+                                                                    <b>{'LBL_CHARACTER_ENCODING'|@getTranslatedString:'Import'}</b>&nbsp;
+                                                                            <select name="format" class="small">
+                                                                            <!-- value must be a known format for mb_convert_encoding() -->
+                                                                                    <option value="CP1251" selected>CP1251</option>
+                                                                                    <option value="UTF-8">UTF-8</option>
+                                                                            </select>
+                                                                    </td>
+                                                                </tr>
+                                                                {* SalesPlatform.ru end *}
 								<tr>
 									<td align="center" colspan="2" border=0 cellspacing=0 cellpadding=5 width=98% class="layerPopupTransport">	
 										<input type="button" name="{$APP.LBL_EXPORT}" value="{$APP.LBL_EXPORT} {$MODULELABEL} " class="crmbutton small create" onclick="record_export('{$MODULELABEL}','{$CATEGORY}',this.form,'{$smarty.request.idstring}')"/>&nbsp;&nbsp;

@@ -179,6 +179,9 @@ if($cvmodule != "") {
 						$log->info("CustomView :: Save :: vtiger_cvstdfilter created successfully");
 					}
 
+                                        // SalesPlatform.ru begin Check array before iterate
+                                        if ($advft_criteria)
+                                        // SalesPlatform.ru end
 					foreach($advft_criteria as $column_index => $column_condition) {
 
 						if(empty($column_condition)) continue;
@@ -242,6 +245,9 @@ if($cvmodule != "") {
 						$advft_criteria_groups[$adv_filter_groupid]["conditionexpression"] = $groupConditionExpression;
 					}
 
+                                        // SalesPlatform.ru begin Check array before iterate
+                                        if ($advft_criteria_groups)
+                                        // SalesPlatform.ru end
 					foreach($advft_criteria_groups as $group_index => $group_condition_info) {
 
 						if(empty($group_condition_info)) continue;
@@ -311,6 +317,9 @@ if($cvmodule != "") {
 						$log->info("CustomView :: Save :: vtiger_cvstdfilter update successfully".$genCVid);
 					}
 
+                                        // SalesPlatform.ru begin Check array before iterate
+                                        if ($advft_criteria)
+                                        // SalesPlatform.ru end
 					foreach($advft_criteria as $column_index => $column_condition) {
 
 						if(empty($column_condition)) continue;
@@ -375,6 +384,9 @@ if($cvmodule != "") {
 						$advft_criteria_groups[$adv_filter_groupid]["conditionexpression"] = $groupConditionExpression;
 					}
 
+                                        // SalesPlatform.ru begin Check array before iterate
+                                        if ($advft_criteria_groups)
+                                        // SalesPlatform.ru end
 					foreach($advft_criteria_groups as $group_index => $group_condition_info) {
 
 						if(empty($group_condition_info)) continue;

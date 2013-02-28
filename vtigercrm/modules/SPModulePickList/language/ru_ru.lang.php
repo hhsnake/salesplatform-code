@@ -10,4 +10,7 @@ $mod_strings = Array (
     'SPModulePickList' => 'Список поля Модуля',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

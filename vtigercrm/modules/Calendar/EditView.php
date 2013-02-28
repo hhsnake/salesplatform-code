@@ -73,6 +73,10 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $related_array = getRelatedListsInformation("Calendar", $focus);
     $cntlist = $related_array['Contacts']['entries'];
 
+    // SalesPlatform.ru begin Check empty related lists
+    $cnt_idlist = array();
+    if (is_array($cntlist)) {
+    // SalesPlatform.ru end
 	$entityIds = array_keys($cntlist);
 	$cnt_namelist = array();
 	$displayValueArray = getEntityName('Contacts', $entityIds);
@@ -82,6 +86,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 		}
 	}
 	$cnt_idlist = array_keys($cnt_namelist);
+    // SalesPlatform.ru begin Check array before calling array_keys
+    }
+    // SalesPlatform.ru end
     $smarty->assign("CONTACTSID",  implode(';', $cnt_idlist));
     $smarty->assign("CONTACTSNAME",$cnt_namelist);
     $query = 'SELECT vtiger_recurringevents.*, vtiger_activity.date_start, vtiger_activity.time_start, vtiger_activity.due_date, vtiger_activity.time_end

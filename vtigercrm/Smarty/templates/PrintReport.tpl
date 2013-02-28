@@ -58,11 +58,22 @@ body table tr td{
 	<table width="80%" border="0" cellpadding="5" cellspacing="0" align="center">
 	<tr>
 		<td align="left" valign="top" style="border:0px solid #000000;">
-		<h2>{$MOD.$REPORT_NAME}</h2>
+{* SalesPlatform.ru begin *}
+		<h2 align="center">{$REPORT_NAME}</h2>
+{*		<h2>{$MOD.$REPORT_NAME}</h2> *}
+{* SalesPlatform.ru end *}
 		<font  color="#666666"><div id="report_info"></div></font>
 		</td>
 		<td align="right" style="border:0px solid #000000;" valign="top"><h3 style="color:#CCCCCC">{$COUNT} {$APP.LBL_RECORDS}</h3></td>
 	</tr>
+{* SalesPlatform.ru begin *}
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr>
+	<td colspan="2" align="left">
+	{$CAPTION_HTML}
+	</td>
+	</tr>
+{* SalesPlatform.ru end *}
 	<tr>
 		<td style="border:0px solid #000000;" colspan="2">
 		<table width="100%" border="0" cellpadding="5" cellspacing="0" align="center" class="printReport" >
@@ -75,7 +86,7 @@ body table tr td{
 	<td colspan="2">
 	{$TOTAL_HTML}
 	</td>
-	<tr>
+	</tr>
 	</table>
 </body>
 <script>

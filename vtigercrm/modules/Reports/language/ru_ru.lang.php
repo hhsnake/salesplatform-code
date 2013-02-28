@@ -29,6 +29,10 @@ $mod_strings = array (
       'LBL_CONTINUE_BUTTON' => 'Продолжить',
       'LBL_NEW_REP1_HDR1' => 'Укажите следующую информацию отчёта',
       'LBL_SELECT_COLUMNS' => 'Выберите колонки',
+// SalesPlatform.ru begin
+      'LBL_SELECT_OWNER'=>'Выберите ответственного',
+      'LBL_SELECT_ACCOUNT'=>'Выберите контрагента',
+// SalesPlatform.ru end
       'LBL_SPECIFY_GROUPING' => 'Укажите группирование',
       'LBL_COLUMNS_TO_TOTAL' => 'Выберите колонки для подсчета итогов',
       'LBL_SPECIFY_CRITERIA' => 'Укажите критерий',
@@ -180,7 +184,7 @@ $mod_strings = array (
       'NO_FILTER_SELECTED' => 'Не выбраны фильтры',
       'LBL_GENERATE_NOW' => 'Сформировать',
       'Totals' => 'Названия Полей',
-      'SUM' => 'СУМ',
+      'SUM' => 'СУММА',
       'AVG' => 'СРЕДН',
       'MAX' => 'МАКС',
       'MIN' => 'МИН',
@@ -301,6 +305,11 @@ $mod_strings = array (
     
     'S&H Amount' => 'Общая Сумма',
     'Conversion Rate' => 'Курс',
+    'Reporting' => 'Отчет с фильтром',
+    'of' => 'со значением',
+    'from' => 'с',
+    'till' => 'до',
+    'to' => '-',
 
 // 5.3.0 begin
     'LBL_YEAR' => 'Год',
@@ -358,4 +367,7 @@ $mod_strings = array (
 
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

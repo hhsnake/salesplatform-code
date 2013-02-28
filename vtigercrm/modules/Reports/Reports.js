@@ -306,10 +306,20 @@ function hideTabs()
 	{
 		divarray = new Array('step1','step2','step4','step5','step6','step7');
 	}
-	else
+        // SalesPlatform.ru begin: Special customization of custom reports
+	else if(objreportType.value == 'summary')
 	{
 		divarray = new Array('step1','step2','step3','step4','step5','step6','step7');
 	}
+	else
+	{
+		divarray = new Array('step6','step7');
+	}
+//	else
+//	{
+//		divarray = new Array('step1','step2','step3','step4','step5','step6','step7');
+//	}
+        // SalesPlatform.ru end: Special customization of custom reports
 }
 
 function showSaveDialog()
@@ -320,13 +330,20 @@ function showSaveDialog()
 
 function saveAndRunReport()
 {
-	if(selectedColumnsObj.options.length == 0)
-	{
-		alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
-		return false;
-	}
+        // SalesPlatform.ru begin: Special customization of custom reports
 	formSelectedColumnString();
+        if(selectedColumnsObj.options.length != 0) {
 	formSelectColumnString();
+        }
+//	if(selectedColumnsObj.options.length == 0)
+//	{
+//		alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
+//		return false;
+//	}
+//	formSelectedColumnString();
+//	formSelectColumnString();
+        // SalesPlatform.ru end
+
 	document.NewReport.submit();
 }
 
@@ -403,7 +420,10 @@ function changeSteps1()
 	} else {
 		for (i = 0; i < divarray.length; i++) {
 			if (getObj(divarray[i]).style.display != 'none') {
-				if (i == 1 && selectedColumnsObj.options.length == 0) {
+                                // SalesPlatform.ru begin: Special customization of custom reports
+				if (divarray[i] == 'step2' && selectedColumnsObj.options.length == 0) {
+				//if (i == 1 && selectedColumnsObj.options.length == 0) {
+                                // SalesPlatform.ru end
 					alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 					return false;
 				}
@@ -436,7 +456,10 @@ function changeStepsback1()
 		{
 			if(getObj(divarray[i]).style.display != 'none')
 			{
-				if(divarray[i] == 'step2' && !backwalk_flag)
+                                // SalesPlatform.ru begin: Special customization of custom reports
+				if(i == 1 && !backwalk_flag)
+				//if(divarray[i] == 'step2' && !backwalk_flag)
+                                // SalesPlatform.ru end
 				{
 					document.getElementById('back_rep').disabled = true;
 				}

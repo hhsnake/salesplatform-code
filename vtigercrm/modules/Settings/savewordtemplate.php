@@ -37,7 +37,10 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
   
     if($filesize != 0)	
     {
-        $merge_ext = array('msword','doc','document','rtf','odt','vnd.oasis.opendocument.text','octet-stream');
+	// SalesPlatform.ru begin: Add support for DOCX merge
+        $merge_ext = array('msword','doc','document','rtf','odt','vnd.oasis.opendocument.text','octet-stream','docx','vnd.openxmlformats-officedocument.wordprocessingml.document');
+        //$merge_ext = array('msword','doc','document','rtf','odt','vnd.oasis.opendocument.text','octet-stream');
+	// SalesPlatform.ru end
         if (in_array($file_type_value, $merge_ext))
 	    {
 		    if($result!=false)

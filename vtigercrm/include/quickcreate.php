@@ -37,6 +37,10 @@ if($module == 'Calendar')
 	$smarty->assign("QCMODULE", getTranslatedString('Todo', 'Calendar'));
 elseif($module == "HelpDesk")
 	$smarty->assign("QCMODULE", getTranslatedString('Ticket', 'HelpDesk'));
+// SalesPlatform.ru begin quick create localization
+elseif($module == "Events")
+	$smarty->assign("QCMODULE", getTranslatedString('LBL_EVENT', 'Calendar'));
+// SalesPlatform.ru end
 else
 	$smarty->assign("QCMODULE",getTranslatedString("SINGLE_".$currentModule, $currentModule));
 $smarty->assign("USERID",$current_user->id);

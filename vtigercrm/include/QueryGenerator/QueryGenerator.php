@@ -512,6 +512,9 @@ class QueryGenerator {
 			}
 			$fieldSql = '(';
 			$fieldGlue = '';
+                        // SalesPlatform.ru begin New custom fields filtering
+                        $conditionInfo['value'] = getMergedDescription($conditionInfo['value'], NULL, NULL);
+                        // SalesPlatform.ru end
 			$valueSqlList = $this->getConditionValue($conditionInfo['value'],
 				$conditionInfo['operator'], $field);
 			if(!is_array($valueSqlList)) {
@@ -652,7 +655,13 @@ class QueryGenerator {
 					$value = 1;
 				} elseif($value == 'no') {
 					$value = 0;
+                                // SalesPlatform.ru begin translated boolean type filters
+				} elseif ($value == getTranslatedString('yes')) {
+					$value = 1;
+				} elseif($value == getTranslatedString('no')) {
+					$value = 0;
 				}
+                                // SalesPlatform.ru end
 			} elseif($this->isDateType($field->getFieldDataType())) {
 				$value = getValidDBInsertDateTimeValue($value);
 			}
@@ -811,11 +820,22 @@ class QueryGenerator {
 		if($input['searchtype']=='advance') {
 
 			$json = new Zend_Json();
+                        // SalesPlatform.ru begin sorting when the search
+                        $advft_criteria = $_REQUEST['advft_criteria'];
+                        $advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
+                        if (stripos($advft_criteria, '\"')) {
+                            $advft_criteria = str_replace('\"', '"', $advft_criteria);
+                            $advft_criteria_groups = str_replace('\"', '"', $advft_criteria_groups);
+                        }
+                        if(!empty($advft_criteria))	$advft_criteria = $json->decode($advft_criteria);
+                        if(!empty($advft_criteria_groups))	$advft_criteria_groups = $json->decode($advft_criteria_groups);
+                        /*
 			$advft_criteria = $_REQUEST['advft_criteria'];
 			if(!empty($advft_criteria))	$advft_criteria = $json->decode($advft_criteria);
 			$advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
 			if(!empty($advft_criteria_groups))	$advft_criteria_groups = $json->decode($advft_criteria_groups);
-
+                        */
+                        // SalesPlatform.ru end
 			if(empty($advft_criteria) || count($advft_criteria) <= 0) {
 				return ;
 			}

@@ -213,6 +213,11 @@ class Migration_Utils {
 				if(@$olddb_conn->Connect($db_hostname, $db_username, $db_password, $old_db_name))
 				{
 					$old_db_exist_status = true;
+                                        // SalesPlatform.ru begin Check crypt type before reset user passwords
+                                        $userResult = $olddb_conn->_Execute("SELECT id FROM vtiger_users WHERE crypt_type != 'PHP5.3MD5'");
+                                        $noOfRows = $userResult->NumRows($userResult);
+                                        if ($noOfRows > 0)
+                                        // SalesPlatform.ru end
 					if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
 						$sql = 'alter table vtiger_users change user_password user_password varchar(128)';
 						$alterResult = $olddb_conn->_Execute($sql);

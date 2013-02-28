@@ -1838,6 +1838,11 @@ function getQuickCreateModules() {
 
 		$tabname = $adb->query_result($result, $i, 'name');
 		$tablabel = getTranslatedString("SINGLE_$tabname", $tabname);
+                // SalesPlatform.ru begin quick create localization
+                if ($tabname == 'Calendar') {
+                    $tablabel = getTranslatedString("LBL_ADDTODO", $tabname);
+                }
+                // SalesPlatform.ru end
 		if (isPermitted($tabname, 'EditView', '') == 'yes') {
 			$return_qcmodule[] = $tablabel;
 			$return_qcmodule[] = $tabname;
@@ -2200,9 +2205,15 @@ function getMergedDescription($description, $id, $parent_type) {
 	global $adb, $log;
 	$log->debug("Entering getMergedDescription ...");
 	$token_data_pair = explode('$', $description);
+        // SalesPlatform.ru begin New custom fields
+        if ($id > 0 && !empty($parent_type)) {
+        // SalesPlatform.ru end
 	global $current_user;
 	$emailTemplate = new EmailTemplate($parent_type, $description, $id, $current_user);
 	$description = $emailTemplate->getProcessedDescription();
+        // SalesPlatform.ru begin New custom fields
+        }
+        // SalesPlatform.ru end
 	$templateVariablePair = explode('$', $description);
 	$tokenDataPair = explode('$', $description);
 	$fields = Array();
@@ -2230,6 +2241,12 @@ function getMergedDescriptionCustomVars($fields, $description) {
 				break;
 			case 'currenttime': $token_value = date("G:i:s T");
 				break;
+                        // SalesPlatform.ru begin New custom fields
+			case 'currentuserfullname': 
+                                global $current_user;
+                                $token_value = getUserFullName($current_user->id);
+				break;
+                        // SalesPlatform.ru end
 		}
 		$description = str_replace($token_data, $token_value, $description);
 	}
@@ -2872,6 +2889,10 @@ function getEmailTemplateVariables() {
 	$allFields[] = $option;
 	$option = array('Current Time', '$custom-currenttime$');
 	$allFields[] = $option;
+        // SalesPlatform.ru begin New custom fields
+	$option = array('Current User Full Name', '$custom-currentuserfullname$');
+	$allFields[] = $option;
+        // SalesPlatform.ru end
 	$allOptions[] = $allFields;
 	return $allOptions;
 }
@@ -3557,4 +3578,22 @@ function sp_smartfilter_data($moduleName) {
         }            
 }
 //SalesPlatform.ru end
+
+// SalesPlatform.ru begin fields of the related list from the database
+function getEntityForListView($module, $headers) {
+    global $adb;
+    $list_query = "SELECT columnname FROM vtiger_cvcolumnlist WHERE cvid = (SELECT cvid FROM vtiger_customview WHERE entitytype = ? 
+        AND viewname = 'All')";
+    $list_result = $adb->pquery($list_query, array($module));
+    $data = array();
+    $rows = $adb->num_rows($list_result);
+    for($i=0; $i<$rows; $i++) {
+        $str = $adb->query_result($list_result, $i, 'columnname');
+        list($table, $col, $field, $namefield, $mark) = explode(':', $str);
+        $name = str_replace(array($module.'_', "_"), array("", " "), $namefield);
+        $data[$name] = $headers ? Array($table => $col) : $field;
+    }
+    return $data; 
+}
+// SalesPlatform.ru end
 ?>

@@ -47,6 +47,30 @@
 		</tr>
 		<tr><td id="report_info" align="left" colspan="2">&nbsp;</td></tr>
 		<tr><td colspan="2">&nbsp;</td></tr>
+{* SalesPlatform.ru begin *}
+		<tr>
+		<td colspan="2" align="left">
+		{* Performance Optimization: Direct result output *}
+		{if $DIRECT_OUTPUT eq true}
+			{if isset($__REPORT_RUN_INSTANCE)}
+				{php}
+					$__oReportRun = $this->_tpl_vars['__REPORT_RUN_INSTANCE'];
+					$__filterSql = $this->_tpl_vars['__REPORT_RUN_FILTER_SQL'];
+					$__reportParams = $this->_tpl_vars['__REPORT_RUN_PARAMS'];
+					$__oReportRunReturnValue = $__oReportRun->GenerateReport("CAPTION_HTML", $__filterSql, true, $__reportParams);
+				{/php}
+			{/if}
+		{elseif $ERROR_MSG eq ''}
+			{$REPORTHTML.0}
+		{else}
+			{$ERROR_MSG}
+		{/if}
+		{* END *}
+		</td>
+		</tr>
+		<tr><td colspan="2">&nbsp;</td></tr>
+		<tr><td colspan="2">&nbsp;</td></tr>
+{* SalesPlatform.ru end *}
 		<tr>
 		<td colspan="2">
 		{* Performance Optimization: Direct result output *}
@@ -55,7 +79,11 @@
 				{php}
 					$__oReportRun = $this->_tpl_vars['__REPORT_RUN_INSTANCE'];
 					$__filterSql = $this->_tpl_vars['__REPORT_RUN_FILTER_SQL'];
-					$__oReportRunReturnValue = $__oReportRun->GenerateReport("HTML", $__filterSql, true);
+// SalesPlatform.ru begin
+					$__reportParams = $this->_tpl_vars['__REPORT_RUN_PARAMS'];
+					$__oReportRunReturnValue = $__oReportRun->GenerateReport("HTML", $__filterSql, true, $__reportParams);
+//					$__oReportRunReturnValue = $__oReportRun->GenerateReport("HTML", $__filterSql, true);
+// SalesPlatform.ru end
 				{/php}
 			{/if}		
 		{elseif $ERROR_MSG eq ''}
@@ -72,7 +100,10 @@
 		{* Performance Optimization: Direct result output *}
 		{if $DIRECT_OUTPUT eq true}
 			{php}
-				if(is_array($__oReportRunReturnValue)) { $__oReportRun->GenerateReport("TOTALHTML", $__filterSql, true); }
+// SalesPlatform.ru begin
+				if(is_array($__oReportRunReturnValue)) { $__oReportRun->GenerateReport("TOTALHTML", $__filterSql, true, $__reportParams); }
+//				if(is_array($__oReportRunReturnValue)) { $__oReportRun->GenerateReport("TOTALHTML", $__filterSql, true); }
+// SalesPlatform.ru end
 			{/php}
 		{else}			
 			{$REPORTTOTHTML}

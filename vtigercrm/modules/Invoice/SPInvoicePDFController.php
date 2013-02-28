@@ -19,29 +19,23 @@ class SalesPlatform_InvoicePDFController extends SalesPlatform_PDF_ProductListDo
 	
 		$this->generateEntityModel($this->focus, 'Invoice', 'invoice_', $model);
 
+                $entity = new SalesOrder();
 		if($this->focusColumnValue('salesorder_id')) {
-            	    $entity = new SalesOrder();
             	    $entity->retrieve_entity_info($this->focusColumnValue('salesorder_id'), 'SalesOrder');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'SalesOrder', 'salesorder_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'SalesOrder', 'salesorder_', $model);
 
+                $entity = new Contacts();
 		if($this->focusColumnValue('contact_id')) {
-            	    $entity = new Contacts();
             	    $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
+                $entity = new Accounts();
 		if($this->focusColumnValue('account_id')) {
-            	    $entity = new Accounts();
             	    $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Accounts', 'account_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
 
 		$model->set('invoice_no', $this->focusColumnValue('invoice_no'));
 

@@ -105,11 +105,20 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
                                     $group_total_tax_percent += $group_tax_details[$i]['percentage'];
                             }
                             $total_tax_percent += $group_total_tax_percent;
-                            $tax_amount = (($taxable_total*$group_total_tax_percent)/100);
+                            if($this->focus->column_fields["hdnTaxType"] == "group_tax_inc") {
+                                $tax_amount = $taxable_total*$group_total_tax_percent/(100.0+$group_total_tax_percent);
+                                $priceWithDiscount -= $priceWithTax*$group_total_tax_percent/(100.0+$group_total_tax_percent);
+                            } else {
+                                $tax_amount = (($taxable_total*$group_total_tax_percent)/100);
+                                $priceWithTax += (($priceWithDiscount * $group_total_tax_percent)/100);
+                            }
                             $producttotal_taxes += $tax_amount;
-                            $priceWithTax += (($priceWithDiscount * $group_total_tax_percent)/100);
                         }
-			$producttotal = $taxable_total+$producttotal_taxes;
+			if($this->focus->column_fields["hdnTaxType"] != "group_tax_inc") {
+                            $producttotal = $taxable_total+$producttotal_taxes;
+                        } else {
+                            $taxable_total -= $producttotal_taxes;
+                        }
 			$tax = $producttotal_taxes;
 			$totaltaxes += $tax;
 			$discountPercentage = $productLineItem["discount_percent{$productLineItemIndex}"];
@@ -242,6 +251,29 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 			$summaryModel->set("summaryTaxServicesPercent", $group_total_tax_percent);
                         $overall_tax_services += ($netTotalServices - $discountServices) * $group_total_tax_percent / 100.0;
 		}
+		else if($final_details['taxtype'] == 'group_tax_inc') {
+			$group_tax_details = $final_details['taxes'];
+			for($i=0;$i<count($group_tax_details);$i++) {
+				$group_total_tax_percent += $group_tax_details[$i]['percentage'];
+			}
+			$summaryModel->set("summaryTax", $this->formatPrice($final_details['tax_totalamount']));
+			$summaryModel->set("summaryTaxLiteral", $this->num2str($final_details['tax_totalamount'], false, $currency));
+			$summaryModel->set("summaryTaxPercent", $group_total_tax_percent);
+                        $overall_tax += $final_details['tax_totalamount'];
+                        $summaryModel->set("summaryNetTotal", $this->formatPrice($netTotal - $final_details['tax_totalamount']));
+
+                        $summaryModel->set("summaryTaxGoods", $this->formatPrice(($netTotalGoods - $discountGoods) * $group_total_tax_percent / (100.0 + $group_total_tax_percent)));
+			$summaryModel->set("summaryTaxGoodsLiteral", $this->num2str(($netTotalGoods - $discountGoods) * $group_total_tax_percent / (100.0 + $group_total_tax_percent), false, $currency));
+			$summaryModel->set("summaryTaxGoodsPercent", $group_total_tax_percent);
+                        $overall_tax_goods += ($netTotalGoods - $discountGoods) * $group_total_tax_percent / (100.0 + $group_total_tax_percent);
+                        $summaryModel->set("summaryNetTotalGoods", $this->formatPrice($netTotalGoods - ($netTotalGoods - $discountGoods) * $group_total_tax_percent / (100.0 + $group_total_tax_percent)));
+
+                        $summaryModel->set("summaryTaxServices", $this->formatPrice(($netTotalServices - $discountServices) * $group_total_tax_percent / (100.0 + $group_total_tax_percent)));
+			$summaryModel->set("summaryTaxServicesLiteral", $this->num2str(($netTotalServices - $discountServices) * $group_total_tax_percent / (100.0 + $group_total_tax_percent), false, $currency));
+			$summaryModel->set("summaryTaxServicesPercent", $group_total_tax_percent);
+                        $overall_tax_services += ($netTotalServices - $discountServices) * $group_total_tax_percent / (100.0 + $group_total_tax_percent);
+                        $summaryModel->set("summaryNetTotalServices", $this->formatPrice($netTotalServices - ($netTotalServices - $discountServices) * $group_total_tax_percent / (100.0 + $group_total_tax_percent)));
+		}
 		else {
 		    $summaryModel->set("summaryTax", $this->formatPrice($this->totaltaxes));
     		    $summaryModel->set("summaryTaxLiteral", $this->num2str($this->totaltaxes, false, $currency));
@@ -297,11 +329,19 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 		$summaryModel->set("summaryOverallTaxServices", $this->formatPrice(round($overall_tax_services)));
 		$summaryModel->set("summaryOverallTaxServicesLiteral", $this->num2str(round($overall_tax_services), false, $currency));
 		
-		$summaryModel->set("summaryGrandTotalGoods", $this->formatPrice($netTotalGoods - $discountGoods + $overall_tax_goods + $final_details['shipping_handling_charge'] + $final_details['adjustment']));
-		$summaryModel->set("summaryGrandTotalGoodsLiteral", $this->num2str($netTotalGoods - $discountGoods + $overall_tax_goods + $final_details['shipping_handling_charge'] + $final_details['adjustment'], false, $currency));
+		if($final_details['taxtype'] == 'group_tax_inc') {
+                    $summaryModel->set("summaryGrandTotalGoods", $this->formatPrice($netTotalGoods - $discountGoods + $final_details['shipping_handling_charge'] + $final_details['adjustment']));
+                    $summaryModel->set("summaryGrandTotalGoodsLiteral", $this->num2str($netTotalGoods - $discountGoods + $final_details['shipping_handling_charge'] + $final_details['adjustment'], false, $currency));
 
-                $summaryModel->set("summaryGrandTotalServices", $this->formatPrice($netTotalServices - $discountServices + $overall_tax_services + $final_details['adjustment']));
-		$summaryModel->set("summaryGrandTotalServicesLiteral", $this->num2str($netTotalServices - $discountServices + $overall_tax_services + $final_details['adjustment'], false, $currency));
+                    $summaryModel->set("summaryGrandTotalServices", $this->formatPrice($netTotalServices - $discountServices + $final_details['adjustment']));
+                    $summaryModel->set("summaryGrandTotalServicesLiteral", $this->num2str($netTotalServices - $discountServices + $final_details['adjustment'], false, $currency));
+                } else {
+                    $summaryModel->set("summaryGrandTotalGoods", $this->formatPrice($netTotalGoods - $discountGoods + $overall_tax_goods + $final_details['shipping_handling_charge'] + $final_details['adjustment']));
+                    $summaryModel->set("summaryGrandTotalGoodsLiteral", $this->num2str($netTotalGoods - $discountGoods + $overall_tax_goods + $final_details['shipping_handling_charge'] + $final_details['adjustment'], false, $currency));
+
+                    $summaryModel->set("summaryGrandTotalServices", $this->formatPrice($netTotalServices - $discountServices + $overall_tax_services + $final_details['adjustment']));
+                    $summaryModel->set("summaryGrandTotalServicesLiteral", $this->num2str($netTotalServices - $discountServices + $overall_tax_services + $final_details['adjustment'], false, $currency));
+                }
 
 		return $summaryModel;
 	}

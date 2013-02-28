@@ -115,18 +115,18 @@ $mod_strings = array (
       'industry' => 'Отрасль',
       'SIC Code' => 'Код',
       'Email Opt Out' => 'Не отправлять Email',
-      'Billing Address' => 'Юр. адрес',
-      'Shipping Address' => 'Почт. адрес',
-      'Shipping Po Box' => 'А/я для почты',
-      'Billing Po Box' => 'Юридический а/я',
-      'Billing City' => 'Город',
-      'Shipping City' => 'Город',
-      'Billing State' => 'Область',
-      'Shipping State' => 'Область',
-      'Billing Code' => 'Индекс (юр.адр.)',
-      'Shipping Code' => 'Индекс (почт.адр)',
-      'Shipping Country' => 'Страна',
-      'Billing Country' => 'Страна',
+      'Billing Address' => 'Юридический адрес',
+      'Shipping Address' => 'Фактический адрес',
+      'Shipping Po Box' => 'Ф/А А/я',
+      'Billing Po Box' => 'Ю/А А/я',
+      'Billing City' => 'Ю/А Город',
+      'Shipping City' => 'Ф/А Город',
+      'Billing State' => 'Ю/А Область',
+      'Shipping State' => 'Ф/А Область',
+      'Billing Code' => 'Ю/А Индекс',
+      'Shipping Code' => 'Ф/А Индекс',
+      'Shipping Country' => 'Ф/А Страна',
+      'Billing Country' => 'Ю/А Страна',
       'Office Phone' => 'Раб. тел.',
       'Home Phone' => 'Дом. тел.',
       'Birthdate' => 'Дата рожд.',
@@ -242,4 +242,7 @@ $mod_strings = array (
 // SalesPlatform.ru end
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

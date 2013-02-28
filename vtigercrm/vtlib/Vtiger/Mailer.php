@@ -146,9 +146,13 @@ class Vtiger_Mailer extends PHPMailer {
 		$this->From = $fromemail;
 		$this->FromName = $fromname;
                 // SalesPlatform.ru begin: from Community user ilapko: Empty ReplyTo bugfix
-                if (!empty($replyto))
+                if (!empty($replyto)) {
+                    $this->ClearReplyTos();
                 // SalesPlatform.ru end
 		$this->AddReplyTo($replyto);
+                // SalesPlatform.ru begin
+                }
+                // SalesPlatform.ru end
 	}
 
 	/**

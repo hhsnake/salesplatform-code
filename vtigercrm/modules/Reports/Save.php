@@ -316,6 +316,45 @@ if($reportid == "")
 {
 	if($reportid != "")
 	{
+            // SalesPlatform.ru begin: Special customization of custom reports
+            if(empty($reporttype)) {
+		$ireportsql = "update vtiger_report set SHARINGTYPE=? where REPORTID=?";
+		$ireportparams = array($sharetype, $reportid);
+		$ireportresult = $adb->pquery($ireportsql, $ireportparams);
+		$log->info("Reports :: Save->Successfully saved vtiger_report");
+
+                $delsharesqlresult = $adb->pquery("DELETE FROM vtiger_reportsharing WHERE reportid=?", array($reportid));
+		if($delsharesqlresult != false  && $sharetype=="Shared" && $shared_entities!='')
+		{
+			$selectedcolumn = explode(";",$shared_entities);
+			for($i=0 ;$i< count($selectedcolumn) -1 ;$i++)
+			{
+				$temp = split("::",$selectedcolumn[$i]);
+				$icolumnsql = "INSERT INTO vtiger_reportsharing (reportid,shareid,setype) VALUES (?,?,?)";
+				$icolumnsqlresult = $adb->pquery($icolumnsql, array($reportid,$temp[1],$temp[0]));
+			}
+		}
+
+                //<<<<step7 scheduledReport>>>>>>>
+                if($isReportScheduled == 'off' || $isReportScheduled == '0' || $isReportScheduled == '') {
+                        $deleteScheduledReportSql = "DELETE FROM vtiger_scheduled_reports WHERE reportid=?";
+                        $adb->pquery($deleteScheduledReportSql, array($reportid));
+                } else{
+                        $checkScheduledResult = $adb->pquery('SELECT 1 FROM vtiger_scheduled_reports WHERE reportid=?', array($reportid));
+
+                        if($adb->num_rows($checkScheduledResult) > 0) {
+                                $scheduledReportSql = 'UPDATE vtiger_scheduled_reports SET recipients=?,schedule=?,format=? WHERE reportid=?';
+                                $adb->pquery($scheduledReportSql, array($selectedRecipients,$scheduledInterval,$scheduledFormat,$reportid));
+                        } else {
+                                $scheduleReportSql = 'INSERT INTO vtiger_scheduled_reports (reportid,recipients,schedule,format,next_trigger_time) VALUES (?,?,?,?,?)';
+                                $adb->pquery($scheduleReportSql, array($reportid,$selectedRecipients,$scheduledInterval,$scheduledFormat,date("Y-m-d H:i:s")));
+                        }
+                }
+                //<<<<step7 scheduledReport>>>>>>>
+
+            } else {
+            // SalesPlatform.ru end
+
 		if(!empty($selectedcolumns))
 		{
 			$idelcolumnsql = "delete from vtiger_selectcolumn where queryid=?";
@@ -529,6 +568,10 @@ if($reportid == "")
 			echo $errormessage;
 			die;
 		}
+            // SalesPlatform.ru begin: Special customization of custom reports
+            }
+            // SalesPlatform.ru end
+
 	}else
 	{
 		$errormessage = "<font color='red'><B>Error Message<ul>

@@ -456,6 +456,9 @@ function getHistory($parentmodule,$query,$id)
 		//Form the header columns
 		$header[] = $app_strings['LBL_TYPE'];
 		$header[] = $app_strings['LBL_SUBJECT'];
+                // SalesPlatform.ru begin added description
+                $header[] = $app_strings['LBL_DESCRIPTION'];
+                // SalesPlatform.ru end
 		$header[] = $app_strings['LBL_RELATED_TO'];
 		$header[] = $app_strings['LBL_START_DATE']." & ".$app_strings['LBL_TIME'];
 		$header[] = $app_strings['LBL_END_DATE']." & ".$app_strings['LBL_TIME'];
@@ -488,7 +491,11 @@ function getHistory($parentmodule,$query,$id)
 
 			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.vtlib_purify($_REQUEST['record']).'&parenttab='.vtlib_purify($_REQUEST['parenttab']).'">'.$row['subject'].'</a></td>';
 			$entries[] = $activity;
-
+                        
+                        // SalesPlatform.ru begin added description
+                        $description = $row['description'];
+                        $entries[] = $description;
+                        // SalesPlatform.ru end
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
 			$entries[] = $parentname;
 

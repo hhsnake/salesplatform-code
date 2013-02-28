@@ -1341,7 +1341,11 @@ class CRMEntity {
 				return true;
 			} else if ($adb->num_rows($check) != 0) {
 				$num_check = $adb->query_result($check, 0, 'cur_id');
-				if ($req_no < $num_check) {
+                                // SalesPlatform.ru begin: Option to turn off sequence check - to make possible invoice numbering renewal
+                                global $sp_modsequence_check_off;
+				if ($sp_modsequence_check_off !== true && $req_no < $num_check) {
+				//if ($req_no < $num_check) {
+                                // SalesPlatform.ru end
 					return false;
 				} else {
 					$adb->pquery("UPDATE vtiger_modentity_num SET active=0 where active=1 and semodule=?", array($module));
@@ -1391,6 +1395,11 @@ class CRMEntity {
 
 	/* Function to check if the mod number already exits */
 	function checkModuleSeqNumber($table, $column, $no) {
+                // SalesPlatform.ru begin: Option to turn off sequence check - to make possible invoice numbering renewal
+                global $sp_modsequence_check_off;
+                if($sp_modsequence_check_off === true) return false;
+                // SalesPlatform.ru end
+
 		global $adb;
 		$result = $adb->pquery("select " . $adb->sql_escape_string($column) .
 				" from " . $adb->sql_escape_string($table) .

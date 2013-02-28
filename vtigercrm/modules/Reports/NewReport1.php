@@ -62,6 +62,14 @@ if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
     $ogReport->getPriModuleColumnsList($oReport->primodule);
     $ogReport->getSecModuleColumnsList($oReport->secmodule);
 	$list_report_form->assign('BACK_WALK','true');
+
+        // SalesPlatform.ru begin: Special customization of custom reports
+        require_once("modules/Reports/SPReportRun.php");
+        if(in_array($oReport->reporttype, getCustomReportsList())) {
+            $list_report_form->assign('SP_CUSTOM_REPORT','true');
+            $list_report_form->assign('BACK_WALK',false);
+        }
+        // SalesPlatform.ru end
 }else
 {
 	$reportname = vtlib_purify($_REQUEST["reportname"]);

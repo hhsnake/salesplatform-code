@@ -464,6 +464,9 @@ class Reports extends CRMEntity{
 		for($i=0;$i<$adb->num_rows($query);$i++){
 			$subordinate_users[] = $adb->query_result($query,$i,'userid');
 		}
+                // SalesPlatform.ru begin hiding reports 
+                $sql .= ($rpt_fldr_id !== false) ? " AND vtiger_report.state != 'HIDDEN'" : " WHERE vtiger_report.state != 'HIDDEN'";
+                // SalesPlatform.ru end
 		$result = $adb->pquery($sql, $params);
 
 		$report = $adb->fetch_array($result);
@@ -696,6 +699,9 @@ class Reports extends CRMEntity{
 							'discount'=>getTranslatedString('Discount',$module),
 							'quantity'=>getTranslatedString('Quantity',$module),
 							'comment'=>getTranslatedString('Comments',$module),
+                                                        // SalesPlatform.ru begin prod_subtotal field added
+							'prod_subtotal'=>getTranslatedString('Product Subtotal',$module),
+                                                        // SalesPlatform.ru end
 			);
 			$fields_datatype = array('productid'=>'V',
 							'serviceid'=>'V',
@@ -703,6 +709,9 @@ class Reports extends CRMEntity{
 							'discount'=>'I',
 							'quantity'=>'I',
 							'comment'=>'V',
+                                                        // SalesPlatform.ru begin prod_subtotal field added
+							'prod_subtotal'=>'I',
+                                                        // SalesPlatform.ru end
 			);
 			foreach($fields as $fieldcolname=>$label){
 				$fieldtypeofdata = $fields_datatype[$fieldcolname];
@@ -1262,7 +1271,7 @@ function getEscapedColumns($selectedfields)
                                 // SalesPlatform.ru begin: Fixed incorrect permissions decision for related products fields in Reports
 				if(CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid" &&
                                         !(in_array($module, array('PurchaseOrder','SalesOrder','Quotes','Invoice','Act','Consignment')) && 
-                                          in_array($fieldname, array('productid','serviceid','listprice','discount','quantity','comment'))))
+                                          in_array($fieldname, array('productid','serviceid','listprice','discount','quantity','comment','prod_subtotal'))))
 				//if(CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid")
                                 // SalesPlatform.ru end
 				{

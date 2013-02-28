@@ -568,7 +568,7 @@ $mod_strings = array (
       'LBL_SELECT_ENTITY' => 'Выберите обьект',
       'LBL_CAN_BE_ACCESSED_BY' => 'доступно для',
       'LBL_PERMISSIONS' => 'Права',
-      'LBL_DOC_MSWORD' => 'Файл должен быть документом .doc/MSWord .odt/OpenOffice или .rtf/RichTextFormat',
+      'LBL_DOC_MSWORD' => 'Файл должен быть документом .doc/.docx/MSWord, .odt/OpenOffice или .rtf/RichTextFormat',
       'LBL_NODOC' => 'Нет файлов .doc в этой папке. Пожалуйста, попробуйте еще раз!',
       'LOGO_ERROR' => 'Логотип должен быть изображением типа jpeg/png',
       'Error_Message' => 'Ошибка',
@@ -899,7 +899,7 @@ $mod_strings = array (
         'LBL_ALL_MODULES' => 'Все модули',
         'LBL_SELECTED_MODULES' => 'Выбранные модули',
 
-        'LBL_CRM_SETTINGS' => 'Свойства CRM',
+        'LBL_CRM_SETTINGS' => 'Настройки CRM',
         // SalesPlatform.ru begin Widgets added
         'LBL_SP_ACC' => 'Последние Контрагенты',
         'LBL_SP_POT' => 'Последние Сделки',
@@ -915,4 +915,7 @@ $mod_strings = array (
         // SalesPlatform.ru end
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

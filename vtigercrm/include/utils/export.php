@@ -200,12 +200,18 @@ function export($type){
 	for($i=0; $i<count($fields_array); $i++) {
 		$translated_fields_array[$i] = getTranslatedString($fields_array[$i],$type);
 	}
-	$header = implode("\",\"",array_values($translated_fields_array));
+        // SalesPlatform.ru begin: Export encoding conversion
+	$header = implode("\"".$_REQUEST['delimiter']."\"",array_values($translated_fields_array));
+	//$header = implode("\",\"",array_values($translated_fields_array));
+        // SalesPlatform.ru end
 	$header = "\"" .$header;
 	$header .= "\"\r\n";
 	
 	/** Output header information */
-	echo $header;
+        // SalesPlatform.ru begin: Export encoding conversion
+	echo iconv("UTF-8", $_REQUEST['format'], $header);
+	//echo $header;
+        // SalesPlatform.ru end
 
 	$column_list = implode(",",array_values($fields_array));
 
@@ -224,12 +230,18 @@ function export($type){
 				array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 			}
 		}
-		$line = implode("\",\"",$new_arr);
+                // SalesPlatform.ru begin: Export encoding conversion
+		$line = implode("\"".$_REQUEST['delimiter']."\"",$new_arr);
+		//$line = implode("\",\"",$new_arr);
+                // SalesPlatform.ru end
 		$line = "\"" .$line;
 		$line .= "\"\r\n";
 		
 		/** Output each row information */
-		echo $line;
+                // SalesPlatform.ru begin: Export encoding conversion
+                echo iconv("UTF-8", $_REQUEST['format'], $line);
+                //echo $line;
+                // SalesPlatform.ru end
 	}
 	$log->debug("Exiting export method ...");
 	return true;

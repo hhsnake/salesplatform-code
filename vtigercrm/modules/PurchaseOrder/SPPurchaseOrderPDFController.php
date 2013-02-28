@@ -20,21 +20,17 @@ class SalesPlatform_PurchaseOrderPDFController extends SalesPlatform_PDF_Product
 	
 		$this->generateEntityModel($this->focus, 'PurchaseOrder', 'purchaseorder_', $model);
 
+                $entity = new Contacts();
 		if($this->focusColumnValue('contact_id')) {
-            	    $entity = new Contacts();
             	    $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
+                $entity = new Vendors();
 		if($this->focusColumnValue('vendor_id')) {
-            	    $entity = new Vendors();
             	    $entity->retrieve_entity_info($this->focusColumnValue('vendor_id'), 'Vendors');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Vendors', 'vendor_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'Vendors', 'vendor_', $model);
 
 		$model->set('purchaseorder_no', $this->focusColumnValue('purchaseorder_no'));
 

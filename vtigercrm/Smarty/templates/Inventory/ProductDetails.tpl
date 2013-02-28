@@ -128,6 +128,10 @@ function displayCoords(currObj,obj,mode,curr_row)
 	<td class="dvInnerHeader" align="center" colspan="2">
 		<b>{$APP.LBL_TAX_MODE}</b>&nbsp;&nbsp;
 		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(); calcTotal();">
+			{* SalesPlatform.ru begin *}
+			{* Group price including taxes *}
+			<OPTION value="group_tax_inc">{$APP.LBL_GROUP_TAX_INC}</OPTION>
+			{* SalesPlatform.ru end *}
 			<OPTION value="individual" selected>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group">{$APP.LBL_GROUP}</OPTION>
 		</select>

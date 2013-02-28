@@ -1445,6 +1445,32 @@ function get_contactsforol($user_name)
 		}
 		return $list_buttons;
 	}
+
+    // SalesPlatform.ru begin: Add vtlib handlers to fix related_to field in Potentials
+    // on Contacts or Accounts enable/disable
+    /**
+    * Invoked when special actions are performed on the module.
+    * @param String Module name
+    * @param String Event Type
+    */
+    function vtlib_handler($moduleName, $eventType) {
+        include_once('vtlib/Vtiger/Module.php');
+
+        if($eventType == 'module.postinstall') {
+        } else if($eventType == 'module.disabled') {
+            $moduleInstance = Vtiger_Module::getInstance('Potentials');
+            $fieldInstance = Vtiger_Field::getInstance('related_to', $moduleInstance);
+            $fieldInstance->unsetRelatedModules(Array($moduleName));
+        } else if($eventType == 'module.enabled') {
+            $moduleInstance = Vtiger_Module::getInstance('Potentials');
+            $fieldInstance = Vtiger_Field::getInstance('related_to', $moduleInstance);
+            $fieldInstance->setRelatedModules(Array($moduleName));
+        } else if($eventType == 'module.preuninstall') {
+        } else if($eventType == 'module.preupdate') {
+        } else if($eventType == 'module.postupdate') {
+        }
+    }
+    // SalesPlatform.ru end
 }
 
 ?>

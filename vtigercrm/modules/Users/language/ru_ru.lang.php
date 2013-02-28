@@ -704,4 +704,7 @@ $mod_strings = array (
 //SalesPlatform.ru end 
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

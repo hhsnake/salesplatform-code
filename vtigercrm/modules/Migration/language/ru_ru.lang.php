@@ -81,4 +81,7 @@ $mod_strings = array (
       'ENTER_CORRECT_MYSQL_PATH' => 'Пожалуйста, укажите правильный путь к MySQL',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

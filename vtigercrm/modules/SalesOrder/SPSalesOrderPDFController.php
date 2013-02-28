@@ -20,37 +20,29 @@ class SalesPlatform_SalesOrderPDFController extends SalesPlatform_PDF_ProductLis
 	
 		$this->generateEntityModel($this->focus, 'SalesOrder', 'salesorder_', $model);
 
+                $entity = new Potentials();
 		if($this->focusColumnValue('potential_id')) {
-            	    $entity = new Potentials();
             	    $entity->retrieve_entity_info($this->focusColumnValue('potential_id'), 'Potentials');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Potentials', 'potential_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'Potentials', 'potential_', $model);
 
+                $entity = new Quotes();
 		if($this->focusColumnValue('quote_id')) {
-            	    $entity = new Quotes();
             	    $entity->retrieve_entity_info($this->focusColumnValue('quote_id'), 'Quotes');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Quotes', 'quote_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'Quotes', 'quote_', $model);
 
+                $entity = new Contacts();
 		if($this->focusColumnValue('contact_id')) {
-            	    $entity = new Contacts();
             	    $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
+                $entity = new Accounts();
 		if($this->focusColumnValue('account_id')) {
-            	    $entity = new Accounts();
             	    $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
-            	    if(!empty($entity)) {
-			$this->generateEntityModel($entity, 'Accounts', 'account_', $model);
-		    }
 		}
+                $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
 
 		$model->set('salesorder_no', $this->focusColumnValue('salesorder_no'));
 		return $model;

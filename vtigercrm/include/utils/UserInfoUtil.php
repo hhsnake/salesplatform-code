@@ -747,6 +747,10 @@ function isPermitted($module,$actionname,$record_id='')
 	global $log;
 	$log->debug("Entering isPermitted(".$module.",".$actionname.",".$record_id.") method ...");
 
+        // SalesPlatform.ru begin: Add check for module active in permissions
+        if(!empty($module) && !vtlib_isModuleActive($module)) return "no";
+        // SalesPlatform.ru end
+
 	global $adb;
 	global $current_user;
 	global $seclog;

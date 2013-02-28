@@ -395,4 +395,7 @@ var alert_arr = {
         ReportCharts: 'Отчет с диаграммой'
 //SalesPlatform.ru end
 	};
-
+        
+// SalesPlatform.ru begin JS SPConfiguration fix
+document.write("<script type='text/javascript' src='include/js/renamed.ru_ru.lang.js'></"+"script>");
+// SalesPlatform.ru end

@@ -173,4 +173,7 @@ $mod_strings = array (
       'Closed Lost' => 'Проиграно',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

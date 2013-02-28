@@ -60,4 +60,7 @@ $mod_strings = array (
       'Vendors ID'=>'ID Поставщика',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

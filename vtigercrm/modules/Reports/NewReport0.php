@@ -35,6 +35,15 @@ $repObj = new Reports ();
 
 if($recordid!=''){
 	$oRep = new Reports($recordid);
+
+        // SalesPlatform.ru begin: Special customization of custom reports
+        require_once("modules/Reports/SPReportRun.php");
+        if(in_array($oRep->reporttype, getCustomReportsList())) {
+            include "modules/Reports/NewReport1.php";
+            exit;
+        }
+        // SalesPlatform.ru end
+
 	if($oRep->secmodule!=''){
 		$sec_mod = split(":",$oRep->secmodule);
 		$rel_modules = getReportRelatedModules($oRep->primodule,$oRep);

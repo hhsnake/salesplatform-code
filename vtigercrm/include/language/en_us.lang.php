@@ -324,6 +324,11 @@ $app_strings = array (
 'LBL_USER' => 'User',
 'LBL_TEAM' => 'Team',
 'LBL_GROUP' => 'Group',
+// SalesPlatform.ru begin
+'LBL_GROUP_TAX_INC' => 'Group, taxes included',
+'group_tax_inc' => 'Group, taxes included',
+'LBL_INC_TAX' => 'Including',
+// SalesPlatform.ru end
 'LBL_NONE_NO_LINE' => 'none',
 'LBL_SELECT_GROUP' => 'Select a group',
 'LBL_HOUR_AND_MINUTE' => '(hours/minutes)',
@@ -1491,6 +1496,7 @@ $app_strings = array (
 'Change_Priority' => 'Priority Changed to:',
 'Change_Severity' => 'Severity Changed to:',
 'Change_Category' => 'Category Changed to:',
+'DownloadMergeFile'=>'Download Merge File',
 // SalesPlatform.ru end      
     
 );

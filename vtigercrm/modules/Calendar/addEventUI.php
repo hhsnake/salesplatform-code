@@ -648,13 +648,28 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 							<td>
 								<input name="parent_id" value="" type="hidden">
 								<input name="del_actparent_rel" type="hidden" >
+                                                                <!-- SalesPlatform.ru begin hiding off disabling modules -->
+                                                                <select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
+                                                                <?php          
+                                                                $arr_mod = array('Leads', 'Accounts', 'Potentials', 'HelpDesk','Campaigns');
+                                                                foreach ($arr_mod as $value) {
+                                                                    if (vtlib_isModuleActive($value)) { ?>
+                                                                        <option value=<?php echo $value?>><?php echo $app_strings[$value]?></option>
+                                                                <?php         
+                                                                    }
+                                                                }
+                                                                ?>
+                                                                </select>
+                                                                <!--
 								<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
-									<option value="Leads"><?php echo $app_strings['Leads']?></option>
-									<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
-									<option value="Potentials"><?php echo $app_strings['Potentials']?></option>
-									<option value="HelpDesk"><?php echo $app_strings['HelpDesk']?></option>
-									<option value="Campaigns"><?php echo $app_strings['Campaigns']?></option>
+									<option value="Leads"><?php //echo $app_strings['Leads']?></option>
+									<option value="Accounts"><?php //echo $app_strings['Accounts']?></option>
+									<option value="Potentials"><?php //echo $app_strings['Potentials']?></option>
+									<option value="HelpDesk"><?php //echo $app_strings['HelpDesk']?></option>
+									<option value="Campaigns"><?php //echo $app_strings['Campaigns']?></option>
 								</select>
+                                                                -->
+                                                                <!-- SalesPlatform.ru end -->
 							</td>
 							<td>
 								<div id="eventrelatedto" align="left">
@@ -665,7 +680,10 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 							</td>
 						</tr>
 					<?php } ?>
-					<?php if(getFieldVisibilityPermission('Events',$current_user->id,'contact_id', 'readwrite') == '0') { ?>	
+                                        <!-- SalesPlatform.ru begin hiding off disabling modules --> 
+					<?php if(getFieldVisibilityPermission('Events',$current_user->id,'contact_id', 'readwrite') == '0' && vtlib_isModuleActive('Contacts')) { ?>
+                                        <?php// if(getFieldVisibilityPermission('Events',$current_user->id,'contact_id', 'readwrite') == '0') { ?>
+                                        <!-- SalesPlatform.ru end -->
 						<tr>
 						<td><b><?php echo $app_strings['Contacts'] ?></b></td>
 							<td colspan="2">

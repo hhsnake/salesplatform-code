@@ -1971,13 +1971,21 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 		//if taxtype is individual and want to change to group during edit time then we have to show the all available taxes and their default values
 		//Also taxtype is group and want to change to individual during edit time then we have to provide the asspciated taxes and their default tax values for individual products
-		if($taxtype == 'group')
+		// SalesPlatform.ru begin
+//		if($taxtype == 'group')
+		if($taxtype == 'group' || $taxtype == 'group_tax_inc')
+		// SalesPlatform.ru end
 			$tax_percent = $adb->query_result($result,0,$tax_name);
 		else
 			$tax_percent = $tax_details[$tax_count]['percentage'];//$adb->query_result($result,0,$tax_name);
 
 		if($tax_percent == '' || $tax_percent == 'NULL')
 			$tax_percent = '0.00';
+		// SalesPlatform.ru begin
+		if($taxtype == 'group_tax_inc')
+			$taxamount = ($subTotal-$finalDiscount)*$tax_percent/(100.0+$tax_percent);
+		else
+		// SalesPlatform.ru end
 		$taxamount = ($subTotal-$finalDiscount)*$tax_percent/100;
 		$taxamount = number_format($taxamount, 2,'.',''); //Convert to 2 decimals
 		$taxtotal = $taxtotal + $taxamount;
@@ -2013,6 +2021,11 @@ function getAssociatedProducts($module,$focus,$seid='')
 		{
 			$shtax_percent = getInventorySHTaxPercent($focus->id,$shtax_name);
 		}
+		// SalesPlatform.ru begin
+		if($taxtype == 'group_tax_inc')
+			$shtaxamount = $shCharge*$shtax_percent/(100+$shtax_percent);
+		else
+		// SalesPlatform.ru end
 		$shtaxamount = $shCharge*$shtax_percent/100;
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['taxname'] = $shtax_name;

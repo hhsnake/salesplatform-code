@@ -217,7 +217,13 @@ $mod_strings = array (
 
     // SalesPlatform.ru begin
     'SALESORDER_' => 'ЗаказНаПродажу_',
+    'Service Name' => 'Услуга',
+    'List Price' => 'Розничная Цена',
+    'Product Subtotal' => 'Всего после Скидки',
     // SalesPlatform.ru end
       );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

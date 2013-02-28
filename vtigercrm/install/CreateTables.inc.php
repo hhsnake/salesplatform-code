@@ -1342,7 +1342,7 @@ function populateDefaultWorkflows($adb) {
 					.'Статус                 : $taskstatus <br/>'
 					.'Приоритет              : $taskpriority <br/>'
 					.'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
-					.'$(parent_id            : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+					.'$(parent_id : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
 					.'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
 					.'Место проведения       : $location <br/>'
 					.'Описание               : $description';
@@ -1393,6 +1393,15 @@ function populateLinks() {
 		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
 		'themes/images/bookMark.gif'
 	);
+
+        // SalesPlatform.ru begin: Add related records link to Documents
+        $documentInstance = Vtiger_Module::getInstance('Documents');
+	$documentInstance->addLink(
+		'DETAILVIEWWIDGET', 'LBL_RELATED_TO',
+		'module=Documents&action=DocumentsAjax&file=DetailViewAjax&recordid=$RECORD$&ajxaction=LOADRELATEDLISTWIDGET',
+		''
+	);
+        // SalesPlatform.ru end
 }
 
 function setFieldHelpInfo() {

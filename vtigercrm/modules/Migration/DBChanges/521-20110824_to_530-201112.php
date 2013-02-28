@@ -37,6 +37,9 @@ $result = $adb->pquery($sql, $params);
 $it = new SqlResultIterator($adb, $result);
 foreach ($it as $row) {
 	$tabId = getTabid($row->modulename);
+        // SalesPlatform.ru begin Check if module turn off
+        if (!$tabId) continue;
+        // SalesPlatform.ru end
 	$column = "'$row->fieldname'";
 	$columnArray = explode(',', $column);
 	$tableName = $row->tablename;

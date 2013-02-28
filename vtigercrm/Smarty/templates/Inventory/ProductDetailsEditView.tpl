@@ -125,11 +125,19 @@ function displayCoords(currObj,obj,mode,curr_row)
 		
 		{if $ASSOCIATEDPRODUCTS.1.final_details.taxtype eq 'group'}
 			{assign var="group_selected" value="selected"}
+		{* SalesPlatform.ru begin *}
+		{elseif $ASSOCIATEDPRODUCTS.1.final_details.taxtype eq 'group_tax_inc'}
+			{assign var="group_tax_inc_selected" value="selected"}
+		{* SalesPlatform.ru end *}
 		{else}
 			{assign var="individual_selected" value="selected"}
 		{/if}
 
 		<select class="small" id="taxtype" name="taxtype" onchange="decideTaxDiv(); calcTotal();">
+			{* SalesPlatform.ru begin *}
+			{* Group price including taxes *}
+			<OPTION value="group_tax_inc" {$group_tax_inc_selected}>{$APP.LBL_GROUP_TAX_INC}</OPTION>
+			{* SalesPlatform.ru end *}
 			<OPTION value="individual" {$individual_selected}>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group" {$group_selected}>{$APP.LBL_GROUP}</OPTION>
 		</select>

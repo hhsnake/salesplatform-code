@@ -4601,7 +4601,7 @@ function fnvshobjMore(obj,Lay,announcement){
 	if(announcement){
 		tagName.style.top = 110+'px';
 	}else{
-		tagName.style.top = 72+'px';
+		tagName.style.top = 76+'px';
 	}
 	tagName.style.display = 'block';
 	tagName.style.visibility = "visible";

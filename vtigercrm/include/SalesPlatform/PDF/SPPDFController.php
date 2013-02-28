@@ -223,11 +223,15 @@ class SalesPlatform_PDF_SPPDFController {
        */
       function num2str($inn, $stripkop=false, $currency='RUB') {
 
-        global $current_language, $default_language;
-        if(empty($current_language)) {
-            $lang = $default_language;
+        global $current_language, $default_language, $sp_pdf_language;
+        if(empty($sp_pdf_language)) {
+            if(empty($current_language)) {
+                $lang = $default_language;
+            } else {
+                $lang = $current_language;
+            }
         } else {
-            $lang = $current_language;
+            $lang = $sp_pdf_language;
         }
 
         require 'include/SalesPlatform/PDF/CurrencyForms.php';
@@ -353,24 +357,24 @@ class SalesPlatform_PDF_SPPDFController {
        return $f5;
    }
 
-    function russianDate($date){
-	$date=explode("-", $date);
-	switch ($date[1]){
-	    case 1: $m='Января'; break;
-	    case 2: $m='Февраля'; break;
-	    case 3: $m='Марта'; break;
-	    case 4: $m='Апреля'; break;
-	    case 5: $m='Мая'; break;
-	    case 6: $m='Июня'; break;
-	    case 7: $m='Июля'; break;
-	    case 8: $m='Августа'; break;
-	    case 9: $m='Сентября'; break;
-	    case 10: $m='Октября'; break;
-	    case 11: $m='Ноября'; break;
-	    case 12: $m='Декабря'; break;
-	}
+    function literalDate($date){
+        global $current_language, $default_language, $sp_pdf_language;
+        if(empty($sp_pdf_language)) {
+            if(empty($current_language)) {
+                $lang = $default_language;
+            } else {
+                $lang = $current_language;
+            }
+        } else {
+            $lang = $sp_pdf_language;
+        }
+
+        require 'include/SalesPlatform/PDF/CurrencyForms.php';
+
+        $date=explode("-", $date);
+        $m = $sp_date_forms[$lang][$date[1] - 1];
 	
-	return $date[2].' '.$m.' '.$date[0].' г.';
+	return $date[2].' '.$m.' '.$date[0];
     }
 
     function shortDate($date){
@@ -382,6 +386,13 @@ class SalesPlatform_PDF_SPPDFController {
 	// Get only active field information
         $cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
     
+        if(isset($this->focus->column_fields['currency_id'])) {
+            $currencyInfo = getCurrencyInfo($this->focus->column_fields['currency_id']);
+            $currency = $currencyInfo['code'];
+        } else {
+            $currency = 'RUB';
+        }
+
 	if($cachedModuleFields) {
 	    foreach($cachedModuleFields as $fieldname=>$fieldinfo) {
 		$fieldname = $fieldinfo['fieldname'];
@@ -389,8 +400,11 @@ class SalesPlatform_PDF_SPPDFController {
 		switch($type[0]) {
 		case 'N':
 		case 'NN': $model->set($prefix.$fieldname, $this->formatPrice($entity->column_fields[$fieldname]));
+                           $model->set($prefix.$fieldname.'_literal', $this->num2str($entity->column_fields[$fieldname], false, $currency));
+                           $model->set(strtoupper($prefix).strtoupper(str_replace(" ","",$fieldinfo['fieldlabel'])).'_LITERAL', $model->get($prefix.$fieldname.'_literal'));
+                           $model->set(getTranslatedString(strtoupper($prefix), $module).str_replace(" ","",getTranslatedString($fieldinfo['fieldlabel'], $module)).getTranslatedString('_literal'), $model->get($prefix.$fieldname.'_literal'));
 			   break;
-		case 'D': $model->set($prefix.$fieldname, $this->russianDate($entity->column_fields[$fieldname]));
+		case 'D': $model->set($prefix.$fieldname, $this->literalDate($entity->column_fields[$fieldname]));
 			  $model->set($prefix.$fieldname.'_short', $this->shortDate($entity->column_fields[$fieldname]));
 			  break;
 		case 'C': if($entity->column_fields[$fieldname] == 0) {
@@ -455,6 +469,56 @@ class SalesPlatform_PDF_SPPDFController {
                     return decode_html($adb->query_result($result,0,'currency_symbol'));
             }
             return false;
+    }
+
+    function generateRelatedListModels($model) {
+        global $adb;
+
+        $lists = $adb->pquery("select vtiger_tab.name as relmodulename from vtiger_relatedlists inner join vtiger_tab on vtiger_tab.tabid=vtiger_relatedlists.related_tabid where vtiger_relatedlists.tabid=? and vtiger_relatedlists.name='get_related_list'",
+                array(getTabid($this->moduleName)));
+
+        for($i = 0; $i < $adb->num_rows($lists); $i++) {
+            $relmodulename = $adb->query_result($lists, $i, 'relmodulename');
+
+            $listrecords = $adb->pquery('select vtiger_crmentityrel.relcrmid from vtiger_crmentityrel inner join vtiger_crmentity on (vtiger_crmentity.crmid=vtiger_crmentityrel.crmid and vtiger_crmentity.deleted=0) where vtiger_crmentityrel.crmid=? and vtiger_crmentityrel.relmodule=?',
+                    array($this->focus->id, $relmodulename));
+
+            for($j = 0; $j < 10; $j++) {
+                $entity = CRMEntity::getInstance($relmodulename);
+                if($j < $adb->num_rows($listrecords)) {
+                    $relcrmid = $adb->query_result($listrecords, $j, 'relcrmid');
+                    $entity->retrieve_entity_info($relcrmid, $relmodulename);
+                }
+                $this->generateEntityModel($entity, $relmodulename, 'Related'.$relmodulename.($j+1).'_', $model);
+            }
+        }
+    }
+
+    function generateUi10Models($model) {
+        global $adb;
+
+        $ui10fields = $adb->pquery("select fieldid,fieldname from vtiger_field where tabid=? and uitype=10 and presence in (0,2)",
+                array(getTabid($this->moduleName)));
+
+        for($i = 0; $i < $adb->num_rows($ui10fields); $i++) {
+            $fieldid = $adb->query_result($ui10fields, $i, 'fieldid');
+            $fieldname = $adb->query_result($ui10fields, $i, 'fieldname');
+            $relmodules = $adb->pquery('select relmodule from vtiger_fieldmodulerel where fieldid=?',
+                    array($fieldid));
+
+            for($j = 0; $j < $adb->num_rows($relmodules); $j++) {
+                $relmodule = $adb->query_result($relmodules, $j, 'relmodule');
+                $entity = CRMEntity::getInstance($relmodule);
+
+                if($this->focusColumnValue($fieldname)) {
+                    if(getSalesEntityType($this->focusColumnValue($fieldname)) == $relmodule) {
+                        $entity->retrieve_entity_info($this->focusColumnValue($fieldname), $relmodule);
+                    }
+                }
+
+                $this->generateEntityModel($entity, $relmodule, strtolower($relmodule).'_', $model);
+            }
+        }
     }
 }
 ?>

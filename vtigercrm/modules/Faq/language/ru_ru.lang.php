@@ -108,4 +108,7 @@ $mod_strings = array (
       'Faq ID' => 'ID ЧаВо',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

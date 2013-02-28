@@ -115,6 +115,12 @@ if ($viewid != "0") {
 $url_string = '';
 if($_REQUEST['query'] == 'true') {
 	$queryGenerator->addUserSearchConditions($_REQUEST);
+        // SalesPlatform.ru begin sorting when the search
+        if (!stripos($_REQUEST['advft_criteria'], '\"')) {
+            $_REQUEST['advft_criteria'] = str_replace('"', '\"', $_REQUEST['advft_criteria']);
+            $_REQUEST['advft_criteria_groups'] = str_replace('"', '\"', $_REQUEST['advft_criteria_groups']);
+        }
+        // SalesPlatform.ru end
 	$ustring = getSearchURL($_REQUEST);
 	$url_string .= "&query=true$ustring";
 	$smarty->assign('SEARCH_URL', $url_string);

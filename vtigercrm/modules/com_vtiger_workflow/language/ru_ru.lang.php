@@ -117,4 +117,7 @@ $mod_strings = array (
         'LBL_NO_ENTITIES_FOUND' => 'Не найдено ни одной сущности для создания',
 );
 
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>

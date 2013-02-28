@@ -269,7 +269,22 @@ class Accounts extends CRMEntity {
 
 		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
-		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.related_to,
+		// SalesPlatform.ru begin fields of the related list from the database
+                $query = "SELECT vtiger_potential.*, vtiger_account.accountname,
+			case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.smownerid
+			FROM vtiger_potential
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_potential.related_to
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_potential.related_to = ".$id;
+                /*
+                $query = "SELECT vtiger_potential.potentialid, vtiger_potential.related_to,
 			vtiger_potential.potentialname, vtiger_potential.sales_stage,
 			vtiger_potential.potentialtype, vtiger_potential.amount,
 			vtiger_potential.closingdate, vtiger_potential.potentialtype, vtiger_account.accountname,
@@ -285,7 +300,9 @@ class Accounts extends CRMEntity {
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_potential.related_to = ".$id;
-
+                 */
+                // SalesPlatform.ru end
+                
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
 
 		if($return_value == null) $return_value = Array();
@@ -1298,6 +1315,32 @@ class Accounts extends CRMEntity {
 		// end of mailer export
 		return $list_buttons;
 	}
+
+        // SalesPlatform.ru begin: Add vtlib handlers to fix related_to field in Potentials
+        // on Contacts or Accounts enable/disable
+        /**
+        * Invoked when special actions are performed on the module.
+        * @param String Module name
+        * @param String Event Type
+        */
+        function vtlib_handler($moduleName, $eventType) {
+            include_once('vtlib/Vtiger/Module.php');
+
+            if($eventType == 'module.postinstall') {
+            } else if($eventType == 'module.disabled') {
+                $moduleInstance = Vtiger_Module::getInstance('Potentials');
+                $fieldInstance = Vtiger_Field::getInstance('related_to', $moduleInstance);
+                $fieldInstance->unsetRelatedModules(Array($moduleName));
+            } else if($eventType == 'module.enabled') {
+                $moduleInstance = Vtiger_Module::getInstance('Potentials');
+                $fieldInstance = Vtiger_Field::getInstance('related_to', $moduleInstance);
+                $fieldInstance->setRelatedModules(Array($moduleName));
+            } else if($eventType == 'module.preuninstall') {
+            } else if($eventType == 'module.preupdate') {
+            } else if($eventType == 'module.postupdate') {
+            }
+        }
+        // SalesPlatform.ru end
 }
 
 ?>

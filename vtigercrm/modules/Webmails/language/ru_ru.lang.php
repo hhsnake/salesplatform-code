@@ -149,5 +149,9 @@ $mod_strings = array (
       'LBL_PLEASE_CLICK_HERE_TO_GO_TO' => 'Нажмите здесь для перехода ',
 
 );
+
+// SalesPlatform.ru begin SPConfiguration fix
+include 'renamed.ru_ru.lang.php';
+// SalesPlatform.ru end
 ?>
 	

@@ -309,9 +309,14 @@ class Vtiger_MailScannerAction {
         for ($n = sizeOf($mimeStrs), $i = 0; $i < $n; $i++) {
             $mimeStr = $mimeStrs[$i];
             $mimeStr->charset = strtolower($mimeStr->charset);
-            if (($mimeStr == 'default' && $inputCharset == $targetCharset)
-                    || $mimStr->charset == $targetCharset) {
-                $decodedStr.=$mimStr->text;
+            // SalesPlatform.ru begin Default charset bugfix
+            if (($mimeStr->charset == 'default' && $inputCharset == $targetCharset)
+                    || $mimeStr->charset == $targetCharset) {
+                $decodedStr.=$mimeStr->text;
+            //if (($mimeStr == 'default' && $inputCharset == $targetCharset)
+                    //|| $mimStr->charset == $targetCharset) {
+                //$decodedStr.=$mimStr->text;
+            // SalesPlatform.ru end
             } else {
                 $decodedStr.=mb_convert_encoding(
                 $mimeStr->text, $targetCharset,

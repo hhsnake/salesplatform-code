@@ -1382,7 +1382,8 @@ function getDetailAssociatedProducts($module, $focus) {
 			   <tr valign="top">
 				<td class="crmTableRow small lineOnTop">
 					<font color="gray">'.getTranslatedString('LBL_PRODUCT_CODE').':</font>&nbsp;<font color="black">'.$productcode.'</font>
-					<br><font color="gray">'.getTranslatedString('LBL_PRODUCT_NAME').':</font>&nbsp;<font color="black">'.$productname.'</font> &nbsp;' . $sc_image_tag . '
+					<br><font color="gray">'.getTranslatedString('LBL_PRODUCT_NAME').':</font>&nbsp;<font color="black"><a href="index.php?action=DetailView&module='.$entitytype.'&parenttab=Inventory&record='.$productid.'">'.$productname.'</a></font> &nbsp;' . $sc_image_tag . '
+                                            <a href="index.php?action=EditView&module='.$entitytype.'&parenttab=Inventory&record='.$productid.'&return_module='.$module.'&return_action=DetailView&return_id='.$focus->id.'"><img border="0" align="absmiddle" title="'.getTranslatedString('LBL_EDIT').'..." src="themes/images/editfield.gif"/></a>
 					<br><font color="gray">'.$productdescription.'</font>
 					<br><font color="gray">'.$comment.'</font>
 				</td>';
@@ -1508,6 +1509,35 @@ function getDetailAssociatedProducts($module, $focus) {
 		$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($taxtotal, null, true) . '</td>';
 		$output .= '</tr>';
 	}
+	// SalesPlatform.ru begin
+	else if($taxtype == 'group_tax_inc')
+	{
+		$taxtotal = '0.00';
+		$final_totalAfterDiscount = $netTotal - $finalDiscount;
+		$tax_info_message = $app_strings['LBL_TOTAL_AFTER_DISCOUNT'] . " = ". CurrencyField::convertToUserFormat($final_totalAfterDiscount, null, true)." \\n";
+		//First we should get all available taxes and then retrieve the corresponding tax values
+		$tax_details = getAllTaxes('available','','edit',$focus->id);
+		//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
+		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+		{
+			$tax_name = $tax_details[$tax_count]['taxname'];
+			$tax_label = $tax_details[$tax_count]['taxlabel'];
+			$tax_value = $adb->query_result($result,0,$tax_name);
+			if($tax_value == '' || $tax_value == 'NULL')
+				$tax_value = '0.00';
+			
+			$taxamount = ($netTotal-$finalDiscount)*$tax_value/(100.0+$tax_value);
+			$taxtotal = $taxtotal + $taxamount;
+			$tax_info_message .= getTranslatedString('LBL_INC_TAX')." $tax_label : $tax_value % = ".
+									CurrencyField::convertToUserFormat($taxtotal, null, true) ." \\n";
+		}
+		$tax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = ". CurrencyField::convertToUserFormat($taxtotal, null, true);
+
+		$output .= '<tr>';
+		$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$tax_info_message.'\');">'.$app_strings['LBL_TAX'].'</a></b></td>';
+		$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($taxtotal, null, true) . '</td>';
+		$output .= '</tr>';
+	}
 
 	$shAmount = ($focus->column_fields['hdnS_H_Amount'] != '') ? $focus->column_fields['hdnS_H_Amount'] : '0.00';
 	$shAmount = number_format($shAmount, 2,'.',''); //Convert to 2 decimals
@@ -1526,6 +1556,11 @@ function getDetailAssociatedProducts($module, $focus) {
 		$shtax_name = $shtax_details[$shtax_count]['taxname'];
 		$shtax_label = $shtax_details[$shtax_count]['taxlabel'];
 		$shtax_percent = getInventorySHTaxPercent($focus->id, $shtax_name);
+		// SalesPlatform.ru begin
+		if ($taxtype == "group_tax_inc")
+			$shtaxamount = $shAmount*$shtax_percent/(100.0+$shtax_percent);
+		else
+		// SalesPlatform.ru end
 		$shtaxamount = $shAmount * $shtax_percent / 100;
 		$shtaxamount = number_format($shtaxamount, 2,'.','');
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
@@ -1573,7 +1608,10 @@ function getRelatedListsInformation($module, $focus) {
 
 	//$sql1 = "select * from vtiger_relatedlists where tabid=? order by sequence";
 	// vtlib customization: Do not picklist module which are set as in-active
-	$sql1 = "select * from vtiger_relatedlists where tabid=? and related_tabid not in (SELECT tabid FROM vtiger_tab WHERE presence = 1) order by sequence";
+        // SalesPlatform.ru begin Related Lists: presence flag supported
+	$sql1 = "select * from vtiger_relatedlists where tabid=? and related_tabid not in (SELECT tabid FROM vtiger_tab WHERE presence = 1) and presence = 0 order by sequence";
+	//$sql1 = "select * from vtiger_relatedlists where tabid=? and related_tabid not in (SELECT tabid FROM vtiger_tab WHERE presence = 1) order by sequence";
+        // SalesPlatform.ru end
 	// END
 	$result = $adb->pquery($sql1, array($cur_tab_id));
 	$num_row = $adb->num_rows($result);
@@ -1621,7 +1659,10 @@ function getRelatedLists($module, $focus) {
 
 	//$sql1 = "select * from vtiger_relatedlists where tabid=? order by sequence";
 	// vtlib customization: Do not picklist module which are set as in-active
-	$sql1 = "select * from vtiger_relatedlists where tabid=? and related_tabid not in (SELECT tabid FROM vtiger_tab WHERE presence = 1) order by sequence";
+        // SalesPlatform.ru begin Related Lists: presence flag supported
+	$sql1 = "select * from vtiger_relatedlists where tabid=? and related_tabid not in (SELECT tabid FROM vtiger_tab WHERE presence = 1) and presence = 0 order by sequence";
+	//$sql1 = "select * from vtiger_relatedlists where tabid=? and related_tabid not in (SELECT tabid FROM vtiger_tab WHERE presence = 1) order by sequence";
+        // SalesPlatform.ru end
 	// END
 	$result = $adb->pquery($sql1, array($cur_tab_id));
 	$num_row = $adb->num_rows($result);
