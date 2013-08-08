@@ -38,7 +38,10 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
         if($_SESSION['image_type_error'] != '')
         {
                 echo '<font color="red">'.$_SESSION['image_type_error'].'</font>';
-                session_unregister('image_type_error');
+		// SalesPlatform.ru begin PHP 5.4 migration
+		unset($_SESSION['image_type_error']);
+                //session_unregister('image_type_error');
+		// SalesPlatform.ru end
         }
 
         $focus->id=$_REQUEST['record'];

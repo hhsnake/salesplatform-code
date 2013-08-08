@@ -10,7 +10,10 @@ class Parser {
 	$results = array();
 
         if ($_results = execute_program('lspci', '', $this->debug)) {
-	    $lines = split("\n", $_results);
+	    // SalesPlatform.ru begin PHP 5.4 migration
+	    $lines = explode("\n", $_results);
+	    //$lines = split("\n", $_results);
+	    // SalesPlatform.ru end
 	    for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
 		list($addr, $name) = explode(' ', trim($lines[$i]), 2);
 		//if (!preg_match('/bridge/i', $name) && !preg_match('/USB/i', $name)) {

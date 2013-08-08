@@ -554,10 +554,16 @@ class PEAR
             $ec = 'PEAR_Error';
         }
         if ($skipmsg) {
-            $a = &new $ec($code, $mode, $options, $userinfo);
+	    // SalesPlatform.ru begin PHP 5.4 migration
+            $a = new $ec($code, $mode, $options, $userinfo);
+            //$a = &new $ec($code, $mode, $options, $userinfo);
+	    // SalesPlatform.ru end
             return $a;
         } else {
-            $a = &new $ec($message, $code, $mode, $options, $userinfo);
+	    // SalesPlatform.ru begin PHP 5.4 migration
+            $a = new $ec($message, $code, $mode, $options, $userinfo);
+            //$a = &new $ec($message, $code, $mode, $options, $userinfo);
+	    // SalesPlatform.ru end
             return $a;
         }
     }

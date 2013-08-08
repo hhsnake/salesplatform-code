@@ -112,6 +112,7 @@ $mod_strings = Array(
 // SalesPlatform.ru begin
 'Access Count'=>'Access Count',
 '{No Subject}' => '{No Subject}',
+'LBL_IN_RECIPIENT' => 'in Recipient',
 // SalesPlatform.ru end
 'Subject'=>'Subject',
 'Attachment'=>'Attachment',

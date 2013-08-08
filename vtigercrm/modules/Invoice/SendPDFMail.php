@@ -12,15 +12,15 @@
 include_once 'modules/Invoice/SPInvoicePDFController.php';
 //include_once 'modules/Invoice/InvoicePDFController.php';
 // SalesPlatform.ru end
-global $currentModule;
+$currentModule = vtlib_purify($_REQUEST['module']);
 
 // SalesPlatform.ru begin
-$controller = new SalesPlatform_InvoicePDFController($currentModule, $_REQUEST['pdf_template']);
+$controller = new SalesPlatform_InvoicePDFController($currentModule, vtlib_purify($_REQUEST['pdf_template']));
 //$controller = new Vtiger_InvoicePDFController($currentModule);
 // SalesPlatform.ru end
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 
-$filenameid = $_REQUEST['record'];
+$filenameid = vtlib_purify($_REQUEST['record']);
 $invoice_no = getModuleSequenceNumber($currentModule,vtlib_purify($_REQUEST['record']));
 if(empty($filenameid)) $filenameid = time();
 $filepath="storage/Invoice_".$invoice_no.".pdf";

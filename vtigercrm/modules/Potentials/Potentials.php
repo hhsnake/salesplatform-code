@@ -230,7 +230,21 @@ class Potentials extends CRMEntity {
 
 		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
-		$query = 'select case when (vtiger_users.user_name not like "") then '.$userNameSql.' else vtiger_groups.groupname end as user_name,
+		// SalesPlatform begin Fields of the related list from the database
+                $query = 'select case when (vtiger_users.user_name not like "") then '.$userNameSql.' else vtiger_groups.groupname end as user_name,
+                        vtiger_contactdetails.accountid,vtiger_contactdetails.contact_no,vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_contactdetails.contactid,
+                        vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.title, vtiger_contactdetails.department,
+                        vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+                        vtiger_crmentity.modifiedtime , vtiger_account.accountname from vtiger_potential
+                        inner join vtiger_contpotentialrel on vtiger_contpotentialrel.potentialid = vtiger_potential.potentialid
+                        inner join vtiger_contactdetails on vtiger_contpotentialrel.contactid = vtiger_contactdetails.contactid
+                        inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+                        left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
+                        left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
+                        left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id
+                        where vtiger_potential.potentialid = '.$id.' and vtiger_crmentity.deleted=0';
+                /*
+                $query = 'select case when (vtiger_users.user_name not like "") then '.$userNameSql.' else vtiger_groups.groupname end as user_name,
 					vtiger_contactdetails.accountid,vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_contactdetails.contactid,
 					vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.title, vtiger_contactdetails.department,
 					vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
@@ -242,6 +256,8 @@ class Potentials extends CRMEntity {
 					left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 					left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id
 					where vtiger_potential.potentialid = '.$id.' and vtiger_crmentity.deleted=0';
+                */
+                // SalesPlatform end
 
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
 

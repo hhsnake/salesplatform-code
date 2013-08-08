@@ -561,7 +561,7 @@ class SPWSInventory {
         $inventory_currency = array('name' => 'inventory_currency','label' => $app_strings['LBL_CURRENCY'],'mandatory' => '','type' => array('picklistValues' => $inv_currency_arr),'nullable' => '','editable' => '1','default' => $inv_currency_default);
         array_push($globalArr, $inventory_currency);
 
-        $taxtype = array('name' => 'taxtype','label' => $app_strings['LBL_TAX_MODE'],'mandatory' => '','type' => array('picklistValues' => array(array('label' => $app_strings['individual'],'value' => 'individual'),array('label' => $app_strings['group'],'value' => 'Group'))),'nullable' => '','editable' => '1','default' => 'individual');
+        $taxtype = array('name' => 'taxtype','label' => $app_strings['LBL_TAX_MODE'],'mandatory' => '','type' => array('picklistValues' => array(array('label' => $app_strings['individual'],'value' => 'individual'),array('label' => $app_strings['group'],'value' => 'Group'))),'nullable' => '','editable' => '1','default' => 'group');
         array_push($globalArr, $taxtype);
         
         $netTotal = array('name' => 'netTotal','label' => $app_strings['LBL_NET_TOTAL'],'mandatory' => '','type' => array('name' => 'double'),'nullable' => '','editable' => '','default' => '0');
@@ -616,7 +616,10 @@ class SPWSInventory {
         $hdnProductcode = array('name' => 'hdnProductcode','label' => $app_strings['LBL_PRODUCT_CODE'],'mandatory' => '','type' => array('name' => 'string'),'nullable' => '1','editable' => '','default' => '');
         array_push($productArr, $hdnProductcode);
         
-        $productName = array('name' => 'productName','label' => $app_strings['LBL_PRODUCT_NAME'],'mandatory' => '1','type' => array('refersTo' => array('0' => 'Products', '1' => 'Services')),'nullable' => '1','editable' => '1','default' => '');
+        $hdnProductId = array('name' => 'hdnProductId','label' => '','mandatory' => '1','type' => array('refersTo' => array('0' => 'Products', '1' => 'Services')),'nullable' => '1','editable' => '1','default' => '');
+        array_push($productArr, $hdnProductId);
+        
+        $productName = array('name' => 'productName','label' => $app_strings['LBL_PRODUCT_NAME'],'mandatory' => '','type' => array('name' => 'string'),'nullable' => '1','editable' => '','default' => '');
         array_push($productArr, $productName);
         
         $productDescription = array('name' => 'productDescription','label' => $app_strings['LBL_PRODUCT_DESCRIPTION'],'mandatory' => '','type' => array('name' => 'text'),'nullable' => '1','editable' => '1','default' => '');

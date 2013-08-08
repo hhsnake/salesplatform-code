@@ -399,7 +399,10 @@ class ADODB_DataDict {
 		if ($flds) {
 			list($lines,$pkey) = $this->_GenFields($flds);
 			list(,$first) = each($lines);
-			list(,$column_def) = split("[\t ]+",$first,2);
+			// SalesPlatform.ru begin PHP 5.4 migration
+			list(,$column_def) = preg_split("[\t ]+",$first,2);
+			//list(,$column_def) = split("[\t ]+",$first,2);
+			// SalesPlatform.ru end
 		}
 		return array(sprintf($this->renameColumn,$tabname,$this->NameQuote($oldcolumn),$this->NameQuote($newcolumn),$column_def));
 	}

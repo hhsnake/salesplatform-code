@@ -158,6 +158,14 @@ if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true) 
 $queryMode = (isset($_REQUEST['query']) && $_REQUEST['query'] == 'true');
 $start = ListViewSession::getRequestCurrentPage($currentModule, $list_query, $viewid, $queryMode);
 
+// SalesPlatform.ru begin fixed deletion of records with the last page
+if (!empty($noofrows)) {
+    $lastPage = ceil($noofrows/$list_max_entries_per_page);
+    if ($start > $lastPage) {
+        $_SESSION['lvs'][$currentModule][$viewid]['start'] = $start = $lastPage;
+    }
+}
+// SalesPlatform.ru end
 $navigation_array = VT_getSimpleNavigationValues($start,$list_max_entries_per_page,$noofrows);
 
 $limit_start_rec = ($start-1) * $list_max_entries_per_page;

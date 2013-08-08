@@ -33,7 +33,10 @@ if( $_SESSION['mail_send_error']!="")
 {
 	echo '<b><font color=red>'. $mod_strings{"LBL_NOTIFICATION_ERROR"}.'</font></b><br>';
 }
-session_unregister('mail_send_error');
+// SalesPlatform.ru begin PHP 5.4 migration
+unset($_SESSION['mail_send_error']);
+//session_unregister('mail_send_error');
+// SalesPlatform.ru end
 
 $focus = CRMEntity::getInstance($currentModule);
 $smarty =  new vtigerCRM_Smarty();
@@ -133,8 +136,12 @@ if($current_user->hour_format == '')
 	$format = 'am/pm';
 else
 	$format = $current_user->hour_format;
-list($stdate,$sttime) = split(' ',$finaldata['date_start']);
-list($enddate,$endtime) = split(' ',$finaldata['due_date']);
+// SalesPlatform.ru begin PHP 5.4 migration
+list($stdate,$sttime) = explode(' ',$finaldata['date_start']);
+list($enddate,$endtime) = explode(' ',$finaldata['due_date']);
+//list($stdate,$sttime) = split(' ',$finaldata['date_start']);
+//list($enddate,$endtime) = split(' ',$finaldata['due_date']);
+// SalesPlatform.ru end
 $time_arr = getaddEventPopupTime($sttime,$endtime,$format);
 $data['starthr'] = $time_arr['starthour'];
 $data['startmin'] = $time_arr['startmin'];
@@ -143,7 +150,10 @@ $data['endhr'] = $time_arr['endhour'];
 $data['endmin'] = $time_arr['endmin'];
 $data['endfmt'] = $time_arr['endfmt'];
 $data['record'] = $focus->id;
-if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == strtolower($mod_strings['LBL_YES'])) 
+// SalesPlatform.ru begin support russian chars for Task(sendnotification)
+if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == mb_strtolower($mod_strings['LBL_YES'],'UTF-8')) 
+//if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == strtolower($mod_strings['LBL_YES'])) 
+// SalesPlatform.ru end        
 	$data['sendnotification'] = $mod_strings['LBL_YES'];
 else
 	$data['sendnotification'] = $mod_strings['LBL_NO'];

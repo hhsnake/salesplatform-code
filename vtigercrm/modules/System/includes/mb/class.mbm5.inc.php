@@ -32,8 +32,12 @@ class mbinfo {
 
     if (!isset($this->buf_label)) {
       if ($fp = fopen('MBM5.csv', 'r')) {
-	    $this->buf_label = split(';', fgets($fp));
-        $this->buf_value = split(';', fgets($fp));
+	// SalesPlatform.ru begin PHP 5.4 migration
+	    $this->buf_label = explode(';', fgets($fp));
+        $this->buf_value = explode(';', fgets($fp));
+	//    $this->buf_label = split(';', fgets($fp));
+        //$this->buf_value = split(';', fgets($fp));
+	// SalesPlatform.ru end
         fclose($fp);
       }
     }
@@ -58,8 +62,12 @@ class mbinfo {
 
     if (!isset($this->buf_label)) {
       if ($fp = fopen('MBM5.csv', 'r')) {
-	    $this->buf_label = split(';', fgets($fp));
-        $this->buf_value = split(';', fgets($fp));
+	// SalesPlatform.ru begin PHP 5.4 migration
+	    $this->buf_label = explode(';', fgets($fp));
+        $this->buf_value = explode(';', fgets($fp));
+	//    $this->buf_label = split(';', fgets($fp));
+        //$this->buf_value = split(';', fgets($fp));
+	// SalesPlatform.ru end
         fclose($fp);
       }
     }
@@ -85,8 +93,12 @@ class mbinfo {
 
     if (!isset($this->buf_label)) {
       if ($fp = fopen('MBM5.csv', 'r')) {
-	    $this->buf_label = split(';', fgets($fp));
-        $this->buf_value = split(';', fgets($fp));
+	// SalesPlatform.ru begin PHP 5.4 migration
+	    $this->buf_label = explode(';', fgets($fp));
+        $this->buf_value = explode(';', fgets($fp));
+	//    $this->buf_label = split(';', fgets($fp));
+        //$this->buf_value = split(';', fgets($fp));
+	// SalesPlatform.ru end
         fclose($fp);
       }
     }

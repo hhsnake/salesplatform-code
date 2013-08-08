@@ -68,7 +68,9 @@ function getListViewHeader($focus, $module, $sort_qry = '', $sorder = '', $order
 	$focus->filterInactiveFields($module);
 
         // SalesPlatform.ru begin fields of the related list from the database
-        if ($module == 'Accounts' || $module == 'Potentials') {
+        if ($module == 'Accounts' || $module == 'Potentials' || $module == 'Contacts' || $module == 'SPPayments'
+                || $module == 'Project' || $module == 'ProjectMilestone' || $module == 'ProjectTask'
+                || $module == 'HelpDesk' || $module == 'Assets' || $module == 'Vendors' || $module == 'SPUnits') {
             $focus->list_fields = getEntityForListView($module, true);                                                                            
             $focus->list_fields_name = getEntityForListView($module, false);  
         }    
@@ -282,7 +284,9 @@ function getSearchListViewHeader($focus, $module, $sort_qry = '', $sorder = '', 
 	$tabid = getTabid($module);
         
         // SalesPlatform.ru begin fields of the related list from the database
-        if ($module == 'Accounts' || $module == 'Potentials') {
+        if ($module == 'Accounts' || $module == 'Potentials' || $module == 'Contacts' || $module == 'SPPayments'
+            || $module == 'Project' || $module == 'ProjectMilestone' || $module == 'ProjectTask'
+            || $module == 'HelpDesk' || $module == 'Assets' || $module == 'Vendors' || $module == 'SPUnits') {
             $focus->search_fields = getEntityForListView($module, true); 
             $focus->search_fields_name = getEntityForListView($module, false);
         }
@@ -515,7 +519,9 @@ function getListViewEntries($focus, $module, $list_result, $navigation_array, $r
 	}
         
         // SalesPlatform.ru begin fields of the related list from the database
-        if ($module == 'Accounts' || $module == 'Potentials') {
+        if ($module == 'Accounts' || $module == 'Potentials' || $module == 'Contacts' || $module == 'SPPayments'
+                || $module == 'Project' || $module == 'ProjectMilestone' || $module == 'ProjectTask'
+                || $module == 'HelpDesk' || $module == 'Assets' || $module == 'Vendors' || $module == 'SPUnits') {
             $focus->list_fields = getEntityForListView($module, true);
             $focus->list_fields_name = getEntityForListView($module, false);
         }
@@ -1054,7 +1060,9 @@ function getSearchListViewEntries($focus, $module, $list_result, $navigation_arr
 	$list_block = Array();
         
         // SalesPlatform.ru begin fields of the related list from the database
-        if ($module == 'Accounts' || $module == 'Potentials') {
+        if ($module == 'Accounts' || $module == 'Potentials' || $module == 'Contacts' || $module == 'SPPayments'
+                || $module == 'Project' || $module == 'ProjectMilestone' || $module == 'ProjectTask'
+                || $module == 'HelpDesk' || $module == 'Assets' || $module == 'Vendors' || $module == 'SPUnits') {
             $focus->search_fields = getEntityForListView($module, true);
             $focus->search_fields_name = getEntityForListView($module, false); 
         }
@@ -1172,7 +1180,22 @@ function getSearchListViewEntries($focus, $module, $list_result, $navigation_arr
 						}
 						// vtlib customization: Generic popup handling
 						elseif (isset($focus->popup_fields) && in_array($fieldname, $focus->popup_fields)) {
-							global $default_charset;
+                                                        // SalesPlatform.ru begin added SPPayments
+                                                        $list_result_count = $i - 1;
+                                                        if ($_REQUEST['srcmodule'] == 'SPPayments' && ($module == 'Invoice' || $module == 'SalesOrder' || $module == 'PurchaseOrder')) {
+                                                            $value = getValue($ui_col_array, $list_result, $fieldname, $focus, $module, $entity_id, $list_result_count, "search", 'specific_sp_amount');
+                                                        } else {
+                                                            global $default_charset;
+                                                            $forfield = htmlspecialchars($_REQUEST['forfield'], ENT_QUOTES, $default_charset);
+                                                            $value = getValue($ui_col_array, $list_result, $fieldname, $focus, $module, $entity_id, $list_result_count, "search", $focus->popup_type);
+                                                            if (isset($forfield) && $forfield != '' && $focus->popup_type != 'detailview') {
+								$value1 = strip_tags($value);
+								$value = htmlspecialchars(addslashes(html_entity_decode(strip_tags($value), ENT_QUOTES, $default_charset)), ENT_QUOTES, $default_charset); // Remove any previous html conversion
+								$count = counterValue();
+								$value = "<a href='javascript:window.close();' onclick='return vtlib_setvalue_from_popup($entity_id, \"$value\", \"$forfield\")' id =$count >$value1</a>";
+                                                            }
+                                                        }
+						/*	global $default_charset;
 							$forfield = htmlspecialchars($_REQUEST['forfield'], ENT_QUOTES, $default_charset);
 							$list_result_count = $i - 1;
 							$value = getValue($ui_col_array, $list_result, $fieldname, $focus, $module, $entity_id, $list_result_count, "search", $focus->popup_type);
@@ -1182,6 +1205,8 @@ function getSearchListViewEntries($focus, $module, $list_result, $navigation_arr
 								$count = counterValue();
 								$value = "<a href='javascript:window.close();' onclick='return vtlib_setvalue_from_popup($entity_id, \"$value\", \"$forfield\")' id =$count >$value1</a>";
 							}
+                                                 */
+                                                 // SalesPlatform.ru end 
 						}
 						// END
 						else {
@@ -1771,7 +1796,10 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 		if (!empty($temp_val)) {
 			$temp_val = html_entity_decode($temp_val, ENT_QUOTES, $default_charset);
 			$json = new Zend_Json();
-			$value = vt_suppressHTMLTags(implode(',', $json->decode($temp_val)));
+                        // SalesPlatform.ru begin Space added to Email list uitype
+			$value = vt_suppressHTMLTags(implode(', ', $json->decode($temp_val)));
+			//$value = vt_suppressHTMLTags(implode(',', $json->decode($temp_val)));
+                        // SalesPlatform.ru end
 		}
 	}
 // SalesPlatform.ru begin
@@ -2046,7 +2074,39 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					$ship_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['ship_street']));
 					$count = counterValue();
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $bill_street . '", "' . $ship_street . '", "' . popup_decode_html($acct_focus->column_fields['bill_city']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_city']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_state']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_state']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_code']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_code']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_country']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_country']) . '","' . popup_decode_html($acct_focus->column_fields['bill_pobox']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_pobox']) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
-				} elseif ($popuptype == "specific_potential_account_address") {
+                                // SalesPlatform.ru begin added SPPayments       
+                                } elseif ($popuptype == "specific_sp_amount") {
+                                        global $default_charset;
+                                        $forfield = htmlspecialchars($_REQUEST['forfield'], ENT_QUOTES, $default_charset);
+                                        if (isset($forfield) && $forfield != '') {
+                                            $select_focus = new $module();
+                                            $select_focus->retrieve_entity_info($entity_id, $module);
+
+                                            $slashes_temp_val = popup_from_html($temp_val);
+                                            $slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
+
+                                            $count = counterValue();
+                                            
+                                            if ($module == 'Invoice' || $module == 'SalesOrder') {
+                                                $payer_id = $select_focus->column_fields['account_id'];
+                                                $data_db = array ('accountname', 'vtiger_account', 'accountid');
+                                            } elseif ($module == 'PurchaseOrder') {
+                                                $payer_id = $select_focus->column_fields['vendor_id'];
+                                                $data_db = array ('vendorname', 'vtiger_vendor', 'vendorid');
+                                            }
+                                            
+                                            if (!empty($payer_id) && !empty($data_db)) {
+                                                $name_result = $adb->pquery("select ".$data_db[0]." from ".$data_db[1]." where ".$data_db[2]." = ?", array($payer_id));
+                                                if ($name_result) {
+                                                    if ($adb->num_rows($name_result) > 0) {
+                                                        $payer_name = $adb->query_result($name_result, 0, $data_db[0]);
+                                                    }
+                                                }
+                                            }
+                                            $value = '<a href="javascript:window.close();" onclick=\'set_return_sppayments("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . popup_decode_html($module) . '", "' . popup_decode_html($select_focus->column_fields['hdnGrandTotal']) . '", "' . popup_decode_html($payer_id) . '", "' . popup_decode_html($payer_name) . '",  "' . $forfield . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
+                                        }   
+                                // SalesPlatform.ru end        
+                                } elseif ($popuptype == "specific_potential_account_address") {
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
 
@@ -2514,7 +2574,8 @@ function getListQuery($module, $where = '') {
 			break;
 		Case "Contacts":
 			//Query modified to sort by assigned to
-			$query = "SELECT vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,
+                    // SalesPlatform begin Fields of the related list from the database
+                    $query = "SELECT vtiger_contactdetails.contact_no, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,
 			vtiger_contactdetails.title, vtiger_contactdetails.accountid,
 			vtiger_contactdetails.email, vtiger_contactdetails.phone,
 			vtiger_crmentity.smownerid, vtiger_crmentity.crmid
@@ -2537,6 +2598,33 @@ function getListQuery($module, $where = '') {
 				ON vtiger_contactdetails.reportsto = vtiger_contactdetails2.contactid
 			LEFT JOIN vtiger_customerdetails
 				ON vtiger_customerdetails.customerid = vtiger_contactdetails.contactid";
+                    /*
+                    $query = "SELECT vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,
+			vtiger_contactdetails.title, vtiger_contactdetails.accountid,
+			vtiger_contactdetails.email, vtiger_contactdetails.phone,
+			vtiger_crmentity.smownerid, vtiger_crmentity.crmid
+			FROM vtiger_contactdetails
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			INNER JOIN vtiger_contactaddress
+				ON vtiger_contactaddress.contactaddressid = vtiger_contactdetails.contactid
+			INNER JOIN vtiger_contactsubdetails
+				ON vtiger_contactsubdetails.contactsubscriptionid = vtiger_contactdetails.contactid
+			INNER JOIN vtiger_contactscf
+				ON vtiger_contactscf.contactid = vtiger_contactdetails.contactid
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_contactdetails.accountid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_contactdetails vtiger_contactdetails2
+				ON vtiger_contactdetails.reportsto = vtiger_contactdetails2.contactid
+			LEFT JOIN vtiger_customerdetails
+				ON vtiger_customerdetails.customerid = vtiger_contactdetails.contactid";      
+                     */
+                    // SalesPlatform end
+			
 			if ((isset($_REQUEST["from_dashboard"]) && $_REQUEST["from_dashboard"] == true) &&
 					(isset($_REQUEST["type"]) && $_REQUEST["type"] == "dbrd")) {
 				$query .= " INNER JOIN vtiger_campaigncontrel on vtiger_campaigncontrel.contactid = " .
@@ -3256,6 +3344,19 @@ function getRelatedTo($module, $list_result, $rset) {
 		//}
 	}
 
+        // SalesPlatform.ru begin added Vendors and ProjectTask
+        if ($parent_module == 'Vendors') {
+		$parent_query = "SELECT vendorname FROM vtiger_vendor WHERE vendorid=?";
+		$parent_result = $adb->pquery($parent_query, array($parent_id));
+		$parent_name = $adb->query_result($parent_result, 0, "vendorname");
+	}
+        if ($parent_module == 'ProjectTask') {
+		$parent_query = "SELECT projecttaskname FROM vtiger_projecttask WHERE projecttaskid=?";
+		$parent_result = $adb->pquery($parent_query, array($parent_id));
+		$parent_name = $adb->query_result($parent_result, 0, "projecttaskname");
+	}
+        // SalesPlatform.ru end
+
 	//added by rdhital for better emails - Raju
 	if ($parent_module == 'Multiple') {
 		$parent_value = $parent_name;
@@ -3968,15 +4069,16 @@ function getListViewDeleteLink($module, $entity_id, $relatedlist, $returnset) {
 	$del_link .= "&parenttab=" . $tabname . "&return_viewname=" . $viewname . $url;
 
 	// vtlib customization: override default delete link for custom modules
-	$requestModule = vtlib_purify($_REQUEST['module']);
-	$requestRecord = vtlib_purify($_REQUEST['record']);
+	
+	$requestModule = $current_module;
 	$requestAction = vtlib_purify($_REQUEST['action']);
-	$parenttab = vtlib_purify($_REQUEST['parenttab']);
 	$isCustomModule = vtlib_isCustomModule($requestModule);
 	if ($requestAction == $requestModule . "Ajax") {
 		$requestAction = vtlib_purify($_REQUEST['file']);
 	}
 	if ($isCustomModule && !in_array($requestAction, Array('index', 'ListView'))) {
+		$requestRecord = vtlib_purify($_REQUEST['record']);
+		$parenttab = vtlib_purify($_REQUEST['parenttab']);
 		$del_link = "index.php?module=$requestModule&action=updateRelations&parentid=$requestRecord";
 		$del_link .= "&destination_module=$module&idlist=$entity_id&mode=delete&parenttab=$parenttab";
 	}

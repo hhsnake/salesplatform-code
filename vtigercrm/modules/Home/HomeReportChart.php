@@ -21,8 +21,12 @@ $selectElement = '<select name=selreportchart id=selreportchart_id class="detail
 $num_rows = $adb->num_rows($reportRes);
 for ($i = 0; $i < $num_rows; $i++) {
 	$reportId = $adb->query_result($reportRes, $i, 'reportid');
-        //SalesPlatform.ru begin localization for ReportCharts 
+        //SalesPlatform.ru begin localization for ReportCharts
+        $report_field_name_arr = explode(':', $adb->query_result($reportRes, $i, 'columnname'));
+        $field_label_arr = explode('_', $report_field_name_arr[2], 2);
+        $field_label = getTranslatedString(str_replace('_', ' ', $field_label_arr[1]), $field_label_arr[0]);
         $reportName = getTranslatedString($adb->query_result($reportRes, $i, 'reportname'));
+        $reportName .= ' ('.$field_label.')';
         //$reportName = $adb->query_result($reportRes, $i, 'reportname');
         //SalesPlatform.ru end
 	$selectElement .= '<option value="' . $reportId . '">' . $reportName . '</option>';

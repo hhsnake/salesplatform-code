@@ -392,7 +392,10 @@ Class ChartUtils {
 
 		if ($fieldDetails != '') {
 			list($tablename, $colname, $module_field, $fieldname, $single) = explode(":", $fieldDetails);
-			list($module, $field) = split("_", $module_field);
+			// SalesPlatform.ru begin PHP 5.4 migration
+			list($module, $field) = explode("_", $module_field);
+			//list($module, $field) = split("_", $module_field);
+			// SalesPlatform.ru end
 			$dateField = false;
 			if ($single == 'D') {
 				$dateField = true;

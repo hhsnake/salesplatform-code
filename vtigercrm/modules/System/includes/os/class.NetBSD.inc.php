@@ -49,8 +49,12 @@ class sysinfo extends bsd_common {
   function network () {
     $netstat_b = execute_program('netstat', '-nbdi | cut -c1-25,44- | grep "^[a-z]*[0-9][ \t].*Link"');
     $netstat_n = execute_program('netstat', '-ndi | cut -c1-25,44- | grep "^[a-z]*[0-9][ \t].*Link"');
-    $lines_b = split("\n", $netstat_b);
-    $lines_n = split("\n", $netstat_n);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines_b = explode("\n", $netstat_b);
+    $lines_n = explode("\n", $netstat_n);
+    //$lines_b = split("\n", $netstat_b);
+    //$lines_n = split("\n", $netstat_n);
+    // SalesPlatform.ru end
     $results = array();
     for ($i = 0, $max = sizeof($lines_b); $i < $max; $i++) {
       $ar_buf_b = preg_split("/\s+/", $lines_b[$i]);

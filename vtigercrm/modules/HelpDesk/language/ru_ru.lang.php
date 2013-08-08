@@ -99,7 +99,7 @@ $mod_strings = array (
       'Solution' => 'Решение',
       'Add Comment' => 'Добавить комментарий',
       'LBL_ADD_COMMENT' => 'Добавить комментарий',
-      'Ticket ID' => 'Номер',
+      'Ticket ID' => 'ID заявки',
       'Subject' => 'Тема',
       'Severity' => 'Важность',
       'Product Name' => 'Товар',
@@ -144,17 +144,17 @@ $mod_strings = array (
       'created' => 'создана',
       //'created' => 'создано',
       //SalesPlatform.ru end
-      'replied' => 'отвечено',
+      'replied' => 'изменена',
       'reply' => 'Добавлен новый комментарий для заявки ',
       'customer_portal' => ' в клиентском портале SalesPlatform.ru. ',
-      'link' => 'Вы можете использовать приведенную ссылку для просмотра комментариев:',
+      'link' => 'Вы можете использовать приведенную ссылку для просмотра деталей заявки:',
       'Thanks' => 'Спасибо',
-      'Support_team' => 'Служба поддержки',
+      'Support_team' => 'Служба поддержки SalesPlatform.ru',
       'LBL_STATUS_CLOSED' => 'Закрыто',
       'LBL_STATUS_UPDATE' => 'Статус Заявки обновлен на',
       'LBL_COULDNOT_CLOSED' => 'Заявка не может быть',
-      'LBL_CUSTOMER_COMMENTS' => 'Клиент предоставил следующую дополнительную информацию на Ваш ответ:',
-      'LBL_RESPOND' => 'Пожалуйста ответьте на следующую заявку как можно скорее.',
+      'LBL_CUSTOMER_COMMENTS' => 'Клиент предоставил следующую дополнительную информацию по заявке:',
+      'LBL_RESPOND' => 'Пожалуйста, ответьте как можно скорее.',
       'LBL_SUPPORT_ADMIN' => 'Администратор Поддержки',
       'LBL_RESPONDTO_TICKETID' => 'Ответ на Заявку №',
       'LBL_CUSTOMER_PORTAL' => 'на Клиентском Портале - СРОЧНО',
@@ -178,7 +178,7 @@ $mod_strings = array (
 // 5.3.0 begin
       'The comments are' => 'Комментарии',
       'Ticket Title' => 'Наименование заявки',
-      'Re' => 'Re :',
+      'Re' => 'Re:',
 // 5.3.0 end
 // SalesPlatform.ru end
 
@@ -191,6 +191,12 @@ $mod_strings = array (
 
     // SalesPlatform.ru begin
     'HELPDESK_' => 'Заявка_',
+
+    'isNew' => 'Добавлена новая заявка ',
+    'commentsHasChanged' => 'Добавлен новый комментарий для заявки ',
+    'solutionHasChanged' => 'Изменено решение для заявки ',
+    'ownerHasChanged' => 'Изменен ответственный по заявке ',
+    'statusHasChanged' => 'Изменено состояние заявки ',
     // SalesPlatform.ru end
 );
 

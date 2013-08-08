@@ -34,7 +34,7 @@ class VTChangeRelModuleFieldValueTask extends VTTask {
                         $data->retrieve_entity_info($relatedCRMid, $wfEntity->getModuleName());
 
                         if(isset($data->column_fields[$this->relfieldname]) &&
-                                $data->column_fields[$this->relfieldname] != '') {
+                                $data->column_fields[$this->relfieldname] > 0) {
 
                             $old_ajxaction = $_REQUEST['ajxaction'];
                             $old_module = $_REQUEST['module'];

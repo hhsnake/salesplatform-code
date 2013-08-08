@@ -29,12 +29,14 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		$crmObject = new VtigerCRMObject($elementType, false);
 		
 		//SalesPlatform.ru begin - rest for inventories implementation
-                require_once('include/Webservices/SPWSInventory.php');
-                $spwsInventory =  new SPWSInventory();
-                $crmObjectInstance = $crmObject->getInstance();
-                $invRes = $spwsInventory->spws_inventoryCreate($element,$crmObjectInstance);
-                if($invRes['isSelect'] == false && $invRes['error'] != 'NOT SET') {
-                    throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED, $invRes['error']);
+                if (isInventoryModule($elementType)) {
+                    require_once('include/Webservices/SPWSInventory.php');
+                    $spwsInventory =  new SPWSInventory();
+                    $crmObjectInstance = $crmObject->getInstance();
+                    $invRes = $spwsInventory->spws_inventoryCreate($element,$crmObjectInstance);
+                    if($invRes['isSelect'] == false && $invRes['error'] != 'NOT SET') {
+                        throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED, $invRes['error']);
+                    }
                 }
                 //SalesPlatform.ru end
                 
@@ -80,10 +82,13 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		
                 //SalesPlatform.ru begin - rest for inventories implementation
                 $filterAndSanitizeData = DataTransform::filterAndSanitize($crmObject->getFields(),$this->meta);
-                require_once('include/Webservices/SPWSInventory.php');
-                $spwsInventory =  new SPWSInventory();
-                $invResData = $spwsInventory->spws_inventoryRetrieve($elemid,$filterAndSanitizeData);
-                return $invResData;
+                if (isInventoryModule($crmObject->getModuleName())) {
+                    require_once('include/Webservices/SPWSInventory.php');
+                    $spwsInventory =  new SPWSInventory();
+                    return $spwsInventory->spws_inventoryRetrieve($elemid,$filterAndSanitizeData);
+                } else {
+                    return $filterAndSanitizeData;
+                }
                 /*commented vtiger code
 		return DataTransform::filterAndSanitize($crmObject->getFields(),$this->meta);
                 */
@@ -97,12 +102,14 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		$crmObject = new VtigerCRMObject($this->tabId, true);
 		$crmObject->setObjectId($ids[1]);
                 //SalesPlatform.ru begin - rest for inventories implementation
-                require_once('include/Webservices/SPWSInventory.php');
-                $spwsInventory =  new SPWSInventory();
-                $crmObjectInstance = $crmObject->getInstance();
-                $invRes = $spwsInventory->spws_inventoryUpdate($element,$crmObjectInstance);
-                if($invRes['isSelect'] == false && $invRes['error'] != 'NOT SET') {
-                    throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED, $invRes['error']);
+                if (isInventoryModule($crmObject->getModuleName())) {
+                    require_once('include/Webservices/SPWSInventory.php');
+                    $spwsInventory =  new SPWSInventory();
+                    $crmObjectInstance = $crmObject->getInstance();
+                    $invRes = $spwsInventory->spws_inventoryUpdate($element,$crmObjectInstance);
+                    if($invRes['isSelect'] == false && $invRes['error'] != 'NOT SET') {
+                        throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED, $invRes['error']);
+                    }
                 }
                 //SalesPlatform.ru end
 		$error = $crmObject->update($element);
@@ -161,13 +168,6 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 					vtws_getWebserviceTranslatedString('LBL_'.
 							WebServiceErrorCode::$DATABASEQUERYERROR));
 		}
-                //SalesPlatform.ru begin - rest for inventories implementation
-                require_once('include/Webservices/SPWSInventory.php');
-                $spwsInventory =  new SPWSInventory();
-                $crmObject->setObjectId($ids[1]);
-                $crmObjectInstance = $crmObject->getInstance();
-                $spwsInventory->spws_inventoryDelete($crmObjectInstance);
-                //SalesPlatform.ru end
 		return array("status"=>"successful");
 	}
 	
@@ -217,8 +217,7 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		$retrieveable = $this->meta->hasReadAccess();
 		$fields = $this->getModuleFields();
                 //SalesPlatform.ru begin - rest for inventories implementation
-                $inventoriesModulesArr = array('PurchaseOrder','SalesOrder','Quotes','Invoice','Act','Consignment');
-                if (in_array($elementType,$inventoriesModulesArr)) {
+                if (isInventoryModule($elementType)) {
                     require_once('include/Webservices/SPWSInventory.php');
                     $spwsInventory =  new SPWSInventory();
                     $invResData = $spwsInventory->spws_inventoryDescribe($elementType);

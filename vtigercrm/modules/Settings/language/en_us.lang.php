@@ -901,6 +901,8 @@ $mod_strings = Array(
 'Error_Message'=>'Error Message',
 'Invalid_file'=>'Invalid file OR',
 'File_has_no_data'=>'File has no data',
+'Invalid_image'=>'Invalid image OR',
+'Image_corrupted'=>'Virus detected OR Uploaded Image Corrupted',
 'Sorry'=>'Sorry',
 'uploaded_file_exceeds_maximum_limit'=>'the uploaded file exceeds the maximum vtiger_filesize limit',
 'try_file_smaller'=>'Please try a file smaller than 800000 bytes',
@@ -1286,6 +1288,7 @@ $mod_strings = Array(
 // SalesPlatform.ru begin
 'LBL_SP_CONFIGURATION' => 'Configuration Manager',
 'LBL_SP_CONFIGURATION_DESC' => 'Manage the application configuration',
+'LBL_MAILSCANNER_CONNECTFAIL' => 'Connecting to mailbox failed!',
 // SalesPlatform.ru end
 // SalesPlatform.ru begin Widgets added
 'LBL_SP_ACC' => 'Recent Organizations',

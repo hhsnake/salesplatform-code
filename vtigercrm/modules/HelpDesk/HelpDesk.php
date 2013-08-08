@@ -282,7 +282,10 @@ class HelpDesk extends CRMEntity {
 		$result=$adb->pquery($query, array($ticketid));
 		$update_log = $adb->query_result($result,0,"update_log");
 
-		$splitval = split('--//--',trim($update_log,'--//--'));
+		// SalesPlatform.ru begin PHP 5.4 migration
+		$splitval = explode('--//--',trim($update_log,'--//--'));
+		//$splitval = split('--//--',trim($update_log,'--//--'));
+		// SalesPlatform.ru end
 
 		$header[] = $adb->query_result($result,0,"title");
 
@@ -813,22 +816,33 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		$wsParentId = $entityData->get('parent_id');
 		$parentIdParts = explode('x', $wsParentId);
 		$parentId = $parentIdParts[1];
-		$desc = getTranslatedString('Ticket ID', $moduleName) . ' : ' . $entityId . '<br>'
-				. getTranslatedString('Ticket Title', $moduleName) . ' : ' . $temp . ' '
-				. $entityData->get('ticket_title');
 		//SalesPltaform.ru begin
-                $desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . getParentName($parentId) . "! "
-				. getTranslatedString('LBL_PORTAL_BODY_MAILINFO', $moduleName) . " " .$reply . ".<br><br>" . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";
-                /*$desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . getParentName($parentId) . ",<br><br>"
-				. getTranslatedString('LBL_PORTAL_BODY_MAILINFO', $moduleName) . " " . $reply . " " . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";*/
+		$desc = getTranslatedString('Ticket ID', $moduleName) . ': ' . $entityId . '<br>'
+				. getTranslatedString('Ticket Title', $moduleName) . ': ' . $temp . ' '
+				. $entityData->get('ticket_title');
+                $desc .= "<br><br>" . getTranslatedString('LBL_TICKET', $moduleName) . " " . $reply . ".<br><br>" . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";
+                $desc .= "<br>" . getTranslatedString('Related To', $moduleName) . ": " . getParentName($parentId);
+                $desc .= "<br>" . getTranslatedString('Ticket No', $moduleName) . ": " . $entityData->get('ticket_no');
+		$desc .= "<br>" . getTranslatedString('Status', $moduleName) . ": " . getTranslatedString($entityData->get('ticketstatus'), $moduleName);
+		$desc .= "<br>" . getTranslatedString('Category', $moduleName) . ": " . getTranslatedString($entityData->get('ticketcategories'), $moduleName);
+		$desc .= "<br>" . getTranslatedString('Severity', $moduleName) . ": " . getTranslatedString($entityData->get('ticketseverities'), $moduleName);
+		$desc .= "<br>" . getTranslatedString('Priority', $moduleName) . ": " . getTranslatedString($entityData->get('ticketpriorities'), $moduleName);
+		$desc .= "<br><br>" . getTranslatedString('Description', $moduleName) . ": <br>" . $entityData->get('description');
+		$desc .= "<br><br>" . getTranslatedString('Solution', $moduleName) . ": <br>" . $entityData->get('solution');
+		//$desc = getTranslatedString('Ticket ID', $moduleName) . ' : ' . $entityId . '<br>'
+		//		. getTranslatedString('Ticket Title', $moduleName) . ' : ' . $temp . ' '
+		//		. $entityData->get('ticket_title');
+                //$desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . getParentName($parentId) . ",<br><br>"
+		//		. getTranslatedString('LBL_PORTAL_BODY_MAILINFO', $moduleName) . " " . $reply . " " . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";
+//                $desc .= "<br>" . getTranslatedString('Related To', $moduleName) . " : " . getParentName($parentId);
+//                $desc .= "<br>" . getTranslatedString('Ticket No', $moduleName) . " : " . $entityData->get('ticket_no');
+//		$desc .= "<br>" . getTranslatedString('Status', $moduleName) . " : " . $entityData->get('ticketstatus');
+//		$desc .= "<br>" . getTranslatedString('Category', $moduleName) . " : " . $entityData->get('ticketcategories');
+//		$desc .= "<br>" . getTranslatedString('Severity', $moduleName) . " : " . $entityData->get('ticketseverities');
+//		$desc .= "<br>" . getTranslatedString('Priority', $moduleName) . " : " . $entityData->get('ticketpriorities');
+//		$desc .= "<br><br>" . getTranslatedString('Description', $moduleName) . " : <br>" . $entityData->get('description');
+//		$desc .= "<br><br>" . getTranslatedString('Solution', $moduleName) . " : <br>" . $entityData->get('solution');
 		//SalesPltaform.ru end
-                $desc .= "<br>" . getTranslatedString('Ticket No', $moduleName) . " : " . $entityData->get('ticket_no');
-		$desc .= "<br>" . getTranslatedString('Status', $moduleName) . " : " . $entityData->get('ticketstatus');
-		$desc .= "<br>" . getTranslatedString('Category', $moduleName) . " : " . $entityData->get('ticketcategories');
-		$desc .= "<br>" . getTranslatedString('Severity', $moduleName) . " : " . $entityData->get('ticketseverities');
-		$desc .= "<br>" . getTranslatedString('Priority', $moduleName) . " : " . $entityData->get('ticketpriorities');
-		$desc .= "<br><br>" . getTranslatedString('Description', $moduleName) . " : <br>" . $entityData->get('description');
-		$desc .= "<br><br>" . getTranslatedString('Solution', $moduleName) . " : <br>" . $entityData->get('solution');
 		$desc .= getTicketComments($entityId);
 
 		$sql = "SELECT * FROM vtiger_ticketcf WHERE ticketid = ?";
@@ -839,7 +853,7 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 				$cfData = $adb->query_result($result, 0, $cfOneField);
 				$sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = ? and vtiger_field.presence in (0,2)";
 				$cfLabel = $adb->query_result($adb->pquery($sql, array($cfOneField)), 0, 'fieldlabel');
-				$desc .= '<br><br>' . $cfLabel . ' : <br>' . $cfData;
+				$desc .= '<br><br>' . $cfLabel . ': <br>' . $cfData;
 			}
 		}
 		// end of contribution
@@ -848,7 +862,30 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		return $desc;
 	}
 
-	public static function getPortalTicketEmailContents($entityData) {
+// SalesPlatform.ru begin
+//	public static function getPortalTicketEmailContents($entityData) {
+//		require_once 'config.inc.php';
+//		global $PORTAL_URL;
+//
+//		$moduleName = $entityData->getModuleName();
+//		$wsId = $entityData->getId();
+//		$parts = explode('x', $wsId);
+//		$entityId = $parts[1];
+//
+//		$wsParentId = $entityData->get('parent_id');
+//		$parentIdParts = explode('x', $wsParentId);
+//		$parentId = $parentIdParts[1];
+//		$portalUrl = "<a href='" . $PORTAL_URL . "/index.php?module=HelpDesk&action=index&ticketid=" . $entityId . "&fun=detail'>"
+//				. getTranslatedString('LBL_TICKET_DETAILS', $moduleName) . "</a>";
+//		$contents = getTranslatedString('Dear', $moduleName) . " " . getParentName(parentId) . ",<br><br>";
+//		$contents .= getTranslatedString('reply', $moduleName) . ' <b>' . $entityData->get('ticket_title')
+//				. '</b>' . getTranslatedString('customer_portal', $moduleName);
+//		$contents .= getTranslatedString("link", $moduleName) . '<br>';
+//		$contents .= $portalUrl;
+//		$contents .= '<br><br>' . getTranslatedString("Thanks", $moduleName) . '<br><br>' . getTranslatedString("Support_team", $moduleName);
+//		return $contents;
+//	}
+	public static function getPortalTicketEmailContents($entityData, $isNew, $statusHasChanged, $solutionHasChanged, $ownerHasChanged, $commentsHasChanged) {
 		require_once 'config.inc.php';
 		global $PORTAL_URL;
 
@@ -862,14 +899,35 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		$parentId = $parentIdParts[1];
 		$portalUrl = "<a href='" . $PORTAL_URL . "/index.php?module=HelpDesk&action=index&ticketid=" . $entityId . "&fun=detail'>"
 				. getTranslatedString('LBL_TICKET_DETAILS', $moduleName) . "</a>";
-		$contents = getTranslatedString('Dear', $moduleName) . " " . getParentName(parentId) . ",<br><br>";
-		$contents .= getTranslatedString('reply', $moduleName) . ' <b>' . $entityData->get('ticket_title')
+
+		$contents .= "<br>" . getTranslatedString('Dear', $moduleName) . " " . getParentName($parentId) . ",<br><br>";
+		
+		if($isNew) {
+			$contents .= getTranslatedString('isNew', $moduleName) . ' <b>' . $entityData->get('ticket_title')
 				. '</b>' . getTranslatedString('customer_portal', $moduleName);
-		$contents .= getTranslatedString("link", $moduleName) . '<br>';
+			$contents .= "<br><br>" . getTranslatedString('Description', $moduleName) . " : <br><b>" . $entityData->get('description') . '</b>';
+		} else if($commentsHasChanged) {
+			$contents .= getTranslatedString('commentsHasChanged', $moduleName) . ' <b>' . $entityData->get('ticket_title')
+				. '</b>' . getTranslatedString('customer_portal', $moduleName);
+			$contents .= '<b>' . getLastTicketComment($entityId) . '</b>';
+		} else if($solutionHasChanged) {
+			$contents .= getTranslatedString('solutionHasChanged', $moduleName) . ' <b>' . $entityData->get('ticket_title')
+				. '</b>' . getTranslatedString('customer_portal', $moduleName);
+			$contents .= "<br><br>" . getTranslatedString('Solution', $moduleName) . " : <br><b>" . $entityData->get('solution') . '</b>';
+		} else if($statusHasChanged) {
+			$contents .= getTranslatedString('statusHasChanged', $moduleName) . ' <b>' . $entityData->get('ticket_title')
+				. '</b>' . getTranslatedString('customer_portal', $moduleName);
+		} else if($ownerHasChanged) {
+			$contents .= getTranslatedString('ownerHasChanged', $moduleName) . ' <b>' . $entityData->get('ticket_title')
+				. '</b>' . getTranslatedString('customer_portal', $moduleName);
+		}
+				
+		$contents .= '<br><br>' . getTranslatedString("link", $moduleName) . '<br>';
 		$contents .= $portalUrl;
 		$contents .= '<br><br>' . getTranslatedString("Thanks", $moduleName) . '<br><br>' . getTranslatedString("Support_team", $moduleName);
 		return $contents;
 	}
+// SalesPlatform.ru end
 
 	function clearSingletonSaveFields() {
 		$this->column_fields['comments'] = '';

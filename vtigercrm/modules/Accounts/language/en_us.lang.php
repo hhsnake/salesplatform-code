@@ -238,6 +238,10 @@ $mod_strings = Array(
 'LBL_SHOW_ACCOUNT_HIERARCHY' => 'Show Organization Hierarchy',
 'Accounts ID' => 'Organizations ID',
 
+// SalesPlatform.ru begin links localization
+'LBL_ACCOUNTS_ADD_ACT' => 'Create Act',
+'LBL_ACCOUNTS_ADD_CONSIGNMENT' => 'Create Consignment',
+// SalesPlatform.ru end
 );
 
 ?>

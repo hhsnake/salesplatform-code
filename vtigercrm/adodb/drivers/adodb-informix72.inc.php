@@ -369,7 +369,10 @@ class ADORecordset_informix72 extends ADORecordSet {
 			foreach($fp as $k => $v) {
 				$o = new ADOFieldObject;
 				$o->name = $k;
-				$arr = split(';',$v); //"SQLTYPE;length;precision;scale;ISNULLABLE"
+				// SalesPlatform.ru begin PHP 5.4 migration
+				$arr = explode(';',$v); //"SQLTYPE;length;precision;scale;ISNULLABLE"
+				//$arr = split(';',$v); //"SQLTYPE;length;precision;scale;ISNULLABLE"
+				// SalesPlatform.ru end
 				$o->type = $arr[0];
 				$o->max_length = $arr[1];
 				$this->_fieldprops[] = $o;

@@ -156,6 +156,9 @@ $focus->parent_type = vtlib_purify($_REQUEST['parent_type']);
 $focus->column_fields["assigned_user_id"]=$current_user->id;
 $focus->column_fields["activitytype"]="Emails";
 $focus->column_fields["date_start"]= date(getNewDisplayDate());//This will be converted to db date format in save
+// SalesPlatform.ru begin Time info added to Emails List View
+$focus->column_fields["time_start"]= date(getNewDisplayTime());
+// SalesPlatform.ru end
 if((!empty($_REQUEST['record'])&& $_REQUEST['send_mail']==false &&
 		!empty($_REQUEST['mode']))) {
 	$focus->mode = 'edit';
@@ -177,7 +180,21 @@ if(isset($sp_global_send_email_to_user) && $sp_global_send_email_to_user)
 // SalesPlatform.ru end
 if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_id'] != '') 
 {
-	$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
+        // SalesPlatform.ru begin Service information added to Email
+        global $site_URL;
+        $email_url = $site_URL."/index.php?module=Emails&action=EmailsAjax&file=DetailView&record=".$focus->id;
+        $realid = explode("@", $focus->parent_id);
+        $sp_description = $_REQUEST['description'].'<br><hr>'.getTranslatedString('LBL_EMAIL', 'Emails').' <a href="'.$email_url.'">'.$email_url.'</a><br>';
+        if (count($realid) == 2) {
+            $mycrmid = $realid[0];
+            $parent_url = $site_URL."/index.php?module=".$focus->parent_type."&action=DetailView&record=".$mycrmid;
+            $sp_description .= getTranslatedString('SINGLE_'.$focus->parent_type).': <a href="'.$parent_url.'">'.$parent_url.'</a>';
+        } else {
+            $sp_description .= getTranslatedString('LBL_TO', 'Emails').' '.getTranslatedString('LBL_MULTIPLE', 'Emails');
+        }
+	$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$sp_description.'<hr>',$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
+	//$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
+        // SalesPlatform.ru end
 		
 	//if block added to fix the issue #3759
 	if($user_mail_status != 1){

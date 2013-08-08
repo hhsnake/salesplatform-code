@@ -359,7 +359,10 @@ class soapclient2 extends nusoap_base  {
 		// detect transport
 		switch(true){
 			// http(s)
-			case ereg('^http',$this->endpoint):
+			// SalesPlatform.ru begin PHP 5.4 migration
+			case preg_match('/^http/',$this->endpoint):
+			//case ereg('^http',$this->endpoint):
+			// SalesPlatform.ru end
 				$this->debug('transporting via HTTP');
 				if($this->persistentConnection == true && is_object($this->persistentConnection)){
 					$http =& $this->persistentConnection;
@@ -381,10 +384,16 @@ class soapclient2 extends nusoap_base  {
 					$http->setEncoding($this->http_encoding);
 				}
 				$this->debug('sending message, length='.strlen($msg));
-				if(ereg('^http:',$this->endpoint)){
+				// SalesPlatform.ru begin PHP 5.4 migration
+				if(preg_match('/^http:/',$this->endpoint)){
+				//if(ereg('^http:',$this->endpoint)){
+				// SalesPlatform.ru end
 				//if(strpos($this->endpoint,'http:')){
 					$this->responseData = $http->send($msg,$timeout,$response_timeout,$this->cookies);
-				} elseif(ereg('^https',$this->endpoint)){
+				// SalesPlatform.ru begin PHP 5.4 migration
+				} elseif(preg_match('/^https/',$this->endpoint)){
+				//} elseif(ereg('^https',$this->endpoint)){
+				// SalesPlatform.ru end
 				//} elseif(strpos($this->endpoint,'https:')){
 					//if(phpversion() == '4.3.0-dev'){
 						//$response = $http->send($msg,$timeout,$response_timeout);
@@ -442,7 +451,10 @@ class soapclient2 extends nusoap_base  {
 		if (strpos($headers['content-type'], '=')) {
 			$enc = str_replace('"', '', substr(strstr($headers["content-type"], '='), 1));
 			$this->debug('Got response encoding: ' . $enc);
-			if(eregi('^(ISO-8859-1|US-ASCII|UTF-8)$',$enc)){
+			// SalesPlatform.ru begin PHP 5.4 migration
+			if(preg_match('/^(ISO-8859-1|US-ASCII|UTF-8)$/i',$enc)){
+			//if(eregi('^(ISO-8859-1|US-ASCII|UTF-8)$',$enc)){
+			// SalesPlatform.ru end
 				$this->xml_encoding = strtoupper($enc);
 			} else {
 				$this->xml_encoding = 'US-ASCII';

@@ -149,7 +149,7 @@ class Vtiger_PackageExport {
 		global $vtiger_current_version, $adb;
 		$moduleid = $moduleInstance->id;
 		
-		$sqlresult = $adb->query("SELECT * FROM vtiger_tab_info WHERE tabid = $moduleid");
+		$sqlresult = $adb->pquery("SELECT * FROM vtiger_tab_info WHERE tabid = ?", array($moduleid));
 		$vtigerMinVersion = $vtiger_current_version;
 		$vtigerMaxVersion = false;
 		$noOfPreferences = $adb->num_rows($sqlresult);
@@ -180,12 +180,12 @@ class Vtiger_PackageExport {
 
 		$moduleid = $moduleInstance->id;
 
-		$sqlresult = $adb->query("SELECT * FROM vtiger_parenttabrel WHERE tabid = $moduleid");
+		$sqlresult = $adb->pquery("SELECT * FROM vtiger_parenttabrel WHERE tabid = ?", array($moduleid));
 		$parenttabid = $adb->query_result($sqlresult, 0, 'parenttabid');
 		$menu = Vtiger_Menu::getInstance($parenttabid);
 		$parent_name = $menu->label;
 
-		$sqlresult = $adb->query("SELECT * FROM vtiger_tab WHERE tabid = $moduleid");
+		$sqlresult = $adb->pquery("SELECT * FROM vtiger_tab WHERE tabid = ?", array($moduleid));
 		$tabresultrow = $adb->fetch_array($sqlresult);
 
 		$tabname = $tabresultrow['name'];
@@ -359,6 +359,14 @@ class Vtiger_PackageExport {
 			$this->outputNode($fieldresultrow['displaytype'],   'displaytype');
 			$this->outputNode($fieldresultrow['info_type'],     'info_type');
 			$this->outputNode('<![CDATA['.$fieldresultrow['helpinfo'].']]>', 'helpinfo');
+                        
+                        // SalesPlatform.ru begin added columntype
+                        $sql = "DESCRIBE ".$fieldresultrow['tablename']." ".$fieldresultrow['columnname'];
+                        $coltype = $adb->pquery($sql, array());
+                        $columntype = $adb->query_result($coltype, 0, 1);
+                        $this->outputNode($columntype, 'columntype');
+                        // SalesPlatform.ru end
+                        
 			if(isset($fieldresultrow['masseditable'])) {
 				$this->outputNode($fieldresultrow['masseditable'], 'masseditable');
 			}
@@ -379,6 +387,9 @@ class Vtiger_PackageExport {
 				} else {
 					$picklistvalues = vtlib_getPicklistValues_AccessibleToAll($fieldname);
 				}
+                                // SalesPlatform.ru begin
+                                $this->outputNode(1, 'cleanpicklistvalues');
+                                // SalesPlatform.ru end
 				$this->openNode('picklistvalues');
 				foreach($picklistvalues as $picklistvalue) {
 					$this->outputNode($picklistvalue, 'picklistvalue');
@@ -422,7 +433,7 @@ class Vtiger_PackageExport {
 
 			$cvid = $adb->query_result($customviewres, $cvindex, 'cvid');
 
-			$cvcolumnres = $adb->query("SELECT * FROM vtiger_cvcolumnlist WHERE cvid=$cvid");
+			$cvcolumnres = $adb->pquery("SELECT * FROM vtiger_cvcolumnlist WHERE cvid=?", array($cvid));
 			$cvcolumncount=$adb->num_rows($cvcolumnres);
 
 			$this->openNode('customview');

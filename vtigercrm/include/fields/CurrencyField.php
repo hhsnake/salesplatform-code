@@ -208,7 +208,7 @@ class CurrencyField {
         $decimalSeparator  = $this->decimalSeparator;
 		if(empty($currencySeparator)) $currencySeparator = ' ';
 		if(empty($decimalSeparator)) $decimalSeparator = ' ';
-
+              
         if($currencyPattern == $this->CURRENCY_PATTERN_PLAIN) {
 			// Replace '.' with Decimal Separator
                         // SalesPlatform.ru begin: small fixes in currency output
@@ -304,12 +304,17 @@ class CurrencyField {
 			} else {
 				$numericParts[0] = $wholeNumberLastPart;
 			}
+                        // SalesPlatform.ru begin fixed when the length whole number less than 3
+                        if (empty($numericParts[0])) {
+                            $numericParts[0] = $wholeNumber;
+                        }
+                        // SalesPlatform.ru end
                         // SalesPlatform.ru begin: small fixes in currency output
                         if(count($numericParts) > 1)
                             $numericParts[1] = $this->_formatDecimalPart($numericParts[1]);
                         // SalesPlatform.ru end
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
-			$number = implode($decimalSeparator, $numericParts);
+			$number = implode($decimalSeparator, $numericParts);   
 			return $number;
 		}
 		return $number;

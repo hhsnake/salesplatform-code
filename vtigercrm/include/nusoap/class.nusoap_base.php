@@ -503,7 +503,10 @@ class nusoap_base {
 			case (is_array($val) || $type):
 				// detect if struct or array
 				$valueType = $this->isArraySimpleOrStruct($val);
-                if($valueType=='arraySimple' || ereg('^ArrayOf',$type)){
+		// SalesPlatform.ru begin PHP 5.4 migration
+                if($valueType=='arraySimple' || preg_match('/^ArrayOf/',$type)){
+                //if($valueType=='arraySimple' || ereg('^ArrayOf',$type)){
+		// SalesPlatform.ru end
 					$i = 0;
 					if(is_array($val) && count($val)> 0){
 						foreach($val as $v){
@@ -698,7 +701,10 @@ class nusoap_base {
 	*/
 	function expandQname($qname){
 		// get element prefix
-		if(strpos($qname,':') && !ereg('^http://',$qname)){
+		// SalesPlatform.ru begin PHP 5.4 migration
+		if(strpos($qname,':') && !preg_match('/^http:\/\//',$qname)){
+		//if(strpos($qname,':') && !ereg('^http://',$qname)){
+		// SalesPlatform.ru end
 			// get unqualified name
 			$name = substr(strstr($qname,':'),1);
 			// get ns prefix
@@ -836,7 +842,10 @@ function timestamp_to_iso8601($timestamp,$utc=true){
 		'([0-9]{2})(\.[0-9]*)?'. // seconds ss.ss...
 		'(Z|[+\-][0-9]{2}:?[0-9]{2})?'; // Z to indicate UTC, -/+HH:MM:SS.SS... for local tz's
 
-		if(ereg($eregStr,$datestr,$regs)){
+		// SalesPlatform.ru begin PHP 5.4 migration
+		if(preg_match('/'.$eregStr.'/',$datestr,$regs)){
+		//if(ereg($eregStr,$datestr,$regs)){
+		// SalesPlatform.ru end
 			return sprintf('%04d-%02d-%02dT%02d:%02d:%02dZ',$regs[1],$regs[2],$regs[3],$regs[4],$regs[5],$regs[6]);
 		}
 		return false;
@@ -861,7 +870,10 @@ function iso8601_to_timestamp($datestr){
 	'([0-9]{2}):'.	// minutes mm:
 	'([0-9]{2})(\.[0-9]+)?'. // seconds ss.ss...
 	'(Z|[+\-][0-9]{2}:?[0-9]{2})?'; // Z to indicate UTC, -/+HH:MM:SS.SS... for local tz's
-	if(ereg($eregStr,$datestr,$regs)){
+	// SalesPlatform.ru begin PHP 5.4 migration
+	if(preg_match('/'.$eregStr.'/',$datestr,$regs)){
+	//if(ereg($eregStr,$datestr,$regs)){
+	// SalesPlatform.ru end
 		// not utc
 		if($regs[8] != 'Z'){
 			$op = substr($regs[8],0,1);

@@ -90,6 +90,9 @@
 <tr>
 	<td align=center class=small>
 	
+        {* SalesPlatform.ru begin added support datefilter *}  
+        {if $DATEFILTER neq ''}
+        {* SalesPlatform.ru end *}
 	<table border=0 cellspacing=0 cellpadding=0 width=80%>
 		<tr>
 			<td align=left class=small><b>{$MOD.LBL_SELECT_COLUMN} </b></td><td class=small>&nbsp;</td>
@@ -143,6 +146,9 @@
 		</tr>
 	</table>
 	
+        {* SalesPlatform.ru begin added support datefilter *}                                         
+        {/if}
+        {* SalesPlatform.ru end *}
 	</td>
 </tr>
 	<tr>
@@ -269,6 +275,9 @@
 
 <script type="text/javascript">
 function CrearEnlace(tipo,id){
+        // SalesPlatform.ru begin added support datefilter 
+        if (getObj('stdDateFilter')) {
+        // SalesPlatform.ru end
 	var stdDateFilterFieldvalue = '';
 	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
 		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
@@ -276,7 +285,10 @@ function CrearEnlace(tipo,id){
 	var stdDateFiltervalue = '';
 	if(document.NewReport.stdDateFilter.selectedIndex != -1)
 		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
-
+                    
+        // SalesPlatform.ru begin added support datefilter        
+        }
+        // SalesPlatform.ru end            
 	if(!checkAdvancedFilter()) return false;
 	var advft_criteria = $('advft_criteria').value;
 	var advft_criteria_groups = $('advft_criteria_groups').value;
@@ -301,12 +313,18 @@ function CrearEnlace(tipo,id){
 function goToURL(url) {
 	document.location.href = url;
 }
-					
+
+// SalesPlatform.ru begin added support datefilter 
+if (getObj('stdDateFilter')) {
+// SalesPlatform.ru end
 var filter = getObj('stdDateFilter').options[document.NewReport.stdDateFilter.selectedIndex].value
     if( filter != "custom" )
     {
         showDateRange( filter );
     }
+// SalesPlatform.ru begin added support datefilter 
+}
+// SalesPlatform.ru end    
 
 // If current user has no access to date fields, we should disable selection
 // Fix for: #4670
@@ -388,6 +406,9 @@ function generateReport(id) {
 	var advft_criteria = $('advft_criteria').value;
 	var advft_criteria_groups = $('advft_criteria_groups').value;
 
+        // SalesPlatform.ru begin added support datefilter 
+        if (getObj('stdDateFilter')) {
+        // SalesPlatform.ru end
 	var stdDateFilterFieldvalue = '';
 	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
 		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
@@ -397,6 +418,9 @@ function generateReport(id) {
 		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
 	var startdatevalue = document.NewReport.startdate.value;
 	var enddatevalue = document.NewReport.enddate.value;
+        // SalesPlatform.ru begin added support datefilter 
+        }
+        // SalesPlatform.ru end
 
 // SalesPlatform.ru begin
 	if(document.NewReport.ownerFilter && document.NewReport.ownerFilter.selectedIndex != -1)
@@ -409,6 +433,9 @@ function generateReport(id) {
                 accountFiltervalue = '';
 // SalesPlatform.ru end
 
+// SalesPlatform.ru begin added support datefilter 
+if (getObj('stdDateFilter')) {
+// SalesPlatform.ru end
 	var date1=getObj("startdate")
         var date2=getObj("enddate")
 	
@@ -424,7 +451,10 @@ if ((date1.value != '') || (date2.value != ''))
 	if(!dateComparison("startdate",'Start Date',"enddate",'End Date','LE'))
                 return false;
 }
-
+    
+// SalesPlatform.ru begin added support datefilter 
+}
+// SalesPlatform.ru end
 
 	new Ajax.Request(
                 'index.php',
@@ -482,6 +512,9 @@ function selectReport() {
 }
 function ReportInfor()
 {
+        // SalesPlatform.ru begin added support datefilter 
+        if (getObj('stdDateFilter')) {
+        // SalesPlatform.ru end
 	var stdDateFilterFieldvalue = '';
 	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
 		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].text;
@@ -515,6 +548,9 @@ function ReportInfor()
                 {literal}
 	}
 	getObj('report_info').innerHTML = reportinfr;
+// SalesPlatform.ru begin added support datefilter 
+}
+// SalesPlatform.ru end
 }
 ReportInfor();
 

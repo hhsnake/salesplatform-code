@@ -1402,6 +1402,17 @@ function populateLinks() {
 		''
 	);
         // SalesPlatform.ru end
+
+        // SalesPlatform.ru begin 5.4.0-201308
+	$vendorsInstance = Vtiger_Module::getInstance('Vendors');
+	$vendorsInstance->addLink('DETAILVIEWBASIC', 'LBL_ADD_NOTE', 'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$','themes/images/bookMark.gif');
+	$vendorsInstance->addLink('DETAILVIEWBASIC', 'LBL_VENDORS_ADD_EVENTS', 'index.php?module=Calendar&action=EditView&return_module=Vendors&return_action=DetailView&activity_mode=Events&return_id=$RECORD$&parent_id=$RECORD$&parenttab=Sales','themes/images/AddEvent.gif');
+	$vendorsInstance->addLink('DETAILVIEWBASIC', 'LBL_VENDORS_ADD_TASK', 'index.php?module=Calendar&action=EditView&return_module=Vendors&return_action=DetailView&activity_mode=Task&return_id=$RECORD$&parent_id=$RECORD$&parenttab=Sales','themes/images/AddToDo.gif');
+
+	$helpdeskInstance = Vtiger_Module::getInstance('HelpDesk');
+	$helpdeskInstance->addLink('DETAILVIEWWIDGET', 'LBL_RELATED_TO', 'module=HelpDesk&action=HelpDeskAjax&file=DetailViewAjax&recordid=$RECORD$&ajxaction=LOADRELATEDLISTWIDGET');
+        // SalesPlatform.ru end
+
 }
 
 function setFieldHelpInfo() {

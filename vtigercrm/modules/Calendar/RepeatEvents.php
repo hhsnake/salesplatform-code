@@ -19,8 +19,12 @@ class Calendar_RepeatEvents {
 	 */
 	static function mktime($fulldateString) {
 		$splitpart = self::splittime($fulldateString);
-		$datepart = split('-', $splitpart[0]);
-		$timepart = split(':', $splitpart[1]);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		$datepart = explode('-', $splitpart[0]);
+		$timepart = explode(':', $splitpart[1]);
+		//$datepart = split('-', $splitpart[0]);
+		//$timepart = split(':', $splitpart[1]);
+		// SalesPlatform.ru end
 		return mktime($timepart[0], $timepart[1], 0, $datepart[1], $datepart[2], $datepart[0]);
 	}
 	/**
@@ -46,7 +50,10 @@ class Calendar_RepeatEvents {
 	 * Split full timing into date and time part.
 	 */
 	static function splittime($fulltiming) {
-		return split(' ', $fulltiming);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		return explode(' ', $fulltiming);
+		//return split(' ', $fulltiming);
+		// SalesPlatform.ru end
 	}
 	/**
 	 * Calculate the time interval to create repeated event entries.

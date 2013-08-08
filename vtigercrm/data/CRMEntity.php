@@ -57,7 +57,16 @@ class CRMEntity {
 		$focus = new $modName();
 		return $focus;
 	}
-
+        
+        // SalesPlatform.ru begin converts html entities to characters
+        function fieldsDecode() {
+            global $default_charset;
+            foreach ($this->column_fields as $fieldName => $fieldValue) {
+                $this->column_fields[$fieldName] = html_entity_decode($fieldValue, ENT_QUOTES, $default_charset);
+            }
+        }
+        // SalesPlatform.ru end
+        
 	function saveentity($module, $fileid = '') {
 		global $current_user, $adb; //$adb added by raju for mass mailing
 		$insertion_mode = $this->mode;
@@ -220,7 +229,7 @@ class CRMEntity {
 			if ($_REQUEST['mode'] == 'edit') {
 				if ($id != '' && $_REQUEST['fileid'] != '') {
 					$delquery = 'delete from vtiger_seattachmentsrel where crmid = ? and attachmentsid = ?';
-					$delparams = array($id, $_REQUEST['fileid']);
+					$delparams = array($id, vtlib_purify($_REQUEST['fileid']));
 					$adb->pquery($delquery, $delparams);
 				}
 			}
@@ -292,6 +301,7 @@ class CRMEntity {
 		if ($this->mode == 'edit') {
 			$description_val = from_html($this->column_fields['description'], ($insertion_mode == 'edit') ? true : false);
 
+			checkFileAccessForInclusion('user_privileges/user_privileges_' . $current_user->id . '.php');
 			require('user_privileges/user_privileges_' . $current_user->id . '.php');
 			$tabid = getTabid($module);
 			if ($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
@@ -391,6 +401,7 @@ class CRMEntity {
 		if ($insertion_mode == 'edit') {
 			$update = array();
 			$update_params = array();
+			checkFileAccessForInclusion('user_privileges/user_privileges_' . $current_user->id . '.php');
 			require('user_privileges/user_privileges_' . $current_user->id . '.php');
 			if ($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
 				$sql = "select * from vtiger_field where tabid in (" . generateQuestionMarks($tabid) . ") and tablename=? and displaytype in (1,3) and presence in (0,2) group by columnname";

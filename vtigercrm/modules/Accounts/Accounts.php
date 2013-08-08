@@ -204,7 +204,27 @@ class Accounts extends CRMEntity {
 
 		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
-		$query = "SELECT vtiger_contactdetails.*,
+		// SalesPlatform.ru begin fields of the related list from the database
+                $query = "SELECT vtiger_contactdetails.*, vtiger_contactsubdetails.*,
+			vtiger_crmentity.crmid,
+                        vtiger_crmentity.smownerid,
+			vtiger_account.accountname,
+			case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name
+			FROM vtiger_contactdetails
+                        INNER JOIN vtiger_contactsubdetails
+                                ON vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_contactdetails.accountid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_contactdetails.accountid = ".$id;
+                /*
+                $query = "SELECT vtiger_contactdetails.*,
 			vtiger_crmentity.crmid,
                         vtiger_crmentity.smownerid,
 			vtiger_account.accountname,
@@ -220,7 +240,8 @@ class Accounts extends CRMEntity {
 				ON vtiger_crmentity.smownerid = vtiger_users.id
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_contactdetails.accountid = ".$id;
-
+                */
+                // SalesPlatform.ru end
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
 
 		if($return_value == null) $return_value = Array();

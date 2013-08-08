@@ -54,6 +54,7 @@ if(isset($_REQUEST['record']))
 	$to_email = $json->decode($adb->query_result($result,0,'to_email'));
 	// SalesPlatform.ru begin
 	// Decoding e-mails with punnycode to display national domains in "to" field properly
+        if ($to_email)
 	foreach ($to_email as $k=>$v) {
 		$to_email[$k] = $idn->decode($v);
 	}
@@ -61,6 +62,7 @@ if(isset($_REQUEST['record']))
 	$cc_email = $json->decode($adb->query_result($result,0,'cc_email'));
 	// SalesPlatform.ru begin
 	// Decoding e-mails with punnycode to display national domains in "cc" field properly
+        if ($cc_email)
 	foreach ($cc_email as $k=>$v) {
 		$cc_email[$k] = $idn->decode($v);
 	}
@@ -70,6 +72,7 @@ if(isset($_REQUEST['record']))
     $bcc_email = $json->decode($adb->query_result($result,0,'bcc_email'));	
 	// SalesPlatform.ru begin
 	// Decoding e-mails with punnycode to display national domains in "bcc" field properly
+        if ($bcc_email)
 	foreach ($bcc_email as $k=>$v) {
 		$bcc_email[$k] = $idn->decode($v);
 	}

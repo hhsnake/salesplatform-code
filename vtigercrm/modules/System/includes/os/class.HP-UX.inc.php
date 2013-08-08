@@ -59,7 +59,10 @@ class sysinfo {
   } 
 
   function users () {
-    $who = split('=', execute_program('who', '-q'));
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $who = explode('=', execute_program('who', '-q'));
+    //$who = split('=', execute_program('who', '-q'));
+    // SalesPlatform.ru END
     $result = $who[1];
     return $result;
   } 
@@ -165,7 +168,10 @@ class sysinfo {
         } 
 
         if ($device) {
-          list($key, $value) = split(': ', $buf, 2);
+	// SalesPlatform.ru begin PHP 5.4 migration
+          list($key, $value) = explode(': ', $buf, 2);
+        //  list($key, $value) = split(': ', $buf, 2);
+	// SalesPlatform.ru END
 
           if (!preg_match('/bridge/i', $key) && !preg_match('/USB/i', $key)) {
             $results[] = preg_replace('/\([^\)]+\)\.$/', '', trim($value));
@@ -239,7 +245,10 @@ class sysinfo {
       foreach( $bufe as $buf ) {
         if (preg_match('/Vendor/', $buf)) {
           preg_match('/Vendor: (.*) Model: (.*) Rev: (.*)/i', $buf, $dev);
-          list($key, $value) = split(': ', $buf, 2);
+	// SalesPlatform.ru begin PHP 5.4 migration
+          list($key, $value) = explode(': ', $buf, 2);
+        //  list($key, $value) = split(': ', $buf, 2);
+	// SalesPlatform.ru END
           $dev_str = $value;
           $get_type = 1;
           continue;
@@ -275,8 +284,12 @@ class sysinfo {
         } 
 
         if ($devstring) {
-          list($key, $value) = split(': ', $buf, 2);
-          list($key, $value2) = split('=', $value, 2);
+	// SalesPlatform.ru begin PHP 5.4 migration
+          list($key, $value) = explode(': ', $buf, 2);
+          list($key, $value2) = explode('=', $value, 2);
+        //  list($key, $value) = split(': ', $buf, 2);
+        //  list($key, $value2) = split('=', $value, 2);
+	// SalesPlatform.ru END
           $results[$devnum] .= " " . trim($value2);
           $devstring = 0;
         } 
@@ -295,7 +308,10 @@ class sysinfo {
 
   function network () {
     $netstat = execute_program('netstat', '-ni | tail -n +2');
-    $lines = split("\n", $netstat);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $netstat);
+    //$lines = split("\n", $netstat);
+    // SalesPlatform.ru end
     $results = array();
     for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/\s+/", $lines[$i]);
@@ -374,7 +390,10 @@ class sysinfo {
 
   function filesystems () {
     $df = execute_program('df', '-kP');
-    $mounts = split("\n", $df);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $mounts = explode("\n", $df);
+    //$mounts = split("\n", $df);
+    // SalesPlatform.ru end
     $fstype = array();
 
     $s = execute_program('mount', '-v');
@@ -382,7 +401,10 @@ class sysinfo {
 
     $i = 0;
     while (list(, $line) = each($lines)) {
-      $a = split(' ', $line);
+    // SalesPlatform.ru begin PHP 5.4 migration
+      $a = explode(' ', $line);
+    //  $a = split(' ', $line);
+    // SalesPlatform.ru end
       $fsdev[$a[0]] = $a[4];
     } 
 

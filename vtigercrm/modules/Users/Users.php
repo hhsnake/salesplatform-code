@@ -681,6 +681,7 @@ class Users extends CRMEntity {
      */
 
     function retrieveCurrentUserInfoFromFile($userid) {
+		checkFileAccessForInclusion('user_privileges/user_privileges_'.$userid.'.php');
         require('user_privileges/user_privileges_'.$userid.'.php');
         foreach($this->column_fields as $field=>$value_iter) {
             if(isset($user_info[$field])) {
@@ -1374,7 +1375,7 @@ class Users extends CRMEntity {
         $tc = $adb->getUniqueID("vtiger_homestuff");
         $visibility=0;
         $sql="insert into vtiger_homestuff values($tc, 15, 'Tag Cloud', $uid, $visibility, 'Tag Cloud')";
-        $adb->query($sql);
+        $adb->pquery($sql, array());
 
         // Customization
         global $VtigerOndemandConfig;
@@ -1496,12 +1497,12 @@ class Users extends CRMEntity {
 				 {
                     $save_array[] = $this->homeorder_array[$i];
                     $qry=" update vtiger_homestuff,vtiger_homedefault set vtiger_homestuff.visible=0 where vtiger_homestuff.stuffid=vtiger_homedefault.stuffid and vtiger_homestuff.userid=".$id." and vtiger_homedefault.hometype='".$this->homeorder_array[$i]."'";//To show the default Homestuff on the the Home Page
-                    $result=$adb->query($qry);
+                    $result=$adb->pquery($qry, array());
                 }
 				 else
 				 {
                     $qry="update vtiger_homestuff,vtiger_homedefault set vtiger_homestuff.visible=1 where vtiger_homestuff.stuffid=vtiger_homedefault.stuffid and vtiger_homestuff.userid=".$id." and vtiger_homedefault.hometype='".$this->homeorder_array[$i]."'";//To hide the default Homestuff on the the Home Page
-                    $result=$adb->query($qry);
+                    $result=$adb->pquery($qry, array());
                 }
             }
             if($save_array !="")

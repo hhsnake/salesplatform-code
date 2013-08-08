@@ -10,27 +10,27 @@
 
 require_once("include/database/PearDatabase.php");
 
-$organization_name=$_REQUEST['organization_name'];
-$org_name=$_REQUEST['org_name'];
-$organization_address=$_REQUEST['organization_address'];
-$organization_city=$_REQUEST['organization_city'];
-$organization_state=$_REQUEST['organization_state'];
-$organization_code=$_REQUEST['organization_code'];
-$organization_country=$_REQUEST['organization_country'];
-$organization_phone=$_REQUEST['organization_phone'];
-$organization_fax=$_REQUEST['organization_fax'];
-$organization_website=$_REQUEST['organization_website'];
+$organization_name= vtlib_purify($_REQUEST['organization_name']);
+$org_name= vtlib_purify($_REQUEST['org_name']);
+$organization_address= vtlib_purify($_REQUEST['organization_address']);
+$organization_city= vtlib_purify($_REQUEST['organization_city']);
+$organization_state= vtlib_purify($_REQUEST['organization_state']);
+$organization_code= vtlib_purify($_REQUEST['organization_code']);
+$organization_country= vtlib_purify($_REQUEST['organization_country']);
+$organization_phone= vtlib_purify($_REQUEST['organization_phone']);
+$organization_fax= vtlib_purify($_REQUEST['organization_fax']);
+$organization_website= vtlib_purify($_REQUEST['organization_website']);
 // SalesPlatform.ru begin
-$organization_inn=$_REQUEST['organization_inn'];
-$organization_kpp=$_REQUEST['organization_kpp'];
-$organization_bankaccount=$_REQUEST['organization_bankaccount'];
-$organization_bankname=$_REQUEST['organization_bankname'];
-$organization_bankid=$_REQUEST['organization_bankid'];
-$organization_corraccount=$_REQUEST['organization_corraccount'];
-$organization_director=$_REQUEST['organization_director'];
-$organization_bookkeeper=$_REQUEST['organization_bookkeeper'];
-$organization_entrepreneur=$_REQUEST['organization_entrepreneur'];
-$organization_entrepreneurreg=$_REQUEST['organization_entrepreneurreg'];
+$organization_inn= vtlib_purify($_REQUEST['organization_inn']);
+$organization_kpp= vtlib_purify($_REQUEST['organization_kpp']);
+$organization_bankaccount= vtlib_purify($_REQUEST['organization_bankaccount']);
+$organization_bankname= vtlib_purify($_REQUEST['organization_bankname']);
+$organization_bankid= vtlib_purify($_REQUEST['organization_bankid']);
+$organization_corraccount= vtlib_purify($_REQUEST['organization_corraccount']);
+$organization_director= vtlib_purify($_REQUEST['organization_director']);
+$organization_bookkeeper= vtlib_purify($_REQUEST['organization_bookkeeper']);
+$organization_entrepreneur= vtlib_purify($_REQUEST['organization_entrepreneur']);
+$organization_entrepreneurreg= vtlib_purify($_REQUEST['organization_entrepreneurreg']);
 // SalesPlatform.ru end
 
 $sql="select * from vtiger_organizationdetails where organizationname = ?";

@@ -447,47 +447,83 @@ class Image_Graph extends Image_Graph_Element
         if (is_array($params)) {
             switch (count($params)) {
             case 1:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0]
                 );
+                /*$obj =& new $class(
+                    $params[0]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 2:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 3:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1],
                     $params[2]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1],
+                    $params[2]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 4:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1],
                     $params[2],
                     $params[3]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1],
+                    $params[2],
+                    $params[3]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 5:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1],
                     $params[2],
                     $params[3],
                     $params[4]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1],
+                    $params[2],
+                    $params[3],
+                    $params[4]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 6:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1],
                     $params[2],
@@ -495,10 +531,20 @@ class Image_Graph extends Image_Graph_Element
                     $params[4],
                     $params[5]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1],
+                    $params[2],
+                    $params[3],
+                    $params[4],
+                    $params[5]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 7:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1],
                     $params[2],
@@ -507,10 +553,21 @@ class Image_Graph extends Image_Graph_Element
                     $params[5],
                     $params[6]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1],
+                    $params[2],
+                    $params[3],
+                    $params[4],
+                    $params[5],
+                    $params[6]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 8:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1],
                     $params[2],
@@ -520,10 +577,22 @@ class Image_Graph extends Image_Graph_Element
                     $params[6],
                     $params[7]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1],
+                    $params[2],
+                    $params[3],
+                    $params[4],
+                    $params[5],
+                    $params[6],
+                    $params[7]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 9:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1],
                     $params[2],
@@ -534,10 +603,23 @@ class Image_Graph extends Image_Graph_Element
                     $params[7],
                     $params[8]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1],
+                    $params[2],
+                    $params[3],
+                    $params[4],
+                    $params[5],
+                    $params[6],
+                    $params[7],
+                    $params[8]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             case 10:
-                $obj =& new $class(
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class(
                     $params[0],
                     $params[1],
                     $params[2],
@@ -549,18 +631,40 @@ class Image_Graph extends Image_Graph_Element
                     $params[8],
                     $params[9]
                 );
+                /*$obj =& new $class(
+                    $params[0],
+                    $params[1],
+                    $params[2],
+                    $params[3],
+                    $params[4],
+                    $params[5],
+                    $params[6],
+                    $params[7],
+                    $params[8],
+                    $params[9]
+                );*/
+		// SalesPlatform.ru end
                 break;
 
             default:
-                $obj =& new $class();
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class();
+                //$obj =& new $class();
+		// SalesPlatform.ru end
                 break;
 
             }
         } else {
             if ($params == null) {
-                $obj =& new $class();
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class();
+                //$obj =& new $class();
+		// SalesPlatform.ru end
             } else {
-                $obj =& new $class($params);
+		// SalesPlatform.ru begin PHP 5.4 migration
+                $obj = new $class($params);
+                //$obj =& new $class($params);
+		// SalesPlatform.ru end
             }
     	}
         return $obj;
@@ -606,7 +710,10 @@ class Image_Graph extends Image_Graph_Element
         
         include_once "Image/Graph/Layout/$layout.php";
         $class = "Image_Graph_Layout_$layout";
-        $obj =& new $class($part1, $part2, $percentage);
+	// SalesPlatform.ru begin PHP 5.4 migration
+        $obj = new $class($part1, $part2, $percentage);
+        //$obj =& new $class($part1, $part2, $percentage);
+	// SalesPlatform.ru end
         return $obj;
     }
 

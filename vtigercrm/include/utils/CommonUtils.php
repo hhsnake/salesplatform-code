@@ -917,6 +917,14 @@ function getNewDisplayDate() {
 	return $date->getDisplayDate($current_user);
 }
 
+// SalesPlatform.ru begin
+function getNewDisplayTime() {
+	global $log, $current_user;
+	$date = new DateTimeField(null);
+	return $date->getDisplayTime($current_user);
+}
+// SalesPlatform.ru end
+
 /** This function returns the default vtiger_currency information.
  * Takes no param, return type array.
  */
@@ -1443,7 +1451,10 @@ function getProductImages($id) {
  * It acceps the File lists,modulename,id and the mode as arguments
  * It returns the array details of the upload
  */
-function SaveImage($_FILES, $module, $id, $mode) {
+// SalesPlatform.ru begin PHP 5.4 migration
+function SaveImage($module, $id, $mode) {
+//function SaveImage($_FILES, $module, $id, $mode) {
+// SalesPlatform.ru end
 	global $log, $root_directory;
 	$log->debug("Entering SaveImage(" . $_FILES . "," . $module . "," . $id . "," . $mode . ") method ...");
 	global $adb;
@@ -2211,6 +2222,20 @@ function getMergedDescription($description, $id, $parent_type) {
 	global $current_user;
 	$emailTemplate = new EmailTemplate($parent_type, $description, $id, $current_user);
 	$description = $emailTemplate->getProcessedDescription();
+
+        // SalesPlatform.ru begin: Add owner fields Email templates
+        if($parent_type != 'Users') {
+            $res = $adb->pquery('select smownerid from vtiger_crmentity where crmid=?',
+                    array($id));
+            if($adb->num_rows($res) > 0) {
+                $ownerid = $adb->query_result($res, 0, 'smownerid');
+
+                $emailTemplate = new EmailTemplate('Users', $description, $ownerid, $current_user);
+                $description = $emailTemplate->getProcessedDescription();
+            }
+        }
+        // SalesPlatform.ru end
+
         // SalesPlatform.ru begin New custom fields
         }
         // SalesPlatform.ru end
@@ -2246,6 +2271,8 @@ function getMergedDescriptionCustomVars($fields, $description) {
                                 global $current_user;
                                 $token_value = getUserFullName($current_user->id);
 				break;
+                        case 'dbcurrentdate': $token_value = date("Y-m-d");
+                                break;
                         // SalesPlatform.ru end
 		}
 		$description = str_replace($token_data, $token_value, $description);
@@ -2498,6 +2525,32 @@ function getTicketComments($ticketid) {
 	$log->debug("Exiting getTicketComments method ...");
 	return $commentlist;
 }
+
+// SalesPlatform.ru begin
+/**     Function to get the last comment for a troubleticket
+ *     @param int $ticketid -- troubleticket id
+ *     return the last comment which is related to this ticket as a string
+ * */
+function getLastTicketComment($ticketid) {
+	global $log;
+	$log->debug("Entering getLastTicketComment(" . $ticketid . ") method ...");
+	global $adb;
+
+	$moduleName = getSalesEntityType($ticketid);
+	$commentlist = '';
+	$sql = "select * from vtiger_ticketcomments where ticketid=? order by createdtime desc";
+	$result = $adb->pquery($sql, array($ticketid));
+	if ($adb->num_rows($result) > 0) {
+		$comment = $adb->query_result($result, 0, 'comments');
+		if ($comment != '') {
+			$commentlist .= '<br><br>' . $comment;
+		}
+	}
+
+	$log->debug("Exiting getLastTicketComment method ...");
+	return $commentlist;
+}
+// SalesPlatform.ru end
 
 /**
  * This function is used to get a random password.
@@ -2892,6 +2945,8 @@ function getEmailTemplateVariables() {
         // SalesPlatform.ru begin New custom fields
 	$option = array('Current User Full Name', '$custom-currentuserfullname$');
 	$allFields[] = $option;
+        $option = array('Db Current Date', '$custom-dbcurrentdate$');
+	$allFields[] = $option;
         // SalesPlatform.ru end
 	$allOptions[] = $allFields;
 	return $allOptions;
@@ -2941,6 +2996,36 @@ function checkFileAccessForInclusion($filepath) {
 	if (stripos($realfilepath, $rootdirpath) !== 0 || in_array($filePathParts[0], $unsafeDirectories)) {
 		die("Sorry! Attempt to access restricted file.");
 	}
+}
+
+/** Function to check the file deletion within the deletable (safe) directories*/
+function checkFileAccessForDeletion($filepath) {
+	global $root_directory;
+	// Set the base directory to compare with
+	$use_root_directory = $root_directory;
+	if (empty($use_root_directory)) {
+		$use_root_directory = realpath(dirname(__FILE__) . '/../../.');
+	}
+
+	$safeDirectories = array('storage', 'cache', 'test');
+
+	$realfilepath = realpath($filepath);
+
+	/** Replace all \\ with \ first */
+	$realfilepath = str_replace('\\\\', '\\', $realfilepath);
+	$rootdirpath = str_replace('\\\\', '\\', $use_root_directory);
+
+	/** Replace all \ with / now */
+	$realfilepath = str_replace('\\', '/', $realfilepath);
+	$rootdirpath = str_replace('\\', '/', $rootdirpath);
+
+	$relativeFilePath = str_replace($rootdirpath, '', $realfilepath);
+	$filePathParts = explode('/', $relativeFilePath);
+
+	if (stripos($realfilepath, $rootdirpath) !== 0 || !in_array($filePathParts[0], $safeDirectories)) {
+		die("Sorry! Attempt to access restricted file.");
+	}
+	
 }
 
 /** Function to check the file access is made within web root directory. */
@@ -3596,4 +3681,16 @@ function getEntityForListView($module, $headers) {
     return $data; 
 }
 // SalesPlatform.ru end
+
+// SalesPlatform.ru begin module with inventories?
+function isInventoryModule($moduleName) {
+    $inventoriesModulesArr = array('PurchaseOrder','SalesOrder','Quotes','Invoice','Act','Consignment');
+    if (in_array($moduleName,$inventoriesModulesArr)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+// SalesPlatform.ru end
+
 ?>

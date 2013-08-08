@@ -84,6 +84,10 @@ class EmailTemplate {
 					$tableList[] = $defaultTable;
 				}
 			}
+                        // SalesPlatform.ru begin: Fixed bug with Leads smownerid in email templates
+                        if($this->module == 'Leads' && !in_array('vtiger_leaddetails',$tableList))
+                                $tableList[] = 'vtiger_leaddetails';
+                        // SalesPlatform.ru end
 
 			// right now this is will be limited to module type, entities.
 			// need to extend it to non-module entities when we have a reliable way of getting

@@ -1497,8 +1497,12 @@ $app_strings = array (
 'Change_Severity' => 'Severity Changed to:',
 'Change_Category' => 'Category Changed to:',
 'DownloadMergeFile'=>'Download Merge File',
-// SalesPlatform.ru end      
-    
+// SalesPlatform.ru end
+
+// SalesPlatform.ru begin localization for SPPayments and SPUnits
+'SPPayments' => 'Payments',
+'SPUnits' => 'Units',
+// SalesPlatform.ru end
 );
 
 $app_list_strings = array (

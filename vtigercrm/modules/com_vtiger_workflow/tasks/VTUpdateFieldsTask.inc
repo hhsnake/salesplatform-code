@@ -63,6 +63,9 @@ class VTUpdateFieldsTask extends VTTask {
 					$parser = new VTExpressionParser(new VTExpressionSpaceFilter(new VTExpressionTokenizer($fieldValue)));
 					$expression = $parser->expression();
 					$exprEvaluater = new VTFieldExpressionEvaluater($expression);
+                                        // SalesPlatform.ru begin Replace related record ids (12x765) with Entity names
+                                        $entity->processReferenceFields();
+                                        // SalesPlatform.ru end
 					$fieldValue = $exprEvaluater->evaluate($entity);
 				} else {
 					if (preg_match('/([^:]+):boolean$/', $fieldValue, $match)) {

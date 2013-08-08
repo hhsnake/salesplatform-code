@@ -175,7 +175,10 @@ class Image_Graph_Layout extends Image_Graph_Plotarea_Element
     function _push($edge, $size = '100%')
     {
         $result = array();
-        if (ereg("([0-9]*)\%", $size, $result)) {
+	// SalesPlatform.ru begin PHP 5.4 migration
+        if (preg_match("/([0-9]*)\%/", $size, $result)) {
+        //if (ereg("([0-9]*)\%", $size, $result)) {
+	// SalesPlatform.ru end
             $this->_alignSize[$edge] = array(
                 'value' => min(100, max(0, $result[1])),
                 'unit' => 'percentage'

@@ -17,6 +17,9 @@ global $currentModule;
 global $app_strings;
 global $default_charset;
 
+function sort_by_length_desc($a, $b) {
+    return strlen($b) - strlen($a);
+}
 
 
 // Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
@@ -105,6 +108,10 @@ foreach($mass_merge as $idx => $entityid) {
     }
 
     $keys_array = explode(',', $csvheader);
+    
+    // Sort array by key length desc
+    usort($keys_array, "sort_by_length_desc");
+    $csvheader = implode(',', $keys_array);
 
     $x = 0;
     $actual_values = array();

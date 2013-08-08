@@ -79,7 +79,10 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 				$targetdir  = substr($filename, 0, strripos($filename,'/'));
 				$targetfile = basename($filename);
 
-				$prefixparts = split('_', $prefix);
+				// SalesPlatform.ru begin PHP 5.4 migration
+				$prefixparts = explode('_', $prefix);
+				//$prefixparts = split('_', $prefix);
+				// SalesPlatform.ru end
 
 				$dounzip = false;
 				if(is_dir($targetdir)) {

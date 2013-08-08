@@ -11,17 +11,17 @@
 // SalesPlatform.ru begin
 include_once 'modules/Quotes/SPQuotePDFController.php';
 //include_once 'modules/Quotes/QuotePDFController.php';
-global $currentModule;
 // SalesPlatform.ru end
+$currentModule = vtlib_purify($_REQUEST['module']);
 
 // SalesPlatform.ru begin
-$controller = new SalesPlatform_QuotePDFController($currentModule, $_REQUEST['pdf_template']);
+$controller = new SalesPlatform_QuotePDFController($currentModule, vtlib_purify($_REQUEST['pdf_template']));
 //$controller = new Vtiger_QuotePDFController($currentModule);
 // SalesPlatform.ru end
 
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 
-$filenameid = $_REQUEST['record'];
+$filenameid = vtlib_purify($_REQUEST['record']);
 $quote_no = getModuleSequenceNumber($currentModule,vtlib_purify($_REQUEST['record']));
 if(empty($filenameid)) $filenameid = time();
 $filepath="storage/Quote_".$quote_no.".pdf";

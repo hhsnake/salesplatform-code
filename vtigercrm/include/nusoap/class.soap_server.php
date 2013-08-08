@@ -240,7 +240,10 @@ class soap_server extends nusoap_base {
 		}
 		$this->debug("In service, query string=$qs");
 
-		if (ereg('wsdl', $qs) ){
+		// SalesPlatform.ru begin PHP 5.4 migration
+		if (preg_match('/wsdl/', $qs) ){
+		//if (ereg('wsdl', $qs) ){
+		// SalesPlatform.ru end
 			$this->debug("In service, this is a request for WSDL");
 			if($this->externalWSDLURL){
               if (strpos($this->externalWSDLURL,"://")!==false) { // assume URL
@@ -311,7 +314,10 @@ class soap_server extends nusoap_base {
 			// get the character encoding of the incoming request
 			if(isset($this->headers['content-type']) && strpos($this->headers['content-type'],'=')){
 				$enc = str_replace('"','',substr(strstr($this->headers["content-type"],'='),1));
-				if(eregi('^(ISO-8859-1|US-ASCII|UTF-8)$',$enc)){
+				// SalesPlatform.ru begin PHP 5.4 migration
+				if(preg_match('/^(ISO-8859-1|US-ASCII|UTF-8)$/i',$enc)){
+				//if(eregi('^(ISO-8859-1|US-ASCII|UTF-8)$',$enc)){
+				// SalesPlatform.ru end
 					$this->xml_encoding = strtoupper($enc);
 				} else {
 					$this->xml_encoding = 'US-ASCII';
@@ -340,7 +346,10 @@ class soap_server extends nusoap_base {
 						$enc = substr(strstr($v, '='), 1);
 						$enc = str_replace('"', '', $enc);
 						$enc = str_replace('\\', '', $enc);
-						if (eregi('^(ISO-8859-1|US-ASCII|UTF-8)$', $enc)) {
+						// SalesPlatform.ru begin PHP 5.4 migration
+						if (preg_match('/^(ISO-8859-1|US-ASCII|UTF-8)$/i', $enc)) {
+						//if (eregi('^(ISO-8859-1|US-ASCII|UTF-8)$', $enc)) {
+						// SalesPlatform.ru end
 							$this->xml_encoding = strtoupper($enc);
 						} else {
 							$this->xml_encoding = 'US-ASCII';
@@ -374,7 +383,10 @@ class soap_server extends nusoap_base {
 						$enc = substr(strstr($v, '='), 1);
 						$enc = str_replace('"', '', $enc);
 						$enc = str_replace('\\', '', $enc);
-						if (eregi('^(ISO-8859-1|US-ASCII|UTF-8)$', $enc)) {
+						// SalesPlatform.ru begin PHP 5.4 migration
+						if (preg_match('/^(ISO-8859-1|US-ASCII|UTF-8)$/i', $enc)) {
+						//if (eregi('^(ISO-8859-1|US-ASCII|UTF-8)$', $enc)) {
+						// SalesPlatform.ru end
 							$this->xml_encoding = strtoupper($enc);
 						} else {
 							$this->xml_encoding = 'US-ASCII';
@@ -703,7 +715,10 @@ class soap_server extends nusoap_base {
         	$payload .= $this->getDebugAsXMLComment();
         }
 		$this->outgoing_headers[] = "Server: $this->title Server v$this->version";
-		ereg('\$Revisio' . 'n: ([^ ]+)', $this->revision, $rev);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		preg_match('/\$Revision: ([^ ]+)/', $this->revision, $rev);
+		//ereg('\$Revisio' . 'n: ([^ ]+)', $this->revision, $rev);
+		// SalesPlatform.ru end
 		$this->outgoing_headers[] = "X-SOAP-Server: $this->title/$this->version (".$rev[1].")";
 		// Let the Web server decide about this
 		//$this->outgoing_headers[] = "Connection: Close\r\n";
@@ -791,7 +806,10 @@ class soap_server extends nusoap_base {
 		if (strpos($headers['content-type'], '=')) {
 			$enc = str_replace('"', '', substr(strstr($headers["content-type"], '='), 1));
 			$this->debug('Got response encoding: ' . $enc);
-			if(eregi('^(ISO-8859-1|US-ASCII|UTF-8)$',$enc)){
+			// SalesPlatform.ru begin PHP 5.4 migration
+			if(preg_match('/^(ISO-8859-1|US-ASCII|UTF-8)$/i',$enc)){
+			//if(eregi('^(ISO-8859-1|US-ASCII|UTF-8)$',$enc)){
+			// SalesPlatform.ru end
 				$this->xml_encoding = strtoupper($enc);
 			} else {
 				$this->xml_encoding = 'US-ASCII';

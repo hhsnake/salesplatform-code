@@ -835,7 +835,23 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 					$tickettitle = substr($tickettitle, 0, 25) . '...';
 				}
 				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $tickettitle . '</a>';
-			}
+			// SalesPlatform.ru begin added Vendors and ProjectTask
+                        } elseif ($parent_module == "Vendors") {
+				$label_fld[] = $app_strings['SINGLE_Vendors'];
+				$sql = "select * from vtiger_vendor where vendorid=?";
+				$result = $adb->pquery($sql, array($value));
+				$vendor_name = $adb->query_result($result, 0, "vendorname");
+
+				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $vendor_name . '</a>';       
+                        } elseif ($parent_module == "ProjectTask") {
+				$label_fld[] = $app_strings['SINGLE_ProjectTask'];
+				$sql = "select * from vtiger_projecttask where projecttaskid=?";
+				$result = $adb->pquery($sql, array($value));
+				$projecttask_name = $adb->query_result($result, 0, "projecttaskname");
+
+				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $projecttask_name . '</a>';
+                        // SalesPlatform.ru end 
+                        }   
 		} else {
 			$label_fld[] = getTranslatedString($fieldlabel, $module);
 			$label_fld[] = $value;

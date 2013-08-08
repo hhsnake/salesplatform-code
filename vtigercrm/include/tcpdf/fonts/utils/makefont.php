@@ -438,7 +438,10 @@ function MakeFontDescriptor($fm, $symbolic = false) {
 	//StemV
 	if (isset($fm['StdVW'])) {
 		$stemv = $fm['StdVW'];
-	} elseif (isset($fm['Weight']) and eregi('(bold|black)',$fm['Weight'])) {
+	// SalesPlatform.ru begin PHP 5.4 migration
+	} elseif (isset($fm['Weight']) and preg_match('/(bold|black)/i',$fm['Weight'])) {
+	//} elseif (isset($fm['Weight']) and eregi('(bold|black)',$fm['Weight'])) {
+	// SalesPlatform.ru end
 		$stemv=120;
 	} else {
 		$stemv = 70;

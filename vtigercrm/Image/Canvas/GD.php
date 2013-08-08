@@ -1676,16 +1676,25 @@ class Image_Canvas_GD extends Image_Canvas_WithMap
             $php_info = ob_get_contents();
             ob_end_clean();
 
-            if (ereg("<td[^>]*>GD Version *<\/td><td[^>]*>([^<]*)<\/td>",
+	    // SalesPlatform.ru begin PHP 5.4 migration
+            if (preg_match("/<td[^>]*>GD Version *<\/td><td[^>]*>([^<]*)<\/td>/",
+            //if (ereg("<td[^>]*>GD Version *<\/td><td[^>]*>([^<]*)<\/td>",
+	    // SalesPlatform.ru end
                 $php_info, $result))
             {
                 $version = $result[1];
             }
         }
 
-        if (ereg('1\.[0-9]{1,2}', $version)) {
+	// SalesPlatform.ru begin PHP 5.4 migration
+        if (preg_match('/1\.[0-9]{1,2}/', $version)) {
+        //if (ereg('1\.[0-9]{1,2}', $version)) {
+	// SalesPlatform.ru end
             return 1;
-        } elseif (ereg('2\.[0-9]{1,2}', $version)) {
+	// SalesPlatform.ru begin PHP 5.4 migration
+        } elseif (preg_match('/2\.[0-9]{1,2}/', $version)) {
+        //} elseif (ereg('2\.[0-9]{1,2}', $version)) {
+	// SalesPlatform.ru end
             return 2;
         } else {
             return 0;

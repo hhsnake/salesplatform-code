@@ -155,7 +155,10 @@ function execute_program ($programname, $args = '', $booErrorRep = true )
   
   // see if we've gotten a |, if we have we need to do patch checking on the cmd
   if ($args) {
-    $args_list = split(' ', $args);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $args_list = explode(' ', $args);
+    //$args_list = split(' ', $args);
+    // SalesPlatform.ru end
     for ($i = 0; $i < count($args_list); $i++) {
       if ($args_list[$i] == '|') {
         $cmd = $args_list[$i + 1];

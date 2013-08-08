@@ -72,5 +72,10 @@ $mod_strings = array(
  */
 'LBL_MODULE_NAME'=>'Vendors',
 'Vendors ID'=>'Vendors ID',
+
+// SalesPlatform.ru begin added translation for links
+'LBL_VENDORS_ADD_EVENTS'=>'Add Events',
+'LBL_VENDORS_ADD_TASK'=>'Add Tasks',
+// SalesPlatform.ru end 
 );
 ?>

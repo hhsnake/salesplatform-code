@@ -60,7 +60,10 @@ $smarty->assign('CHANGE_GROUP_OWNER', getGroupslist());
 // Enabling Module Search
 $url_string = '';
 if($_REQUEST['query'] == 'true') {
-	list($where, $ustring) = split('#@@#', getWhereCondition($currentModule));
+	// SalesPlatform.ru begin PHP 5.4 migration
+	list($where, $ustring) = explode('#@@#', getWhereCondition($currentModule));
+	//list($where, $ustring) = split('#@@#', getWhereCondition($currentModule));
+	// SalesPlatform.ru end
 	$url_string .= "&query=true$ustring";
 	$smarty->assign('SEARCH_URL', $url_string);
 }

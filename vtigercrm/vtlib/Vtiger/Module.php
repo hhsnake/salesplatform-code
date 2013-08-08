@@ -45,8 +45,12 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	 *
 	 * @internal Creates table vtiger_crmentityrel if it does not exists
 	 */
-	function setRelatedList($moduleInstance, $label='', $actions=false, $function_name='get_related_list') {
-		global $adb;
+        
+	// SalesPlatform.ru begin added support presence/sequence
+	function setRelatedList($moduleInstance, $label='', $actions=false, $function_name='get_related_list', $presence = '', $sequence = '') {
+        //function setRelatedList($moduleInstance, $label='', $actions=false, $function_name='get_related_list') {
+        // SalesPlatform.ru end
+                global $adb;
 
 		if(empty($moduleInstance)) return;
 
@@ -59,8 +63,16 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		}
 
 		$relation_id = $this->__getRelatedListUniqueId();
-		$sequence = $this->__getNextRelatedListSequence();
-		$presence = 0; // 0 - Enabled, 1 - Disabled
+                // SalesPlatform.ru begin added support presence/sequence
+                if ($sequence == '') {
+                    $sequence = $this->__getNextRelatedListSequence();
+                }
+                if ($presence == '') {
+                    $presence = 0; // 0 - Enabled, 1 - Disabled
+                }
+                //$sequence = $this->__getNextRelatedListSequence();
+                //$presence = 0; // 0 - Enabled, 1 - Disabled
+                // SalesPlatform.ru end
 
 		if(empty($label)) $label = $moduleInstance->name;
 
@@ -88,7 +100,7 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	 */
 	function unsetRelatedList($moduleInstance, $label='', $function_name='get_related_list') {
 		global $adb;
-
+                
 		if(empty($moduleInstance)) return;
 
 		if(empty($label)) $label = $moduleInstance->name;
@@ -177,6 +189,7 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		$instance = false;
 		$filepath = "modules/$modulename/$modulename.php";
 		if(Vtiger_Utils::checkFileAccessForInclusion($filepath, false)) {
+			checkFileAccessForInclusion($filepath);
 			include_once($filepath);
 			if(class_exists($modulename)) {
 				$instance = new $modulename();

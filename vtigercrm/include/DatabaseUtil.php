@@ -59,9 +59,11 @@ function mkCountQuery($query)
     // This is required for proper pattern matching for words like ' FROM ', 'ORDER BY', 'GROUP BY' as they depend on the spaces between the words.
     $query = preg_replace("/[\n\r\s]+/"," ",$query);
     
+    // SalesPlatform.ru begin: Fixed incorrect row count queries with DISTINCT
     //Strip of the current SELECT fields and replace them by "select count(*) as count"
     // Space across FROM has to be retained here so that we do not have a clash with string "from" found in select clause
-    $query = "SELECT count(*) AS count ".substr($query, stripos($query,' FROM '),strlen($query));
+    //$query = "SELECT count(*) AS count ".substr($query, stripos($query,' FROM '),strlen($query));
+    // SalesPlatform.ru end
 
     //Strip of any "GROUP BY" clause
     if(stripos($query,'GROUP BY') > 0)
@@ -70,6 +72,17 @@ function mkCountQuery($query)
     //Strip of any "ORDER BY" clause
     if(stripos($query,'ORDER BY') > 0)
 	$query = substr($query, 0, stripos($query,'ORDER BY'));
+
+    // SalesPlatform.ru begin: Fixed incorrect row count queries with DISTINCT
+    if(stripos($query,'*') === false) {
+        if(stripos($query,'DISTINCT') === false) {
+            $query = 'SELECT DISTINCT'.substr($query, stripos($query,'SELECT')+6);
+        }
+        $query = "SELECT count(*) AS count FROM ($query) AS sp_count_query";
+    } else {
+        $query = "SELECT count(*) AS count ".substr($query, stripos($query,' FROM '),strlen($query));
+    }
+    // SalesPlatform.ru end
 
     //That's it
     return( $query);

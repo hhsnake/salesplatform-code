@@ -226,7 +226,10 @@ class bsd_common {
     $results['ram'] = array();
 
     $pstat = execute_program('vmstat');
-    $lines = split("\n", $pstat);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $pstat);
+    //$lines = split("\n", $pstat);
+    // SalesPlatform.ru end
     for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/\s+/", $lines[$i], 19);
       if ($i == 2) {
@@ -254,7 +257,10 @@ class bsd_common {
       $pstat = execute_program('swapinfo', '-k');
     } 
 
-    $lines = split("\n", $pstat);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $pstat);
+    //$lines = split("\n", $pstat);
+    // SalesPlatform.ru end
 
     $results['swap']['total'] = 0;
     $results['swap']['used'] = 0;

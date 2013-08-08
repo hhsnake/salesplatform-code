@@ -177,7 +177,7 @@ var alert_arr = {
 
                 /* For Duplicate merging feature */
 	SAME_GROUPS: 'Вы должны выбрать записи в одной группе для объединения',
-	ATLEAST_TWO: 'Выберите минимум дые записи для объединения',
+	ATLEAST_TWO: 'Выберите минимум две записи для объединения',
 	MAX_THREE: 'Вам разрешено выбрать максимум три записи',
 	//PARENT_RECORD: 'Select a record as parent record',  MergeFields.tpl Line:59
 	MAX_RECORDS: 'Вам разрешено выбирать максимум четыре записи',

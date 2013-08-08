@@ -87,6 +87,7 @@ $mod_strings = array (
       'No Mail Ids' => 'Отсутствует e-mail адрес',
       'Mail Ids not permitted' => 'Доступ к e-mail адресам не разрешен',
       '{No Subject}' => '{Без темы}',
+      'LBL_IN_RECIPIENT' => 'в Получателе',
       // SalesPlatform.ru end
       'Subject' => 'Тема',
       'Attachment' => 'Вложение',

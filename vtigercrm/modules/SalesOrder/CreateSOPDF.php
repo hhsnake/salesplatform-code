@@ -11,11 +11,11 @@
 // SalesPlatform.ru begin
 include_once 'modules/SalesOrder/SPSalesOrderPDFController.php';
 //include_once 'modules/SalesOrder/SalesOrderPDFController.php';
-global $currentModule;
 // SalesPlatform.ru end
+$currentModule = vtlib_purify($_REQUEST['module']);
 
 // SalesPlatform.ru begin
-$controller = new SalesPlatform_SalesOrderPDFController($currentModule, $_REQUEST['pdf_template']);
+$controller = new SalesPlatform_SalesOrderPDFController($currentModule, vtlib_purify($_REQUEST['pdf_template']));
 //$controller = new Vtiger_SalesOrderPDFController($currentModule);
 // SalesPlatform.ru end
 

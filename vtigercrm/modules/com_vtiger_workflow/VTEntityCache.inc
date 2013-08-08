@@ -22,6 +22,30 @@ class VTWorkflowEntity{
 		}
 		$this->data = $data;
 	}
+	
+        // SalesPlatform.ru begin Replace related record ids (12x765) with Entity names
+	function processReferenceFields() {
+            require_once 'include/Webservices/DescribeObject.php';
+            // Describe object
+            $meta_info = vtws_describe($this->getModuleName(), $this->user);
+            foreach($meta_info['fields'] as $field_info_arr){
+                $type_name = $field_info_arr['type']['name'];
+                // Detect related fields
+                if ($type_name == 'reference' || $type_name == 'owner') {
+                    $ref_field_name = $field_info_arr['name'];
+                    // Get CRM ID
+                    $crmId = vtws_getCRMEntityId($this->data[$ref_field_name]);
+                    if ($crmId > 0) {
+                        // Get related Entity name
+                        $this->data[$ref_field_name] = ($type_name == 'owner' || 
+                                ($field_info_arr['type']['refersTo'][0] == 'Users')) ? 
+                                getOwnerRealName($crmId) : getParentName($crmId);
+                    }
+                }
+            }
+	}
+        // SalesPlatform.ru end
+        
 	/**
 	 * Get the data from the entity object as an array.
 	 *

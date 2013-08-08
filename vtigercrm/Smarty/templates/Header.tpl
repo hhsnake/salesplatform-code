@@ -16,6 +16,9 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link REL="SHORTCUT ICON" HREF="themes/images/vtigercrm_icon.ico">
 	<style type="text/css">@import url("themes/{$THEME}/style.css?v={$VERSION}");</style>
+        {* SalesPlatform.ru begin added autogenerate CSS file *}
+        <style type="text/css">@import url("themes/style.css?v={$VERSION}");</style>
+        {* SalesPlatform.ru end *}
 	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 {* vtlib customization: Inclusion of custom javascript and css as registered *}
 {if $HEADERCSS}

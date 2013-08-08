@@ -370,7 +370,10 @@ class dbTable extends dbObject {
 	*/
 	function &addIndex( $attributes ) {
 		$name = strtoupper( $attributes['NAME'] );
-		$this->indexes[$name] =& new dbIndex( $this, $attributes );
+		// SalesPlatform.ru begin PHP 5.4 migration
+		$this->indexes[$name] = new dbIndex( $this, $attributes );
+		//$this->indexes[$name] =& new dbIndex( $this, $attributes );
+		// SalesPlatform.ru end
 		return $this->indexes[$name];
 	}
 	
@@ -382,7 +385,10 @@ class dbTable extends dbObject {
 	*/
 	function &addData( $attributes ) {
 		if( !isset( $this->data ) ) {
-			$this->data =& new dbData( $this, $attributes );
+			// SalesPlatform.ru begin PHP 5.4 migration
+			$this->data = new dbData( $this, $attributes );
+			//$this->data =& new dbData( $this, $attributes );
+			// SalesPlatform.ru end
 		}
 		return $this->data;
 	}

@@ -83,7 +83,10 @@ class VTSimpleTemplate{
 				}
 			}
 		}
-		return $result;
+                // SalesPlatform.ru begin inserts html line breaks
+                return nl2br($result);
+                //return $result;
+                // SalesPlatform.ru end
 
 	}
 

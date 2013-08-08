@@ -23,6 +23,8 @@ $optionalModuleStrings = array(
 	'Projects_description' => 'Добавляет возможность Управления Проектами',
 	'Act_description' => 'Формирование и печать актов об оказанных услугах',
 	'Consignment_description' => 'Реализация товаров и услуг, формирование и печать счетов-фактур',
+	'SPPayments_description' => 'Модуль "Платежи"',
+	'SPUnits_description' => 'Модуль "Единицы измерения"',
 );
 
 $installationStrings = array(

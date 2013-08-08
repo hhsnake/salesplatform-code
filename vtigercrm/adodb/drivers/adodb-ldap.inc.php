@@ -55,7 +55,10 @@ class ADODB_ldap extends ADOConnection {
 		$conn_info = array( $host,$this->port);
 		
 		if ( strstr( $host, ':' ) ) {
-		    $conn_info = split( ':', $host );
+		    // SalesPlatform.ru begin PHP 5.4 migration
+		    $conn_info = explode( ':', $host );
+		    //$conn_info = split( ':', $host );
+		    // SalesPlatform.ru end
 		} 
 		
 		$this->_connectionID = ldap_connect( $conn_info[0], $conn_info[1] );

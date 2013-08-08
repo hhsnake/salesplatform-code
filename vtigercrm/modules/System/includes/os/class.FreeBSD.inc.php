@@ -49,7 +49,10 @@ class sysinfo extends bsd_common {
 
   function network () {
     $netstat = execute_program('netstat', '-nibd | grep Link');
-    $lines = split("\n", $netstat);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $netstat);
+    //$lines = split("\n", $netstat);
+    // SalesPlatform.ru END
     $results = array();
     for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/\s+/", $lines[$i]);

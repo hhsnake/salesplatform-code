@@ -15,14 +15,16 @@
 require_once 'include/utils/utils.php';
 require_once 'include/utils/CommonUtils.php';
 
-function getTabidDB($modulename) {
-    global $adb;
+if (!function_exists('getTabidDB')) {
+    function getTabidDB($modulename) {
+        global $adb;
 
-    $res = $adb->pquery('select tabid from vtiger_tab where name=?', array($modulename));
-    if($adb->num_rows($res) > 0) {
-        return $adb->query_result($res, 0, 'tabid');
+        $res = $adb->pquery('select tabid from vtiger_tab where name=?', array($modulename));
+        if($adb->num_rows($res) > 0) {
+            return $adb->query_result($res, 0, 'tabid');
+        }
+        return '';
     }
-    return '';
 }
 
 //we have to use the current object (stored in PatchApply.php) to execute the queries

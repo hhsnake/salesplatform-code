@@ -17,6 +17,7 @@
 	require_once("include/Zend/Json.php");
 	require_once('include/logging.php');
         // SalesPlatform.ru begin : bugfix for current language, used setCurrentLanguage() function
+    //checkFileAccessForInclusion("include/language/$default_language.lang.php");
 	//require_once "include/language/$default_language.lang.php";
 	// SalesPlatform.ru end
 	
@@ -125,11 +126,11 @@
 		$includes = $operationManager->getOperationIncludes();
 		
 		foreach($includes as $ind=>$path){
+			checkFileAccessForInclusion($path);
 			require_once($path);
 		}
 		$rawOutput = $operationManager->runOperation($operationInput,$current_user);
 		writeOutput($operationManager, $rawOutput);
-                //error_log("$operation rawOutput=".print_r($rawOutput, true));
 	}catch(WebServiceException $e){
 		writeErrorOutput($operationManager,$e);
 	}catch(Exception $e){

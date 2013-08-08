@@ -21,7 +21,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH","themes/$theme/images/");
 
-$scannername = $_REQUEST['scannername'];
+$scannername = vtlib_purify($_REQUEST['scannername']);
 $scannerinfo = new Vtiger_MailScannerInfo($scannername);
 
 $mailbox = new Vtiger_MailBox($scannerinfo);
@@ -29,7 +29,12 @@ $isconnected = $mailbox->connect();
 if($isconnected) {
 	$folders = $mailbox->getFolders();
 	$scannerinfo->updateFolderInfo($folders);
+} 
+// SalesPlatform.ru begin check connection
+else {
+    $smarty->assign("CONNECTFAIL", getTranslatedString('LBL_MAILSCANNER_CONNECTFAIL', 'Settings'));
 }
+// SalesPlatform.ru end
 
 $smarty->assign("SCANNERINFO", $scannerinfo->getAsMap());
 $smarty->assign("FOLDERINFO", $scannerinfo->getFolderInfo());

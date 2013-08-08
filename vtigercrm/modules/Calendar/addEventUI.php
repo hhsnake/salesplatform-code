@@ -652,6 +652,10 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
                                                                 <select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
                                                                 <?php          
                                                                 $arr_mod = array('Leads', 'Accounts', 'Potentials', 'HelpDesk','Campaigns');
+                                                                // SalesPlatform.ru begin added Vendors and ProjectTask
+                                                                array_push($arr_mod, 'Vendors');
+                                                                array_push($arr_mod, 'ProjectTask');
+                                                                // SalesPlatform.ru end
                                                                 foreach ($arr_mod as $value) {
                                                                     if (vtlib_isModuleActive($value)) { ?>
                                                                         <option value=<?php echo $value?>><?php echo $app_strings[$value]?></option>
@@ -781,8 +785,11 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 	for($i=0; $i<$adb->num_rows($Res);$i++)
 	{
 		$eventlist = $adb->query_result($Res,$i,'activitytype');
-?>		
-	<tr><td><a href='' id="add<?php echo strtolower($eventlist);?>" class='drop_down'><?php echo getTranslatedString($eventlist,'Calendar')?></a></td></tr>
+?>	
+        <!-- SalesPlatform.ru begin Support russian chars -->
+	<tr><td><a href='' id="add<?php echo mb_strtolower($eventlist,'UTF-8');?>" class='drop_down'><?php echo getTranslatedString($eventlist,'Calendar')?></a></td></tr>
+        <!--<tr><td><a href='' id="add<//?php echo strtolower($eventlist);?>" class='drop_down'><//?php echo getTranslatedString($eventlist,'Calendar')?></a></td></tr> -->
+        <!-- SalesPlatform.ru end -->
 <?php
 	}
 ?>
@@ -992,6 +999,10 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 						<option value="Invoice"><?php echo $app_strings['Invoice']?></option>
 						<option value="Act"><?php echo $app_strings['Act']?></option>
                                                 <option value="Consignment"><?php echo $app_strings['Consignment']?></option>
+                                                <!-- SalesPlatform.ru begin added Vendors and ProjectTask -->
+                                                <option value="Vendors"><?php echo $app_strings['Vendors']?></option>
+                                                <option value="ProjectTask"><?php echo $app_strings['ProjectTask']?></option>
+                                                <!-- SalesPlatform.ru end -->
 						</select>
 				</td>
 				<td>

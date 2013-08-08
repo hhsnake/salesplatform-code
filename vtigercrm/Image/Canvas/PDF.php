@@ -988,14 +988,20 @@ class Image_Canvas_PDF extends Image_Canvas
             $php_info = ob_get_contents();
             ob_end_clean();
 
-            if (ereg("<td[^>]*>PDFlib GmbH Version *<\/td><td[^>]*>([^<]*)<\/td>",
+	    // SalesPlatform.ru begin PHP 5.4 migration
+            if (preg_match("/<td[^>]*>PDFlib GmbH Version *<\/td><td[^>]*>([^<]*)<\/td>/",
+            //if (ereg("<td[^>]*>PDFlib GmbH Version *<\/td><td[^>]*>([^<]*)<\/td>",
+	    // SalesPlatform.ru end
                 $php_info, $result))
             {
                 $version = $result[1];
             }
         }
 
-        if (ereg('([0-9]{1,2})\.[0-9]{1,2}(\.[0-9]{1,2})?', trim($version), $result)) {
+	// SalesPlatform.ru begin PHP 5.4 migration
+        if (preg_match('/([0-9]{1,2})\.[0-9]{1,2}(\.[0-9]{1,2})?/', trim($version), $result)) {
+        //if (ereg('([0-9]{1,2})\.[0-9]{1,2}(\.[0-9]{1,2})?', trim($version), $result)) {
+	// SalesPlatform.ru end
             return $result[1];
         } else {
             return 0;

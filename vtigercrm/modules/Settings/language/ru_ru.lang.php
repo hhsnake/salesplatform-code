@@ -912,6 +912,7 @@ $mod_strings = array (
         'Allows you to Configure Cron Task' => 'Настройка Планировщика',
         'Update configuration file of the application' => 'Настройка конфигурационного файла', 
         'Allows you to manage Webforms' => 'Управление ВебФормами', 
+        'LBL_MAILSCANNER_CONNECTFAIL' => 'Не удалось подключиться к почтовому ящику!',
         // SalesPlatform.ru end
 );
 

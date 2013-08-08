@@ -255,7 +255,7 @@ function homepage_getSP_EVENTS_UpcomingActivities($maxval,$calCnt){
  	
 	$list_query = 'select vtiger_activity.subject, vtiger_activity.activitytype, vtiger_activity.activityid
 		from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid 
-		where vtiger_crmentity.deleted =0 AND vtiger_crmentity.smownerid = ?';
+		where vtiger_activity.activitytype not in ("Emails") AND vtiger_crmentity.deleted =0 AND vtiger_crmentity.smownerid = ?';
 	
         $list_query .=" ORDER BY vtiger_activity.activityid DESC";
        
@@ -325,7 +325,7 @@ function homepage_getSP_EXT_EVENTS_UpcomingActivities($maxval,$calCnt){
                         on vtiger_activity.activityid = vtiger_crmentity.crmid 
                         inner join vtiger_users 
                         on vtiger_crmentity.smownerid = vtiger_users.id
-                        where vtiger_crmentity.deleted =0 AND vtiger_users.reports_to_id=?';
+                        where vtiger_activity.activitytype not in ("Emails") AND vtiger_crmentity.deleted =0 AND vtiger_users.reports_to_id=?';
 	
         $list_query .=" ORDER BY vtiger_activity.activityid DESC";
 	 

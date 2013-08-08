@@ -819,7 +819,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			'Accounts' => $app_strings['COMBO_ACCOUNTS'],
 			'Potentials' => $app_strings['COMBO_POTENTIALS'],
 			'HelpDesk' => $app_strings['COMBO_HELPDESK'],
-			'Campaigns' => $app_strings['COMBO_CAMPAIGNS']
+			'Campaigns' => $app_strings['COMBO_CAMPAIGNS'],
+                        // SalesPlatform.ru begin added Vendors and ProjectTask
+                        'Vendors' => $app_strings['Vendors'],
+                        'ProjectTask' => $app_strings['ProjectTask'],
+                        // SalesPlatform.ru end
 		);
 		if($act_mode == "Task") {
 			$parentModulesList['Quotes'] = $app_strings['COMBO_QUOTES'];
@@ -830,6 +834,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$parentModulesList['Act'] = $app_strings['COMBO_ACTS'];
                         $parentModulesList['Consignment'] = $app_strings['COMBO_CONSIGNMENTS'];
                 // SalesPlatform.ru end
+                        // SalesPlatform.ru begin added Vendors and ProjectTask
+                        $parentModulesList['Vendors'] = $app_strings['Vendors'];
+                        $parentModulesList['ProjectTask'] = $app_strings['ProjectTask'];
+                        // SalesPlatform.ru end
 		}
 		$parentModuleNames = array_keys($parentModulesList);
 		$parentModuleLabels = array_values($parentModulesList);
@@ -1557,6 +1565,25 @@ function getConvertInvoiceToConsignment($focus,$invoice_focus,$invoiceid)
 }
 // SalesPlatform.ru end
 
+// SalesPlatform.ru begin convert address information
+function getConvertAddressInformation($focus, $rel_focus) {
+        $focus->column_fields['account_id'] = $rel_focus->column_fields['record_id'];
+        $focus->column_fields['bill_street'] = $rel_focus->column_fields['bill_street'];
+        $focus->column_fields['ship_street'] = $rel_focus->column_fields['ship_street'];
+        $focus->column_fields['bill_city'] = $rel_focus->column_fields['bill_city'];
+        $focus->column_fields['ship_city'] = $rel_focus->column_fields['ship_city'];
+        $focus->column_fields['bill_state'] = $rel_focus->column_fields['bill_state'];
+        $focus->column_fields['ship_state'] = $rel_focus->column_fields['ship_state'];
+        $focus->column_fields['bill_code'] = $rel_focus->column_fields['bill_code'];
+        $focus->column_fields['ship_code'] = $rel_focus->column_fields['ship_code'];
+        $focus->column_fields['bill_country'] = $rel_focus->column_fields['bill_country'];
+        $focus->column_fields['ship_country'] = $rel_focus->column_fields['ship_country'];
+        $focus->column_fields['bill_pobox'] = $rel_focus->column_fields['bill_pobox'];
+        $focus->column_fields['ship_pobox'] = $rel_focus->column_fields['ship_pobox'];
+        return $focus;
+}
+// SalesPlatform.ru end
+        
 /** This function returns the sales order object populated with the details from quote object.
 * Param $focus - Sales order object
 * Param $quote_focus - Quote order focus
@@ -1648,11 +1675,23 @@ function getAssociatedProducts($module,$focus,$seid='')
  		                        vtiger_inventoryproductrel.listprice, 
  		                        vtiger_inventoryproductrel.description AS product_description, 
  		                        vtiger_inventoryproductrel.* 
+                                        , attachments.attachment_id, attachments.attachment_name, attachments.attachment_path
  	                            FROM vtiger_inventoryproductrel 
  		                        LEFT JOIN vtiger_products 
  		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
  		                        LEFT JOIN vtiger_service 
  		                                ON vtiger_service.serviceid=vtiger_inventoryproductrel.productid 
+                                        LEFT JOIN (
+                                                    SELECT vtiger_attachments.attachmentsid AS attachment_id,
+                                                        vtiger_seattachmentsrel.crmid AS attachment_crmid, 
+                                                        vtiger_attachments.name AS attachment_name, 
+                                                        vtiger_attachments.path AS attachment_path 
+                                                    FROM vtiger_seattachmentsrel, vtiger_attachments, vtiger_inventoryproductrel 
+                                                    WHERE vtiger_seattachmentsrel.crmid=vtiger_inventoryproductrel.productid AND 
+                                                        vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid 
+                                                    GROUP BY attachment_crmid DESC
+                                                  ) attachments
+                                                ON attachments.attachment_crmid=vtiger_inventoryproductrel.productid                                                
  		                        WHERE id=?
  		                        ORDER BY sequence_no"; 
 /*		$query="SELECT 
@@ -1748,6 +1787,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 		    $customs_id=$adb->query_result($result,$i-1,'customs_id');
 		    $manuf_country_code=$adb->query_result($result,$i-1,'manuf_country_code');
 		    $unit_code=$adb->query_result($result,$i-1,'unit_code');
+		    $attachment_id=$adb->query_result($result,$i-1,'attachment_id');
+		    $attachment_name=$adb->query_result($result,$i-1,'attachment_name');
+		    $attachment_path=$adb->query_result($result,$i-1,'attachment_path');
 		}
 // SalesPlatform.ru end
 
@@ -1865,6 +1907,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 		    $product_Detail[$i]['customsId'.$i] = $customs_id;
 		    $product_Detail[$i]['manufCountryCode'.$i] = $manuf_country_code;
 		    $product_Detail[$i]['unitCode'.$i] = $unit_code;
+		    $product_Detail[$i]['attachmentId'.$i] = $attachment_id;
+		    $product_Detail[$i]['attachmentName'.$i] = $attachment_name;
+		    $product_Detail[$i]['attachmentPath'.$i] = $attachment_path;
 		}
 // SalesPlatform.ru end
 
@@ -2210,7 +2255,7 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 			}
 		}
 	}
-	$log->debug("Exiting getBlockInformation method ...");
+        $log->debug("Exiting getBlockInformation method ...");   
 	return $returndata;
 
 }

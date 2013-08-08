@@ -82,7 +82,10 @@ class sysinfo extends bsd_common {
     $results = array();
     $s = $this->grab_ioreg('IOPCIDevice');
 
-    $lines = split("\n", $s);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $s);
+    //$lines = split("\n", $s);
+    // SalesPlatform.ru end
     for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/\s+/", $lines[$i], 19);
       $results[$i] = $ar_buf[0];
@@ -96,7 +99,10 @@ class sysinfo extends bsd_common {
     // ioreg | grep "Media  <class IOMedia>"
     $s = $this->grab_ioreg('IOATABlockStorageDevice'); 
 
-    $lines = split("\n", $s);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $s);
+    //$lines = split("\n", $s);
+    // SalesPlatform.ru end
     $j = 0;
     for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/\/\//", $lines[$i], 19);
@@ -115,7 +121,10 @@ class sysinfo extends bsd_common {
     $results['ram'] = array();
 
     $pstat = execute_program('vm_stat'); // use darwin's vm_stat
-    $lines = split("\n", $pstat);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $pstat);
+    //$lines = split("\n", $pstat);
+    // SalesPlatform.ru end
     for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/\s+/", $lines[$i], 19);
 
@@ -135,7 +144,10 @@ class sysinfo extends bsd_common {
     $results['ram']['percent'] = round(($results['ram']['used'] * 100) / $results['ram']['total']); 
     // need to fix the swap info...
     $pstat = execute_program('swapinfo', '-k');
-    $lines = split("\n", $pstat);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $pstat);
+    //$lines = split("\n", $pstat);
+    // SalesPlatform.ru end
 
     for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/\s+/", $lines[$i], 6);
@@ -157,7 +169,10 @@ class sysinfo extends bsd_common {
 
   function network () {
     $netstat = execute_program('netstat', '-nbdi | cut -c1-24,42- | grep Link');
-    $lines = split("\n", $netstat);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $lines = explode("\n", $netstat);
+    //$lines = split("\n", $netstat);
+    // SalesPlatform.ru end
     $results = array();
     for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/\s+/", $lines[$i]);
@@ -183,7 +198,10 @@ class sysinfo extends bsd_common {
 
   function filesystems () {
     $df = execute_program('df', '-k');
-    $mounts = split("\n", $df);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $mounts = explode("\n", $df);
+    //$mounts = split("\n", $df);
+    // SalesPlatform.ru end
     $fstype = array();
 
     $s = execute_program('mount');
@@ -191,7 +209,10 @@ class sysinfo extends bsd_common {
 
     $i = 0;
     while (list(, $line) = each($lines)) {
-      ereg('(.*) \((.*)\)', $line, $a);
+    // SalesPlatform.ru begin PHP 5.4 migration
+      preg_match('/(.*) \((.*)\)/', $line, $a);
+    //  ereg('(.*) \((.*)\)', $line, $a);
+    // SalesPlatform.ru end
 
       $m = explode(' ', $a[0]);
       $fsdev[$m[0]] = $a[2];

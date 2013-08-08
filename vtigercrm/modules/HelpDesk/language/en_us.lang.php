@@ -189,7 +189,7 @@ $mod_strings = Array(
 'Support_team' => 'Vtiger Support Team',
 'The comments are' => 'The comments are',
 'Ticket Title' => 'Ticket Title',
-'Re' => 'Re :',
+'Re' => 'Re:',
 // Added/Updated for vtiger CRM 5.0.4
 
 //this label for customerportal.
@@ -224,6 +224,12 @@ $mod_strings = Array(
 
 'From Portal' => 'From Portal',
 'HelpDesk ID' => 'Trouble Tickets ID',
+
+'isNew' => 'New ticket added',
+'commentsHasChanged' => 'There is a comment to',
+'solutionHasChanged' => 'Solution has changed to',
+'ownerHasChanged' => 'Owner has changed for',
+'statusHasChanged' => 'Status has changed for',
 );
 
 ?>

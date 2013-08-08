@@ -186,7 +186,10 @@ class XMLSchema extends nusoap_base  {
         if(count($attrs) > 0){
         	foreach($attrs as $k => $v){
                 // if ns declarations, add to class level array of valid namespaces
-				if(ereg("^xmlns",$k)){
+				// SalesPlatform.ru begin PHP 5.4 migration
+				if(preg_match("/^xmlns/",$k)){
+				//if(ereg("^xmlns",$k)){
+				// SalesPlatform.ru end
                 	//$this->xdebug("$k: $v");
                 	//$this->xdebug('ns_prefix: '.$this->getPrefix($k));
                 	if($ns_prefix = substr(strrchr($k,':'),1)){
@@ -296,7 +299,10 @@ class XMLSchema extends nusoap_base  {
 					//                        minOccurs="0" maxOccurs="unbounded" />
 					//                </sequence>
 					//            </complexType>
-					if(isset($attrs['base']) && ereg(':Array$',$attrs['base'])){
+					// SalesPlatform.ru begin PHP 5.4 migration
+					if(isset($attrs['base']) && preg_match('/:Array$/',$attrs['base'])){
+					//if(isset($attrs['base']) && ereg(':Array$',$attrs['base'])){
+					// SalesPlatform.ru end
 						$this->xdebug('complexType is unusual array');
 						$this->complexTypes[$this->currentComplexType]['phpType'] = 'array';
 					} else {
@@ -315,7 +321,10 @@ class XMLSchema extends nusoap_base  {
 					//                        minOccurs="0" maxOccurs="unbounded" />
 					//                </sequence>
 					//            </complexType>
-					if(isset($attrs['base']) && ereg(':Array$',$attrs['base'])){
+					// SalesPlatform.ru begin PHP 5.4 migration
+					if(isset($attrs['base']) && preg_match('/:Array$/',$attrs['base'])){
+					//if(isset($attrs['base']) && ereg(':Array$',$attrs['base'])){
+					// SalesPlatform.ru end
 						$this->xdebug('complexType is unusual array');
 						$this->complexTypes[$this->currentComplexType]['phpType'] = 'array';
 					} else {
@@ -713,7 +722,10 @@ class XMLSchema extends nusoap_base  {
 		} elseif(isset($this->attributes[$type])){
 			$this->xdebug("in getTypeDef, found attribute $type");
 			return $this->attributes[$type];
-		} elseif (ereg('_ContainedType$', $type)) {
+		// SalesPlatform.ru begin PHP 5.4 migration
+		} elseif (preg_match('/_ContainedType$/', $type)) {
+		//} elseif (ereg('_ContainedType$', $type)) {
+		// SalesPlatform.ru end
 			$this->xdebug("in getTypeDef, have an untyped element $type");
 			$typeDef['typeClass'] = 'simpleType';
 			$typeDef['phpType'] = 'scalar';

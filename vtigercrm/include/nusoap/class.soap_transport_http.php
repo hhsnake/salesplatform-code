@@ -49,7 +49,10 @@ class soap_transport_http extends nusoap_base {
 	function soap_transport_http($url){
 		parent::nusoap_base();
 		$this->setURL($url);
-		ereg('\$Revisio' . 'n: ([^ ]+)', $this->revision, $rev);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		preg_match('/\$Revision: ([^ ]+)/', $this->revision, $rev);
+		//ereg('\$Revisio' . 'n: ([^ ]+)', $this->revision, $rev);
+		// SalesPlatform.ru end
 		$this->outgoing_headers['User-Agent'] = $this->title.'/'.$this->version.' ('.$rev[1].')';
 		$this->debug('set User-Agent: ' . $this->outgoing_headers['User-Agent']);
 	}
@@ -588,7 +591,10 @@ class soap_transport_http extends nusoap_base {
 				}
 			}
 			// remove 100 header
-			if(isset($lb) && ereg('^HTTP/1.1 100',$data)){
+			// SalesPlatform.ru begin PHP 5.4 migration
+			if(isset($lb) && preg_match('/^HTTP\/1.1 100/',$data)){
+			//if(isset($lb) && ereg('^HTTP/1.1 100',$data)){
+			// SalesPlatform.ru end
 				unset($lb);
 				$data = '';
 			}//
@@ -741,7 +747,10 @@ class soap_transport_http extends nusoap_base {
 		curl_close($this->ch);
 		
 		// remove 100 header(s)
-		while (ereg('^HTTP/1.1 100',$data)) {
+		// SalesPlatform.ru begin PHP 5.4 migration
+		while (preg_match('/^HTTP\/1.1 100/',$data)) {
+		//while (ereg('^HTTP/1.1 100',$data)) {
+		// SalesPlatform.ru end
 			if ($pos = strpos($data,"\r\n\r\n")) {
 				$data = ltrim(substr($data,$pos));
 			} elseif($pos = strpos($data,"\n\n") ) {
@@ -932,7 +941,10 @@ class soap_transport_http extends nusoap_base {
 	 */
 	function parseCookie($cookie_str) {
 		$cookie_str = str_replace('; ', ';', $cookie_str) . ';';
-		$data = split(';', $cookie_str);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		$data = explode(';', $cookie_str);
+		//$data = split(';', $cookie_str);
+		// SalesPlatform.ru end
 		$value_str = $data[0];
 
 		$cookie_param = 'domain=';

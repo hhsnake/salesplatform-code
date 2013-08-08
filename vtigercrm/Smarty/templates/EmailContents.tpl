@@ -28,9 +28,12 @@
 			<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="search_text" id="search_text" class="importBox" >&nbsp;
 		</td>
 		<td width="20%" align=left class="small">
-			<select name="search_field" id="search_field" onChange="Searchfn();" class="importBox">
+			<select name="search_field" id="search_field" {* SalesPlatform.ru begin Bugfix *} {* onChange="Searchfn();" *} {* SalesPlatform.ru end *} class="importBox">
 				<option value='subject'>{$MOD.LBL_IN_SUBJECT}</option>
 				<option value='user_name'>{$MOD.LBL_IN_SENDER}</option>
+                                {* SalesPlatform.ru begin *}
+				<option value='to_email'>{$MOD.LBL_IN_RECIPIENT}</option>
+                                {* SalesPlatform.ru end *}
 				<option value='join'>{$MOD.LBL_IN_SUBJECT_OR_SENDER}</option>
 			</select>&nbsp;
 		</td>
@@ -62,7 +65,10 @@
 				{if $EMAILFALG.$id eq 'SAVED'}
 					<td onClick="getEmailContents('{$id}');" style="cursor:pointer;"></td>
 				{else}
-					<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.2}</td>
+					<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.2} {$row.3}</td>
+                                        {* SalesPlatform.ru begin Time info added to Emails List View *}
+					{* <td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.2}</td> *}
+                                        {* SalesPlatform.ru end *}
 				{/if}
 			        </tr>
 			{/foreach}
@@ -77,6 +83,13 @@
 	if(gselectedrowid != 0)
 	{ldelim}
 		var rowid = 'row_'+gselectedrowid;
-	    getObj(rowid).className = 'emailSelected';
+            // SalesPlatform.ru begin Fixed flipping pages for MailManager
+            var rowobj = getObj(rowid);
+            if (rowobj) 
+                {ldelim}
+                    rowobj.className = 'emailSelected';
+                {rdelim}
+	    //getObj(rowid).className = 'emailSelected';
+            // SalesPlatform.ru end
 	{rdelim}
 </SCRIPT>

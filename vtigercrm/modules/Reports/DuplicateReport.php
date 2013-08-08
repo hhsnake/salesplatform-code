@@ -35,7 +35,10 @@ if($numOfRows > 0) {
 	$primarymodule = $ogReport->primodule;
 	$restrictedmodules = array();
 	if($ogReport->secmodule!='')
-		$rep_modules = split(":",$ogReport->secmodule);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		$rep_modules = explode(":",$ogReport->secmodule);
+		//$rep_modules = split(":",$ogReport->secmodule);
+		// SalesPlatform.ru end
 	else
 		$rep_modules = array();
 

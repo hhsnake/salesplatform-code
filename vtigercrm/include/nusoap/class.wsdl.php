@@ -274,7 +274,10 @@ class wsdl extends nusoap_base {
             $this->currentSchema->schemaStartElement($parser, $name, $attrs);
             $this->appendDebug($this->currentSchema->getDebug());
             $this->currentSchema->clearDebug();
-        } elseif (ereg('schema$', $name)) {
+	// SalesPlatform.ru begin PHP 5.4 migration
+        } elseif (preg_match('/schema$/', $name)) {
+        //} elseif (ereg('schema$', $name)) {
+	// SalesPlatform.ru end
         	$this->debug('Parsing WSDL schema');
             // $this->debug("startElement for $name ($attrs[name]). status = $this->status (".$this->getLocalPart($name).")");
             $this->status = 'schema';
@@ -293,7 +296,10 @@ class wsdl extends nusoap_base {
             if (count($attrs) > 0) {
 				// register namespace declarations
                 foreach($attrs as $k => $v) {
-                    if (ereg("^xmlns", $k)) {
+		    // SalesPlatform.ru begin PHP 5.4 migration
+                    if (preg_match("/^xmlns/", $k)) {
+                    //if (ereg("^xmlns", $k)) {
+		    // SalesPlatform.ru end
                         if ($ns_prefix = substr(strrchr($k, ':'), 1)) {
                             $this->namespaces[$ns_prefix] = $v;
                         } else {
@@ -318,7 +324,10 @@ class wsdl extends nusoap_base {
                 $attrs = array();
             } 
             // get element prefix, namespace and name
-            if (ereg(':', $name)) {
+	    // SalesPlatform.ru begin PHP 5.4 migration
+            if (preg_match('/:/', $name)) {
+            //if (ereg(':', $name)) {
+	    // SalesPlatform.ru end
                 // get ns prefix
                 $prefix = substr($name, 0, strpos($name, ':')); 
                 // get ns
@@ -483,7 +492,10 @@ class wsdl extends nusoap_base {
 	*/
 	function end_element($parser, $name){ 
 		// unset schema status
-		if (/*ereg('types$', $name) ||*/ ereg('schema$', $name)) {
+		// SalesPlatform.ru begin PHP 5.4 migration
+		if (/*ereg('types$', $name) ||*/ preg_match('/schema$/', $name)) {
+		//if (/*ereg('types$', $name) ||*/ ereg('schema$', $name)) {
+		// SalesPlatform.ru end
 			$this->status = "";
             $this->appendDebug($this->currentSchema->getDebug());
             $this->currentSchema->clearDebug();

@@ -27,7 +27,7 @@ $smarty->assign('MODULE',$currentModule);
 $smarty->assign('APP',$app_strings);
 $smarty->assign('THEME', $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
-$storearray = getSelectedRecords($_REQUEST, $currentModule, $_REQUEST['idstring'],$excludedRecords);
+$storearray = getSelectedRecords($_REQUEST, $currentModule, vtlib_purify($_REQUEST['idstring']),$excludedRecords);
 $idstringval=implode(';',$storearray);
 $smarty->assign("IDS",$idstringval);
 $smarty->assign('MASS_EDIT','1');
@@ -42,6 +42,11 @@ $validationArray = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$validationArray['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$validationArray['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$validationArray['fieldlabel']);
+
+// SalesPlatform.ru begin
+$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
+$smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
+// SalesPlatform.ru end
 
 $smarty->display('MassEditForm.tpl');
 

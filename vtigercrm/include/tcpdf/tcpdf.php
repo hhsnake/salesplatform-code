@@ -7550,7 +7550,10 @@ if (!class_exists('TCPDF', false)) {
 			if (isset($dash)) {
 				$dash_string = '';
 				if ($dash) {
-					if (ereg('^.+,', $dash)) {
+					// SalesPlatform.ru begin PHP 5.4 migration
+					if (preg_match('/^.+,/', $dash)) {
+					//if (ereg('^.+,', $dash)) {
+					// SalesPlatform.ru end
 						$tab = explode(',', $dash);
 					} else {
 						$tab = array($dash);
@@ -10975,7 +10978,10 @@ if (!class_exists('TCPDF', false)) {
 							if (isset($dom[$key]['style']['font-family'])) {
 								// font family
 								if (isset($dom[$key]['style']['font-family'])) {
-									$fontslist = split(',', strtolower($dom[$key]['style']['font-family']));
+									// SalesPlatform.ru begin PHP 5.4 migration
+									$fontslist = explode(',', strtolower($dom[$key]['style']['font-family']));
+									//$fontslist = split(',', strtolower($dom[$key]['style']['font-family']));
+									// SalesPlatform.ru end
 									foreach ($fontslist as $font) {
 										$font = trim(strtolower($font));
 										if (in_array($font, $this->fontlist) OR in_array($font, $this->fontkeys)) {
@@ -11089,7 +11095,10 @@ if (!class_exists('TCPDF', false)) {
 						if ($dom[$key]['value'] == 'font') {
 							// font family
 							if (isset($dom[$key]['attribute']['face'])) {
-								$fontslist = split(',', strtolower($dom[$key]['attribute']['face']));
+								// SalesPlatform.ru begin PHP 5.4 migration
+								$fontslist = explode(',', strtolower($dom[$key]['attribute']['face']));
+								//$fontslist = split(',', strtolower($dom[$key]['attribute']['face']));
+								// SalesPlatform.ru end
 								foreach ($fontslist as $font) {
 									$font = trim(strtolower($font));
 									if (in_array($font, $this->fontlist) OR in_array($font, $this->fontkeys)) {

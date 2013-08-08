@@ -166,7 +166,10 @@ class MailBox {
 		$this->db->println("Building connection string");
                 if(preg_match("/@/",$this->login_username)) 
 		{
-                        $mailparts = split("@",$this->login_username);
+			// SalesPlatform.ru begin PHP 5.4 migration
+                        $mailparts = explode("@",$this->login_username);
+                        //$mailparts = split("@",$this->login_username);
+			// SalesPlatform.ru end
                         $user="".trim($mailparts[0])."";
                         $domain="".trim($mailparts[1])."";
 

@@ -204,6 +204,10 @@ $mod_strings = array (
     // SalesPlatform.ru begin
     'ACCOUNT_' => 'Контрагент_',
     // SalesPlatform.ru end
+    // SalesPlatform.ru begin links localization
+    'LBL_ACCOUNTS_ADD_ACT' => 'Создать Акт',
+    'LBL_ACCOUNTS_ADD_CONSIGNMENT' => 'Создать Реализация',
+    // SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

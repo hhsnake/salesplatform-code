@@ -193,22 +193,40 @@ class Vtiger_Link {
 							Vtiger_Utils::implodestr('?', count($permittedTabIdList), ',').')';
 						$params[] = $permittedTabIdList;
 					}
+                                        // SalesPlatform.ru begin Added sorting of sequence
+                                        $sql .= ' order by sequence';
+                                        // SalesPlatform.ru end
 					$result = $adb->pquery($sql, Array($adb->flatten_array($params)));
 				} else {
+                                        // SalesPlatform.ru begin Added sorting of sequence
 					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype IN ('.
-						Vtiger_Utils::implodestr('?', count($type), ',') .')',
+						Vtiger_Utils::implodestr('?', count($type), ',') .') order by sequence',
 							Array($tabid, $adb->flatten_array($type)));
+                                        /*
+                                         $result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype IN ('.                                    
+-                                               Vtiger_Utils::implodestr('?', count($type), ',') .')', 
+                                        */
+                                        // SalesPlatform.ru end
 				}			
 			} else {
 				// Single link type selection
 				if($tabid === self::IGNORE_MODULE) {
-					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE linktype=?', Array($type));
+                                        // SalesPlatform.ru begin Added sorting of sequence
+					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE linktype=? order by sequence', Array($type));
+                                        //$result = $adb->pquery('SELECT * FROM vtiger_links WHERE linktype=?', Array($type));
+                                        // SalesPlatform.ru end
 				} else {
-					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype=?', Array($tabid, $type));				
+                                        // SalesPlatform.ru begin Added sorting of sequence
+					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype=? order by sequence', Array($tabid, $type));
+                                        //$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype=?', Array($tabid, $type));
+                                        // SalesPlatform.ru end
 				}
 			}
 		} else {
-			$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=?', Array($tabid));
+                        // SalesPlatform.ru begin Added sorting of sequence
+			$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? order by sequence', Array($tabid));
+                        //$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=?', Array($tabid));
+                        // SalesPlatform.ru end
 		}
 
 		$strtemplate = new Vtiger_StringTemplate();
@@ -225,6 +243,7 @@ class Vtiger_Link {
 			$instance = new self();
 			$instance->initialize($row);
 			if(!empty($row['handler_path']) && isFileAccessible($row['handler_path'])) {
+				checkFileAccessForInclusion($row['handler_path']);
 				require_once $row['handler_path'];
 				$linkData = new Vtiger_LinkData($instance, $current_user);
 				$ignore = call_user_func(array($row['handler_class'], $row['handler']), $linkData);

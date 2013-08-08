@@ -122,11 +122,18 @@ if ($template == "wml") {
 if ($lng == 'browser') {
   // see if the browser knows the right languange.
   if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-    $plng = split(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    $plng = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    //$plng = split(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    // SalesPlatform.ru end
     if (count($plng) > 0) {
       while (list($k, $v) = each($plng)) {
-        $k = split(';', $v, 1);
-        $k = split('-', $k[0]);
+	// SalesPlatform.ru begin PHP 5.4 migration
+        $k = explode(';', $v, 1);
+        $k = explode('-', $k[0]);
+        //$k = split(';', $v, 1);
+        //$k = split('-', $k[0]);
+	// SalesPlatform.ru end
         if (file_exists(APP_ROOT . '/includes/lang/' . $k[0] . '.php')) {
           $lng = $k[0];
           break;

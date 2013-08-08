@@ -65,7 +65,10 @@ if (!$hide_picklist) {
 
   $dir = opendir(getcwd().'/modules/System/includes/lang/');
   while (false !== ($file = readdir($dir))) {
-    if ($file[0] != '.' && is_file(getcwd().'/modules/System/includes/lang/' . $file) && eregi("\.php$", $file)) {
+    // SalesPlatform.ru begin PHP 5.4 migration
+    if ($file[0] != '.' && is_file(getcwd().'/modules/System/includes/lang/' . $file) && preg_match("/\.php$/i", $file)) {
+    //if ($file[0] != '.' && is_file(getcwd().'/modules/System/includes/lang/' . $file) && eregi("\.php$", $file)) {
+    // SalesPlatform.ru end
       $filelist[] = eregi_replace('.php', '', $file);
     } 
   } 

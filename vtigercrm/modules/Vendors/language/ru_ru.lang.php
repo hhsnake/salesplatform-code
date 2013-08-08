@@ -58,6 +58,10 @@ $mod_strings = array (
       'LBL_MODULE_NAME'=>'Поставщики',
 
       'Vendors ID'=>'ID Поставщика',
+      // SalesPlatform.ru begin added translation for links
+      'LBL_VENDORS_ADD_EVENTS'=>'Добавить События',
+      'LBL_VENDORS_ADD_TASK'=>'Добавить Задачи',
+      // SalesPlatform.ru end 
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

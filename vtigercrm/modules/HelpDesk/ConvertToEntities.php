@@ -19,7 +19,10 @@ $potential_name = vtlib_purify($_REQUEST["potential_name"]);
 $close_date = vtlib_purify($_REQUEST["closedate"]);
 $current_user_id = vtlib_purify($_REQUEST["current_user_id"]);
 
-$idlist=split(';',$_REQUEST['idlist']);
+// SalesPlatform.ru begin PHP 5.4 migration
+$idlist=explode(';',$_REQUEST['idlist']);
+//$idlist=split(';',$_REQUEST['idlist']);
+// SalesPlatform.ru end
 
 $query='select * from vtiger_troubletickets';
 $rs=$adb->pquery($query, array());

@@ -218,26 +218,41 @@ class Vtiger_Mailer extends PHPMailer {
 			$adb->pquery('INSERT INTO vtiger_mailer_queue(id,fromname,fromemail,content_type,subject,body,mailer,relcrmid) VALUES(?,?,?,?,?,?,?,?)',
 				Array($uniqueid, $this->FromName, $this->From, $this->ContentType, $this->Subject, $this->Body, $this->Mailer, $linktoid));
 			$queueid = $adb->database->Insert_ID();
+                        // SalesPlatform.ru begin Check array before foreach
+                        if ($this->to)
+                        // SalesPlatform.ru end
 			foreach($this->to as $toinfo) {
 				if(empty($toinfo[0])) continue;
 				$adb->pquery('INSERT INTO vtiger_mailer_queueinfo(id, name, email, type) VALUES(?,?,?,?)',
 					Array($queueid, $toinfo[1], $toinfo[0], 'TO'));
 			}
+                        // SalesPlatform.ru begin Check array before foreach
+                        if ($this->cc)
+                        // SalesPlatform.ru end
 			foreach($this->cc as $ccinfo) {
 				if(empty($ccinfo[0])) continue;
 				$adb->pquery('INSERT INTO vtiger_mailer_queueinfo(id, name, email, type) VALUES(?,?,?,?)',
 					Array($queueid, $ccinfo[1], $ccinfo[0], 'CC'));
 			}
+                        // SalesPlatform.ru begin Check array before foreach
+                        if ($this->bcc)
+                        // SalesPlatform.ru end
 			foreach($this->bcc as $bccinfo) {
 				if(empty($bccinfo[0])) continue;
 				$adb->pquery('INSERT INTO vtiger_mailer_queueinfo(id, name, email, type) VALUES(?,?,?,?)',
 					Array($queueid, $bccinfo[1], $bccinfo[0], 'BCC'));
 			}
+                        // SalesPlatform.ru begin Check array before foreach
+                        if ($this->ReplyTo)
+                        // SalesPlatform.ru end
 			foreach($this->ReplyTo as $rtoinfo) {
 				if(empty($rtoinfo[0])) continue;
 				$adb->pquery('INSERT INTO vtiger_mailer_queueinfo(id, name, email, type) VALUES(?,?,?,?)',
 					Array($queueid, $rtoinfo[1], $rtoinfo[0], 'RPLYTO'));
 			}
+                        // SalesPlatform.ru begin Check array before foreach
+                        if ($this->attachment)
+                        // SalesPlatform.ru end
 			foreach($this->attachment as $attachmentinfo) {
 				if(empty($attachmentinfo[0])) continue;
 				$adb->pquery('INSERT INTO vtiger_mailer_queueattachments(id, path, name, encoding, type) VALUES(?,?,?,?,?)',
@@ -254,7 +269,7 @@ class Vtiger_Mailer extends PHPMailer {
 		if(!Vtiger_Utils::CheckTable('vtiger_mailer_queue')) return;
 
 		$mailer = new self();
-		$queue = $adb->query('SELECT * FROM vtiger_mailer_queue WHERE failed != 1');
+		$queue = $adb->pquery('SELECT * FROM vtiger_mailer_queue WHERE failed != ?', array(1));
 		if($adb->num_rows($queue)) {
 			for($index = 0; $index < $adb->num_rows($queue); ++$index) {
 				$mailer->reinitialize();

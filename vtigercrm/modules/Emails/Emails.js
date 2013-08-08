@@ -37,7 +37,13 @@ function getEmailContents(id)
 	if(gselectedrowid != 0 && gselectedrowid != id)
 	{
 		var prev_selected_rowid = 'row_'+gselectedrowid;
-		getObj(prev_selected_rowid).className = 'prvPrfHoverOff';
+                // SalesPlatform.ru begin Fixed flipping pages for MailManager
+                    var rowobj = getObj(prev_selected_rowid);
+                    if (rowobj) {
+                        rowobj.className = 'prvPrfHoverOff';
+                    }
+		//getObj(prev_selected_rowid).className = 'prvPrfHoverOff';
+                // SalesPlatform.ru end
 	}
 	gselectedrowid = id;
 	new Ajax.Request(

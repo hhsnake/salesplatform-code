@@ -691,6 +691,9 @@ $app_strings = array (
 // SalesPlatform.ru begin
 // 5.4.0 begin
      'LBL_BY' => 'По ',
+     // localization for SPPayments and SPUnits
+     'SPPayments' => 'Платежи',
+     'SPUnits' => 'Единицы измерения',
 // 5.4.0 end
 // SalesPlatform.ru end
       'LBL_UPDATED' => 'Обновлено',
@@ -1299,7 +1302,7 @@ $app_strings = array (
       'LBL_DONE' => ' Готово ',
       'LBL_NO_MODULES_TO_SELECT' => 'Операция Запрещена. Нет Модулей для обработки.',
       'CANNOT_CONVERT' => 'Невозможно Конвертировать',
-      'LBL_ADD_NOTE' => 'Добавить Заметку',
+      'LBL_ADD_NOTE' => 'Добавить Документ',
       'LBL_UNHIDE_FIELDS' => 'Отобразить Поля',
       'LBL_SELECT_FIELDS_TO_UDPATE_WITH_NEW_VALUE' => 'Выберите поля для обновления и укажите новое значение.',
       'LBL_LOADING' => 'Загрузка...',
@@ -1429,6 +1432,11 @@ $app_strings = array (
 
 // SalesPlatform.ru begin: Added literal form for all numbers on PDF
 '_literal' => '_прописью',
+'_short' => '_коротко',
+// SalesPlatform.ru end
+
+// SalesPlatform.ru begin added SPPayments     
+'LBL_SP_ADD_SPPAYMENTS' => 'Создать платеж', 
 // SalesPlatform.ru end
 );
 $app_list_strings = array (

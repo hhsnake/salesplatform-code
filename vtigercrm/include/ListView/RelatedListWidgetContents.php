@@ -12,13 +12,14 @@ if ($ajaxaction == "LOADRELATEDLISTWIDGET") {
         if ($currentModule == "Documents") {
             $query = "SELECT ce.crmid, ce.setype FROM vtiger_senotesrel nr ".
                     "LEFT JOIN vtiger_crmentity ce ON ce.crmid = nr.crmid ".
-                    "WHERE ce.deleted = 0 AND nr.notesid = ?";
+                    "WHERE nr.notesid = ? ";
         } else {
             $query = "SELECT ce.crmid, ce.setype FROM vtiger_crmentityrel er ".
                     "LEFT JOIN vtiger_crmentity ce ON ce.crmid = er.crmid ".
-                    "WHERE ce.deleted = 0 AND  er.relcrmid = ?";
+                    "WHERE er.relcrmid = ? ";
         }
-        $list_result = $adb->pquery($query, array($crmid));
+        $query .= " AND ce.deleted = 0 AND ce.crmid != ? ";
+        $list_result = $adb->pquery($query, array($crmid, $crmid));
         $noofrows = $adb->num_rows($list_result);
         for ($i = 0; $i < $noofrows; $i++) {
             $module = $adb->query_result($list_result, $i, "setype");

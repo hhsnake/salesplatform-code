@@ -60,8 +60,18 @@ function vtmailscanner_folders_resetAll_To(checktype) {
 				<br>
 				<table border=0 cellspacing=0 cellpadding=10 width=100% >
 				<tr>
-				<td>
-				
+				<td>	
+                           
+                                {* SalesPlatform.ru begin check connection *}                                    
+                                {if $CONNECTFAIL neq ''}
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+					<tr>
+							<td align="center" width="100%"><font color='red'><b>{$CONNECTFAIL}</b></font></td>
+					</tr>
+					</table>
+				{/if}
+                                {* SalesPlatform.ru end *}
+                                
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 				<tr>
 					<td class="big" width="70%"><strong>{$MOD.LBL_MAILBOX} {$MOD.LBL_FOLDER}</strong></td>

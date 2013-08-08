@@ -702,6 +702,9 @@ $mod_strings = array (
 '1 Hour' => '1 час',
 '1 Day' => '1 день',
 //SalesPlatform.ru end 
+// SalesPlatform.ru begin settings asterisk
+'LBL_ASTERISKEXTENSIONS_EXIST' => 'Данный Asterisk номер уже существует',
+// SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

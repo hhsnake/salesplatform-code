@@ -31,7 +31,7 @@ $focus = new Users();
 
 // Add in defensive code here.
 // SalesPlatform.ru begin : trim added
-$focus->column_fields["user_name"] = to_html(trim($_REQUEST['user_name']));
+$focus->column_fields["user_name"] = to_html(vtlib_purify(trim($_REQUEST['user_name'])));
 $user_password = vtlib_purify(trim($_REQUEST['user_password']));
 //$focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
 //$user_password = vtlib_purify($_REQUEST['user_password']);
@@ -71,13 +71,24 @@ if($focus->is_authenticated())
 	createUserPrivilegesfile($focus->id);
 	
 	//Security related entries end
-	session_unregister('login_password');
-	session_unregister('login_error');
-	session_unregister('login_user_name');
+	// SalesPlatform.ru begin PHP 5.4 migration
+	unset($_SESSION['login_password']);
+	unset($_SESSION['login_error']);
+	unset($_SESSION['login_user_name']);
+	//session_unregister('login_password');
+	//session_unregister('login_error');
+	//session_unregister('login_user_name');
+	// SalesPlatform.ru end
 
 	$_SESSION['authenticated_user_id'] = $focus->id;
 	$_SESSION['app_unique_key'] = $application_unique_key;
 
+	//Enabled session variable for KCFINDER
+	$_SESSION['KCFINDER'] = array();
+	$_SESSION['KCFINDER']['disabled'] = false;
+	$_SESSION['KCFINDER']['uploadURL'] = "test/upload";
+	$_SESSION['KCFINDER']['uploadDir'] = "../test/upload";
+	
 	// store the user's theme in the session
 	if(!empty($focus->column_fields["theme"])) {
 		$authenticated_user_theme = $focus->column_fields["theme"];

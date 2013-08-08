@@ -7,7 +7,9 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ********************************************************************************/
+global $mod_strings,$adb,$root_directory;
 
+checkFileAccessForInclusion($root_directory."include/database/PearDatabase.php");
 require_once($root_directory."include/database/PearDatabase.php");
 // SalesPlatform.ru begin
 require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';

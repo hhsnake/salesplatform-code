@@ -670,10 +670,16 @@ function _convertRange2d($range)
     
     // Split the range into 2 cell refs
     if (preg_match("/^([A-Ia-i]?[A-Za-z])(\d+)\:([A-Ia-i]?[A-Za-z])(\d+)$/",$range)) {
-        list($cell1, $cell2) = split(':', $range);
+	// SalesPlatform.ru begin PHP 5.4 migration
+        list($cell1, $cell2) = explode(':', $range);
+        //list($cell1, $cell2) = split(':', $range);
+	// SalesPlatform.ru end
     }
  elseif (preg_match("/^([A-Ia-i]?[A-Za-z])(\d+)\.\.([A-Ia-i]?[A-Za-z])(\d+)$/",$range)) {
-        list($cell1, $cell2) = split('\.\.', $range);
+	// SalesPlatform.ru begin PHP 5.4 migration
+        list($cell1, $cell2) = explode('\.\.', $range);
+        //list($cell1, $cell2) = split('\.\.', $range);
+	// SalesPlatform.ru end
     }
  else {
         // TODO: use real error codes
@@ -721,7 +727,10 @@ function _convertRange3d($token)
     $class = 2; // as far as I know, this is magick.
 
     // Split the ref at the ! symbol
-    list($ext_ref, $range) = split('!', $token);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    list($ext_ref, $range) = explode('!', $token);
+    //list($ext_ref, $range) = split('!', $token);
+    // SalesPlatform.ru end
 
     // Convert the external reference part
     $ext_ref = $this->_packExtRef($ext_ref);
@@ -730,7 +739,10 @@ function _convertRange3d($token)
     }
 
     // Split the range into 2 cell refs
-    list($cell1, $cell2) = split(':', $range);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    list($cell1, $cell2) = explode(':', $range);
+    //list($cell1, $cell2) = split(':', $range);
+    // SalesPlatform.ru end
 
     // Convert the cell references
     if (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)$/", $cell1))
@@ -819,7 +831,10 @@ function _convertRef3d($cell)
     $class = 2; // as far as I know, this is magick.
  
     // Split the ref at the ! symbol
-    list($ext_ref, $cell) = split('!', $cell);
+    // SalesPlatform.ru begin PHP 5.4 migration
+    list($ext_ref, $cell) = explode('!', $cell);
+    //list($ext_ref, $cell) = split('!', $cell);
+    // SalesPlatform.ru end
  
     // Convert the external reference part
     $ext_ref = $this->_packExtRef($ext_ref);
@@ -860,7 +875,10 @@ function _packExtRef($ext_ref) {
     // Check if there is a sheet range eg., Sheet1:Sheet2.
     if (preg_match("/:/", $ext_ref))
  {
-        list($sheet_name1, $sheet_name2) = split(':', $ext_ref);
+	// SalesPlatform.ru begin PHP 5.4 migration
+        list($sheet_name1, $sheet_name2) = explode(':', $ext_ref);
+        //list($sheet_name1, $sheet_name2) = split(':', $ext_ref);
+	// SalesPlatform.ru end
 
         $sheet1 = $this->_getSheetIndex($sheet_name1);
         if ($sheet1 == -1) {
@@ -1135,7 +1153,10 @@ function _match($token)
         default:
             // if it's a reference
             if (preg_match('/^\$?[A-Ia-i]?[A-Za-z]\$?[0-9]+$/',$token) and
-               !ereg("[0-9]",$this->_lookahead) and 
+	    // SalesPlatform.ru begin PHP 5.4 migration
+               !preg_match("/[0-9]/",$this->_lookahead) and 
+            //   !ereg("[0-9]",$this->_lookahead) and 
+	    // SalesPlatform.ru end
                ($this->_lookahead != ':') and ($this->_lookahead != '.') and
                ($this->_lookahead != '!'))
  {
@@ -1143,32 +1164,47 @@ function _match($token)
             }
             // If it's an external reference (Sheet1!A1 or Sheet1:Sheet2!A1)
             elseif (preg_match("/^[A-Za-z0-9_]+(\:[A-Za-z0-9_]+)?\![A-Ia-i]?[A-Za-z][0-9]+$/",$token) and
-                   !ereg("[0-9]",$this->_lookahead) and
+		// SalesPlatform.ru begin PHP 5.4 migration
+                   !preg_match("/[0-9]/",$this->_lookahead) and
+                //   !ereg("[0-9]",$this->_lookahead) and
+		// SalesPlatform.ru end
                    ($this->_lookahead != ':') and ($this->_lookahead != '.'))
  {
                 return $token;
             }
             // if it's a range (A1:A2)
             elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+:(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and 
-                   !ereg("[0-9]",$this->_lookahead))
+    		// SalesPlatform.ru begin PHP 5.4 migration
+                   !preg_match("/[0-9]/",$this->_lookahead))
+                //   !ereg("[0-9]",$this->_lookahead))
+    		// SalesPlatform.ru end
  {
                 return $token;
             }
             // if it's a range (A1..A2)
             elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and 
-                   !ereg("[0-9]",$this->_lookahead))
+		// SalesPlatform.ru begin PHP 5.4 migration
+                   !preg_match("/[0-9]/",$this->_lookahead))
+                //   !ereg("[0-9]",$this->_lookahead))
+		// SalesPlatform.ru end
  {
                 return $token;
             }
             // If it's an external range like Sheet1:Sheet2!A1:B2
             elseif (preg_match("/^[A-Za-z0-9_]+(\:[A-Za-z0-9_]+)?\!([A-Ia-i]?[A-Za-z])?[0-9]+:([A-Ia-i]?[A-Za-z])?[0-9]+$/",$token) and
-                   !ereg("[0-9]",$this->_lookahead))
+		// SalesPlatform.ru begin PHP 5.4 migration
+                   !preg_match("/[0-9]/",$this->_lookahead))
+                //   !ereg("[0-9]",$this->_lookahead))
+		// SalesPlatform.ru end
  {
                 return $token;
             }
 	    // If it's an external range like 'Sheet1:Sheet2'!A1:B2
             elseif (preg_match("/^'[A-Za-z0-9_ ]+(\:[A-Za-z0-9_ ]+)?'\!([A-Ia-i]?[A-Za-z])?[0-9]+:([A-Ia-i]?[A-Za-z])?[0-9]+$/",$token) and
-                   !ereg("[0-9]",$this->_lookahead))
+		// SalesPlatform.ru begin PHP 5.4 migration
+                   !preg_match("/[0-9]/",$this->_lookahead))
+                //   !ereg("[0-9]",$this->_lookahead))
+		// SalesPlatform.ru end
  {
                 return $token;
             }
@@ -1180,12 +1216,18 @@ function _match($token)
                 return $token;
             }
             // If it's a string (of maximum 255 characters)
-            elseif (ereg("^\"[^\"]{0,255}\"$",$token))
+	    // SalesPlatform.ru begin PHP 5.4 migration
+            elseif (preg_match("/^\"[^\"]{0,255}\"$/",$token))
+            //elseif (ereg("^\"[^\"]{0,255}\"$",$token))
+	    // SalesPlatform.ru end
  {
                 return $token;
             }
             // if it's a function call
-            elseif (eregi("^[A-Z0-9\xc0-\xdc\.]+$",$token) and ($this->_lookahead == "(")) {
+	    // SalesPlatform.ru begin PHP 5.4 migration
+            elseif (preg_match("/^[A-Z0-9\xc0-\xdc\.]+$/i",$token) and ($this->_lookahead == "(")) {
+            //elseif (eregi("^[A-Z0-9\xc0-\xdc\.]+$",$token) and ($this->_lookahead == "(")) {
+	    // SalesPlatform.ru end
                 return $token;
             }
             return '';
@@ -1290,7 +1332,10 @@ function _condition()
 function _expression()
  {
     // If it's a string return a string node
-    if (ereg("^\"[^\"]{0,255}\"$", $this->_current_token))
+    // SalesPlatform.ru begin PHP 5.4 migration
+    if (preg_match("/^\"[^\"]{0,255}\"$/", $this->_current_token))
+    //if (ereg("^\"[^\"]{0,255}\"$", $this->_current_token))
+    // SalesPlatform.ru end
  {
         $result = $this->_createTree($this->_current_token, '', '');
         $this->_advance();
@@ -1443,7 +1488,10 @@ function _fact()
         $this->_advance();
         return $result;
     }
- elseif (eregi("^[A-Z0-9\xc0-\xdc\.]+$",$this->_current_token))
+// SalesPlatform.ru begin PHP 5.4 migration
+ elseif (preg_match("/^[A-Z0-9\xc0-\xdc\.]+$/i",$this->_current_token))
+// elseif (eregi("^[A-Z0-9\xc0-\xdc\.]+$",$this->_current_token))
+// SalesPlatform.ru end
  {
     // if it's a function call
         $result = $this->_func();

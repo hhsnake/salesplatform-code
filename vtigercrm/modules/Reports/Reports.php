@@ -1235,7 +1235,10 @@ function getEscapedColumns($selectedfields)
 		$result = $adb->pquery($ssql, array($reportid));
 		$permitted_fields = Array();
 
-		$selected_mod = split(":",$this->secmodule);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		$selected_mod = explode(":",$this->secmodule);
+		//$selected_mod = split(":",$this->secmodule);
+		// SalesPlatform.ru end
 		array_push($selected_mod,$this->primodule);
 
 		while($columnslistrow = $adb->fetch_array($result))
@@ -1251,9 +1254,15 @@ function getEscapedColumns($selectedfields)
 				}
 			}
 			if($selmod_field_disabled==false){
-				list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
+				// SalesPlatform.ru begin PHP 5.4 migration
+				list($tablename,$colname,$module_field,$fieldname,$single) = explode(":",$fieldcolname);
+				//list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
+				// SalesPlatform.ru end
 				require('user_privileges/user_privileges_'.$current_user->id.'.php');
-				list($module,$field) = split("_",$module_field);
+				// SalesPlatform.ru begin PHP 5.4 migration
+				list($module,$field) = explode("_",$module_field);
+				//list($module,$field) = split("_",$module_field);
+				// SalesPlatform.ru end
 				if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 				{
 					$permitted_fields = $this->getaccesfield($module);
@@ -1556,7 +1565,10 @@ function getEscapedColumns($selectedfields)
                         // SalesPlatform.ru begin localization for 5.4.0  
                             $columntototalrow['fieldlabel'] = html_entity_decode($columntototalrow['fieldlabel']);
                         // SalesPlatform.ru end 
-			if($typeofdata[0] == "N" || $typeofdata[0] == "I")
+                        // SalesPlatform.ru begin NN type supported
+			if($typeofdata[0] == "N" || $typeofdata[0] == "NN" || $typeofdata[0] == "I")
+			//if($typeofdata[0] == "N" || $typeofdata[0] == "I")
+                        // SalesPlatform.ru end 
 			{
 				$options = Array();
 				if(isset($this->columnssummary))

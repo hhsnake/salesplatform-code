@@ -11,17 +11,17 @@
 // SalesPlatform.ru begin
 include_once 'modules/SalesOrder/SPSalesOrderPDFController.php';
 //include_once 'modules/SalesOrder/SalesOrderPDFController.php';
-global $currentModule;
 // SalesPlatform.ru end
+$currentModule = vtlib_purify($_REQUEST['module']);
 
 // SalesPlatform.ru begin
-$controller = new SalesPlatform_SalesOrderPDFController($currentModule, $_REQUEST['pdf_template']);
+$controller = new SalesPlatform_SalesOrderPDFController($currentModule, vtlib_purify($_REQUEST['pdf_template']));
 //$controller = new Vtiger_SalesOrderPDFController($currentModule);
 // SalesPlatform.ru end
 
 $controller->loadRecord(vtlib_purify($_REQUEST['record']));
 
-$filenameid = $_REQUEST['record'];
+$filenameid = vtlib_purify($_REQUEST['record']);
 $salesorder_no = getModuleSequenceNumber($currentModule,vtlib_purify($_REQUEST['record']));
 if(empty($filenameid)) $filenameid = time();
 $filepath="storage/SalesOrder_".$salesorder_no.".pdf";

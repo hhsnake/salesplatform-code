@@ -378,8 +378,12 @@ class SalesPlatform_PDF_SPPDFController {
     }
 
     function shortDate($date){
-	$date=explode("-", $date);
-	return $date[2].'.'.$date[1].'.'.$date[0];
+	if(!empty($date)) {
+	    $date=explode("-", $date);
+	    return $date[2].'.'.$date[1].'.'.$date[0];
+	} else {
+	    return '';
+	}
     }
 
     protected function generateEntityModel($entity, $module, $prefix, $model) {
@@ -406,6 +410,8 @@ class SalesPlatform_PDF_SPPDFController {
 			   break;
 		case 'D': $model->set($prefix.$fieldname, $this->literalDate($entity->column_fields[$fieldname]));
 			  $model->set($prefix.$fieldname.'_short', $this->shortDate($entity->column_fields[$fieldname]));
+                          $model->set(strtoupper($prefix).strtoupper(str_replace(" ","",$fieldinfo['fieldlabel'])).'_SHORT', $model->get($prefix.$fieldname.'_short'));
+                          $model->set(getTranslatedString(strtoupper($prefix), $module).str_replace(" ","",getTranslatedString($fieldinfo['fieldlabel'], $module)).getTranslatedString('_short'), $model->get($prefix.$fieldname.'_short'));
 			  break;
 		case 'C': if($entity->column_fields[$fieldname] == 0) {
 			    $model->set($prefix.$fieldname, 'Нет');

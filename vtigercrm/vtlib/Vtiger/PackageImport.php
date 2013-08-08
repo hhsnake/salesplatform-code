@@ -697,7 +697,10 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			}
 		}
 		if($relModuleInstance) {
-			$moduleInstance->setRelatedList($relModuleInstance, "$label", $actions, "$relatedlistnode->function");
+                        // SalesPlatform.ru begin added support presence/sequence
+			$moduleInstance->setRelatedList($relModuleInstance, "$label", $actions, "$relatedlistnode->function", $relatedlistnode->presence, $relatedlistnode->sequence);
+                        //$moduleInstance->setRelatedList($relModuleInstance, "$label", $actions, "$relatedlistnode->function");
+                        // SalesPlatform.ru end
 		}
 		return $relModuleInstance;
 	}

@@ -33,8 +33,12 @@ Class CustomReportUtils {
 		foreach ($groupBy as $key => $value) {
 			// $groupByConditon = explode(" ",$value);
 			//$groupByNew = explode("'",$groupByConditon[0]);
-			list($tablename, $colname, $module_field, $fieldname, $single) = split(":", $key);
-			list($module, $field) = split("_", $module_field);
+			// SalesPlatform.ru begin PHP 5.4 migration
+			list($tablename, $colname, $module_field, $fieldname, $single) = explode(":", $key);
+			list($module, $field) = explode("_", $module_field);
+			//list($tablename, $colname, $module_field, $fieldname, $single) = split(":", $key);
+			//list($module, $field) = split("_", $module_field);
+			// SalesPlatform.ru end
 			$fieldDetails = $key;
 			break;
 		}
@@ -53,7 +57,10 @@ Class CustomReportUtils {
 	}
 
 	public static function IsDateField($reportColDetails) {
-		list($tablename, $colname, $module_field, $fieldname, $typeOfData) = split(":", $reportColDetails);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		list($tablename, $colname, $module_field, $fieldname, $typeOfData) = explode(":", $reportColDetails);
+		//list($tablename, $colname, $module_field, $fieldname, $typeOfData) = split(":", $reportColDetails);
+		// SalesPlatform.ru end
 		if ($typeOfData == "D") {
 			return true;
 		} else {
@@ -62,9 +69,14 @@ Class CustomReportUtils {
 	}
 
 	public static function getAdvanceSearchCondition($fieldDetails, $criteria, $fieldvalue) {
-		list($tablename, $colname, $module_field, $fieldname, $single) = split(":", $fieldDetails);
-		list($module, $field) = split("_", $module_field);
-		list($year, $month, $day) = split("-", $fieldvalue);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		list($tablename, $colname, $module_field, $fieldname, $single) = explode(":", $fieldDetails);
+		list($module, $field) = explode("_", $module_field);
+		list($year, $month, $day) = explode("-", $fieldvalue);
+		//list($tablename, $colname, $module_field, $fieldname, $single) = split(":", $fieldDetails);
+		//list($module, $field) = split("_", $module_field);
+		//list($year, $month, $day) = split("-", $fieldvalue);
+		// SalesPlatform.ru end
 		$grteqCondition = 'h';
 		$eqCondition = 'e';
 		$lessCondititon = 'l';

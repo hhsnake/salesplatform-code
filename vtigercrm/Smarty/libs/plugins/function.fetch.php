@@ -181,7 +181,10 @@ function smarty_function_fetch($params, &$smarty)
                         $content .= fgets($fp,4096);
                     }
                     fclose($fp);
-                    $csplit = split("\r\n\r\n",$content,2);
+		    // SalesPlatform.ru begin PHP 5.4 migration
+                    $csplit = explode("\r\n\r\n",$content,2);
+                    //$csplit = split("\r\n\r\n",$content,2);
+		    // SalesPlatform.ru end
 
                     $content = $csplit[1];
 

@@ -54,8 +54,15 @@ function redirectWhenNoRelatedRecordsFound()
 <script language="JavaScript" type="text/javascript" src="include/js/vtlib.js"></script>
 <!-- END -->
 <script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
+{if $RETURN_MODULE}
 <script language="JavaScript" type="text/javascript" src="modules/{$RETURN_MODULE}/{$RETURN_MODULE}.js"></script>
+{/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
+<!-- SalesPlatform.ru begin added SPPayments -->
+{if $SPPAYMENTS_ACTIVE}
+<script language="JavaScript" type="text/javascript" src="modules/SPPayments/SPPayments.js"></script>
+{/if}
+<!-- SalesPlatform.ru end -->
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type='text/javascript' src='modules/com_vtiger_workflow/resources/jquery-1.2.6.js'></script>
 <script type='text/javascript'>

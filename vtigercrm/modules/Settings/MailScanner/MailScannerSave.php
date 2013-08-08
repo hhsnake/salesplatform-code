@@ -39,14 +39,14 @@ $newscannerinfo->ssltype    = vtlib_purify(trim($_REQUEST['mailboxinfo_ssltype']
 $newscannerinfo->sslmethod  = vtlib_purify(trim($_REQUEST['mailboxinfo_sslmethod']));
 $newscannerinfo->searchfor  = vtlib_purify(trim($_REQUEST['mailboxinfo_searchfor']));
 $newscannerinfo->markas     = vtlib_purify(trim($_REQUEST['mailboxinfo_markas']));
-$newscannerinfo->isvalid    =($_REQUEST['mailboxinfo_enable'] == 'true')? true : false;
+$newscannerinfo->isvalid    =(vtlib_purify($_REQUEST['mailboxinfo_enable']) == 'true')? true : false;
 
 // Rescan all folders on next run?
-$rescanfolder = ($_REQUEST['mailboxinfo_rescan_folders'] == 'true')? true : false;
+$rescanfolder = (vtlib_purify($_REQUEST['mailboxinfo_rescan_folders']) == 'true')? true : false;
 
 $isconnected = false;
 
-$scannerinfo = new Vtiger_MailScannerInfo(trim($_REQUEST['hidden_scannername']));
+$scannerinfo = new Vtiger_MailScannerInfo(vtlib_purify(trim($_REQUEST['hidden_scannername'])));
 
 if(!$scannerinfo->compare($newscannerinfo)) {
 	$mailbox = new Vtiger_MailBox($newscannerinfo);
@@ -72,7 +72,10 @@ if(!$isconnected) {
 	$smarty->assign("IMAGE_PATH","themes/$theme/images/");
 
 	$smarty->assign("SCANNERINFO", $newscannerinfo->getAsMap());
-	$smarty->assign("CONNECTFAIL", "Connecting to mailbox failed!");
+        // SalesPlatform.ru begin check connection
+        $smarty->assign("CONNECTFAIL", getTranslatedString('LBL_MAILSCANNER_CONNECTFAIL', 'Settings'));
+	//$smarty->assign("CONNECTFAIL", "Connecting to mailbox failed!");
+        // SalesPlatform.ru end
 	$smarty->display('MailScanner/MailScannerEdit.tpl');	
 } else {
 

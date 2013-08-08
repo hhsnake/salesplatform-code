@@ -81,7 +81,10 @@ if($numOfRows > 0) {
 	$primarymodule = $ogReport->primodule;
 	$restrictedmodules = array();
 	if($ogReport->secmodule!='')
-		$rep_modules = split(":",$ogReport->secmodule);
+		// SalesPlatform.ru begin PHP 5.4 migration
+		$rep_modules = explode(":",$ogReport->secmodule);
+		//$rep_modules = split(":",$ogReport->secmodule);
+		// SalesPlatform.ru end
 	else
 		$rep_modules = array();
 
@@ -143,8 +146,12 @@ if($numOfRows > 0) {
 				foreach ($groupBy as $key => $value) {
 					//$groupByConditon = explode(" ",$value);
 					//$groupByNew = explode("'",$groupByConditon[0]);
-					list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$key);
-					list($module,$field)= split("_",$module_field);
+					// SalesPlatform.ru begin PHP 5.4 migration
+					list($tablename,$colname,$module_field,$fieldname,$single) = explode(":",$key);
+					list($module,$field)= explode("_",$module_field);
+					//list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$key);
+					//list($module,$field)= split("_",$module_field);
+					// SalesPlatform.ru end
 					$fieldDetails = $key;
 					break;
 				}
@@ -293,8 +300,8 @@ if($numOfRows > 0) {
 		$list_report_form->assign("BLOCKCRITERIA",$BLOCKCRITERIA);
 		if(isset($ogReport->startdate) && isset($ogReport->enddate))
 		{
-			$list_report_form->assign("STARTDATE",getDisplayDate($ogReport->startdate));
-			$list_report_form->assign("ENDDATE",getDisplayDate($ogReport->enddate));
+			$list_report_form->assign("STARTDATE",DateTimeField::convertToUserFormat($ogReport->startdate));
+			$list_report_form->assign("ENDDATE",DateTimeField::convertToUserFormat($ogReport->enddate));
 		}else
 		{
 			$list_report_form->assign("STARTDATE",$ogReport->startdate);
@@ -315,6 +322,11 @@ if($numOfRows > 0) {
 		$list_report_form->assign("FOLDERID", $folderid);
 		$list_report_form->assign("DATEFORMAT",$current_user->date_format);
 		$list_report_form->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+                // SalesPlatform.ru begin added support datefilter
+                if($reporttype == 'tabular' || $reporttype == 'summary' ||  in_array($reporttype, getCustomReportsListWithDateFilter())) {
+                    $list_report_form->assign("DATEFILTER", $reporttype);
+                } 
+                // SalesPlatform.ru end 
 		if($modules_export_permitted==true){
 			$list_report_form->assign("EXPORT_PERMITTED","YES");
 		} else {

@@ -1641,7 +1641,10 @@ function _write_url_external() {
     if (isset($sheet)) {
         $link_type |= 0x08;
         $sheet_len  = pack("V", length($sheet) + 0x01);
-        $sheet      = join("\0", split('', $sheet));
+	// SalesPlatform.ru begin PHP 5.4 migration
+        $sheet      = join("\0", explode('', $sheet));
+        //$sheet      = join("\0", split('', $sheet));
+	// SalesPlatform.ru end
         $sheet     .= "\0\0\0";
     } else {
         $sheet_len   = '';

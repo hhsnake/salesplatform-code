@@ -141,7 +141,10 @@ class Appointment
 			for($j = $from; $j <= $to; $j=$j+(60*60*24))
 			{
 
-				$obj = &new Appointment();
+				// SalesPlatform.ru begin PHP 5.4 migration
+				$obj = new Appointment();
+				//$obj = &new Appointment();
+				// SalesPlatform.ru end
 				$temp_start = date("Y-m-d",$j);
 				$endTime = strtotime($temp_start. ' '.  $result['time_start']);
 				if($endTime > $windowTo) {
@@ -187,7 +190,10 @@ class Appointment
         $a = 0;
 		while ( $a < $n )
                 {
-			$obj = &new Appointment();
+			// SalesPlatform.ru begin PHP 5.4 migration
+			$obj = new Appointment();
+			//$obj = &new Appointment();
+			// SalesPlatform.ru end
                         $result = $adb->fetchByAssoc($r);
 			list($obj->temphour,$obj->tempmin) = explode(":",$result["time_start"]);
                         $obj->readResult($result,$view);
