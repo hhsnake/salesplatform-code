@@ -9,7 +9,10 @@
  *************************************************************************************/
 
 require_once 'modules/Reports/Reports.php';
-require_once 'modules/Reports/ReportRun.php';
+// SalesPlatform.ru begin Fixed problem with shedule reports
+require_once 'modules/Reports/SPReportRun.php';
+//require_once 'modules/Reports/ReportRun.php';
+// SalesPlatform.ru end
 require_once 'include/Zend/Json.php';
 
 class VTScheduledReport extends Reports {
@@ -149,11 +152,14 @@ class VTScheduledReport extends Reports {
 		$vtigerMailer->ContentType = "text/html";
 
 		$baseFileName = preg_replace('/[^a-zA-Z0-9_-\s]/', '', $this->reportname).'_'. preg_replace('/[^a-zA-Z0-9_-\s]/', '', $currentTime);
-
-		$oReportRun = new ReportRun($this->id);
+                
+                // SalesPlatform.ru begin Fixed problem with shedule reports
+                $oReportRun = new SPReportRun($this->id);
+		//$oReportRun = new ReportRun($this->id);
+                // SalesPlatform.ru end
 		$reportFormat = $this->scheduledFormat;
 		$attachments = array();
-
+                
 		if($reportFormat == 'pdf' || $reportFormat == 'both') {
 			$fileName = $baseFileName.'.pdf';
 			$filePath = 'storage/'.$fileName;
@@ -167,7 +173,7 @@ class VTScheduledReport extends Reports {
 			$attachments[$fileName] = $filePath;
 			$oReportRun->writeReportToExcelFile($filePath);
 		}
-
+               
 		foreach($attachments as $attachmentName => $path) {
 			$vtigerMailer->AddAttachment($path, $attachmentName);
 		}

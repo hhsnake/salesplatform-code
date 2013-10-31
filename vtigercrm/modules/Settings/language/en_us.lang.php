@@ -585,6 +585,7 @@ $mod_strings = Array(
 'LBL_ORGANIZATION_BOOKKEEPER'=>'Bookkeeper',
 'LBL_ORGANIZATION_ENTREPRENEUR'=>'Entrepreneur',
 'LBL_ORGANIZATION_ENTREPRENEURREG'=>'Entrepreneur ID',
+'LBL_ORGANIZATION_OKPO'=>'OKPO',
 // SalesPlatform.ru end
 'LBL_ORGANIZATION_DETAILS'=>'Company Information',
 'LBL_SPECIFY_COMPANY_DETAILS'=>' - Specify Company Information',

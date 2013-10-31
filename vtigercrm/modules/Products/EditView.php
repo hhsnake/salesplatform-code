@@ -71,6 +71,9 @@ if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
 	$focus->vendorid = $_REQUEST['vendorid'];
 }
 
+// SalesPlatform.ru begin Unifying method for EditView preparing
+$focus = prepareEditView($focus, $_REQUEST, $smarty);
+// SalesPlatform.ru end
 $disp_view = getView($focus->mode);
 	$smarty->assign('BLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields));
 

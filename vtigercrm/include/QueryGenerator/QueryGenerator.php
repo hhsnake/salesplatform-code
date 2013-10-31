@@ -455,17 +455,28 @@ class QueryGenerator {
 			);
 			$tableJoinMapping['vtiger_attachmentsfolder'] = 'INNER JOIN';
 		}
-
+                
+                //SalesPlatform.ru begin - doSync bug fix
+                $iter = 2;   
+                //SalesPlatform.ru end
 		foreach ($tableJoinCondition as $fieldName=>$conditionInfo) {
 			foreach ($conditionInfo as $tableName=>$condition) {
-				if(!empty($tableList[$tableName])) {
-					$tableNameAlias = $tableName.'2';
+				if(!empty($tableList[$tableName])) { 
+                                        //SalesPlatform.ru begin - doSync bug fix
+                                        /*vtiger commented code
+                                        $tableNameAlias = $tableName.'2';
+                                        */
+					$tableNameAlias = $tableName.$iter;
+                                        //SalesPlatform.ru end
 					$condition = str_replace($tableName, $tableNameAlias, $condition);
 				} else {
 					$tableNameAlias = '';
 				}
 				$sql .= " $tableJoinMapping[$tableName] $tableName $tableNameAlias ON $condition";
 			}
+                        //SalesPlatform.ru begin - doSync bug fix
+                        $iter++;
+                        //SalesPlatform.ru end
 		}
 
 		foreach ($this->manyToManyRelatedModuleConditions as $conditionInfo) {

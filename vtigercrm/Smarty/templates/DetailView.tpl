@@ -550,7 +550,7 @@ function sendfile_email()
                 								{/if}
 {* SalesPlatform.ru begin *}
 				<!-- Start: Actions for PDF Templates -->
-                                {if $PDF_TEMPLATES_LIST && ($MODULE eq 'HelpDesk' || $MODULE eq 'Potentials')}
+                                {if $PDF_TEMPLATES_LIST && ($MODULE eq 'HelpDesk' || $MODULE eq 'Potentials' || $MODULE eq 'SPPayments')}
                                    <tr>
                                         <td align="left">
                                                 <span class="genHeaderSmall">{$APP.PrintingOptions}</span><br />
@@ -823,6 +823,9 @@ function sendpdf_submit()
 	{/if}
 	{if $MODULE eq 'Potentials'}
 		OpenCompose('{$ID}','Potentials');
+	{/if}
+	{if $MODULE eq 'SPPayments'}
+		OpenCompose('{$PAYMENT_NO}','Payment');
 	{/if}
 {literal}
 }

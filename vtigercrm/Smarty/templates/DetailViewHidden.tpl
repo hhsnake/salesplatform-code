@@ -219,6 +219,9 @@
         <input type="hidden" name="return_module">
         <input type="hidden" name="return_action">
         <input type="hidden" name="return_id">
+{* SalesPlatform.ru begin: Added PDF templates to SPPayments *}
+        <input type="hidden" name="pdf_template">
+{* SalesPlatform.ru end  *}
 {/if}
 
 

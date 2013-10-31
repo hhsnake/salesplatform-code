@@ -4720,6 +4720,9 @@
 		<field name="entrepreneurreg" type="C" size="100">
 			<default value="" />
 		</field>
+		<field name="okpo" type="C" size="100">
+			<default value="" />
+		</field>
 
 		<opt platform="mysql">ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci</opt>
 	</table>
@@ -7089,7 +7092,7 @@
 		<field name="tabid" type="I" />
 		<field name="linktype" type="C" size="20" />
 		<field name="linklabel" type="C" size="30" />
-		<field name="linkurl" type="C" size="255" />
+		<field name="linkurl" type="C" size="1024" />
 		<field name="linkicon" type="C" size="100" />
 		<field name="sequence" type="I" />
 		<field name="handler_path" type="C" size="128">

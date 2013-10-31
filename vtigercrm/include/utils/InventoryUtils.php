@@ -434,27 +434,29 @@ function deleteInventoryProductDetails($focus)
 	global $log, $adb,$updateInventoryProductRel_update_product_array;
 	$log->debug("Entering into function deleteInventoryProductDetails(".$focus->id.").");
 
-	$product_info = $adb->pquery("SELECT productid, quantity, sequence_no, incrementondel from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
-	$numrows = $adb->num_rows($product_info);
-	for($index = 0;$index <$numrows;$index++){
-		$productid = $adb->query_result($product_info,$index,'productid');
-		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
-		$qty = $adb->query_result($product_info,$index,'quantity');
-		$incrementondel = $adb->query_result($product_info,$index,'incrementondel');
-
-		if($incrementondel){
-			$focus->update_product_array[$focus->id][$sequence_no][$productid]= $qty;
-			$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$sequence_no));
-			if($adb->num_rows($sub_prod_query)>0){
-				for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
-					$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
-					$focus->update_product_array[$focus->id][$sequence_no][$sub_prod_id]= $qty;
-				}
-			}
-
-		}
-	}
-	$updateInventoryProductRel_update_product_array = $focus->update_product_array;
+        // SalesPlatform.ru begin Disabled dubious logic back to the stock
+//	$product_info = $adb->pquery("SELECT productid, quantity, sequence_no, incrementondel from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
+//	$numrows = $adb->num_rows($product_info);
+//	for($index = 0;$index <$numrows;$index++){
+//		$productid = $adb->query_result($product_info,$index,'productid');
+//		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
+//		$qty = $adb->query_result($product_info,$index,'quantity');
+//		$incrementondel = $adb->query_result($product_info,$index,'incrementondel');
+//
+//		if($incrementondel){
+//			$focus->update_product_array[$focus->id][$sequence_no][$productid]= $qty;
+//			$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$sequence_no));
+//			if($adb->num_rows($sub_prod_query)>0){
+//				for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
+//					$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
+//					$focus->update_product_array[$focus->id][$sequence_no][$sub_prod_id]= $qty;
+//				}
+//			}
+//
+//		}
+//	}
+//	$updateInventoryProductRel_update_product_array = $focus->update_product_array;
+        // SalesPlatform.ru end
     $adb->pquery("delete from vtiger_inventoryproductrel where id=?", array($focus->id));
     $adb->pquery("delete from vtiger_inventorysubproductrel where id=?", array($focus->id));
     $adb->pquery("delete from vtiger_inventoryshippingrel where id=?", array($focus->id));
@@ -462,7 +464,10 @@ function deleteInventoryProductDetails($focus)
 	$log->debug("Exit from function deleteInventoryProductDetails(".$focus->id.")");
 }
 
-function updateInventoryProductRel($entity)
+// SalesPlatform.ru begin Replenishment of stock
+function updateInventoryProductRel($entity, $is_purchase=false)
+//function updateInventoryProductRel($entity)
+// SalesPlatform.ru end
 {
 	global $log, $adb,$updateInventoryProductRel_update_product_array;
 	$entity_id = vtws_getIdComponents($entity->getId());
@@ -470,19 +475,21 @@ function updateInventoryProductRel($entity)
 	$update_product_array = $updateInventoryProductRel_update_product_array;
 	$log->debug("Entering into function updateInventoryProductRel(".$entity_id.").");
 
-	if(!empty($update_product_array)){
-		foreach($update_product_array as $id=>$seq){
-			foreach($seq as $seq=>$product_info)
-			{
-				foreach($product_info as $key=>$index){
-					$updqtyinstk= getPrdQtyInStck($key);
-					$upd_qty = $updqtyinstk+$index;
-					updateProductQty($key, $upd_qty);
-				}
-			}
-		}
-	}
-	$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($entity_id));
+        // SalesPlatform.ru begin Disabled dubious logic back to the stock
+//	if(!empty($update_product_array)){
+//		foreach($update_product_array as $id=>$seq){
+//			foreach($seq as $seq=>$product_info)
+//			{
+//				foreach($product_info as $key=>$index){
+//					$updqtyinstk= getPrdQtyInStck($key);
+//					$upd_qty = $updqtyinstk+$index;
+//					updateProductQty($key, $upd_qty);
+//				}
+//			}
+//		}
+//	}
+//	$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($entity_id));
+        // SalesPlatform.ru end
 
 	$product_info = $adb->pquery("SELECT productid,sequence_no, quantity from vtiger_inventoryproductrel WHERE id=?",array($entity_id));
 	$numrows = $adb->num_rows($product_info);
@@ -491,6 +498,11 @@ function updateInventoryProductRel($entity)
 		$qty = $adb->query_result($product_info,$index,'quantity');
 		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
 		$qtyinstk= getPrdQtyInStck($productid);
+                // SalesPlatform.ru begin Replenishment of stock
+                if ($is_purchase)
+                    $upd_qty = $qtyinstk+$qty;
+                else
+                // SalesPlatform.ru end
 		$upd_qty = $qtyinstk-$qty;
 		updateProductQty($productid, $upd_qty);
 		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($entity_id,$sequence_no));
@@ -498,6 +510,11 @@ function updateInventoryProductRel($entity)
 			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
 				$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
 				$sqtyinstk= getPrdQtyInStck($sub_prod_id);
+                                // SalesPlatform.ru begin Replenishment of stock
+                                if ($is_purchase)
+                                    $supd_qty = $sqtyinstk+$qty;
+                                else
+                                // SalesPlatform.ru end
 				$supd_qty = $sqtyinstk-$qty;
 				updateProductQty($sub_prod_id, $supd_qty);
 			}

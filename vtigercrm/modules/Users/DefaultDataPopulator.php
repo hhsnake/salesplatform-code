@@ -42,7 +42,10 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (1,'Dashboard',0,12,'Dashboards',0,1,0,'Analytics')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (15,'Faq',0,-1,'Faq',0,1,1,'Support')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (16,'Events',2,-1,'Events',0,0,1,null)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (18,'Vendors',0,-1,'Vendors',0,1,1,'Inventory')");
+                // SalesPlatform.ru begin: Added sharing for Vendors
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (18,'Vendors',0,-1,'Vendors',0,0,1,'Inventory')");
+		//$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (18,'Vendors',0,-1,'Vendors',0,1,1,'Inventory')");
+                // SalesPlatform.ru end
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (19,'PriceBooks',0,-1,'PriceBooks',0,1,1,'Inventory')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (20,'Quotes',0,-1,'Quotes',0,0,1,'Sales')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (21,'PurchaseOrder',0,-1,'PurchaseOrder',0,0,1,'Inventory')");
@@ -643,6 +646,10 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (18," . $this->db->getUniqueID("vtiger_field") . ",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,'',100,7,$vendorbasicinfo,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (18," . $this->db->getUniqueID("vtiger_field") . ",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,'',100,9,$vendorbasicinfo,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (18," . $this->db->getUniqueID("vtiger_field") . ",'modifiedby','vtiger_crmentity',1,'52','modifiedby','Last Modified By',1,0,'',100,12,$vendorbasicinfo,3,'V~O',3,null,'BAS',0)");
+                // SalesPlatform.ru begin Added Vendors assigned_user_id
+		$this->db->query("insert into vtiger_field values (18," . $this->db->getUniqueID("vtiger_field") . ",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,'',100,13,$vendorbasicinfo,1,'V~M',0,4,'BAS',1)");
+                // SalesPlatform.ru end
+
 		//Block 46
 
 		$this->db->query("insert into vtiger_field values (18," . $this->db->getUniqueID("vtiger_field") . ",'street','vtiger_vendor',1,'21','street','Street',1,2,'',100,1,$vendoraddressblock,1,'V~O',1,null,'ADV',1)");
@@ -1049,7 +1056,10 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_org_share_action_mapping values(7,'Show Details and Add Events')");
 
 		//Inserting for all vtiger_tabs
-		$def_org_tabid = Array(2, 4, 6, 7, 8, 9, 10, 13, 14, 16, 20, 21, 22, 23, 26);
+                // SalesPlatform.ru begin: Added sharing for Vendors
+		$def_org_tabid = Array(2, 4, 6, 7, 8, 9, 10, 13, 14, 16, 18, 20, 21, 22, 23, 26);
+		//$def_org_tabid = Array(2, 4, 6, 7, 8, 9, 10, 13, 14, 16, 20, 21, 22, 23, 26);
+                // SalesPlatform.ru end
 
 		foreach ($def_org_tabid as $def_tabid) {
 			$this->db->query("insert into vtiger_org_share_action2tab values(0," . $def_tabid . ")");
@@ -1079,6 +1089,8 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_def_org_share values (".$this->db->getUniqueID('vtiger_def_org_share').",14,2,0)");
 // SalesPlatform.ru begin
         $this->db->query("insert into vtiger_def_org_share values (".$this->db->getUniqueID('vtiger_def_org_share').",10,3,0)");
+        // Added sharing for Vendors
+        $this->db->query("insert into vtiger_def_org_share values (".$this->db->getUniqueID('vtiger_def_org_share').",18,2,0)");
 // SalesPlatform.ru end
 
 		//Populating the DataShare Related Modules

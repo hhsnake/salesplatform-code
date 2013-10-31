@@ -107,6 +107,9 @@ if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['rec
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
+// SalesPlatform.ru begin Unifying method for EditView preparing
+$focus = prepareEditView($focus, $_REQUEST, $smarty);
+// SalesPlatform.ru end
 $disp_view = getView($focus->mode);
 $mode = $focus->mode;
 	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));

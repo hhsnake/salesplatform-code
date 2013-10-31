@@ -176,7 +176,9 @@ class Homestuff{
 					$reportResult= $adb->query($reportQuery);
 					$num_rows = $adb->num_rows($reportResult);
 					if($num_rows <=0 ){
-						continue;
+                                                // SalesPlatform.ru begin Correction of the homepage with limited rights for the report
+						//continue;
+                                                // SalesPlatform.ru end
 					}
 				}
             }

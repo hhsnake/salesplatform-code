@@ -127,7 +127,10 @@ function sensex_info()
 									   <tr>
 										<td  colspan=4 style="padding:5px">
 										   <div align="center">
-											<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; displaydeleted(); return validateInventory('{$MODULE}')" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+											{* SalesPlatform.ru begin check before save *}
+                                                                                        <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(validateInventory('{$MODULE}')) sp_js_editview_checkBeforeSave('{$MODULE}',this.form, '{$MODE}');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+										        {*<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; displaydeleted(); return validateInventory('{$MODULE}')" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >*}
+                                                                                        {* SalesPlatform.ru end *}
 											<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 										   </div>
 										</td>
@@ -176,7 +179,10 @@ function sensex_info()
 									   <tr>
 										<td  colspan=4 style="padding:5px">
 											<div align="center">
-												<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  displaydeleted();return validateInventory('{$MODULE}')" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                                                {* SalesPlatform.ru begin check before save *}
+                                                                                                <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(validateInventory('{$MODULE}')) sp_js_editview_checkBeforeSave('{$MODULE}',this.form, '{$MODE}');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+												{*<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  displaydeleted();return validateInventory('{$MODULE}')" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >*}
+                                                                                                {* SalesPlatform.ru end *}
 												<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 											</div>
 										</td>
@@ -208,6 +214,13 @@ function sensex_info()
         var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
 
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
+        
+        //SalesPlatform.ru begin check before save
+        var crmId;
+        {if isset($ID) && !empty($ID)}
+        crmId = {$ID};
+        {/if}
+	//SalesPlatform.ru end
 
 	var product_labelarr = {ldelim}CLEAR_COMMENT:'{$APP.LBL_CLEAR_COMMENT}',
 				DISCOUNT:'{$APP.LBL_DISCOUNT}',

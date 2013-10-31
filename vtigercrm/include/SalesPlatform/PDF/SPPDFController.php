@@ -141,6 +141,7 @@ class SalesPlatform_PDF_SPPDFController {
 			$model->set('orgBankName', $adb->query_result($result,0,'bankname'));
 			$model->set('orgBankId', $adb->query_result($result,0,'bankid'));
 			$model->set('orgCorrAccount', $adb->query_result($result,0,'corraccount'));
+                        $model->set('orgOKPO', $adb->query_result($result,0,"okpo"));
 
 			if($adb->query_result($result,0,'director')) {
 			    $model->set('orgDirector', $adb->query_result($result,0,'director'));

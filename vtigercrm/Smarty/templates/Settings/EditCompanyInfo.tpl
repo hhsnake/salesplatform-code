@@ -150,6 +150,10 @@
                             <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_ENTREPRENEURREG}</strong></td>
                             <td class="small cellText"><input type="text" name="organization_entrepreneurreg" class="detailedViewTextBox small" value="{$ORGANIZATIONENTREPRENEURREG}"></td>
                           </tr>
+                          <tr> 
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_OKPO}</strong></td> 
+                            <td class="small cellText"><input type="text" name="organization_okpo" class="detailedViewTextBox small" value="{$ORGANIZATIONOKPO}"></td> 
+                          </tr>
 <!-- SalesPlatform.ru end -->
                         </table>
 						

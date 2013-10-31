@@ -1927,7 +1927,7 @@ class ReportRun extends CRMEntity
 		$advfiltersql = $this->getAdvFilterSql($reportid, $params);
 //		$advfiltersql = $this->getAdvFilterSql($reportid);
 // SalesPlatform.ru end
-
+                
 		$this->totallist = $columnstotallist;
 		global $current_user;
 		$tab_id = getTabid($this->primarymodule);
@@ -1951,7 +1951,10 @@ class ReportRun extends CRMEntity
         }
 
 		//standard list
-		if(isset($stdfilterlist))
+                // SalesPlatform.ru begin: Fixed runtime date filters in Reports
+		if(isset($stdfilterlist) && empty($filtersql))
+		//if(isset($stdfilterlist))
+                // SalesPlatform.ru end
 		{
 			$stdfiltersql = implode(", ",$stdfilterlist);
 		}
@@ -1964,20 +1967,23 @@ class ReportRun extends CRMEntity
 		{
 			$wheresql = " and ".$stdfiltersql;
 		}
-
-		if(isset($filtersql) && $filtersql !== false) {
+                
+                // SalesPlatform.ru begin Fixed problem with advanced filters
+                if($filtersql) { 
+		//if(isset($filtersql) && $filtersql !== false) {
+                // SalesPlatform.ru end
 			$advfiltersql = $filtersql;
 		}
 		if($advfiltersql != "") {
 			$wheresql .= " and ".$advfiltersql;
 		}
-
+                
 		$reportquery = $this->getReportsQuery($this->primarymodule, $type);
-
+                
 		// If we don't have access to any columns, let us select one column and limit result to shown we have not results
                 // Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/4758 - Prasad
 		$allColumnsRestricted = false;
-
+                
 		if($type == 'COLUMNSTOTOTAL')
 		{
 			if($columnstotalsql != '')
@@ -2025,7 +2031,7 @@ class ReportRun extends CRMEntity
         }
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
                 return $reportquery;
-
+                
 	}
 
 	/** function to get the report output in HTML,PDF,TOTAL,PRINT,PRINTTOTAL formats depends on the argument $outputformat
@@ -2396,7 +2402,7 @@ class ReportRun extends CRMEntity
 				$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
 				$totalpdf=array();
 // SalesPlatform.ru begin
-				$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL",false,$params);
+				$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,'',false,$params);
 //				$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
 // SalesPlatform.ru end
 				if(isset($this->totallist))
@@ -2404,7 +2410,7 @@ class ReportRun extends CRMEntity
 						if($sSQL != "")
 						{
 								$result = $adb->query($sSQL);
-								$y=$adb->num_fields($result);
+								$y=$adb->num_fields($result);                                                                                                                              
 								$custom_field_values = $adb->fetch_array($result);
 
 								foreach($this->totallist as $key=>$value)
@@ -3336,7 +3342,7 @@ class ReportRun extends CRMEntity
 		$header->set_bold();
 		$header->set_size(12);
 		$header->set_color('blue');
-
+                
                 // SalesPlatform.ru begin
                 $caption = $this->GenerateReport("CAPTION",$filterlist,false,$reportParams);
                 $arr_val = $this->GenerateReport("PDF",$filterlist,false,$reportParams);
@@ -3648,5 +3654,11 @@ class ReportRun extends CRMEntity
 		}
 		return $columnsSqlList;
 	}
+        
+        // SalesPlatform.ru begin Fixed problem with shedule reports
+        function getReportCaption($reportid,$filterlist,$params) {
+            return '';
+        }
+        // SalesPlatform.ru end
 }
 ?>

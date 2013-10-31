@@ -31,6 +31,7 @@ $organization_director= vtlib_purify($_REQUEST['organization_director']);
 $organization_bookkeeper= vtlib_purify($_REQUEST['organization_bookkeeper']);
 $organization_entrepreneur= vtlib_purify($_REQUEST['organization_entrepreneur']);
 $organization_entrepreneurreg= vtlib_purify($_REQUEST['organization_entrepreneurreg']);
+$organization_okpo=$_REQUEST['organization_okpo'];
 // SalesPlatform.ru end
 
 $sql="select * from vtiger_organizationdetails where organizationname = ?";
@@ -41,17 +42,17 @@ if($org_name=='')
 {
 	$organizationId = $this->db->getUniqueID('vtiger_organizationdetails');
 // SalesPlatform.ru begin
-	$sql="insert into vtiger_organizationdetails(organization_id,organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, bankname, bankid, corraccount, director, bookkeeper, entrepreneur, entrepreneurreg) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	$sql="insert into vtiger_organizationdetails(organization_id,organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, bankname, bankid, corraccount, director, bookkeeper, entrepreneur, entrepreneurreg, okpo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	//$sql="insert into vtiger_organizationdetails(organization_id,organizationname, address, city, state, code, country, phone, fax, website) values(?,?,?,?,?,?,?,?,?)";
-	$params = array($organizationId, $organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $organization_inn, $organization_kpp, $organization_bankaccount, $organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg);
+	$params = array($organizationId, $organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $organization_inn, $organization_kpp, $organization_bankaccount, $organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg,$organization_okpo);
 	//$params = array($organizationId, $organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website);
 // SalesPlatform.ru end
 }
 else
 {
 // SalesPlatform.ru begin
-	$sql="update vtiger_organizationdetails set organizationname = ?, address = ?, city = ?, state = ?,  code = ?, country = ?,  phone = ?,  fax = ?,  website = ?, inn = ?, kpp = ?, bankaccount = ?, bankname = ?, bankid = ?, corraccount = ?, director = ?, bookkeeper = ?, entrepreneur = ?, entrepreneurreg = ? where organizationname = ?";
-	$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $organization_inn, $organization_kpp, $organization_bankaccount, $organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg, $org_name);
+	$sql="update vtiger_organizationdetails set organizationname = ?, address = ?, city = ?, state = ?,  code = ?, country = ?,  phone = ?,  fax = ?,  website = ?, inn = ?, kpp = ?, bankaccount = ?, bankname = ?, bankid = ?, corraccount = ?, director = ?, bookkeeper = ?, entrepreneur = ?, entrepreneurreg = ?, okpo = ? where organizationname = ?";
+	$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $organization_inn, $organization_kpp, $organization_bankaccount, $organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg, $organization_okpo, $org_name);
 	//$sql="update vtiger_organizationdetails set organizationname = ?, address = ?, city = ?, state = ?,  code = ?, country = ?,  phone = ?,  fax = ?,  website = ? where organizationname = ?";
 	//$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $org_name);
 // SalesPlatform.ru end

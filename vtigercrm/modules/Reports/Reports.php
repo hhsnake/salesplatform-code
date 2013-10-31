@@ -191,8 +191,12 @@ class Reports extends CRMEntity{
 			} else {
 				if($_REQUEST['mode'] != 'ajax')
 				{
-					include('modules/Vtiger/header.php');
+                                        // SalesPlatform.ru begin Correction of the homepage with limited rights for the report
+					//include('modules/Vtiger/header.php');
+                                        // SalesPlatform.ru end
 				}
+                                // SalesPlatform.ru begin Correction of the homepage with limited rights for the report
+                                /*
 				echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
 				echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>
 
@@ -209,6 +213,9 @@ class Reports extends CRMEntity{
 				</div>";
 				echo "</td></tr></table>";
 				break;
+                                 * 
+                                 */
+                                // SalesPlatform.ru end
 
 			}
 		}

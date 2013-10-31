@@ -1336,6 +1336,143 @@ class Accounts extends CRMEntity {
 		// end of mailer export
 		return $list_buttons;
 	}
+        
+        // SalesPlatform.ru begin Added functions to get Acts/Consignments related Accounts
+        /**
+	* Function to get Acts related Accounts
+	* @param  integer   $id      - accountid
+	* returns related Acts record in array format
+	*/
+	function get_acts($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
+		$log->debug("Entering get_acts(".$id.") method ...");
+		$this_module = $currentModule;
+
+                $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+                vtlib_setup_modulevars($related_module, $other);
+		$singular_modname = vtlib_toSingular($related_module);
+
+		$parenttab = getParentTab();
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+
+		$button = '';
+
+		if($actions && getFieldVisibilityPermission($related_module, $current_user->id, 'account_id','readwrite') == '0') {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_ADD_NEW'). " ". getTranslatedString($singular_modname) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+		}
+
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
+			vtiger_crmentity.*,
+                        vtiger_sp_act.*,
+			vtiger_sp_actbillads.*,
+                        vtiger_salesorder.subject AS salessubject
+			FROM vtiger_sp_act
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_sp_act.actid
+                        LEFT JOIN vtiger_salesorder
+				ON vtiger_salesorder.salesorderid = vtiger_sp_act.salesorderid
+			LEFT JOIN vtiger_sp_actbillads
+                                ON vtiger_sp_act.actid = vtiger_sp_actbillads.actbilladdressid
+                        LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_sp_act.accountid = ".$id;
+
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+
+		$log->debug("Exiting get_invoices method ...");
+		return $return_value;
+	}
+        
+        /**
+	* Function to get Consignments related Accounts
+	* @param  integer   $id      - accountid
+	* returns related Acts record in array format
+	*/
+	function get_consignments($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
+		$log->debug("Entering get_consignments(".$id.") method ...");
+		$this_module = $currentModule;
+
+                $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+                vtlib_setup_modulevars($related_module, $other);
+		$singular_modname = vtlib_toSingular($related_module);
+
+		$parenttab = getParentTab();
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+
+		$button = '';
+
+		if($actions && getFieldVisibilityPermission($related_module, $current_user->id, 'account_id','readwrite') == '0') {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_ADD_NEW'). " ". getTranslatedString($singular_modname) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+		}
+
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
+			vtiger_crmentity.*,
+                        vtiger_sp_consignment.*,
+			vtiger_sp_consignmentbillads.*,
+                        vtiger_salesorder.subject AS salessubject,
+                        vtiger_invoice.subject AS invoicesubject
+			FROM vtiger_sp_consignment
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_sp_consignment.consignmentid
+                        LEFT JOIN vtiger_salesorder
+				ON vtiger_salesorder.salesorderid = vtiger_sp_consignment.salesorderid
+                        LEFT JOIN vtiger_invoice
+				ON vtiger_invoice.invoiceid = vtiger_sp_consignment.invoiceid 
+			LEFT JOIN vtiger_sp_consignmentbillads
+                                ON vtiger_sp_consignment.consignmentid = vtiger_sp_consignmentbillads.consignmentbilladdressid
+                        LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_sp_consignment.accountid = ".$id;
+
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+
+		$log->debug("Exiting get_consignments method ...");
+		return $return_value;
+	}
+        // SalesPlatform.ru end
 
         // SalesPlatform.ru begin: Add vtlib handlers to fix related_to field in Potentials
         // on Contacts or Accounts enable/disable

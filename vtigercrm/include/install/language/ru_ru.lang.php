@@ -25,6 +25,8 @@ $optionalModuleStrings = array(
 	'Consignment_description' => 'Реализация товаров и услуг, формирование и печать счетов-фактур',
 	'SPPayments_description' => 'Модуль "Платежи"',
 	'SPUnits_description' => 'Модуль "Единицы измерения"',
+	'SPSocialConnector_description' => 'Модуль интеграции с социальными сетями',
+	'SPCMLConnector_description' => 'Модуль интеграции с 1С',
 );
 
 $installationStrings = array(

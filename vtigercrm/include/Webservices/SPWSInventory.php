@@ -681,5 +681,20 @@ class SPWSInventory {
         require_once('include/utils/InventoryUtils.php');
         deleteInventoryProductDetails($instance);
     }
+    
+    public function spws_retrieveProductImages($crmId,$data) {
+        global $adb, $site_URL;
+        $attachments_query = 'SELECT p.productid, a.attachmentsid, a.name, a.path 
+            FROM vtiger_products p, vtiger_seattachmentsrel ar, vtiger_attachments a 
+            WHERE p.productid = ar.crmid AND ar.attachmentsid = a.attachmentsid AND p.productid = ?';
+        $result = $adb->pquery($attachments_query, array($crmId));
+        $it = new SqlResultIterator($adb, $result);
+        $attachments = array();
+        foreach ($it as $row) {
+            $attachments[] = $site_URL."/".$row->path.$row->attachmentsid."_".$row->name;
+        }
+        $data['images'] = $attachments;
+        return $data;
+    }
 }
 ?>

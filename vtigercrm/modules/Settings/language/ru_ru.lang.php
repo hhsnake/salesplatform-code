@@ -305,6 +305,7 @@ $mod_strings = array (
       'LBL_ORGANIZATION_BOOKKEEPER'=>'Гл. бухгалтер',
       'LBL_ORGANIZATION_ENTREPRENEUR'=>'Инд. предприниматель',
       'LBL_ORGANIZATION_ENTREPRENEURREG'=>'Св-во о регистрации ИП',
+      'LBL_ORGANIZATION_OKPO'=>'ОКПО',
 // SalesPlatform.ru end
       'LBL_ORGANIZATION_DETAILS' => 'Информация Организации',
       'LBL_SPECIFY_COMPANY_DETAILS' => ' - Указать Информацию об Организации',
@@ -581,7 +582,7 @@ $mod_strings = array (
       'Please_try_again' => 'Пожалуйста, попробуйте еще раз!',
       'LBL_TESTMAILSTATUS' => 'Статус Тестового Сообщения: ',
       'LBL_CHECK_ASSIGNEDTO_MAILID' => 'Пожалуйста, проверьте адрес Ответственного',
-      'LBL_MAILSENDERROR' => 'Письмо не может быть отправлено админу. Пожалуйста, проверьте настройки адреса и сервера админа',
+      'LBL_MAILSENDERROR' => 'Письмо не может быть отправлено админу. Пожалуйста, проверьте настройки Сервера исходящей почты и Email админа.',
       'LBL_RECORD_NOEXIST' => 'Запись отсутствует',
       'LBL_ENTER_PROFILE' => 'Введите название Профиля',
       'LBL_DISABLE' => 'Запретить',

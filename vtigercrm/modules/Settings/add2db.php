@@ -19,7 +19,9 @@ $saveflag = "true";
 $error_flag = "";
 $binFile = $_FILES['binFile']['name'];
 $imageContent = file_get_contents($_FILES['binFile']['tmp_name']);
-if (preg_match('/(<\?(php)?)/i', $imageContent) == 0) {
+// SalesPlatform.ru begin Bad кedundancy сheck, see image_extensions_allowed checking
+//if (preg_match('/(<\?(php)?)/i', $imageContent) == 0) {
+// SalesPlatform.ru end
 	$imageInfo = getimagesize($_FILES['binFile']['tmp_name']);
 	$image_extensions_allowed = array('jpeg', 'png', 'jpg', 'pjpeg', 'x-png');
 	
@@ -70,6 +72,12 @@ if (preg_match('/(<\?(php)?)/i', $imageContent) == 0) {
 
 		if ($savelogo == "true") {
 			move_uploaded_file($_FILES["binFile"]["tmp_name"], $uploaddir . $_FILES["binFile"]["name"]);
+        // SalesPlatform.ru begin Save organization info even if there is no image
+                }
+        } else {
+            $nologo_specified = "true";
+        }
+        // SalesPlatform.ru end
 
 			$organization_name = vtlib_purify($_REQUEST['organization_name']);
 			$org_name = vtlib_purify($_REQUEST['org_name']);
@@ -92,6 +100,7 @@ if (preg_match('/(<\?(php)?)/i', $imageContent) == 0) {
                         $organization_bookkeeper=from_html($_REQUEST['organization_bookkeeper']);
                         $organization_entrepreneur=from_html($_REQUEST['organization_entrepreneur']);
                         $organization_entrepreneurreg=from_html($_REQUEST['organization_entrepreneurreg']);
+                        $organization_okpo=from_html($_REQUEST['organization_okpo']);
                         // SalesPlatform.ru end
 
 			$organization_logoname = $filename;
@@ -107,12 +116,12 @@ if (preg_match('/(<\?(php)?)/i', $imageContent) == 0) {
 				$organizationId = $adb->getUniqueID('vtiger_organizationdetails');
                                 // SalesPlatform.ru begin
 				$sql = "INSERT INTO vtiger_organizationdetails
-				(organization_id,organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, bankname, bankid, corraccount, director, bookkeeper, entrepreneur, entrepreneurreg, logoname) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				(organization_id,organizationname, address, city, state, code, country, phone, fax, website, inn, kpp, bankaccount, bankname, bankid, corraccount, director, bookkeeper, entrepreneur, entrepreneurreg, logoname, okpo) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				$params = array($organizationId, $organization_name, $organization_address, $organization_city, $organization_state, $organization_code,
 					$organization_country, $organization_phone, $organization_fax, $organization_website, 
                                         $organization_inn, $organization_kpp, $organization_bankaccount,
                                         $organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, $organization_bookkeeper, 
-                                        $organization_entrepreneur, $organization_entrepreneurreg, $organization_logoname);
+                                        $organization_entrepreneur, $organization_entrepreneurreg, $organization_logoname,$organization_okpo);
 				//$sql = "INSERT INTO vtiger_organizationdetails
 				//(organization_id,organizationname, address, city, state, code, country, phone, fax, website, logoname) values (?,?,?,?,?,?,?,?,?,?)";
 				//$params = array($organizationId, $organization_name, $organization_address, $organization_city, $organization_state, $organization_code,
@@ -137,13 +146,13 @@ if (preg_match('/(<\?(php)?)/i', $imageContent) == 0) {
 				SET organizationname = ?, address = ?, city = ?, state = ?, code = ?, country = ?, 
                                     phone = ?, fax = ?, website = ?, inn = ?, kpp = ?, bankaccount = ?, 
                                     bankname = ?, bankid = ?, corraccount = ?, director = ?, bookkeeper = ?, entrepreneur = ?, entrepreneurreg = ?,
-                                    logoname = ? WHERE organizationname = ?";
+                                    logoname = ?, okpo = ? WHERE organizationname = ?";
 				$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code,
                                             $organization_country, $organization_phone, $organization_fax, $organization_website, 
                                             $organization_inn, $organization_kpp, $organization_bankaccount,
                                             $organization_bankname, $organization_bankid, $organization_corraccount, $organization_director, 
                                             $organization_bookkeeper, $organization_entrepreneur, $organization_entrepreneurreg,
-                                            decode_html($organization_logoname), $org_name);
+                                            decode_html($organization_logoname), $organization_okpo, $org_name);
 				//$sql = "UPDATE vtiger_organizationdetails
 				//SET organizationname = ?, address = ?, city = ?, state = ?, code = ?, country = ?, 
 				//phone = ?, fax = ?, website = ?, logoname = ? WHERE organizationname = ?";
@@ -158,13 +167,16 @@ if (preg_match('/(<\?(php)?)/i', $imageContent) == 0) {
 			} elseif ($savelogo == "false") {
 				header("Location: index.php?parenttab=Settings&module=Settings&action=EditCompanyDetails&flag=" . $error_flag);
 			}
-		}
-	} else {
-		$error_flag = 2;
-		header("Location: index.php?parenttab=Settings&module=Settings&action=EditCompanyDetails&flag=" . $error_flag);
-	}
-}else{
-	$error_flag = 5;
-	header("Location: index.php?parenttab=Settings&module=Settings&action=EditCompanyDetails&flag=" . $error_flag);
-}
+// SalesPlatform.ru begin Save organization info even if there is no image
+	//}
+	//} else {
+	//	$error_flag = 2;
+	//	header("Location: index.php?parenttab=Settings&module=Settings&action=EditCompanyDetails&flag=" . $error_flag);
+	//}
+
+//}else{
+//	$error_flag = 5;
+//	header("Location: index.php?parenttab=Settings&module=Settings&action=EditCompanyDetails&flag=" . $error_flag);
+//}
+// SalesPlatform.ru end
 ?>

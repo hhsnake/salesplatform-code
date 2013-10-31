@@ -93,6 +93,9 @@ if (isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 if (empty($_REQUEST['record']) && $focus->mode != 'edit') {
         setObjectValuesFromRequest($focus);
 }
+// SalesPlatform.ru begin Unifying method for EditView preparing
+$focus = prepareEditView($focus, $_REQUEST, $smarty);
+// SalesPlatform.ru end
 $disp_view = getView($focus->mode);
 
 $smarty->assign("BLOCKS", getBlocks($currentModule, $disp_view, $mode, $focus->column_fields));
@@ -213,6 +216,15 @@ $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 
 $picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
 $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
+
+// SalesPlatform.ru begin enable/disable button Import
+$instance = Vtiger_Module::getInstance('SPSocialConnector'); 
+$fl_import_button = true;
+if($instance->presence == 1){
+    $fl_import_button = false;
+}
+$smarty->assign("FL_IMPORT_BUTTON", $fl_import_button);
+// SalesPlatform.ru end
 
 $smarty->display("salesEditView.tpl");
 

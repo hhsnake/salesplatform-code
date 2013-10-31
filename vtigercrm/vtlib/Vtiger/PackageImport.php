@@ -747,7 +747,10 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			if((empty($cronTask->sequence))){
 				$cronTask->sequence=Vtiger_Cron::nextSequence();
 			}
-			Vtiger_Cron::register("$cronTask->name","$cronTask->handler", "$cronTask->frequency", "$modulenode->name","$cronTask->status","$cronTask->sequence","$cronTask->description");
+			// SalesPlatform.ru begin added support laststart/lastend
+                        Vtiger_Cron::register("$cronTask->name","$cronTask->handler", "$cronTask->frequency", "$modulenode->name","$cronTask->status","$cronTask->sequence","$cronTask->description","$cronTask->laststart","$cronTask->lastend");
+			//Vtiger_Cron::register("$cronTask->name","$cronTask->handler", "$cronTask->frequency", "$modulenode->name","$cronTask->status","$cronTask->sequence","$cronTask->description");
+                        // SalesPlatform.ru end
 		}
 	}
 }

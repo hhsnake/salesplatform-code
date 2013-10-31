@@ -140,18 +140,26 @@ function AddressSync(Addform,id)
 									<table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 									   <tr>
 										<td  colspan=4 style="padding:5px">
-											<div align="center">
+											<div align="center">                                                                                  
 												{if $MODULE eq 'Webmails'}
 													<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';this.form.module.value='Webmails';this.form.send_mail.value='true';this.form.record.value='{$ID}'" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
                                                                                                 {elseif $MODULE eq 'Accounts'}{if $MODE eq 'edit'}
-											<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; displaydeleted();  if(formValidate()) {ldelim} if(AjaxDuplicateValidate('Accounts','accountname',this.form)) {ldelim} AddressSync(this.form,{$ID}); {rdelim} {rdelim}"  type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
-
+                                                                                        {* SalesPlatform.ru begin check before save *} 
+                                                                                        <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; displaydeleted();  if(formValidate()) sp_js_editview_checkBeforeSave('{$MODULE}',this.form, '{$MODE}');"  type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+											{*<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; displaydeleted();  if(formValidate()) {ldelim} if(AjaxDuplicateValidate('Accounts','accountname',this.form)) {ldelim} AddressSync(this.form,{$ID}); {rdelim} {rdelim}"  type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >*}
+                                                                                        {* SalesPlatform.ru end *}
 												{else}
-                                                                                        <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(formValidate())AjaxDuplicateValidate('Accounts','accountname',this.form);" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                                        {* SalesPlatform.ru begin check before save *} 
+                                                                                        <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(formValidate()) sp_js_editview_checkBeforeSave('{$MODULE}',this.form, '{$MODE}');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                                        {*<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(formValidate())AjaxDuplicateValidate('Accounts','accountname',this.form);" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >*}
+                                                                                        {* SalesPlatform.ru end *}
 
                                                                                                    {/if}
 												{else}
-													<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" onclick="this.form.action.value='Save'; displaydeleted(); return formValidate() " type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                                                        {* SalesPlatform.ru begin check before save *} 
+                                                                                                        <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" onclick="this.form.action.value='Save'; displaydeleted(); if(formValidate()) sp_js_editview_checkBeforeSave('{$MODULE}',this.form, '{$MODE}');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+													{*<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" onclick="this.form.action.value='Save'; displaydeleted(); return formValidate() " type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >*}
+                                                                                                        {* SalesPlatform.ru end *}
 												{/if}
                                                                                                         {* SalesPlatform.ru begin correct interface *} 
                                                                                                         <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
@@ -160,6 +168,16 @@ function AddressSync(Addform,id)
 											</div>
 										</td>
 									   </tr>
+                                                                           
+                                                                           {* SalesPlatform.ru begin: Add import button from social nets to Leads, Accounts, Contacts *}         
+                                                                           {if $FL_IMPORT_BUTTON && ($MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Contacts')}
+                                                                               <tr>
+                                                                                   <td  colspan=4 style="padding-bottom:5px"align="right">
+                                                                                        <input title="{$APP.LBL_IMPORT_BUTTON_TITLE}" accessKey="{$APP.LBL_IMPORT_BUTTON_KEY}" class="crmButton small create" onclick="SPSocialConnectorCommon.displayEnterUrlWizard('{$MODULE}', '{$ID}');" type="button" name="button" value="   {$APP.LBL_IMPORT_BUTTON_LABEL}   " style="width:70px" >
+                                                                                   </td>
+                                                                               </tr>
+                                                                           {/if}
+                                                                           {* SalesPlatform.ru end *} 
 
 									   <!-- included to handle the edit fields based on ui types -->
 									   {foreach key=header item=data from=$BLOCKS}
@@ -236,12 +254,21 @@ function AddressSync(Addform,id)
 										<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';this.form.module.value='Webmails';this.form.send_mail.value='true';this.form.record.value='{$ID}'" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 										{elseif $MODULE eq 'Accounts'}
 											{if $MODE eq 'edit'}
-												<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; displaydeleted();  if(formValidate()) {ldelim} if(AjaxDuplicateValidate('Accounts','accountname',this.form)) {ldelim} AddressSync(this.form,'{$ID}'); {rdelim} {rdelim}"  type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                                                {* SalesPlatform.ru begin check before save *} 
+                                                                                                <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; displaydeleted();  if(formValidate()) sp_js_editview_checkBeforeSave('{$MODULE}',this.form, '{$MODE}');"  type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+												{*<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; displaydeleted();  if(formValidate()) {ldelim} if(AjaxDuplicateValidate('Accounts','accountname',this.form)) {ldelim} AddressSync(this.form,'{$ID}'); {rdelim} {rdelim}"  type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >*}
+                                                                                                {* SalesPlatform.ru end *}
 											{else}
-												<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(formValidate())AjaxDuplicateValidate('Accounts','accountname',this.form);" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                                                {* SalesPlatform.ru begin check before save *}
+                                                                                                <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(formValidate()) sp_js_editview_checkBeforeSave('{$MODULE}',this.form, '{$MODE}');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+												{*<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(formValidate())AjaxDuplicateValidate('Accounts','accountname',this.form);" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >*}
+                                                                                                {* SalesPlatform.ru end *}
 											{/if}
 										{else}
-											<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  displaydeleted();return formValidate()" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                                        {* SalesPlatform.ru begin check before save *} 
+                                                                                        <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  displaydeleted(); if(formValidate()) sp_js_editview_checkBeforeSave('{$MODULE}',this.form, '{$MODE}');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+											{*<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  displaydeleted();return formValidate()" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >*}
+                                                                                        {* SalesPlatform.ru end *}
 										{/if}
                                             <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 											</div>
@@ -312,9 +339,16 @@ function AddressSync(Addform,id)
 
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
 
-	var ProductImages=new Array();
+        //SalesPlatform.ru begin check before save
+        var crmId;
+        {if isset($ID) && !empty($ID)}
+        crmId = {$ID};
+        {/if}
+	//SalesPlatform.ru end
+        
+        var ProductImages=new Array();
 	var count=0;
-
+        
 	function delRowEmt(imagename)
 	{ldelim}
 		ProductImages[count++]=imagename;

@@ -3398,6 +3398,12 @@ function getModuleSequenceNumber($module, $recordId) {
 			$moduleSeqNo = $adb->query_result($res,0,'consignment_no');
 			break;
                 // SalesPlatform.ru end
+                // SalesPlatform.ru begin: Added PDF templates to SPPayments
+		case "SPPayments":
+			$res = $adb->query("SELECT pay_no FROM sp_payments WHERE payid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'pay_no');
+			break;
+                // SalesPlatform.ru end
                 }
 	return $moduleSeqNo;
 }

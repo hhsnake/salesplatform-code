@@ -283,6 +283,9 @@ class CustomView extends CRMEntity {
 	 */
 	function getColumnsListbyBlock($module, $block) {
 		global $adb, $mod_strings, $app_strings;
+                // SalesPlatform.ru Formation of the correct array without duplicates
+                $check_value_array = array();
+                // SalesPlatform.ru end
 		$block_ids = explode(",", $block);
 		$tabid = getTabid($module);
 		global $current_user;
@@ -368,15 +371,28 @@ class CustomView extends CRMEntity {
 			}
 			if ($fieldlabel == "Start Date & Time") {
 				$fieldlabel = "Start Date";
-				if ($module == 'Calendar' && $block == 19)
-					$module_columnlist['vtiger_activity:time_start::Calendar_Start_Time:I'] = 'Start Time';
-			}
+                                // SalesPlatform.ru Commenting wrong lines
+				//if ($module == 'Calendar' && $block == 19)
+				//	$module_columnlist['vtiger_activity:time_start::Calendar_Start_Time:I'] = 'Start Time';
+                                // SalesPlatform.ru end
+                                
+                        }
 			$fieldlabel1 = str_replace(" ", "_", $fieldlabel);
 			$optionvalue = $fieldtablename . ":" . $fieldcolname . ":" . $fieldname . ":" . $module . "_" .
 					$fieldlabel1 . ":" . $fieldtypeofdata;
-			//added to escape attachments fields in customview as we have multiple attachments
+			
+                        // SalesPlatform.ru Formation of the correct array without duplicates
+                        $check_optionvalue = $fieldtablename . ":" . $fieldcolname . ":" . $fieldname . ":" . $module;			
+                        if (in_array($check_optionvalue, $check_value_array)) {
+                            continue;
+                        } else {
+                            $check_value_array[] = $check_optionvalue;
+                        }
+                        // SalesPlatform.ru end
+                        
+                        //added to escape attachments fields in customview as we have multiple attachments+
 			$fieldlabel = getTranslatedString($fieldlabel); //added to support i18n issue
-			if ($module != 'HelpDesk' || $fieldname != 'filename')
+                        if ($module != 'HelpDesk' || $fieldname != 'filename')
 				$module_columnlist[$optionvalue] = $fieldlabel;
 			if ($fieldtype[1] == "M") {
 				$this->mandatoryvalues[] = "'" . $optionvalue . "'";
@@ -410,7 +426,7 @@ class CustomView extends CRMEntity {
 		$module_info = $this->getCustomViewModuleInfo($module);
 		foreach ($this->module_list[$module] as $key => $value) {
 			$columnlist = $this->getColumnsListbyBlock($module, $value);
-
+                        
 			if (isset($columnlist)) {
 				$ret_module_list[$module][$key] = $columnlist;
 			}
@@ -1778,7 +1794,7 @@ class CustomView extends CRMEntity {
 			$module = "Calendar','Events";
 			$modules_list = array('Calendar', 'Events');
 		}
-
+                
 		// Tabid mapped to the list of block labels to be skipped for that tab.
 		$skipBlocksList = array(
 			getTabid('Contacts') => array('LBL_IMAGE_INFORMATION'),

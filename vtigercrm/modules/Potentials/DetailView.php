@@ -157,6 +157,9 @@ $focus->markAsViewed($current_user->id);
 // Gather the custom link information to display
 include_once('vtlib/Vtiger/Link.php');
 $customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
+// SalesPlatform.ru begin Entity fields added to custom Vtiger Link params
+$customlink_params = array_merge($focus->column_fields, $customlink_params);
+// SalesPlatform.ru end
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW','DETAILVIEWWIDGET'), $customlink_params));
 // END
 

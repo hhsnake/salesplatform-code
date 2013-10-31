@@ -13,4 +13,11 @@ function handleInventoryProductRel($entity){
 	updateInventoryProductRel($entity);
 }
 
+// SalesPlatform.ru begin Replenishment of stock
+function handleInventoryPurchase($entity){
+	require_once("include/utils/InventoryUtils.php");
+	updateInventoryProductRel($entity, true);
+}
+// SalesPlatform.ru end
+
 ?>

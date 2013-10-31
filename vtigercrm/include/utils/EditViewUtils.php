@@ -1807,7 +1807,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 		//calculate productTotal
 		$productTotal = $qty*$listprice;
-
+                
 		//Delete link in First column
 		if($i != 1)
 		{
@@ -1917,7 +1917,10 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['taxTotal'.$i] = $taxTotal;
 
 		//Calculate netprice
-		$netPrice = $totalAfterDiscount+$taxTotal;
+                // SalesPlatform.ru begin Fixed problem with rounding
+		$netPrice = round($totalAfterDiscount+$taxTotal,2);
+                //$netPrice = $totalAfterDiscount+$taxTotal;
+                // SalesPlatform.ru end
 		//if condition is added to call this function when we create PO/SO/Quotes/Invoice from Product module
                 // SalesPlatform.ru begin: Added acts and consignments
 		if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice' || $module == 'Act' || $module == 'Consignment')
@@ -2040,7 +2043,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[1]['final_details']['taxes'][$tax_count]['amount'] = $taxamount;
 	}
 	$product_Detail[1]['final_details']['tax_totalamount'] = $taxtotal;
-
+        
 	//To set the Shipping & Handling charge
 	$shCharge = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:'0.00';
 	$shCharge = number_format($shCharge, 2,'.',''); //Convert to 2 decimals
@@ -2079,7 +2082,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['amount'] = $shtaxamount;
 	}
 	$product_Detail[1]['final_details']['shtax_totalamount'] = $shtaxtotal;
-
+        
 	//To set the Adjustment value
 	$adjustment = ($focus->column_fields['txtAdjustment'] != '')?$focus->column_fields['txtAdjustment']:'0.00';
 	$adjustment = number_format($adjustment, 2,'.',''); //Convert to 2 decimals
@@ -2089,7 +2092,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '')?$focus->column_fields['hdnGrandTotal']:'0.00';
 	$grandTotal = number_format($grandTotal, 2,'.',''); //Convert to 2 decimals
 	$product_Detail[1]['final_details']['grandTotal'] = $grandTotal;
-
+        
 	$log->debug("Exiting getAssociatedProducts method ...");
 
 	return $product_Detail;
@@ -2310,5 +2313,24 @@ function split_validationdataArray($validationData)
 	return $data;
 }
 
-
+// SalesPlatform.ru begin Unifying method for EditView preparing
+function prepareEditView($focus, $request, $smarty) {
+    global $currentModule;
+    if ($focus && is_object($focus) && $focus instanceof CRMEntity 
+            && is_array($request) && !empty($currentModule)) {
+        if (file_exists("modules/$currentModule/PrepareView.php")) {
+            require_once "modules/$currentModule/PrepareView.php";
+            $function_name = "prepareEditView_$currentModule";
+            if (function_exists($function_name)) {
+                $result = call_user_func($function_name, $focus, $request, $smarty);
+                if ($result && is_object($result) && 
+                        (get_class($focus) == get_class($result))) {
+                    return $result;
+                }
+            }
+        }
+    }
+    return $focus;
+}
+// SalesPlatform.ru end
 ?>

@@ -367,8 +367,11 @@ Class ChartUtils {
 		$yaxisArray = array();
 		$ChartDataArray = array();
 		$target_val = array();
-
-		$report = new ReportRun($reportid);
+                
+                // SalesPlatform.ru begin Fixed problem with shedule reports
+                $report = new SPReportRun($reportid);
+		//$report = new ReportRun($reportid);
+                // SalesPlatform.ru end
 		$restrictedModules = array();
 		if($report->secondarymodule!='') {
 			$reportModules = explode(":",$report->secondarymodule);
@@ -384,8 +387,14 @@ Class ChartUtils {
 				$restrictedModules[] = $mod;
 			}
 		}
-
+                
 		if(is_array($restrictedModules) && count($restrictedModules) > 0) {
+                        // SalesPlatform.ru begin Correction of the homepage with limited rights for the report
+                        if (empty($reportModules[0])) {
+                            $ChartDataArray['error'] = "<h4>".getTranslatedString('LBL_PERM_DENIED_REPORT', 'Reports')."</h4>";
+                            return $ChartDataArray;
+                        }
+                        // SalesPlatform.ru end
 			$ChartDataArray['error'] = "<h4>".getTranslatedString('LBL_NO_ACCESS', 'Reports').' - '.implode(',', $restrictedModules)."</h4>";
 			return $ChartDataArray;
 		}

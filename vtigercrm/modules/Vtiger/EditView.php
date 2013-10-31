@@ -35,6 +35,9 @@ if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
 	setObjectValuesFromRequest($focus);
 }
 
+// SalesPlatform.ru begin Unifying method for EditView preparing
+$focus = prepareEditView($focus, $_REQUEST, $smarty);
+// SalesPlatform.ru end
 $disp_view = getView($focus->mode);
 	$smarty->assign('BLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields));
 	$smarty->assign('BASBLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields, 'BAS'));
@@ -103,6 +106,15 @@ if($focus->mode != 'edit' && $mod_seq_field != null) {
 // Gather the help information associated with fields
 $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
+
+// SalesPlatform.ru begin enable/disable button Import
+$instance = Vtiger_Module::getInstance('SPSocialConnector'); 
+$fl_import_button = true;
+if($instance->presence == 1){
+    $fl_import_button = false;
+}
+$smarty->assign("FL_IMPORT_BUTTON", $fl_import_button);
+// SalesPlatform.ru end
 
 $picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
 $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));

@@ -4936,4 +4936,148 @@ function sp_smartfilter(module,dataStr,uiTypesListStr)
     );
     return false
 }
+
+//Empty check
+function empty (mixed_var) {
+
+  var undef, key, i, len;
+  var emptyValues = [undef, null, false, 0, "", "0"];
+
+  for (i = 0, len = emptyValues.length; i < len; i++) {
+    if (mixed_var === emptyValues[i]) {
+      return true;
+    }
+  }
+
+  if (typeof mixed_var === "object") {
+    for (key in mixed_var) {
+      // TODO: should we check for own properties only?
+      //if (mixed_var.hasOwnProperty(key)) {
+      return false;
+      //}
+    }
+    return true;
+  }
+
+  return false;
+}
+
+//Json check
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+//Check before save implementation
+function sp_js_editview_checkBeforeSave(module, thisForm, mode) {
+    var fldvalObjectArr = {};
+    var createMode;
+    if(mode == 'edit') {
+        createMode = 'edit';
+    } else {
+        createMode = 'create';
+    }
+    
+    for (var i = 0; i < fieldname.length; i++) {
+        var obj = getObj(fieldname[i]);
+        if (empty(obj)) {
+            obj = getObj(fieldname[i]+"[]");
+        }
+
+        if(!empty(obj)) {
+            if(obj.tagName == 'SELECT' && obj.hasAttribute('multiple')) {
+                var selectValuesArr = {};
+                for (var j = 0; j < obj.options.length; j++) {
+                    if (obj.options[j].selected) {
+                        selectValuesArr[j] = obj.options[j].value;
+                    }
+                }
+                
+                fldvalObjectArr[fieldname[i]] = selectValuesArr;
+            } else if(obj.getAttribute('type') == 'checkbox') {
+                var fieldvalue;
+                if(obj.checked) {
+                    fieldvalue = 1;
+                } else {
+                    fieldvalue = 0;
+                }
+                
+                fldvalObjectArr[fieldname[i]] = fieldvalue;
+            } else {
+                var fieldvalue = getObj(fieldname[i]).value;
+                
+                fldvalObjectArr[fieldname[i]] = fieldvalue;
+            }
+        } 
+       
+    }            
+    
+    var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));               
+    VtigerJS_DialogBox.block();
+
+    var urlstring = "module="+module+"&action="+module+"Ajax&file=CheckBeforeSave&checkBeforeSaveData="+data+"&EditViewAjaxMode=true&CreateMode="+createMode;
+    if(mode == 'edit') {
+        urlstring = urlstring + "&id=" + crmId;
+    }
+
+    new Ajax.Request(
+	'index.php',
+	{
+	    queue: {
+			position: 'end',
+			scope: 'command'
+		   },
+	    method: 'post',
+	    postBody: urlstring,
+	    onComplete: function(response) {
+			    if(!empty(response.responseText) && IsJsonString(response.responseText)) {	                         
+                                var responseObj= JSON.parse(response.responseText);
+                                if(responseObj.response === undefined) {
+                                    thisForm.submit();
+                                    return true;
+                                }
+				if(responseObj.response === "OK") {
+                                    if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                                        alert(responseObj.message);
+                                    }
+				    thisForm.submit();
+                                    return true;
+				} else if(responseObj.response === "ALERT") {
+				    VtigerJS_DialogBox.unblock();
+                                    if (responseObj.message !== undefined) {
+                                        alert(responseObj.message);
+                                    } else {
+                                        alert('Alert');
+                                    }
+				    return false;
+				} else if(responseObj.response === "CONFIRM") {
+                                    var confirmMessage;
+                                    if (responseObj.message !== undefined) {
+                                        confirmMessage =responseObj.message;
+                                    } else {
+                                        confirmMessage = 'Confirm';
+                                    }
+				    if (confirm(confirmMessage)) {
+		                        thisForm.submit();
+                                        return true;
+	                            } else {
+                                        VtigerJS_DialogBox.unblock();
+                                        return false;
+                                    }
+				} else {
+                                    thisForm.submit();
+                                    return true;
+                                }
+                            } else {
+                                thisForm.submit();
+                                return true;
+                            }
+	                }
+	}
+    );
+}
 //SalesPlatform.ru end

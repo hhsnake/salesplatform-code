@@ -13,7 +13,7 @@ global $adb;
 global $log, $current_user;
 
 // SalesPlatform.ru begin
-function decodeLocalizedFilterValues($values, $tabid, $module, $fieldname) {
+function decodeLocalizedFilterValues(&$values, $tabid, $module, $fieldname) {
 	global $adb, $app_strings, $current_language;
 	$mod_strings = return_module_language($current_language,$module);
 	$result = $adb->pquery("SELECT uitype FROM vtiger_field WHERE tabid = ? AND fieldname = ?", array($tabid, $fieldname) );
@@ -229,7 +229,7 @@ if($cvmodule != "") {
 						} 
                                                 // SalesPlatform.ru begin
 						else {
-							decodeLocalizedFilterValues(&$temp_val, $cv_tabid, $cvmodule, $fieldName);
+							decodeLocalizedFilterValues($temp_val, $cv_tabid, $cvmodule, $fieldName);
 							$adv_filter_value = implode(",",$temp_val);
 						}
 						// SalesPlatform.ru end
@@ -368,7 +368,7 @@ if($cvmodule != "") {
 						}
 						// SalesPlatform.ru begin
 						else {
-							decodeLocalizedFilterValues(&$temp_val, $cv_tabid, $cvmodule, $fieldName);
+							decodeLocalizedFilterValues($temp_val, $cv_tabid, $cvmodule, $fieldName);
 							$adv_filter_value = implode(",",$temp_val);
 						}
 						// SalesPlatform.ru end

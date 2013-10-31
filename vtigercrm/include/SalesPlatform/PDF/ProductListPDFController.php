@@ -93,8 +93,12 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 				for($tax_count=0;$tax_count<count($productLineItem['taxes']);$tax_count++) {
 					$tax_percent = $productLineItem['taxes'][$tax_count]['percentage'];
 					$total_tax_percent += $tax_percent;
-					$tax_amount = (($taxable_total*$tax_percent)/100);
-					$producttotal_taxes += $tax_amount;
+                                        // SalesPlatform.ru begin Fixed problem with rounding
+					$tax_amount = ((round($taxable_total,2)*$tax_percent)/100);
+					$producttotal_taxes += round($tax_amount,2);  
+                                        //$tax_amount = (($taxable_total*$tax_percent)/100);
+                                        //$producttotal_taxes += $tax_amount;
+                                        // SalesPlatform.ru end
 					$priceWithTax += (($priceWithDiscount * $tax_percent)/100);
 				}
                         } else {

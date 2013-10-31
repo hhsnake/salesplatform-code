@@ -173,11 +173,15 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	var popupTxt= "popuptxt_"+ fieldLabel;      
 	var hdTxt = "hdtxt_"+ fieldLabel;
 
+        //SalesPlatform.ru begin
+        //Check before save implementation
+        /*vtiger commented code
 	if(formValidate() == false)
 	{
 		return false;
 	}
-
+        */
+        //SalesPlatform.ru end
 
 	$("vtbusy_info").style.display="inline";
 	var isAdmin = document.getElementById("hdtxt_IsAdmin").value; 
@@ -542,3 +546,207 @@ function hndMouseClick(fieldLabel)
 	$(globaltxtboxid).select();
 
 }
+
+//SalesPlatform.ru begin
+//Check before save implementation
+
+function sp_js_detailview_checkBeforeSave(fieldLabel,module,uitype,tableName,fieldName,crmId) {
+	var dtlView = "dtlview_"+ fieldLabel;
+	var editArea = "editarea_"+ fieldLabel;
+	var groupurl = "";
+	
+	if(globaluitype == 53) {
+		if(typeof(document.DetailView.assigntype[0]) != 'undefined')
+		{
+			var assign_type_U = document.DetailView.assigntype[0].checked;
+			var assign_type_G = document.DetailView.assigntype[1].checked;
+		}else
+		{
+			var assign_type_U = document.DetailView.assigntype.checked;
+		}
+		if(assign_type_U == true)
+		{
+			var txtBox= 'txtbox_U'+fieldLabel;
+		}
+		else if(assign_type_G == true)
+		{
+			var txtBox= 'txtbox_G'+fieldLabel;
+			var group_id = encodeURIComponent($(txtBox).options[$(txtBox).selectedIndex].text); 
+			var groupurl = "&assigned_group_id="+group_id+"&assigntype=T"
+		}
+
+	}
+	else if(uitype == 15 || uitype == 16)
+	{	
+		var txtBox= "txtbox_"+ fieldLabel;
+		var not_access =document.getElementById(txtBox);
+                 pickval = not_access.options[not_access.selectedIndex].value;
+			if(pickval == alert_arr.LBL_NOT_ACCESSIBLE)
+			{
+				document.getElementById(editArea).style.display='none';
+				document.getElementById(dtlView).style.display='block';
+     				itsonview=false; //to show the edit link again after hiding the editdiv.
+				return false;
+			}
+	}
+	else if(globaluitype == 33)
+	{
+	  var txtBox= "txtbox_"+ fieldLabel;
+	  var oMulSelect = $(txtBox);
+	  var r = {};
+	  for (iter=0;iter < oMulSelect.options.length ; iter++)
+	  {
+      	      if (oMulSelect.options[iter].selected)
+		{
+			r[iter] = oMulSelect.options[iter].value;
+		}
+      	  }
+	}else
+	{
+		var txtBox= "txtbox_"+ fieldLabel;
+	}
+	
+
+	if(formValidate() == false)
+	{
+		return false;
+	}
+
+
+	$("vtbusy_info").style.display="inline";
+
+
+	//overriden the tagValue based on UI Type for checkbox 
+	if(uitype == '56')
+	{
+		if(document.getElementById(txtBox).checked == true)
+		{
+			if(module == "Contacts")
+			{
+				var obj = getObj("email");
+				if((fieldName == "portal") && (obj == null || obj.value == ''))
+				{
+					tagValue = "0";
+					alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+					return false;
+				}
+				else
+					tagValue = "1";
+
+			}
+			else
+				tagValue = "1";
+		}else
+		{
+			tagValue = "0";
+		}
+                tagValue = escapeAll(tagValue);
+	}else	if(uitype == '156')
+	{
+		if(document.getElementById(txtBox).checked == true)
+		{
+			tagValue = "1";
+		}else
+		{
+			tagValue = "0";
+		}
+                tagValue = escapeAll(tagValue);
+	}else if(uitype == '33')
+	{
+		tagValue = r;
+  	}else if(uitype == '24' || uitype == '21')
+        {
+                tagValue = document.getElementById(txtBox).value.replace(/<br\s*\/>/g, " ");
+                tagValue = escapeAll(tagValue);
+
+        }else
+	{
+		tagValue = trim(document.getElementById(txtBox).value);
+		if(module == "Contacts")
+                {
+			if(getObj('portal'))
+                        {
+                                var port_obj = getObj('portal').checked;
+                                if(fieldName == "email" && tagValue == '' && port_obj == true)
+                                {
+                                        alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+                                        return false;
+                                }
+                        }
+                }
+                tagValue = escapeAll(tagValue);
+	}
+
+        var fldvalObjectArr = {};
+        fldvalObjectArr[fieldName] = tagValue;
+
+        var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));      
+
+        var urlstring = "module="+module+"&action="+module+"Ajax&file=CheckBeforeSave&checkBeforeSaveData="+data+"&DetailViewAjaxMode=true&id="+crmId;
+
+        new Ajax.Request(
+	    'index.php',
+	    {
+	        queue: {
+			    position: 'end',
+			    scope: 'command'
+		       },
+	        method: 'post',
+	        postBody: urlstring,
+	        onComplete: function(response) {
+                                if(!empty(response.responseText) && IsJsonString(response.responseText)) {
+				    var responseObj = JSON.parse(response.responseText);
+                                    if(responseObj.response === undefined) {
+                                        $("vtbusy_info").style.display="none";
+                                        dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId);
+                                        fnhide('crmspanid');
+                                        return true;
+                                    }
+				    if(responseObj.response === "OK") {
+                                        $("vtbusy_info").style.display="none";
+                                        if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                                            alert(responseObj.message);
+                                        }
+                                        dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId);
+                                        fnhide('crmspanid');
+                                        return true;
+				    } else if(responseObj.response === "ALERT") {
+                                        $("vtbusy_info").style.display="none";
+                                        if (responseObj.message !== undefined) {
+                                            alert(responseObj.message);
+                                        } else {
+                                            alert('Alert');
+                                        }
+                                        return false;
+				    } else if(responseObj.response === "CONFIRM") {
+                                        $("vtbusy_info").style.display="none";
+                                        var confirmMessage;
+                                        if (responseObj.message !== undefined) {
+                                            confirmMessage =responseObj.message;
+                                        } else {
+                                            confirmMessage = 'Confirm';
+                                        }
+				        if (confirm(confirmMessage)) {
+                                            dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId);
+                                            fnhide('crmspanid');
+                                            return true;
+	                                } else {
+                                            return false;
+                                        }
+				    } else {
+                                        $("vtbusy_info").style.display="none";
+                                        dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId);
+                                        fnhide('crmspanid');
+                                        return true;
+                                    }
+                                } else {
+                                    $("vtbusy_info").style.display="none";
+                                    dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId);
+                                    fnhide('crmspanid');
+                                    return true;
+                                }
+	                    }
+	    }
+        );
+}
+//SalesPlatform.ru end

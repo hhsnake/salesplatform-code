@@ -154,6 +154,9 @@ $userDetails=getOtherUserName($current_user->id);
 $to_email = getUserEmailId('id',$current_user->id);
 $smarty->assign("CURRENTUSERID",$current_user->id);
 
+// SalesPlatform.ru begin Unifying method for EditView preparing
+$focus = prepareEditView($focus, $_REQUEST, $smarty);
+// SalesPlatform.ru end
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
 {

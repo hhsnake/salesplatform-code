@@ -253,6 +253,9 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
+// SalesPlatform.ru begin Unifying method for EditView preparing
+$focus = prepareEditView($focus, $_REQUEST, $smarty);
+// SalesPlatform.ru end
 $disp_view = getView($focus->mode);
 $details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);
 //changed this below line to view description in all language - bharath

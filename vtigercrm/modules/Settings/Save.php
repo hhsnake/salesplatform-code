@@ -162,12 +162,20 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
 	global $current_user;
 
 	$to_email = getUserEmailId('id',$current_user->id);
+        // SalesPlatform.ru begin Send test email from Email specified in SPMTP Server Settings page
+        if ($from_email_field) {
+            $from_email = $from_email_field;
+        } else
+        // SalesPlatform.ru end
 	$from_email = $to_email;
 	$subject = 'Test mail about the mail server configuration.';
 	$description = 'Dear '.$current_user->user_name.', <br><br><b> This is a test mail sent to confirm if a mail is actually being sent through the smtp server that you have configured. </b><br>Feel free to delete this mail.<br><br>Thanks  and  Regards,<br> Team vTiger <br><br>';
 	if($to_email != '')
 	{
-		$mail_status = send_mail('Users',$to_email,$current_user->user_name,$from_email,$subject,$description);
+                // SalesPlatform.ru begin Send test email from Email specified in SPMTP Server Settings page
+                $mail_status = send_mail('Users',$to_email,$current_user->user_name,$from_email,$subject,$description,'','','','','',true);
+		//$mail_status = send_mail('Users',$to_email,$current_user->user_name,$from_email,$subject,$description);
+                // SalesPlatform.ru end
 		$mail_status_str = $to_email."=".$mail_status."&&&";
 	}
 	else

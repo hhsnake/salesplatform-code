@@ -67,6 +67,7 @@ $organization_director = $adb->query_result($result,0,'director');
 $organization_bookkeeper = $adb->query_result($result,0,'bookkeeper');
 $organization_entrepreneur = $adb->query_result($result,0,'entrepreneur');
 $organization_entrepreneurreg = $adb->query_result($result,0,'entrepreneurreg');
+$organization_okpo = $adb->query_result($result,0,'okpo');
 // SalesPlatform.ru end
 $organization_logoname = $adb->query_result($result,0,'logoname');
 
@@ -111,6 +112,8 @@ if (isset($organization_entrepreneur))
 	$smarty->assign("ORGANIZATIONENTREPRENEUR",$organization_entrepreneur);
 if (isset($organization_entrepreneurreg))
 	$smarty->assign("ORGANIZATIONENTREPRENEURREG",$organization_entrepreneurreg);
+if (isset($organization_okpo)) 
+        $smarty->assign("ORGANIZATIONOKPO",$organization_okpo);
 // SalesPlatform.ru end
 
 if ($organization_logoname == '') 

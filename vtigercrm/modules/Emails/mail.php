@@ -29,7 +29,10 @@ require_once 'include/SalesPlatform/NetIDNA/idna_convert.class.php';
   *   $attachment	-- whether we want to attach the currently selected file or all vtiger_files.[values = current,all] - optional
   *   $emailid		-- id of the email object which will be used to get the vtiger_attachments
   */
-function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='',$logo='')
+// SalesPlatform.ru begin Force-from param added
+function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='',$logo='',$force_from=false)
+//function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='',$logo='')
+// SalesPlatform.ru end
 {
 
 	global $adb, $log;
@@ -60,6 +63,9 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	} else {
 		$replyToEmail = $from_email_field;
 	}
+        // SalesPlatform.ru begin Force-from param added
+        if (!$force_from)
+        // SalesPlatform.ru end
 	if(isset($from_email_field) && $from_email_field!=''){
 		//setting from _email to the defined email address in the outgoing server configuration
 		$from_email = $from_email_field;

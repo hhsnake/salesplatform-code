@@ -132,6 +132,10 @@
                             <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_ENTREPRENEURREG}</strong></td>
                             <td class="small cellText">{$ORGANIZATIONENTREPRENEURREG}</td>
                           </tr>
+                          <tr> 
+                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_OKPO}</strong></td> 
+                            <td class="small cellText">{$ORGANIZATIONOKPO}</td> 
+                          </tr> 
 <!-- SalesPlatform.ru end -->
                         </table>
 						

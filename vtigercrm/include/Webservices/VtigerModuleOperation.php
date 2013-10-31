@@ -86,6 +86,11 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
                     require_once('include/Webservices/SPWSInventory.php');
                     $spwsInventory =  new SPWSInventory();
                     return $spwsInventory->spws_inventoryRetrieve($elemid,$filterAndSanitizeData);
+                } else if ($crmObject->getModuleName() == "Products") {
+                    // Retrieve product images URLs
+                    require_once('include/Webservices/SPWSInventory.php');
+                    $spwsInventory = new SPWSInventory();
+                    return $spwsInventory->spws_retrieveProductImages($elemid,$filterAndSanitizeData);
                 } else {
                     return $filterAndSanitizeData;
                 }
@@ -201,6 +206,14 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 				continue;
 			}
 			$output[] = DataTransform::sanitizeDataWithColumn($row,$meta);
+                        // SalesPlatform.ru begin Retrieve product images URLs
+                        if ($meta->getTabName() == "Products") {
+                            require_once('include/Webservices/SPWSInventory.php');
+                            $spwsInventory = new SPWSInventory();
+                            $last_ix = count($output) - 1;
+                            $output[$last_ix] = $spwsInventory->spws_retrieveProductImages($row["productid"], $output[$last_ix]);
+                        }
+                        // SalesPlatform.ru end
 		}
 		
 		return $output;

@@ -323,7 +323,13 @@ class CRMEntity {
 					$params = array($ownerid, $current_user->id, $adb->formatDate($date_var, true), $this->id);
 				}
 			}
-			$adb->pquery($sql, $params);
+                        // SalesPlatform.ru begin Check result
+			$qresult = $adb->pquery($sql, $params);
+                        if (!$qresult) {
+                            die(getTranslatedString('LBL_MANDATORY_FIELD_MISSING'));
+                        }
+			//$adb->pquery($sql, $params);
+                        // SalesPlatform.ru end
 			$sql1 = "delete from vtiger_ownernotify where crmid=?";
 			$params1 = array($this->id);
 			$adb->pquery($sql1, $params1);
@@ -355,7 +361,13 @@ class CRMEntity {
 			$description_val = from_html($this->column_fields['description'], ($insertion_mode == 'edit') ? true : false);
 			$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,modifiedby,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?)";
 			$params = array($current_id, $current_user->id, $ownerid, $module, $description_val, $current_user->id, $created_date_var, $modified_date_var);
-			$adb->pquery($sql, $params);
+                        // SalesPlatform.ru begin Check result
+			$qresult = $adb->pquery($sql, $params);
+                        if (!$qresult) {
+                            die(getTranslatedString('LBL_MANDATORY_FIELD_MISSING'));
+                        }
+			//$adb->pquery($sql, $params);
+                        // SalesPlatform.ru end
 			$this->id = $current_id;
 		}
 	}
@@ -666,11 +678,23 @@ class CRMEntity {
 			if (count($update) > 0) {
 				$sql1 = "update $table_name set " . implode(",", $update) . " where " . $this->tab_name_index[$table_name] . "=?";
 				array_push($update_params, $this->id);
-				$adb->pquery($sql1, $update_params);
+                                // SalesPlatform.ru begin Check result
+				$qresult = $adb->pquery($sql1, $update_params);
+                                if (!$qresult) {
+                                    die(getTranslatedString('LBL_MANDATORY_FIELD_MISSING'));
+                                }
+				//$adb->pquery($sql1, $update_params);
+                                // SalesPlatform.ru end
 			}
 		} else {
 			$sql1 = "insert into $table_name(" . implode(",", $column) . ") values(" . generateQuestionMarks($value) . ")";
-			$adb->pquery($sql1, $value);
+                        // SalesPlatform.ru begin Check result
+			$qresult = $adb->pquery($sql1, $value);
+                        if (!$qresult) {
+                            die(getTranslatedString('LBL_MANDATORY_FIELD_MISSING'));
+                        }
+			//$adb->pquery($sql1, $value);
+                        // SalesPlatform.ru end
 		}
 	}
 

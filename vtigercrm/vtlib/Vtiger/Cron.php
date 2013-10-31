@@ -286,15 +286,22 @@ class Vtiger_Cron {
     /**
      * Register cron task.
      */
-    static function register($name, $handler_file, $frequency, $module = 'Home', $status = 1, $sequence = 0, $description = '') {
+    // SalesPlatform.ru begin added support laststart/lastend
+    static function register($name, $handler_file, $frequency, $module = 'Home', $status = 1, $sequence = 0, $description = '', $laststart = '', $lastend = '') {
+    //static function register($name, $handler_file, $frequency, $module = 'Home', $status = 1, $sequence = 0, $description = '') {
+    // SalesPlatform.ru end
         self::initializeSchema();
         global $adb;
         $instance = self::getInstance($name);
         if($sequence == 0) {
             $sequence = self::nextSequence();
         }
-        self::querySilent('INSERT INTO vtiger_cron_task (name, handler_file, frequency, status, sequence,module,description) VALUES(?,?,?,?,?,?,?)',
-                array($name, $handler_file, $frequency, $status, $sequence, $module,$description));
+        // SalesPlatform.ru begin added support laststart/lastend
+        self::querySilent('INSERT INTO vtiger_cron_task (name, handler_file, frequency, status, sequence,module,description,laststart,lastend) VALUES(?,?,?,?,?,?,?,?,?)',
+                array($name, $handler_file, $frequency, $status, $sequence, $module,$description, $laststart, $lastend));
+        /*self::querySilent('INSERT INTO vtiger_cron_task (name, handler_file, frequency, status, sequence,module,description) VALUES(?,?,?,?,?,?,?)',
+                array($name, $handler_file, $frequency, $status, $sequence, $module,$description));*/
+        // SalesPlatform.ru end
     }
 
     /**

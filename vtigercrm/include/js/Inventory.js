@@ -326,7 +326,7 @@ function roundValue(val) {
 function validateInventory(module) 
 {
 	if(!formValidate())
-		return false
+		return false;
 
 	//for products, vendors and pricebook modules we won't validate the product details. here return the control
 	if(module == 'Products' || module == 'Vendors' || module == 'PriceBooks' || module == 'Services')

@@ -1379,8 +1379,13 @@ $app_strings = array (
 
 //Added missing labels in the vtigercrm
 'Projects' => 'Проекты',
-'End Time' => 'Время окончания',
-'Start Time' => 'Время начала',
+// SalesPlatform.ru begin Changed to correct translation
+'End Time' => 'Время Завершения',
+'Start Time' => 'Время Начала',
+//'End Time' => 'Время окончания',
+//'Start Time' => 'Время начала',
+'LBL_MANDATORY_FIELD_MISSING'=>'Ошибка сохранения/изменения данных: отсутствуют обязательные поля.',
+// SalesPlatform.ru end
 'Email2' => 'Второй Email',
 'Comments' => 'Комментарии',
 'Issued Date' => 'Дата создания',
@@ -1436,8 +1441,18 @@ $app_strings = array (
 // SalesPlatform.ru end
 
 // SalesPlatform.ru begin added SPPayments     
-'LBL_SP_ADD_SPPAYMENTS' => 'Создать платеж', 
+'LBL_SP_ADD_SPPAYMENTS' => 'Создать Платеж', 
 // SalesPlatform.ru end
+    
+// SalesPlatform.ru begin for module SPSocialConnector
+'LBL_IMPORT_BUTTON_TITLE' => 'Импорт [Alt+I]',   // Button "Import" when edit record in Contacts, Leads, Accounts
+'LBL_IMPORT_BUTTON_KEY'   => 'I',
+'LBL_IMPORT_BUTTON_LABEL' => 'Импорт',
+
+'Send to social nets'     => 'Сообщение',  // Link on right side in Contacts, Leads, Accounts
+'SPSocialConnector'       => 'Сообщения'
+// SalesPlatform.ru end
+    
 );
 $app_list_strings = array (
       'moduleList' => array(

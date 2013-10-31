@@ -1060,14 +1060,25 @@ function getUnifiedWhere($listquery,$module,$search_val){
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 	$search_val = $adb->sql_escape_string($search_val);
+        // SalesPlatform.ru begin fixed Global search
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
-		$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
+		$query = "SELECT columnname, tablename, typeofdata FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
 		$qparams = array(getTabid($module));
 	}else{
 		$profileList = getCurrentUserProfileList();
-		$query = "SELECT columnname, tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+		$query = "SELECT columnname, tablename, typeofdata FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
 		$qparams = array(getTabid($module), $profileList);
 	}
+//	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
+//		$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
+//		$qparams = array(getTabid($module));
+//	}else{
+//		$profileList = getCurrentUserProfileList();
+//		$query = "SELECT columnname, tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+//		$qparams = array(getTabid($module), $profileList);
+//	}
+        // SalesPlatform.ru end
+
 	$result = $adb->pquery($query, $qparams);
 	$noofrows = $adb->num_rows($result);
 
@@ -1075,6 +1086,9 @@ function getUnifiedWhere($listquery,$module,$search_val){
 	for($i=0;$i<$noofrows;$i++){
 		$columnname = $adb->query_result($result,$i,'columnname');
 		$tablename = $adb->query_result($result,$i,'tablename');
+                // SalesPlatform.ru begin fixed Global search
+		$typeofdata = $adb->query_result($result,$i,'typeofdata');
+                // SalesPlatform.ru end
 
 		// Search / Lookup customization
 		if($module == 'Contacts' && $columnname == 'accountid') {
@@ -1084,11 +1098,15 @@ function getUnifiedWhere($listquery,$module,$search_val){
 		// END
 
 		//Before form the where condition, check whether the table for the field has been added in the listview query
+                // SalesPlatform.ru begin fixed Global search
+                if(!preg_match("/^(D~|DT~|T~)/", $typeofdata))
+                // SalesPlatform.ru end
 		if(strstr($listquery,$tablename)){
 			if($where != ''){
 				$where .= " OR ";
 			}
-			$where .= $tablename.".".$columnname." LIKE '". formatForSqlLike($search_val) ."'";
+                        $where .= $tablename.".".$columnname." LIKE '". formatForSqlLike($search_val) ."'";
+
 		}
 	}
 	return $where;

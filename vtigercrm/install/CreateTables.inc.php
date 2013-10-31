@@ -1027,6 +1027,9 @@ function registerEntityMethods($adb) {
 	// Registering method for Updating Inventory Stock
 	$emm->addEntityMethod("SalesOrder","UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");//Adding EntityMethod for Updating Products data after creating SalesOrder
 	$emm->addEntityMethod("Invoice","UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");//Adding EntityMethod for Updating Products data after creating Invoice
+        // SalesPlatform.ru begin: Added PurchaseOrder entity method
+	$emm->addEntityMethod("PurchaseOrder","UpdateInventoryPurchase","include/InventoryHandler.php","handleInventoryPurchase");
+        // SalesPlatform.ru end
 
 	// Register Entity Method for Customer Portal Login details email notification task
 	$emm->addEntityMethod("Contacts","SendPortalLoginDetails","modules/Contacts/ContactsHandler.php","Contacts_sendCustomerPortalLoginDetails");
@@ -1378,7 +1381,10 @@ function populateLinks() {
 		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
 		'themes/images/bookMark.gif'
 	);
-	$accountInstance->addLink('DETAILVIEWBASIC', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+        // SalesPlatform.ru begin: Add detail view action icons
+        $accountInstance->addLink('DETAILVIEWBASIC', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$', 'themes/images/products.gif');
+        //$accountInstance->addLink('DETAILVIEWBASIC', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+        // SalesPlatform.ru end
 
 	$leadInstance = Vtiger_Module::getInstance('Leads');
 	$leadInstance->addLink(

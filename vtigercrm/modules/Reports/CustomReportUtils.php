@@ -8,7 +8,10 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-require_once 'modules/Reports/ReportRun.php';
+// SalesPlatform.ru begin Fixed problem with shedule reports
+require_once("modules/Reports/SPReportRun.php");
+//require_once("modules/Reports/ReportRun.php");
+// SalesPlatform.ru end
 require_once 'include/ChartUtils.php';
 require_once 'include/utils/CommonUtils.php';
 
@@ -16,7 +19,10 @@ Class CustomReportUtils {
 
 	public static function getCustomReportsQuery($reportid, $filterlist=null) {
 		global $current_user;
-		$reportnew = new ReportRun($reportid);
+                // SalesPlatform.ru begin Fixed problem with shedule reports
+                $reportnew = new SPReportRun($reportid);
+		//$reportnew = new ReportRun($reportid);
+                // SalesPlatform.ru end
 		$groupby = $reportnew->getGroupingList($reportid);
 		$showcharts = false;
 		if (!empty($groupby)) {
@@ -28,7 +34,10 @@ Class CustomReportUtils {
 
 	public static function getReportChart($reportid, $chartType) {
 		global $log, $adb;
-		$oReportRun = new ReportRun($reportid);
+                // SalesPlatform.ru begin Fixed problem with shedule reports
+                $oReportRun = new SPReportRun($reportid);
+		//$oReportRun = new ReportRun($reportid);
+                // SalesPlatform.ru end
 		$groupBy = $oReportRun->getGroupingList($reportid);
 		foreach ($groupBy as $key => $value) {
 			// $groupByConditon = explode(" ",$value);
