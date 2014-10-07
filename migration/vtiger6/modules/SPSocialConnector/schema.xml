@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>vtiger_sp_socialconnector</name>
+			<sql><![CDATA[CREATE TABLE `vtiger_sp_socialconnector` (
+  `socialserviceconnectorid` int(11) DEFAULT '0',
+  `message` text,
+  `status` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>vtiger_sp_socialconnectorcf</name>
+			<sql><![CDATA[CREATE TABLE `vtiger_sp_socialconnectorcf` (
+  `socialserviceconnectorid` int(11) NOT NULL,
+  `fb_status` varchar(155) DEFAULT NULL,
+  `vk_status` varchar(155) DEFAULT NULL,
+  `tw_status` varchar(155) DEFAULT NULL,
+  PRIMARY KEY (`socialserviceconnectorid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>vtiger_sp_socialconnector_providers</name>
+			<sql><![CDATA[CREATE TABLE `vtiger_sp_socialconnector_providers` (
+  `id` int(11) NOT NULL,
+  `provider_name` varchar(45) NOT NULL,
+  `provider_domen` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+	</tables>
+</schema>

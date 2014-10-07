@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>sp_templates</name>
+			<sql><![CDATA[CREATE  TABLE `sp_templates` (
+                              `templateid` int(11) NOT NULL AUTO_INCREMENT,
+                              `name` varchar(64) DEFAULT NULL,
+                              `module` varchar(64) DEFAULT NULL,
+                              `template` text,
+                              `header_size` int(8) DEFAULT NULL,
+                              `footer_size` int(8) DEFAULT NULL,
+                              `page_orientation` varchar(1) DEFAULT NULL,
+                              PRIMARY KEY (`templateid`)
+                              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+         ]]></sql>
+		</table>
+	</tables>
+</schema>
