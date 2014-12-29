@@ -30,7 +30,8 @@ class Migration_Module_Model extends Vtiger_Module_Model {
             // SalesPlatform.ru begin
 			array('540-201310'   => '5.4.0-201310'),
 			array('600-201403' => '6.0.0-201403'),
-            array('610-201410' => '6.1.0-201410')
+            array('610-201410' => '6.1.0-201410'),
+			array('610-201412' => '6.1.0-201412')
 			//array('540'   => '5.4.0'),
 			//array('600RC' => '6.0.0 RC')
             // SalesPlatform.ru end

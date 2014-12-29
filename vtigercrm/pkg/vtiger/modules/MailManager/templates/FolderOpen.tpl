@@ -10,7 +10,10 @@
 {strip}
 	<div class="listViewPageDiv" id="email_con" name="email_con">
 		<div class="row-fluid">
-			<h3>{$FOLDER->name()}</h3>
+            {* SalesPlatform.ru begin *}
+            <h3>{vtranslate($FOLDER->name(), $MODULE)}</h3>
+			{*<h3>{$FOLDER->name()}</h3>*}
+            {* SalesPlatform.ru end *}
 		</div>
 		<hr>
 		<input type="hidden" id="jscal_dateformat" name="jscal_dateformat" value="{$USER_DATE_FORMAT}" />
@@ -23,7 +26,10 @@
 					<select style="width:auto;margin-bottom: 0px !important;" id="moveFolderList" onchange="MailManager.moveMail(this);">
 						<option value="">{vtranslate('LBL_MOVE_TO',$MODULE)}</option>
 						{foreach item=folder from=$FOLDERLIST}
-							<option value="{$folder}" >{$folder}</option>
+                            {* SalesPlatform.ru begin *}
+							<option value="{$folder}" >{vtranslate($folder,$MODULE)}</option>
+                            {*<option value="{$folder}" >{$folder}</option>*}
+                            {* SalesPlatform.ru end *}
 						{/foreach}
 					</select>
 					<div class="pull-right">

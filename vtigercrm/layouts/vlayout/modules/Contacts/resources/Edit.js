@@ -34,6 +34,16 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 										'otherzip' : 'mailingzip',
 										'othercountry' : 'mailingcountry'
 								},
+                                                                
+        //SalesPlatform.ru begin kladr integration
+        kladrFieldsList : { standartAddressFields : 
+                                [ 
+                                    {code : 'mailingzip', city: 'mailingcity', state: 'mailingstate', street: 'mailingstreet'},
+                                    {code : 'otherzip', city: 'othercity', state: 'otherstate', street: 'otherstreet'}
+                                ],
+                             fullAddressFields : [] 
+                          },
+        //SalesPLatform.ru end
 	
 	
 	/**

@@ -4,7 +4,7 @@
 		<table>
 			<name>sp_templates</name>
 			<sql><![CDATA[CREATE  TABLE `sp_templates` (
-                              `templateid` int(11) NOT NULL AUTO_INCREMENT,
+                              `templateid` int(11) NOT NULL,
                               `name` varchar(64) DEFAULT NULL,
                               `module` varchar(64) DEFAULT NULL,
                               `template` text,

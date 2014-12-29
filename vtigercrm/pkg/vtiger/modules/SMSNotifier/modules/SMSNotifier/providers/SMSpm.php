@@ -56,7 +56,7 @@ class SMSNotifier_SMSpm_Provider implements SMSNotifier_ISMSProvider_Model {
 	
 	const SERVICE_URI = 'http://panel.smspm.com/gateway/';
         const AUTH_HASH = 'LBL_SMSPM_AUTH_HASH';
-	const SENDER = 'LBL_SMS_SENDER';
+	const SENDER = 'LBL_SMS_SENDER_SMSpm';
 
 	private static $REQUIRED_PARAMETERS = array(self::AUTH_HASH, self::SENDER);
 	

@@ -17,7 +17,7 @@ jQuery.Class('Install_Index_Js', {}, {
 			var elements = jQuery('.no')
 			if(elements.length > 0) {
                                 //SalesPlatform.ru begin
-                                var msg = "Некоторые Параметры PHP не соответствуют рекомендованным значениям. Это может повлиять на некоторые из функций Vtiger CRM. Вы уверены что хотите продолжить?";
+                                var msg = "Некоторые Параметры PHP не соответствуют рекомендованным значениям. Это может повлиять на некоторые функции Vtiger CRM. Вы уверены, что хотите продолжить?";
                                 /*vtiger commented code
 				var msg = "Some of the PHP Settings do not meet the recommended values. This might affect some of the features of vtiger CRM. Are you sure, you want to proceed?";
 				*/

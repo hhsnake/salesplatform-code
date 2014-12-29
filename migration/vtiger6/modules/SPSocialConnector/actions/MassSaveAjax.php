@@ -7,9 +7,6 @@
  * All Rights Reserved.
  * If you have any questions or comments, please email: devel@salesplatform.ru
  ************************************************************************************/
-require_once 'modules/SPSocialConnector/SPSocialConnectorHelper.php';
-require_once 'modules/SPSocialConnector/SPSocialConnector.php';
-
 class SPSocialConnector_MassSaveAjax_Action extends Vtiger_Mass_Action {
     
     function checkPermission(Vtiger_Request $request) {
@@ -22,19 +19,15 @@ class SPSocialConnector_MassSaveAjax_Action extends Vtiger_Mass_Action {
 		}
 	}
 
-	/**
-	 * Function that saves message records
-	 * @param Vtiger_Request $request
-	 */
+    /**
+     * Function that saves message records
+     * @param Vtiger_Request $request
+     * @return \Vtiger_Response
+     */
 	public function process(Vtiger_Request $request) {
-		$urlFieldList = $request->get('fields');
 		$response = new Vtiger_Response();
-		if(!empty($urlFieldList)) {
-			$response->setResult(true);
-		} else {
-			$response->setResult(false);
-		}
-		return $response;
+		$response->setResult(true);
+        $response->emit();
 	}
 }
 

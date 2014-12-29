@@ -113,7 +113,12 @@
                                                                 {/if}
                                                             </span>
                                                             <div class="span11 marginLeftZero" style="word-wrap: break-word;">
+                                                                {*SalesPlatform.ru begin fieldname tooltip*}
+                                                                <span data-toggle="tooltip" data-placement="right" title="{vtranslate('System name', $QUALIFIED_MODULE)}: {$FIELD_MODEL->get('name')}" class="fieldLabel">{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}&nbsp;
+                                                                {*
                                                                 <span class="fieldLabel">{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}&nbsp;
+                                                                *}    
+                                                                {*SalesPlatform.ru end*}    
                                                                 {if $IS_MANDATORY}<span class="redColor">*</span>{/if}</span>
                                                             <span class="btn-group pull-right actions">
                                                                 {if $FIELD_MODEL->isEditable()}
@@ -273,7 +278,12 @@
                             {/if}
                         </span>
                         <div class="span11 marginLeftZero" style="word-wrap: break-word;">
+                            {*SalesPlatform.ru begin fieldname tooltip*}
+                            <span data-toggle="tooltip" data-placement="right" title="{vtranslate('System name', $QUALIFIED_MODULE)}: {$FIELD_MODEL->get('name')}" class="fieldLabel">
+                            {*    
                             <span class="fieldLabel">
+                            *}
+                            {*SalesPlatform.ru end*}
                                 {if $IS_MANDATORY}
                                     <span class="redColor">*</span>
                                 {/if}

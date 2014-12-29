@@ -25,6 +25,9 @@
 		<script type="text/javascript" src="libraries/jquery/jquery.min.js"></script>
 		<script type="text/javascript" src="libraries/bootstrap/js/bootstrap-tooltip.js"></script>
 		<script type="text/javascript" src="libraries/jquery/select2/select2.min.js"></script>
+        {* SalesPLatform.ru begin *}
+        <script type="text/javascript" src="libraries/jquery/select2/select2_locale_ru.js"></script>
+        {* SalesPLatform.ru end *}
 		<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine.js" ></script>
 		<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine-en.js" ></script>
 
@@ -445,9 +448,14 @@
 								<div class="controls">
 									<select name="date_format" id="date_format" style="width:250px;" placeholder="{vtranslate('LBL_DATE_FORMAT', $MODULE)}" data-errormessage="{vtranslate('LBL_CHOOSE_DATE_FORMAT', $MODULE)}" class="validate[required]">
 										<option value=""></option>
-										<option value="dd-mm-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "dd-mm-yyyy"} selected{/if}>dd-mm-yyyy</option>
-										<option value="mm-dd-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "mm-dd-yyyy"} selected{/if}>mm-dd-yyyy</option>
-										<option value="yyyy-mm-dd" {if $CURRENT_USER_MODEL->get('date_format') eq "yyyy-mm-dd"} selected{/if}>yyyy-mm-dd</option>
+                                                                                {* SalesPlatform.ru begin translate date format *}
+                                                                                <option value="dd-mm-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "dd-mm-yyyy"} selected{/if}>{vtranslate('dd-mm-yyyy', $MODULE)}</option>
+										<option value="mm-dd-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "mm-dd-yyyy"} selected{/if}>{vtranslate('mm-dd-yyyy', $MODULE)}</option>
+										<option value="yyyy-mm-dd" {if $CURRENT_USER_MODEL->get('date_format') eq "yyyy-mm-dd"} selected{/if}>{vtranslate('yyyy-mm-dd', $MODULE)}</option>
+										{*<option value="dd-mm-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "dd-mm-yyyy"} selected{/if}>dd-mm-yyyy</option>*}
+										{*<option value="mm-dd-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "mm-dd-yyyy"} selected{/if}>mm-dd-yyyy</option>*}
+										{*<option value="yyyy-mm-dd" {if $CURRENT_USER_MODEL->get('date_format') eq "yyyy-mm-dd"} selected{/if}>yyyy-mm-dd</option>*}
+                                                                                {* SalesPlatform.ru end *}
 									</select>
 									<div style="padding-top:10px;"></div>
 								</div>

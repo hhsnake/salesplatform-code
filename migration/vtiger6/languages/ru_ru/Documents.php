@@ -54,7 +54,7 @@ $jsLanguageStrings = array(
 	'JS_EXCEEDS_MAX_UPLOAD_SIZE'   => 'Превышен максимальный размер загрузки', // TODO: Review
 	'JS_NEW_FOLDER'                => 'Новая папка'                  , // TODO: Review
 	'JS_MOVE_DOCUMENTS'            => 'Перемещение документов'              , // TODO: Review
-	'JS_ARE_YOU_SURE_YOU_WANT_TO_MOVE_DOCUMENTS_TO' => 'Вы уверены что хотите переместить файлы в', // TODO: Review
+	'JS_ARE_YOU_SURE_YOU_WANT_TO_MOVE_DOCUMENTS_TO' => 'Вы уверены, что хотите переместить файлы в', // TODO: Review
 	'JS_FOLDER'                    => 'папка'                      , // TODO: Review
 	'JS_OPERATION_DENIED'          => 'Операция запрещена'            , // TODO: Review
 );

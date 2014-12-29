@@ -198,7 +198,10 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	if($module == "Support" || $logo ==1)
 		$mail->AddEmbeddedImage('layouts/vlayout/skins/images/logo_mail.jpg', 'logo', 'logo.jpg',"base64","image/jpg");
 
-	$mail->Subject = $subject;
+        // SalesPlatform.ru begin
+        $mail->Timeout = 20;
+        // SalesPlatform.ru end
+        $mail->Subject = $subject;
 	//Added back as we have changed php mailer library, older library was using html_entity_decode before sending mail
 	$mail->Body = decode_html($contents);
 	//$mail->Body = html_entity_decode(nl2br($contents));	//if we get html tags in mail then we will use this line
@@ -363,9 +366,12 @@ function setMailServerProperties($mail)
 	}
 	else{
 		$smtp_auth = $adb->query_result($res,0,'smtp_auth');
-        if($smtp_auth == "1" || $smtp_auth == "true"){
-            $smtp_auth = true;
-        }
+        // SalesPlatform.ru begin smtp_auth var bugfix
+        $smtp_auth = ($smtp_auth == "1" || $smtp_auth == "true");
+        //if($smtp_auth == "1" || $smtp_auth == "true"){
+        //    $smtp_auth = true;
+        //}
+        // SalesPlatform.ru end
     }
 
         // SalesPlatform.ru begin

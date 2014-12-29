@@ -43,9 +43,72 @@ class PBXManager_PBXManager_Controller {
                 }
                 $this->processHangupCall($request);
                 break;
+                
+            //SalesPlatform.ru begin alternative start call detection mode
+            case "DialBegin" :
+                $this->processDialBeginCall($request);
+                break;
+            //SalesPlatform.ru end    
         }
     }
+    
+    //SalesPlatform.ru begin alternative start call detection mode
+    /**
+     * Function to process Incoming call request
+     * @params <array> incoming call details
+     * return Response object
+     */
+    function processDialBeginCall($request) {
+        
+        /* Config contains inner numbers of asterisk, which no entered in users entity */
+        require 'config.inc.php';
+        $connector = $this->getConnector();
 
+        /* Search info about caller */
+        $callerNumber = $request->get('callerIdNumber');
+        $userInfo = PBXManager_Record_Model::getUserInfoWithNumber($callerNumber);
+        
+        /* Get direction of call with checking numbers added in config */
+        $isOutboundCall = true;
+        if(!$userInfo) {
+            $isOutboundCall = false;
+            
+            /* Check additional inner numbers */
+            if(is_array($crm_user_phones) && in_array($callerNumber, $crm_user_phones)) {
+                $isOutboundCall = true;
+            }
+        } 
+        
+        /* Get dialed number by caller. It has unified format so we need check variants */
+        if(strpos($request->get('dialString'), "/") !== FALSE) {
+            $dialParts = explode("/", $request->get('dialString'));
+            $destinationNumber = end($dialParts);
+        } elseif(strpos($request->get('dialString'), "@") !== FALSE) {
+            $dialParts = explode("@", $request->get('dialString'));
+            $destinationNumber = $dialParts[0];
+        } else {
+            $destinationNumber = $request->get('dialString');
+        }
+        
+        /* Call handling logic of call */
+        if ($isOutboundCall) {
+            // Outbound Call
+            $request->set('Direction', 'outbound');
+            $request->set('to', $destinationNumber);
+            $customerInfo = PBXManager_Record_Model::lookUpRelatedWithNumber($destinationNumber);
+            $connector->handleStartupCall($request, $userInfo, $customerInfo);
+        } else {
+            // Inbound Call
+            $request->set('Direction', 'inbound');
+            $customerInfo = PBXManager_Record_Model::lookUpRelatedWithNumber($request->get('callerIdNumber'));
+            $userInfo = PBXManager_Record_Model::getUserInfoWithNumber($destinationNumber);
+            $request->set('from', $request->get('callerIdNumber'));
+            $connector->handleStartupCall($request, $userInfo, $customerInfo);
+        }
+    }
+    //SalesPlatform.ru end
+    
+    
     /**
      * Function to process Incoming call request
      * @params <array> incoming call details
@@ -53,7 +116,7 @@ class PBXManager_PBXManager_Controller {
      */
     function processStartupCall($request) {
         $connector = $this->getConnector();
-
+	
         $temp = $request->get('channel');
         $temp = explode("-", $temp);
         $temp = explode("/", $temp[0]);

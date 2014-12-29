@@ -9,16 +9,16 @@
  ************************************************************************************/
 $languageStrings = array(
 	'LBL_SAVED_SUCCESSFULLY'       => 'Успешно сохранено'          , 
-	'LBL_DELETED_SUCCESSFULLY'     => 'Успешно удален'        , 
+	'LBL_DELETED_SUCCESSFULLY'     => 'Успешно удалено'        , 
 	'LBL_INVALID_MAPPING'          => 'Неверный карт'             , 
-	'LBL_CONVERT_LEAD_FIELD_MAPPING' => 'Преобразование Lead Mapping'        , 
-	'LBL_FIELD_LABEL'              => 'Метка Поля'         , // KEY 5.x: FieldLabel
-	'LBL_FIELD_TYPE'               => 'Тип Поля'             , // KEY 5.x: FieldType
+	'LBL_CONVERT_LEAD_FIELD_MAPPING' => 'Преобразование Обращений'        , 
+	'LBL_FIELD_LABEL'              => 'Метка поля'         , // KEY 5.x: FieldLabel
+	'LBL_FIELD_TYPE'               => 'Тип поля'             , // KEY 5.x: FieldType
 	'LBL_MAPPING_WITH_OTHER_MODULES' => 'Связи с другими модулями', // KEY 5.x: LBL_MAPPING_OTHER_MODULES
 	'LBL_ORGANIZATIONS'            => 'Контрагенты'      , // KEY 5.x: COMBO_ACCOUNTS
 	'LBL_CONTACTS'                 => 'Контакты'            , // KEY 5.x: LBL_CONTACT_TITLE
 	'LBL_OPPURTUNITIES'            => 'Сделки'               , // TODO: Review
-	'LBL_ADD_MAPPING'              => 'добавить отображение', 
+	'LBL_ADD_MAPPING'              => 'Добавить отображение', 
 	'LBL_NONE'                     => '--нет--'                  , 
 	'phone'                        => 'Тел.'                     , // KEY 5.x: Phone
 	'picklist'                     => 'Список'                , // KEY 5.x: PickList
@@ -33,26 +33,26 @@ $languageStrings = array(
 	'checkBox'                     => 'Флажок'                   , // TODO: Review
 	'date'                         => 'Дата'                    , // KEY 5.x: Date
 	'integer'                      => 'Целое число',
-        'decimal'                      => 'Дробное число'                     , // TODO: Review
+    'decimal'                      => 'Дробное число'                     , // TODO: Review
 	'percent'                      => 'Процент'              , // KEY 5.x: Percent
 	'skype'                        => 'Skype'                       , // KEY 5.x: Skype
-        // Salesplatform begin localization
-        'LBL_CONVERT_LEAD_FIELD_MAPPING' => 'Соответствия для Обращений'        ,
-        'LBL_Cancel' => 'Отменить',
-        // Salesplatform end
+    // Salesplatform begin localization
+    'LBL_CONVERT_LEAD_FIELD_MAPPING' => 'Соответствия для Обращений'        ,
+    'LBL_Cancel'                   => 'Отменить',
+    // Salesplatform end
 );
 $jsLanguageStrings = array(
 	'JS_NONE'                      => 'Ни один'                        , 
-	'JS_IS_ALREADY_BEEN_MAPPED'    => 'уже были нанесены на карту'      , 
-	'JS_CANT_MAP'                  => 'Не могу карту'                    , 
+	'JS_IS_ALREADY_BEEN_MAPPED'    => 'уже есть отображение'      , 
+	'JS_CANT_MAP'                  => 'Невозможно отобразить'                    , 
 	'JS_WITH'                      => 'с'                        , 
-	'JS_MAPPING_DELETED_SUCCESSFULLY' => 'Отображение успешно удален', 
+	'JS_MAPPING_DELETED_SUCCESSFULLY' => 'Отображение успешно удалено', 
 	'JS_phone'                     => 'Телефон'                       , 
 	'JS_picklist'                  => 'Памятка'                   , 
 	'JS_email'                     => 'E-mail'                       , 
 	'JS_text'                      => 'Строка'                      , 
 	'JS_currency'                  => 'Валюта'                    , 
-	'JS_multiSelectCombo'          => 'Multi-Select Поле со списком'      , 
+	'JS_multiSelectCombo'          => 'Список'      , 
 	'JS_time'                      => 'Время'                        , 
 	'JS_textArea'                  => 'Текстовая область'                   , 
 	'JS_url'                       => 'Адрес'                         , 
@@ -63,5 +63,5 @@ $jsLanguageStrings = array(
 	'JS_percent'                   => 'Процент'                     , 
 	'JS_skype'                     => 'Skype'                       , 
 	'JS_None'                      => 'Ни один'                        , 
-	'JS_integer'					=> 'Целое',
+	'JS_integer'				   => 'Целое',
 );

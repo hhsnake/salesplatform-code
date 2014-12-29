@@ -32,7 +32,7 @@ class SMSNotifier_DevinoTelecom_Provider implements SMSNotifier_ISMSProvider_Mod
                                         69 => 'Отклонено', 
                                         99 => 'Неизвестный', 
                                         255 => 'Не успело попасть в БД либо сообщение старше 48 часов');
-	const SENDER_PARAM = 'LBL_SMS_SENDER';
+	const SENDER_PARAM = 'LBL_SMS_SENDER_DevinoTelecom';
         
 	private static $REQUIRED_PARAMETERS = array(self::SENDER_PARAM);
 	

@@ -13,6 +13,7 @@
 
 $languageStrings = array(
     'Install' => 'Установка',
+    'Vtiger CRM Setup' => 'Установка',
 	'LBL_INSTALLATION_WIZARD' => 'Мастер установки',
 	'LBL_WELCOME' => 'Добро пожаловать',
 	'LBL_WELCOME_TO_VTIGER6_SETUP_WIZARD' => 'Добро пожаловать в мастер установки Sales Platform Vtiger CRM 6',
@@ -46,17 +47,21 @@ $languageStrings = array(
 	'LBL_TIME_ZONE' => 'Часовой пояс',
 	'LBL_PLEASE_WAIT'=>'Пожалуйста, подождите',
 	'LBL_INSTALLATION_IN_PROGRESS'=>'Установка',
-	'LBL_EMAIL' => 'Email',
+	'LBL_EMAIL' => 'E-mail',
 	'LBL_ADMIN_USER_INFORMATION' => 'Параметры Пользователя',
 	'LBL_CURRENCY' => 'Валюта',
 	'LBL_URL' => 'URL',
-	'LBL_CONFIRM_CONFIGURATION_SETTINGS' => 'Подтвердить Параметры Конфигурации',
+	'LBL_CONFIRM_CONFIGURATION_SETTINGS' => 'Подтвердить параметры Конфигурации',
 	'LBL_NEXT' => 'Далее',
         'LBL_BACK' => 'Назад',
 	'LBL_PHP_VERSION' => 'Версия PHP',
-	'LBL_IMAP_SUPPORT' => 'Поддержка Imap',
+	'LBL_IMAP_SUPPORT' => 'Поддержка IMAP',
 	'LBL_ZLIB_SUPPORT' => 'Поддержка Zlib',
+    'LBL_MYSQLI_CONNECT_SUPPORT' => 'Поддержка MySQLi',
+    'LBL_OPEN_SSL' => 'Поддержка OpenSSL',
+    'LBL_CURL' => 'Поддержка cURL',
 	'LBL_GD_LIBRARY' => 'Графическая библиотека GD',
+    'NOT RECOMMENDED' => 'Не рекомендуемые параметры',
 	'ERR_DATABASE_CONNECTION_FAILED' => 'Невозможно соединится с Сервером БД',
 	'ERR_INVALID_MYSQL_PARAMETERS' => 'Указаны неверные параметры соединения с сервером MySQL',
 	'MSG_LIST_REASONS' => 'Причины этого могут быть следующие',
@@ -68,7 +73,10 @@ $languageStrings = array(
 	'MSG_DB_ROOT_USER_NOT_AUTHORIZED' => 'Сообщение: Указанный администратор БД не имеет прав на созание БД или название БД содержит специальные символы. Попробуйте изменить настройки БД',
 	'ERR_DB_NOT_FOUND' => 'Эта БД не найдена. Попробуйте изменить настройки БД',
 	'LBL_PASSWORD_MISMATCH' => 'Пожалуйста, введите пароль заново. Значения полей \"Пароль\" и \"Повторите пароль\" не совпадают.',
-	'LBL_ONE_LAST_THING' => 'И еще кое-что...'
+	'LBL_ONE_LAST_THING' => 'И еще кое-что...',
+	// SalesPlatform.ru begin
+	'LBL_MB_STRING' => 'Поддержка mbstring',
+	// SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

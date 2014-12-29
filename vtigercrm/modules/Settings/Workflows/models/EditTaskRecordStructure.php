@@ -23,9 +23,18 @@ class Settings_Workflows_EditTaskRecordStructure_Model extends Settings_Workflow
 		$recordId = $recordModel->getId();
 
 		$values = array();
-
+                
 		$baseModuleModel = $moduleModel = $this->getModule();
 		$blockModelList = $moduleModel->getBlocks();
+                
+                //SalesPlatform.ru add Direct link field to Detail view of entity
+                $additionalFieldModel = new Vtiger_Field_Model();
+                $additionalFieldModel->set('workflow_columnname', 'spDetailViewLink')
+                                     ->set('workflow_columnlabel', vtranslate('LBL_DETAIL_VIEW_LINK',$moduleModel->getName()) );
+                $values['SP_LINKS_BLOCK'] = array();
+                $values['SP_LINKS_BLOCK'][] = $additionalFieldModel;
+                //SalesPlatform.ru end
+
 		foreach($blockModelList as $blockLabel=>$blockModel) {
 			$fieldModelList = $blockModel->getFields();
 			if (!empty ($fieldModelList)) {

@@ -13,7 +13,10 @@
     <html lang="en">
 
         <head>
-            <title>Vtiger CRM Setup</title>
+            {* SalesPlatform.ru begin *}
+            <title>{vtranslate('Vtiger CRM Setup', 'Install')}</title>
+            {*<title>Vtiger CRM Setup</title>*}
+            {* SalesPlatform.ru end *}
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <link REL="SHORTCUT ICON" HREF="layouts/vlayout/skins/images/favicon.ico">

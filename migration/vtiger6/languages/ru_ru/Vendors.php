@@ -29,7 +29,7 @@ $languageStrings = array(
 	'306-Internet Sales'           => '306-Продажи-Интернет', 
 	'307-Service-Hardware Labor'   => '307-Сервис-Работа', 
 	'308-Sales-Books'              => '308-Продажи-Книги',
-    'LBL_to'                       => 'из',
+    'LBL_to'                       => '-',
     
         //SalesPLatfomr.ru begin add locale
         'LBL_VENDORS_ADD_EVENT' => 'Добавить Событие',

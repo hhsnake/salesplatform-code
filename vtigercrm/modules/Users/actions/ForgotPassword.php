@@ -49,7 +49,10 @@ class Users_ForgotPassword_Action {
         $shortURLModel->delete();
         $viewer->assign('USERNAME', $userName);
         $viewer->assign('PASSWORD', $newPassword);
-        $viewer->view('FPLogin.tpl', 'Users');
+        // SalesPlatform.ru begin
+        header ('Location: ../../../index.php?module=Users&view=Login');
+        //$viewer->view('FPLogin.tpl', 'Users');
+        // SalesPlatform.ru end
     }
 
     public static function run($request) {

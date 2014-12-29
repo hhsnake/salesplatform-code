@@ -97,7 +97,7 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
 			$firstKey = key($menuModels);
 			$selectedMenu = $menuModels[$firstKey];
 		}
-
+                
 		if(Settings_Vtiger_Index_View::$loadOlderSettingUi) {
             // Customization
             $viewer->assign('UI5_URL', $this->transformToUI5URL($request));
@@ -185,4 +185,13 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
         public function validateRequest(Vtiger_Request $request) { 
             $request->validateReadAccess(); 
         }
+        
+        //SalesPlatform.ru begin fix page title
+        public function getPageTitle(Vtiger_Request $request) {
+            if($request->getModule() == 'Vtiger') {
+                return vtranslate('LBL_SETTINGS', $request->getModule());
+            }
+            return parent::getPageTitle($request);
+	}
+        //SalesPlatform.ru end
 }

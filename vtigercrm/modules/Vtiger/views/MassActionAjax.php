@@ -481,7 +481,7 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
         $viewer->assign('RECORD_ID', $selectedIds[0]);
 		$viewer->assign('USER_MODEL', $user);
 
-		echo $viewer->view('EnterURL.tpl', $moduleName, true);
+		echo $viewer->view('EnterUrlForm.tpl', $moduleName, true);
 	}
     // SalesPlatform end
 }

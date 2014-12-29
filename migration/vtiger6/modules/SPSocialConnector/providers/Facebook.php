@@ -51,22 +51,35 @@ class Hybrid_Providers_Extended_Facebook extends Hybrid_Providers_Facebook {
 
      // new function: send private message to user by URL
     function sendPrivateMessage( $id_and_text ) {
-        list($id, $text) = explode( '?', $id_and_text );
+        list($id, $text) = explode( '?!?', $id_and_text );
+        
 ?>
-        <html xmlns:fb="https://www.facebook.com/2008/fbml">
+        <html>
             <body>
-                <script src="http://connect.facebook.net/en_US/all.js"></script>
-                <div id="fb-root"></div>
                 <script>
-                    // assume we are already logged in
-                    // enter your appId
-                    FB.init({appId: '', xfbml: true, cookie: true});
-
-                    FB.ui({
-                        method: 'send',
-                        link: 'https://www.facebook.com/',
-                        to: '<?php echo $id; ?>'
+                    var isLoaded = false;
+                    window.fbAsyncInit = function() {
+                        FB.init({
+                            appId      : '',
+                            status     : true,
+                            xfbml      : true,
+                            version    : 'v2.1'
                         });
+                        
+                        FB.ui({
+                            method: 'send',
+                            link: 'https://www.facebook.com/',
+                            to: '<?php echo $id; ?>'
+                        });
+                      };                     
+                      
+                      (function(d, s, id){
+                         var js, fjs = d.getElementsByTagName(s)[0];
+                         if (d.getElementById(id)) {return;}
+                         js = d.createElement(s); js.id = id;
+                         js.src = "//connect.facebook.net/ru_RU/sdk.js";
+                         fjs.parentNode.insertBefore(js, fjs);
+                       }(document, 'script', 'facebook-jssdk'));
                 </script>
             </body>
         </html>

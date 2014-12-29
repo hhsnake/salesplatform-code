@@ -235,7 +235,10 @@
         <br>
 		<div class="pull-right">
 			<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE',$MODULE)}</strong></button>
-			<a class="cancelLink" onclick="javascript:window.history.back();" type="reset">Cancel</a>
+            {* SalesPlatform.ru begin *}
+            <a class="cancelLink" onclick="javascript:window.history.back();" type="reset">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a> 
+			{*<a class="cancelLink" onclick="javascript:window.history.back();" type="reset">Cancel</a>*}
+            {* SalesPlatform.ru end *}
 			<br><br>
 		</div>
 	</form>

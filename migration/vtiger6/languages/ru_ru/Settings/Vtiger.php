@@ -49,7 +49,7 @@ $languageStrings = array(
 	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Настройка зависимостей между значениями списков в каждом модуле', 
 	'LBL_MENU_EDITOR'              => 'Редактор меню'   , 
     'LBL_MENU_EDITOR_MESSAGE'      => 'Фактическое количество отображаемых пунктов меню зависит от разрешения экрана и может быть меньше, чем количество выбранных пунктов.',
-	'LBL_MENU_DESC'                => 'описание меню'   , 
+	'LBL_MENU_DESC'                => 'Изменить последовательность пунктов меню'   , 
 	'EMAILTEMPLATES'               => 'Шаблоны E-mail'        , 
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Управление шаблонами модуля E-mail', 
 	'LBL_COMPANY_DETAILS'          => 'Данные организации', 
@@ -59,7 +59,7 @@ $languageStrings = array(
 	'LBL_TAX_SETTINGS'             => 'Настройки налогов', 
 	'LBL_TAX_DESCRIPTION'          => 'Управление налогами и ставками налогов', 
 	'LBL_MAIL_SERVER_SETTINGS'     => 'Сервер исходящей почты', 
-	'LBL_MAIL_SERVER_DESCRIPTION'  => 'Настройте параметры Сервера исходящей почты', 
+	'LBL_MAIL_SERVER_DESCRIPTION'  => 'Настройте параметры Сервера Исходящей Почты', 
 	'INVENTORYTERMSANDCONDITIONS'  => 'Сроки и условия', 
 	'LBL_INV_TANDC_DESCRIPTION'    => 'Укажите Cроки и условия для Предложений, Заказов и Счетов', 
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Управление Оповещениями', 
@@ -241,6 +241,7 @@ $languageStrings = array(
     'LBL_EXTENSION_STORE'          => 'Магазин расширений',
     'Signed in'                    => 'Вошел',
     'Signed off'                   => 'Вышел',
+    'LBL_SOCIALCONNECTOR_SETTINGS' => 'Сообщения',
     //Salesplatform.ru end
 );
 $jsLanguageStrings = array(

@@ -35,11 +35,14 @@ function getFieldByReportLabel($module, $label) {
 	if(empty($cachedModuleFields)) {
 		return null;
 	}
-    
+        
 	foreach ($cachedModuleFields as $fieldInfo) {
 		$fieldLabel = str_replace(' ', '_', $fieldInfo['fieldlabel']);
         $fieldLabel = decode_html($fieldLabel);
-		if($label == $fieldLabel) {
+                //SalesPlatform.ru begin fix get field info by label
+                if($label == $fieldLabel || $label == getTranslatedString($fieldLabel, $module)) {
+		//if($label == $fieldLabel) {
+                //SalesPlatform.ru end    
 			VTCacheUtils::setReportFieldByLabel($module, $label, $fieldInfo);
 			return $fieldInfo;
 		}

@@ -20,8 +20,8 @@ class SMSNotifier_StreamSMSru_Provider implements SMSNotifier_ISMSProvider_Model
 
         private $_streamsms;
 	
-	const SENDER_PARAM = 'LBL_SMS_SENDER';
-	const TIME_PARAM = 'LBL_SMS_TIME';
+	const SENDER_PARAM = 'LBL_SMS_SENDER_StreamSMSru';
+	const TIME_PARAM = 'LBL_SMS_TIME_StreamSMSru';
         
 	private static $REQUIRED_PARAMETERS = array(self::SENDER_PARAM, self::TIME_PARAM);
 	

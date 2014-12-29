@@ -52,6 +52,33 @@
                                 <div class="span3"><input type="radio"  name="mode" value="ExportAllData"  {if empty($SELECTED_IDS)} checked="checked" {/if} /></div>
                             </div>
                         </div>
+                        
+                        {* SalesPlatform.ru begin add encoding and delimiter *}
+                        <div class="row-fluid" style="height:30px">
+                            <div class="span6 textAlignRight row-fluid">
+                                <div class="span8">{vtranslate('LBL_CHARACTER_ENCODING',$MODULE)}&nbsp;</div>
+                                <div class="span3">
+                                    <select name="file_encoding" id="file_encoding">
+                                        {foreach key=FILE_ENCODING item=FILE_ENCODING_LABEL from=$SUPPORTED_FILE_ENCODING}
+                                        <option value="{$FILE_ENCODING}">{vtranslate($FILE_ENCODING_LABEL,$MODULE)}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid" style="height:30px" id="delimiter_container">
+                            <div class="span6 textAlignRight row-fluid">
+                                <div class="span8">{vtranslate('LBL_DELIMITER',$MODULE)}&nbsp;</div>
+                                <div class="span3">
+                                    <select name="delimiter" id="delimiter">
+                                        {foreach key=DELIMITER item=DELIMITER_LABEL from=$SUPPORTED_DELIMITERS}
+                                        <option value="{$DELIMITER}">{vtranslate($DELIMITER_LABEL,$MODULE)}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        {* SalesPlatform.ru end *}
                     </div>
                     <br>
                     <div class="textAlignCenter">

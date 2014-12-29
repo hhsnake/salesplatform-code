@@ -88,7 +88,12 @@ class Consignment extends CRMEntity {
 	
 	// For Alphabetical search
 	var $def_basicsearch_col = 'consignment_no';
-
+        
+        //SalesPlatform.ru begin fix empty updating line items from handlers 
+        var $isLineItemUpdate = true;
+        //SalesPlatform.ru end
+        
+        
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Consignment() {
@@ -108,9 +113,15 @@ class Consignment extends CRMEntity {
 	{
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if(isset($_REQUEST)) {
-			if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
-					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
+                        //SalesPlatform.ru begin fix empty updating line items from handlers 
+                        if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
+					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates' 
+                                        && $this->isLineItemUpdate != false)
 			{
+			//if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
+			//		&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
+			//{  
+                        //SalesPlatform.ru end    
 				//Based on the total Number of rows we will save the product relationship with this entity
 				saveInventoryProductDetails($this, 'Consignment');
 			}

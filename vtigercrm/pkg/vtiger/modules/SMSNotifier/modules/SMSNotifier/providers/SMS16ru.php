@@ -15,7 +15,7 @@ class SMSNotifier_SMS16ru_Provider implements SMSNotifier_ISMSProvider_Model {
 	private $_password;
 	private $_parameters = array();
 	
-	const SENDER_PARAM = 'LBL_SMS_SENDER';
+	const SENDER_PARAM = 'LBL_SMS_SENDER_SMS16ru';
         
 	private static $REQUIRED_PARAMETERS = array(self::SENDER_PARAM);
 	

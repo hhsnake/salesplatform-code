@@ -23,8 +23,13 @@ include_once 'includes/main/WebUI.php';
 require_once('libraries/nusoap/nusoap.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Emails/mail.php');
+require_once('include/utils/CommonUtils.php');
+require_once('include/utils/VtlibUtils.php');
 require_once 'modules/Users/Users.php';
 
+// SalesPlatform.ru begin
+require_once 'includes/SalesPlatform/NetIDNA/idna_convert.class.php';
+// SalesPlatform.ru end
 
 /** Configure language for server response translation */
 global $default_language, $current_language;
@@ -339,6 +344,31 @@ $server->register(
 	array('id'=>'xsd:string','module'=>'xsd:string','customerid'=>'xsd:string','sessionid'=>'xsd:string'),
 	array('return'=>'tns:field_details_array'),
 	$NAMESPACE);
+
+// SalesPlatform.ru begin
+ 
+// Get the Price Books
+$server->register(
+	'get_pricebooks_list',
+	array('fieldname'=>'tns:common_array'),
+	array('return'=>'tns:common_array'),
+	$NAMESPACE);
+
+// Create SalesOrder
+$server->register(
+	'create_salesorder',
+	array('fieldname'=>'tns:common_array'),
+	array('return'=>'tns:common_array'),
+	$NAMESPACE);
+
+// Change filed for any CRM Entity
+$server->register(
+	'change_entity_field',
+	array('fieldname'=>'tns:common_array'),
+	array('return'=>'tns:common_array'),
+	$NAMESPACE);
+
+// SalesPlatform.ru end
 
 /**
  * Helper class to provide functionality like caching etc...
@@ -1133,9 +1163,15 @@ function send_mail_for_password($mailid)
 
 	$mail = new PHPMailer();
 
+// SalesPlatform.ru begin
+	$idn = new idna_convert();
+// SalesPlatform.ru end
+
 	$mail->Subject = $mod_strings['LBL_SUBJECT_PORTAL_LOGIN_DETAILS'];
 	$mail->Body    = $contents;
-	$mail->IsSMTP();
+    // SalesPlatform.ru begin
+	//$mail->IsSMTP();
+    // SalesPlatform.ru end
 
 	$mailserverresult = $adb->pquery("select * from vtiger_systems where server_type=?", array('email'));
 	$mail_server = $adb->query_result($mailserverresult,0,'server');
@@ -1143,16 +1179,39 @@ function send_mail_for_password($mailid)
 	$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
 	$smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
 
+// SalesPlatform.ru begin
+        $use_sendmail = $adb->query_result($mailserverresult,0,'use_sendmail');
+        if(!empty($use_sendmail) && $use_sendmail != 'false')
+            $mail->IsSendmail();
+        else
+            $mail->IsSMTP();
+
+        $mail_server_tls = $adb->query_result($mailserverresult,0,'server_tls');
+	if(!empty($mail_server_tls) && $mail_server_tls != 'no')
+            $mail->SMTPSecure = $mail_server_tls;
+
+        $mail_server_port = $adb->query_result($mailserverresult,0,'server_port');
+        if(!empty($mail_server_port) && $mail_server_port != 0)
+            $mail->Port = $mail_server_port;
+// SalesPlatform.ru end
+
 	$mail->Host = $mail_server;
 	if($smtp_auth == 'true')
 	$mail->SMTPAuth = 'true';
 	$mail->Username = $mail_server_username;
 	$mail->Password = $mail_server_password;
-	$mail->From = $from;
+// SalesPlatform.ru begin
+	$mail->From = $idn->encode($from);
+//	$mail->From = $from;
+// SalesPlatform.ru end
 	$mail->FromName = $initialfrom;
 
-	$mail->AddAddress($user_name);
-	$mail->AddReplyTo($current_user->name);
+// SalesPlatform.ru begin
+	$mail->AddAddress($idn->encode($user_name));
+	$mail->AddReplyTo($idn->encode($current_user->name));
+//	$mail->AddAddress($user_name);
+//	$mail->AddReplyTo($current_user->name);
+// SalesPlatform.ru end
 	$mail->WordWrap = 50;
 
 	$mail->IsHTML(true);
@@ -1660,6 +1719,28 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 		$params = array($entity_ids_list,$entity_ids_list);
 		$fields_list['Related To'] = 'entityid';
 	}
+        // SalesPlatform.ru begin
+	else if($module == 'SalesOrder')
+	{
+		$query ="select distinct vtiger_salesorder.*,vtiger_crmentity.smownerid,
+		case when vtiger_salesorder.contactid !=0 then vtiger_salesorder.contactid else vtiger_salesorder.accountid end as entityid,
+		case when vtiger_salesorder.contactid !=0 then 'Contacts' else 'Accounts' end as setype
+		from vtiger_salesorder 
+		left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid 
+		where vtiger_crmentity.deleted=0 and (accountid in (". generateQuestionMarks($entity_ids_list) .") or contactid in  (". generateQuestionMarks($entity_ids_list) ."))";
+                $query .= " order by vtiger_salesorder.sostatus asc, vtiger_salesorder.salesorderid asc ";
+		$params = array($entity_ids_list,$entity_ids_list);
+		$fields_list['Related To'] = 'entityid';
+		$fields_list['Status'] = 'sostatus';
+	}
+	else if($module == 'Products')
+	{
+		$query ="select distinct vtiger_products.*,vtiger_crmentity.smownerid, vtiger_seproductsrel.* from vtiger_seproductsrel, vtiger_products
+		left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid 
+		where vtiger_seproductsrel.productid = vtiger_crmentity.crmid and vtiger_crmentity.deleted=0 and (vtiger_seproductsrel.crmid in (". generateQuestionMarks($entity_ids_list) ."))";
+		$params = array($entity_ids_list);
+	}
+        // SalesPlatform.ru end
 	else if ($module == 'Documents')
 	{
 		$query ="select vtiger_notes.*, vtiger_crmentity.*, vtiger_senotesrel.crmid as entityid, '' as setype,vtiger_attachmentsfolder.foldername from vtiger_notes " .
@@ -1735,7 +1816,10 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 				}
 				if($fieldname == 'total'){
 					$sym = getCurrencySymbol($res,$j,'currency_id');
-					$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru begin
+					$fieldvalue = getCurrencyValue($sym, $fieldvalue);
+					//$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru end
 				}
 			}
 			if($module == 'Invoice')
@@ -1750,9 +1834,35 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 				}
 				if($fieldname == 'total'){
 					$sym = getCurrencySymbol($res,$j,'currency_id');
-					$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru begin
+					$fieldvalue = getCurrencyValue($sym, $fieldvalue);
+					//$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru end
 				}
 			}
+                        // SalesPlatform.ru begin
+			if($module == 'SalesOrder')
+			{
+				if ($fieldname =='subject') {
+					$fieldid = $adb->query_result($res,$j,'salesorderid');
+					$fieldvalue = '<a href="index.php?&module=SalesOrder&action=index&status=true&id='.$fieldid.'">'.$fieldvalue.'</a>';
+				} else if ($fieldname == 'total') {
+					$sym = getCurrencySymbol($res,$j,'currency_id');
+					$fieldvalue = getCurrencyValue($sym, $fieldvalue);
+				} else if ($fieldname == 'quoteid') {
+                                        if($fieldvalue != '') {
+                                                $fieldvalue = get_table_record_field_value("subject", "vtiger_quotes", "quoteid", $fieldvalue);
+                                        }
+                                }
+			}
+			if($module == 'Products')
+			{   
+				if ($fieldname =='unit_price') {
+					$sym = getCurrencySymbol($res,$j,'currency_id');
+                                        $fieldvalue = getCurrencyValue($sym, $fieldvalue);
+				}
+			}
+                        // SalesPlatform.ru end
 			if($module == 'Documents')
 			{
 				if($fieldname == 'title'){
@@ -1805,7 +1915,10 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 				}
 				if($fieldname == 'unit_price'){
 					$sym = getCurrencySymbol($res,$j,'currency_id');
-					$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru begin
+					$fieldvalue = getCurrencyValue($sym, $fieldvalue);
+					//$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru end
 				}
 
 			}
@@ -1851,9 +1964,20 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 			if($fieldname == 'smownerid'){
 				$fieldvalue = getOwnerName($fieldvalue);
 			}
+                        // SalesPlatform.ru begin
+                        $output[1][$module]['data'][$j][$i]['fielddata'] = getTranslatedString($fieldvalue,$module);
+			//$output[1][$module]['data'][$j][$i]['fielddata'] = $fieldvalue;
+                        // SalesPlatform.ru end
+			$i++;
+		}
+                // SalesPlatform.ru begin
+                if ($module == 'Products') {
+                        $fieldvalue = $adb->query_result($res, $j, 'productid');
+			$output[0][$module]['head'][0][$i]['fielddata'] = 'productid';
 			$output[1][$module]['data'][$j][$i]['fielddata'] = $fieldvalue;
 			$i++;
 		}
+                // SalesPlatform.ru end
 	}
 	$log->debug("Exiting customer portal function get_list_values");
 	return $output;
@@ -2034,7 +2158,10 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 	if(!validateSession($customerid,$sessionid))
 	return null;
 
-	$fieldquery = "SELECT fieldname, columnname, fieldlabel,block,uitype FROM vtiger_field WHERE tabid = ? AND displaytype in (1,2,4) ORDER BY block,sequence";
+        // SalesPlatform.ru begin : for total field support
+	$fieldquery = "SELECT fieldname, columnname, fieldlabel,block,uitype FROM vtiger_field WHERE tabid = ? ORDER BY block,sequence";
+	//$fieldquery = "SELECT fieldname, columnname, fieldlabel,block,uitype FROM vtiger_field WHERE tabid = ? AND displaytype in (1,2,4) ORDER BY block,sequence";
+        // SalesPlatform.ru end
 	$fieldres = $adb->pquery($fieldquery,array(getTabid($module)));
 	$nooffields = $adb->num_rows($fieldres);
 	$query = "select vtiger_invoice.*,vtiger_crmentity.* ,vtiger_invoicebillads.*,vtiger_invoiceshipads.*,
@@ -2049,7 +2176,10 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 	for($i=0;$i<$nooffields;$i++)
 	{
 		$fieldname = $adb->query_result($fieldres,$i,'columnname');
-		$fieldlabel = getTranslatedString($adb->query_result($fieldres,$i,'fieldlabel'));
+                // SalesPlatform.ru begin
+		$fieldlabel = getTranslatedString($adb->query_result($fieldres,$i,'fieldlabel'),$module);
+		//$fieldlabel = getTranslatedString($adb->query_result($fieldres,$i,'fieldlabel'));
+                // SalesPlatform.ru end
 
 		$blockid = $adb->query_result($fieldres,$i,'block');
 		$blocknameQuery = "select blocklabel from vtiger_blocks where blockid = ?";
@@ -2057,7 +2187,7 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 		$blocklabel = $adb->query_result($blockPquery,0,'blocklabel');
 
 		$fieldper = getFieldVisibilityPermission($module,$current_user->id,$fieldname);
-		if($fieldper == '1'){
+		if($fieldper == '1' /* SalesPlatform.ru begin */ &&  (strcmp($fieldname, 'total') != 0)/* SalesPlatform.ru end */){
 			continue;
 		}
 
@@ -2086,7 +2216,10 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 		}
 		if($fieldname == 'total'){
 			$sym = getCurrencySymbol($res,0,'currency_id');
-			$fieldvalue = $sym.$fieldvalue;
+            // SalesPlatform.ru begin
+            $fieldvalue = getCurrencyValue($sym, $fieldvalue);
+			//$fieldvalue = $sym.$fieldvalue;
+            // SalesPlatform.ru end
 		}
 		if($fieldname == 'smownerid'){
 			$fieldvalue = getOwnerName($fieldvalue);
@@ -2224,7 +2357,10 @@ function get_product_list_values($id,$modulename,$sessionid,$only_mine='true')
 
 				if($fieldname == 'unit_price'){
 					$sym = getCurrencySymbol($res[$k],$j,'currency_id');
-					$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru begin
+					$fieldvalue = getCurrencyValue($sym, $fieldvalue);
+					//$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru end
 				}
 				$output[$k][$modulename]['data'][$j][$i]['fielddata'] = $fieldvalue;
 				$i++;
@@ -2354,6 +2490,20 @@ function get_details($id,$module,$customerid,$sessionid)
 					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_project.projectid
 					LEFT JOIN vtiger_projectcf ON vtiger_projectcf.projectid = vtiger_project.projectid
 					WHERE vtiger_project.projectid = ? AND vtiger_crmentity.deleted = 0";
+        // SalesPlatform.ru begin
+	} else if ($module == 'PriceBooks') {
+		$query = "SELECT vtiger_pricebook.*, vtiger_crmentity.* ".
+                        "FROM vtiger_pricebook ".
+                        "INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_pricebook.pricebookid ".
+                        "WHERE active = 1 AND vtiger_crmentity.deleted = 0 AND pricebookid = ? ";
+	} else if ($module == 'SalesOrder') {
+		$query = "SELECT vtiger_salesorder.*, vtiger_crmentity.*, vtiger_sobillads.*, vtiger_soshipads.* ".
+                        "FROM vtiger_salesorder ".
+                        "INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid ".
+			"INNER JOIN vtiger_sobillads ON vtiger_salesorder.salesorderid = vtiger_sobillads.sobilladdressid ".
+			"INNER JOIN vtiger_soshipads ON vtiger_salesorder.salesorderid = vtiger_soshipads.soshipaddressid ".
+                        "WHERE vtiger_crmentity.deleted = 0 AND salesorderid = ? ";
+        // SalesPlatform.ru end
 	}
 
 	$params = array($id);
@@ -2386,12 +2536,22 @@ function get_details($id,$module,$customerid,$sessionid)
 			continue;
 		}
 		$fieldper = getFieldVisibilityPermission($module,$current_user->id,$fieldname);
-		if($fieldper == '1'){
+		if($fieldper == '1' /* SalesPlatform.ru begin */ &&  (strcmp($fieldname, 'total') != 0)/* SalesPlatform.ru end */){
 			continue;
 		}
 
-		$fieldlabel = getTranslatedString($adb->query_result($fieldres,$i,'fieldlabel'));
-		$fieldvalue = $adb->query_result($res,0,$columnname);
+                // SalesPlatform.ru begin
+		$fieldlabel = getTranslatedString($adb->query_result($fieldres,$i,'fieldlabel'),$module);
+                $fieldvalue = getTranslatedString($adb->query_result($res,0,$columnname),$module);
+		//$fieldlabel = getTranslatedString($adb->query_result($fieldres,$i,'fieldlabel'));
+		//$fieldvalue = $adb->query_result($res,0,$columnname);
+                // SalesPlatform.ru end
+                
+                // SalesPlatform.ru begin : don't send empty fields
+                if (empty($fieldvalue)) {
+                        continue;
+                }
+                // SalesPlatform.ru end
 
 		$output[0][$module][$i]['fieldlabel'] = $fieldlabel ;
 		$output[0][$module][$i]['blockname'] = $blockname;
@@ -2427,7 +2587,10 @@ function get_details($id,$module,$customerid,$sessionid)
 			}
 			if($fieldname == 'total'){
 				$sym = getCurrencySymbol($res,0,'currency_id');
-				$fieldvalue = $sym.$fieldvalue;
+                // SalesPlatform.ru begin
+                $fieldvalue = getCurrencyValue($sym, $fieldvalue);
+				//$fieldvalue = $sym.$fieldvalue;
+                // SalesPlatform.ru end
 			}
 		}
 		if($module == 'Documents')
@@ -2537,9 +2700,17 @@ function get_details($id,$module,$customerid,$sessionid)
 		}
 		if($fieldname == 'unit_price'){
 			$sym = getCurrencySymbol($res,0,'currency_id');
-			$fieldvalue = round($fieldvalue, 2);
-			$fieldvalue = $sym.$fieldvalue;
+                        // SalesPlatform.ru begin
+                        $fieldvalue = getCurrencyValue($sym, $fieldvalue);
+                        //$fieldvalue = $sym.$fieldvalue;
+                        // SalesPlatform.ru end
 		}
+                // SalesPlatform.ru begin
+		if ($fieldname == 'currency_id') {
+			$sym = getCurrencySymbol($res,0,'currency_id');
+                        $fieldvalue = $sym;
+		}
+                // SalesPlatform.ru end
 		$output[0][$module][$i]['fieldvalue'] = $fieldvalue;
 	}
 
@@ -2549,7 +2720,10 @@ function get_details($id,$module,$customerid,$sessionid)
 		if (!empty($sc_info)) {
 			$modulename = 'ServiceContracts';
 			$blocklable = getTranslatedString('LBL_SERVICE_CONTRACT_INFORMATION',$modulename);
-			$j=$i;
+                        // SalesPlatform.ru begin
+			$j = $i + 1;
+			//$j=$i;
+                        // SalesPlatform.ru end
 			for($k=0;$k<count($sc_info);$k++){
 				foreach ($sc_info[$k] as $label => $value) {
 					$output[0][$module][$j]['fieldlabel']= getTranslatedString($label,$modulename);
@@ -2560,6 +2734,58 @@ function get_details($id,$module,$customerid,$sessionid)
 			}
 		}
 	}
+        // SalesPlatform.ru begin
+        else if ($module == 'PriceBooks') {
+		$sc_info = getRelatedPriceBookProducts($id);
+		if (!empty($sc_info)) {
+			$modulename = 'Products';
+			$blocklable = getTranslatedString('LBL_LIST_FORM_TITLE',$modulename);
+			$j = $i + 1;
+			for($k=0;$k<count($sc_info);$k++){
+				foreach ($sc_info[$k] as $label => $value) {
+					$output[0][$module][$j]['fieldlabel']= getTranslatedString($label,$modulename);
+					$output[0][$module][$j]['fieldvalue']= $value;
+					$output[0][$module][$j]['blockname'] = $blocklable;
+					$j++;
+				}
+			}
+		}
+        }
+        else if ($module == 'SalesOrder') {
+                $sym = getCurrencySymbol($res,0,'currency_id');
+                
+                $blocklable = getTranslatedString('Total',$module);
+                $i++;
+                $output[0][$module][$i]['fieldlabel']= getTranslatedString('Sub Total',$module);
+                $output[0][$module][$i]['fieldvalue']= getCurrencyValue($sym, $adb->query_result($res,0,'subtotal'));
+                $output[0][$module][$i]['blockname'] = $blocklable;
+                $i++;
+                $output[0][$module][$i]['fieldlabel']= getTranslatedString('Shipping & Handling Charges',$module);
+                $output[0][$module][$i]['fieldvalue']= getCurrencyValue($sym, $adb->query_result($res,0,'s_h_amount'));
+                $output[0][$module][$i]['blockname'] = $blocklable;
+                $i++;
+                $output[0][$module][$i]['fieldlabel']= getTranslatedString('Total',$module);
+                $output[0][$module][$i]['fieldvalue']= getCurrencyValue($sym, $adb->query_result($res,0,'total'));
+                $output[0][$module][$i]['blockname'] = $blocklable;
+                $i++;
+                
+		$sc_info = getRelatedSalesOrderItems($id);
+		if (!empty($sc_info)) {
+			$modulename = 'Products';
+			$blocklable = getTranslatedString('LBL_LIST_FORM_TITLE',$modulename);
+			$j = $i + 1;
+			for($k=0;$k<count($sc_info);$k++){
+				foreach ($sc_info[$k] as $label => $value) {
+					$output[0][$module][$j]['fieldlabel']= getTranslatedString($label,$modulename);
+					$output[0][$module][$j]['fieldvalue']= $value;
+					$output[0][$module][$j]['blockname'] = $blocklable;
+					$j++;
+				}
+			}
+		}
+        }
+        // SalesPlatform.ru end
+        
 	$log->debug("Existing customer portal function get_details ..");
 	return $output;
 }
@@ -2805,6 +3031,24 @@ function check_permission($customerid, $module, $entityid) {
 								return true;
 							}
 							break;
+
+                // SalesPlatform.ru begin
+		case 'PriceBooks'   :	return $show_all; 
+                                        break;
+                
+		case 'SalesOrder'	:	$query = "SELECT vtiger_salesorder.salesorderid
+								FROM vtiger_salesorder   
+								INNER JOIN vtiger_crmentity 
+								ON vtiger_salesorder.salesorderid=vtiger_crmentity.crmid  													
+								WHERE vtiger_crmentity.deleted=0 
+									AND (vtiger_salesorder.contactid IN (". generateQuestionMarks($allowed_contacts_and_accounts).") or vtiger_salesorder.accountid IN (".generateQuestionMarks($allowed_contacts_and_accounts)."))
+									AND vtiger_salesorder.salesorderid = ?";
+							$res = $adb->pquery($query, array($allowed_contacts_and_accounts, $allowed_contacts_and_accounts, $entityid));
+							if ($adb->num_rows($res) > 0) {
+								return true;
+							}
+							break;
+                // SalesPlatform.ru end
 
 	}
 	return false;
@@ -3172,7 +3416,10 @@ function get_service_list_values($id,$modulename,$sessionid,$only_mine='true')
 
 				if($fieldname == 'unit_price'){
 					$sym = getCurrencySymbol($res[$k],$j,'currency_id');
-					$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru begin
+					$fieldvalue = getCurrencyValue($sym, $fieldvalue);
+					//$fieldvalue = $sym.$fieldvalue;
+                                        // SalesPlatform.ru end
 				}
 				$output[$k][$modulename]['data'][$j][$i]['fielddata'] = $fieldvalue;
 				$i++;
@@ -3183,6 +3430,410 @@ function get_service_list_values($id,$modulename,$sessionid,$only_mine='true')
 	return $output;
 }
 
+// SalesPlatform.ru begin
+/**
+ * Get PriceBook list
+ * 
+ * @param array $input_array    input data
+ * @return array                resulted data
+ */
+function get_pricebooks_list($input_array) {
+	require_once('modules/PriceBooks/PriceBooks.php');
+	require_once('include/utils/UserInfoUtil.php');
+
+	global $adb, $log;
+	global $current_user;
+	require_once('modules/Users/Users.php');
+        
+	$log->debug("Entering customer portal function get_pricebooks_list");
+	
+	$user = new Users();
+	$userid = getPortalUserid();
+	
+	$show_all = show_all('PriceBooks');
+	$current_user = $user->retrieveCurrentUserInfoFromFile($userid);
+	
+	$id = $input_array['id'];
+	$only_mine = $input_array['onlymine'];
+	$only_base = $input_array['onlybase'];
+	$sessionid = $input_array['sessionid'];
+
+	if (!validateSession($id, $sessionid)) {
+		return null;
+        }
+
+	$entity_ids_list = array();
+	if ($only_mine == 'true') {
+		array_push($entity_ids_list, $id);
+	}
+	else {
+                // TODO
+	}
+
+	$focus = new PriceBooks();
+	$focus->filterInactiveFields('PriceBooks');
+	foreach ($focus->list_fields as $fieldlabel => $values) {
+		foreach($values as $table => $fieldname){
+			$fields_list[$fieldlabel] = $fieldname;
+		}
+	}
+	
+	$FieldVisibilityByColumn = array();
+	foreach($fields_list as $fieldlabel => $fieldname) {
+		$FieldVisibilityByColumn[$fieldname] = 
+			getColumnVisibilityPermission($current_user->id, $fieldname, 'PriceBooks');
+	}
+
+        // PriceBooks items selection
+        $query = "SELECT * FROM vtiger_pricebook ".
+                "INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_pricebook.pricebookid AND vtiger_crmentity.deleted = 0 ".
+                "WHERE active = 1 ";
+        if (count($entity_ids_list) > 0) {
+            $query .= "AND owner_id IN (". generateQuestionMarks($entity_ids_list) .")";
+        }
+	$params = array($entity_ids_list);
+	
+	$res = $adb->pquery($query, $params);
+	$noofdata = $adb->num_rows($res);
+	for ($j = 0; $j < $noofdata; $j++) {
+		$i = 0;
+		foreach ($fields_list as $fieldlabel => $fieldname) {
+                        if (strcmp($fieldname, 'active') == 0) {
+				continue;
+                        }
+			$fieldper = $FieldVisibilityByColumn[$fieldname];
+			if ($fieldper == '1') {
+				continue;
+			}
+			$output[0]['head'][0][$i]['fielddata'] = $fieldlabel;
+			$fieldvalue = $adb->query_result($res, $j, $fieldname);
+			$pricebookid = $adb->query_result($res, $j, 'pricebookid');
+			if ($fieldname == 'bookname'){
+				$fieldvalue = '<a href="index.php?module=PriceBooks&action=index&fun=detail&pricebookid='.$pricebookid.'">'.$fieldvalue.'</a>';
+			}
+			if($fieldname == 'owner_id') {
+                            // TODO
+			}
+			$output[1]['data'][$j][$i]['fielddata'] = $fieldvalue;
+			$i++;
+		}
+	}
+	$log->debug("Exiting customer portal function get_pricebooks_list");
+	return $output;
+}
+
+/**
+ * Get related PriceBook items
+ * 
+ * @param int $crmid    pricebook id
+ * @return array        $array[index][fieldname] = fieldvalue
+ */
+function getRelatedPriceBookProducts($crmid){
+	global $adb,$log;
+	$log->debug("Entering customer portal function getRelatedPriceBookProducts");
+	$module = 'Products';
+	$sc_info = array();
+	if(vtlib_isModuleActive($module) !== true){
+		return $sc_info;
+	}
+	$query = "SELECT vtiger_pricebookproductrel.*, vtiger_products.* ".
+                "FROM vtiger_pricebookproductrel ".
+                "INNER JOIN vtiger_products ON vtiger_pricebookproductrel.productid = vtiger_products.productid ".
+                "INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_pricebookproductrel.productid AND vtiger_crmentity.deleted = 0 ".
+                "WHERE vtiger_pricebookproductrel.pricebookid = ?";
+
+	$res = $adb->pquery($query,array($crmid));
+	$rows = $adb->num_rows($res);
+	for ($i = 0; $i < $rows;$i++) {
+		$sc_info[$i][getTranslatedString('LBL_PRODUCT_CODE',$module)] = $adb->query_result($res,$i,'product_no');
+		$sc_info[$i][getTranslatedString('LBL_PRODUCT_NAME',$module)] = $adb->query_result($res,$i,'productname');
+                $sym = getCurrencySymbol($res,$i,'currency_id');
+                $listprice = $adb->query_result($res,$i,'listprice');
+		$sc_info[$i][getTranslatedString('LBL_PB_LIST_PRICE','PriceBooks')] = getCurrencyValue($sym, $listprice);
+		$sc_info[$i][getTranslatedString('LBL_MANUFACTURER',$module)] = $adb->query_result($res,$i,'manufacturer');
+	}
+	$log->debug("Exiting customerportal function getRelatedPriceBookProducts");
+	return $sc_info;
+}
+
+/**
+ * Get related SalesOrder items
+ * 
+ * @param int $crmid    salesorder id
+ * @return array        $array[index][fieldname] = fieldvalue
+ */
+function getRelatedSalesOrderItems($crmid) {
+	global $adb,$log;
+	$log->debug("Entering customer portal function getRelatedSalesOrderItems");
+	$module = 'Products';
+	$sc_info = array();
+	if(vtlib_isModuleActive($module) !== true){
+		return $sc_info;
+	}
+	$query = "SELECT vtiger_inventoryproductrel.*, vtiger_products.* ".
+                "FROM vtiger_inventoryproductrel ".
+                "INNER JOIN vtiger_products ON vtiger_inventoryproductrel.productid = vtiger_products.productid ".
+                "INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_inventoryproductrel.productid AND vtiger_crmentity.deleted = 0 ".
+                "WHERE vtiger_inventoryproductrel.id = ?";
+
+	$res = $adb->pquery($query,array($crmid));
+	$rows = $adb->num_rows($res);
+	for ($i = 0; $i < $rows;$i++) {
+                $qty = $adb->query_result($res,$i,'quantity');
+		$sc_info[$i]['productid'.$adb->query_result($res,$i,'productid')] = $qty;
+		$sc_info[$i][getTranslatedString('LBL_PRODUCT_CODE',$module)] = $adb->query_result($res,$i,'product_no');
+		$sc_info[$i][getTranslatedString('LBL_PRODUCT_NAME',$module)] = $adb->query_result($res,$i,'productname');
+                $sym = getCurrencySymbol($res,$i,'currency_id');
+                $listprice = $adb->query_result($res,$i,'listprice');
+		$sc_info[$i][getTranslatedString('LBL_PB_LIST_PRICE','SalesOrder')] = getCurrencyValue($sym, $listprice);
+		$sc_info[$i][getTranslatedString('Quantity','SalesOrder')] = number_format($qty);
+	}
+	$log->debug("Exiting customerportal function getRelatedSalesOrderItems");
+	return $sc_info;
+}
+
+/**
+ * Create SalesOrder entity
+ * 
+ * @param array $input_array    input data for salesorder
+ */
+function create_salesorder($input_array) {
+        require_once('modules/SalesOrder/SalesOrder.php');
+
+	global $adb,$log;
+	$adb->println("Inside customer portal function create_salesorder");
+	$adb->println($input_array);
+        
+        // Input parameters
+	$id = $input_array['id'];
+	$sessionid = $input_array['sessionid'];
+	$title = $input_array['title'];
+	$module = $input_array['module'];
+	$salesorderid = $input_array['salesorderid'];
+	$product_ids = explode('_', $input_array['product_ids']);
+        
+        global $current_user;
+        $current_user->id = getPortalUserid();
+
+	if (!validateSession($id,$sessionid))
+		return null;
+
+        $user_editable_state = 'Created';
+        
+	$order = new SalesOrder();
+        if ($salesorderid > 0) {
+                $order->retrieve_entity_info($salesorderid, 'SalesOrder');
+                if (strcmp($user_editable_state, $order->column_fields['sostatus']) != 0) {
+                        return null;
+                }
+                $order->mode = 'edit';
+                $order->id = $salesorderid;
+        } else {
+                $account_id = get_account_id_by_contact_id($id);
+                $order->column_fields['assigned_user_id'] = $current_user->id;
+                $order->column_fields['account_id'] = $account_id;
+                $order->column_fields['contact_id'] = $id;
+                $order->column_fields['currency_id'] = 1;
+                $order->column_fields['sostatus'] = $user_editable_state;
+                
+                $shipads = get_table_record_fields_values('vtiger_accountshipads', 'accountaddressid', $account_id);
+                $order->column_fields['ship_city'] = $shipads['ship_city'];
+                $order->column_fields['ship_street'] = $shipads['ship_street'];
+                $order->column_fields['ship_code'] = $shipads['ship_code'];
+                $order->column_fields['ship_state'] = $shipads['ship_state'];
+                $order->column_fields['ship_country'] = $shipads['ship_country'];
+                $order->column_fields['ship_pobox'] = $shipads['ship_pobox'];
+                
+                $billads = get_table_record_fields_values('vtiger_accountbillads', 'accountaddressid', $account_id);
+                $order->column_fields['bill_city'] = $billads['bill_city'];
+                $order->column_fields['bill_street'] = $billads['bill_street'];
+                $order->column_fields['bill_code'] = $billads['bill_code'];
+                $order->column_fields['bill_state'] = $billads['bill_state'];
+                $order->column_fields['bill_country'] = $billads['bill_country'];
+                $order->column_fields['bill_pobox'] = $billads['bill_pobox'];
+                
+                $_REQUEST['discount_type_final'] = "amount";
+                $_REQUEST['discount_amount_final'] = 0;
+                $_REQUEST['discount_type_final'] = "amount";
+                $_REQUEST['discount_amount_final'] = 0;
+                $_REQUEST['taxtype'] = 'group';
+                $_REQUEST['shipping_handling_charge'] = 0;
+        }
+        $order->column_fields['subject'] = $title;
+        $i = 1;
+        $prices = get_products_prices();
+        $total = 0.0;
+        foreach ($product_ids as $ix => $current_id) {
+                if (!empty($current_id)) {
+                        $product_info = explode('#', $current_id);
+                        $product_id = $product_info[0];
+                        $product_qty = $product_info[1];
+                        $_REQUEST['hdnProductId'.$i] = $product_id;
+                        $_REQUEST['qty'.$i] = (int)$product_qty;
+                        $price = $prices[$product_id];
+                        $_REQUEST['listPrice'.$i] = $price;
+                        $_REQUEST['discount_type'.$i] = "amount";
+                        $_REQUEST['discount_amount'.$i] = $discount;
+                        
+                        $total += ($price * $product_qty);
+                        $i++;
+                }
+        }
+        $_REQUEST['totalProductCount'] = ($i - 1);
+        $_REQUEST['subtotal'] = $total;
+        $_REQUEST['total'] = $total;
+
+	$order->save("SalesOrder");
+
+	if ($order->id > 0) {
+		$record_array[0]['new_salesorder']['salesorderid'] = $order->id;
+		$adb->println("SalesOrder from Portal is saved with id => ".$order->id);
+		return $record_array;
+	} else {
+		$adb->println("There may be error in saving the salesorder.");
+		return null;
+	}
+	$log->debug("Exiting customerportal function create_salesorder");
+}
+
+/**
+ * Change filed for any CRM Entity
+ * 
+ * @param arrya $input_array    input data
+ * @return string               true or false 
+ */
+function change_entity_field($input_array) {
+	global $adb, $log;
+	$adb->println("Inside customer portal function change_entity_field");
+	$adb->println($input_array);
+        
+	$contact_id = $input_array['id'];
+	$session_id = $input_array['sessionid'];
+	$module = $input_array['module'];
+	$entity_id = $input_array['entityid'];
+	$field_name = $input_array['fieldname'];
+	$field_value = $input_array['fieldvalue'];
+
+        global $current_user;
+        $current_user->id = getPortalUserid();
+        
+        require_once("modules/$module/$module.php");
+        
+	if (!validateSession($contact_id, $session_id))
+		return null;
+
+	$entity = CRMEntity::getInstance($module);
+        if ($entity_id > 0) {
+                $entity->retrieve_entity_info($entity_id, $module);
+                $entity->column_fields[$field_name] = $field_value;
+                if ($module == 'SalesOrder' || $module == 'Invoice' || 
+                        $module == 'PurchaseOrder' || $module == 'Quotes') {
+                    // in ajax save we should not call update related products 
+                    // function, because this will delete all the existing product values
+                    $_REQUEST['ajxaction'] = 'DETAILVIEW';
+                }
+                $entity->save($module, $entity_id);
+                
+                if ($entity->column_fields["record_id"] == $entity->id) {
+                        $adb->println("$module from Portal is saved with id => ".$entity->id);
+                        return array($entity->id);
+                }
+        }
+
+        $adb->println("There may be error in saving the $module");
+        return null;
+}
+
+/**
+ * Get account id by contact id
+ * 
+ * @param int $id   contact id
+ * @return int      account id
+ */
+function get_account_id_by_contact_id($id) {
+	global $adb;
+        $contactquery = "SELECT contactid, accountid FROM vtiger_contactdetails " .
+                " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid" .
+                " AND vtiger_crmentity.deleted = 0 WHERE contactid = ?";
+        $contactres = $adb->pquery($contactquery, array($id));
+        return $adb->query_result($contactres, 0, 'accountid');
+}
+
+/**
+ *
+ * @param string $what  field name
+ * @param string $table table name
+ * @param string $where where field name
+ * @param string $value where field value
+ * @return string       resulted field value 
+ */
+function get_table_record_field_value($what, $table, $where, $value) {
+        $result = '';
+        global $adb;
+        $query = "SELECT $what FROM $table WHERE $where = ?";
+        $res = $adb->pquery($query, array($value));
+        $rows = $adb->num_rows($res);
+        if ($rows > 0) {
+            $result = $adb->query_result($res, 0, $what);
+        }
+        return $result;
+}
+
+/**
+ * Get single row data from table
+ * 
+ * @param string $table table name
+ * @param string $where where field name
+ * @param string $value where field value
+ * @return array        result: array[fieldname] = fieldvalue
+ */
+function get_table_record_fields_values($table, $where, $value) {
+        $result = '';
+        global $adb;
+        $query = "SELECT * FROM $table WHERE $where = ?";
+        $res = $adb->pquery($query, array($value));
+        $rows = $adb->num_rows($res);
+        if ($rows > 0) {
+            $result = $adb->query_result_rowdata($res);
+        }
+        return $result;
+}
+
+/**
+ * Get all products prices
+ * 
+ * @return array    indexed by productid: array[productid] = productprice
+ */
+function get_products_prices() {
+        global $adb;
+        $query = "SELECT productid, unit_price FROM vtiger_products " .
+                " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid" .
+                " AND vtiger_crmentity.deleted = 0";
+        $res = $adb->pquery($query, array());
+        $rows = $adb->num_rows($res);
+	for ($i = 0; $i < $rows;$i++) {
+                $result[$adb->query_result($res, $i, 'productid')] = $adb->query_result($res, $i, 'unit_price');
+        }
+        return $result;
+}
+
+/**
+ * Get price with currency symbol
+ * 
+ * @param string $csym      currency symbol
+ * @param string $cvalue    price value
+ * @return string           resulted string
+ */
+function getCurrencyValue($csym, $cvalue) {
+        $cvalue = number_format($cvalue, 2);
+        if ($currency_symbol_before) {
+                $result = $csym.$cvalue;
+        } else {
+                $result = $cvalue.$csym;
+        }
+        return $result;
+}
+// SalesPlatform.ru end
 
 /* Function to get the list of modules allowed for customer portal
  */

@@ -59,13 +59,19 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
         $recordModel = PBXManager_Record_Model::getCleanInstance();
         $response = new Vtiger_Response();
         $user = Users_Record_Model::getCurrentUserModel();
-        
+
         $recordModels = $recordModel->searchIncomingCall();
         // To check whether user have permission on caller record
         if($recordModels){
             foreach ($recordModels as $recordModel){
                 // To check whether the user has permission to see contact name in popup
                 $recordModel->set('callername', null);
+                
+                //SalesPlatform.ru begin incoming call for calling user
+                if($user->id != $recordModel->get('user')) {
+                    continue;
+                }
+                //SalesPlatform.ru end
 
                 $callerid = $recordModel->get('customer');
                 if($callerid){

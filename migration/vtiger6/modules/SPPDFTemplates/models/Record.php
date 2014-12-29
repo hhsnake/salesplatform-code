@@ -15,6 +15,10 @@ class SPPDFTemplates_Record_Model extends Vtiger_Record_Model {
         return $this->get('templateid');
     }
     
+    function setId($value) {
+        $this->set('templateid', $value);
+    }
+    
     function getName() {
         return $this->get('name');
     }
@@ -44,12 +48,16 @@ class SPPDFTemplates_Record_Model extends Vtiger_Record_Model {
      * @return \self
      */
     public static function getInstanceById($id) {
+        $instance = new SPPDFTemplates_Record_Model();
+        
+        if(!isset($id) || $id == '') {
+            return $instance;
+        }
+        
         $db = PearDatabase::getInstance();
         
         $query = 'SELECT * FROM sp_templates WHERE templateid=?';
         $params = array($id);
-        
-        $instance = new SPPDFTemplates_Record_Model();
         
         $result = $db->pquery($query,$params);
         if($db->num_rows($result) > 0) {
@@ -70,15 +78,15 @@ class SPPDFTemplates_Record_Model extends Vtiger_Record_Model {
      */
     public function save() {
         $db = PearDatabase::getInstance();
-        $params = array($this->get('name'), $this->get('module'), $this->get('template'),
-            $this->get('header_size'), $this->get('footer_size'), $this->get('page_orientation'), $this->get('templateid'));
+        
+        $query = "update sp_templates set name=?, module=?, template=?, header_size=?, footer_size=?, page_orientation=? where templateid=?";
         if($this->getId() == NULL) {
+           $this->setId($db->getUniqueID('sp_templates'));
            $query = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,templateid) values (?,?,?,?,?,?,?)";
-           $db->pquery($query, $params);
-           $this->set('templateid', $db->getLastInsertID());
-        } else {
-            $query = "update sp_templates set name =?, module =?, template =?, header_size =?, footer_size =?, page_orientation =? where templateid =?";
-            $db->pquery($query, $params);
         } 
+        
+        $params = array($this->get('name'), $this->get('module'), $this->get('template'),
+            $this->get('header_size'), $this->get('footer_size'), $this->get('page_orientation'), $this->getId());
+        $db->pquery($query, $params);
     }
 }

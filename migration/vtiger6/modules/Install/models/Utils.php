@@ -147,6 +147,10 @@ class Install_Utils_Model {
 		$preInstallConfig['LBL_GD_LIBRARY']		= array((extension_loaded('gd') || $gnInstalled), true, (extension_loaded('gd') || $gnInstalled));
 		$preInstallConfig['LBL_ZLIB_SUPPORT']	= array(function_exists('gzinflate'), true, (function_exists('gzinflate') == true));
 
+		// SalesPlatform.ru begin
+		$preInstallConfig['LBL_MB_STRING'] = array(extension_loaded('mbstring'), true, extension_loaded('mbstring'));
+		// SalesPlatform.ru end
+
 		return $preInstallConfig;
 	}
 	
@@ -353,6 +357,17 @@ class Install_Utils_Model {
 						if($createdb_conn->Execute($query)) {
 							$db_creation_failed = false;
 						}
+
+						// SalesPlatform.ru begin
+						if(self::isMySQL($db_type)) {
+							$query = "grant all on $db_name.* to $db_username";
+
+							if(!$createdb_conn->Execute($query)) {
+								$db_creation_failed = true;
+							}
+						}
+						// SalesPlatform.ru end
+
 						$createdb_conn->Close();
 					}
 				}

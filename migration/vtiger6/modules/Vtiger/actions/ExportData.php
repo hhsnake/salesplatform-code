@@ -169,17 +169,32 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		header("Expires: Mon, 31 Dec 2000 00:00:00 GMT" );
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
 		header("Cache-Control: post-check=0, pre-check=0", false );
-
-		$header = implode("\", \"", $headers);
+                
+                //SalesPlatform.ru begin support custom delimiter
+                $header = implode("\"" . $request->get('delimiter') . "\"", $headers);
+		//$header = implode("\", \"", $headers);
+                //SalesPlatform.ru end
 		$header = "\"" .$header;
 		$header .= "\"\r\n";
-		echo $header;
+
+                //SalesPlatform.ru begin support custom encoding
+                echo iconv("UTF-8", $request->get('file_encoding'), $header);
+		//echo $header;
+                //SalesPlatform.ru end
 
 		foreach($entries as $row) {
-			$line = implode("\",\"",$row);
-			$line = "\"" .$line;
-			$line .= "\"\r\n";
-			echo $line;
+                    //SalesPlatform.ru begin support custom delimiter
+                    $line = implode("\"" . $request->get('delimiter') . "\"",$row);
+                    //$line = implode("\",\"",$row);
+                    //SalesPlatform.ru end
+                    
+                    $line = "\"" .$line;
+                    $line .= "\"\r\n";
+                    
+                    //SalesPlatform.ru begin support custom encoding
+                    echo iconv("UTF-8", $request->get('file_encoding'), $line); 
+                    //echo $line;
+                    //SalesPlatform.ru end
 		}
 	}
 

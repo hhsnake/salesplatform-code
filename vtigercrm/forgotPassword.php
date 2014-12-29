@@ -16,14 +16,21 @@ require_once 'modules/Vtiger/helpers/ShortURL.php';
 global $adb;
 $adb = PearDatabase::getInstance();
 
-if (isset($_REQUEST['user_name']) && isset($_REQUEST['emailId'])) {
-    $username = vtlib_purify($_REQUEST['user_name']);
+// SalesPlatform.ru begin
+if (isset($_REQUEST['username']) && isset($_REQUEST['email'])) {
+    $username = vtlib_purify($_REQUEST['username']);
+//if (isset($_REQUEST['user_name']) && isset($_REQUEST['emailId'])) {
+//    $username = vtlib_purify($_REQUEST['user_name']);
+// SalesPlatform.ru end
     $result = $adb->pquery('select email1 from vtiger_users where user_name= ? ', array($username));
     if ($adb->num_rows($result) > 0) {
         $email = $adb->query_result($result, 0, 'email1');
     }
 
-    if (vtlib_purify($_REQUEST['emailId']) == $email) {
+    // SalesPlatform.ru begin
+    if (vtlib_purify($_REQUEST['email']) == $email) {
+    //if (vtlib_purify($_REQUEST['emailId']) == $email) {
+    // SalesPlatform.ru end
         $time = time();
         $options = array(
             'handler_path' => 'modules/Users/handlers/ForgotPassword.php',
@@ -37,15 +44,30 @@ if (isset($_REQUEST['user_name']) && isset($_REQUEST['emailId'])) {
             )
         );
         $trackURL = Vtiger_ShortURL_Helper::generateURL($options);
-        $content = 'Dear Customer,<br><br> 
-                            You recently requested a password reset for your VtigerCRM Open source Account.<br> 
-                            To create a new password, click on the link <a target="_blank" href=' . $trackURL . '>here</a>. 
-                            <br><br> 
-                            This request was made on ' . date("Y-m-d H:i:s") . ' and will expire in next 24 hours.<br><br> 
-		            Regards,<br> 
-		            VtigerCRM Open source Support Team.<br>' ;
-                $mail = new PHPMailer();
-        setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $content, 'support@vtiger.com', $username, $email);
+        // SalesPlatform.ru begin
+        $content = 'Уважамаемый Пользователь,<br><br>
+                            Вы запросили смену пароля в системе SalesPlatform Vtiger CRM.<br>
+                            Для создания нового пароля, нажмите на <a target="_blank" href=' . $trackURL . '>ссылку</a>.
+                            <br><br>
+                            Запрос был сделан ' . date("Y-m-d H:i:s") . ' и будет актуален следующее 24 часа.<br><br>
+		            С наилучшими пожеланиями,<br>
+		            Команда SalesPlatform.<br>' ;
+        $mail = new PHPMailer();
+//        $content = 'Dear Customer,<br><br>
+//                            You recently requested a password reset for your VtigerCRM Open source Account.<br>
+//                            To create a new password, click on the link <a target="_blank" href=' . $trackURL . '>here</a>.
+//                            <br><br>
+//                            This request was made on ' . date("Y-m-d H:i:s") . ' and will expire in next 24 hours.<br><br>
+//		            Regards,<br>
+//		            VtigerCRM Open source Support Team.<br>' ;
+//                $mail = new PHPMailer();
+        // SalesPlatform.ru end
+
+        // SalesPlatform.ru begin
+        setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $content, null, $username, $email);
+        //setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $content, 'support@vtiger.com', $username, $email);
+        // SalesPlatform.ru end
+
         $status = MailSend($mail);
         if ($status === 1)
             header('Location:  index.php?modules=Users&view=Login&status=1');

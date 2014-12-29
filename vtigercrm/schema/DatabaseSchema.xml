@@ -7010,4 +7010,25 @@
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
+    <!-- SalesPlatform.ru begin -->
+    <table name="sp_custom_reports">
+        <field name="reporttype" type="C" size="50">
+            <key />
+        </field>
+        <field name="datefilter" type="I" size="1">
+            <default value="0" />
+        </field>
+        <field name="ownerfilter" type="I" size="1">
+            <default value="0" />
+        </field>
+        <field name="accountfilter" type="I" size="1">
+            <default value="0" />
+        </field>
+        <field name="functionname" type="C" size="255">
+            <notnull />
+        </field>
+        <opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci</opt>
+    </table>
+    <!-- SalesPlatform.ru end -->
+
 </schema>

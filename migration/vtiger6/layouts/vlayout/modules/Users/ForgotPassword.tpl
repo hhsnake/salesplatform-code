@@ -10,6 +10,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+		{* SalesPlatform.ru begin *}
+		<meta charset="utf-8">
+		{* SalesPlatform.ru end *}
         <style type="text/css">
             body{
                font-family: Tahoma, "Trebuchet MS","Lucida Grande",Verdana !important;
@@ -99,7 +102,10 @@
 								<tr><td></td></tr>
 								<tr>
 									<td></td>
-									<td><input type="submit" id="btn" value="Submit" onclick="return checkPassword();"/></td>
+									{* SalesPlatform.ru begin *}
+									<td><input type="submit" id="btn" value={vtranslate('Submit', $MODULE)} onclick="return checkPassword();"/></td>
+									{*<td><input type="submit" id="btn" value="Submit" onclick="return checkPassword();"/></td>*}
+									{* SalesPlatform.ru end *}
 								</tr>
 							</table>
 						</form>

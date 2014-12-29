@@ -108,7 +108,7 @@ class Reports_Detail_View extends Vtiger_Index_View {
             }
         }
         // End
-		
+
 		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $primaryModuleRecordStructure);
 		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $secondaryModuleRecordStructures);
 
@@ -134,7 +134,60 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		$viewer->assign('RECORD_ID', $recordId);
 		$viewer->assign('COUNT',$this->count);
 		$viewer->assign('MODULE', $moduleName);
-		$viewer->view('ReportHeader.tpl', $moduleName);
+
+        // SalesPlatform.ru begin
+
+        // If it is a custom report
+        if(in_array($reportModel->getReportType(), getCustomReportsList())) {
+
+            // Only equals filter
+            $customAdvanceFilterOpsByFieldType = array(
+                'V' => array('e'),
+                'N' => array('e'),
+                'T' => array('e'),
+                'I' => array('e'),
+                'C' => array('e'),
+                'D' => array('e'),
+                'DT' => array('e'),
+                'I' => array('e'),
+                'NN' => array('e'),
+                'E' => array('e'),
+            );
+
+            $spPaymentsRecordStructure = $recordStructureInstance->getStructure('SPPayments');
+            foreach($spPaymentsRecordStructure as $blockLabel => $blockFields){
+                foreach($blockFields as $field => $object){
+                    if($field != 'pay_date' && $field != 'assigned_user_id' && $field != 'payer'){
+                        unset($spPaymentsRecordStructure[$blockLabel][$field]);
+                    }
+                }
+            }
+            $customBlockName = 'CUSTOM_BLOCK';
+            $customRecordStructure[$customBlockName] = $spPaymentsRecordStructure['LBL_PAYMENT_DETAILS'];
+
+            // Check date filter for custom report
+            if(!in_array($reportModel->getReportType(), getCustomReportsListWithDateFilter())) {
+                unset($customRecordStructure[$customBlockName]['pay_date']);
+            }
+
+            // Check owner filter for custom report
+            if(!in_array($reportModel->getReportType(), getCustomReportsListWithOwnerFilter())) {
+                unset($customRecordStructure[$customBlockName]['assigned_user_id']);
+            }
+
+            // Check account filter for custom report
+            if(!in_array($reportModel->getReportType(), getCustomReportsListWithAccountFilter())) {
+                unset($customRecordStructure[$customBlockName]['payer']);
+            }
+
+            $viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $customRecordStructure);
+            $viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $customAdvanceFilterOpsByFieldType);
+            $viewer->view('SPReportHeader.tpl', $moduleName);
+        } else {
+            $viewer->view('ReportHeader.tpl', $moduleName);
+        }
+
+        // SalesPlatform.ru end
 	}
 
 	function process(Vtiger_Request $request) {

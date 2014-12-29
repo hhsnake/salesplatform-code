@@ -80,6 +80,11 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 
 			$quantity	= $productLineItem["qty{$productLineItemIndex}"];
 			$usageunit	= $productLineItem["usageunit{$productLineItemIndex}"];
+            // SalesPlatform.ru begin
+            if($usageunit =='') {
+                $usageunit = "-";
+            }
+            // SalesPlatform.ru end
 			$listPrice	= $productLineItem["listPrice{$productLineItemIndex}"];
 			$discount	= $productLineItem["discountTotal{$productLineItemIndex}"];
 			$taxable_total = $quantity * $listPrice - $discount;

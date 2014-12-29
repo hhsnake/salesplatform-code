@@ -10,19 +10,22 @@
  * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
  * If you have any questions or comments, please email: devel@salesplatform.ru
  ************************************************************************************/
-$languageStrings = Array (
-'SPSocialConnector'                         => 'SPSocialConnector',
-'Compose message'                           => 'Compose message',
-'Message'                                   => 'Message',
-'characters'                                => 'characters',  
-'Assigned To'                               => 'Assigned To',
-'Created Time'                              => 'Created Time',
-'Modified Time'                             => 'Modified Time',
-'message'                                   => 'message',   
-'SINGLE_SPSocialConnector'                  => ' ',
-'LBL_SOCIALSERVICECONNECTOR_INFORMATION'    => 'Info',
-'StatusInformation'                         => 'Status info',
-'LBL_CHECK_STATUS'                          => 'Check status',  
+$languageStrings = array(
+	'LBL_SPSOCIALCONNECTOR_SETTINGS' => 'Social Connector',
+    'LBL_SPSOCIALCONNECTOR_CONFIG'   => 'Configuration',
+    'LBL_NOTE'  =>  'Note: ',
+    'LBL_DOCS'  =>  'documentation (click here)',
+    'vk_app_id'   => 'Vkontakte: App ID',
+    'vk_app_secret'   => 'Vkontakte: App secret',
+    'vk_access_token'   => 'Vkontakte: Access token',
+    'tw_app_key'   => 'Twitter: App key',
+    'tw_app_secret'   => 'Twitter: App secret',
+    'fb_app_id'   => 'Facebook: App ID',
+    'fb_app_secret'   => 'Facebook: App secret',
+);
+
+$jsLanguageStrings = array(
+
 );
 
 ?>

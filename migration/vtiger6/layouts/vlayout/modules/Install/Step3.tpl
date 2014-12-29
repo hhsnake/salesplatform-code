@@ -57,7 +57,10 @@
 							</tr>
 							{foreach key=DIRECTIVE item=VALUE from=$PHP_INI_CURRENT_SETTINGS name=directives}
 								<tr>
-									<td>{$DIRECTIVE}</td><td>{$PHP_INI_RECOMMENDED_SETTINGS[$DIRECTIVE]}</td><td class="no">{$VALUE}</td>
+                                    {* SalesPlatform.ru begin *}
+									<td>{$DIRECTIVE}</td><td>{$PHP_INI_RECOMMENDED_SETTINGS[$DIRECTIVE]}</td><td class="no">{vtranslate($VALUE, 'Install')}</td>
+                                    {*<td>{$DIRECTIVE}</td><td>{$PHP_INI_RECOMMENDED_SETTINGS[$DIRECTIVE]}</td><td class="no">{$VALUE}</td>*}
+                                    {* SalesPlatform.ru end *}
 								</tr>
 							{/foreach}
 						</table>

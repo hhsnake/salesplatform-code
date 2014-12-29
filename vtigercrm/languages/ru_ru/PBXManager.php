@@ -50,6 +50,14 @@ $languageStrings = array(
     'Source UUID' => 'Идентификатор источника',
 );
 
+//SalesPlatform.ru begin
+$jsLanguageStrings = array(
+    'Enter Email-id' => 'Введите E-mail',
+    'Select' => 'Выберите',
+    'Save' => 'Сохранить'
+);
+//SalesPlatform.ru end
+
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/PBXManager.php';
 // SalesPlatform.ru end

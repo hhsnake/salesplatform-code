@@ -493,9 +493,9 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (14," . $this->db->getUniqueID("vtiger_field") . ",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Handler',1,0,'',100,5,33,1,'V~M',0,5,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (14," . $this->db->getUniqueID("vtiger_field") . ",'qtyindemand','vtiger_products',1,'1','qtyindemand','Qty In Demand',1,2,'',100,6,33,1,'I~O',1,null,'ADV',1)");
 
-                // SalesPlatform.ru begin
- 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'unit_code','vtiger_products',1,'1','unit_code','Unit Code',1,2,'',100,7,33,1,'V~O',1,null,'ADV',1)");
-                // SalesPlatform.ru end
+        // SalesPlatform.ru begin
+ 		//$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'unit_code','vtiger_products',1,'1','unit_code','Unit Code',1,2,'',100,7,33,1,'V~O',1,null,'ADV',1)");
+        // SalesPlatform.ru end
 
 		//ProductImageInformation
 

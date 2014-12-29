@@ -109,14 +109,42 @@ Vtiger_Detail_Js("Users_Detail_Js",{
 				'transfer_user_id' : transferUserId,
 				'userid' : userid
 			}
+                        
+                //SalesPlatform. ru begin fix delete user        
+                var progressInstance = jQuery.progressIndicator({
+                    'position' : 'html',
+                    'blockInfo' : {
+                            'enabled' : true
+                     }
+                });
+                app.hideModalWindow();
+                //SalesPlatform.ru end
+                
 		AppConnector.request(params).then(
 			function(data) {
-				if(data.success){
-					app.hideModalWindow();
-					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.status.message));
-					var url = data.result.listViewUrl;
-					window.location.href=url;
-				}
+                            //SalesPlatform. ru begin fix delete user  
+                            progressInstance.progressIndicator({
+                                'mode' : 'hide'
+                            });
+                            //SalesPlatform.ru end
+                            
+                            //SalesPlatform.ru begin fix delete user
+                            if(data.success){
+                                    window.location.href = 'index.php?module='+app.getModuleName()+'&parent='+app.getParentModuleName() + '&view=List';
+                            } else {
+                                Vtiger_Helper_Js.showPnotify({
+                                    title : app.vtranslate('JS_ERROR'),
+                                    text : data.error.message,
+                                    type: 'error'
+                                });
+                            }
+                            //if(data.success){
+                            //		app.hideModalWindow();
+                            //		Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.status.message));
+                            //		var url = data.result.listViewUrl;
+                            //		window.location.href=url;
+                            //}
+                            //SalesPlatform.ru end
 			}
 		);
 	},

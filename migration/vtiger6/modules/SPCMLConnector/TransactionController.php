@@ -97,7 +97,7 @@ class TransactionController {
                 $status = $this->salesOrderQuery();
                 break;
             case 'success':
-                exit(0);    //stop script because no need answer on this step
+                $status = 'success';
                 break;            
             case 'file':       
                 $orderFileName = vtlib_purify($request['filename']);

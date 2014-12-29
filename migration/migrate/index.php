@@ -10,6 +10,9 @@
 chdir (dirname(__FILE__) . '/..');
 include_once 'vtigerversion.php';
 include_once 'data/CRMEntity.php';
+// SalesPlatform.ru begin
+include_once 'config.inc.php';
+// SalesPlatform.ru end
 
 @session_start();
 
@@ -32,6 +35,9 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 				
 				$userid = $user->retrieve_user_id($userName);
 				$_SESSION['authenticated_user_id'] = $userid;
+				// SalesPlatform.ru begin
+				$_SESSION['app_unique_key'] = $application_unique_key;
+				// SalesPlatform.ru end
 
 				header('Location: ../index.php?module=Migration&view=Index&mode=step1');
 			} else {
@@ -95,7 +101,7 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 								}?>
 								<p>Обнаружена установленная <strong>SalesPlatform Vtiger <?php echo $vtiger_current_version?> </strong>версии. <br> <br> </p>
 								<p>
-									<strong> Предупреждение: </strong>Пожалуйста, учтите что возврат к SalesPlatform Vtiger <?php echo $vtiger_current_version?> невозможен после обновления до SalesPlatform Vtiger 6.1.0-201410 <br><br>
+									<strong> Предупреждение: </strong>Пожалуйста, учтите что возврат к SalesPlatform Vtiger <?php echo $vtiger_current_version?> невозможен после обновления до SalesPlatform Vtiger 6.1.0-201412 <br><br>
 									Необходимо сделать бэкап установленной SalesPlatform Vtiger <?php echo $vtiger_current_version?> включая исходный код и базу данных.</p>
 								<form action="index.php" method="POST">
 									<div><input type="checkbox" id="checkBox1" name="checkBox1"/> <div class="chkbox"></div> Я сделал(-а) бэкап базы данных <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_600_%D0%9C%D0%B8%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F" target="_blank" >(руководство)</a> </div><br>

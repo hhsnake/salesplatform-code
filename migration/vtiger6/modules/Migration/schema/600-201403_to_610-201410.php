@@ -14,32 +14,34 @@ include_once 'modules/com_vtiger_workflow/VTTaskManager.inc';
 include_once 'include/utils/utils.php';
 
 if(defined('VTIGER_UPGRADE')) {
-        //Collating all module package updates here
-	updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
-        updateVtlibModule('PBXManager', 'packages/vtiger/mandatory/PBXManager.zip');
-	updateVtlibModule('MailManager', 'packages/vtiger/mandatory/MailManager.zip');
-	updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
-        updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
-        updateVtlibModule('ServiceContracts', 'packages/vtiger/mandatory/ServiceContracts.zip');
-        updateVtlibModule('Services', 'packages/vtiger/mandatory/Services.zip');
-	updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
-        updateVtlibModule('Arabic_ar_ae', 'packages/vtiger/optional/Arabic_ar_ae.zip');
-        updateVtlibModule('Assets', 'packages/vtiger/optional/Assets.zip');
-        updateVtlibModule('EmailTemplates', 'packages/vtiger/optional/EmailTemplates.zip');
-        updateVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
-        updateVtlibModule('ModComments', 'packages/vtiger/optional/ModComments.zip');
-        updateVtlibModule('Projects', 'packages/vtiger/optional/Projects.zip');
-	updateVtlibModule('RecycleBin', 'packages/vtiger/optional/RecycleBin.zip');
-	updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
-        updateVtlibModule("Sweden_sv_se","packages/vtiger/optional/Sweden_sv_se.zip");
-	updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
-        installVtlibModule('ExtensionStore', 'packages/vtiger/marketplace/ExtensionStore.zip');
-        
-        // SalesPlatfotm.ru begin Update SP modules
-        updateVtlibModule('Act', 'packages/vtiger/optional/Act.zip');
-        updateVtlibModule('Consignment', "packages/vtiger/optional/Consignment.zip");
-        updateVtlibModule('SPPayments', "packages/vtiger/optional/SPPayments.zip");
-        // SalesPlatform.ru end
+    //Collating all module package updates here
+    updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
+    // SalesPlatform.ru begin
+    //updateVtlibModule('PBXManager', 'packages/vtiger/mandatory/PBXManager.zip');
+    // SalesPlatform.ru end
+    updateVtlibModule('MailManager', 'packages/vtiger/mandatory/MailManager.zip');
+    updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
+    updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
+    updateVtlibModule('ServiceContracts', 'packages/vtiger/mandatory/ServiceContracts.zip');
+    updateVtlibModule('Services', 'packages/vtiger/mandatory/Services.zip');
+    updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
+    updateVtlibModule('Arabic_ar_ae', 'packages/vtiger/optional/Arabic_ar_ae.zip');
+    updateVtlibModule('Assets', 'packages/vtiger/optional/Assets.zip');
+    updateVtlibModule('EmailTemplates', 'packages/vtiger/optional/EmailTemplates.zip');
+    updateVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
+    updateVtlibModule('ModComments', 'packages/vtiger/optional/ModComments.zip');
+    updateVtlibModule('Projects', 'packages/vtiger/optional/Projects.zip');
+    updateVtlibModule('RecycleBin', 'packages/vtiger/optional/RecycleBin.zip');
+    updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
+    updateVtlibModule("Sweden_sv_se","packages/vtiger/optional/Sweden_sv_se.zip");
+    updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
+    installVtlibModule('ExtensionStore', 'packages/vtiger/marketplace/ExtensionStore.zip');
+
+    // SalesPlatfotm.ru begin Update SP modules
+    updateVtlibModule('Act', 'packages/vtiger/optional/Act.zip');
+    updateVtlibModule('Consignment', "packages/vtiger/optional/Consignment.zip");
+    updateVtlibModule('SPPayments', "packages/vtiger/optional/SPPayments.zip");
+    // SalesPlatform.ru end
 }
 if(defined('INSTALLATION_MODE')) {
 		// Set of task to be taken care while specifically in installation mode.
@@ -1565,3 +1567,19 @@ Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reporttype
 //Configuration Editor fix
 $sql = "UPDATE vtiger_settings_field SET name = ? WHERE name = ?";
 Migration_Index_View::ExecuteQuery($sql,array('LBL_CONFIG_EDITOR', 'Configuration Editor'));
+
+// SalesPlatform.ru begin
+// Add new fields for Webforms
+Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_webforms
+ADD captcha INT(1) NOT NULL DEFAULT '0',
+ADD roundrobin INT(1) NOT NULL DEFAULT '0',
+ADD roundrobin_userid VARCHAR(256) DEFAULT NULL,
+ADD roundrobin_logic INT(11) NOT NULL DEFAULT '0'", array());
+Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_webforms_field
+ADD sequence INT(10) DEFAULT NULL,
+ADD hidden INT(10) DEFAULT NULL", array());
+
+// Delete SPModulePicklist
+Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_tab WHERE tablabel = ?',
+    array('SPModulePicklist'));
+// SalesPlatform.ru end

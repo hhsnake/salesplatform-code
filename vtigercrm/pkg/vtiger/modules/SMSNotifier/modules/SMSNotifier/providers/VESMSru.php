@@ -34,7 +34,7 @@ class SMSNotifier_VESMSru_Provider implements SMSNotifier_ISMSProvider_Model {
                 25 => 'Недоступный номер.',
             );
         private $_vesmsru;
-	const SENDER_PARAM = 'LBL_SMS_SENDER';
+	const SENDER_PARAM = 'LBL_SMS_SENDER_VESMSru';
         
 	private static $REQUIRED_PARAMETERS = array(self::SENDER_PARAM);
 	

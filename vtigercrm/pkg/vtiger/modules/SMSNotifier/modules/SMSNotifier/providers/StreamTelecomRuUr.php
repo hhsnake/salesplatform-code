@@ -18,7 +18,7 @@ class SMSNotifier_StreamTelecomRuUr_Provider implements SMSNotifier_ISMSProvider
 
         private $_streamsms;
 	
-	const SENDER_PARAM = 'LBL_SMS_SENDER';
+	const SENDER_PARAM = 'LBL_SMS_SENDER_StreamTelecomRuUr';
         
 	private static $REQUIRED_PARAMETERS = array(self::SENDER_PARAM);
 	

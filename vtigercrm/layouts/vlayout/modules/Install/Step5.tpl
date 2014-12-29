@@ -119,7 +119,10 @@
 									{vtranslate('LBL_TIME_ZONE','Install')}<span class="no">*</span>
 								</td>
 								<td>
-									{$INFORMATION['timezone']}
+									{* SalesPlatform.ru begin *}
+									{vtranslate($INFORMATION['timezone'], 'Users')}
+									{*{$INFORMATION['timezone']}*}
+									{* SalesPlatform.ru end *}
 								</td>
 							</tr>
 							<tr>
@@ -127,7 +130,10 @@
 									{vtranslate('LBL_DATE_FORMAT','Install')}<span class="no">*</span>
 								</td>
 								<td>
-									{$INFORMATION['dateformat']}
+									{* SalesPlatform.ru begin *}
+									{vtranslate($INFORMATION['dateformat'], 'Install')}
+									{*{$INFORMATION['dateformat']}*}
+									{* SalesPlatform.ru end *}
 								</td>
 							</tr>
 						</tbody>

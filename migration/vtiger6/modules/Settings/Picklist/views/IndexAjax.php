@@ -66,9 +66,14 @@ class Settings_Picklist_IndexAjax_View extends Settings_Vtiger_IndexAjax_View {
 
 		// merge the non-editable picklist value also with editable values, so that deleted value can be replaced with either of them.
                 if(!empty($selectedFieldNonEditablePickListValues)){
-                    $selectedFieldEditablePickListValues = array_merge($selectedFieldEditablePickListValues, $selectedFieldNonEditablePickListValues);
+                    //SalesPlatform.ru begin fix picklist values merge
+                    foreach($selectedFieldNonEditablePickListValues as $fieldId => $fieldValue) {
+                        $selectedFieldEditablePickListValues[$fieldId] = $fieldValue;
+                    }
+                    
+                    //$selectedFieldEditablePickListValues = array_merge($selectedFieldEditablePickListValues, $selectedFieldNonEditablePickListValues);
+                    //SalesPlatform.ru end
                 }
-
         $qualifiedName = $request->getModule(false);
         $viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();

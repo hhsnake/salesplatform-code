@@ -28,14 +28,25 @@ class VTSimpleTemplate{
         if(!empty($this->parent)){
             if(count($matches)==0){
                 $fieldname = $match[1];
-
+                
                 //To handle comments for this module
                 if (in_array($fieldname, array('lastComment', 'last5Comments', 'allComments'))) {
                     return $this->getComments($this->parent->getModuleName(), $fieldname, $this->parent->getId());
                 }
 
                 $data = $this->parent->getData();
-
+                
+                //SalesPlatform.ru add direct link to entity field
+                if($fieldname === 'spDetailViewLink') {
+                    global $site_URL;
+                    $recordModel = Vtiger_Record_Model::getInstanceById(vtws_getCRMEntityId($data['id']), $this->parent->getModuleName());
+                    if($recordModel) {
+                       return $site_URL . $recordModel->getDetailViewUrl(); 
+                    }
+                    return '';
+                }
+                //SalesPlatform.ru end
+                
                 if(isset($data[$fieldname]) || $fieldname === '_DATE_FORMAT_') {
                     if($this->useValue($data, $fieldname)){
                         $result = $this->transformToUserFormat($this->parent->getModuleName(), $fieldname, $data[$fieldname]);

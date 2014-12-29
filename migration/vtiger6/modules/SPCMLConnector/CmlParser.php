@@ -21,6 +21,11 @@ require_once 'modules/SPCMLConnector/CmlAccount.php';
  */
 class CmlParser {
     
+    private function filter($value) {
+        return str_replace("'", "", $value);
+    }
+
+
     /**
      * Parse import file. Return CmlCatalog representation of import document.
      * @param String $import
@@ -126,6 +131,7 @@ class CmlParser {
         
         /* Get catalog mandatory fields */
         $catalogName = $this->getMandatoryChildContent($catalog, 'Наименование', 'Not catalog name in import.xml');
+        $catalogName = $this->filter($catalogName);
         $oneEsIdentifier =  $this->getMandatoryChildContent($catalog, 'Ид', 'Not catalog identificator in import.xml');
         $cmlCatalog = new CmlCatalog($catalogName, $oneEsIdentifier);
         
@@ -144,6 +150,7 @@ class CmlParser {
     private function initilizatePackage($package) {
         $oneEsIdentifier = $this->getMandatoryChildContent($package, 'Ид', 'Not id in offers!');
         $name = $this->getMandatoryChildContent($package, 'Наименование', 'Not name in offers!');
+        $name = $this->filter($name);
         $cmlCatalog = new CmlCatalog($name, $oneEsIdentifier);
         
         /* Get package currency */
@@ -191,6 +198,8 @@ class CmlParser {
         
         $name = $this->getMandatoryChildContent($offer, 'Наименование',
                 'Not product name in offers.xml');
+        $name = $this->filter($name);
+        
         $oneEsIdentifier = $this->getMandatoryChildContent($offer, 'Ид',
                 'Not product identificator in offers.xml');
         $count = $this->getChildContent($offer, 'Количество');
@@ -266,6 +275,10 @@ class CmlParser {
         $unitName = $this->getChildContent($xmlInventoryDescription, 'БазоваяЕдиница');
         $article = $this->getChildContent($xmlInventoryDescription, 'Артикул');
         $NDS = $this->getTaxRate($xmlInventoryDescription);
+        
+        /* REST API broke on special symbols */
+        $name = $this->filter($name);
+        $article = $this->filter($article);
         
         $inventory->catalogInitilizate($oneEsIdentifier, $name, $article, $unitName, $NDS);
         
@@ -408,8 +421,8 @@ class CmlParser {
         $cmlSalesOrders = array();
         foreach($xmlOrders->Документ as $xmlOrder) {
             $number = $this->getMandatoryChildContent($xmlOrder, 'Номер', 'Not document number in orders.xml');
-            $oneEsidentifier = $this->getMandatoryChildContent($xmlOrder, 'Ид', 'Not document id in orders.xml');
-            $currency = $this->getMandatoryChildContent($xmlOrder, 'Валюта', 'Not document currency in orders.xml');
+            $oneEsidentifier = $this->getMandatoryChildContent($xmlOrder, 'Ид', 'Not document id in orders.xml! Document number - ' . $number);
+            $currency = $this->getMandatoryChildContent($xmlOrder, 'Валюта', 'Not document currency in orders.xml! Document number - ' . $number);
             
             $salesOrder = new CmlSalesOrder($number, $oneEsidentifier, $currency);
             $salesOrder = $this->getDocumentAccount($salesOrder,$xmlOrder);
@@ -434,16 +447,18 @@ class CmlParser {
             $xmlAccount = $xmlOrder->Контрагенты;
         }
         
-        $this->checkMandatoryChildElement($xmlAccount, 'Контрагент', 'Not account in order!');
+        $this->checkMandatoryChildElement($xmlAccount, 'Контрагент', 'Not account in order! Order number - ' . $salesOrder->getNumber());
         $account = $xmlAccount->Контрагент;
                 
-        $oneEsIdentifier = $this->getMandatoryChildContent($account, 'Ид', 'Not account id in order!');
+        $oneEsIdentifier = $this->getMandatoryChildContent($account, 'Ид', 'Not account id in order! Order number - ' . $salesOrder->getNumber());
         
         /* Phisical or legal face */
         $accountName = $this->getChildContent($account, 'ПолноеНаименование');
         if($accountName == null) {
-            $accountName = $this->getMandatoryChildContent($account, 'ОфициальноеНаименование', 'Not account name in order!');
+            $accountName = $this->getMandatoryChildContent($account, 'ОфициальноеНаименование', 'Not account name in order! Order number - ' . $salesOrder->getNumber());
         }
+        $accountName = $this->filter($accountName);
+        
         $inn = $this->getChildContent($account, 'ИНН');
         $kpp = $this->getChildContent($account, 'КПП');
         
@@ -495,19 +510,19 @@ class CmlParser {
      * @return CmlSalesOrder 
      */
     private function initilizateOrderInventories($salesOrder, $order) {
-        $this->checkMandatoryChildElement($order, 'Товары', 'Not products in order!');
+        $this->checkMandatoryChildElement($order, 'Товары', 'Not products in order!' . $salesOrder->getNumber());
         $orderInventories = $order->Товары;
         
-        $this->checkMandatoryChildElement($orderInventories, 'Товар', 'No one product or service in order.');
+        $this->checkMandatoryChildElement($orderInventories, 'Товар', 'No one product or service in order. Order number - ' . $salesOrder->getNumber());
         
         foreach($orderInventories->Товар as $xmlInventory) {
             if($this->isProduct($xmlInventory)) {
                 $inventory = new CmlProduct();
-                $inventory = $this->initilizateOrderInventory($xmlInventory, $inventory);
+                $inventory = $this->initilizateOrderInventory($xmlInventory, $inventory, $salesOrder);
                 $salesOrder->addProduct($inventory);
             } else {
                 $inventory = new CmlService();
-                $inventory = $this->initilizateOrderInventory($xmlInventory, $inventory);
+                $inventory = $this->initilizateOrderInventory($xmlInventory, $inventory, $salesOrder);
                 $salesOrder->addService($inventory);
             } 
         }
@@ -518,16 +533,20 @@ class CmlParser {
      * Initilizate AbstractProduct by order xml.
      * @param SimpleXmlElement $orderProduct
      * @param AbstractProduct $inventory 
+     * @param CmlSalesOrder $salesOrder
      * @return AbstractProduct
      */
-    private function initilizateOrderInventory($orderProduct, $inventory) {
-        $name = $this->getMandatoryChildContent($orderProduct, 'Наименование', 'Not product name in order.xml');
-        $oneEsIdentifier = $this->getMandatoryChildContent($orderProduct, 'Ид', 'Not product identificator in order.xml');
-        $price = $this->getMandatoryChildContent($orderProduct, 'ЦенаЗаЕдиницу', 'Not product price in orders.');
-        $count = $this->getMandatoryChildContent($orderProduct, 'Количество', 'Not product count in orders.');
+    private function initilizateOrderInventory($orderProduct, $inventory, $salesOrder) {
+        $name = $this->getMandatoryChildContent($orderProduct, 'Наименование', 'Not product name in order! Order number - ' . $salesOrder->getNumber());
+        $oneEsIdentifier = $this->getMandatoryChildContent($orderProduct, 'Ид', 'Not product identificator in order. Order number - ' . $salesOrder->getNumber());
+        $price = $this->getMandatoryChildContent($orderProduct, 'ЦенаЗаЕдиницу', 'Not product price in order. Order number - ' . $salesOrder->getNumber());
+        $count = $this->getMandatoryChildContent($orderProduct, 'Количество', 'Not product count in order. Order number - ' . $salesOrder->getNumber());
         $unitName = $this->getChildContent($orderProduct, 'БазоваяЕдиница');
         $article = $this->getChildContent($orderProduct, 'Артикул');
         $NDS = $this->getTaxRate($orderProduct);
+        
+        $name = $this->filter($name);
+        $article = $this->filter($article);
         
         $inventory->orderInitilizate($oneEsIdentifier, $name, $article, $unitName, $price, $count, $NDS);
         

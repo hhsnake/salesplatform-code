@@ -45,11 +45,16 @@ function HelpDesk_nofifyOnPortalTicketCreation($entityData) {
 	$wsParentId = $entityData->get('contact_id');
 	$parentIdParts = explode('x', $wsParentId);
 	$parentId = $parentIdParts[1];
-
-	$subject = '[From Portal] ' .$entityData->get('ticket_no'). " [ Ticket Id : $entityId ] " .$entityData->get('ticket_title');
+        
+        //SalesPlatform.ru begin
+        $subject = " [ ".getTranslatedString('Ticket No', $moduleName)." ".$entityData->get('ticket_no')." ] ".$entityData->get('ticket_title');
+	$contents = " ".getTranslatedString('Ticket No', $moduleName)." ".$entityData->get('ticket_no'). "<br> ".getTranslatedString('Ticket ID', $moduleName).": ".$entityId."<br> ".getTranslatedString('Ticket Title', $moduleName).": ".
+							$entityData->get('ticket_title')."<br><br>".$entityData->get('description');
+	/*$subject = "[From Portal] " .$entityData->get('ticket_no')." [ Ticket ID : $entityId ] ".$entityData->get('ticket_title');
 	$contents = ' Ticket No : '.$entityData->get('ticket_no'). '<br> Ticket ID : '.$entityId.'<br> Ticket Title : '.
-							$entityData->get('ticket_title').'<br><br>'.$entityData->get('description');
-
+							$entityData->get('ticket_title').'<br><br>'.$entityData->get('description');*/
+        //SalesPlatform.ru end 
+        
 	//get the contact email id who creates the ticket from portal and use this email as from email id in email
 	$result = $adb->pquery("SELECT email, concat (firstname,' ',lastname) as name FROM vtiger_contactdetails WHERE contactid=?", array($parentId));
 	$contact_email = $adb->query_result($result,0,'email');
@@ -94,7 +99,10 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 	$latestComment = strip_tags($commentDiff);
 
 	//send mail to the assigned to user when customer add comment
-	$subject = getTranslatedString('LBL_RESPONSE_TO_TICKET_NUMBER', $moduleName). ' : ' .$entityData->get('ticket_no'). ' ' .getTranslatedString('LBL_CUSTOMER_PORTAL', $moduleName);
+        // SalesPlatform.ru begin
+	$subject = getTranslatedString('LBL_RESPONDTO_TICKETID', $moduleName). " " . $entityData->get('ticket_no'). " " . getTranslatedString('LBL_CUSTOMER_PORTAL', $moduleName);
+	//$subject = getTranslatedString('LBL_RESPONDTO_TICKETID', $moduleName)."##". $entityId."##". getTranslatedString('LBL_CUSTOMER_PORTAL', $moduleName);
+        // SalesPlatform.ru end
 	$contents = getTranslatedString('Dear', $moduleName)." ".$ownerName.","."<br><br>"
 						.getTranslatedString('LBL_CUSTOMER_COMMENTS', $moduleName)."<br><br>
 						<b>".$latestComment."</b><br><br>"
@@ -127,7 +135,19 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 		$reply = '';
 	}
 
-	$subject = $entityData->get('ticket_no') . " [ Ticket Id : $entityId ] " . $reply . $entityData->get('ticket_title');
+// SalesPlatform.ru begin
+        $subject =  ' [ '.getTranslatedString('Ticket No', $moduleName)
+						.' '.$entityData->get('ticket_no').' ] '.$reply.$entityData->get('ticket_title');
+	$bodysubject = getTranslatedString('Ticket No', $moduleName) ." " . $entityData->get('ticket_no') . "<br>"
+						.getTranslatedString('LBL_SUBJECT', $moduleName) . " " . $entityData->get('ticket_title') . "<br>"
+						.getTranslatedString('Status', $moduleName) . ": " . getTranslatedString($entityData->get('ticketstatus'), $moduleName);
+//	$subject = $entityData->get('ticket_no') . ' [ '.getTranslatedString('LBL_TICKET_ID', $moduleName)
+//						.' : '.$entityId.' ] '.$reply.$entityData->get('ticket_title');
+//	$bodysubject = getTranslatedString('Ticket No', $moduleName) .":<br>" . $entityData->get('ticket_no')
+//						. "<br>" . getTranslatedString('LBL_TICKET_ID', $moduleName).' : '.$entityId.'<br> '
+//						.getTranslatedString('LBL_SUBJECT', $moduleName).$entityData->get('ticket_title');
+// SalesPlatform.ru end
+
 	$emailoptout = 0;
 	$wsContactId = $entityData->get('contact_id');
 	$contactId = explode('x', $wsContactId);
@@ -161,8 +181,52 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 			$email_body = HelpDesk::getTicketEmailContents($entityData);
 		}
 
-		if($isNew) {
-			send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+		//added condition to check the emailoptout(this is for contacts and vtiger_accounts.)
+		if($emailoptout == 0) {
+
+                        // SalesPlatform.ru begin
+                        //if($isPortalUser == 1){
+			//	$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$entityId."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
+			//	$email_body = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData);
+			//}
+			//else {
+			//	$email_body = HelpDesk::getTicketEmailContents($entityData);
+			//}
+                        // SalesPlatform.ru end
+			if($isNew) {
+                                // SalesPlatform.ru begin
+				if($isPortalUser == 1){
+					$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$entityId."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
+					$email_body = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData, true);
+				}
+				else {
+					$email_body = HelpDesk::getTicketEmailContents($entityData);
+                                // SalesPlatform.ru end
+				}
+				$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+			} else {
+				$entityDelta = new VTEntityDelta();
+				$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
+				$solutionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'solution');
+				$ownerHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'assigned_user_id');
+				$commentsHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'comments');
+                                // SalesPlatform.ru begin
+                                if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged) {
+					if($isPortalUser == 1){
+						$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$entityId."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
+						$email_body = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData, false, $statusHasChanged, $solutionHasChanged, $ownerHasChanged, $commentsHasChanged);
+					}
+					else {
+						$email_body = HelpDesk::getTicketEmailContents($entityData);
+					}
+				//if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged || $ownerHasChanged) {
+                                // SalesPlatform.ru end
+
+					$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+				}
+			}
+			$mail_status_str .= $parent_email."=".$mail_status."&&&";
+
 		} else {
 			$entityDelta = new VTEntityDelta();
 			$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
@@ -192,7 +256,12 @@ function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 		$reply = '';
 	}
 
-	$subject = getTranslatedString('LBL_TICKET_NUMBER', $moduleName). ' : ' .$entityData->get('ticket_no'). ' ' .$reply.$entityData->get('ticket_title');
+        // SalesPlatform.ru begin
+        $subject = ' [ '.getTranslatedString('Ticket No', $moduleName)
+						.' '.$entityData->get('ticket_no').' ] '.$reply.$entityData->get('ticket_title');
+	//$subject = $entityData->get('ticket_no') . ' [ '.getTranslatedString('LBL_TICKET_ID', $moduleName)
+	//					.' : '.$entityId.' ] '.$reply.$entityData->get('ticket_title');
+        // SalesPlatform.ru end
 
 	$email_body = HelpDesk::getTicketEmailContents($entityData, true);
 	if(PerformancePrefs::getBoolean('NOTIFY_OWNER_EMAILS', true) === true){

@@ -10,7 +10,10 @@
 {strip}
 	<div class="listViewPageDiv" id="email_con" name="email_con">
 		<div class="row-fluid" id="mail_fldrname">
-			<h3>{$FOLDER->name()}</h3>
+            {* SalesPlatform.ru begin *}
+			<h3>{vtranslate($FOLDER->name(), $MODULE)}</h3>
+			{*<h3>{$FOLDER->name()}</h3>*}
+            {* SalesPlatform.ru end *}
 		</div>
 		<hr>
 		<div class="listViewTopMenuDiv noprint">

@@ -8,7 +8,10 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 vimport('~~/modules/Reports/Reports.php');
-vimport('~~/modules/Reports/ReportRun.php');
+// SalesPlatform.ru begin
+vimport('~~/modules/Reports/SPReportRun.php');
+//vimport('~~/modules/Reports/ReportRun.php');
+// SalesPlatform.ru end
 require_once('modules/Reports/ReportUtils.php');
 require_once('Report.php');
 
@@ -951,7 +954,15 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		}
 
 		$this->reportRun = ReportRun::getInstance($this->getId());
-		$filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria,$advancedFilterCriteriaGroup);
+
+        // SalesPlatform.ru begin
+        if(in_array($this->reportRun->reporttype, getCustomReportsList())) {
+            $filterQuery = $this->reportRun->generateAdvFilterArray($advancedFilterCriteria);
+        } else {
+            $filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria, $advancedFilterCriteriaGroup);
+        }
+        // SalesPlatform.ru end
+
 		return $filterQuery;
 	}
 

@@ -195,7 +195,10 @@ class Products extends CRMEntity {
 				// Update the Product information with Base Currency choosen by the User.
 				if ($_REQUEST['base_currency'] == $cur_valuename) {
 					$currencySet = 1;
-					$adb->pquery("update vtiger_products set currency_id=?, unit_price=? where productid=?", array($curid, $actualPrice, $this->id));
+					// SalesPlatform.ru begin
+					$adb->pquery("update vtiger_products set currency_id=?, unit_price=? where productid=?", array($curid, $requestPrice, $this->id));
+					//$adb->pquery("update vtiger_products set currency_id=?, unit_price=? where productid=?", array($curid, $actualPrice, $this->id));
+					// SalesPlatform.ru end
 				}
 			}
 			if(!$currencySet){

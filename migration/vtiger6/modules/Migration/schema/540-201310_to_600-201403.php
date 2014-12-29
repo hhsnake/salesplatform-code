@@ -2523,29 +2523,19 @@ $invoiceInstance->addLink('DETAILVIEWBASIC', 'LBL_INVOICE_ADD_ACT',
 // Consignment
 $invoiceInstance->addLink('DETAILVIEWBASIC', 'LBL_INVOICE_ADD_CONSIGNMENT',
         'index.php?module=Consignment&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&relationOperation=true');
-            
-// SPCMLConnector
-$sql = "INSERT INTO `sp_cml_site_settings` VALUES (1,'siteParam','adminLogin','admin'),
-                              (2,'siteParam','adminPassword','admin'),
-                              (3,'siteParam','siteUrl','http://localhost/1c_exchange.php'),
-                              (4,'siteParam','assignedUser','admin'),
-          (5,'statusParam','Created','Принят');";
-$adb->pquery($sql,array());
-
-$sql = "set @lastfieldid = (select `id` from `vtiger_settings_field_seq`);";
-$adb->pquery($sql,array());
-$sql = "set @blockid = (select `blockid` from `vtiger_settings_blocks` where `label` = 'LBL_OTHER_SETTINGS');";
-$adb->pquery($sql,array());
-$sql = "set @maxseq = (select max(`sequence`) from `vtiger_settings_field` where `blockid` = @blockid);";
-$adb->pquery($sql,array());
-$sql = "INSERT INTO `vtiger_settings_field` (`fieldid`, `blockid`, `name`, `iconpath`, `description`, `linkto`, `sequence`, `active`) "
-        . " VALUES (@lastfieldid+1, @blockid, 'LBL_CML_SETTINGS', 'cml_settings.png', 'LBL_CML_SETTINGS_DESCRIPTION', 'index.php?module=SPCMLConnector&view=Index&parent=Settings', @maxseq+1, 0);";
-$adb->pquery($sql,array());
-$sql = "UPDATE `vtiger_settings_field_seq` SET `id` = @lastfieldid+1;";
-$adb->pquery($sql,array());
 
 // SPPayments
 $sql = "UPDATE `vtiger_field` SET `typeofdata` = 'D~M' WHERE `columnname` = 'pay_date' AND `tablename` = 'sp_payments';";
 $adb->pquery($sql,array());
+
+// Create sp_custom_reports table
+Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS sp_custom_reports (
+    reporttype varchar(50) NOT NULL,
+    datefilter int(1) default 0,
+    ownerfilter int(1) default 0,
+    accountfilter int(1) default 0,
+    functionname varchar(255) NOT NULL,
+    PRIMARY KEY  (reporttype)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci", array());
 
 // SalesPlatform.ru end

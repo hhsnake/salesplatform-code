@@ -53,8 +53,8 @@ class ProductsController extends InventoryController {
      * @param CmlProduct $abstractProduct
      */
     public function getReference($abstractProduct) {
-        $name = $abstractProduct->getName();
-        $article = $abstractProduct->getArticle();
+        $name = $abstractProduct->getName(); 
+ 	$article = $abstractProduct->getArticle();
         if($article != null) {
             $result = $this->query("select id from Products where productname='$name' "
                 . "and productcode='$article';");       //if in article null - request generate error

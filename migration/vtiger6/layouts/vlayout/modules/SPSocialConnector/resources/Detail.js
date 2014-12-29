@@ -1,11 +1,11 @@
-/*+***********************************************************************************
- * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
  * ("License"); You may not use this file except in compliance with the License
- * The Original Code is:  vtiger CRM Open Source
- * The Initial Developer of the Original Code is vtiger.
- * Portions created by vtiger are Copyright (C) vtiger.
+ * The Original Code is: SalesPlatform Ltd
+ * The Initial Developer of the Original Code is SalesPlatform Ltd.
  * All Rights Reserved.
- *************************************************************************************/
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 
 Vtiger_Detail_Js("SPSocialConnector_Detail_Js",{
 
@@ -27,13 +27,23 @@ Vtiger_Detail_Js("SPSocialConnector_Detail_Js",{
 	},
     
     /*
-	 * function to trigger send Message to social nets
+	 * function to trigger send message to social nets
 	 * @params: send message url
 	 */
     triggerSendMessage : function(detailActionUrl) {
         
         SPSocialConnector_Detail_Js.triggerDetailViewActionSendMessage(detailActionUrl);	
         
+    },
+    
+    /*
+	 * function to trigger get message from social nets
+	 * @params: get message url
+	 */
+    triggerGetMessage : function(detailActionUrl) {
+        var popupInstance = Vtiger_Popup_Js.getInstance();
+        popupInstance.show("module=SPSocialConnector&view=AuthWindow&popuptype=get_msg&" + detailActionUrl,'', '', '', function(params){
+        });         
     },
     
     /*
@@ -72,22 +82,15 @@ Vtiger_Detail_Js("SPSocialConnector_Detail_Js",{
 	 * function to call the register events of send message to the social nets
 	 */
     registerURLFieldSelectionEvent : function() {
-        var thisInstance = this;
 		var selectEmailForm = jQuery("#massSave");
 		selectEmailForm.on('submit',function(e){
 			var form = jQuery(e.currentTarget);
 			var params = JSON.stringify(form.serializeFormData());
             var obj = JSON.parse(params);
             var str = '&source_module='+obj.source_module+'&record_id='+obj.selected_ids+'&text='+obj.message+'&URL='+obj.fields;
-            var win = window.open("index.php?module=SPSocialConnector&action=AuthWindow&popuptype=send_msg"+str,"test","top=100, left=100, width=1000, height=590, resizable=0, scrollbars=0");                
-            app.hideModalWindow();
-            var timer = setInterval(function() {   
-                        if(win.closed) {  
-                            clearInterval(timer);
-                            location.reload(); 
-                        }  
-                        }, 500); 
-			e.preventDefault();
+            var popupInstance = Vtiger_Popup_Js.getInstance();
+            popupInstance.show("module=SPSocialConnector&view=AuthWindow&popuptype=send_msg"+str,'', '', '', function(params){
+            });
 		});
     }
 	

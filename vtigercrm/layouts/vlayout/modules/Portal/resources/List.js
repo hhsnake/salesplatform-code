@@ -41,7 +41,10 @@ Vtiger_List_Js("Portal_List_Js",{
             if(params.bookmarkName == '' || params.bookmarkUrl == '') {
                 var data = {
                     title : app.vtranslate('JS_MESSAGE'),
-                    text: 'Please enter all mandatory field',
+                    // SalesPlatform.ru begin
+                    text: app.vtranslate('Please enter all mandatory field'),
+                    //text: 'Please enter all mandatory field',
+                    // SalesPlatform.ru end
                     animation: 'show',
                     type: 'error'
                 };

@@ -2763,6 +2763,13 @@ class ReportRun extends CRMEntity
 	{
 		global $log;
 
+        // SalesPlatform.ru begin
+        if(in_array($this->reporttype, getCustomReportsList())) {
+            $filterArray = $filtersql;
+            return $this->sSPGetSQLforReport($filterArray);
+        }
+        // SalesPlatform.ru end
+
 		$columnlist = $this->getQueryColumnsList($reportid,$type);
 		$groupslist = $this->getGroupingList($reportid);
 		$groupTimeList = $this->getGroupByTimeList($reportid);
@@ -2865,6 +2872,69 @@ class ReportRun extends CRMEntity
 		return $reportquery;
 
 	}
+
+    // SalesPlatform.ru begin
+
+    /**
+     * Execute custom report function
+     * @param $filterArray
+     * @return string
+     * @throws Exception
+     */
+    function sSPGetSQLforReport($filterArray) {
+        global $adb;
+
+        $filterhash = md5(serialize($filterArray));
+
+        $res = $adb->pquery('SELECT functionname FROM sp_custom_reports WHERE reporttype=?',
+            array($this->reporttype));
+        if($adb->num_rows($res) > 0) {
+            $functionname = $adb->query_result($res, 0, 'functionname');
+
+            require_once "modules/Reports/sp_custom_reports/".$this->reporttype.".inc.php";
+            return $functionname($filterhash, $filterArray);
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Generate array of filters for custom reports
+     * @param $advancedFilterCriteria
+     * @return mixed Array of filters
+     */
+    function generateAdvFilterArray($advancedFilterCriteria) {
+
+        if(count($advancedFilterCriteria) == 0) {
+            return array();
+        }
+
+        foreach($advancedFilterCriteria as $filterKey => $filterValue) {
+
+            foreach($filterValue as $key => $value) {
+
+                // Change columns names
+                if($key == 'columnname') {
+                    if(strpos($value, 'pay_date') !== false) {
+                        $advancedFilterCriteria[$filterKey][$key] = 'date';
+                    }
+                    if(strpos($value, 'smownerid') !== false) {
+                        $advancedFilterCriteria[$filterKey][$key] = 'owner';
+                    }
+                    if(strpos($value, 'payer') !== false) {
+                        $advancedFilterCriteria[$filterKey][$key] = 'account';
+                    }
+                } elseif($key == 'groupid' || $key == 'columncondition') {
+                    unset($advancedFilterCriteria[$filterKey][$key]);
+                }
+
+            }
+
+        }
+
+        return $advancedFilterCriteria;
+    }
+    // SalesPlatform.ru end
 
 	/** function to get the report output in HTML,PDF,TOTAL,PRINT,PRINTTOTAL formats depends on the argument $outputformat
 	 *  @ param $outputformat : Type String (valid parameters HTML,PDF,TOTAL,PRINT,PRINT_TOTAL)

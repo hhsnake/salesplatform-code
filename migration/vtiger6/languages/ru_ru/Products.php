@@ -83,6 +83,11 @@ $languageStrings = array(
 	'Customs ID' => 'Номер ГТД',
     'Mf. Country Code' => 'Код страны',
     // SalesPlatform.ru end
+    
+    //SalesPlatform.ru begin Localization for PDF
+    'Days' => 'Дни',
+    'Incidents' => 'События',
+    //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

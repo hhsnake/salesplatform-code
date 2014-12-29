@@ -1596,6 +1596,10 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 
 		thisInstance.relatedModulesTabClickEvent();
 		thisInstance.registerModulesChangeEvent();
+                
+                //SalesPlatform.ru begin fieldname tooltip
+                jQuery('[data-toggle="tooltip"]').tooltip();
+                //SalesPlatform.ru end
 	}
 
 });

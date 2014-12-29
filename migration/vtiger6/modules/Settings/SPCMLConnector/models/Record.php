@@ -115,8 +115,6 @@ class Settings_SPCMLConnector_Record_Model extends Settings_Vtiger_Record_Model 
         if(empty($id)) {
 
             $id = $this->getUniqueId($tableName);
-            error_log("UNIQUE identifier");
-            error_log($id);
             $query = 'INSERT INTO '.$tableName.' VALUES(?,?,?,?)' ;
             $params = array($id,'statusParam', $this->getCrmStatus(), $this->getSiteStatus());
         } else {

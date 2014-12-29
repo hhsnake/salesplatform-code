@@ -1,8 +1,8 @@
 <?php
-/*!
+/**
 * HybridAuth
 * http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html
+* (c) 2009-2014, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html
 */
 
 /**
@@ -141,7 +141,7 @@ class Hybrid_Endpoint {
 		}
 		catch ( Exception $e ) {
 			Hybrid_Logger::error( "Exception:" . $e->getMessage(), $e );
-			Hybrid_Error::setError( $e->getMessage(), $e->getCode(), $e->getTraceAsString(), $e );
+			Hybrid_Error::setError( $e->getMessage(), $e->getCode(), $e->getTraceAsString(), $e->getPrevious() );
 
 			$hauth->returnToCallbackUrl();
 		}
@@ -176,7 +176,7 @@ class Hybrid_Endpoint {
 		}
 		catch( Exception $e ){
 			Hybrid_Logger::error( "Exception:" . $e->getMessage(), $e );
-			Hybrid_Error::setError( $e->getMessage(), $e->getCode(), $e->getTraceAsString(), $e );
+			Hybrid_Error::setError( $e->getMessage(), $e->getCode(), $e->getTraceAsString(), $e->getPrevious());
 
 			$hauth->adapter->setUserUnconnected(); 
 		}
@@ -194,7 +194,9 @@ class Hybrid_Endpoint {
 
 			# Init Hybrid_Auth
 			try {
-				require_once realpath( dirname( __FILE__ ) )  . "/Storage.php";
+                if(!class_exists("Hybrid_Storage")){
+                    require_once realpath( dirname( __FILE__ ) )  . "/Storage.php";
+                }
 				
 				$storage = new Hybrid_Storage(); 
 

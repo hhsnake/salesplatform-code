@@ -47,7 +47,7 @@ $languageStrings = array(
 	'LBL_SORT_ORDER'               => 'Отсортировать'                  , // TODO: Review
 	'LBL_ASCENDING'                => 'По возрастанию' , // KEY 5.x: Ascending
 	'LBL_DESCENDING'               => 'По убыванию'       , // KEY 5.x: Descending
-	'LBL_CALCULATIONS'             => 'Рассчеты'            , 
+	'LBL_CALCULATIONS'             => 'Расчеты'            , 
 	'LBL_COLUMNS'                  => 'Колонки'              , 
 	'LBL_SUM_VALUE'                => 'Сумма'                  , // KEY 5.x: LBL_COLUMNS_SUM
 	'LBL_AVERAGE'                  => 'Среднее'              , // KEY 5.x: LBL_COLUMNS_AVERAGE
@@ -185,7 +185,11 @@ $languageStrings = array(
 	'LBL_CHARTS' => 'Диаграммы',
     //Schedule Reports - Mail Content
     'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'Это автосгенерированное письмо, отправленное из запланированного отчета.',
-    
+
+    'Pay date' => 'Дата',
+    'Assigned To' => 'Ответственный',
+    'Payer' => 'Контрагент',
+
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(

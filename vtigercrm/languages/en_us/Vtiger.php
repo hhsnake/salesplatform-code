@@ -632,6 +632,12 @@ $languageStrings = array(
         //Promotion translations
         'LBL_HIDE_PROMOTION' => 'Hide Promotion',
         'LBL_SHOW_PROMOTION' => 'Show Promotion',
+    
+        //SalesPlatform.ru begin add locale
+        'LBL_CHARACTER_ENCODING'       => 'encoding',
+        'LBL_DELIMITER'                => 'delimiter',
+        'LBL_DETAIL_VIEW_LINK' => 'Link to entity',
+        //SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(
@@ -771,4 +777,11 @@ $jsLanguageStrings = array(
         'LBL_SYNCRONIZING' => 'Syncronizing',
     
         'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Records ownership transferred successfully.',
+    
+        //SalesPlatform.ru begin add locale
+        'JS_LBL_HELP_ADDRESS_TYPE' => 'For get help when typing - enter city',
+        'JS_LBL_LOCAL_STORAGE_FAIL' => 'Error on create local storage with KLADR integration! Update browser or off module!',
+        'JS_LBL_LOAD_MORE_CITIES' => 'Load next',
+        'JS_LBL_OF' => 'of',
+        //SalesPLatform.ru end
 );

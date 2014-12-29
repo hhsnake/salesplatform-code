@@ -176,7 +176,10 @@
 				<span class="span8">
 					<span class="pull-right">
 						<button type="submit" class="btn btn-success"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
-						<a class="cancelLink" type="reset" onclick="javascript:window.history.back();">Cancel</a>
+						{*Salesplatform begin localization*}
+                        <a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_Cancel', $QUALIFIED_MODULE)}</a>
+						{*<a class="cancelLink" type="reset" onclick="javascript:window.history.back();">Cancel</a>*}
+                        {*Salesplatform end*}
 					</span>
 				</span>
 			</div>

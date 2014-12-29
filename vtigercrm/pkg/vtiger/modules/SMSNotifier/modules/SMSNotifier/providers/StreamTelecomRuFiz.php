@@ -18,8 +18,8 @@ class SMSNotifier_StreamTelecomRuFiz_Provider implements SMSNotifier_ISMSProvide
 
         private $_streamsms;
 	
-	const SENDER_PARAM = 'LBL_SMS_SENDER';
-	const TIME_PARAM = 'LBL_SMS_TIME';
+	const SENDER_PARAM = 'LBL_SMS_SENDER_StreamTelecomRuFiz';
+	const TIME_PARAM = 'LBL_SMS_TIME_StreamTelecomRuFiz';
         
 	private static $REQUIRED_PARAMETERS = array(self::SENDER_PARAM, self::TIME_PARAM);
 	

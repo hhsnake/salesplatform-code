@@ -35,12 +35,18 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 	function getLogin() {
 		$user = parent::getLogin();
 		if (!$user) {
+                    // SalesPlatform.ru begin Session bugfix 
+                    if ($_SESSION['app_unique_key'] == vglobal('application_unique_key')) {
+                    // SalesPlatform.ru end
 			$userid = Vtiger_Session::get('AUTHUSERID', $_SESSION['authenticated_user_id']);
 			if ($userid) {
 				$user = CRMEntity::getInstance('Users');
 				$user->retrieveCurrentUserInfoFromFile($userid);
 				$this->setLogin($user);
 			}
+                    // SalesPlatform.ru begin
+                    }
+                    // SalesPlatform.ru end
 		}
 		return $user;
 	}

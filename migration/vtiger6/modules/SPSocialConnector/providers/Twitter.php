@@ -38,7 +38,7 @@ class Hybrid_Providers_Extended_Twitter extends Hybrid_Providers_Twitter {
 
     // new function: send private message to user by URL
     function sendPrivateMessage( $id_and_text ) {
-        list($id, $text) = explode( '?', $id_and_text );
+        list($id, $text) = explode( '?!?', $id_and_text );
         $status = '@'.$id.' '.$text;
         $parameters = array( 'status' => $status); 
         $response  = $this->api->post( 'statuses/update.json', $parameters ); 
@@ -47,9 +47,9 @@ class Hybrid_Providers_Extended_Twitter extends Hybrid_Providers_Twitter {
         if ( $this->api->http_code != 200 ) {
             throw new Exception( "Update user status failed! {$this->providerId} returned an error. " . 
                                 $this->errorMessageByStatus( $this->api->http_code ) );
-            return 0;
+            return -1;
         } else {
-            return 1;
+            return $response->id_str;
         }
     }
 }

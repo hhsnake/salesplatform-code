@@ -86,16 +86,17 @@ jQuery.Class("SPSocialConnector_Edit_Js",{
 			var params = JSON.stringify(form.serializeFormData());
             var obj = JSON.parse(params);
             var str = "&URL="+obj.message+"&sourcemodule="+obj.source_module+"&recordid="+obj.record_id;
-            var win = window.open("index.php?module=SPSocialConnector&action=AuthWindow&popuptype=load_profile"+str,"test","top=100, left=100, width=1000, height=590, resizable=0, scrollbars=0");                
             app.hideModalWindow();
-            var timer = setInterval(function() {   
-                        if(win.closed) {  
-                            clearInterval(timer);
-                            location.reload(); 
-                        }  
-                        }, 500); 
-			e.preventDefault();
-		});
+            e.preventDefault();
+            var popupInstance = Vtiger_Popup_Js.getInstance();
+            var win = popupInstance.show("module=SPSocialConnector&view=AuthWindow&popuptype=load_profile"+str);
+            var timer = setInterval(function() {
+                if(win.closed) {
+                    clearInterval(timer);
+                    location.reload();
+                }
+            }, 500);
+        });
     }
 },{
     

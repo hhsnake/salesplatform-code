@@ -152,6 +152,15 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         $rnumber = strrev($fnumber);
         $db = PearDatabase::getInstance();
         
+        //SalesPlatform.ru begin 
+        /* Delete record if it null after filtering number */
+        if($fnumber == '') {
+            $db->pquery('DELETE FROM ' . self::lookuptableName . ' where crmid=? AND fieldname=? AND setype=?',
+                    array($recordid, $fieldName, $details['setype']));
+            return true;
+        }
+        //SalesPLatform.ru end
+        
         $params = array($recordid, $details['setype'],$fnumber,$rnumber, $fieldName);
         $db->pquery('INSERT INTO '.self::lookuptableName.
                     '(crmid, setype, fnumber, rnumber, fieldname) 
@@ -179,7 +188,29 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         $db = PearDatabase::getInstance();
         $fnumber = preg_replace('/[-()\s+]/', '',$from);
         $rnumber = strrev($fnumber);
-        $result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE "'. $fnumber . '%" OR rnumber LIKE "'. $rnumber . '%" ', array());
+        
+        //SalesPlatform.ru begin fix search entity by number
+        
+        if($from == NULL) {
+            return;
+        }
+        
+        /* Numbers starts with 7 and 8 are the same */
+        $numberSynonym = $fnumber;
+        switch($fnumber[0]) {
+            case '7':
+                $numberSynonym[0] = '8';
+                break;
+            
+            case '8':
+                $numberSynonym[0] = '7';
+                break;
+        }
+        
+        $result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber IN (?,?)', array($fnumber, $numberSynonym));
+        //$result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE "'. $fnumber . '%" OR rnumber LIKE "'. $rnumber . '%" ', array());
+        //SalesPlatform.ru end
+        
         if($db->num_rows($result)){
             $crmid = $db->query_result($result, 0, 'crmid');
             $fieldname = $db->query_result($result, 0, 'fieldname');
