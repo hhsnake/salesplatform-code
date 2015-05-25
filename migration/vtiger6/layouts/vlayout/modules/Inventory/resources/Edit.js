@@ -12,7 +12,10 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	zeroDiscountType : 'zero' ,
 	percentageDiscountType : 'percentage',
 	directAmountDiscountType : 'amount',
-
+        
+        //SalesPlatform.ru begin
+        groupTaxIncType : 'group_tax_inc',
+        //SalesPlatform.ru end
 	individualTaxType : 'individual',
 	groupTaxType :  'group'
 },{
@@ -214,7 +217,13 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		}
 		return false;
 	},
-
+        
+        //SalesPlatform.ru begin
+        isGroupIncTaxMode : function() {
+            return this.getTaxTypeSelectElement().find('option:selected').val() == Inventory_Edit_Js.groupTaxIncType;
+        },
+        //SalesPlatform.ru end
+        
 	/**
 	 * Function which gives edit view form
 	 * @return : jQuery object which represents the form element
@@ -805,7 +814,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		netPrice = netPrice.toFixed(numberOfDecimal);
 		this.setLineItemNetPrice(lineItemRow,netPrice);
 	},
-
+        
 	/**
 	 * Function which will caliculate the total net price for all the line items
 	 */
@@ -817,7 +826,10 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			var lineItemRow = jQuery(domElement);
 			netTotalValue += thisInstance.getLineItemNetPrice(lineItemRow);
 		});
-		this.setNetTotal(netTotalValue);
+                //SalesPlatform.ru begin
+                this.setNetTotal( netTotalValue.toFixed( parseInt(jQuery('.numberOfCurrencyDecimal').val()) ) );
+		//this.setNetTotal(netTotalValue);
+                //SalesPlatform.ru end
 	},
 
 	calculateFinalDiscount : function() {
@@ -863,7 +875,10 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
     },
 
 	calculateGroupTax : function() {
-        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
+            //SalesPlatform.ru begin
+            var currentInstance = this;
+            //SalesPlatform.ru end
+            var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 		var netTotal = this.getNetTotal();
 		var finalDiscountValue = this.getFinalDiscountTotal();
 		var amount = netTotal - finalDiscountValue;
@@ -877,15 +892,27 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
                 var groupTaxValue = "0.00";
             } else {
                 var groupTaxValue = Math.abs(amount * groupTaxPercentageElement.val())/100;
+                //SalesPlatform.ru begin 
+                if(currentInstance.isGroupIncTaxMode()) { 
+                    groupTaxValue = Math.abs( amount * parseFloat(groupTaxPercentageElement.val()) ) / 
+                            ( 100 + parseFloat(groupTaxPercentageElement.val()) ); 
+                } 
+                //SalesPlatform.ru end 
             }
 			groupTaxValue = parseFloat(groupTaxValue).toFixed(numberOfDecimal);
 			groupTaxRow.find('.groupTaxTotal').val(groupTaxValue);
 			groupTaxTotal += parseFloat(groupTaxValue);
 		});
-		this.setGroupTaxTotal(groupTaxTotal);
+		//SalesPlatform.ru begin
+                this.setGroupTaxTotal(groupTaxTotal.toFixed(numberOfDecimal));
+		//this.setGroupTaxTotal(groupTaxTotal);
+                //SalesPlatform.ru end
 	},
 
 	calculateShippingAndHandlingTaxCharges : function() {
+                //SalesPlatform.ru begin 
+                var currentInstance = this; 
+                //SalesPlatform.ru end 
 		var shippingHandlingCharge = this.getShippingAndHandling();
 		var shippingTaxDiv = jQuery('#shipping_handling_div');
 		var shippingTaxPercentage = shippingTaxDiv.find('.shippingTaxPercentage');
@@ -899,10 +926,21 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 				currentTaxPerValue = "0.00";
 			}
              if(isNaN(currentTaxPerValue)){
-                var currentTaxTotal = "0.00";
+                //SalesPlatform.ru begin
+                currentTaxTotal = "0.00";
+                //var currentTaxTotal = "0.00";
+                //SalesPlatform.ru end
             } else {
 				currentTaxPerValue = parseFloat(currentTaxPerValue);
-                var currentTaxTotal = Math.abs(currentTaxPerValue * shippingHandlingCharge)/100;
+                                
+                //SalesPlatform.ru begin    
+                currentTaxTotal = Math.abs(currentTaxPerValue * shippingHandlingCharge)/100;      
+                if(currentInstance.isGroupIncTaxMode()) {
+                    currentTaxTotal = Math.abs(currentTaxPerValue * shippingHandlingCharge) / 
+                            (100 + currentTaxPerValue);
+                }
+                //var currentTaxTotal = Math.abs(currentTaxPerValue * shippingHandlingCharge)/100;
+                //SalesPlatform.ru end
             }
 			jQuery('.shippingTaxTotal',currentParentRow).val(currentTaxTotal);
 		});
@@ -916,11 +954,17 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var shippingHandlingTax = this.getShippingAndHandlingTaxTotal();
 		var adjustment = this.getAdjustmentValue();
 		var grandTotal = parseFloat(netTotal) - parseFloat(discountTotal) + parseFloat(shippingHandlingCharge) + parseFloat(shippingHandlingTax);
-
-		if(this.isGroupTaxMode()){
+                
+                //SalesPlatform.ru begin
+                if(this.isGroupIncTaxMode()) {
+                    grandTotal -= parseFloat(shippingHandlingTax);
+                }
+                //SalesPlatform.ru end
+                
+                if(this.isGroupTaxMode()){   
 			grandTotal +=  this.getGroupTaxTotal();
 		}
-
+                         
 		if(this.isAdjustMentAddType()) {
 			grandTotal +=  parseFloat(adjustment);
 		}else if(this.isAdjustMentDeductType()) {
@@ -1083,9 +1127,17 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	lineItemToTalResultCalculations : function(){
 		this.calculateNetTotal();
 		this.calculateFinalDiscount();
-		if(this.isGroupTaxMode()){
+		//SalesPlatform.ru begin
+                if(this.isGroupTaxMode() || this.isGroupIncTaxMode()){    
+                //if(this.isGroupTaxMode()){
+                //SalesPlatform.ru end
 			this.calculateGroupTax();
 		}
+                
+                //SalesPlatform.ru begin
+                this.shippingAndHandlingChargesChangeActions();
+                //SalesPlatform.ru end
+                
 		//this.calculateShippingAndHandlingTaxCharges();
 		this.calculateGrandTotal();
 	},
@@ -1118,9 +1170,12 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		this.calculateLineItemNetPrice(lineItemRow);
 		this.calculateNetTotal();
 		this.calculateFinalDiscount();
-		if(this.isGroupTaxMode()){
+		//SalesPlatform.ru begin
+                if(this.isGroupTaxMode() || this.isGroupIncTaxMode()){    
+                //if(this.isGroupTaxMode()){
+                //SalesPlatform.ru end
 			this.calculateGroupTax();
-		}
+		}               
 		//this.calculateShippingAndHandlingTaxCharges();
 		this.calculateGrandTotal();
 	},
@@ -1138,7 +1193,10 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 
 	finalDiscountChangeActions : function() {
 		this.calculateFinalDiscount();
-		if(this.isGroupTaxMode()){
+		//SalesPlatform.ru begin
+                if(this.isGroupTaxMode() || this.isGroupIncTaxMode()){    
+                //if(this.isGroupTaxMode()){
+                //SalesPlatform.ru end
 			this.calculateGroupTax();
 		}
 		this.calculateGrandTotal();
@@ -1333,12 +1391,12 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 					lineItemRow.find('.individualTaxContainer,.productTaxTotal').removeClass('hide');
 					thisInstance.lineItemRowCalculations(lineItemRow);
 				});
-			}else{
+			}else{                   
 				jQuery('#group_tax_row').removeClass('hide');
 				lineItemTable.find('tr.'+thisInstance.rowClass).each(function(index,domElement){
 					var lineItemRow = jQuery(domElement);
 					lineItemRow.find('.individualTaxContainer,.productTaxTotal').addClass('hide');
-					thisInstance.calculateLineItemNetPrice(lineItemRow);
+                                            thisInstance.calculateLineItemNetPrice(lineItemRow);
 				});
 			}
 			thisInstance.lineItemToTalResultCalculations();

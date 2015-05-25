@@ -698,10 +698,18 @@ Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET presence = 1 WHERE t
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_users SET truncate_trailing_zeros = ?', array(1));
 
 //deleted the id column from the All filter
+//SalesPlatform.ru begin
 Migration_Index_View::ExecuteQuery("DELETE FROM vtiger_cvcolumnlist WHERE cvid IN
 			(SELECT cvid FROM vtiger_customview WHERE viewname='All' AND entitytype NOT IN
-				('Emails','Calendar','ModComments','ProjectMilestone','Project','SMSNotifier','PBXManager','Webmails'))
+				('Accounts','Emails','Calendar','ModComments','ProjectMilestone','Project','SMSNotifier','PBXManager','Webmails'))
 			AND columnindex = 0", array());
+
+
+//Migration_Index_View::ExecuteQuery("DELETE FROM vtiger_cvcolumnlist WHERE cvid IN
+//			(SELECT cvid FROM vtiger_customview WHERE viewname='All' AND entitytype NOT IN
+//				('Emails','Calendar','ModComments','ProjectMilestone','Project','SMSNotifier','PBXManager','Webmails'))
+//			AND columnindex = 0", array());
+//SalesPLatform.ru end
 
 // Added indexes for Modtracker Module to improve performance
 Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_modtracker_basic ADD INDEX crmidx (crmid)', array());

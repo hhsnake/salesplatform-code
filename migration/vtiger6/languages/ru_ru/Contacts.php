@@ -18,7 +18,8 @@ $languageStrings = array(
 	'LBL_COPY_OTHER_ADDRESS'       => 'Копировать другой адрес', // KEY 5.x: LBL_CPY_OTHER_ADDRESS
 	'LBL_COPY_MAILING_ADDRESS'     => 'Копировать почтовый адрес', // KEY 5.x: LBL_CPY_MAILING_ADDRESS
 	'Office Phone'                 => 'Рабочий тел.'      , 
-	'Home Phone'                   => 'Домашний тел.'    , 
+	'Home Phone'                   => 'Домашний тел.'    ,
+    'Mobile Phone'                 => 'Мобильный тел.',
 	'Title'                        => 'Должность'          , 
 	'Department'                   => 'Отдел'                  , 
 	'Birthdate'                    => 'День рождения'   , 
@@ -34,11 +35,11 @@ $languageStrings = array(
 	'Mailing Zip'                  => 'Индекс'                , 
 	'Mailing Country'              => 'Страна'                , 
 	'Mailing Po Box'               => 'А/я (почта)'            , // TODO: Review
-	'Other Street'                 => 'Доп.адрес: улица', 
-	'Other City'                   => 'Доп.адрес: город', 
-	'Other State'                  => 'Доп.адрес: область', 
-	'Other Zip'                    => 'Доп.адрес: индекс', 
-	'Other Country'                => 'Доп.адрес: страна', 
+	'Other Street'                 => 'Доп. адрес: улица',
+	'Other City'                   => 'Доп. адрес: город',
+	'Other State'                  => 'Доп. адрес: область',
+	'Other Zip'                    => 'Доп. адрес: индекс',
+	'Other Country'                => 'Доп. адрес: страна',
 	'Other Po Box'                 => 'А/я  (другое)'              , // TODO: Review
 	'Contact Image'                => 'Изображение'      , 
 	'Mr.'                          => 'Г-н.'                      , 
@@ -50,13 +51,15 @@ $languageStrings = array(
 	'Contact Id' => 'Контакт №',
     'Contacted - Successful'       => 'Успешный Контакт', 
     'LBL_SETUP_WEBFORMS'           => 'Установка Веб-Форм',
+    'Please Login Here'            => 'Войти',
 );
 $jsLanguageStrings = array(
     'LBL_SYNC_BUTTON'              => 'Синхронизировать',
     'LBL_SYNCRONIZING'             => 'Синхронизация...',
     'LBL_NOT_SYNCRONIZED'          => 'Не синхронизировано',
 	'LBL_FIELD_MAPPING'            => 'Соответствие полей',
-    'Contacted - Successful'       => 'Успешный Контакт', 
+    'Contacted - Successful'       => 'Успешный Контакт',
+    'JS_SAVED_SUCCESSFULLY'        => 'Настройки сохранены',
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

@@ -18,12 +18,31 @@
     {assign var="FINAL" value=$RELATED_PRODUCTS.1.final_details}
 
     {assign var="IS_INDIVIDUAL_TAX_TYPE" value=false}
-    {assign var="IS_GROUP_TAX_TYPE" value=true}
-
+    {* SalesPlatform.ru begin *} 
+    {assign var="IS_GROUP_TAX_TYPE" value=false}
+    {assign var="IS_GROUP_TAX_INC_TYPE" value=false}
+    {* {assign var="IS_GROUP_TAX_TYPE" value=true} *}
+    {* SalesPlatform.ru end *} 
+    
+    
+    {* SalesPlatform.ru begin *} 
+    
+    {* Get tax type *}
     {if $FINAL.taxtype eq 'individual'}
-        {assign var="IS_GROUP_TAX_TYPE" value=false}
         {assign var="IS_INDIVIDUAL_TAX_TYPE" value=true}
+    {elseif $FINAL.taxtype eq 'group'}   
+        {assign var="IS_GROUP_TAX_TYPE" value=true}   
+    {else}
+        {assign var="IS_GROUP_TAX_INC_TYPE" value=true}
     {/if}
+    
+    {*
+        {if $FINAL.taxtype eq 'individual'}
+            {assign var="IS_GROUP_TAX_TYPE" value=false}
+            {assign var="IS_INDIVIDUAL_TAX_TYPE" value=true}
+        {/if}
+    *}
+    {* SalesPlatform.ru end *} 
     
     <input type="hidden" class="numberOfCurrencyDecimal" value="{$USER_MODEL->get('no_of_currency_decimals')}" />
 
@@ -70,6 +89,9 @@
                         <span class="alignTop">{vtranslate('LBL_TAX_MODE', $MODULE)}</span>
                     </div>
                     <select class="chzn-select lineItemTax" id="taxtype" name="taxtype" style="width: 164px;">
+                        {* SalesPlatform.ru begin *} 
+                        <OPTION value="group_tax_inc" {if $IS_GROUP_TAX_INC_TYPE}selected{/if}>{vtranslate('LBL_GROUP_TAX_INC', $MODULE)}</OPTION> 
+                        {* SalesPlatform.ru end *}
                         <OPTION value="individual" {if $IS_INDIVIDUAL_TAX_TYPE}selected{/if}>{vtranslate('LBL_INDIVIDUAL', $MODULE)}</OPTION>
                         <OPTION value="group" {if $IS_GROUP_TAX_TYPE}selected{/if}>{vtranslate('LBL_GROUP', $MODULE)}</OPTION>
                     </select>
@@ -326,9 +348,15 @@
                 </td>
                 <td>
                     {if $MODULE eq 'Invoice'}
-                            <span class="pull-right"><input id="received" name="received" type="text" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('received') && !($IS_DUPLICATE)}{$RECORD->getDisplayValue('received')}{else}0.00{/if}"></span>
+                            {* SalesPlatform.ru begin *}
+                            {* <span class="pull-right"><input id="received" name="received" type="text" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('received') && !($IS_DUPLICATE)}{$RECORD->getDisplayValue('received')}{else}0.00{/if}"></span> *}
+                            <span class="pull-right"><input id="received" name="received" type="text" class="lineItemInputBox" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" value="{if $RECORD->get('received') && !($IS_DUPLICATE)}{number_format($RECORD->get('received'), $USER_MODEL->get('no_of_currency_decimals'),'.','')}{else}0.00{/if}"></span>
+                            {* SalesPlatform.ru end *}
                     {else}
-                        <span class="pull-right"><input id="paid" name="paid" type="text" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('paid') && !($IS_DUPLICATE)}{$RECORD->getDisplayValue('paid')}{else}0.00{/if}"></span>
+                        {* SalesPlatform.ru begin *}
+                        {* <span class="pull-right"><input id="paid" name="paid" type="text" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('paid') && !($IS_DUPLICATE)}{$RECORD->getDisplayValue('paid')}{else}0.00{/if}"></span> *}
+                        <span class="pull-right"><input id="paid" name="paid" type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->get('paid') && !($IS_DUPLICATE)}{number_format($RECORD->get('paid'), $USER_MODEL->get('no_of_currency_decimals'),'.','')}{else}0.00{/if}"></span>
+                        {* SalesPlatform.ru end *}
                     {/if}
                 </td>
             </tr>

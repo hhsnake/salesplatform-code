@@ -8,12 +8,12 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Emails'                => 'Почта'                  , 
+	'SINGLE_Emails'                => 'E-mail'                  ,
 	'Emails'                       => 'Сообщения E-mail'   , 
 	'LBL_SELECT_EMAIL_IDS'         => 'Выберите E-mail адреса'      , // TODO: Review
 	'LBL_SUBJECT'                  => 'Тема:'                   , 
 	'LBL_ATTACHMENT'               => 'Вложение'            , 
-	'LBL_BROWSE_CRM'               => 'Обзор CRM'                  , // TODO: Review
+	'LBL_BROWSE_CRM'               => 'Выбрать Документ'                  , // TODO: Review
 	'LBL_SEND'                     => 'Отправить'          , 
 	'LBL_SAVE_AS_DRAFT'            => 'Сохранить как черновик'               , // TODO: Review
 	'LBL_GO_TO_PREVIEW'            => 'Перейти к предварительному просмотру'               , // TODO: Review

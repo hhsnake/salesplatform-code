@@ -80,11 +80,11 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 
 			$quantity	= $productLineItem["qty{$productLineItemIndex}"];
 			$usageunit	= $productLineItem["usageunit{$productLineItemIndex}"];
-            // SalesPlatform.ru begin
-            if($usageunit =='') {
-                $usageunit = "-";
-            }
-            // SalesPlatform.ru end
+
+                        if($usageunit =='') {
+                            $usageunit = "-";
+                        }
+
 			$listPrice	= $productLineItem["listPrice{$productLineItemIndex}"];
 			$discount	= $productLineItem["discountTotal{$productLineItemIndex}"];
 			$taxable_total = $quantity * $listPrice - $discount;
@@ -230,7 +230,8 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 			$discount = $discount_amount;
 			$discountGoods = $discount_amount;
 			$discountServices = $discount_amount;
-		} else if(!empty($discount_percent)) {
+		}
+		if(!empty($discount_percent)) {
 			$discount = (($discount_percent*$final_details["hdnSubTotal"])/100);
 			$discountGoods = (($discount_percent*$netTotalGoods)/100);
 			$discountServices = (($discount_percent*$netTotalServices)/100);

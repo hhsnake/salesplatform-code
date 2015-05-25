@@ -38,7 +38,9 @@ class Settings_ExtensionStore_ExtensionStore_View extends Settings_Vtiger_Index_
 
         if ($registrationStatus) {
             $userName = $modelInstance->getRegisteredUser();
+            //check if remember password is enabled
             $pwdStatus = $modelInstance->passwordStatus();
+            //check if password set in current session
             if (!$pwdStatus) {
                 $sessionIdentifer = $modelInstance->getSessionIdentifier();
                 $pwd = $_SESSION[$sessionIdentifer . '_password'];
@@ -84,6 +86,7 @@ class Settings_ExtensionStore_ExtensionStore_View extends Settings_Vtiger_Index_
         $jsFileNames = array(
             "libraries.jquery.jqueryRating",
             "libraries.jquery.boxslider.jqueryBxslider",
+            "~modules/Settings/ExtensionStore/libraries/jasny-bootstrap.min.js",
         );
 
         $jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
@@ -152,13 +155,15 @@ class Settings_ExtensionStore_ExtensionStore_View extends Settings_Vtiger_Index_
             }
             $viewer->assign('CUSTOMER_PROFILE', $customerProfile);
         }
-
+        
+        $extension = $extensionDetail[$extensionId];
         $viewer->assign('IS_PRO', true);
         $viewer->assign('MODULE_ACTION', $moduleAction);
         $viewer->assign('SCREEN_SHOTS', $screenShots);
         $viewer->assign('AUTHOR_INFO', $authorInfo);
         $viewer->assign('CUSTOMER_REVIEWS', $customerReviews);
-        $viewer->assign('EXTENSION_DETAIL', $extensionDetail[$extensionId]);
+        $viewer->assign('EXTENSION_DETAIL', $extension);
+        $viewer->assign('EXTENSION_MODULE_MODEL', $extension->get('moduleModel'));
         $viewer->assign('EXTENSION_ID', $extensionId);
         $viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
         $viewer->assign('REGISTRATION_STATUS', $registrationStatus);

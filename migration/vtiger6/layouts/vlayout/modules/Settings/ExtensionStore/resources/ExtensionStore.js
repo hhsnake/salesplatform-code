@@ -4,6 +4,14 @@
  */
 
 jQuery.Class('Settings_ExtensionStore_Js', {
+    showPopover : function(e) {
+        var ele = jQuery(e);
+        var options = {
+            placement : ele.data('position'),
+            trigger   : 'hover',
+        };
+        ele.popover(options);
+    },
 }, {
     /**
      * Function to get import module index params
@@ -125,7 +133,7 @@ jQuery.Class('Settings_ExtensionStore_Js', {
                                 var progressIndicatorElement = jQuery.progressIndicator();
                                 AppConnector.request(formData).then(
                                         function(data) {
-                                            if (data['success'] == 'true') {
+                                            if (data.success) {
                                                 progressIndicatorElement.progressIndicator({'mode': 'hide'});
                                                 app.hideModalWindow();
                                                 location.reload();
@@ -134,7 +142,8 @@ jQuery.Class('Settings_ExtensionStore_Js', {
                                                 app.hideModalWindow();
                                                 var error = data['error'];
                                                 var params = {
-                                                    text: error
+                                                    text: error,
+                                                    type: 'error'
                                                 };
                                                 Settings_Vtiger_Index_Js.showMessage(params);
                                             }
@@ -177,7 +186,9 @@ jQuery.Class('Settings_ExtensionStore_Js', {
                                         var error = data.error.message;
                                         if (error.length) {
                                             var params = {
-                                                text: error
+                                                    type: 'error',
+                                                    text: error,
+                                                    title : app.vtranslate('LBL_WARNING')
                                             };
                                             Settings_Vtiger_Index_Js.showMessage(params);
                                         }
@@ -198,7 +209,7 @@ jQuery.Class('Settings_ExtensionStore_Js', {
             }, {'width': '1000px'});
 
         });
-
+        
        /* 
         * Function related extension store pro
          jQuery(container).on('click', '#registerUser', function(e) {
@@ -301,12 +312,13 @@ jQuery.Class('Settings_ExtensionStore_Js', {
 
             var callBackFunction = function(data) {
                 jQuery(data).on('click', '[name="resetButton"]', function(e) {
-                    jQuery(data).find('[name="cardNumber"],[name="expMonth"],[name="expYear"], [name="cvccode"]').val('');
+                    jQuery(data).find('[name="cardNumber"],[name="expMonth"],[name="expYear"],[name="cvccode"]').val('');
                 });
                 var form = data.find('.setUpCardForm');
                 var params = app.getvalidationEngineOptions(true);
                 params.onValidationComplete = function(form, valid) {
                     if (valid) {
+                        form.find('.saveButton').attr('disabled','true');
                         var formData = form.serializeFormData();
                         var progressIndicatorElement = jQuery.progressIndicator();
                         AppConnector.request(formData).then(
@@ -321,12 +333,15 @@ jQuery.Class('Settings_ExtensionStore_Js', {
                                         jQuery(container).find('.setUpCardModal').find('[name="cvccode"]').val(result['cvc']);
                                         element.html(app.vtranslate('JS_UPDATE_CARD_DETAILS'));
                                         app.hideModalWindow();
+                                        Settings_Vtiger_Index_Js.showMessage({text:app.vtranslate('JS_CARD_DETAILS_UPDATED')});
                                     } else {
                                         progressIndicatorElement.progressIndicator({'mode': 'hide'});
                                         app.hideModalWindow();
                                         var errorMessage = data.error.message;
                                         var params = {
-                                            text: errorMessage
+                                            type:'error',
+                                            text: errorMessage,
+                                            title : app.vtranslate('LBL_WARNING')
                                         };
                                         Settings_Vtiger_Index_Js.showMessage(params);
                                     }
@@ -481,6 +496,7 @@ jQuery.Class('Settings_ExtensionStore_Js', {
         this.getImportModuleStepView(params).then(function(data) {
             var detailContentsHolder = jQuery('.contentsDiv');
             detailContentsHolder.html(data);
+            jQuery(window).scrollTop(10);
             thisInstance.registerEventsForExtensionStoreDetail(detailContentsHolder);
         });
     },

@@ -235,6 +235,14 @@ class CRMEntity {
 		if ($module == 'Events') {
 			$module = 'Calendar';
 		}
+
+        // SalesPlatform.ru begin Fix owner for outgoing calls
+        if($module == 'PBXManager') {
+            $currentUser = Users_Record_Model::getCurrentUserModel();
+            $current_user->id = $currentUser->getId();
+        }
+        // SalesPlatform.ru end
+
 		if ($this->mode == 'edit') {
 			$description_val = from_html($this->column_fields['description'], ($insertion_mode == 'edit') ? true : false);
 

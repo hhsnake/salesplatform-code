@@ -201,8 +201,4 @@ $default_timezone = 'Europe/Moscow';
 if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set($default_timezone);
 }
-
-// SalesPlatform.ru begin Additional phones
-$crm_user_phones = array();
-// SalesPlatform.ru end
 ?>

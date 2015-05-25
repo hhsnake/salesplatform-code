@@ -22,7 +22,10 @@ class SMSNotifier_Record_Model extends Vtiger_Record_Model {
 
 		$this->setData($statusDetails[0]);
 
-		return $this;
+        // SalesPlatform.ru begin
+        return $statusDetails;
+		//return $this;
+        // SalesPlatform.ru end
 	}
 
 	public function getCheckStatusUrl() {
@@ -41,4 +44,21 @@ class SMSNotifier_Record_Model extends Vtiger_Record_Model {
 		}
 		return $statusColor;
 	}
+
+    // SalesPlatform.ru begin
+    public static function getBackgroundColorForStatus($smsStatus) {
+        if ($smsStatus == 'Processing') {
+            $statusColor = '#FFFCDF';
+        } elseif ($smsStatus == 'Dispatched') {
+            $statusColor = '#E8FFCF';
+        } elseif ($smsStatus == 'Failed') {
+            $statusColor = '#FFE2AF';
+        } elseif ($smsStatus == 'Delivered') {
+            $statusColor = '#25b42f';
+        } else {
+            $statusColor = '#FFFFFF';
+        }
+        return $statusColor;
+    }
+    // SalesPlatform.ru end
 }

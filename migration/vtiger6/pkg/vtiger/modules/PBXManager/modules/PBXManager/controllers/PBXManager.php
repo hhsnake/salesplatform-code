@@ -59,51 +59,42 @@ class PBXManager_PBXManager_Controller {
      * return Response object
      */
     function processDialBeginCall($request) {
-        
-        /* Config contains inner numbers of asterisk, which no entered in users entity */
-        require 'config.inc.php';
-        $connector = $this->getConnector();
-
-        /* Search info about caller */
         $callerNumber = $request->get('callerIdNumber');
-        $userInfo = PBXManager_Record_Model::getUserInfoWithNumber($callerNumber);
-        
-        /* Get direction of call with checking numbers added in config */
-        $isOutboundCall = true;
-        if(!$userInfo) {
-            $isOutboundCall = false;
-            
-            /* Check additional inner numbers */
-            if(is_array($crm_user_phones) && in_array($callerNumber, $crm_user_phones)) {
-                $isOutboundCall = true;
-            }
-        } 
-        
+
+        /* Hide Originate event */
+        if($callerNumber == $request->get('dialString')) return;
+        $callerUserInfo = PBXManager_Record_Model::getUserInfoWithNumber($callerNumber);
+  
         /* Get dialed number by caller. It has unified format so we need check variants */
-        if(strpos($request->get('dialString'), "/") !== FALSE) {
+        if(strpos($request->get('dialString'), "/") !== false) {
             $dialParts = explode("/", $request->get('dialString'));
             $destinationNumber = end($dialParts);
-        } elseif(strpos($request->get('dialString'), "@") !== FALSE) {
+        } elseif(strpos($request->get('dialString'), "@") !== false) {
             $dialParts = explode("@", $request->get('dialString'));
             $destinationNumber = $dialParts[0];
         } else {
             $destinationNumber = $request->get('dialString');
         }
         
-        /* Call handling logic of call */
-        if ($isOutboundCall) {
-            // Outbound Call
+        /* If caller number binded with crm user - it outgoing number */
+        $connector = $this->getConnector();
+        if ($callerUserInfo) {
             $request->set('Direction', 'outbound');
             $request->set('to', $destinationNumber);
             $customerInfo = PBXManager_Record_Model::lookUpRelatedWithNumber($destinationNumber);
-            $connector->handleStartupCall($request, $userInfo, $customerInfo);
+            $connector->handleStartupCall($request, $callerUserInfo, $customerInfo);
         } else {
-            // Inbound Call
+            
+            /* If no match of twon numbers for crm users - don't fix ring */
+            $crmUserInfo = PBXManager_Record_Model::getUserInfoWithNumber($destinationNumber);
+            if(!$crmUserInfo) {
+                return;
+            }
+            
             $request->set('Direction', 'inbound');
-            $customerInfo = PBXManager_Record_Model::lookUpRelatedWithNumber($request->get('callerIdNumber'));
-            $userInfo = PBXManager_Record_Model::getUserInfoWithNumber($destinationNumber);
             $request->set('from', $request->get('callerIdNumber'));
-            $connector->handleStartupCall($request, $userInfo, $customerInfo);
+            $customerInfo = PBXManager_Record_Model::lookUpRelatedWithNumber($request->get('callerIdNumber'));
+            $connector->handleStartupCall($request, $crmUserInfo, $customerInfo);
         }
     }
     //SalesPlatform.ru end

@@ -167,7 +167,8 @@ class Vtiger_PDF_Generator {
 	}
 	
 	function generate($name, $outputMode='D') {
-		$this->contentViewer->display($this);		
+		$this->contentViewer->display($this);
+                header('Content-Transfer-Encoding: binary');
 		$this->pdf->Output($name, $outputMode);
 	}
 

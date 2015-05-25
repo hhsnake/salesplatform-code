@@ -1036,16 +1036,10 @@ class Install_InitSchema_Model {
 
 		// Creating Workflow for Updating Inventory Stock for Invoice
 		$vtWorkFlow = new VTWorkflowManager($adb);
-		// SalesPlatform.ru begin
-	    $invWorkFlow = $vtWorkFlow->newWorkFlow("SalesOrder");
-	    $invWorkFlow->test = '';
-	    $invWorkFlow->description = "Обновление склада при доставке заказа";
-	    $invWorkFlow->executionCondition=3;	
-		//$invWorkFlow = $vtWorkFlow->newWorkFlow("Invoice");
-		//$invWorkFlow->test = '[{"fieldname":"subject","operation":"does not contain","value":"`!`"}]';
-		//$invWorkFlow->description = "UpdateInventoryProducts On Every Save";
-		//$invWorkFlow->defaultworkflow = 1;
-		// SalesPlatform.ru end
+		$invWorkFlow = $vtWorkFlow->newWorkFlow("Invoice");
+		$invWorkFlow->test = '[{"fieldname":"subject","operation":"does not contain","value":"`!`"}]';
+		$invWorkFlow->description = "UpdateInventoryProducts On Every Save";
+		$invWorkFlow->defaultworkflow = 1;
 		$vtWorkFlow->save($invWorkFlow);
 
 		$tm = new VTTaskManager($adb);

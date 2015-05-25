@@ -1990,7 +1990,10 @@ function getCurrencyDecimalPlaces() {
 		}
 
 function getInventoryModules() {
-	$inventoryModules = array('Invoice','Quotes','PurchaseOrder','SalesOrder');
+	// SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+	$inventoryModules = array('Invoice','Quotes','PurchaseOrder','SalesOrder','Act','Consignment');
+	//$inventoryModules = array('Invoice','Quotes','PurchaseOrder','SalesOrder');
+	// SalesPlatform.ru end
 	return $inventoryModules;
 }
 

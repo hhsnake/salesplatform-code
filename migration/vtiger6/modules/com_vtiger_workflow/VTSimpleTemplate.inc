@@ -28,7 +28,7 @@ class VTSimpleTemplate{
         if(!empty($this->parent)){
             if(count($matches)==0){
                 $fieldname = $match[1];
-                
+
                 //To handle comments for this module
                 if (in_array($fieldname, array('lastComment', 'last5Comments', 'allComments'))) {
                     return $this->getComments($this->parent->getModuleName(), $fieldname, $this->parent->getId());
@@ -60,6 +60,8 @@ class VTSimpleTemplate{
                 list($full, $referenceField, $referenceModule, $fieldname) = $matches;
                 if($referenceModule === '__VtigerMeta__' || $fieldname === 'dbLabel') {
                     $result = $this->getMetaValue($fieldname);
+                } else if ('__VtigerCompany__' == $referenceModule) { 
+                    $result = $this->getCompanySetting($fieldname); 
                 }else{
                     $referenceId = $this->parent->get($referenceField);
                     if($referenceId==null){
@@ -140,6 +142,10 @@ class VTSimpleTemplate{
 	function parseTemplate(){
 		return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))/', array($this,"matchHandler"), $this->template);
 	}
+        
+        function getCompanySetting($fieldname) { 
+            return Settings_Vtiger_CompanyDetails_Model::getSetting($fieldname); 
+        } 
 
 	function getMetaValue($fieldname){
 		require_once 'config.inc.php';

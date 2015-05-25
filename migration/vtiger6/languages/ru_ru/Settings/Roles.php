@@ -17,12 +17,12 @@ $languageStrings = array(
 	'LBL_CLICK_TO_EDIT_OR_DRAG_TO_MOVE' => 'Нажмите для редактирования'  , // TODO: Review
 	'LBL_ASSIGN_ROLE'              => 'Прикрепить роль'                 , // TODO: Review
 	'LBL_CHOOSE_PROFILES'          => 'Выбрать профили'             , // TODO: Review
-	'LBL_COPY_PRIVILEGES_FROM'     => 'Копировать привелегии из'        , // TODO: Review
+	'LBL_COPY_PRIVILEGES_FROM'     => 'Копировать привилегии из'        , // TODO: Review
 	'LBL_PROFILE'                  => 'Профиль'              , // KEY 5.x: LBL_PROFILE_M
 	'LBL_REPORTS_TO'               => 'Подчиняется'      , 
 	'LBL_NAME'                     => 'Имя'                      , 
-	'LBL_ASSIGN_NEW_PRIVILEGES'    => 'Назначить привелегии', // TODO: Review
-	'LBL_ASSIGN_EXISTING_PRIVILEGES' => 'Прикрепить привелегии из существующих профилей', // TODO: Review
+	'LBL_ASSIGN_NEW_PRIVILEGES'    => 'Назначить привилегии', // TODO: Review
+	'LBL_ASSIGN_EXISTING_PRIVILEGES' => 'Прикрепить привилегии из существующих профилей', // TODO: Review
 	'LBL_PRIVILEGES'               => 'Права'                  , 
 	'LBL_DUPLICATES_EXIST'         => 'Дубликат роли существует'       , // TODO: Review
     

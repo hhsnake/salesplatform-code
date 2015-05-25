@@ -103,7 +103,7 @@ class Settings_ExtensionStore_ExtnStore_Connector {
                 if ($json['success']) {
                     return $json['result'];
                 } else {
-                    // TODO: Propogate back failure
+                    throw new Exception($json['error']['message']);
                 }
             }
         }
@@ -403,17 +403,14 @@ class Settings_ExtensionStore_ExtnStore_Connector {
      * @param type $persistLogin
      */
 
-    protected function persistLogin($userName, $password, $persistLogin) {
+    protected function persistLogin($userName, $password, $rememberPassword) {
         $db = PearDatabase::getInstance();
-        if ($persistLogin == 'true') {
+        if ($rememberPassword) {
             $db->pquery('DELETE FROM ' . $this->user_table, array());
             $db->pquery('INSERT INTO ' . $this->user_table . '(username,password, createdon) VALUES(?,?,?)', array($userName, $password, date('Y-m-d H:i:s')));
         } else {
             $persistanceStatus = $this->getPersistenceStatus();
-            
-            if($persistanceStatus){
-                $db->pquery('UPDATE '.$this->user_table.' SET username = ?, createdon = ?',array($userName, date('Y-m-d H:i:s')));
-            }else{
+            if(!$persistanceStatus) {
                 $db->pquery('INSERT INTO ' . $this->user_table . ' (username, createdon) VALUES(?,?)', array($userName, date('Y-m-d H:i:s')));
             }
             $_SESSION[$this->identifier_name . '_username'] = $userName;
@@ -431,16 +428,29 @@ class Settings_ExtensionStore_ExtnStore_Connector {
      */
 
     public function login($userName, $password, $persistLogin) {
-        $_SESSION[$this->identifier_name . '_username'] = $userName;
-        $_SESSION[$this->identifier_name . '_password'] = $password;
         try {
+            /**set user entered password to session as we are using to set auth 
+             * header initializeAuth() function which we are depending on session 
+             * password if password not exists in db
+             * */
+            $_SESSION[$this->identifier_name . '_username'] = $userName;
+            $_SESSION[$this->identifier_name . '_password'] = $password;
             $this->auth = $this->api('/customer/profile', 'GET', '', true);
             if($this->auth){
                 $this->persistLogin($this->auth['email'], $this->auth['password'], $persistLogin);
             }
             return array('success' => true, 'result' => $this->auth);
         } catch (Exception $ex) {
-            return array('success' => false, 'error' => $ex->getMessage());
+            //Should flush credentials from session if login fails
+            $_SESSION[$this->identifier_name . '_username'] = null;
+            $_SESSION[$this->identifier_name . '_password'] = null;
+            $exceptionMessage = $ex->getMessage();
+            if(empty($exceptionMessage)) {
+                $error = vtranslate('LBL_UNAUTHORIZED','Settings:ExtensionStore');
+            }else{
+                $error = $exceptionMessage;
+            }
+            return array('success' => false, 'error' => $error);
         }
     }
     

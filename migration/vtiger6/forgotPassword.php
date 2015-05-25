@@ -64,7 +64,7 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['email'])) {
         // SalesPlatform.ru end
 
         // SalesPlatform.ru begin
-        setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $content, null, $username, $email);
+        setMailerProperties($mail, 'Восстановление пароля', $content, null, $username, $email);
         //setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $content, 'support@vtiger.com', $username, $email);
         // SalesPlatform.ru end
 

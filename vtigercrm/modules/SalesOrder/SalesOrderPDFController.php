@@ -85,32 +85,35 @@ require_once 'modules/Potentials/Potentials.php';
 require_once 'modules/Accounts/Accounts.php';
 
 class SalesPlatform_SalesOrderPDFController extends SalesPlatform_PDF_ProductListDocumentPDFController{
-        function buildDocumentModel() {
 
+    function buildDocumentModel() {
+        global $app_strings;
+
+        try {
             $model = parent::buildDocumentModel();
 
             $this->generateEntityModel($this->focus, 'SalesOrder', 'salesorder_', $model);
 
             $entity = new Potentials();
-            if($this->focusColumnValue('potential_id')) {
+            if ($this->focusColumnValue('potential_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('potential_id'), 'Potentials');
             }
             $this->generateEntityModel($entity, 'Potentials', 'potential_', $model);
 
             $entity = new Quotes();
-            if($this->focusColumnValue('quote_id')) {
+            if ($this->focusColumnValue('quote_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('quote_id'), 'Quotes');
             }
             $this->generateEntityModel($entity, 'Quotes', 'quote_', $model);
 
             $entity = new Contacts();
-            if($this->focusColumnValue('contact_id')) {
+            if ($this->focusColumnValue('contact_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
             }
             $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
             $entity = new Accounts();
-            if($this->focusColumnValue('account_id')) {
+            if ($this->focusColumnValue('account_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
             }
             $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
@@ -120,11 +123,23 @@ class SalesPlatform_SalesOrderPDFController extends SalesPlatform_PDF_ProductLis
 
             $model->set('salesorder_no', $this->focusColumnValue('salesorder_no'));
             return $model;
-	}
 
-	function getWatermarkContent() {
-		return '';
-	}
+        } catch (Exception $e) {
+            echo '<meta charset="utf-8" />';
+            if($e->getMessage() == $app_strings['LBL_RECORD_DELETE']) {
+                echo $app_strings['LBL_RECORD_INCORRECT'];
+                echo '<br><br>';
+            } else {
+                echo $e->getMessage();
+                echo '<br><br>';
+            }
+            return null;
+        }
+    }
+
+    function getWatermarkContent() {
+        return '';
+    }
 }
 
 //SalesPlatform.ru end

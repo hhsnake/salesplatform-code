@@ -76,6 +76,13 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
                 $callerid = $recordModel->get('customer');
                 if($callerid){
                     $moduleName = $recordModel->get('customertype');
+
+                    // SalesPlatform.ru begin
+                    $callerRecordModel = Vtiger_Record_Model::getInstanceById($callerid, $moduleName);
+                    $ownerId = $callerRecordModel->get('assigned_user_id');
+                    $recordModel->set('ownername',getUserFullName($ownerId));
+                    // SalesPlatform.ru end
+
                     if(!Users_Privileges_Model::isPermitted($moduleName, 'DetailView', $callerid)){
                         $name = $recordModel->get('customernumber').vtranslate('LBL_HIDDEN','PBXManager');
                         $recordModel->set('callername',$name);
@@ -140,8 +147,14 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
         $id = vtws_getIdComponents($customer['id']);
         $sourceuuid = $request->get('callid');
         $module = $request->get('modulename');
-        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($sourceuuid);
-        $recordModel->updateCallDetails(array('customer'=>$id[1], 'customertype'=>$module));
+        //SalesPlatform.ru begin
+        $currentUser = Users_Record_Model::getCurrentUserModel();
+        $user = array('id' => $currentUser->id);
+        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($sourceuuid, $user);
+        $recordModel->updateCallDetails(array('customer'=>$id[1], 'customertype'=>$module), $user);
+        //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($sourceuuid);
+        //$recordModel->updateCallDetails(array('customer'=>$id[1], 'customertype'=>$module));
+        //SalesPlatform.ru end
     }
     
     public function getCallStatus($request){

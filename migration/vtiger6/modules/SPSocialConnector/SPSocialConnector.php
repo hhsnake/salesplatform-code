@@ -231,7 +231,7 @@ class SPSocialConnector extends CRMEntity {
             /* Create field in module settings */
             $sql = "set @lastfieldid = (select `id` from `vtiger_settings_field_seq`);";
             $adb->pquery($sql,array());
-            $sql = "set @blockid = (select `blockid` from `vtiger_settings_blocks` where `label` = 'LBL_OTHER_SETTINGS');";
+            $sql = "set @blockid = (select `blockid` from `vtiger_settings_blocks` where `label` = 'LBL_INTEGRATION');";
             $adb->pquery($sql,array());
             $sql = "set @maxseq = (select max(`sequence`) from `vtiger_settings_field` where `blockid` = @blockid);";
             $adb->pquery($sql,array());

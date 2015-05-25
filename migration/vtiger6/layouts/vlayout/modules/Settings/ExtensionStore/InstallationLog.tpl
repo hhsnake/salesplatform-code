@@ -35,7 +35,7 @@
             </div>
 	<div class="modal-footer">
 		<span class="pull-right">
-			<button class="btn btn-success" id="importCompleted" data-dismiss="modal">{vtranslate('LBL_OK', $QUALIFIED_MODULE)}</button>
+                    <button class="btn btn-success" id="importCompleted" onclick="location.reload()">{vtranslate('LBL_OK', $QUALIFIED_MODULE)}</button>
 		</span>
 	</div>
 </div>

@@ -418,8 +418,11 @@
 										<option value=""></option>
 										{foreach key=header item=currency from=$CURRENCIES}
 										<!--Open source fix to select user preferred currency during installation -->
-											<option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('currency_name')}selected{/if}>{$header|@getTranslatedCurrencyString}({$currency.1})</option> 
-										{/foreach}
+                                            <!-- SalesPlatform.ru begin Localize currency -->
+											<option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('currency_name')}selected{/if}>{vtranslate($header|@getTranslatedCurrencyString,$MODULE)} ({$currency.1})</option>
+                                            <!-- <option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('currency_name')}selected{/if}>{$header|@getTranslatedCurrencyString}({$currency.1})</option> -->
+                                            <!-- SalesPlatform.ru end -->
+                                        {/foreach}
 									</select>
 									&nbsp;
 									<span rel="tooltip" title="{vtranslate('LBL_OPERATING_CURRENCY', $MODULE)}" id="currency_name_tooltip" class="icon-info-sign"></span>

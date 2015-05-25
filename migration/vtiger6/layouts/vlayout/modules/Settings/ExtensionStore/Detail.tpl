@@ -36,7 +36,7 @@
                                         {/if}
                                     {/if}
 
-                                    <button class="btn btn-info {if $MODULE_ACTION neq 'Installed'} hide{/if}" type="button" id="launchExtension" onclick="location.href='index.php?module={$EXTENSION_DETAIL->get('name')}&view=List'"><strong>{vtranslate('LBL_LAUNCH', $QUALIFIED_MODULE)}</strong></button>
+                                    <button class="btn btn-info {if $MODULE_ACTION eq 'Installed'}{if $EXTENSION_MODULE_MODEL->get('extnType') eq 'language'}hide{/if}{else}hide{/if}" type="button" id="launchExtension" onclick="location.href='index.php?module={$EXTENSION_DETAIL->get('name')}&view=List'"><strong>{vtranslate('LBL_LAUNCH', $QUALIFIED_MODULE)}</strong></button>
                                     <a class="cancelLink" type="reset" id="declineExtension">{vtranslate('LBL_CANCEL', $MODULE)}</a>
                                 </div>
                                 <div class="clearfix"></div>

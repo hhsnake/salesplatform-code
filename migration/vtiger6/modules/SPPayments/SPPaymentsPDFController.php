@@ -13,18 +13,32 @@ include_once 'includes/SalesPlatform/PDF/SPPDFController.php';
 class SalesPlatform_SPPaymentsPDFController extends SalesPlatform_PDF_SPPDFController {
 
 	function buildDocumentModel() {
-	
-		$model = parent::buildDocumentModel();
-	
-		$this->generateEntityModel($this->focus, 'SPPayments', 'payment_', $model);
+        global $app_strings;
 
-                $this->generateUi10Models($model);
-                $this->generateRelatedListModels($model);
+        try {
+            $model = parent::buildDocumentModel();
 
-                $model->set('payment_owner', getUserFullName($this->focusColumnValue('assigned_user_id')));
-                $model->set('payment_payer', getParentName($this->focusColumnValue('payer')));
-                return $model;
-	}
+            $this->generateEntityModel($this->focus, 'SPPayments', 'payment_', $model);
+
+            $this->generateUi10Models($model);
+            $this->generateRelatedListModels($model);
+
+            $model->set('payment_owner', getUserFullName($this->focusColumnValue('assigned_user_id')));
+            $model->set('payment_payer', getParentName($this->focusColumnValue('payer')));
+            return $model;
+
+        } catch (Exception $e) {
+            echo '<meta charset="utf-8" />';
+            if($e->getMessage() == $app_strings['LBL_RECORD_DELETE']) {
+                echo $app_strings['LBL_RECORD_INCORRECT'];
+                echo '<br><br>';
+            } else {
+                echo $e->getMessage();
+                echo '<br><br>';
+            }
+            return null;
+        }
+    }
 
 }
 ?>

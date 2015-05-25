@@ -176,7 +176,10 @@
 		<div>
 			<b>{vtranslate('LBL_TOTAL_AFTER_DISCOUNT',$MODULE)} :</b>
 		</div>
-		<div class="individualTaxContainer {if $IS_GROUP_TAX_TYPE}hide{/if}">
+                {* SalesPlatform.ru begin *}
+                <div class="individualTaxContainer {if $IS_GROUP_TAX_TYPE || $IS_GROUP_TAX_INC_TYPE}hide{/if}">
+		{* <div class="individualTaxContainer {if $IS_GROUP_TAX_TYPE}hide{/if}"> *}
+                {* SalesPlatform.ru end *}
 			(+)&nbsp;<b><a href="javascript:void(0)" class="individualTax">{vtranslate('LBL_TAX',$MODULE)} </a> : </b>
 		</div>
 		<span class="taxDivContainer">
@@ -219,7 +222,10 @@
 		<div id="productTotal{$row_no}" align="right" class="productTotal">{if $data.$productTotal}{$data.$productTotal}{else}0.00{/if}</div>
 		<div id="discountTotal{$row_no}" align="right" class="discountTotal">{if $data.$discountTotal}{$data.$discountTotal}{else}0.00{/if}</div>
 		<div id="totalAfterDiscount{$row_no}" align="right" class="totalAfterDiscount">{if $data.$totalAfterDiscount}{$data.$totalAfterDiscount}{else}0.00{/if}</div>
-		<div id="taxTotal{$row_no}" align="right" class="productTaxTotal {if $IS_GROUP_TAX_TYPE}hide{/if}">{if $data.$taxTotal}{$data.$taxTotal}{else}0.00{/if}</div>
+                {* SalesPlatform.ru begin *}
+                <div id="taxTotal{$row_no}" align="right" class="productTaxTotal {if $IS_GROUP_TAX_TYPE || $IS_GROUP_TAX_INC_TYPE}hide{/if}">{if $data.$taxTotal}{$data.$taxTotal}{else}0.00{/if}</div>
+		{* <div id="taxTotal{$row_no}" align="right" class="productTaxTotal {if $IS_GROUP_TAX_TYPE}hide{/if}">{if $data.$taxTotal}{$data.$taxTotal}{else}0.00{/if}</div> *}
+                {* SalesPlatform.ru end *}
 	</td>
 	<td>
 		<span id="netPrice{$row_no}" class="pull-right netPrice">{if $data.$netPrice}{$data.$netPrice}{else}0.00{/if}</span>

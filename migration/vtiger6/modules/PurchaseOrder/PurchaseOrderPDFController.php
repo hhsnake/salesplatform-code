@@ -72,35 +72,49 @@ require_once 'modules/Accounts/Accounts.php';
 
 class SalesPlatform_PurchaseOrderPDFController extends SalesPlatform_PDF_ProductListDocumentPDFController{
 
-	function buildDocumentModel() {
-	
-		$model = parent::buildDocumentModel();
-	
-		$this->generateEntityModel($this->focus, 'PurchaseOrder', 'purchaseorder_', $model);
+    function buildDocumentModel() {
+        global $app_strings;
 
-                $entity = new Contacts();
-		if($this->focusColumnValue('contact_id')) {
-            	    $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
-		}
-                $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
+        try {
+            $model = parent::buildDocumentModel();
 
-                $entity = new Vendors();
-		if($this->focusColumnValue('vendor_id')) {
-            	    $entity->retrieve_entity_info($this->focusColumnValue('vendor_id'), 'Vendors');
-		}
-                $this->generateEntityModel($entity, 'Vendors', 'vendor_', $model);
+            $this->generateEntityModel($this->focus, 'PurchaseOrder', 'purchaseorder_', $model);
 
-                $this->generateUi10Models($model);
-                $this->generateRelatedListModels($model);
+            $entity = new Contacts();
+            if ($this->focusColumnValue('contact_id')) {
+                $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
+            }
+            $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
-		$model->set('purchaseorder_no', $this->focusColumnValue('purchaseorder_no'));
+            $entity = new Vendors();
+            if ($this->focusColumnValue('vendor_id')) {
+                $entity->retrieve_entity_info($this->focusColumnValue('vendor_id'), 'Vendors');
+            }
+            $this->generateEntityModel($entity, 'Vendors', 'vendor_', $model);
 
-		return $model;
-	}
+            $this->generateUi10Models($model);
+            $this->generateRelatedListModels($model);
 
-	function getWatermarkContent() {
-		return '';
-	}
+            $model->set('purchaseorder_no', $this->focusColumnValue('purchaseorder_no'));
+
+            return $model;
+
+        } catch (Exception $e) {
+            echo '<meta charset="utf-8" />';
+            if($e->getMessage() == $app_strings['LBL_RECORD_DELETE']) {
+                echo $app_strings['LBL_RECORD_INCORRECT'];
+                echo '<br><br>';
+            } else {
+                echo $e->getMessage();
+                echo '<br><br>';
+            }
+            return null;
+        }
+    }
+
+    function getWatermarkContent() {
+        return '';
+    }
 
 }
 

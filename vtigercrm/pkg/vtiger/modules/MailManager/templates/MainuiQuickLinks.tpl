@@ -22,11 +22,17 @@
 					<td class="widgeticons span5" align="right">
 						<div class="box pull-right">
 							<a href='#Reload' id="_mailfolder_mm_reload" onclick="MailManager.reload_now();">
-								<i alt="Refresh" title="Refresh" align="absmiddle" border="0" hspace="2" class="icon-refresh"></i>
+                                <!-- SalesPlatform.ru begin -->
+								<i alt="Refresh" title="{vtranslate('LBL_REFRESH', 'MailManager')}" align="absmiddle" border="0" hspace="2" class="icon-refresh"></i>
+                                <!-- <i alt="Refresh" title="Refresh" align="absmiddle" border="0" hspace="2" class="icon-refresh"></i> -->
+                                <!-- SalesPlatform.ru end -->
 							</a>
 							<a href='#Settings' id="_mailfolder_mm_settings" onclick="MailManager.open_settings_detail();">
-								<i alt="Settings" title="Settings" align="absmiddle" border="0" hspace="2" class="icon-cog"></i>
-							</a>
+                                <!-- SalesPlatform.ru begin -->
+								<i alt="Settings" title="{vtranslate('LBL_SETTINGS', 'MailManager')}" align="absmiddle" border="0" hspace="2" class="icon-cog"></i>
+                                <!-- <i alt="Settings" title="Settings" align="absmiddle" border="0" hspace="2" class="icon-cog"></i> -->
+                                <!-- SalesPlatform.ru end -->
+                            </a>
 						</div>
 					</td>
 				</tr>

@@ -392,7 +392,16 @@ abstract class Base_Chart extends Vtiger_Base_Model{
 			foreach($filter as $index => $filterInfo) {
 				foreach($filterInfo['columns'] as $j => $column) {
 					if($column) {
-						$listSearchParams[$i][] = array($column['columnname'], $column['comparator'], $column['value']);
+                        // SalesPlatform.ru begin
+                        $primaryModule = $this->getPrimaryModule();
+                        if($primaryModule == 'PBXManager') {
+                            $userFullName = getUserFullName($column['value']);
+                            $listSearchParams[$i][] = array($column['columnname'], $column['comparator'], $userFullName);
+                        } else {
+                            $listSearchParams[$i][] = array($column['columnname'], $column['comparator'], $column['value']);
+                        }
+                        //$listSearchParams[$i][] = array($column['columnname'], $column['comparator'], $column['value']);
+                        // SalesPlatform.ru end
 					}
 				}
 				$i++;
@@ -480,7 +489,15 @@ class PieChart extends Base_Chart {
 				} else if($fieldDataType == 'datetime') {
 						$label = Vtiger_Date_UIType::getDisplayDateTimeValue($row[strtolower($legendField->get('reportlabel'))]);
 				} else {
-					$label = $row[strtolower($legend)];
+                    // SalesPlatform.ru begin
+                    $primaryModule = $this->getPrimaryModule();
+                    if($primaryModule == 'PBXManager') {
+                        $label = getUserFullName($row[strtolower($legend)]);
+                    } else {
+                        $label = $row[strtolower($legend)];
+                    }
+                    //$label = $row[strtolower($legend)];
+                    // SalesPlatform.ru end
 				}
 			} else {
 				$label = $row[strtolower($legend)];
@@ -555,7 +572,15 @@ class VerticalbarChart extends Base_Chart {
 					} else if($fieldDataType == 'datetime') {
 						$label = Vtiger_Date_UIType::getDisplayDateTimeValue($row[strtolower($gFieldModel->get('reportlabel'))]);
 					} else {
-						$label = $row[strtolower($gFieldModel->get('reportlabel'))];
+                        // SalesPlatform.ru begin
+                        $primaryModule = $this->getPrimaryModule();
+                        if($primaryModule == 'PBXManager') {
+                            $label = getUserFullName($row[strtolower($gFieldModel->get('reportlabel'))]);
+                        } else {
+                            $label = $row[strtolower($gFieldModel->get('reportlabel'))];
+                        }
+                        //$label = $row[strtolower($gFieldModel->get('reportlabel'))];
+                        // SalesPlatform.ru end
 					}
 					$labels[] = (strlen($label) > 30) ? substr($label, 0, 30).'..' : $label;
 					$links[] = $this->generateLink($gFieldModel->get('reportcolumninfo'), $row[strtolower($gFieldModel->get('reportlabel'))]);

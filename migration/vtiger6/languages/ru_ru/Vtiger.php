@@ -230,7 +230,10 @@ $languageStrings = array(
 	'LBL_ADD_SERVICE'              => 'Добавить Услугу',
 	'LBL_ITEMS_TOTAL'              => 'Общий итог'                 , // TODO: Review
 	'LBL_SHIPPING_AND_HANDLING_CHARGES' => 'Стоимость доставки и хранения',
-	'LBL_PRE_TAX_TOTAL'            => 'Индивидуальный налог'               , // TODO: Review
+        //SalesPlatform.ru begin
+        'LBL_PRE_TAX_TOTAL'            => 'Итого',
+	//'LBL_PRE_TAX_TOTAL'            => 'Итого без налогов'               , // TODO: Review
+        //SalesPlatform.ru end
 	'LBL_TAX_FOR_SHIPPING_AND_HANDLING' => 'Налоги на доставку и хранение',
 	'LBL_SET_SHIPPING_AND_HANDLING_TAXES_FOR' => 'Налоги на ДиХ'           , // TODO: Review
 	'LBL_ADJUSTMENT'               => 'Корректировка'  ,
@@ -580,7 +583,7 @@ $languageStrings = array(
 	'LBL_MODULE_SEQUENCE_NUMBERING' => 'Нумерация модуля'   , // TODO: Review
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Custom Field Mapping'        , // TODO: Review
 	'LBL_WEBFORMS'                 => 'Вебформы'                    , // TODO: Review
-	'SINGLE_Emails'                => 'Почта'                  ,
+	'SINGLE_Emails'                => 'E-mail'                  ,
 	'Emails'                       => 'Сообщения E-mail'   ,
 	'LBL_SELECT_EMAIL_IDS'         => 'Выберите E-mail адреса'      , // TODO: Review
 	'LBL_SUBJECT'                  => 'Заголовок'          ,
@@ -848,6 +851,27 @@ $languageStrings = array(
     'List_Price'                   => 'Розничная_цена',
     'comma'                        => ',',
     'semicolon'                    => ';',
+    'LBL_GROUP_TAX_INC' => 'В т.ч. налоги',  
+    'group_tax_inc' => 'В т.ч. налоги',  
+    'LBL_INC_TAX' => 'В т.ч.',
+    'individual' => 'Индивидуально',
+    'LBL_RECORD_INCORRECT'         => 'Запись содержит удаленные связанные сущности. Исправьте запись и попробуйте снова.',
+    'LBL_NEXT_TRIGGER_TIME' => 'Следующее время отправки/выполнения',
+    'LBL_PARENT_OWNER' => 'Владелец родительской записи',
+    'generalFields' => 'Основные поля',
+    'Europe/Moscow'                => 'Москва, Волгоград',
+    'Asia/Yekaterinburg'           => 'Екатеринбург',
+    'Asia/Novosibirsk'             => 'Новосибирск',
+    'Asia/Krasnoyarsk'             => 'Красноярск',
+    'Asia/Irkutsk'                 => 'Иркутск',
+    'Asia/Yakutsk'                 => 'Якутск',
+    'Asia/Vladivostok'             => 'Владивосток',
+    'Asia/Kamchatka'               => 'Камчатка',
+    'Asia/Magadan'                 => 'Магадан',
+    'Organization Name' => 'Организация',
+    'Date of Birth' => 'Дата рождения',
+    'Mailing Address' => 'Адрес',
+    'Other Address' => 'Доп. адрес',
     // SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
@@ -1010,6 +1034,14 @@ $jsLanguageStrings = array(
     'JS_LBL_LOAD_MORE_CITIES' => 'Загрузить следующие',
     'JS_LBL_OF' => 'из',
     'Please enter all mandatory field' => 'Пожалуйста, заполните все обязательные поля',
+    'JS_LBL_ASSIGNED_TO' => 'Ответственный',
+    'Enter Email-id' => 'Введите E-mail',
+    'Select' => 'Выберите',
+    'Save' => 'Сохранить',
+    'Current Date' => 'Текущая дата',
+    'Current Time' => 'Текущее время',
+    'JS_SUITABLE_VTIGER_FIELD_NOT_AVAILABLE_FOR_MAPPING' => 'Не доступно для сопоставления',
+    'JS_CONFIRM_APPLY_FILTER' => 'Вы уверены, что хотите добавить записи из фильтра?',
     //SalesPlatform.ru end
 );
 

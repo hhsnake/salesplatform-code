@@ -223,7 +223,7 @@ $languageStrings = array(
 	'LBL_LOGGED_OUT_TIME' => 'Время выхода', 
 	'LBL_STATUS' => 'Статус',
     
-    //SalesPlatform.ru start
+    //SalesPlatform.ru begin
     'LBL_CML_SETTINGS'             => 'Настройки обмена по CommerceML', 
     'LBL_CML_SETTINGS_DESCRIPTION' => 'Настройка параметров обмена по стандарту CommerceML',
     'LBL_CONNECTION_SECURITY'      => 'Защита соединения',

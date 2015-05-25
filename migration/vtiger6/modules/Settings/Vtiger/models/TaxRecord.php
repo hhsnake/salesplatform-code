@@ -135,6 +135,11 @@ class Settings_Vtiger_TaxRecord_Model extends Vtiger_Base_Model{
 			
 			$inventoryModules = getInventoryModules();
 			foreach ($inventoryModules as $moduleName) {
+                // SalesPlatform.ru begin Fix save tax for Products/Services
+                if($moduleName == 'Act' || $moduleName == 'Consignment') {
+                    continue;
+                }
+                // SalesPlatform.ru end
 				$moduleInstance = Vtiger_Module::getInstance($moduleName);
 				$blockInstance = Vtiger_Block::getInstance('LBL_ITEM_DETAILS',$moduleInstance);
 				$field = new Vtiger_Field();

@@ -50,7 +50,7 @@ var Vtiger_PBXManager_Js = {
                 text: '<div class="row-fluid pbxcall" id="pbxcall_'+record.pbxmanagerid+'" callid='+record.pbxmanagerid+' style="color:black"><span class="span12" id="caller" value="'+record.customernumber+'">'+app.vtranslate('JS_PBX_CALL_FROM')+' : '+record.customernumber+'</span><span class="hide span12" id="contactsave_'+record.pbxmanagerid+'">\n\
                         <span><input class="span3" id="email_'+record.pbxmanagerid+'" type="text" placeholder="' + app.vtranslate('Enter Email-id') + '"></input>&nbsp;&nbsp;&nbsp;<select class="input-medium" id="module_'+record.pbxmanagerid+'"><option value="Select" selected>' + app.vtranslate('Select') + '</option></select><h5 class="alert-danger hide span3" id="alert_msg">'+app.vtranslate('JS_PBX_FILL_ALL_FIELDS')+'</h5>\n\
                         <button class="btn btn-success pull-right"  id="pbxcontactsave_'+record.pbxmanagerid+'" recordid="'+record.pbxmanagerid+'" type="submit">' + app.vtranslate('Save') + '</button>\n\
-                        </span></span><br/><span class="span12" style="display:none" id="answeredby"><i class="icon-headphones"></i>&nbsp;<span id="answeredbyname"></span></span></div>',
+                        </span></span><br/><span class="span12" style="display:none" id="owner">'+app.vtranslate('JS_LBL_ASSIGNED_TO')+'&nbsp;:&nbsp;<span id="ownername"></span></span><br/><span class="span12" style="display:none" id="answeredby"><i class="icon-headphones"></i>&nbsp;<span id="answeredbyname"></span></span></div>',
                 
                 //text: '<div class="row-fluid pbxcall" id="pbxcall_'+record.pbxmanagerid+'" callid='+record.pbxmanagerid+' style="color:black"><span class="span12" id="caller" value="'+record.customernumber+'">'+app.vtranslate('JS_PBX_CALL_FROM')+' : '+record.customernumber+'</span><span class="hide span12" id="contactsave_'+record.pbxmanagerid+'">\n\
                 //        <span><input class="span3" id="email_'+record.pbxmanagerid+'" type="text" placeholder="Enter Email-id"></input>&nbsp;&nbsp;&nbsp;<select class="input-small" id="module_'+record.pbxmanagerid+'" placeholder="Select"><option>Select</option></select><h5 class="alert-danger hide span3" id="alert_msg">'+app.vtranslate('JS_PBX_FILL_ALL_FIELDS')+'</h5>\n\
@@ -142,6 +142,10 @@ var Vtiger_PBXManager_Js = {
                 break;
             default:
                 jQuery('#caller','#pbxcall_'+record.pbxmanagerid+'').html(app.vtranslate('JS_PBX_CALL_FROM')+' :&nbsp;<a href="index.php?module='+record.customertype+'&view=Detail&record='+record.customer+'">'+record.callername+'</a>');
+                // SalesPlatform.ru begin
+                jQuery('#ownername','#pbxcall_'+record.pbxmanagerid+'').text(record.ownername);
+                jQuery('#owner','#pbxcall_'+record.pbxmanagerid+'').show();
+                // SalesPlatform.ru end
                 break;
         }
     },

@@ -23,6 +23,9 @@ $languageStrings = array(
 	'LBL_PAID'                     => 'Оплачено'                        , // TODO: Review
 	'LBL_BALANCE'                  => 'Баланс'                     , // TODO: Review
 	'Received Shipment'            => 'Получено с доставкой', 
+        //SalesPlatform.ru begin
+        'LBL_COPY_COMPANY_ADDRESS' => 'Копировать адрес компании',
+        //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

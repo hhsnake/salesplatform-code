@@ -14,7 +14,7 @@ $languageStrings = array(
 	'LBL_PRIDE_BEING_ASSOCIATED' => 'Мы гордимся тем, что связано с вами.',
 	'LBL_TALK_TO_US_AT_FORUMS' => 'Обсуждение работы SalesPlatform Vtiger на <a href="http://community.salesplatform.ru/forums" target="_blank"> Форуме </a><br>',
 	'LBL_DISCUSS_WITH_US_AT_BLOGS' => 'Последние новости по системе читайте в нашем <a href="http://community.salesplatform.ru/blogs" target="_blank">Блоге</a>',
-	'LBL_CRM_DOCUMENTATION' => 'Помощь при работе с SalesPlatform Vtiger - <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_600" target="_blank">Документация</a><br>',
+	'LBL_CRM_DOCUMENTATION' => 'Помощь при работе с SalesPlatform Vtiger - <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_620" target="_blank">Документация</a><br>',
 	'LBL_THANKS' => 'Спасибо за использование <b>SalesPlatform Vtiger CRM</b>',
 	'LBL_WE_AIM_TO_BE_BEST' => 'Мы стремимся быть лучшими',
 	'LBL_SPACE_FOR_YOU' => 'Приходите на более, есть место для вас тоже!',

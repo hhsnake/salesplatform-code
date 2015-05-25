@@ -14,11 +14,13 @@
 {* SalesPlatform.ru end *}
 <div>
 	<table width="100%" cellpadding="3" cellspacing="1" border="0" class="lvt small">
+        {* SalesPlatform.ru begin *}
+        {foreach item=RECORD from=$RECORDS}
 		<tr>
-            {* SalesPlatform.ru begin *}
-			<td nowrap="nowrap" title="{$RECORD->get('statusmessage')}" bgcolor="{$RECORD->get('status')}" width="25%">{$RECORD->get('tonumber')}</td>
+			<td nowrap="nowrap" title="{$RECORD['statusmessage']}" bgcolor="{SMSNotifier_Record_Model::getBackgroundColorForStatus($RECORD['status'])}" width="25%">{$RECORD['tonumber']}</td>
             {*<td nowrap="nowrap" bgcolor="{$RECORD->get('statuscolor')}" width="25%">{$RECORD->get('tonumber')}</td>*}
-            {* SalesPlatform.ru end *}
 		</tr>
+        {/foreach}
+        {* SalesPlatform.ru end *}
 	</table>
 </div>

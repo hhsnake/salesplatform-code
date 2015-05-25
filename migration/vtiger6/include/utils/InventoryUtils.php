@@ -467,7 +467,7 @@ function updateInventoryProductRel($entity) {
 		$statusFieldValue = 'Delivered';
     // SalesPlatform.ru end
 	}
-    
+
 	$statusChanged = false;
 	$vtEntityDelta = new VTEntityDelta ();
 	$oldEntity = $vtEntityDelta-> getOldValue($moduleName, $entity_id, $statusFieldName);
@@ -555,7 +555,10 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	$ext_prod_arr = Array();
 	if($focus->mode == 'edit')
 	{
-		if($_REQUEST['taxtype'] == 'group')
+                // SalesPlatform.ru begin 
+		if($_REQUEST['taxtype'] == 'group' || $_REQUEST['taxtype'] == 'group_tax_inc')
+                //if($_REQUEST['taxtype'] == 'group')     
+                // SalesPlatform.ru end     
 			$all_available_taxes = getAllTaxes('available','','edit',$id);
 		$return_old_values = '';
 		if($module != 'PurchaseOrder')
@@ -569,7 +572,10 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	}
 	else
 	{
-	if($_REQUEST['taxtype'] == 'group')
+	// SalesPlatform.ru begin 
+        if($_REQUEST['taxtype'] == 'group' || $_REQUEST['taxtype'] == 'group_tax_inc')
+        //if($_REQUEST['taxtype'] == 'group')     
+        // SalesPlatform.ru end  
 		$all_available_taxes = getAllTaxes('available','','edit',$id);
 	}
 	$tot_no_prod = $_REQUEST['totalProductCount'];
@@ -651,7 +657,10 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 			$discount_amount = $_REQUEST['discount_amount'.$i];
 			array_push($updateparams, $discount_amount);
 		}
-		if($_REQUEST['taxtype'] == 'group')
+		// SalesPlatform.ru begin 
+		if($_REQUEST['taxtype'] == 'group' || $_REQUEST['taxtype'] == 'group_tax_inc')
+                //if($_REQUEST['taxtype'] == 'group')     
+                // SalesPlatform.ru end  
 		{
 			for($tax_count=0;$tax_count<count($all_available_taxes);$tax_count++)
 			{

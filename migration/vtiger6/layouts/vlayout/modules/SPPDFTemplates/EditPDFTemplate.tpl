@@ -99,7 +99,7 @@
         
         <tr>
             <td>
-                <div style="diplay:block;" id="body_div2"> 
+                <div style="diplay:block; max-width: 80%" id="body_div2">
                     <style>.CodeMirror {ldelim} border: 1px solid #cccccc; {rdelim}</style>
                     <textarea name="body" id="body" style="width:100%;height:500px" class=small tabindex="5">{$MODEL->get('template')}</textarea>
                 </div>

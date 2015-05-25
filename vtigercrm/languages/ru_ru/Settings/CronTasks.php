@@ -26,4 +26,14 @@ $languageStrings = array(
 	'Recommended frequency for RecurringInvoice is 12 hours' => 'Рекомендованная частота 12 минут',
 	'Recommended frequency for SendReminder is 15 mins' => 'Рекомендованная частота 15 минут',
 	'Recommended frequency for Scheduled Import is 15 mins' => 'Рекомендованная частота 15 минут',
+	//SalesPlatform.ru begin
+	'Workflow' => 'Обработчик',
+	'SendReminder' => 'Отправка напоминаний',
+	'RecurringInvoice' => 'Повторяющиеся Cчета',
+	'MailScanner' => 'Сканер почты',
+	'Scheduled Import' => 'Запланированный Импорт',
+	'Products upload' => 'Загрузка Товаров',
+	'SalesOrder exchange' => 'Обмен Заказами',
+	'ScheduleReports' => 'Запланированные Отчеты',
+	//Salesplatform.ru end
 );

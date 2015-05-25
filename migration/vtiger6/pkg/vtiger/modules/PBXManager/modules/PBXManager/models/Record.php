@@ -80,14 +80,17 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         }
         return $moduleModel->saveRecord($recordModel);
     }
-    
+
     /**
      * Function to update call details
      * @param <array> $details
      * $param <string> $callid
      * return true
      */
-    public function updateCallDetails($details){
+    // SalesPlatform.ru begin
+    public function updateCallDetails($details, $user){
+    //public function updateCallDetails($details){
+    // SalesPlatform.ru end
         $db = PearDatabase::getInstance();
         $sourceuuid = $this->get('sourceuuid');
         $query = 'UPDATE '.self::moduletableName.' SET ';
@@ -96,8 +99,18 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
             $params[] = $value;
         }
         $query = substr_replace($query ,"",-1);
-        $query .= ' WHERE sourceuuid = ?';
+
+        // SalesPlatform.ru begin
+        //$query .= ' WHERE sourceuuid = ?';
+        // SalesPlatform.ru end
+
         $params[] = $sourceuuid;
+
+        // SalesPlatform.ru begin
+        $query .= ' WHERE sourceuuid = ? AND user = ?';
+        $params[] = $user['id'];
+        // SalesPlatform.ru end
+        
         $db->pquery($query, $params);
         return true;
     }
@@ -127,12 +140,19 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         }
         return $record;
     }
-    
-    public static function getInstanceBySourceUUID($sourceuuid){
+
+    // SalesPlatform.ru begin
+    public static function getInstanceBySourceUUID($sourceuuid, $user){
+    //public static function getInstanceBySourceUUID($sourceuuid){
+    // SalesPlatform.ru end
         $db = PearDatabase::getInstance();
         $record = new self();
-        $query = 'SELECT * FROM '.self::moduletableName.' WHERE sourceuuid=?';
-        $params = array($sourceuuid);
+        
+        // SalesPlatform.ru begin
+        $query = 'SELECT * FROM ' . self::moduletableName . ' WHERE sourceuuid=? AND user=?';
+        $params = array($sourceuuid, $user['id']);
+        // SalesPlatform.ru end
+        
         $result = $db->pquery($query, $params);
         $rowCount =  $db->num_rows($result);
         if($rowCount){
@@ -141,6 +161,30 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         }
         return $record;
     }
+    
+    //SalesPlatform.ru begin
+    public static function updateCallRecordBySourceUUID($sourceuuid, $recordingUrl) {
+        $db = PearDatabase::getInstance();
+        $query = 'UPDATE '.self::moduletableName.' SET recordingurl=? WHERE sourceuuid=?';
+        $db->pquery($query, array($recordingUrl, $sourceuuid));
+    }
+    
+    
+    public static function updateCallDetailsBySourceUUID($sourceuuid, $details) {
+        $db = PearDatabase::getInstance();
+        $query = 'UPDATE '.self::moduletableName.' SET ';
+        $params = array();
+        foreach($details as $key => $value){
+            $query .= $key . '=?,';
+            $params[] = $value;
+        }
+        $query = substr_replace($query ,"",-1);
+        $query .= ' WHERE sourceuuid = ?';
+        $params[] = $sourceuuid;
+        
+        $db->pquery($query, $params);
+    }
+    //SalesPlatform.ru end
     
     /**
      * Function to save/update contact/account/lead record in Phonelookup table on every save
@@ -151,6 +195,15 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         $fnumber = preg_replace('/[-()\s+]/', '',$details[$fieldName]);
         $rnumber = strrev($fnumber);
         $db = PearDatabase::getInstance();
+        
+        //SalesPlatform.ru begin 
+        /* Delete record if it null after filtering number */
+        if($fnumber == '') {
+            $db->pquery('DELETE FROM ' . self::lookuptableName . ' where crmid=? AND fieldname=? AND setype=?',
+                    array($recordid, $fieldName, $details['setype']));
+            return true;
+        }
+        //SalesPLatform.ru end
         
         $params = array($recordid, $details['setype'],$fnumber,$rnumber, $fieldName);
         $db->pquery('INSERT INTO '.self::lookuptableName.
@@ -181,24 +234,18 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         $rnumber = strrev($fnumber);
         
         //SalesPlatform.ru begin fix search entity by number
-        
         if($from == NULL) {
             return;
         }
-        
-        /* Numbers starts with 7 and 8 are the same */
-        $numberSynonym = $fnumber;
-        switch($fnumber[0]) {
-            case '7':
-                $numberSynonym[0] = '8';
-                break;
-            
-            case '8':
-                $numberSynonym[0] = '7';
-                break;
+
+        if(strlen($fnumber) >= 10) {
+            // Select by last 10 numbers
+            $result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE "%"?', array(substr($fnumber, -10, 10)));
+        } else {
+            // Select exact matching number
+            $result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE ?', array($fnumber));
         }
         
-        $result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber IN (?,?)', array($fnumber, $numberSynonym));
         //$result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE "'. $fnumber . '%" OR rnumber LIKE "'. $rnumber . '%" ', array());
         //SalesPlatform.ru end
         

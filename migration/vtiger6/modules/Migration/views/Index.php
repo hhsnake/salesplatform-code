@@ -10,6 +10,10 @@
 
 class Migration_Index_View extends Vtiger_Basic_View {
 
+    // SalesPlatform.ru begin Create migration log
+    const MIGRATION_FILE_NAME = 'migration_log.txt';
+    // SalesPlatform,ru end
+
 	function __construct() {
 		parent::__construct();
 		$this->exposeMethod('step1');
@@ -79,6 +83,10 @@ class Migration_Index_View extends Vtiger_Basic_View {
 	}
 
 	public function applyDBChanges(){
+        //SalesPlatform.ru begin: set infinity time limit to success update DB
+        set_time_limit(0);
+        //SalesPlatform.ru end
+            
 		$migrationModuleModel = Migration_Module_Model::getInstance();
 
 		$getAllowedMigrationVersions = $migrationModuleModel->getAllowedMigrationVersions();
@@ -103,6 +111,10 @@ class Migration_Index_View extends Vtiger_Basic_View {
 			$filename =  "modules/Migration/schema/".$migrateVersions[$i]."_to_".$migrateVersions[$i+1].".php";
 			if(is_file($filename)) {
 				if(!defined('INSTALLATION_MODE')) {
+                    // SalesPlatform.ru begin Create migration log
+                    $line = $migrateVersions[$i]." ==> ".$migrateVersions[$i+1]." Database changes -- Starts.\n";
+                    file_put_contents(self::MIGRATION_FILE_NAME, $line, FILE_APPEND | LOCK_EX);
+                    // SalesPlatform.ru end
 					echo "<table class='config-table'><tr><th><span><b><font color='red'>".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]." Database changes -- Starts. </font></b></span></th></tr></table>";
 					echo "<table class='config-table'>";
 				}
@@ -110,9 +122,17 @@ class Migration_Index_View extends Vtiger_Basic_View {
 				include($filename);
 				$i = $_i_statesaved;
 				if(!defined('INSTALLATION_MODE')) {
+                    // SalesPlatform.ru begin Create migration log
+                    $line = $migrateVersions[$i]." ==> ".$migrateVersions[$i+1]." Database changes -- Ends.\n";
+                    file_put_contents(self::MIGRATION_FILE_NAME, $line, FILE_APPEND | LOCK_EX);
+                    // SalesPlatform.ru end
 					echo "<table class='config-table'><tr><th><span><b><font color='red'>".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]." Database changes -- Ends.</font></b></span></th></tr></table>";
 				}
 			} else if(isset($migrateVersions[$patchCount+1])){
+                // SalesPlatform.ru begin Create migration log
+                $line = "There is no Database Changes from ".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]."\n";
+                file_put_contents(self::MIGRATION_FILE_NAME, $line, FILE_APPEND | LOCK_EX);
+                // SalesPlatform.ru end
 				echo "<table class='config-table'><tr><th><span><b><font color='red'> There is no Database Changes from ".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]."</font></b></span></th></tr></table>";
 			}
 		}
@@ -129,8 +149,16 @@ class Migration_Index_View extends Vtiger_Basic_View {
 		if(!defined('INSTALLATION_MODE')) {
 			$query = $adb->convert2sql($query, $params);
 			if(is_object($status)) {
+                // SalesPlatform.ru begin Create migration log
+                $line = $query." Success\n";
+                file_put_contents(self::MIGRATION_FILE_NAME, $line, FILE_APPEND | LOCK_EX);
+                // SalesPlatform.ru end
 				echo '<tr><td width="80%"><span>'.$query.'</span></td><td style="color:green">Success</td></tr>';
 			} else {
+                // SalesPlatform.ru begin Create migration log
+                $line = $query." Failure\n";
+                file_put_contents(self::MIGRATION_FILE_NAME, $line, FILE_APPEND | LOCK_EX);
+                // SalesPlatform.ru end
 				echo '<tr><td width="80%"><span>'.$query.'</span></td><td style="color:red">Failure</td></tr>';
 			}
 		}

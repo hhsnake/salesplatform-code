@@ -22,7 +22,10 @@
 			<div class="well contentsBackground">
 				<div class="row-fluid padding1per">
 					<span class="span3">{vtranslate('LBL_REPORT_NAME',$MODULE)}<span class="redColor">*</span></span>
-					<span class="span7 row-fluid"><input class="span6" data-validation-engine='validate[required]' type="text" name="reportname" value="{$REPORT_MODEL->get('reportname')}"/></span>
+                    <!-- SalesPlatform.ru begin -->
+					<span class="span7 row-fluid"><input class="span6" data-validation-engine='validate[required]' type="text" name="reportname" value="{vtranslate($REPORT_MODEL->get('reportname'),$MODULE)}"/></span>
+                    <!-- <span class="span7 row-fluid"><input class="span6" data-validation-engine='validate[required]' type="text" name="reportname" value="{$REPORT_MODEL->get('reportname')}"/></span> -->
+                    <!-- SalesPlatform.ru end -->
 				</div>
 				<div class="row-fluid padding1per">
 					<span class="span3">{vtranslate('LBL_REPORT_FOLDER',$MODULE)}<span class="redColor">*</span></span>
@@ -81,7 +84,10 @@
 				</div>
 				<div class="row-fluid padding1per">
 					<span class="span3">{vtranslate('LBL_DESCRIPTION',$MODULE)}</span>
-					<span class="span7"><textarea class="span6" type="text" name="description" >{$REPORT_MODEL->get('description')}</textarea></span>
+                    <!-- SalesPlatform.ru begin -->
+					<span class="span7"><textarea class="span6" type="text" name="description" >{vtranslate($REPORT_MODEL->get('description'),$MODULE)}</textarea></span>
+                    <!-- <span class="span7"><textarea class="span6" type="text" name="description" >{$REPORT_MODEL->get('description')}</textarea></span> -->
+                    <!-- SalesPlatform.ru end -->
 				</div>
 				<div class="row-fluid padding1per">
 					<div class="row span">
@@ -228,7 +234,10 @@
                             </div>
                             <div class='span'>
                                 {DateTimeField::convertToUserFormat($SCHEDULEDREPORTS->get('next_trigger_time'))}
-                                            <span>&nbsp;({$ACTIVE_ADMIN->time_zone})</span>
+                                            <!-- SalesPlatform.ru begin -->
+                                            <span>&nbsp;({vtranslate($ACTIVE_ADMIN->time_zone, $MODULE)})</span>
+                                            <!-- <span>&nbsp;({$ACTIVE_ADMIN->time_zone})</span> -->
+                                            <!-- SalesPlatform.ru end -->
                             </div>
                         </div>
                     {/if}

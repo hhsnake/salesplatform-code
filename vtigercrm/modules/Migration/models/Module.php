@@ -26,16 +26,26 @@ class Migration_Module_Model extends Vtiger_Module_Model {
 	}
 	
 	public function getAllowedMigrationVersions(){
-		$versions = array(
-            // SalesPlatform.ru begin
-			array('540-201310'   => '5.4.0-201310'),
-			array('600-201403' => '6.0.0-201403'),
-            array('610-201410' => '6.1.0-201410'),
-			array('610-201412' => '6.1.0-201412')
-			//array('540'   => '5.4.0'),
-			//array('600RC' => '6.0.0 RC')
-            // SalesPlatform.ru end
-		);
+		// SalesPlatform.ru begin
+		$currentVersion = str_replace(array('.', ' '),'', $this->getDBVersion());
+		if($currentVersion == '600') {
+			$versions = array(
+				array('600' => '6.0.0'),
+				array('600-201403' => '6.0.0-201403'),
+				array('610-201410' => '6.1.0-201410'),
+				array('610-201412' => '6.1.0-201412'),
+                array('620-201505' => '6.2.0-201505'),
+			);
+		} else {
+			$versions = array(
+				array('540-201310'   => '5.4.0-201310'),
+				array('600-201403' => '6.0.0-201403'),
+				array('610-201410' => '6.1.0-201410'),
+				array('610-201412' => '6.1.0-201412'),
+                array('620-201505' => '6.2.0-201505'),
+			);
+		}
+		// SalesPlatform.ru end
 		return $versions;
 	}
 	

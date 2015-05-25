@@ -226,7 +226,11 @@ class ReportRun extends CRMEntity
 						'Quotes_Total', 'Quotes_Sub_Total', 'Quotes_Pre_Tax_Total', 'Quotes_S&H_Amount', 'Quotes_Discount_Amount', 'Quotes_Adjustment',
 						'SalesOrder_Total', 'SalesOrder_Sub_Total', 'SalesOrder_Pre_Tax_Total', 'SalesOrder_S&H_Amount', 'SalesOrder_Discount_Amount', 'SalesOrder_Adjustment',
 						'PurchaseOrder_Total', 'PurchaseOrder_Sub_Total', 'PurchaseOrder_Pre_Tax_Total', 'PurchaseOrder_S&H_Amount', 'PurchaseOrder_Discount_Amount', 'PurchaseOrder_Adjustment',
-                        'Invoice_Received','PurchaseOrder_Paid','Invoice_Balance','PurchaseOrder_Balance'
+                        'Invoice_Received','PurchaseOrder_Paid','Invoice_Balance','PurchaseOrder_Balance',
+						// SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+						'Act_Total', 'Act_Sub_Total', 'Act_S&H_Amount', 'Act_Discount_Amount', 'Act_Adjustment',
+						'Consignment_Total', 'Consignment_Sub_Total', 'Consignment_S&H_Amount', 'Consignment_Discount_Amount', 'Consignment_Adjustment',
+						// SalesPlatform.ru end
 						);
 	var $ui10_fields = array();
 	var $ui101_fields = array();
@@ -297,9 +301,16 @@ class ReportRun extends CRMEntity
 		{
 			$fieldname ="";
 			$fieldcolname = $columnslistrow["columnname"];
-			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
-			list($module,$field) = split("_",$module_field,2);
+			// SalesPlatform.ru begin PHP 5.4 migration
+			list($tablename,$colname,$module_field,$fieldname,$single) = explode(":",$fieldcolname);
+			list($module,$field) = explode("_",$module_field,2);
+			//list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
+			//list($module,$field) = split("_",$module_field,2);
+			// SalesPlatform.ru end
 			$inventory_fields = array('serviceid');
+			// SalesPlatform.ru begin prod_subtotal field added
+			$inventory_fields[] = 'prod_subtotal';
+			// SalesPlatform.ru end
 			$inventory_modules = getInventoryModules();
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
 			if(sizeof($permitted_fields[$module]) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
@@ -2675,6 +2686,61 @@ class ReportRun extends CRMEntity
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
 					" where vtiger_crmentity.deleted=0";
 		}
+		// SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+		else if($module == "Act")
+		{
+
+			$query = "from vtiger_sp_act
+                            inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_sp_act.actid
+                            inner join vtiger_sp_actbillads on vtiger_sp_act.actid=vtiger_sp_actbillads.actbilladdressid
+                            inner join vtiger_sp_actshipads on vtiger_sp_act.actid=vtiger_sp_actshipads.actshipaddressid
+                            left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = vtiger_sp_act.currency_id";
+			if($type !== 'COLUMNSTOTOTAL') {
+				$query .=" left join vtiger_inventoryproductrel as vtiger_inventoryproductrelAct on vtiger_sp_act.actid = vtiger_inventoryproductrelAct.id
+                                    left join vtiger_products as vtiger_productsAct on vtiger_productsAct.productid = vtiger_inventoryproductrelAct.productid
+                                    left join vtiger_service as vtiger_serviceAct on vtiger_serviceAct.serviceid = vtiger_inventoryproductrelAct.productid";
+			}
+			$query .= " left join vtiger_salesorder as vtiger_salesorderAct on vtiger_salesorderAct.salesorderid=vtiger_sp_act.salesorderid
+                            left join vtiger_sp_actcf on vtiger_sp_act.actid = vtiger_sp_actcf.actid
+                            left join vtiger_groups as vtiger_groupsAct on vtiger_groupsAct.groupid = vtiger_crmentity.smownerid
+                            left join vtiger_users as vtiger_usersAct on vtiger_usersAct.id = vtiger_crmentity.smownerid
+                            left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
+                            left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+                            left join vtiger_users as vtiger_lastModifiedByAct on vtiger_lastModifiedByAct.id = vtiger_crmentity.modifiedby
+                            left join vtiger_account as vtiger_accountAct on vtiger_accountAct.accountid = vtiger_sp_act.accountid
+                            left join vtiger_contactdetails as vtiger_contactdetailsAct on vtiger_contactdetailsAct.contactid = vtiger_sp_act.contactid
+                            ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+				getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
+                            where vtiger_crmentity.deleted=0";
+		}
+		else if($module == "Consignment")
+		{
+
+			$query = "from vtiger_sp_consignment
+                            inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_sp_consignment.consignmentid
+                            inner join vtiger_sp_consignmentbillads on vtiger_sp_consignment.consignmentid=vtiger_sp_consignmentbillads.consignmentbilladdressid
+                            inner join vtiger_sp_consignmentshipads on vtiger_sp_consignment.consignmentid=vtiger_sp_consignmentshipads.consignmentshipaddressid
+                            left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = vtiger_sp_consignment.currency_id";
+			if($type !== 'COLUMNSTOTOTAL') {
+				$query .=" left join vtiger_inventoryproductrel as vtiger_inventoryproductrelConsignment on vtiger_sp_consignment.consignmentid = vtiger_inventoryproductrelConsignment.id
+                                    left join vtiger_products as vtiger_productsConsignment on vtiger_productsConsignment.productid = vtiger_inventoryproductrelConsignment.productid
+                                    left join vtiger_service as vtiger_serviceConsignment on vtiger_serviceConsignment.serviceid = vtiger_inventoryproductrelConsignment.productid";
+			}
+			$query .= " left join vtiger_salesorder as vtiger_salesorderConsignment on vtiger_salesorderConsignment.salesorderid=vtiger_sp_consignment.salesorderid
+                            left join vtiger_sp_consignmentcf on vtiger_sp_consignment.consignmentid = vtiger_sp_consignmentcf.consignmentid
+                            left join vtiger_groups as vtiger_groupsConsignment on vtiger_groupsConsignment.groupid = vtiger_crmentity.smownerid
+                            left join vtiger_users as vtiger_usersConsignment on vtiger_usersConsignment.id = vtiger_crmentity.smownerid
+                            left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
+                            left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+                            left join vtiger_users as vtiger_lastModifiedByConsignment on vtiger_lastModifiedByConsignment.id = vtiger_crmentity.modifiedby
+                            left join vtiger_account as vtiger_accountConsignment on vtiger_accountConsignment.accountid = vtiger_sp_consignment.accountid
+                            left join vtiger_contactdetails as vtiger_contactdetailsConsignment on vtiger_contactdetailsConsignment.contactid = vtiger_sp_consignment.contactid
+                            left join vtiger_invoice as vtiger_invoiceConsignment on vtiger_invoiceConsignment.invoiceid = vtiger_sp_consignment.invoiceid
+                            ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+				getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
+                            where vtiger_crmentity.deleted=0";
+		}
+		// SalesPlatform.ru end
 		else if($module == "Campaigns")
 		{
 			$query = "from vtiger_campaign
@@ -3891,7 +3957,10 @@ class ReportRun extends CRMEntity
 				if(CheckColumnPermission($field_tablename,$field_columnname,$premod) != "false"){
 					$field_permitted = true;
 				} else {
-					$mod = split(":",$secmod);
+					// SalesPlatform.ru begin PHP 5.4 migration
+					$mod = explode(":",$secmod);
+					//$mod = split(":",$secmod);
+					// SalesPlatform.ru end
 					foreach($mod as $key){
 						if(CheckColumnPermission($field_tablename,$field_columnname,$key) != "false"){
 							$field_permitted=true;
@@ -3900,7 +3969,10 @@ class ReportRun extends CRMEntity
 				}
 
 				//Calculation fields of "Events" module should show in Calendar related report
-				$secondaryModules = split(":", $secmod);
+				// SalesPlatform.ru begin PHP 5.4 migration
+				$secondaryModules = explode(":", $secmod);
+				//$secondaryModules = split(":", $secmod);
+				// SalesPlatform.ru end
 				if ($field_permitted === false && ($premod === 'Calendar' || in_array('Calendar', $secondaryModules)) && CheckColumnPermission($field_tablename, $field_columnname, "Events") != "false") {
 					$field_permitted = true;
 				}
@@ -3963,9 +4035,14 @@ class ReportRun extends CRMEntity
 			$this->queryPlanner->addTable("innerService");
 
 		}
-		if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder')
-				&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount'
-						|| $field_columnname == 'paid' || $field_columnname == 'balance' || $field_columnname == 'received')) {
+		// SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+		if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder' || $field_tablename == 'vtiger_sp_act' || $field_tablename == 'vtiger_sp_consignment')
+			&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount'
+				|| $field_columnname == 'paid' || $field_columnname == 'balance' || $field_columnname == 'received')) {
+		//if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder')
+		//		&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount'
+		//				|| $field_columnname == 'paid' || $field_columnname == 'balance' || $field_columnname == 'received')) {
+		// SalesPlatform.ru end
 			$field =  " $field_tablename.$field_columnname/$field_tablename.conversion_rate ";
 		}
 
@@ -4537,6 +4614,22 @@ class ReportRun extends CRMEntity
 					$referenceTableName = 'vtiger_contactdetailsPotentials';
 				} elseif ($moduleName == 'Potentials' && $referenceModule == 'Accounts') {
 					$referenceTableName = 'vtiger_accountPotentials';
+				// SalesPlatform.ru begin: Fixed reports for Consignments and Acts
+				} elseif ($moduleName == 'Act' && $referenceModule == 'SalesOrder') {
+					$referenceTableName = 'vtiger_salesorderAct';
+				} elseif ($moduleName == 'Act' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsAct';
+				} elseif ($moduleName == 'Act' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountAct';
+				} elseif ($moduleName == 'Consignment' && $referenceModule == 'SalesOrder') {
+					$referenceTableName = 'vtiger_salesorderConsignment';
+				} elseif ($moduleName == 'Consignment' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsConsignment';
+				} elseif ($moduleName == 'Consignment' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountConsignment';
+				} elseif ($moduleName == 'Consignment' && $referenceModule == 'Invoice') {
+					$referenceTableName = 'vtiger_invoiceConsignment';
+				// SalesPlatform.ru end
 				} elseif ($moduleName == 'ModComments' && $referenceModule == 'Users') {
 					$referenceTableName = 'vtiger_usersModComments';
 				} elseif (in_array($referenceModule, $reportSecondaryModules)) {

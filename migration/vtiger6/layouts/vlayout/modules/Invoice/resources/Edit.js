@@ -72,11 +72,53 @@ Inventory_Edit_Js("Invoice_Edit_Js",{},{
 		)
 		return aDeferred.promise();
 	},
+        
+        //SalesPlatform.ru begin
+        getReceived : function() {
+            var received = parseFloat(jQuery('#received').val());
+            if(isNaN(received)) {
+                return 0;
+            }
+            return received;
+        },
+        
+        getReceivedElement : function() {
+            return jQuery('#received');
+        },
+        
+        getGrandTotalElement : function() {
+            return jQuery('#grandTotal');
+        },
+        
+        setBalance : function(value) {
+            jQuery('#balance').val(value.toFixed( parseInt(jQuery('.numberOfCurrencyDecimal').val()) ) );
+        },
+        
+        calculateBalance : function() {
+            this.setBalance(this.getGrandTotal() - this.getReceived());
+        },
+        
+        calculateGrandTotal : function() {
+            this._super();
+            this.calculateBalance();
+        },
+        
+        registerReceivedChange : function() {
+            var thisInstance = this;
+            this.getReceivedElement().on('change', function(e){
+                thisInstance.calculateBalance();
+            });
+        },
+        //SalesPlatform.ru end
 
-	registerEvents: function(){
+	registerEvents: function() {
 		this._super();
 		this.registerForTogglingBillingandShippingAddress();
 		this.registerEventForCopyAddress();
+                
+                //SalesPlatform.ru begin
+                this.registerReceivedChange();
+                //SalesPlatform.ru end
 	}
 });
 

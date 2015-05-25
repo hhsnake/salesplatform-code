@@ -484,7 +484,7 @@ class SalesPlatform_PDF_SPPDFController {
     }
 
     function buildHeaderShippingAddress() {
-            return $this->focusColumnValues(array('bill_code','bill_country','bill_city','bill_street','bill_pobox'), ', ');
+            return $this->focusColumnValues(array('ship_code','ship_country','ship_city','ship_street','ship_pobox'), ', ');
     }
 
     function buildCurrencySymbol() {

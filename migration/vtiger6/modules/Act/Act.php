@@ -357,7 +357,7 @@ class Act extends CRMEntity {
                     'themes/images/actionGenerateInvoice.gif');
             //SalesPlatform.ru end 
             
-            $accountsInstance->setRelatedlist($actInstance,'Act',array(ADD),'get_related_list');
+            $accountsInstance->setRelatedlist($actInstance,'Act',array(ADD),'get_dependents_list');
 
 		} else if($eventType == 'module.disabled') {
 			$invoiceInstance = Vtiger_Module::getInstance('Invoice');
@@ -370,7 +370,7 @@ class Act extends CRMEntity {
             $accountsInstance->deleteLink('DETAILVIEWBASIC', 'LBL_ACCOUNTS_ADD_ACT');
             // SalesPlatform.ru end
 
-            $accountsInstance->unsetRelatedlist($actInstance,'Act','get_related_list');
+            $accountsInstance->unsetRelatedlist($actInstance,'Act','get_dependents_list');
                         
 		} else if($eventType == 'module.enabled') {
 			$invoiceInstance = Vtiger_Module::getInstance('Invoice');
@@ -399,7 +399,7 @@ class Act extends CRMEntity {
 
             // SalesPlatform.ru end
 
-            $accountsInstance->setRelatedlist($actInstance,'Act',array(ADD),'get_related_list');
+            $accountsInstance->setRelatedlist($actInstance,'Act',array(ADD),'get_dependents_list');
                         
 		} else if($eventType == 'module.preuninstall') {
 		// TODO Handle actions when this module is about to be deleted.
@@ -450,7 +450,7 @@ class Act extends CRMEntity {
             
             $accountsInstance = Vtiger_Module::getInstance('Accounts');
             $actInstance = Vtiger_Module::getInstance('Act');
-            $accountsInstance->setRelatedlist($actInstance,'Act',array(ADD),'get_related_list');
+            $accountsInstance->setRelatedlist($actInstance,'Act',array(ADD),'get_dependents_list');
             
 		}
  	}

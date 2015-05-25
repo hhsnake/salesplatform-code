@@ -111,21 +111,21 @@ class Consignment extends CRMEntity {
 	
 	function save_module($module)
 	{
-		//in ajax save we should not call this function, because this will delete all the existing product values
-		if(isset($_REQUEST)) {
-                        //SalesPlatform.ru begin fix empty updating line items from handlers 
-                        if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
-					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates' 
-                                        && $this->isLineItemUpdate != false)
-			{
-			//if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
-			//		&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
-			//{  
-                        //SalesPlatform.ru end    
-				//Based on the total Number of rows we will save the product relationship with this entity
-				saveInventoryProductDetails($this, 'Consignment');
-			}
-		}
+        //in ajax save we should not call this function, because this will delete all the existing product values
+        if(isset($_REQUEST)) {
+            //SalesPlatform.ru begin fix empty updating line items from handlers
+            if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
+                && $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
+                && $this->isLineItemUpdate != false)
+            {
+                //if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
+                //		&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
+                //{
+                //SalesPlatform.ru end
+                //Based on the total Number of rows we will save the product relationship with this entity
+                saveInventoryProductDetails($this, 'Consignment');
+            }
+        }
 		
 		
 		// Update the currency id and the conversion rate for the Consignment
@@ -133,6 +133,33 @@ class Consignment extends CRMEntity {
 		
 		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
 		$this->db->pquery($update_query, $update_params);
+
+        // Auto-generation for goods consignment no
+        if($this->column_fields['has_goods_consignment'] == 'on' &&
+            (empty($this->column_fields['goods_consignment_no']) ||
+                $this->column_fields['goods_consignment_no'] == 0)) {
+
+            $res = $this->db->query('select max(goods_consignment_no) as max_no from vtiger_sp_consignment
+        join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_sp_consignment.consignmentid
+        where vtiger_crmentity.deleted=0');
+
+            if($this->db->num_rows($res) > 0) {
+
+                $this->column_fields['goods_consignment_no'] =
+                    $this->db->query_result($res, 0, 'max_no') + 1;
+                $update_query = "update vtiger_sp_consignment set goods_consignment_no=? where consignmentid=?";
+                $update_params = array($this->db->query_result($res, 0, 'max_no') + 1, $this->id);
+
+
+            } else {
+
+                $this->column_fields['goods_consignment_no'] = 1;
+                $update_query = "update vtiger_sp_consignment set goods_consignment_no=? where consignmentid=?";
+                $update_params = array($this->column_fields['goods_consignment_no'] = 1, $this->id);
+
+            }
+            $this->db->pquery($update_query, $update_params);
+        }
 	}
 
 	/**	function used to get the name of the current object
@@ -348,7 +375,7 @@ class Consignment extends CRMEntity {
                     'index.php?module=Consignment&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&relationOperation=true');
             // SalesPlatform.ru end
             
-            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_related_list');
+            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_dependents_list');
 
 		} else if($eventType == 'module.disabled') {
 			$consignmentInstance = Vtiger_Module::getInstance('Consignment');
@@ -362,7 +389,7 @@ class Consignment extends CRMEntity {
             $invoiceInstance->deleteLink('DETAILVIEWBASIC', 'LBL_INVOICE_ADD_CONSIGNMENT');
             // SalesPlatform.ru end
             
-            $accountsInstance->unsetRelatedlist($consignmentInstance,'Consignment','get_related_list');
+            $accountsInstance->unsetRelatedlist($consignmentInstance,'Consignment','get_dependents_list');
             
 		} else if($eventType == 'module.enabled') {
 			$consignmentInstance = Vtiger_Module::getInstance('Consignment');
@@ -386,7 +413,7 @@ class Consignment extends CRMEntity {
                     'index.php?module=Consignment&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&relationOperation=true');
             // SalesPlatform.ru end
             
-            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_related_list');
+            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_dependents_list');
             
 		} else if($eventType == 'module.preuninstall') {
 		// TODO Handle actions when this module is about to be deleted.
@@ -437,7 +464,7 @@ class Consignment extends CRMEntity {
             
             $consignmentInstance = Vtiger_Module::getInstance('Consignment');
             $accountsInstance = Vtiger_Module::getInstance('Accounts');
-            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_related_list');
+            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_dependents_list');
             
 		}
  	}

@@ -44,6 +44,6 @@
     </form>
 </div><br>
 <div class="span4 alert alert-info container-fluid">
-{vtranslate('LBL_NOTE', $QUALIFIED_MODULE)} <a target="blank" href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_600_%D0%98%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F_%D1%81_%D1%81%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%BC%D0%B8_%D1%81%D0%B5%D1%82%D1%8F%D0%BC%D0%B8">{vtranslate('LBL_DOCS', $QUALIFIED_MODULE)}</a>
+{vtranslate('LBL_NOTE', $QUALIFIED_MODULE)} <a target="blank" href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_620_%D0%98%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F_%D1%81_%D1%81%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%BC%D0%B8_%D1%81%D0%B5%D1%82%D1%8F%D0%BC%D0%B8">{vtranslate('LBL_DOCS', $QUALIFIED_MODULE)}</a>
 </div>	
 {/strip}

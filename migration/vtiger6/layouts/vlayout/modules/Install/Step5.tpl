@@ -23,7 +23,7 @@
 				</div>
 				<div class="span2">
 					{* SalesPlatform.ru begin Link to SP wiki *}
-                    <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_600" target="_blank" class="pull-right">
+                    <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_620" target="_blank" class="pull-right">
                     {*<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">*}
                     {* SalesPlatform.ru end *}
 						<img src="{'help.png'|vimage_path}" alt="Help-Icon"/>
@@ -87,7 +87,9 @@
 									{vtranslate('LBL_CURRENCY','Install')}<span class="no">*</span>
 								</td>
 								<td>
-									{$INFORMATION['currency_name']}
+                                    {* SalesPlatform.ru begin Link to SP wiki *}
+									{vtranslate($INFORMATION['currency_name'], 'Install')}
+                                    {* SalesPlatform.ru end *}
 								</td>
 							</tr>
 						</tbody>

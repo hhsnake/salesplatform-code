@@ -550,7 +550,15 @@ class QueryGenerator {
 		}
 		$ownerFields = $this->meta->getOwnerFields();
 		if (count($ownerFields) > 0) {
-			$ownerField = $ownerFields[0];
+            // SalesPlatform.ru begin Fix bug with owner
+            $key = array_search('assigned_user_id', $ownerFields);
+            if($key) {
+                $ownerField = $ownerFields[$key];
+            } else {
+                $ownerField = $ownerFields[0];
+            }
+            //$ownerField = $ownerFields[0];
+            // SalesPlatform.ru end
 		}
 		$baseTable = $this->meta->getEntityBaseTable();
 		$sql = " FROM $baseTable ";
@@ -902,13 +910,18 @@ class QueryGenerator {
 		$db = PearDatabase::getInstance();
 
 		if(is_string($value) && $this->ignoreComma == false) {
-			$valueArray = explode(',' , $value);
-			if ($field->getFieldDataType() == 'multipicklist' && in_array($operator, array('e', 'n'))) {
-				$valueArray = getCombinations($valueArray);
-				foreach ($valueArray as $key => $value) {
-					$valueArray[$key] = ltrim($value, ' |##| ');
-				}
-			}
+            $commaSeparatedFieldTypes = array('picklist', 'multipicklist', 'owner', 'date', 'datetime', 'time');
+            if(in_array($field->getFieldDataType(), $commaSeparatedFieldTypes)) {
+                $valueArray = explode(',' , $value);
+                if ($field->getFieldDataType() == 'multipicklist' && in_array($operator, array('e', 'n'))) {
+                    $valueArray = getCombinations($valueArray);
+                    foreach ($valueArray as $key => $value) {
+                        $valueArray[$key] = ltrim($value, ' |##| ');
+                    }
+                }
+            } else {
+                $valueArray = array($value);
+            }
 		} elseif(is_array($value)) {
 			$valueArray = $value;
 		} else{
@@ -983,8 +996,8 @@ class QueryGenerator {
 					$sql[] = "IS NULL";
 					continue;
 				}
-				$sql[] = "IS NOT NULL";
-				continue;
+					$sql[] = "IS NOT NULL";
+					continue;
 			} elseif($field->getFieldDataType() == 'boolean') {
 				$value = strtolower($value);
 				if ($value == 'yes') {
@@ -1018,6 +1031,13 @@ class QueryGenerator {
                         $value = $dateTime[0];
                     }
                 }
+			} else if ($field->getFieldDataType() === 'currency') {
+				$uiType = $field->getUIType();
+				if ($uiType == 72) {
+					$value = CurrencyField::convertToDBFormat($value, null, true);
+				} elseif ($uiType == 71) {
+					$value = CurrencyField::convertToDBFormat($value);
+				}
 			}
 
 			if($field->getFieldName() == 'birthday' && !$this->isRelativeSearchOperators(

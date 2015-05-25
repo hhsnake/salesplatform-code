@@ -37,6 +37,7 @@ class Users_Login_View extends Vtiger_View_Controller {
 		$moduleName = $request->getModule();
 		
 		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('CURRENT_VERSION', vglobal('vtiger_current_version'));
 		$viewer->view('Login.tpl', 'Users');
 }
 }

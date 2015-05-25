@@ -1140,7 +1140,7 @@ foreach($modules as $module){
             $field->label = 'Created By';
             $field->table = 'vtiger_crmentity';
             $field->column = 'smcreatorid';
-            $field->uitype = 53;
+            $field->uitype = 52;
             $field->typeofdata = 'V~O';
             $field->displaytype= 2;
             $field->quickcreate = 3;
@@ -1249,6 +1249,164 @@ if(!defined('INSTALLATION_MODE')) {
        echo '<br>Installing PBX Manager starts<br>'; 
        installVtlibModule('PBXManager', 'packages/vtiger/mandatory/PBXManager.zip'); 
     }else{ 
+        
+        //SalesPlatform.ru begin
+        
+        /* Add missed main table columns */
+        $adb->pquery("ALTER TABLE `vtiger_pbxmanager` 
+                        ADD COLUMN `direction` varchar(10) DEFAULT NULL,
+                        ADD COLUMN `callstatus` varchar(20) DEFAULT NULL,
+                        ADD COLUMN `starttime` datetime DEFAULT NULL,
+                        ADD COLUMN `endtime` datetime DEFAULT NULL,
+                        ADD COLUMN `totalduration` int(11) DEFAULT NULL,
+                        ADD COLUMN `billduration` int(11) DEFAULT NULL,
+                        ADD COLUMN `recordingurl` varchar(200) DEFAULT NULL,
+                        ADD COLUMN `sourceuuid` varchar(100) DEFAULT NULL,
+                        ADD COLUMN `gateway` varchar(20) DEFAULT NULL,
+                        ADD COLUMN `customer` varchar(100) DEFAULT NULL,
+                        ADD COLUMN `user` varchar(100) DEFAULT NULL,
+                        ADD COLUMN `customernumber` varchar(100) DEFAULT NULL,
+                        ADD COLUMN `customertype` varchar(100) DEFAULT NULL", array());
+
+        $adb->pquery("ALTER TABLE `vtiger_pbxmanager` 
+                        ADD KEY `index_sourceuuid` (`sourceuuid`),
+                        ADD KEY `index_pbxmanager_id` (`pbxmanagerid`)", array());
+
+        $vtigerPbxAddedFields = array('direction' => array(1, 'Direction', 'V~O', 0),
+                             'callstatus' => array(1, 'Call Status', 'V~O', 1),
+                             'starttime' => array(70, 'Start Time', 'DT~O', 1),
+                             'endtime' => array(70, 'End Time', 'DT~O', 0),
+                             'totalduration' => array(7, 'Total Duration', 'I~O', 0),
+                             'billduration' => array(7, 'Bill Duration', 'I~O', 0),
+                             'recordingurl' => array(17, 'Recording URL', 'V~O', 1),
+                             'sourceuuid' => array(1, 'Source UUID', 'V~O', 0),
+                             'gateway' => array(1, 'Gateway', 'V~O', 0),
+                             'customer' => array(10, 'Customer', 'V~O', 1),
+                             'user' => array(52, 'User', 'V~O', 1),
+                             'customernumber' => array(11, 'Customer Number', 'V~M', 0),
+                             'customertype' => array(1, 'Customer Type', 'V~O', 0));
+
+        /* Delete old blocks and create new one */
+        $pbxTabId = getTabid('PBXManager');
+        $adb->pquery('DELETE FROM vtiger_blocks WHERE tabid=?', array($pbxTabId));
+        $result = $adb->pquery('SELECT MAX(blockid) FROM vtiger_blocks');
+        $pbxBlockId = $adb->query_result($result, 0, 0) + 1;
+        $adb->pquery('INSERT INTO vtiger_blocks VALUES(?,?,?,?,?,?,?,?,?,?,?)', array($pbxBlockId, $pbxTabId, 'LBL_PBXMANAGER_INFORMATION',1 ,0, 0, 0, 0, 0, 1, 0));
+
+        foreach($vtigerPbxAddedFields as $fieldName => $fieldInfo) {
+
+            /* Create field unique id */
+            $adb->pquery('UPDATE vtiger_field_seq SET id=id+1', array());
+            $result = $adb->pquery('SELECT id FROM vtiger_field_seq', array());
+            $fieldId = $adb->query_result($result, 0, 'id');
+
+            /* Create sequence number for field */
+            $result = $adb->pquery('SELECT MAX(sequence) FROM vtiger_field WHERE block = ? AND tabid = ?', array($pbxBlockId, $pbxTabId));
+            $fieldSeq = $adb->query_result($result, 0, 0) + 1;
+
+            /* Insert field to fields table */
+            $adb->pquery('INSERT INTO vtiger_field VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+                    array($pbxTabId, $fieldId, $fieldName, 'vtiger_pbxmanager', 1, $fieldInfo[0],
+                          $fieldName, $fieldInfo[1], 1, 2, '', 100, $fieldSeq, $pbxBlockId, 1, $fieldInfo[2],
+                          1, NULL, "BAS", 1, NULL, $fieldInfo[3]));
+
+            /* Check it in controll access subsystem */
+            $adb->pquery('INSERT INTO vtiger_profile2field SELECT profileid,?, ?, 0, 1 FROM vtiger_profile', array($pbxTabId, $fieldId));
+            $adb->pquery('INSERT INTO vtiger_def_org_field VALUES(?, ?, 0, 1)', array($pbxTabId, $fieldId));
+        }
+
+        /* Add crm_entity missed fields */
+
+        /* Add smownerid */
+        $adb->pquery('UPDATE vtiger_field_seq SET id=id+1', array());
+        $result = $adb->pquery('SELECT id FROM vtiger_field_seq', array());
+        $fieldId = $adb->query_result($result, 0, 'id');
+
+        $result = $adb->pquery('SELECT MAX(sequence) FROM vtiger_field WHERE block = ? AND tabid = ?', array($pbxBlockId, $pbxTabId));
+        $fieldSeq = $adb->query_result($result, 0, 0) + 1;
+
+        $adb->pquery('INSERT INTO vtiger_field VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+                    array($pbxTabId, $fieldId, 'smownerid', 'vtiger_crmentity', 1, 53,
+                          'assigned_user_id', 'Assigned To', 1, 2, '', 100, $fieldSeq, $pbxBlockId, 1, 'V~M',
+                          1, NULL, "BAS", 1, NULL, 0));
+
+        $adb->pquery('INSERT INTO vtiger_profile2field SELECT profileid,?, ?, 0, 1 FROM vtiger_profile', array($pbxTabId, $fieldId));
+        $adb->pquery('INSERT INTO vtiger_def_org_field VALUES(?, ?, 0, 1)', array($pbxTabId, $fieldId));
+
+
+        /* Add createdtime */
+        $adb->pquery('UPDATE vtiger_field_seq SET id=id+1', array());
+        $result = $adb->pquery('SELECT id FROM vtiger_field_seq', array());
+        $fieldId = $adb->query_result($result, 0, 'id');
+
+        $result = $adb->pquery('SELECT MAX(sequence) FROM vtiger_field WHERE block = ? AND tabid = ?', array($pbxBlockId, $pbxTabId));
+        $fieldSeq = $adb->query_result($result, 0, 0) + 1;
+
+        $adb->pquery('INSERT INTO vtiger_field VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+                    array($pbxTabId, $fieldId, 'createdtime', 'vtiger_crmentity', 1, 70,
+                          'CreatedTime', 'CreatedTime', 1, 2, '', 100, $fieldSeq, $pbxBlockId, 2, 'DT~O',
+                          1, NULL, "BAS", 1, NULL, 0));
+
+        $adb->pquery('INSERT INTO vtiger_profile2field SELECT profileid,?, ?, 0, 1 FROM vtiger_profile', array($pbxTabId, $fieldId));
+        $adb->pquery('INSERT INTO vtiger_def_org_field VALUES(?, ?, 0, 1)', array($pbxTabId, $fieldId));
+
+        /* Add modifiedtime */
+        $adb->pquery('UPDATE vtiger_field_seq SET id=id+1', array());
+        $result = $adb->pquery('SELECT id FROM vtiger_field_seq', array());
+        $fieldId = $adb->query_result($result, 0, 'id');
+
+        $result = $adb->pquery('SELECT MAX(sequence) FROM vtiger_field WHERE block = ? AND tabid = ?', array($pbxBlockId, $pbxTabId));
+        $fieldSeq = $adb->query_result($result, 0, 0) + 1;
+
+        $adb->pquery('INSERT INTO vtiger_field VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+                    array($pbxTabId, $fieldId, 'modifiedtime', 'vtiger_crmentity', 1, 70,
+                          'ModifiedTime', 'ModifiedTime', 1, 2, '', 100, $fieldSeq, $pbxBlockId, 2, 'DT~O',
+                          1, NULL, "BAS", 1, NULL, 0));
+
+        $adb->pquery('INSERT INTO vtiger_profile2field SELECT profileid,?, ?, 0, 1 FROM vtiger_profile', array($pbxTabId, $fieldId));
+        $adb->pquery('INSERT INTO vtiger_def_org_field VALUES(?, ?, 0, 1)', array($pbxTabId, $fieldId));
+
+        /* Add missed tables */
+        $adb->pquery("CREATE TABLE IF NOT EXISTS`vtiger_pbxmanagercf` (
+                        `pbxmanagerid` int(11) NOT NULL,
+                        PRIMARY KEY (`pbxmanagerid`)
+                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8", array());
+
+        $adb->pquery("CREATE TABLE IF NOT EXISTS `vtiger_pbxmanager_gateway` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `gateway` varchar(20) DEFAULT NULL,
+                        `parameters` text,
+                        PRIMARY KEY (`id`)
+                      ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8", array());
+
+        $adb->pquery("CREATE TABLE IF NOT EXISTS `vtiger_pbxmanager_phonelookup` (
+                        `crmid` int(20) DEFAULT NULL,
+                        `setype` varchar(30) DEFAULT NULL,
+                        `fnumber` varchar(100) DEFAULT NULL,
+                        `rnumber` varchar(100) DEFAULT NULL,
+                        `fieldname` varchar(50) DEFAULT NULL,
+                        UNIQUE KEY `unique_key` (`crmid`,`setype`,`fieldname`),
+                        KEY `index_phone_number` (`fnumber`,`rnumber`),
+                        CONSTRAINT `vtiger_pbxmanager_phonelookup_ibfk_1` FOREIGN KEY (`crmid`) REFERENCES `vtiger_crmentity` (`crmid`) ON DELETE CASCADE
+                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8", array());
+        
+        
+        /* Apply new main custom view */
+        $result = $adb->pquery("SELECT DISTINCT cvid FROM vtiger_customview WHERE viewname='All' AND entitytype='PBXManager'", array());
+        $pbxAllCustomViewId = $adb->query_result($result, $i, 'cvid');
+
+        Migration_Index_View::ExecuteQuery("DELETE FROM vtiger_cvcolumnlist WHERE cvid=?", array($pbxAllCustomViewId));
+        Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_cvcolumnlist(cvid,columnindex,columnname) VALUES "
+                                                        . "($pbxAllCustomViewId,0,'vtiger_pbxmanager:callstatus:callstatus:PBXManager_Call_Status:V'), "
+                                                        . "($pbxAllCustomViewId,1,'vtiger_pbxmanager:customernumber:customernumber:PBXManager_Customer_Number:V'),"
+                                                        . "($pbxAllCustomViewId,2,'vtiger_pbxmanager:customer:customer:PBXManager_Customer:V'),"
+                                                        . "($pbxAllCustomViewId,3,'vtiger_pbxmanager:user:user:PBXManager_User:V'),"
+                                                        . "($pbxAllCustomViewId,4,'vtiger_pbxmanager:recordingurl:recordingurl:PBXManager_Recording_URL:V'),"
+                                                        . "($pbxAllCustomViewId,5,'vtiger_pbxmanager:totalduration:totalduration:PBXManager_Total_Duration:I'),"
+                                                        . "($pbxAllCustomViewId,6,'vtiger_pbxmanager:starttime:starttime:PBXManager_Start_Time:DT')", array());
+        
+        //SalesPlatform.ru end
+        
         $result = $adb->pquery('SELECT server, port FROM vtiger_asterisk', array());
         $server = $adb->query_result($result, 0, 'server');
 

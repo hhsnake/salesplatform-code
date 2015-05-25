@@ -156,7 +156,12 @@ class Vtiger_ModuleBasic {
 		$useisentitytype = $this->isentitytype? 1 : 0;
 		$adb->pquery('UPDATE vtiger_tab set isentitytype=? WHERE tabid=?',Array($useisentitytype, $this->id));
 
-		if(!Vtiger_Utils::CheckTable('vtiger_tab_info')) {
+        // SalesPlatform.ru begin Enable history for new module
+        $adb->pquery("INSERT INTO vtiger_modtracker_tabs (tabid, visible) VALUES (?,?)",
+            Array($this->id, 1));
+        // SalesPlatform.ru end
+
+        if(!Vtiger_Utils::CheckTable('vtiger_tab_info')) {
 			Vtiger_Utils::CreateTable(
 				'vtiger_tab_info',
 				'(tabid INT, prefname VARCHAR(256), prefvalue VARCHAR(256), FOREIGN KEY fk_1_vtiger_tab_info(tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE)',
@@ -221,6 +226,9 @@ class Vtiger_ModuleBasic {
 		}
 
 		$adb->pquery("DELETE FROM vtiger_tab WHERE tabid=?", Array($this->id));
+        // SalesPlatform.ru begin Disable history for deleted module
+        $adb->pquery("DELETE FROM vtiger_modtracker_tabs WHERE tabid=?", Array($this->id));
+        // SalesPlatform.ru end
 		self::log("Deleting Module $this->name ... DONE");
 	}
 

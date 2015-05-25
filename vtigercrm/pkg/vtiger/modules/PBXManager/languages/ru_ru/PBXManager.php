@@ -48,7 +48,25 @@ $languageStrings = array(
     'Customer Type' => 'Тип клиента',
     'End Time' => 'Время завершения звонка',
     'Source UUID' => 'Идентификатор источника',
+
+    //SalesPlatform.ru begin
+    'inbound' => 'Входящий',
+    'outbound' => 'Исходящий',
+    'ringing' => 'Звонок',
+    'in-progress' => 'В прогрессе',
+    'completed' => 'Завершен',
+    'busy' => 'Занято',
+    'no-answer' => 'Нет ответа',
+    //SalesPlatform.ru end
 );
+
+//SalesPlatform.ru begin
+$jsLanguageStrings = array(
+    'Enter Email-id' => 'Введите E-mail',
+    'Select' => 'Выберите',
+    'Save' => 'Сохранить'
+);
+//SalesPlatform.ru end
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/PBXManager.php';

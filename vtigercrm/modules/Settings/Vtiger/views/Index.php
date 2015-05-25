@@ -97,7 +97,7 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
 			$firstKey = key($menuModels);
 			$selectedMenu = $menuModels[$firstKey];
 		}
-                
+
 		if(Settings_Vtiger_Index_View::$loadOlderSettingUi) {
             // Customization
             $viewer->assign('UI5_URL', $this->transformToUI5URL($request));
@@ -131,7 +131,7 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
             $viewer = $this->getViewer($request);
             $qualifiedModuleName = $request->getModule(false);
 			$usersCount = Users_Record_Model::getCount(true);
-			$activeWorkFlows = Settings_Workflows_Record_Model::getActiveCount();
+			$activeWorkFlows = Settings_Workflows_Module_Model::getActiveWorkflowCount();
 			$activeModules = Settings_ModuleManager_Module_Model::getModulesCount(true);
 			$pinnedSettingsShortcuts = Settings_Vtiger_MenuItem_Model::getPinnedItems();
 

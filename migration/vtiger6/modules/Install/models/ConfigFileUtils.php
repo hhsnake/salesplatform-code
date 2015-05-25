@@ -281,9 +281,6 @@ ini_set('memory_limit','64M');
 // Set the default timezone as per your preference
 //\$default_timezone = '';
 
-//Set inner phones, which no need to type in Users entities
-\$crm_user_phones = array();
-
 /** If timezone is configured, try to set it */
 if(isset(\$default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set(\$default_timezone);

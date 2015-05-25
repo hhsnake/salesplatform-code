@@ -71,60 +71,74 @@ require_once 'modules/Accounts/Accounts.php';
 
 class SalesPlatform_InvoicePDFController extends SalesPlatform_PDF_ProductListDocumentPDFController{
 
-	function buildDocumentModel() {
-	
-		$model = parent::buildDocumentModel();
-	
-		$this->generateEntityModel($this->focus, 'Invoice', 'invoice_', $model);
+    function buildDocumentModel() {
+        global $app_strings;
 
-                $entity = new SalesOrder();
-		if($this->focusColumnValue('salesorder_id')) {
-            	    $entity->retrieve_entity_info($this->focusColumnValue('salesorder_id'), 'SalesOrder');
-		}
-                $this->generateEntityModel($entity, 'SalesOrder', 'salesorder_', $model);
+        try {
+            $model = parent::buildDocumentModel();
 
-                $entity = new Contacts();
-		if($this->focusColumnValue('contact_id')) {
-            	    $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
-		}
-                $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
+            $this->generateEntityModel($this->focus, 'Invoice', 'invoice_', $model);
 
-                $entity = new Accounts();
-		if($this->focusColumnValue('account_id')) {
-            	    $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
-		}
-                $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
+            $entity = new SalesOrder();
+            if ($this->focusColumnValue('salesorder_id')) {
+                $entity->retrieve_entity_info($this->focusColumnValue('salesorder_id'), 'SalesOrder');
+            }
+            $this->generateEntityModel($entity, 'SalesOrder', 'salesorder_', $model);
 
-                $this->generateUi10Models($model);
-                $this->generateRelatedListModels($model);
+            $entity = new Contacts();
+            if ($this->focusColumnValue('contact_id')) {
+                $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
+            }
+            $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
-		$model->set('invoice_no', $this->focusColumnValue('invoice_no'));
+            $entity = new Accounts();
+            if ($this->focusColumnValue('account_id')) {
+                $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
+            }
+            $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
 
-		return $model;
-	}
+            $this->generateUi10Models($model);
+            $this->generateRelatedListModels($model);
 
-	function getWatermarkContent() {
-		return '';
-	}
+            $model->set('invoice_no', $this->focusColumnValue('invoice_no'));
+
+            return $model;
+
+        } catch (Exception $e) {
+            echo '<meta charset="utf-8" />';
+            if($e->getMessage() == $app_strings['LBL_RECORD_DELETE']) {
+                echo $app_strings['LBL_RECORD_INCORRECT'];
+                echo '<br><br>';
+            } else {
+                echo $e->getMessage();
+                echo '<br><br>';
+            }
+            return null;
+        }
+    }
+
+    function getWatermarkContent() {
+        return '';
+    }
 
     function russianDate($date){
-	$date=explode("-", $date);
-	switch ($date[1]){
-	    case 1: $m='Января'; break;
-	    case 2: $m='Февраля'; break;
-	    case 3: $m='Марта'; break;
-	    case 4: $m='Апреля'; break;
-	    case 5: $m='Мая'; break;
-	    case 6: $m='Июня'; break;
-	    case 7: $m='Июля'; break;
-	    case 8: $m='Августа'; break;
-	    case 9: $m='Сентября'; break;
-	    case 10: $m='Октября'; break;
-	    case 11: $m='Ноября'; break;
-	    case 12: $m='Декабря'; break;
-	}
-	
-	return $date[2].' '.$m.' '.$date[0].' г.';
+        $date=explode("-", $date);
+        switch ($date[1]){
+            case 1: $m='Января'; break;
+            case 2: $m='Февраля'; break;
+            case 3: $m='Марта'; break;
+            case 4: $m='Апреля'; break;
+            case 5: $m='Мая'; break;
+            case 6: $m='Июня'; break;
+            case 7: $m='Июля'; break;
+            case 8: $m='Августа'; break;
+            case 9: $m='Сентября'; break;
+            case 10: $m='Октября'; break;
+            case 11: $m='Ноября'; break;
+            case 12: $m='Декабря'; break;
+        }
+
+        return $date[2].' '.$m.' '.$date[0].' г.';
     }
 }
 

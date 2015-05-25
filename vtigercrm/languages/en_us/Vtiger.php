@@ -401,7 +401,7 @@ $languageStrings = array(
 	'LBL_REASON_FOR_CHANGING_COMMENT' => 'Reason for changing comment',
 	'LBL_RECENTLY_MODIFIED' => 'Recently Modified',
 	'LBL_RECORD' => 'Record',
-	'LBL_RECORDS_LIST' => 'Records List', 
+	'LBL_RECORDS_LIST' => 'Records List',
 	'LBL_RECORD_DELETE' => 'The record you are trying to view has been deleted.',
 	'LBL_RECORD_NOT_FOUND' => 'Record you are trying to access is not found',
 	'LBL_RECORD_SUMMARY' => 'Module Summary', //Duplicated key-value pairs
@@ -628,17 +628,28 @@ $languageStrings = array(
 	'Web Site' => 'Web Site',
 	'Website: ' => 'Website: ',
 	'Word of mouth' => 'Word of mouth',
-    
+    	  
         //Promotion translations
         'LBL_HIDE_PROMOTION' => 'Hide Promotion',
         'LBL_SHOW_PROMOTION' => 'Show Promotion',
     
-        //SalesPlatform.ru begin add locale
-        'LBL_CHARACTER_ENCODING'       => 'encoding',
-        'LBL_DELIMITER'                => 'delimiter',
-        'LBL_DETAIL_VIEW_LINK' => 'Link to entity',
+        //customerportal forgot password 
+        'LBL_LOGIN_DETAILS' => 'Login Details' ,
+        'LBL_USERNAME' => ' Username',
+        'LBL_PASSWORD' => 'Password',
+        'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Portal Login Details',
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Users' => 'Users', 
+        'Service Requests' => 'Service Requests', 
+        'Terms &amp; Conditions' => 'Terms & Conditions', 
+	'LBL_CONVERSION_RATE'          => 'Conversion Rate',
+    
+        //SalesPlatform.ru begin
+        'LBL_GROUP_TAX_INC' => 'Group, taxes included', 
+ 	'group_tax_inc' => 'Group, taxes included',  
+ 	'LBL_INC_TAX' => 'Including',  
         //SalesPlatform.ru end
-);
+);  
 
 $jsLanguageStrings = array(
 	'AM' => 'AM',
@@ -753,7 +764,7 @@ $jsLanguageStrings = array(
 	'JS_YOU_ARE_IN_PAGE_NUMBER' => 'You are in page number',
 	'JS_YOU_CAN_SELECT_ONLY' => 'You can select only',
 	'LBL_DELETE_CONFIRMATION' => 'Are you sure you want to delete?', // This is added as duplicate as we need to show different message for different modules. Ex:Accounts has different message
-	'LBL_DELETE_USER_CONFIRMATION' => 'When a User is deleted, the user will be marked as "Inactive" and no new records can be assigned to the User, and the user will not be able to login. Billing will stop for this user.If you need to reactivate a deleted user, you will need to send email to support@vtiger.com.Are you sure you want to delete?',
+	'LBL_DELETE_USER_CONFIRMATION' => 'When a User is deleted, the user will be marked as "Inactive" and no new records can be assigned to the User, and the user will not be able to login. Are you sure you want to delete?',
 	'LBL_IMAGE_DELETED_SUCCESSFULLY' => 'Image Deleted Successfully',
 	'LBL_IMAGE_NOT_DELETED' => 'Image Not Deleted',
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Are you sure you want to delete the selected Records?',
@@ -778,10 +789,6 @@ $jsLanguageStrings = array(
     
         'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Records ownership transferred successfully.',
     
-        //SalesPlatform.ru begin add locale
-        'JS_LBL_HELP_ADDRESS_TYPE' => 'For get help when typing - enter city',
-        'JS_LBL_LOCAL_STORAGE_FAIL' => 'Error on create local storage with KLADR integration! Update browser or off module!',
-        'JS_LBL_LOAD_MORE_CITIES' => 'Load next',
-        'JS_LBL_OF' => 'of',
-        //SalesPLatform.ru end
+    //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Your Changes Will Be Lost!',
 );

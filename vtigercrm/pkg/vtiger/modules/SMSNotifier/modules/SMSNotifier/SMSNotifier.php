@@ -193,7 +193,10 @@ class SMSNotifier extends SMSNotifierBase {
 				$response = $provider->query($messageid);
 
 				if($response['error']) {
-					$responseStatus = ISMSProvider::MSG_STATUS_FAILED;
+                    // SalesPlatform.ru begin
+                    $responseStatus = SMSNotifier_ISMSProvider_Model::MSG_STATUS_FAILED;
+					//$responseStatus = ISMSProvider::MSG_STATUS_FAILED;
+                    // SalesPlatform.ru end
 					$needlookup = $response['needlookup'];
 				} else {
 					$responseStatus = $response['status'];
@@ -223,6 +226,9 @@ class SMSNotifier extends SMSNotifierBase {
 
 	static function getSMSStatusInfo($record) {
 		global $adb;
+        // SalesPlatform.ru begin Update message status
+        SMSNotifier::smsquery($record);
+        // SalesPlatform.ru end
 		$results = array();
 		$qresult = $adb->pquery("SELECT * FROM vtiger_smsnotifier_status WHERE smsnotifierid=?", array($record));
 		if($qresult && $adb->num_rows($qresult)) {

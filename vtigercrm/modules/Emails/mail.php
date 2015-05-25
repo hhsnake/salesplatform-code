@@ -228,7 +228,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
             $use_sendmail = $adb->query_result($result,0,'use_sendmail');
         }
 
-        if ($use_sendmail == "true")
+        if ($use_sendmail == "true" || $use_sendmail == "on")
             $mail->IsSendmail();
         else
             $mail->IsSMTP();

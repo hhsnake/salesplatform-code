@@ -1581,9 +1581,6 @@ jQuery.Class("Vtiger_Detail_Js",{
 		var thisInstance = this;
 		var detailContentsHolder = thisInstance.getContentHolder();
 		var detailContainer = detailContentsHolder.closest('div.detailViewInfo');
-		app.registerEventForDatePickerFields(detailContentsHolder);
-		//Attach time picker event to time fields
-		app.registerEventForTimeFields(detailContentsHolder);
 
 		jQuery('.related', detailContainer).on('click', 'li', function(e, urlAttributes){
 			var tabElement = jQuery(e.currentTarget);
@@ -1604,6 +1601,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 				function(data){
 					thisInstance.deSelectAllrelatedTabs();
 					thisInstance.markTabAsSelected(tabElement);
+                                        app.registerEventForDatePickerFields(detailContentsHolder);
+                                        //Attach time picker event to time fields
+                                        app.registerEventForTimeFields(detailContentsHolder);
 					Vtiger_Helper_Js.showHorizontalTopScrollBar();
 					element.progressIndicator({'mode': 'hide'});
 					if(typeof callBack == 'function'){
@@ -2071,55 +2071,54 @@ function sp_js_detailview_checkBeforeSave(fieldData) {
         var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));      
 
         var urlstring = "index.php?module="+fieldData['module']+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&DetailViewAjaxMode=true&id="+fieldData['record'];
-
+        
+        /* Need sync request with crf protect */ 
+ 	var params = {  
+            url : urlstring, 
+            async : false, 
+            data : {} 
+ 	}; 
+        
         var continue_fl;    // true - continue, false - break  
-        $.ajax({
-            url: urlstring,            
-            type: "POST",
-            async: false,
-            dataType : "json",                     
-            complete: function (response, textStatus) {
-                                if(!empty(response.responseText) && IsJsonString(response.responseText)) {
-				    var responseObj = JSON.parse(response.responseText);
-                                    if(responseObj.response === undefined) {
-  
-                                        continue_fl = true;
-                                    }
-				    if(responseObj.response === "OK") {
-                                        if (responseObj.message !== undefined && !empty(responseObj.message)) {
-                                            alert(responseObj.message);
-                                        }
-                                        continue_fl = true;
-				    } else if(responseObj.response === "ALERT") {
-                                        if (responseObj.message !== undefined) {
-                                            alert(responseObj.message);
-                                        } else {
-                                            alert('Alert');
-                                        }
-                                        continue_fl = false;
-				    } else if(responseObj.response === "CONFIRM") {
-                                        var confirmMessage;
-                                        if (responseObj.message !== undefined) {
-                                            confirmMessage =responseObj.message;
-                                        } else {
-                                            confirmMessage = 'Confirm';
-                                        }
-				        if (confirm(confirmMessage)) {
+        AppConnector.request(params).then( function (responseObj) { 
+            if(!empty(responseObj)) { 
+                if(responseObj.response === undefined) {
 
-                                            continue_fl = true;
-	                                } else {
-                                            continue_fl = false;
-                                        }
-				    } else {
+                    continue_fl = true;
+                }
+                if(responseObj.response === "OK") {
+                    if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                        alert(responseObj.message);
+                    }
+                    continue_fl = true;
+                } else if(responseObj.response === "ALERT") {
+                    if (responseObj.message !== undefined) {
+                        alert(responseObj.message);
+                    } else {
+                        alert('Alert');
+                    }
+                    continue_fl = false;
+                } else if(responseObj.response === "CONFIRM") {
+                    var confirmMessage;
+                    if (responseObj.message !== undefined) {
+                        confirmMessage =responseObj.message;
+                    } else {
+                        confirmMessage = 'Confirm';
+                    }
+                    if (confirm(confirmMessage)) {
 
-                                        continue_fl = true;
-                                    }
-                                } else {
-                                    continue_fl = true;
-                                }
-	                    }
-	    }
-        );
+                        continue_fl = true;
+                    } else {
+                        continue_fl = false;
+                    }
+                } else {
+
+                    continue_fl = true;
+                }
+            } else {
+                continue_fl = true;
+            }
+        });
         return continue_fl;
 }
 //SalesPlatform.ru end

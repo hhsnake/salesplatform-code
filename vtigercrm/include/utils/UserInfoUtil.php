@@ -360,9 +360,13 @@ function isPermitted($module,$actionname,$record_id='')
 		//Checking for Action Permission
 		if(strlen($profileActionPermission[$tabid][$actionid]) <  1 && $profileActionPermission[$tabid][$actionid] == '')
 		{
-			$permission = "yes";
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
+			// SalesPlatform.ru begin Show e-mails by owner
+			if($module != 'Emails') {
+				$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+			// SalesPlatform.ru end
 		}
 
 		if($profileActionPermission[$tabid][$actionid] != 0 && $profileActionPermission[$tabid][$actionid] != '')
@@ -383,12 +387,14 @@ function isPermitted($module,$actionname,$record_id='')
 		//If modules is Products,Vendors,Faq,PriceBook then no sharing
 		if($record_id != '')
 		{
-			if(getTabOwnedBy($module) == 1)
-			{
+			// SalesPlatform.ru begin Show e-mails by owner
+			if(getTabOwnedBy($module) == 1 && $module != 'Emails') {
+			//if(getTabOwnedBy($module) == 1)
 				$permission = "yes";
 				$log->debug("Exiting isPermitted method ...");
 				return $permission;
 			}
+			// SalesPlatform.ru end
 		}
 
 		//Retreiving the RecordOwnerId

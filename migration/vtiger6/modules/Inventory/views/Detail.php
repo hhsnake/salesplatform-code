@@ -52,11 +52,21 @@ class Inventory_Detail_View extends Vtiger_Detail_View {
 
 		//Final tax details convertion started
 		$taxtype = $finalDetails['taxtype'];
-		if ($taxtype == 'group') {
+		//SalesPlatform.ru begin 
+                if ($taxtype == 'group' || $taxtype == 'group_tax_inc') { 
+                //if ($taxtype == 'group') { 
+                //SalesPlatform.ru end 
 			$taxDetails = $finalDetails['taxes'];
 			$taxCount = count($taxDetails);
 			for($i=0; $i<$taxCount; $i++) {
-				$taxDetails[$i]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($taxDetails[$i]['amount'], null, true);
+                            //SalesPlatform.ru begin
+                            if($taxtype == 'group_tax_inc' ) { 
+                                $taxDetails[$i]['taxlabel'] = vtranslate('LBL_INC_TAX') . ' ' . $taxDetails[$i]['taxlabel']; 
+                            } 
+                            
+                            $taxDetails[$i]['amount'] = htmlentities(Vtiger_Currency_UIType::transformDisplayValue($taxDetails[$i]['amount'], null, true), ENT_QUOTES | ENT_HTML401);
+				//$taxDetails[$i]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($taxDetails[$i]['amount'], null, true);
+                            //SalesPlatform.ru end
 			}
 			$finalDetails['taxes'] = $taxDetails;
 		}
@@ -66,7 +76,14 @@ class Inventory_Detail_View extends Vtiger_Detail_View {
 		$shippingTaxDetails = $finalDetails['sh_taxes'];
 		$taxCount = count($shippingTaxDetails);
 		for($i=0; $i<$taxCount; $i++) {
-			$shippingTaxDetails[$i]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($shippingTaxDetails[$i]['amount'], null, true);
+                    //SalesPlatform.ru begin
+                    if($taxtype == 'group_tax_inc' ) { 
+                        $shippingTaxDetails[$i]['taxlabel'] = vtranslate('LBL_INC_TAX') . ' ' . $shippingTaxDetails[$i]['taxlabel']; 
+                    } 
+        
+                    $shippingTaxDetails[$i]['amount'] = htmlentities(Vtiger_Currency_UIType::transformDisplayValue($shippingTaxDetails[$i]['amount'], null, true), ENT_QUOTES | ENT_HTML401);
+			//$shippingTaxDetails[$i]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($shippingTaxDetails[$i]['amount'], null, true);
+                    //SalesPlatform.ru end
 		}
 		$finalDetails['sh_taxes'] = $shippingTaxDetails;
 		//Final shipping tax details convertion ended
@@ -74,7 +91,10 @@ class Inventory_Detail_View extends Vtiger_Detail_View {
 		$currencyFieldsList = array('adjustment', 'grandTotal', 'hdnSubTotal', 'preTaxTotal', 'tax_totalamount',
 									'shtax_totalamount', 'discountTotal_final', 'discount_amount_final', 'shipping_handling_charge', 'totalAfterDiscount');
 		foreach ($currencyFieldsList as $fieldName) {
-			$finalDetails[$fieldName] = Vtiger_Currency_UIType::transformDisplayValue($finalDetails[$fieldName], null, true);
+                    //SalesPlatform.ru begin
+                    $finalDetails[$fieldName] = htmlentities(Vtiger_Currency_UIType::transformDisplayValue($finalDetails[$fieldName], null, true), ENT_QUOTES | ENT_HTML401);
+			//$finalDetails[$fieldName] = Vtiger_Currency_UIType::transformDisplayValue($finalDetails[$fieldName], null, true);
+                    //SalesPlatform.ru end
 		}
 
 		$relatedProducts[1]['final_details'] = $finalDetails;
@@ -90,7 +110,10 @@ class Inventory_Detail_View extends Vtiger_Detail_View {
 				$taxDetails = $product['taxes'];
 				$taxCount = count($taxDetails);
 				for($j=0; $j<$taxCount; $j++) {
-					$taxDetails[$j]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($taxDetails[$j]['amount'], null, true);
+                                    //SalesPlatform.ru begin
+                                    $taxDetails[$j]['amount'] = htmlentities(Vtiger_Currency_UIType::transformDisplayValue($taxDetails[$j]['amount'], null, true), ENT_QUOTES | ENT_HTML401);
+					//$taxDetails[$j]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($taxDetails[$j]['amount'], null, true);
+                                    //SalesPlatform.ru end
 				}
 				$product['taxes'] = $taxDetails;
 			}
@@ -99,7 +122,10 @@ class Inventory_Detail_View extends Vtiger_Detail_View {
 			$currencyFieldsList = array('taxTotal', 'netPrice', 'listPrice', 'unitPrice', 'productTotal',
 										'discountTotal', 'discount_amount', 'totalAfterDiscount');
 			foreach ($currencyFieldsList as $fieldName) {
-				$product[$fieldName.$i] = Vtiger_Currency_UIType::transformDisplayValue($product[$fieldName.$i], null, true);
+                            //SalesPlatform.ru begin
+                            $product[$fieldName.$i] = htmlentities(Vtiger_Currency_UIType::transformDisplayValue($product[$fieldName.$i], null, true), ENT_QUOTES | ENT_HTML401);
+				//$product[$fieldName.$i] = Vtiger_Currency_UIType::transformDisplayValue($product[$fieldName.$i], null, true);
+                            //SalesPlatform.ru end 
 			}
 
 			$relatedProducts[$i] = $product;

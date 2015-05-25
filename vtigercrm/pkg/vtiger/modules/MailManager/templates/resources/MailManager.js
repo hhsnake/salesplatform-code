@@ -517,7 +517,10 @@ if (typeof(MailManager) == 'undefined') {
 			if(jQuery('#search_type').val()) {
 				query += "&type=" + encodeURIComponent(jQuery('#search_type').val());
 			}
-			var message = app.vtranslate('JSLBL_Loading')+' ' + name + ' ...';
+			// SalesPlatform.ru begin
+			var message = app.vtranslate('JSLBL_Loading') + ' ...';
+			//var message = app.vtranslate('JSLBL_Loading')+' ' + name + ' ...';
+			// SalesPlatform.ru end
 			var progressIndicatorElement = jQuery.progressIndicator({
 				'message' : message,
 				'position' : 'html',

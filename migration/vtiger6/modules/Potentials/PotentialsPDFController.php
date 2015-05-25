@@ -13,34 +13,48 @@ require_once 'modules/Accounts/Accounts.php';
 
 class SalesPlatform_PotentialsPDFController extends SalesPlatform_PDF_SPPDFController {
 
-	function buildDocumentModel() {
-	
-		$model = parent::buildDocumentModel();
-	
-		$this->generateEntityModel($this->focus, 'Potentials', 'potential_', $model);
+    function buildDocumentModel() {
+        global $app_strings;
 
-                if($this->focusColumnValue('related_to'))
-                    $setype = getSalesEntityType($this->focusColumnValue('related_to'));
+        try {
+            $model = parent::buildDocumentModel();
 
-                $account = new Accounts();
-                $contact = new Contacts();
+            $this->generateEntityModel($this->focus, 'Potentials', 'potential_', $model);
 
-                if($setype == 'Accounts')
-           	    $account->retrieve_entity_info($this->focusColumnValue('related_to'), $setype);
-                elseif($setype == 'Contacts')
-           	    $contact->retrieve_entity_info($this->focusColumnValue('related_to'), $setype);
+            if ($this->focusColumnValue('related_to'))
+                $setype = getSalesEntityType($this->focusColumnValue('related_to'));
 
-                $this->generateEntityModel($account, 'Accounts', 'account_', $model);
-                $this->generateEntityModel($contact, 'Contacts', 'contact_', $model);
+            $account = new Accounts();
+            $contact = new Contacts();
 
-                $this->generateUi10Models($model);
-                $this->generateRelatedListModels($model);
+            if ($setype == 'Accounts')
+                $account->retrieve_entity_info($this->focusColumnValue('related_to'), $setype);
+            elseif ($setype == 'Contacts')
+                $contact->retrieve_entity_info($this->focusColumnValue('related_to'), $setype);
 
-		$model->set('potential_no', $this->focusColumnValue('potential_no'));
-                $model->set('potential_owner', getUserFullName($this->focusColumnValue('assigned_user_id')));
+            $this->generateEntityModel($account, 'Accounts', 'account_', $model);
+            $this->generateEntityModel($contact, 'Contacts', 'contact_', $model);
 
-                return $model;
-	}
+            $this->generateUi10Models($model);
+            $this->generateRelatedListModels($model);
+
+            $model->set('potential_no', $this->focusColumnValue('potential_no'));
+            $model->set('potential_owner', getUserFullName($this->focusColumnValue('assigned_user_id')));
+
+            return $model;
+
+        } catch (Exception $e) {
+            echo '<meta charset="utf-8" />';
+            if($e->getMessage() == $app_strings['LBL_RECORD_DELETE']) {
+                echo $app_strings['LBL_RECORD_INCORRECT'];
+                echo '<br><br>';
+            } else {
+                echo $e->getMessage();
+                echo '<br><br>';
+            }
+            return null;
+        }
+    }
 
 }
 ?>

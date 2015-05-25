@@ -58,30 +58,46 @@ class Settings_ExtensionStore_Basic_Action extends Settings_Vtiger_IndexAjax_Vie
 
     protected function uninstallExtension(Vtiger_Request $request) {
         $extensionName = $request->get('extensionName');
-        $extensionInstance = Vtiger_Module_Model::getInstance($extensionName);
-        $extensionInstance->delete();
-
-        //Remove extension files
-        global $root_directory;
-        $deletePaths = array();
-        $pathToExtensionLayouts = $root_directory . "layouts/vlayout/modules/$extensionName";
-        $layoutDirAccessible = isFileAccessible($pathToExtensionLayouts);
-        if($layoutDirAccessible){
-            $deletePaths['layouts'] = $pathToExtensionLayouts;
-        }
-
-        $pathToExtensionModule = $root_directory . "modules/$extensionName";
-        $moduleDirAccessible = isFileAccessible($pathToExtensionModule);
-        if($moduleDirAccessible){
-            $deletePaths['modules'] = $pathToExtensionModule; 
-        }
-
-        foreach ($deletePaths as $dirName) {
-            $this->deleteRecursively($dirName);
-        }
-        
+        $extensionInstance = Settings_ExtensionStore_Extension_Model::getModuleFromExtnName($extensionName);
+        $extnType = $extensionInstance->get('extnType');
         $response = new Vtiger_Response();
-        $response->setResult(array('success' => true, 'message' => 'extension deleted'));
+        
+        if($extnType == 'module'){
+            $extensionInstance->delete();
+            //Remove extension files
+            global $root_directory;
+            $deletePaths = array();
+            $pathToExtensionLayouts = $root_directory . "layouts/vlayout/modules/$extensionName";
+            $layoutDirAccessible = isFileAccessible($pathToExtensionLayouts);
+            if($layoutDirAccessible){
+                $deletePaths['layouts'] = $pathToExtensionLayouts;
+            }
+
+            $pathToExtensionModule = $root_directory . "modules/$extensionName";
+            $moduleDirAccessible = isFileAccessible($pathToExtensionModule);
+            if($moduleDirAccessible){
+                $deletePaths['modules'] = $pathToExtensionModule; 
+            }
+
+            foreach ($deletePaths as $dirName) {
+                $this->deleteRecursively($dirName);
+            }
+            $response->setResult(array('success' => true, 'message' => 'extension deleted'));
+        }else if($extnType == 'language'){
+            $languageInstance = Settings_ExtensionStore_Extension_Model::getLanguageInstance($extensionName);
+            if($languageInstance) {
+                $langPrefix = $languageInstance->get('prefix');
+                Vtiger_Language::deregister($langPrefix);
+                //remove files
+                $langDir = "languages/$langPrefix";
+                if(isFileAccessible($langDir)) {
+                    $this->deleteRecursively($langDir);
+                }
+            }
+            $response->setResult(array('success' => true, 'message' => 'extension deleted'));
+        }  else {
+            $response->setError('Error in deleting extension');
+        }    
         $response->emit();
     }
     
@@ -101,7 +117,7 @@ class Settings_ExtensionStore_Basic_Action extends Settings_Vtiger_IndexAjax_Vie
     protected function registerAccount(Vtiger_Request $request) {
         $options = array();
         $userAction = $request->get('userAction');
-        $options['emailaddress'] = $request->get('emailaddress');
+        $options['emailAddress'] = $request->get('emailAddress');
         $options['password'] = $request->get('password');
         $modelInstance = $this->getModelInstance();
         
@@ -112,7 +128,7 @@ class Settings_ExtensionStore_Basic_Action extends Settings_Vtiger_IndexAjax_Vie
             $options['confirmPassword'] = $request->get('confirmPassword');
             $profieInfo = $modelInstance->signup($options);
         } elseif ($userAction == 'login') {
-            $options['savePassword'] = $request->get('savePassword');
+            $options['savePassword'] = ($request->get('savePassword') == 'true') ? true:false;
             $options['password'] = md5($options['password']);
             $profieInfo = $modelInstance->login($options);
         } elseif ($userAction == 'register') {
@@ -140,7 +156,7 @@ class Settings_ExtensionStore_Basic_Action extends Settings_Vtiger_IndexAjax_Vie
     }
     
     protected function updateCardDetails(Vtiger_Request $request) {
-        $number = (int) $request->get('cardNumber');
+        $number = $request->get('cardNumber');
         $expmonth = (int) $request->get('expMonth');
         $expyear = (int) $request->get('expYear');
         $cvc = (int) $request->get('cvccode');
@@ -160,5 +176,9 @@ class Settings_ExtensionStore_Basic_Action extends Settings_Vtiger_IndexAjax_Vie
             $response->setResult($result['result']);
         }
         $response->emit();
+    }
+    
+    public function validateRequest(Vtiger_Request $request) {
+        $request->validateWriteAccess();
     }
 }

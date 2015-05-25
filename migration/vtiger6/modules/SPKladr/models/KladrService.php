@@ -13,7 +13,16 @@
  * to search some address parts. Specific endless value 00 of code - it record is actual.
  */
 class KladrService {
-      
+     
+    private $db;
+    
+    public function __construct() {
+        /* Load config params and create connection */
+        require_once 'modules/SPKladr/kladrDB.config.inc';
+        
+        $this->db = new PearDatabase($spKladrDB['type'], $spKladrDB['hostname'], $spKladrDB['name'], $spKladrDB['username'], $spKladrDB['password']);
+    }
+    
     /**
      * Search city by part of it name. Return container, which have city name 
      * and socr, state name and socr and region name and socr
@@ -28,20 +37,19 @@ class KladrService {
             return array();
         }
            
-        $db = PearDatabase::getInstance();
         $sql = "select name, socr, code FROM sp_kladr " .
                     "WHERE socr IN (select scname FROM sp_kladr_socrbase WHERE level IN (3,4)) " .
                     "AND code LIKE '%00' AND name LIKE ? ORDER BY socr, name LIMIT ?,?";
-        $searchResult = $db->pquery($sql, array($searchParams["cityName"] . "%", $searchParams["cityOffset"], $searchParams["cityRecordsLimit"]));
+        $searchResult = $this->db->pquery($sql, array($searchParams["cityName"] . "%", $searchParams["cityOffset"], $searchParams["cityRecordsLimit"]));
         
         $citiesList = array();
-        while($searchedRow = $db->fetch_row($searchResult)) {
+        while($searchedRow = $this->db->fetch_row($searchResult)) {
             $currentCity = array();
             $currentCity["cityName"] = $searchedRow["name"];
             $currentCity["citySocr"] = $searchedRow["socr"];
             $currentCity["cityCode"] = substr($searchedRow["code"], 0, 11);
             
-            $this->selectCityStateAndRegion($currentCity, $db);
+            $this->selectCityStateAndRegion($currentCity, $this->db);
             
             $citiesList[] = $currentCity;
         }
@@ -50,8 +58,8 @@ class KladrService {
         $sql = "select count(code) FROM sp_kladr WHERE socr IN (select scname FROM sp_kladr_socrbase WHERE level IN (3,4)) " .
                     "AND code LIKE '%00' AND name LIKE ?";
         
-        $countResult = $db->pquery($sql, array($searchParams["cityName"] . "%"));
-        $countResult = $db->fetch_row($countResult);
+        $countResult = $this->db->pquery($sql, array($searchParams["cityName"] . "%"));
+        $countResult = $this->db->fetch_row($countResult);
         
         return array("totalCities" => $countResult[0], "selectedCities" => $citiesList);
     }
@@ -68,12 +76,11 @@ class KladrService {
             return array();
         }
         
-        $db = PearDatabase::getInstance();
-        $searchResult = $db->pquery("select name, socr FROM sp_kladr WHERE code LIKE '%00000000000' AND name LIKE ? ORDER BY socr, name", 
+        $searchResult = $this->db->pquery("select name, socr FROM sp_kladr WHERE code LIKE '%00000000000' AND name LIKE ? ORDER BY socr, name", 
                 array($searchParams["stateName"] . "%"));
         
         $statesList = array();
-        while($searchedRow = $db->fetch_row($searchResult)) {
+        while($searchedRow = $this->db->fetch_row($searchResult)) {
             $currentState = array();
             $currentState['stateName'] = $searchedRow['name'];
             $currentState['stateSocr'] = $searchedRow['socr'];
@@ -103,10 +110,9 @@ class KladrService {
         $sql = "select name, socr, code FROM sp_kladr_street WHERE code LIKE ? AND name LIKE ? ORDER BY name";
 
         /* Fill in list search results */
-        $db = PearDatabase::getInstance();
-        $searchResult = $db->pquery($sql, $params);
+        $searchResult = $this->db->pquery($sql, $params);
         $streetsList = array();
-        while($searchedRow = $db->fetch_row($searchResult)) { 
+        while($searchedRow = $this->db->fetch_row($searchResult)) { 
             $currentStreet = array();
             $currentStreet["streetName"] = $searchedRow["name"];
             $currentStreet["streetSocr"] = $searchedRow["socr"];
@@ -138,10 +144,9 @@ class KladrService {
         $sql = "select name, mail_index FROM sp_kladr_formatted_house WHERE code LIKE ? AND name LIKE ? ORDER BY CAST(name as UNSIGNED)";
 
         /* Get search results */
-        $db = PearDatabase::getInstance();
-        $searchResult = $db->pquery($sql, $params);
+        $searchResult = $this->db->pquery($sql, $params);
         $housesList = array();
-        while($searchedRow = $db->fetch_row($searchResult)) { 
+        while($searchedRow = $this->db->fetch_row($searchResult)) { 
             $currentHouse = array();
             $currentHouse["houseNumber"] = $searchedRow["name"];
             $currentHouse["mailIndex"] = $searchedRow["mail_index"];

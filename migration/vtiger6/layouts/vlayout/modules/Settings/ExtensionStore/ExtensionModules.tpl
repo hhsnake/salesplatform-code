@@ -8,7 +8,7 @@
     <div class="row-fluid">
         {foreach item=EXTENSION from=$EXTENSIONS_LIST name=extensions}
             {if $EXTENSION->isAlreadyExists()}
-                {assign var=EXTENSION_MODULE_MODEL value= Vtiger_Module_Model::getInstance($EXTENSION->get('name'))}
+                {assign var=EXTENSION_MODULE_MODEL value= $EXTENSION->get('moduleModel')}
             {else}
                 {assign var=EXTENSION_MODULE_MODEL value= 'false'}
             {/if}
@@ -44,8 +44,8 @@
                         <div class="extensionInfo">
                             <div class="row-fluid">
                                 {assign var=ON_RATINGS value=$EXTENSION->get('avgrating')}
-                                <div class="span5"><span class="rating" data-score="{$ON_RATINGS}" data-readonly=true></span><span>{if $EXTENSION->get('avgrating')}&nbsp;({$EXTENSION->get('avgrating')}){/if}</span></div>
-                                <div class="span7">
+                                <div class="span4"><span class="rating" data-score="{$ON_RATINGS}" data-readonly=true></span><span>{if $EXTENSION->get('avgrating')}&nbsp;({$EXTENSION->get('avgrating')}){/if}</span></div>
+                                <div class="span8">
                                     <div class="pull-right">
                                         <button class="btn installExtension addButton" style="margin-right:5px;">{vtranslate('LBL_MORE_DETAILS', $QUALIFIED_MODULE)}</button>
                                         {if $EXTENSION->isVtigerCompatible()}

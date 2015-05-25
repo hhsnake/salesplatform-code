@@ -129,7 +129,7 @@ class SalesOrder extends CRMEntity {
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if($_REQUEST['action'] != 'SalesOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
 				&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
-				&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false) {           
+				&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false) {
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails($this, 'SalesOrder');
             // SalesPlatform.ru begin

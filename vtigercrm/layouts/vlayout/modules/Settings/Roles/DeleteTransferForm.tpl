@@ -42,7 +42,10 @@
 
 			<div class="modal-footer">
 				<div class=" pull-right cancelLinkContainer">
-					<a class="cancelLink" data-dismiss="modal" type="reset">Cancel</a>
+					{* SalesPlatform.ru begin *}
+					<a class="cancelLink" data-dismiss="modal" type="reset">{vtranslate('Cancel', $QUALIFIED_MODULE)}</a>
+					{*<a class="cancelLink" data-dismiss="modal" type="reset">Cancel</a>*}
+					{* SalesPlatform.ru end *}
 				</div>
 				<button class="btn btn-success pull-right" type="submit">{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</button>
 			</div>

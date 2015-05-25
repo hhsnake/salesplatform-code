@@ -216,6 +216,7 @@ $languageStrings = array(
 	'LBL_ALMOST_THERE'			   =>	'Почти готово',
     'Preferences' 				   => 'Настройки',
 	'LBL_BASE_CURRENCY' 		   => 'Базовая валюта',
+    'LBL_OLD_PASSWORD'             => 'Старый пароль',
     'LBL_OPERATING_CURRENCY'	   => 'После завершения установки базовая валюта не может быть изменена. Выберите вашу базовую валюту из списка',
     'LBL_GET_STARTED'			   => 'Завершить установку',
     'Call'                         => 'Звонок'                ,

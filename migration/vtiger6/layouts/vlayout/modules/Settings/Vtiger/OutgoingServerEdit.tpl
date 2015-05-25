@@ -37,9 +37,7 @@
 					<tr class="blockHeader"><th colspan="2" class="{$WIDTHTYPE}">{vtranslate('LBL_MAIL_SERVER_SMTP', $QUALIFIED_MODULE)}</th></tr>
 				</thead>
 				<tbody>
-                                        <tr><td width="20%" class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px">{vtranslate('LBL_SENDMAIL', $QUALIFIED_MODULE)}</label></td>
-                                        <td class="{$WIDTHTYPE}" style="border-left: none;"><input type="checkbox" name="use_sendmail" {if $MODEL->isUseSendMailEnabled() neq 'false'}checked{/if}/></td></tr> 
-					<tr><td class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px"><span class="redColor">*</span>{vtranslate('LBL_SERVER_NAME', $QUALIFIED_MODULE)}</label></td>
+					<tr><td width="20%" class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px"><span class="redColor">*</span>{vtranslate('LBL_SERVER_NAME', $QUALIFIED_MODULE)}</label></td>
 						<td class="{$WIDTHTYPE}" style="border-left: none;"><input type="text" name="server" data-validation-engine='validate[required]' value="{$MODEL->get('server')}" /></td></tr>
 					{* SalesPlatform.ru begin optional fields *}
                                         <tr><td class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px">{vtranslate('LBL_SERVER_PORT', $QUALIFIED_MODULE)}</label></td>

@@ -76,6 +76,12 @@ Vtiger_RelatedList_Js("Campaigns_RelatedList_Js",{
 	registerChangeCustomFilterEvent : function(){
 		var filterSelectElement = jQuery('#recordsFilter');
 		filterSelectElement.change(function(e){
+            // SalesPlatform.ru begin Add confirm dialog on action
+            if(!confirm(app.vtranslate('JS_CONFIRM_APPLY_FILTER'))) {
+                filterSelectElement.select2("val", "");
+                return;
+            }
+            // SalesPlatform.ru end
 			var element = jQuery(e.currentTarget);
 			var cvId = element.find('option:selected').data('id');
 			var relatedModuleName = jQuery('.relatedModuleName').val();

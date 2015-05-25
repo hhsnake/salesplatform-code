@@ -22,7 +22,10 @@ class CustomView_Deny_Action extends Vtiger_Action_Controller {
 		header("Location: $listViewUrl");
 	}
         
-        public function validateRequest(Vtiger_Request $request) { 
-            $request->validateWriteAccess(); 
+        public function validateRequest(Vtiger_Request $request) {
+            // SalesPlatform.ru begin
+            $request->validateWriteAccess(true);
+            //$request->validateWriteAccess(true);
+            // SalesPlatform.ru end
         } 
 }

@@ -51,37 +51,51 @@ require_once 'modules/Accounts/Accounts.php';
 
 class SalesPlatform_QuotesPDFController extends SalesPlatform_PDF_ProductListDocumentPDFController{
 
-	function buildDocumentModel() {
-	
-		$model = parent::buildDocumentModel();
-	
-		$this->generateEntityModel($this->focus, 'Quotes', 'quote_', $model);
+    function buildDocumentModel() {
+        global $app_strings;
 
-                $entity = new Potentials();
-		if($this->focusColumnValue('potential_id'))
-            	    $entity->retrieve_entity_info($this->focusColumnValue('potential_id'), 'Potentials');
-                $this->generateEntityModel($entity, 'Potentials', 'potential_', $model);
+        try {
+            $model = parent::buildDocumentModel();
 
-                $entity = new Accounts();
-		if($this->focusColumnValue('account_id'))
-            	    $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
-                $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
+            $this->generateEntityModel($this->focus, 'Quotes', 'quote_', $model);
 
-                $entity = new Contacts();
-		if($this->focusColumnValue('contact_id'))
-            	    $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
-                $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
+            $entity = new Potentials();
+            if ($this->focusColumnValue('potential_id'))
+                $entity->retrieve_entity_info($this->focusColumnValue('potential_id'), 'Potentials');
+            $this->generateEntityModel($entity, 'Potentials', 'potential_', $model);
 
-                $this->generateUi10Models($model);
-                $this->generateRelatedListModels($model);
+            $entity = new Accounts();
+            if ($this->focusColumnValue('account_id'))
+                $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
+            $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
 
-		$model->set('quote_no', $this->focusColumnValue('quote_no'));
-		return $model;
-	}
+            $entity = new Contacts();
+            if ($this->focusColumnValue('contact_id'))
+                $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
+            $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
-	function getWatermarkContent() {
-		return '';
-	}
+            $this->generateUi10Models($model);
+            $this->generateRelatedListModels($model);
+
+            $model->set('quote_no', $this->focusColumnValue('quote_no'));
+            return $model;
+
+        } catch (Exception $e) {
+            echo '<meta charset="utf-8" />';
+            if($e->getMessage() == $app_strings['LBL_RECORD_DELETE']) {
+                echo $app_strings['LBL_RECORD_INCORRECT'];
+                echo '<br><br>';
+            } else {
+                echo $e->getMessage();
+                echo '<br><br>';
+            }
+            return null;
+        }
+    }
+
+    function getWatermarkContent() {
+        return '';
+    }
 
 }
 

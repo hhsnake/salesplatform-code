@@ -8,18 +8,27 @@ vimport('~~/vtlib/Vtiger/Package.php');
 vimport ('~/libraries/PHPMarkdown/Michelf/Markdown.inc.php');
 
 class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
-
-    private static $EXTENSION_LOOKUP_URL = 'https://marketplace.vtiger.com/api';
-    private static $EXTENSION_MANAGER_URL= false;
-
+	private static $EXTENSION_MANAGER_URL= false;
+	protected $EXTENSIONSTORE_LOOKUP_URL = null;
+	protected $siteURL = null;
 	var $fileName;
+	
+	public function __construct() {
+		parent::__construct();
+		$this->EXTENSIONSTORE_LOOKUP_URL = 'https://marketplace.vtiger.com/api';
+		global $site_URL;
+		if (empty($site_URL)) {
+            throw new Exception('Invalid configuration.');
+        }
+        $this->siteURL = $site_URL;
+	}
         
-        public function getExtensionsLookUpUrl() {
-		return self::$EXTENSION_LOOKUP_URL;
+    public function getExtensionsLookUpUrl() {
+    	return $this->EXTENSIONSTORE_LOOKUP_URL;
 	}
 
 	public function getExtensionsManagerUrl() {
-		return self::$EXTENSION_MANAGER_URL ? self::$EXTENSION_MANAGER_URL : self::$EXTENSION_LOOKUP_URL;
+		return self::$EXTENSION_MANAGER_URL ? self::$EXTENSION_MANAGER_URL : $this->EXTENSIONSTORE_LOOKUP_URL;
 	}
 
 	/**
@@ -116,9 +125,25 @@ class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		if($moduleModel) {
 			return true;
-		}
+        }else if(self::getLanguageInstance($moduleName)){
+            return true;
+        }
 		return false;
 	}
+    
+    public static function getLanguageInstance($lang) {
+        $sql = 'SELECT id,name,prefix FROM vtiger_language WHERE name = ?';
+        $db = PearDatabase::getInstance();
+        $result = $db->pquery($sql,array($lang));
+        if($db->num_rows($result) > 0) {
+            $instance = new self();
+            $row = $db->query_result_rowdata($result, 0);
+            $instance->setData($row);
+            return $instance;
+        }  else {
+            return false;
+        }
+    }
 
 	/**
 	 * Function to check whether the module is upgradable or not
@@ -357,7 +382,7 @@ class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
             $extensionLookUpUrl = $this->getExtensionsLookUpUrl();
             if ($extensionLookUpUrl) {
                     $connector = Settings_ExtensionStore_ExtnStore_Connector::getInstance($extensionLookUpUrl);
-                    $response = $connector->login($options['emailaddress'], $options['password'], $options['savePassword']);
+                    $response = $connector->login($options['emailAddress'], $options['password'], $options['savePassword']);
                     return $response;
             }
         }
@@ -436,8 +461,8 @@ class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
 		
 		foreach ($listing as $key => $value) {
 			switch ($key) {
-                        case 'name'    :   $key = 'label'; break;
-                        case 'identifier': $key = 'name'; break;
+            case 'name'    :   $key = 'label'; break;
+            case 'identifier': $key = 'name'; break;
 			case 'version' :   $key = 'pkgVersion'; break;
 			case 'minrange':   $key = 'vtigerVersion'; break;
 			case 'maxrange':   $key = 'vtigerMaxVersion'; break;
@@ -447,19 +472,19 @@ class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
 			case 'ListingFileId': 
 				if ($value) {
 					$key = 'downloadURL'; 
-					$value = self::$EXTENSION_LOOKUP_URL . '/customer/listingfiles?id='.$value;
+					$value = $this->getExtensionsLookUpUrl() . '/customer/listingfiles?id='.$value;
 				}
 				break;
                         case 'thumbnail': 
                                 if ($value) {
                                     $key = 'thumbnailURL';
-                                    $value = str_replace('api', "_listingimages/$value", self::$EXTENSION_LOOKUP_URL);
+                                    $value = str_replace('api', "_listingimages/$value", $this->getExtensionsLookUpUrl());
                                 }
                                 break;
                         case 'banner'   :
                                if ($value) {
                                    $key = 'bannerURL';
-                                   $value = str_replace('api', "_listingimages/$value", self::$EXTENSION_LOOKUP_URL);
+                                   $value = str_replace('api', "_listingimages/$value", $this->getExtensionsLookUpUrl());
                                }
                                break;
                         case 'description':
@@ -475,8 +500,31 @@ class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
 		if (!$label) {
                     $extensionModel->set('label', $extensionModel->getName());
 		}
+        
+        $moduleModel = self::getModuleFromExtnName($extensionModel->getName());
+        if($moduleModel && $moduleModel->get('extnType') == 'language') {
+            $trial = $extensionModel->get('trial');
+            $moduleModel->set('trial',$trial);
+        }
+        $extensionModel->set('moduleModel',  $moduleModel);
 		return $extensionModel;
 	}
+    
+    public static function getModuleFromExtnName($extnName) {
+        $moduleModel = Vtiger_Module_Model::getInstance($extnName);
+        if($moduleModel) {
+            $moduleModel->set('extnType','module');
+        }
+        if(!$moduleModel) {
+            if(self::getLanguageInstance($extnName)) {
+               $moduleModel = new Vtiger_Module_Model();
+               $moduleModel->set('name',$extnName);
+               $moduleModel->set('isentitytype',false);
+               $moduleModel->set('extnType','language');
+            }
+        }
+        return $moduleModel;
+    }
 
         /**
 	 * Function to get instance by using XML node
@@ -491,7 +539,7 @@ class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
                         case 'location': 
                                if ($value) {
                                    $key = 'screenShotURL';
-                                   $value = str_replace('api', "_listingimages/$value", self::$EXTENSION_LOOKUP_URL);
+                                   $value = str_replace('api', "_listingimages/$value", $this->getExtensionsLookUpUrl());
                                }
                                break;
                         }

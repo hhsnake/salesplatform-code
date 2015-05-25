@@ -15,7 +15,7 @@ $languageStrings = array(
 	'LBL_EVENTS'                   => 'События'              , 
 	'LBL_TODOS'                    => 'Задачи'                , 
 	'LBL_CALENDAR_SETTINGS'        => 'Настройки Календаря', // KEY 5.x: LBL_CALSETTINGS
-	'LBL_CALENDAR_SHARING'         => 'Использовать совмесно с', 
+	'LBL_CALENDAR_SHARING'         => 'Использовать совместно с',
 	'LBL_DEFAULT_EVENT_DURATION'   => 'Продолжительность события по умолчанию'      , // TODO: Review
 	'LBL_CALL'                     => 'звонить по телефону', 
 	'LBL_OTHER_EVENTS'             => 'Другие События'                , // TODO: Review
@@ -187,9 +187,11 @@ $jsLanguageStrings = array(
 	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'Больше нет типов для добавления',
 	'JS_EDIT_CALENDAR' => 'Редактировать календарь',
     
-        //SalesPlatform.ru begin add locale
-        'JS_RECORD_DELETED' => 'Запись удалена',
-        //SalesPlatform.ru end
+    //SalesPlatform.ru begin add locale
+    'JS_RECORD_DELETED' => 'Запись удалена',
+    'JS_NO_DELETE_PERMISSION' => 'У Вас недостаточно прав для удаления элементов Календаря',
+    'JS_NO_EDIT_PERMISSION' => 'У Вас недостаточно прав для изменения элементов Календаря',
+    //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

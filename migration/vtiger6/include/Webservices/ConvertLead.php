@@ -261,6 +261,11 @@ function vtws_updateConvertLeadStatus($entityIds, $leadId, $user) {
 		$sql = "DELETE FROM vtiger_tracker WHERE item_id=?";
 		$adb->pquery($sql, array($leadIdComponents[1]));
 
+        // SalesPlatform.ru begin
+        $sql = "DELETE FROM vtiger_pbxmanager_phonelookup WHERE crmid=?";
+        $adb->pquery($sql, array($leadIdComponents[1]));
+        // SalesPlatform.ru end
+
 		//update the modifiedtime and modified by information for the record
 		$leadModifiedTime = $adb->formatDate(date('Y-m-d H:i:s'), true);
 		$crmentityUpdateSql = "UPDATE vtiger_crmentity SET modifiedtime=?, modifiedby=? WHERE crmid=?";

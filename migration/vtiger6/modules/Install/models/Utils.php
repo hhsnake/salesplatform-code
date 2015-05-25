@@ -59,8 +59,14 @@ class Install_Utils_Model {
 		$directiveValues = array();
 		if (ini_get('safe_mode') == '1' || stripos(ini_get('safe_mode'), 'On') > -1)
 			$directiveValues['safe_mode'] = 'On';
-		if (ini_get('display_errors') != '1' || stripos(ini_get('display_errors'), 'Off') > -1)
-			$directiveValues['display_errors'] = 'Off';
+		// SalesPlatform.ru begin
+		if (ini_get('display_errors') == '1' || stripos(ini_get('display_errors'), 'On') > -1)
+			$directiveValues['display_errors'] = 'On';
+		//if (ini_get('display_errors') != '1' || stripos(ini_get('display_errors'), 'Off') > -1)
+		//	$directiveValues['display_errors'] = 'Off';
+		if (ini_get('max_input_vars') < 100000)
+			$directiveValues['max_input_vars'] = ini_get('max_input_vars');
+		// SalesPlatform.ru end
 		if (ini_get('file_uploads') != '1' || stripos(ini_get('file_uploads'), 'Off') > -1)
 			$directiveValues['file_uploads'] = 'Off';
 		if (ini_get('register_globals') == '1' || stripos(ini_get('register_globals'), 'On') > -1)
@@ -69,21 +75,37 @@ class Install_Utils_Model {
 			$directiveValues['output_buffering'] = 'Off';
 		if (ini_get('max_execution_time') < 600)
 			$directiveValues['max_execution_time'] = ini_get('max_execution_time');
-		if (ini_get('memory_limit') < 32)
+		if (ini_get('memory_limit') < 128)
 			$directiveValues['memory_limit'] = ini_get('memory_limit');
-		$errorReportingValue = E_WARNING & ~E_NOTICE;
+		// SalesPlatform.ru begin
+		$errorReportingValue = E_ALL & ~E_NOTICE;
+		//$errorReportingValue = E_WARNING & ~E_NOTICE;
+		// SalesPlatform.ru end
 		if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
-                        // SalesPlatform.ru begin
-			$errorReportingValue = E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT;
+            		// SalesPlatform.ru begin
+			$errorReportingValue = E_ALL & ~E_NOTICE & ~E_DEPRECATED;
 			//$errorReportingValue = E_WARNING & ~E_NOTICE & ~E_DEPRECATED;
-                        // SalesPlatform.ru end
+            		// SalesPlatform.ru end
 		}
+                // SalesPlatform.ru begin
+		if(version_compare(PHP_VERSION, '5.4.0') >= 0) {
+			$errorReportingValue = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT;
+		}
+                // SalesPlatform.ru end
 		if (ini_get('error_reporting') != $errorReportingValue)
 			$directiveValues['error_reporting'] = 'NOT RECOMMENDED';
+		// SalesPlatform.ru begin
+		if(version_compare(PHP_VERSION, '5.4.0') < 0) {
+		// SalesPlatform.ru end
 		if (ini_get('allow_call_time_pass_reference') != '1' || stripos(ini_get('allow_call_time_pass_reference'), 'Off') > -1)
 			$directiveValues['allow_call_time_pass_reference'] = 'Off';
-		if (ini_get('log_errors') == '1' || stripos(ini_get('log_errors'), 'On') > -1)
-			$directiveValues['log_errors'] = 'On';
+		// SalesPlatform.ru begin
+		}
+		if (ini_get('log_errors') != '1' || stripos(ini_get('log_errors'), 'Off') > -1)
+			$directiveValues['log_errors'] = 'Off';
+		//if (ini_get('log_errors') == '1' || stripos(ini_get('log_errors'), 'On') > -1)
+		//	$directiveValues['log_errors'] = 'On';
+		// SalesPlatform.ru end
 		if (ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'), 'Off') > -1)
 			$directiveValues['short_open_tag'] = 'Off';
 
@@ -96,14 +118,23 @@ class Install_Utils_Model {
 	 */
 	public static $recommendedDirectives = array (
 		'safe_mode' => 'Off',
-		'display_errors' => 'On',
+		// SalesPlatform.ru begin
+		'display_errors' => 'Off',
+		//'display_errors' => 'On',
+		'max_input_vars' => '100000',
+		// SalesPlatform.ru end
 		'file_uploads' => 'On',
 		'register_globals' => 'On',
 		'output_buffering' => 'On',
 		'max_execution_time' => '600',
-		'memory_limit' => '32',
-		'error_reporting' => 'E_WARNING & ~E_NOTICE',
-		'log_errors' => 'Off',
+		// SalesPlatform.ru begin
+		'memory_limit' => '128',
+		'error_reporting' => 'E_ALL & ~E_NOTICE',
+		'log_errors' => 'On',
+		//'memory_limit' => '32',
+		//'error_reporting' => 'E_WARNING & ~E_NOTICE',
+		//'log_errors' => 'Off',
+		// SalesPlatform.ru end
 		'short_open_tag' => 'On'
 	);
 
@@ -114,10 +145,15 @@ class Install_Utils_Model {
 	function getRecommendedDirectives() {
 		if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
                         // SalesPlatform.ru begin
-			self::$recommendedDirectives['error_reporting'] = 'E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT';
+			self::$recommendedDirectives['error_reporting'] = 'E_ALL & ~E_NOTICE & ~E_DEPRECATED';
 			//self::$recommendedDirectives['error_reporting'] = 'E_WARNING & ~E_NOTICE & ~E_DEPRECATED';
                         // SalesPlatform.ru end
 		}
+                // SalesPlatform.ru begin
+		if(version_compare(PHP_VERSION, '5.4.0') >= 0) {
+			self::$recommendedDirectives['error_reporting'] = 'E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE';
+		}
+                // SalesPlatform.ru end
 		return self::$recommendedDirectives;
 	}
 

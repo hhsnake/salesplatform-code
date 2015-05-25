@@ -1383,55 +1383,54 @@ function sp_js_editview_checkBeforeSave(module, thisForm, mode) {
     if(mode == 'edit') {
         urlstring = urlstring + "&id=" + crmId;
     }
-
+    
+    var params = {  
+        url : urlstring, 
+        async : false, 
+        data : {} 
+    }; 
+    
     var continue_fl;    // true - continue, false - break  
-    $.ajax({
-        url: urlstring,            
-        type: "POST",
-        async: false,
-        dataType : "json",                     
-        complete: function (response, textStatus) {
-			    if(!empty(response.responseText) && IsJsonString(response.responseText)) {	                         
-                    var responseObj= JSON.parse(response.responseText);
-                    if(responseObj.response === undefined) {                                  
-                        continue_fl = true;
-                    }
-                    if(responseObj.response === "OK") {
-                        if (responseObj.message !== undefined && !empty(responseObj.message)) {
-                            alert(responseObj.message);
-                        }
-                        continue_fl = true;
-                    } else if(responseObj.response === "ALERT") {
-                        VtigerJS_DialogBox.unblock();
-                        if (responseObj.message !== undefined) {
-                            alert(responseObj.message);
-                        } else {
-                            alert('Alert');
-                        }
-                        thisForm.removeData('submit');
-                        continue_fl = false;
-                    } else if(responseObj.response === "CONFIRM") {
-                        var confirmMessage;
-                        if (responseObj.message !== undefined) {
-                            confirmMessage =responseObj.message;
-                        } else {
-                            confirmMessage = 'Confirm';
-                        }
-                        if (confirm(confirmMessage)) {
-                            continue_fl = true;
-                        } else {
-                            VtigerJS_DialogBox.unblock();
-                            thisForm.removeData('submit');
-                            continue_fl = false;
-                        }
-                    } else {
-                        continue_fl = true;
-                    }
-                } else {
-                    continue_fl = true;
+    AppConnector.request(params).then( function (responseObj) {
+	if(!empty(responseObj)) {                        
+            if(responseObj.response === undefined) {                                  
+                continue_fl = true;
+            }
+            if(responseObj.response === "OK") {
+                if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                    alert(responseObj.message);
                 }
+                continue_fl = true;
+            } else if(responseObj.response === "ALERT") {
+                VtigerJS_DialogBox.unblock();
+                if (responseObj.message !== undefined) {
+                    alert(responseObj.message);
+                } else {
+                    alert('Alert');
+                }
+                thisForm.removeData('submit');
+                continue_fl = false;
+            } else if(responseObj.response === "CONFIRM") {
+                var confirmMessage;
+                if (responseObj.message !== undefined) {
+                    confirmMessage =responseObj.message;
+                } else {
+                    confirmMessage = 'Confirm';
+                }
+                if (confirm(confirmMessage)) {
+                    continue_fl = true;
+                } else {
+                    VtigerJS_DialogBox.unblock();
+                    thisForm.removeData('submit');
+                    continue_fl = false;
+                }
+            } else {
+                continue_fl = true;
+            }
+        } else {
+            continue_fl = true;
         }
-	});
+    });
     return continue_fl;
 }
 //SalesPlatform.ru end

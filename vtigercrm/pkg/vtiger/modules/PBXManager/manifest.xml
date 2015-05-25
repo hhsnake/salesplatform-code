@@ -375,7 +375,7 @@
 <masseditable>1</masseditable>
 </field>
 <field>
-<fieldname>CreatedTime</fieldname>
+<fieldname>createdtime</fieldname>
 <uitype>70</uitype>
 <columnname>createdtime</columnname>
 <columntype>DATETIME</columntype>
@@ -396,7 +396,7 @@
 <masseditable>1</masseditable>
 </field>
 <field>
-<fieldname>ModifiedTime</fieldname>
+<fieldname>modifiedtime</fieldname>
 <uitype>70</uitype>
 <columnname>modifiedtime</columnname>
 <columntype>DATETIME</columntype>
