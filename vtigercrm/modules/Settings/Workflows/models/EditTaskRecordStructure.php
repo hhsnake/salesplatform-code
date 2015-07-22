@@ -23,7 +23,7 @@ class Settings_Workflows_EditTaskRecordStructure_Model extends Settings_Workflow
 		$recordId = $recordModel->getId();
 
 		$values = array();
-                
+
 		$baseModuleModel = $moduleModel = $this->getModule();
 		$blockModelList = $moduleModel->getBlocks();
                 

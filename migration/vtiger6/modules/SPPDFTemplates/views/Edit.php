@@ -18,7 +18,11 @@ class SPPDFTemplates_Edit_View extends Vtiger_Index_View {
     public function process(Vtiger_Request $request) {
         $recordModel = SPPDFTemplates_Record_Model::getInstanceById($request->get('templateid'));
         $moduleModel = new SPPDFTemplates_Module_Model();
-        
+        $pdfCompanies = array('All' => vtranslate('All'));
+        foreach(Settings_Vtiger_CompanyDetails_Model::getCompanies() as $company) {
+            $pdfCompanies[$company] = vtranslate($company, 'Settings:Vtiger');
+        }
+ 
         if($request->get('isDuplicate') != NULL ) {
             $recordModel->toDuplicate();
         }
@@ -33,6 +37,7 @@ class SPPDFTemplates_Edit_View extends Vtiger_Index_View {
         $viewer->assign('MODEL', $recordModel);
         $viewer->assign('MODULENAMES',$moduleModel->getModulesList());
         $viewer->assign('PAGE_ORIENTATIONS',$moduleModel->getPageOrientations());
+        $viewer->assign('SP_PDF_COMPANIES',$pdfCompanies);
         $viewer->view('EditPDFTemplate.tpl', $request->getModule());
     }
 }

@@ -43,63 +43,9 @@ class PBXManager_PBXManager_Controller {
                 }
                 $this->processHangupCall($request);
                 break;
-                
-            //SalesPlatform.ru begin alternative start call detection mode
-            case "DialBegin" :
-                $this->processDialBeginCall($request);
-                break;
-            //SalesPlatform.ru end    
         }
     }
-    
-    //SalesPlatform.ru begin alternative start call detection mode
-    /**
-     * Function to process Incoming call request
-     * @params <array> incoming call details
-     * return Response object
-     */
-    function processDialBeginCall($request) {
-        $callerNumber = $request->get('callerIdNumber');
 
-        /* Hide Originate event */
-        if($callerNumber == $request->get('dialString')) return;
-        $callerUserInfo = PBXManager_Record_Model::getUserInfoWithNumber($callerNumber);
-  
-        /* Get dialed number by caller. It has unified format so we need check variants */
-        if(strpos($request->get('dialString'), "/") !== false) {
-            $dialParts = explode("/", $request->get('dialString'));
-            $destinationNumber = end($dialParts);
-        } elseif(strpos($request->get('dialString'), "@") !== false) {
-            $dialParts = explode("@", $request->get('dialString'));
-            $destinationNumber = $dialParts[0];
-        } else {
-            $destinationNumber = $request->get('dialString');
-        }
-        
-        /* If caller number binded with crm user - it outgoing number */
-        $connector = $this->getConnector();
-        if ($callerUserInfo) {
-            $request->set('Direction', 'outbound');
-            $request->set('to', $destinationNumber);
-            $customerInfo = PBXManager_Record_Model::lookUpRelatedWithNumber($destinationNumber);
-            $connector->handleStartupCall($request, $callerUserInfo, $customerInfo);
-        } else {
-            
-            /* If no match of twon numbers for crm users - don't fix ring */
-            $crmUserInfo = PBXManager_Record_Model::getUserInfoWithNumber($destinationNumber);
-            if(!$crmUserInfo) {
-                return;
-            }
-            
-            $request->set('Direction', 'inbound');
-            $request->set('from', $request->get('callerIdNumber'));
-            $customerInfo = PBXManager_Record_Model::lookUpRelatedWithNumber($request->get('callerIdNumber'));
-            $connector->handleStartupCall($request, $crmUserInfo, $customerInfo);
-        }
-    }
-    //SalesPlatform.ru end
-    
-    
     /**
      * Function to process Incoming call request
      * @params <array> incoming call details
@@ -107,7 +53,7 @@ class PBXManager_PBXManager_Controller {
      */
     function processStartupCall($request) {
         $connector = $this->getConnector();
-	
+
         $temp = $request->get('channel');
         $temp = explode("-", $temp);
         $temp = explode("/", $temp[0]);

@@ -384,7 +384,10 @@ class ServiceContracts extends CRMEntity {
 			$helpDeskInstance->setRelatedList($moduleInstance,"Service Contracts",Array('ADD','SELECT'));
 
 			// Initialize module sequence for the module
-			$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1));
+                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+                        $adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1,'')); 
+			//$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1));
+                        // SalesPlatform.ru end 
 
 			// Make the picklist value 'Complete' for status as non-editable
 			$adb->query("UPDATE vtiger_contract_status SET presence=0 WHERE contract_status='Complete'");

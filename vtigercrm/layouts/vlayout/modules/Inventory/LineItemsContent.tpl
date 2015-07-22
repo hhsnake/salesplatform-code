@@ -228,5 +228,5 @@
                 {* SalesPlatform.ru end *}
 	</td>
 	<td>
-		<span id="netPrice{$row_no}" class="pull-right netPrice">{if $data.$netPrice}{$data.$netPrice}{else}0.00{/if}</span>
+		<span id="netPrice{$row_no}" class="pull-right netPrice">{if $data.$netPrice}{$data.$netPrice}{else}0{/if}</span>
 	</td>

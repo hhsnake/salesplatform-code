@@ -78,7 +78,15 @@
                                         {html_options  options=$PAGE_ORIENTATIONS selected=$MODEL->get('page_orientation')}
                                 </select>
                             </td>      						
-                        </tr>    					
+                        </tr>
+                        <tr> 
+                            <td valign=top class="small cellLabel"><font color="red">*</font><strong>{vtranslate('LBL_COMPANY', 'Settings:Vtiger')}:</strong></td> 
+                            <td class="cellText small" valign="top"> 
+                                <select name="spcompany" id="spcompany" class="small"> 
+                                        {html_options  options=$SP_PDF_COMPANIES selected=$MODEL->get('spcompany')} 
+                                </select> 
+                            </td> 
+                        </tr>                         
                     </table>              
                 </div>
             </td>
@@ -184,7 +192,7 @@ function check4null(form)
                 errorMessage += "\n " + "{vtranslate('LBL_PAGE_ORIENTATION', $MODULE)}";
                 form.templatename.focus();
         {rdelim}
-
+            
         // Here we decide whether to submit the form.
         if (isError == true) {ldelim}
                 alert("{vtranslate('LBL_MISSING_FIELDS', $MODULE)}" + errorMessage);

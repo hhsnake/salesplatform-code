@@ -23,7 +23,8 @@
                     {if (!$PASSWORD_STATUS)}
                         <button id="logintoMarketPlace" class="btn btn-primary">{vtranslate('LBL_LOGIN_TO_MARKET_PLACE', $QUALIFIED_MODULE)}</button>
                     {elseif $IS_PRO}
-                        <button id="setUpCardDetails" class="btn btn-primary pull-right">{if !empty($CUSTOMER_PROFILE['CustomerCardId'])}{vtranslate('LBL_UPDATE_CARD_DETAILS', $QUALIFIED_MODULE)}{else}{vtranslate('LBL_SETUP_CARD_DETAILS', $QUALIFIED_MODULE)}{/if}</button>
+                        <button id="setUpCardDetails" class="btn btn-primary ">{if !empty($CUSTOMER_PROFILE['CustomerCardId'])}{vtranslate('LBL_UPDATE_CARD_DETAILS', $QUALIFIED_MODULE)}{else}{vtranslate('LBL_SETUP_CARD_DETAILS', $QUALIFIED_MODULE)}{/if}</button>&nbsp;
+			<button id="logoutMarketPlace" class="btn btn-primary pull-right">{vtranslate('LBL_LOGOUT', $QUALIFIED_MODULE)}</button>
                     {/if}
                     {if $PASSWORD_STATUS && !$IS_PRO}
                         <span class="btn-toolbar">

@@ -54,9 +54,10 @@ class SPPDFTemplates_Module_Model extends Vtiger_Module_Model {
      * @param String $moduleName
      * @return array<SPPDFTemplates_Record_Model>
      */
-    public function getModuleTemplates($moduleName) {
+    public function getModuleTemplates($moduleName, $spCompany = '') {
         $db = PearDatabase::getInstance();
-        $result = $db->pquery('SELECT templateid, name FROM sp_templates where module=?', array($moduleName));
+        $result = $db->pquery('SELECT templateid, name FROM sp_templates where module=? AND spcompany IN ("All",?)', 
+                array($moduleName, html_entity_decode($spCompany, ENT_QUOTES, 'UTF-8')));
         
         $templatesList = array();
         while($template = $db->fetchByAssoc($result)) {
@@ -64,6 +65,6 @@ class SPPDFTemplates_Module_Model extends Vtiger_Module_Model {
         }
         return $templatesList;
     }
-  
+    
 }
 ?>

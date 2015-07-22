@@ -120,7 +120,10 @@ class VTScheduledReport extends Reports {
 	}
 
 	public function sendEmail() {
-		global $currentModule;
+        // SalesPlatform.ru begin
+        global $currentModule, $root_directory;
+        //global $currentModule;
+        // SalesPlatform.ru end
 		require_once 'vtlib/Vtiger/Mailer.php';
 
 		$vtigerMailer = new Vtiger_Mailer();
@@ -149,7 +152,10 @@ class VTScheduledReport extends Reports {
 
 		if($reportFormat == 'pdf' || $reportFormat == 'both') {
 			$fileName = $baseFileName.'.pdf';
-			$filePath = 'storage/'.$fileName;
+            // SalesPlatform.ru begin
+			$filePath = $root_directory.'/storage/'.$fileName;
+            //$filePath = 'storage/'.$fileName;
+            // SalesPlatform.ru end
 			$attachments[$fileName] = $filePath;
 			$pdf = $oReportRun->getReportPDF();
 			$pdf->Output($filePath,'F');

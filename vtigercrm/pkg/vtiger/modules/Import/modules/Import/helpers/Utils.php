@@ -16,10 +16,7 @@ class Import_Utils_Helper {
 	static $AUTO_MERGE_OVERWRITE = 2;
 	static $AUTO_MERGE_MERGEFIELDS = 3;
 
-    // SalesPlatform.ru begin Add CP1251
-	static $supportedFileEncoding = array('UTF-8'=>'UTF-8', 'CP1251'=>'CP1251', 'ISO-8859-1'=>'ISO-8859-1');
-    //static $supportedFileEncoding = array('UTF-8'=>'UTF-8', 'ISO-8859-1'=>'ISO-8859-1');
-    // SalesPlatform.ru end
+	static $supportedFileEncoding = array('UTF-8'=>'UTF-8', 'ISO-8859-1'=>'ISO-8859-1');
 	static $supportedDelimiters = array(','=>'comma', ';'=>'semicolon');
 	static $supportedFileExtensions = array('csv','vcf');
 

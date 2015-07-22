@@ -43,7 +43,10 @@ class Settings_Vtiger_CustomRecordNumberingAjax_Action extends Settings_Vtiger_I
 		$sourceModule = $request->get('sourceModule');
 
 		$moduleModel = Settings_Vtiger_CustomRecordNumberingModule_Model::getInstance($sourceModule);
-		$moduleData = $moduleModel->getModuleCustomNumberingData();
+                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                $moduleData = $moduleModel->getModuleCustomNumberingData($request->get('spCompany'));
+		//$moduleData = $moduleModel->getModuleCustomNumberingData();
+                // SalesPlatform.ru end
 		
 		$response = new Vtiger_Response();
 		$response->setEmitType(Vtiger_Response::$EMIT_JSON);
@@ -62,8 +65,11 @@ class Settings_Vtiger_CustomRecordNumberingAjax_Action extends Settings_Vtiger_I
 		$moduleModel = Settings_Vtiger_CustomRecordNumberingModule_Model::getInstance($sourceModule);
 		$moduleModel->set('prefix', $request->get('prefix'));
 		$moduleModel->set('sequenceNumber', $request->get('sequenceNumber'));
-
-		$result = $moduleModel->setModuleSequence();
+                
+                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                $result = $moduleModel->setModuleSequence($request->get('spCompany'));
+		//$result = $moduleModel->setModuleSequence();
+                // SalesPlatform.ru end
 
 		$response = new Vtiger_Response();
 		if ($result['success']) {
@@ -83,13 +89,16 @@ class Settings_Vtiger_CustomRecordNumberingAjax_Action extends Settings_Vtiger_I
 		$sourceModule = $request->get('sourceModule');
 
 		$moduleModel = Settings_Vtiger_CustomRecordNumberingModule_Model::getInstance($sourceModule);
-		$result = $moduleModel->updateRecordsWithSequence();
+                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+                $result = $moduleModel->updateRecordsWithSequence($request->get('spCompany'));
+		//$result = $moduleModel->updateRecordsWithSequence();
+                //SalesPlatform.ru end
 
 		$response = new Vtiger_Response();
 		$response->setResult($result);
 		$response->emit();
 	}
-        
+              
         public function validateRequest(Vtiger_Request $request) { 
             $request->validateWriteAccess(); 
         }

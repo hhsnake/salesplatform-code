@@ -63,7 +63,7 @@
                     <button class="btn btn-info" type="button" onclick="SPSocialConnector_Edit_Js.triggerEnterURL('index.php?module={$MODULE}&record_id={$RECORD_ID}&view=MassActionAjax&mode=showEnterURLForm');"><strong>{vtranslate('LBL_IMPORT', $MODULE)}</strong></button>
                     &nbsp;&nbsp;
                 {/if}
-        {* SalesPlatform.ru end *}
+                {* SalesPlatform.ru end *}
                 <span class="pull-right">
                     <button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
                     <a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $MODULE)}</a>

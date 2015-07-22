@@ -4,7 +4,7 @@
  */
 
 jQuery.Class("ExtensionStore_ExtensionStore_Js", {}, {
-
+    
     /**
      * Function to register events for banner
      */
@@ -17,14 +17,14 @@ jQuery.Class("ExtensionStore_ExtensionStore_Js", {}, {
                 auto: true,
                 pager: items.length > 1,
                 speed: items.length > 1 ? 1500 : 0,
-                pause: 2000,
+                pause: 3000,
                 onSlideBefore : function(){
-                    jQuery('.bx-viewport').css({'height': '150px', 'overflow': 'hidden'});
+                    jQuery('.bx-viewport').css({'height': '110px', 'overflow': 'hidden'});
                 }
             });
         }
     },
-
+    
     /**
      * Function to getPromotions from marketplace
      */
@@ -47,7 +47,7 @@ jQuery.Class("ExtensionStore_ExtensionStore_Js", {}, {
             function(error) {}
         );
     },
-
+    
     /**
      * Function to request get promotions from market place based on promotion closed date
      */
@@ -73,13 +73,13 @@ jQuery.Class("ExtensionStore_ExtensionStore_Js", {}, {
             thisInstance.getPromotions();
         }
     },
-
+    
     registerEventsForTogglePromotion : function() {
         var thisInstance = this;
         jQuery('.togglePromotion').on('click', function(e){
             var element = jQuery(e.currentTarget);
             var bannerContainer = jQuery(".banner-container");
-
+            
             if(element.hasClass('up')){
                  bannerContainer.slideUp();
                  element.find('.icon-chevron-up').addClass('hide');
@@ -103,7 +103,7 @@ jQuery.Class("ExtensionStore_ExtensionStore_Js", {}, {
             }
         });
     },
-
+    
     insertTogglePromotionHtml : function(){
         var toggleHtml = '<span class="btn-group">'+
                         '<button class="btn addButton togglePromotion up">'+
@@ -113,7 +113,7 @@ jQuery.Class("ExtensionStore_ExtensionStore_Js", {}, {
                     '</span>';
         jQuery('.dashboardHeading').find('.btn-toolbar').append(toggleHtml);
     },
-
+    
     registerEvents: function() {
         var thisInstance = this;
         var moduleName = app.getModuleName();
@@ -125,7 +125,7 @@ jQuery.Class("ExtensionStore_ExtensionStore_Js", {}, {
         if(promotionClosedDate == null){
             getPromotion = true;
         }else if(promotionClosedDate.length > 0){
-           var closedDate = promotionClosedDate.split("-");
+           var closedDate = promotionClosedDate.split("-"); 
            var closedOn = new Date(parseInt(closedDate[0]), parseInt(closedDate[1]), parseInt(closedDate[2]));
            var currentDate = new Date();
            var diff = (currentDate.getTime()) - (closedOn.getTime());
@@ -136,7 +136,7 @@ jQuery.Class("ExtensionStore_ExtensionStore_Js", {}, {
                getPromotion = false;
            }
         }
-
+        
         if ((moduleName == "Home") && getPromotion) {
             // SalesPlatform.ru begin Hide promotion banner
             //thisInstance.getPromotionsFromMarketPlace(promotionClosedDate);

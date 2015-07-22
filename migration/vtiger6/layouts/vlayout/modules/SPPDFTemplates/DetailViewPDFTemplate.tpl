@@ -54,7 +54,11 @@
                                 {else}
                                      <td class="cellText small" valign="top">{vtranslate("Landscape")}</td>
                                 {/if}      						
-                        </tr>    					
+                        </tr>    
+                        <tr> 
+                            <td valign=top class="small cellLabel"><strong>{vtranslate('LBL_COMPANY', 'Settings:Vtiger')}:</strong></td> 
+                            <td class="cellText small" valign=top>{vtranslate($MODEL->get('spcompany'), 'Settings:Vtiger')}</td> 
+                        </tr> 
                     </table>              
                 </div>
             </td>

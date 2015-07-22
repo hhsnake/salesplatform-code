@@ -13,14 +13,11 @@ class Import_Config_Model extends Vtiger_Base_Model {
 	function __construct() {
 		$ImportConfig = array(
 			'importTypes' => array(
-                // SalesPlatform.ru begin 
-                'csv' => array('reader' => 'SPImport_CSVReader_Reader', 'classpath' => 'modules/Import/readers/SPCSVReader.php'),
-                //'csv' => array('reader' => 'Import_CSVReader_Reader', 'classpath' => 'modules/Import/readers/CSVReader.php'),
-                // SalesPlatform.ru end
-                'vcf' => array('reader' => 'Import_VCardReader_Reader', 'classpath' => 'modules/Import/readers/VCardReader.php'),
-                'ics' => array('reader' => 'Import_ICSReader_Reader', 'classpath' => 'modules/Import/readers/ICSReader.php'),
-                'default' => array('reader' => 'Import_FileReader_Reader', 'classpath' => 'modules/Import/readers/FileReader.php')
-            ),
+								'csv' => array('reader' => 'Import_CSVReader_Reader', 'classpath' => 'modules/Import/readers/CSVReader.php'),
+								'vcf' => array('reader' => 'Import_VCardReader_Reader', 'classpath' => 'modules/Import/readers/VCardReader.php'),
+								'ics' => array('reader' => 'Import_ICSReader_Reader', 'classpath' => 'modules/Import/readers/ICSReader.php'),
+								'default' => array('reader' => 'Import_FileReader_Reader', 'classpath' => 'modules/Import/readers/FileReader.php')
+							),
 
 			'userImportTablePrefix' => 'vtiger_import_',
 			// Individual batch limit - Specified number of records will be imported at one shot and the cycle will repeat till all records are imported

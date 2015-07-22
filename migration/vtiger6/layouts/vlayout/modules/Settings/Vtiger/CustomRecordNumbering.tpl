@@ -52,6 +52,23 @@
                             </select>
                         </td>
                     </tr>
+                    
+                    {* SalesPlatform.ru begin: Added separate Invoice numbering for self organizations *}
+                    <tr id="spcompanyRow" style="display: none;">
+                        <td class="{$WIDTHTYPE}">
+                            <label class="pull-right marginRight10px"><b>{vtranslate('LBL_COMPANY', $QUALIFIED_MODULE)}</b></label>
+                        </td>
+                        <td class="fieldValue {$WIDTHTYPE}" style="border-left: none">
+                            <select name="spCompany"> 
+                                {foreach from=$SP_PDF_COMPANIES item=COMPANY}
+                                    <option value="{$COMPANY}" {if $COMPANY eq 'Default'} selected {/if}>
+                                        {vtranslate($COMPANY, $QUALIFIED_MODULE)}
+                                    </option>
+                                {/foreach}
+                            </select> 
+                        </td>
+                        {* SalesPlatform.ru end *}
+                    </tr>
                     <tr>
                         <td class="{$WIDTHTYPE}">
                             <label class="pull-right marginRight10px"><b>{vtranslate('LBL_USE_PREFIX', $QUALIFIED_MODULE)}</b></label>

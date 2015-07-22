@@ -352,6 +352,7 @@ $languageStrings = array(
 	'LBL_NEXT_MONTH' => 'Next Month',
 	'LBL_NEXT_WEEK' => 'Next Week',
 	'LBL_NO' => 'No',
+	'LBL_EQ_ZERO' => 'No',
 	'LBL_NONE' => 'None',
 	'LBL_NOTE' => 'Note',
 	'LBL_NOTEPAD' => 'Notepad',
@@ -644,12 +645,7 @@ $languageStrings = array(
         'Terms &amp; Conditions' => 'Terms & Conditions', 
 	'LBL_CONVERSION_RATE'          => 'Conversion Rate',
     
-        //SalesPlatform.ru begin
-        'LBL_GROUP_TAX_INC' => 'Group, taxes included', 
- 	'group_tax_inc' => 'Group, taxes included',  
- 	'LBL_INC_TAX' => 'Including',  
-        //SalesPlatform.ru end
-);  
+);
 
 $jsLanguageStrings = array(
 	'AM' => 'AM',

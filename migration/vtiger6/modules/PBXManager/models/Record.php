@@ -80,7 +80,7 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         }
         return $moduleModel->saveRecord($recordModel);
     }
-
+    
     /**
      * Function to update call details
      * @param <array> $details

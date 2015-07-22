@@ -288,9 +288,6 @@ class MailManager_Connector_Connector {
 	 * @param String $folderName - folder name
 	 */
 	public function moveMail($msgno, $folderName) {
-		// SalesPlatform begin
-		$msgno = urldecode($msgno);
-		// SalesPlatform end
 		$msgno = trim($msgno,',');
 		$msgno = explode(',',$msgno);
 		$folder = $this->convertCharacterEncoding(html_entity_decode($folderName),'UTF7-IMAP','UTF-8'); //handle both utf8 characters and html entities

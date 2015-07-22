@@ -23,11 +23,9 @@ class SMSNotifier_CheckStatus_View extends Vtiger_IndexAjax_View {
 		$moduleName = $request->getModule();
 
 		$notifierRecordModel = Vtiger_Record_Model::getInstanceById($request->get('record'), $moduleName);
-        // SalesPlatform.ru begin
-		//$notifierRecordModel->checkStatus();
-        $viewer->assign('RECORDS', $notifierRecordModel->checkStatus());
-		//$viewer->assign('RECORD', $notifierRecordModel);
-        // SalesPlatform.ru end
+		$notifierRecordModel->checkStatus();
+
+		$viewer->assign('RECORD', $notifierRecordModel);
 		$viewer->view('StatusWidget.tpl', $moduleName);
 	}
 }

@@ -206,7 +206,7 @@ var Vtiger_CustomView_Js = {
 		var contentsContainer = Vtiger_CustomView_Js.getContentsContainer();
 		jQuery('.stndrdFilterDateSelect').datepicker();
 		jQuery('.chzn-select').chosen();
-        
+
 		var select2Element = app.getSelect2ElementFromSelect(Vtiger_CustomView_Js.getColumnSelectElement());
 		Vtiger_CustomView_Js.columnListSelect2Element = select2Element;
 

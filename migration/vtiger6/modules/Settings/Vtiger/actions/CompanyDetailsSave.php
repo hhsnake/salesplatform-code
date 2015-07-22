@@ -11,14 +11,17 @@
 
 class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Action {
 
-	public function process(Vtiger_Request $request) {
-		$qualifiedModuleName = $request->getModule(false);
-		$moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance();
-		$status = false;
+    public function process(Vtiger_Request $request) {
+        $qualifiedModuleName = $request->getModule(false);
+        //SalesPlatform.ru begin
+        $moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance(htmlentities($request->get('company'), ENT_QUOTES));
+        //$moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance();
+        //SalesPlatform.ru end
+        $status = false;
 
         if ($request->get('organizationname')) {
             $saveLogo = $status = true;
-			if(!empty($_FILES['logo']['name'])) {
+            if(!empty($_FILES['logo']['name'])) {
                 $logoDetails = $_FILES['logo'];
                 $fileType = explode('/', $logoDetails['type']);
                 $fileType = $fileType[1];
@@ -26,44 +29,49 @@ class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Ac
                 if (!$logoDetails['size'] || !in_array($fileType, Settings_Vtiger_CompanyDetails_Model::$logoSupportedFormats)) {
                     $saveLogo = false;
                 }
-				// Check for php code injection
-				$imageContents = file_get_contents($_FILES["logo"]["tmp_name"]);
-				if (preg_match('/(<\?php?(.*?))/i', $imageContents) == 1) {
-					$saveLogo = false;
-				}
+                // Check for php code injection
+                $imageContents = file_get_contents($_FILES["logo"]["tmp_name"]);
+                if (preg_match('/(<\?php?(.*?))/i', $imageContents) == 1) {
+                    $saveLogo = false;
+                }
                 if ($saveLogo) {
                     $moduleModel->saveLogo();
                 }
             }else{
                 $saveLogo = true;
             }
-			$fields = $moduleModel->getFields();
-			foreach ($fields as $fieldName => $fieldType) {
-				$fieldValue = $request->get($fieldName);
-				if ($fieldName === 'logoname') {
-					if (!empty($logoDetails['name'])) {
-						$fieldValue = ltrim(basename(" " . $logoDetails['name']));
-					} else {
-						$fieldValue = $moduleModel->get($fieldName);
-					}
-				}
-				$moduleModel->set($fieldName, $fieldValue);
-			}
-			$moduleModel->save();
-		}
+            $fields = $moduleModel->getFields();
+            foreach ($fields as $fieldName => $fieldType) {
+                $fieldValue = $request->get($fieldName);
+                if ($fieldName === 'logoname') {
+                    if (!empty($logoDetails['name'])) {
+                        $fieldValue = ltrim(basename(" " . $logoDetails['name']));
+                    } else {
+                        $fieldValue = $moduleModel->get($fieldName);
+                    }
+                }
 
-		$reloadUrl = $moduleModel->getIndexViewUrl();
-		if ($saveLogo && $status) {
+                if ($fieldName === 'company') {
+                    $fieldValue = htmlentities($request->get('company'), ENT_QUOTES);
+                }
 
-		} else if (!$saveLogo) {
-			$reloadUrl .= '&error=LBL_INVALID_IMAGE';
-		} else {
-			$reloadUrl = $moduleModel->getEditViewUrl() . '&error=LBL_FIELDS_INFO_IS_EMPTY';
-		}
-		header('Location: ' . $reloadUrl);
-	}
+                $moduleModel->set($fieldName, $fieldValue);
+            }
+            $moduleModel->save();
+        }
 
-        public function validateRequest(Vtiger_Request $request) { 
-            $request->validateWriteAccess(); 
-        } 
+        $reloadUrl = $moduleModel->getIndexViewUrl();
+        if ($saveLogo && $status) {
+
+        } else if (!$saveLogo) {
+            $reloadUrl .= '&error=LBL_INVALID_IMAGE';
+        } else {
+            $reloadUrl = $moduleModel->getEditViewUrl() . '&error=LBL_FIELDS_INFO_IS_EMPTY';
+        }
+        header('Location: ' . $reloadUrl);
+    }
+
+    public function validateRequest(Vtiger_Request $request) {
+        $request->validateWriteAccess();
+    }
 }

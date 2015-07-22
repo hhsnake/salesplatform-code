@@ -275,6 +275,19 @@ class Settings_ExtensionStore_ExtnStore_Connector {
     }
     
     /**
+     * Function to verify purchase of extension
+     * @param $listingName => extension name to verify purchase
+     */
+    public function verifyPurchase($listingName){
+        $q = $listingName ? array('identifier' => $listingName) : null;
+        try{
+            return $this->api('/customer/mysubscriptions', 'GET', $q ? array('type' => 'verifypurchase', 'q' => Zend_Json::encode($q)) : null, true);
+        } catch (Exception $ex) {
+            return array('success' => false, 'error' => $ex->getMessage());
+        }
+    }
+
+        /**
      * Function to retrieve profile of loged in user
      * @return type
      */

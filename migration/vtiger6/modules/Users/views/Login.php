@@ -18,20 +18,6 @@ class Users_Login_View extends Vtiger_View_Controller {
 		return true;
 	}
 	
-	function preProcess(Vtiger_Request $request, $display = true) {
-		$viewer = $this->getViewer($request);
-                // Salesplatform begin renamed pagetitle
-                $viewer->assign('PAGETITLE', 'SalesPlatform Vtiger CRM');
-		//$viewer->assign('PAGETITLE', $this->getPageTitle($request));
-                // Salesplatform end
-		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
-		$viewer->assign('STYLES',$this->getHeaderCss($request));
-		$viewer->assign('CURRENT_VERSION', vglobal('vtiger_current_version'));
-		if($display) {
-			$this->preProcessDisplay($request);
-		}
-	}
-
 	function process (Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();

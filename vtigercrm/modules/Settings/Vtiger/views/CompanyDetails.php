@@ -10,40 +10,53 @@
 
 class Settings_Vtiger_CompanyDetails_View extends Settings_Vtiger_Index_View {
 
-	public function process(Vtiger_Request $request) {
-		$qualifiedModuleName = $request->getModule(false);
-		$moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance();
-		
-		$viewer = $this->getViewer($request);
-		$viewer->assign('MODULE_MODEL', $moduleModel);
-		$viewer->assign('ERROR_MESSAGE', $request->get('error'));
-		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
-		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
-		$viewer->view('CompanyDetails.tpl', $qualifiedModuleName);
-	}
-	
-	
-	function getPageTitle(Vtiger_Request $request) {
-		$qualifiedModuleName = $request->getModule(false);
-		return vtranslate('LBL_COMPANY_DETAILS',$qualifiedModuleName);
-	}
-	
-		/**
-	 * Function to get the list of Script models to be included
-	 * @param Vtiger_Request $request
-	 * @return <Array> - List of Vtiger_JsScript_Model instances
-	 */
-	function getHeaderScripts(Vtiger_Request $request) {
-		$headerScriptInstances = parent::getHeaderScripts($request);
-		$moduleName = $request->getModule();
+    public function process(Vtiger_Request $request) {
+        $qualifiedModuleName = $request->getModule(false);
 
-		$jsFileNames = array(
-			"modules.Settings.$moduleName.resources.CompanyDetails"
-		);
+        //SalesPlatform.ru begin
+        $selectedCompany = htmlentities($request->get('company'), ENT_QUOTES);
+        if($selectedCompany == '') {
+            $selectedCompany = 'Default';
+        }
+        $moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance($selectedCompany);
+        //$moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance();
+        //SalesPlatform.ru end
 
-		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
-		return $headerScriptInstances;
-	}
-    
+        $viewer = $this->getViewer($request);
+
+        //SalesPlatform.ru begin
+        $viewer->assign('SELECTED_COMPANY', htmlentities($selectedCompany));
+        //SalesPlatform.ru end
+
+        $viewer->assign('MODULE_MODEL', $moduleModel);
+        $viewer->assign('ERROR_MESSAGE', $request->get('error'));
+        $viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
+        $viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
+        $viewer->view('CompanyDetails.tpl', $qualifiedModuleName);
+    }
+
+
+    function getPageTitle(Vtiger_Request $request) {
+        $qualifiedModuleName = $request->getModule(false);
+        return vtranslate('LBL_COMPANY_DETAILS',$qualifiedModuleName);
+    }
+
+    /**
+     * Function to get the list of Script models to be included
+     * @param Vtiger_Request $request
+     * @return <Array> - List of Vtiger_JsScript_Model instances
+     */
+    function getHeaderScripts(Vtiger_Request $request) {
+        $headerScriptInstances = parent::getHeaderScripts($request);
+        $moduleName = $request->getModule();
+
+        $jsFileNames = array(
+            "modules.Settings.$moduleName.resources.CompanyDetails"
+        );
+
+        $jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+        $headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
+        return $headerScriptInstances;
+    }
+
 }

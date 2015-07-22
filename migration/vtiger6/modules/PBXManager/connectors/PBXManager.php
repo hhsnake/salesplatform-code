@@ -18,7 +18,10 @@ class PBXManager_PBXManager_Connector {
     private static $SETTINGS_REQUIRED_PARAMETERS = array('webappurl' => 'text','outboundcontext' => 'text', 'vtigersecretkey' => 'text');
     //private static $SETTINGS_REQUIRED_PARAMETERS = array('webappurl' => 'text','outboundcontext' => 'text', 'outboundtrunk' => 'text' , 'vtigersecretkey' => 'text');
     // SalesPlatform.ru end
-    private static $RINGING_CALL_PARAMETERS = array('From' => 'callerIdNumber', 'SourceUUID' => 'callUUID', 'Direction' => 'Direction');
+    //SalesPlatform.ru begin
+    //private static $RINGING_CALL_PARAMETERS = array('From' => 'callerIdNumber', 'SourceUUID' => 'callUUID', 'Direction' => 'Direction');
+    private static $RINGING_CALL_PARAMETERS = array('From' => 'callerIdNumber', 'SourceUUID' => 'callUUID', 'Direction' => 'Direction', 'IncomingLineName' => 'connectedLineName');
+    //SalesPlatform.ru end
     private static $NUMBERS = array();
     private $webappurl;
     private $outboundcontext, $outboundtrunk;
@@ -110,7 +113,7 @@ class PBXManager_PBXManager_Connector {
      */
     public function handleDialCall($details) {
         $callid = $details->get('callUUID');
-        
+
         $answeredby = $details->get('callerid2');
         $caller = $details->get('callerid1');
 
@@ -274,6 +277,7 @@ class PBXManager_PBXManager_Connector {
         $params['starttime'] = DateTimeField::convertToDBFormat($date->getDisplayDate()).' '.$date->getDisplayTime();
         // SalesPlatform.ru end
         
+        $params['starttime'] = $details->get('StartTime');
         $params['callstatus'] = "ringing";
         $user = CRMEntity::getInstance('Users');
         // SalesPlatform.ru begin

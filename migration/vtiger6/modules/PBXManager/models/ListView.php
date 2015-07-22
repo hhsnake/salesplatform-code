@@ -185,7 +185,7 @@ class PBXManager_ListView_Model extends Vtiger_ListView_Model {
                 $listViewEntries[$recordId]['recordingurl'] = '';
             }
 
-
+            
             if ($listViewEntries[$recordId]['direction'] == 'outbound') {
                 if ($listViewEntries[$recordId]['callstatus'] == 'ringing' || $listViewEntries[$recordId]['callstatus'] == 'in-progress') {
                     $listViewEntries[$recordId]['callstatus'] = '<span class="label label-info"><i class="icon-arrow-up icon-white">

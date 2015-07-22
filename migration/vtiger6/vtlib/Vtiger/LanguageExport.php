@@ -222,6 +222,13 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 				$languageinfo[$prefix] = $label;
 			}
 		}
+        // SalesPlatform.ru begin Set ru_ru to first position
+        if($languageinfo['ru_ru']) {
+            $ruLabel = $languageinfo['ru_ru'];
+            unset($languageinfo['ru_ru']);
+            $languageinfo = array_merge(array('ru_ru' => $ruLabel), $languageinfo);
+        }
+        // SalesPlatform.ru end
 		return $languageinfo;
 	}
 }

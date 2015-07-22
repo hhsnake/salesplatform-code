@@ -9,20 +9,20 @@
  ************************************************************************************/
 
 $languageStrings = Array(
-    'LBL_RSS_FEED_SOURCES' => 'Rss Feed Källor',
-    'LBL_ADD_FEED_SOURCE' => 'Lägg Feed Källa',
-    'LBL_FEEDS_LIST_FROM' => 'Feeds Lista från',
-    'LBL_SET_AS_DEFAULT' => 'Ange som standard',
-    'LBL_SENDER' => 'sändare',
-    'LBL_FEED_SOURCE' => 'Matningskälla',
-    'LBL_ENTER_FEED_SOURCE' => 'Ange Feed Källa',  
-    'SINGLE_Rss' => 'rSS-flöde',
+    'LBL_RSS_FEED_SOURCES' => 'Rss Kaynakları',
+    'LBL_ADD_FEED_SOURCE' => 'Besleme Kaynak Ekle',
+    'LBL_FEEDS_LIST_FROM' => 'Gönderen Listesi Feeds',
+    'LBL_SET_AS_DEFAULT' => 'Varsayılan olarak ayarla',
+    'LBL_SENDER' => 'verici',
+    'LBL_FEED_SOURCE' => 'besleme Kaynağı',
+    'LBL_ENTER_FEED_SOURCE' => 'Besleme Kaynağı girin',  
+    'SINGLE_Rss' => 'RSS beslemesine',
 );
 
 $jsLanguageStrings = array(
-	'JS_RSS_SUCCESSFULLY_SAVED' => 'RSS har sparats',
-    'JS_INVALID_RSS_URL' => 'Ogiltig Rss webbadress',
-    'JS_RSS_MADE_AS_DEFAULT' => 'Rss som förval',
+	'JS_RSS_SUCCESSFULLY_SAVED' => 'Başarıyla kaydedildi RSS',
+    'JS_INVALID_RSS_URL' => 'Geçersiz Rss Url',
+    'JS_RSS_MADE_AS_DEFAULT' => 'Varsayılan olarak yapılmıştır rss',
     
 );
 

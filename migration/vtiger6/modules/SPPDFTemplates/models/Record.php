@@ -79,14 +79,14 @@ class SPPDFTemplates_Record_Model extends Vtiger_Record_Model {
     public function save() {
         $db = PearDatabase::getInstance();
         
-        $query = "update sp_templates set name=?, module=?, template=?, header_size=?, footer_size=?, page_orientation=? where templateid=?";
+        $query = "update sp_templates set name=?, module=?, template=?, header_size=?, footer_size=?, page_orientation=?, spcompany=? where templateid=?";
         if($this->getId() == NULL) {
            $this->setId($db->getUniqueID('sp_templates'));
-           $query = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,templateid) values (?,?,?,?,?,?,?)";
+           $query = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,spcompany,templateid) values (?,?,?,?,?,?,?,?)";
         } 
         
-        $params = array($this->get('name'), $this->get('module'), $this->get('template'),
-            $this->get('header_size'), $this->get('footer_size'), $this->get('page_orientation'), $this->getId());
+        $params = array($this->get('name'), $this->get('module'), $this->get('template'), $this->get('header_size'), 
+            $this->get('footer_size'), $this->get('page_orientation'), $this->get('spcompany'), $this->getId());
         $db->pquery($query, $params);
     }
 }

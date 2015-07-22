@@ -22,6 +22,10 @@ $languageStrings = array(
 	'Rejected'                     => 'Отклонено'          ,
     'Terms & Conditions'           => 'Сроки и условия',
     'LBL_TERMS_AND_CONDITIONS'     => 'Сроки и условия',
+    
+    //SalesPlatform.ru begin
+    'Self Company' => 'Юр. лицо',
+    //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

@@ -75,7 +75,7 @@ class Install_Utils_Model {
 			$directiveValues['output_buffering'] = 'Off';
 		if (ini_get('max_execution_time') < 600)
 			$directiveValues['max_execution_time'] = ini_get('max_execution_time');
-		if (ini_get('memory_limit') < 128)
+		if (ini_get('memory_limit') < 32)
 			$directiveValues['memory_limit'] = ini_get('memory_limit');
 		// SalesPlatform.ru begin
 		$errorReportingValue = E_ALL & ~E_NOTICE;
@@ -164,7 +164,7 @@ class Install_Utils_Model {
 	function getSystemPreInstallParameters() {
 		$preInstallConfig = array();
 		// Name => array( System Value, Recommended value, supported or not(true/false) );
-		$preInstallConfig['LBL_PHP_VERSION']	= array(phpversion(), '5.3.0', (version_compare(phpversion(), '5.3.0', '>=')));
+		$preInstallConfig['LBL_PHP_VERSION']	= array(phpversion(), '5.2.1 - 5.6', (version_compare(phpversion(), '5.7.0', '<=')));
 		$preInstallConfig['LBL_IMAP_SUPPORT']	= array(function_exists('imap_open'), true, (function_exists('imap_open') == true));
 		$preInstallConfig['LBL_ZLIB_SUPPORT']	= array(function_exists('gzinflate'), true, (function_exists('gzinflate') == true));
                 if ($preInstallConfig['LBL_PHP_VERSION'] >= '5.5.0') {

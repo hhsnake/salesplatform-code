@@ -939,7 +939,8 @@ function create_ticket($input_array)
 	*/
 function update_ticket_comment($input_array)
 {
-	global $adb,$mod_strings,$current_user;
+	global $adb,$mod_strings,$current_language; 
+        $mod_strings = return_module_language($current_language, 'HelpDesk');
 	$adb->println("Inside customer portal function update_ticket_comment");
 	$adb->println($input_array);
 
@@ -1201,7 +1202,7 @@ function send_mail_for_password($mailid)
 // SalesPlatform.ru end
 
 	$mail->Host = $mail_server;
-	if($smtp_auth == 'true')
+	if($smtp_auth) 
 	$mail->SMTPAuth = 'true';
 	$mail->Username = $mail_server_username;
 	$mail->Password = $mail_server_password;

@@ -517,10 +517,7 @@ if (typeof(MailManager) == 'undefined') {
 			if(jQuery('#search_type').val()) {
 				query += "&type=" + encodeURIComponent(jQuery('#search_type').val());
 			}
-			// SalesPlatform.ru begin
-			var message = app.vtranslate('JSLBL_Loading') + ' ...';
-			//var message = app.vtranslate('JSLBL_Loading')+' ' + name + ' ...';
-			// SalesPlatform.ru end
+			var message = app.vtranslate('JSLBL_Loading')+' ' + name + ' ...';
 			var progressIndicatorElement = jQuery.progressIndicator({
 				'message' : message,
 				'position' : 'html',
@@ -681,7 +678,7 @@ if (typeof(MailManager) == 'undefined') {
 					//var responseJSON = JSON.parse(response);
 					var resultJSON = responseJSON['result'];
 					if (!resultJSON['ui']) {
-						Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_Failed_To_Open_Email'));
+						Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_Failed_To_Open_Mail'));
 						return;
 					}
 
@@ -1354,10 +1351,7 @@ if (typeof(MailManager) == 'undefined') {
 		},
 
 		folder_drafts: function(page){
-            // SalesPlatform.ru begin
-			var message = app.vtranslate('JSLBL_Loading');
-            //var message = app.vtranslate('JSLBL_Loading')+' '+app.vtranslate('JSLBL_Loading');
-            // SalesPlatform.ru end
+			var message = app.vtranslate('JSLBL_Loading')+' '+app.vtranslate('JSLBL_Loading');
 			var progressIndicatorElement = jQuery.progressIndicator({
 				'message' : message,
 				'position' : 'html',

@@ -502,7 +502,10 @@ class PieChart extends Base_Chart {
 			} else {
 				$label = $row[strtolower($legend)];
 			}
-			$labels[] = (strlen($label) > 30) ? substr($label, 0, 30).'..' : $label;
+                        //SalesPlatform.ru begin
+                        $labels[] = (mb_strlen($label, 'UTF-8') > 30) ? mb_substr($label, 0, 30).'..' : $label;
+			//$labels[] = (strlen($label) > 30) ? substr($label, 0, 30).'..' : $label;
+                        //SalesPlatform.ru end
 			$links[] = $this->generateLink($legendField->get('reportcolumninfo'), $row[strtolower($legend)]);
 		}
 
@@ -582,7 +585,10 @@ class VerticalbarChart extends Base_Chart {
                         //$label = $row[strtolower($gFieldModel->get('reportlabel'))];
                         // SalesPlatform.ru end
 					}
-					$labels[] = (strlen($label) > 30) ? substr($label, 0, 30).'..' : $label;
+                                        //SalesPlatform.ru begin   
+                                        $labels[] = (mb_strlen($label, 'UTF-8') > 30) ? mb_substr($label, 0, 30).'..' : $label; 
+					//$labels[] = (strlen($label) > 30) ? substr($label, 0, 30).'..' : $label;
+                                        //SalesPlatform.ru end
 					$links[] = $this->generateLink($gFieldModel->get('reportcolumninfo'), $row[strtolower($gFieldModel->get('reportlabel'))]);
 				}
 			}

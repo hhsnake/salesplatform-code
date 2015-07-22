@@ -20,10 +20,7 @@
             <div class="row-fluid">
                 <div class="btn-toolbar span10">
                     <div class="btn-group">
-                        {* SalesPlatform.ru begin *}
-                        <button class="btn pull-left" onclick="MailManager.mail_close();" href='javascript:void(0);'><strong>&#171; {vtranslate($FOLDER->name(), $MODULE)}</strong></button>
-                        {*<button class="btn pull-left" onclick="MailManager.mail_close();" href='javascript:void(0);'><strong>&#171; {$FOLDER->name()}</strong></button>*}
-                        {* SalesPlatform.ru end *}
+                        <button class="btn pull-left" onclick="MailManager.mail_close();" href='javascript:void(0);'><strong>&#171; {$FOLDER->name()}</strong></button>
                     </div>
                     <div class="btn-group">
                         <button class="btn" onclick="MailManager.mail_reply(true);"><strong>{vtranslate('LBL_Reply_All',$MODULE)}</strong></button>

@@ -48,6 +48,7 @@ class PBXManager extends CRMEntity {
         'User'     => 'user',
         'Recording' => 'recordingurl',
         'Start Time' => 'starttime',
+        'Incoming Line Name' => 'incominglinename',
     );
     // Make the field link to detail view
     var $list_link_field = 'customernumber';

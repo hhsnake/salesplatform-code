@@ -57,6 +57,7 @@ $languageStrings = array(
     'completed' => 'Завершен',
     'busy' => 'Занято',
     'no-answer' => 'Нет ответа',
+    'Incoming Line Name' => 'Входящая линия',
     //SalesPlatform.ru end
 );
 

@@ -17,6 +17,7 @@ class Settings_ExtensionStore_Basic_Action extends Settings_Vtiger_IndexAjax_Vie
         $this->exposeMethod('registerAccount');
         $this->exposeMethod('updateTrialMode');
         $this->exposeMethod('updateCardDetails');
+        $this->exposeMethod('logoutMarketPlace');
     }
 
     function process(Vtiger_Request $request) {
@@ -55,6 +56,13 @@ class Settings_ExtensionStore_Basic_Action extends Settings_Vtiger_IndexAjax_Vie
         $dateString = Vtiger_Util_Helper::formatDateTimeIntoDayString($date);
         return $dateString;
     }
+
+
+    protected function logoutMarketPlace(Vtiger_Request $request) { 
+         $modelInstance = $this->getModelInstance(); 
+         $modelInstance->logoutMarketPlace($request);
+    }
+
 
     protected function uninstallExtension(Vtiger_Request $request) {
         $extensionName = $request->get('extensionName');

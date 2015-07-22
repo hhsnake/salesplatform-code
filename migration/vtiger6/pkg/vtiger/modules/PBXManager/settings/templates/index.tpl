@@ -41,12 +41,8 @@
 	</div>
 </div>
 <br>
-{* SalesPlatform.ru begin *}
-<div class="span9 alert alert-danger container-fluid">
-{*<div class="span8 alert alert-danger container-fluid">*}
-    {vtranslate('LBL_NOTE', $QUALIFIED_MODULE)} {vtranslate('LBL_PBXMANAGER_INFO', $QUALIFIED_MODULE)}
-    {*{vtranslate('LBL_NOTE', $QUALIFIED_MODULE)}<br>
-    {vtranslate('LBL_PBXMANAGER_INFO', $QUALIFIED_MODULE)}*}
-{* SalesPlatform.ru end *}
+<div class="span8 alert alert-danger container-fluid">
+    {vtranslate('LBL_NOTE', $QUALIFIED_MODULE)}<br>
+    {vtranslate('LBL_PBXMANAGER_INFO', $QUALIFIED_MODULE)}
 </div>	
 {/strip}

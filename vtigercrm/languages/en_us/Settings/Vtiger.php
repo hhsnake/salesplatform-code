@@ -118,7 +118,7 @@ $languageStrings = array(
 	'LBL_OPTIONS2'=>"",
 	'LBL_OTHER_SETTINGS' => 'Other Settings',
 	'LBL_OUTGOING_SERVER_DESC' => 'Configure your Outgoing Mail Server details',
-	'LBL_OUTGOING_SERVER_FROM_FIELD'=>'NOTE: If "From Email" field is set to blank then the User Email address will be picked up.',
+    'LBL_OUTGOING_SERVER_NOTE' => 'NOTE: Outgoing server should be set to SSL or TLS Protocal and If "From Email" field is set to blank then the User Email address will be picked up.',
 	'LBL_OUTGOING_SERVER' => 'Outgoing Server',
 	'LBL_PASSWORD' => 'Password',
 	'LBL_PBXMANAGER' => 'PBXManager',
@@ -196,6 +196,11 @@ $languageStrings = array(
         'vatid'=>'VAT ID', 
         //Exchange Connector
         'LBL_EXCHANGE_CONNECTOR' => 'Exchange Connector',
+        
+        //SalesPlatform.ru begin
+        'LBL_COMPANY'                  => 'Company',
+        'LBL_NEW_COMPANY'              => 'New company', 
+        //SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(
@@ -218,4 +223,7 @@ $jsLanguageStrings = array(
 	'LBL_NO_LOGO_SELECTED' => 'No logo selected',
 	'LBL_PREFIX_IN_USE' => 'Prefix in use',
 	'LBL_WRONG_IMAGE_TYPE' => 'not supported Image type',
+        //SalesPlatform.ru begin
+        'JS_LBL_CONFIRM_DELETE_COMPANY' => 'Do you really want to delete the company?',
+        //SalesPlatform.ru end
 );

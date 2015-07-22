@@ -65,7 +65,7 @@ Vtiger_Edit_Js("EmailTemplates_Edit_Js",{},{
 				}
 			}
 		}
-
+		
 		if(options == '')
 			options = '<option value="">NONE</option>';
 		

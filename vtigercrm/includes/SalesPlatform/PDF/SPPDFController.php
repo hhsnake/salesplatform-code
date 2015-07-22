@@ -25,6 +25,7 @@ class SalesPlatform_PDF_SPPDFController {
 	protected $headerSize;
 	protected $footerSize;
 	protected $documentModel = null;
+        protected $company; 
 
 	function __construct($module, $templateid) {
 		$this->moduleName = $module;
@@ -41,6 +42,7 @@ class SalesPlatform_PDF_SPPDFController {
 		    $this->pageOrientation = $adb->query_result($templates_result,0,'page_orientation');
 		    $this->headerSize = $adb->query_result($templates_result,0,'header_size');
 		    $this->footerSize = $adb->query_result($templates_result,0,'footer_size');
+                    $this->company = $adb->query_result($templates_result,0,'spcompany');
 
 		    return html_entity_decode($adb->query_result($templates_result,0,'template'), ENT_QUOTES, 'UTF-8');
                 }
@@ -118,8 +120,14 @@ class SalesPlatform_PDF_SPPDFController {
 		
 		$model = new Vtiger_PDF_Model();
 
-		// Company information
-		$result = $adb->pquery("SELECT * FROM vtiger_organizationdetails", array());
+                if ( isset ($this->focus->column_fields["spcompany"]) && $this->focus->column_fields["spcompany"] != '') { 
+ 		    $selfcompany = html_entity_decode($this->focus->column_fields["spcompany"], ENT_QUOTES, 'UTF-8'); 
+                } else {
+ 		    $selfcompany = "Default";
+                }
+
+		// Company information 
+		$result = $adb->pquery("SELECT * FROM vtiger_organizationdetails WHERE company=?", array($selfcompany));
 		$num_rows = $adb->num_rows($result);
 		if($num_rows) {
 			$resultrow = $adb->fetch_array($result);
@@ -392,7 +400,12 @@ class SalesPlatform_PDF_SPPDFController {
 	    return '';
 	}
     }
-
+    
+    private function mmyyyyDate($date){ 
+ 	$date=explode("-", $date); 
+ 	return $date[1].'/'.$date[0].'г.'; 
+    }
+    
     protected function generateEntityModel($entity, $module, $prefix, $model) {
 	// Get only active field information
         $cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
@@ -430,6 +443,7 @@ class SalesPlatform_PDF_SPPDFController {
 			   break;
 		    case 'D': $model->set($prefix.$fieldname, $this->literalDate($entity->column_fields[$fieldname]));
 			  $model->set($prefix.$fieldname.'_short', $this->shortDate($entity->column_fields[$fieldname]));
+                          $model->set($prefix.$fieldname.'_mmyyyy', $this->mmyyyyDate($entity->column_fields[$fieldname])); 
                           $model->set(strtoupper($prefix).strtoupper(str_replace(" ","",$fieldinfo['fieldlabel'])).'_SHORT', $model->get($prefix.$fieldname.'_short'));
                           $model->set(getTranslatedString(strtoupper($prefix), $module).str_replace(" ","",getTranslatedString($fieldinfo['fieldlabel'], $module)).getTranslatedString('_short'), $model->get($prefix.$fieldname.'_short'));
 			  break;

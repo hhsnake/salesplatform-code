@@ -374,6 +374,16 @@ class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
                     return $response;
             }
         }
+
+         
+         /**
+         * Function to Logout from extension store
+         */
+	public function logoutMarketPlace(Vtiger_Request $request) {
+		    $sql = 'DELETE FROM vtiger_extnstore_users';
+		    $db = PearDatabase::getInstance();
+		    $db->pquery($sql, array());
+	    }
         
         /**
          * Function to login user to extension store
@@ -427,6 +437,22 @@ class Settings_ExtensionStore_Extension_Model extends Vtiger_Base_Model {
             }
         }
         
+        /**
+         * Function to verify extension purchase
+         */
+        public function verifyPurchase($listingName){
+            $extensionLookUpUrl = $this->getExtensionsLookUpUrl();
+            if ($extensionLookUpUrl) {
+                $connector = Settings_ExtensionStore_ExtnStore_Connector::getInstance($extensionLookUpUrl);
+                $response = $connector->verifyPurchase($listingName);
+                if($response == 1){
+                    return true;
+                }
+                return false;
+            }
+        }
+
+
         /**
          * Function to get listing author information
          */

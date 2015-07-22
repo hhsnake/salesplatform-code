@@ -8,45 +8,18 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD'               => 'Новая конфигурция',
-	'SMSNotifier'                  => 'SMS-Уведомления', 
-	'LBL_ADD_CONFIGURATION'        => 'Новая конфигурция',
-	'LBL_EDIT_CONFIGURATION'       => 'Изменить конфигурцию',
-	'LBL_SELECT_ONE'               => 'Select One',
-	'providertype'                 => 'Провайдер',
-	'isactive'                     => 'Активен', // KEY 5.x: LBL_ACTIVE
-	'username'                     => 'Пользователь', // KEY 5.x: LBL_USERNAME
-	'password'                     => 'Пароль',// KEY 5.x: LBL_PASWRD
-    'Provider'                     => 'Провайдер',
-    'User Name'                    => 'Пользователь',
-    'Yes'                          => 'Да',
-	'No'                           => 'Нет',
-    'LBL_SELECT_ONE'               => 'Выбор',
-    'LBL_SMS_TIME'                 => 'Время(мин)',
-    'LBL_SMS_TIME_StreamTelecomRuFiz'                 => 'Время(мин)',
-    'LBL_SMS_TIME_StreamTelecomRu' => 'Время(мин)',
-    'LBL_SMS_TIME_StreamSMSru'                 => 'Время(мин)',
-    'LBL_SMSPM_AUTH_HASH'          => 'Хэш-код',
-    'LBL_SMS_SENDER'               => 'Отправитель',
-    'LBL_SMS_SENDER_StreamTelecomRuFiz' => 'Отправитель',
-    'LBL_SMS_SENDER_StreamTelecomRu' => 'Отправитель',
-    'LBL_SMS_SENDER_DevinoTelecom' => 'Отправитель',
-    'LBL_SMS_SENDER_SMS16ru' => 'Отправитель',
-    'LBL_SMS_SENDER_SMSpm' => 'Отправитель',
-    'LBL_SMS_SENDER_StreamSMSru' => 'Отправитель',
-    'LBL_SMS_SENDER_StreamTelecomRuUr' => 'Отправитель',
-    'LBL_SMS_SENDER_VESMSru' => 'Отправитель',
-    'LBL_INFORMGRAD_ACCOUNT_NUMBER' => 'Номер счета',
-    'Enter new data'               => 'Введите новые данные',
+	'LBL_ADD_RECORD'               => 'New Configuration'           , // TODO: Review
+	'SMSNotifier'                  => 'SMS-Уведомления'  , 
+	'LBL_ADD_CONFIGURATION'        => 'New Configuration'           , // TODO: Review
+	'LBL_EDIT_CONFIGURATION'       => 'Edit Configuration'          , // TODO: Review
+	'LBL_SELECT_ONE'               => 'Select One'                  , // TODO: Review
+	'providertype'                 => 'Provider'                    , // TODO: Review
+	'isactive'                     => 'Активен'              , // KEY 5.x: LBL_ACTIVE
+	'username'                     => 'Пользователь'    , // KEY 5.x: LBL_USERNAME
+	'password'                     => 'Пароль'                , // KEY 5.x: LBL_PASWRD
 );
 $jsLanguageStrings = array(
-	'LBL_DELETE_CONFIRMATION'      => 'Вы уверены, что хотите удалить конфигурацию SMS-провайдера?', 
-	'JS_RECORD_DELETED_SUCCESSFULLY' => 'SMS-провайдер успешно удален', 
-	'JS_CONFIGURATION_SAVED'       => 'Конфигурация SMS-провайдера сохранена',
-    // SalesPlatform begin localization
-    'LBL_SMS_SENDER' => 'Отправитель',
-    'LBL_SMS_TIME' => 'Время(мин)',
-    'LBL_SMSPM_AUTH_HASH' => 'Хэш-код',
-    'LBL_INFORMGRAD_ACCOUNT_NUMBER' => 'Номер счета',
-    // SalesPlatform end
+	'LBL_DELETE_CONFIRMATION'      => 'Are you sure, you want to delete this SMSNotifier Configuration', // TODO: Review
+	'JS_RECORD_DELETED_SUCCESSFULLY' => 'SMS Provider Deleted Successfully', // TODO: Review
+	'JS_CONFIGURATION_SAVED'       => 'SMS Provider Configurations saved', // TODO: Review
 );

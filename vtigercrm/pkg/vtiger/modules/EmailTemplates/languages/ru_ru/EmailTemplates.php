@@ -8,27 +8,18 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD' => 'Добавить Шаблон Email',
-	'SINGLE_EmailTemplates' => 'Шаблоны Email',
+	'Email Templates' => 'Шаблоны Email' ,
+	'LBL_ADD_RECORD' => 'Добавить E-mail шаблон',
+	'SINGLE_EmailTemplates' => 'E-mail шаблона',
 	'LBL_EMAIL_TEMPLATES'=> 'Шаблоны Email',
-	'LBL_EMAIL_TEMPLATE' => 'Шаблоны Email',
+	'LBL_EMAIL_TEMPLATE' => 'E-mail шаблона',
 	
-	'LBL_TEMPLATE_NAME' => 'Имя шаблона',
+	'LBL_TEMPLATE_NAME' => 'Имя шаблона ',
 	'LBL_DESCRIPTION' => 'Описание',
 	'LBL_SUBJECT' => 'Тема',
-	'LBL_GENERAL_FIELDS' => 'General Fields',
-	'LBL_SELECT_FIELD_TYPE' => 'Выберите поле',
-	'Records List' => 'fgdfg',
-	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Управление шаблонами',
-        'Message'=>'Сообщение',
-        'Template Name'=>'Имя шаблона',
-        'Templatename'=>'Имя шаблона',
-        'Email Template - Properties of ' => 'Шаблон Email - Свойства ',
+	'LBL_GENERAL_FIELDS' => 'Общие поля',
+	'LBL_SELECT_FIELD_TYPE' => 'Выберите тип поле',
+	
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Управление шаблонами для модуля E-Mail',
+	
 );
-$jsLanguageStrings = array(
-            'LBL_GENERAL_FIELDS' => 'General Fields',
-);
-
-// SalesPlatform.ru begin SPConfiguration fix
-include 'renamed/EmailTemplates.php';
-// SalesPlatform.ru end

@@ -8,6 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Интеграция',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Настройки'          , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Поиск настроек'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Итог'                    , 
@@ -137,7 +139,8 @@ $languageStrings = array(
 	'LBL_REQUIRES_AUTHENTICATION'  => 'Требует аутентификацию?',
     'LBL_OUTGOING_SERVER'          => 'Сервер исходящей почты', // KEY 5.x: LBL_MAIL_SERVER_SETTINGS
 	'LBL_OUTGOING_SERVER_DESC'     => 'Настроить Сервер исходящей почты', // KEY 5.x: LBL_MAIL_SERVER_DESC
-	'LBL_DEFAULT'                  => 'По умолчанию в учетной записи SMTP в качестве исходящего сервера установлен od1.vtiger.com. Чтобы избежать удаления исходящих сообщений СПАМ-фильтрами получателя мы рекомендуем сделать следующее.', 
+    'LBL_OUTGOING_SERVER_NOTE'     => 'Примечание: Для сервера исходящей почты должен быть выбран SSL или TLS протокол и если поле "E-mail отправителя" пустое, то будет выбрано поле "Пользователь".',
+    'LBL_DEFAULT'                  => 'По умолчанию в учетной записи SMTP в качестве исходящего сервера установлен od1.vtiger.com. Чтобы избежать удаления исходящих сообщений СПАМ-фильтрами получателя мы рекомендуем сделать следующее.',
 	'LBL_OPTIONS1'                 => 'Отправлять сообщения через ваш сервер<br>
                                         - Укажите настройки учетной записи SMTP (Имя сервера, Пользователь, Пароль).', 
 	'LBL_OPTIONS2'                 => 'Добавьте сервер od1.vtiger.com в список доверенных отправителей вашего домена.<br>
@@ -242,7 +245,10 @@ $languageStrings = array(
     'Signed in'                    => 'Вошел',
     'Signed off'                   => 'Вышел',
     'LBL_SOCIALCONNECTOR_SETTINGS' => 'Сообщения',
-    //Salesplatform.ru end
+    'LBL_COMPANY'                  => 'Юр. лицо',
+    'Default'                      => 'По умолчанию',
+    'LBL_NEW_COMPANY'              => 'Новое юр.лицо', 
+    //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
 	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group', // TODO: Review
@@ -266,4 +272,8 @@ $jsLanguageStrings = array(
 	'JS_CONFIGURATION_DETAILS_SAVED' => 'Конфигурация сохранена' , 
 	'JS_TERMS_AND_CONDITIONS_SAVED' => 'Сроки и условия сохранены',
     'LBL_PREFIX_IN_USE'            => 'префикс уже используется',
+        
+        //SalesPlatform.ru begin
+        'JS_LBL_CONFIRM_DELETE_COMPANY' => 'Вы действительно хотите удалить компанию?',
+        //SalesPlatform.ru end
 );

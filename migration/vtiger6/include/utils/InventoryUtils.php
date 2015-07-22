@@ -866,7 +866,7 @@ function getInventoryProductTaxValue($id, $productid, $taxname)
 	$taxvalue = $adb->query_result($res,0,$taxname);
 
 	if($taxvalue == '')
-		$taxvalue = '0.00';
+		$taxvalue = '0';
 
 	$log->debug("Exit from function getInventoryProductTaxValue($id, $productid, $taxname).");
 
@@ -887,7 +887,7 @@ function getInventorySHTaxPercent($id, $taxname)
 	$taxpercentage = $adb->query_result($res,0,$taxname);
 
 	if($taxpercentage == '')
-		$taxpercentage = '0.00';
+		$taxpercentage = '0';
 
 	$log->debug("Exit from function getInventorySHTaxPercent($id, $taxname)");
 

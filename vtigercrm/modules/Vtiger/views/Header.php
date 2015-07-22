@@ -68,7 +68,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 						'linktype' => 'HEADERLINK',
 						'linklabel' => 'LBL_DOCUMENTATION',
                                                 // SalesPlatform.ru begin Doc links fixed
-						'linkurl' => 'http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_620',
+						'linkurl' => 'http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630',
 						//'linkurl' => 'https://wiki.vtiger.com/vtiger6/index.php/Main_Page',
                                                 // SalesPlatform.ru end
 						'linkicon' => '',

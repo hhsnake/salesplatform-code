@@ -14,10 +14,7 @@ require_once 'vtlib/Vtiger/Net/Client.php';
 
 class PBXManager_PBXManager_Connector {
 
-    // SalesPlatform.ru begin hide trunk field
-    private static $SETTINGS_REQUIRED_PARAMETERS = array('webappurl' => 'text','outboundcontext' => 'text', 'vtigersecretkey' => 'text');
-    //private static $SETTINGS_REQUIRED_PARAMETERS = array('webappurl' => 'text','outboundcontext' => 'text', 'outboundtrunk' => 'text' , 'vtigersecretkey' => 'text');
-    // SalesPlatform.ru end
+    private static $SETTINGS_REQUIRED_PARAMETERS = array('webappurl' => 'text','outboundcontext' => 'text', 'outboundtrunk' => 'text' , 'vtigersecretkey' => 'text');
     private static $RINGING_CALL_PARAMETERS = array('From' => 'callerIdNumber', 'SourceUUID' => 'callUUID', 'Direction' => 'Direction');
     private static $NUMBERS = array();
     private $webappurl;
@@ -110,54 +107,28 @@ class PBXManager_PBXManager_Connector {
      */
     public function handleDialCall($details) {
         $callid = $details->get('callUUID');
-        
+
         $answeredby = $details->get('callerid2');
         $caller = $details->get('callerid1');
 
         // For Inbound call, answered by will be the user, we should fill the user field
-
-        // SalesPlatform.ru begin
-        /* 
-         * We dont know who caller - crm user or another human. We need check this and also check inner call
-         * when caller and answer numbers in crm but only one matches on record model 
-         */
-        $user = PBXManager_Record_Model::getUserInfoWithNumber($caller);
-        if(!$user) {
+        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
+        $direction = $recordModel->get('direction');
+        if ($direction == self::INCOMING_TYPE) {
+            // For Incoming call, we should fill the user field if he answered that call 
             $user = PBXManager_Record_Model::getUserInfoWithNumber($answeredby);
-            
-            /* If no one crm user for anyone caller - no process ring */
-            if(!$user) {
-                return;
+            $params['user'] = $user['id'];
+            $recordModel->updateAssignedUser($user['id']);
+        } else {
+            $user = PBXManager_Record_Model::getUserInfoWithNumber($caller);
+            if ($user) {
+                $params['user'] = $user['id'];
+                $recordModel->updateAssignedUser($user['id']);
             }
-        } 
-        
-        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid, $user);
-        $params['user'] = $user['id'];
-        
-        //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
-        //
-        //$direction = $recordModel->get('direction');
-        //if ($direction == self::INCOMING_TYPE) {
-        //    // For Incoming call, we should fill the user field if he answered that call 
-        //    $user = PBXManager_Record_Model::getUserInfoWithNumber($answeredby);
-        //    
-        //    $params['user'] = $user['id'];
-        //    $recordModel->updateAssignedUser($user['id']);
-        //} else {
-        //    $user = PBXManager_Record_Model::getUserInfoWithNumber($caller);
-        //    if ($user) {
-        //        $params['user'] = $user['id'];
-        //        $recordModel->updateAssignedUser($user['id']);
-        //    }
-        //}
-        // SalesPlatform.ru end
-        
+        }
+
         $params['callstatus'] = "in-progress";
-        // SalesPlatform.ru begin
-        $recordModel->updateCallDetails($params, $user);
-        $recordModel->updateAssignedUser($user['id']);
-        //$recordModel->updateCallDetails($params);
-        // SalesPlatform.ru end
+        $recordModel->updateCallDetails($params);
     }
     
     /**
@@ -166,20 +137,14 @@ class PBXManager_PBXManager_Connector {
      */
     public function handleEndCall($details) {
         $callid = $details->get('callUUID');
-
-        // SalesPlatform.ru begin
-        //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
-        // SalesPlatform.ru end
-
+        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
+        
         $params['starttime'] = $details->get('starttime');
         $params['endtime'] = $details->get('endtime');
         $params['totalduration'] = $details->get('duration');
         $params['billduration'] = $details->get('billableseconds');
-        
-        //SalesPlatform.ru begin
-        PBXManager_Record_Model::updateCallDetailsBySourceUUID($callid, $params);
-        //$recordModel->updateCallDetails($params);
-        //SalesPlatform.ru end     
+
+        $recordModel->updateCallDetails($params);
     }
     
     /**
@@ -188,17 +153,7 @@ class PBXManager_PBXManager_Connector {
      */
     public function handleHangupCall($details) {
         $callid = $details->get('callUUID');
-
-        // SalesPlatform.ru begin
-        $userNumber = $details->get('callerIdNum');
-        $user = PBXManager_Record_Model::getUserInfoWithNumber($userNumber);
-        if(!$user) {
-            return;
-        }
-        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid, $user);
-        //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
-        // SalesPlatform.ru end
-
+        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
         $hangupcause = $details->get('causetxt');
         
         switch ($hangupcause) {
@@ -224,11 +179,8 @@ class PBXManager_PBXManager_Connector {
             $params['endtime'] = $details->get('EndTime');
             $params['totalduration'] = $details->get('Duration');
         }
-
-        // SalesPlatform.ru begin
-        $recordModel->updateCallDetails($params, $user);
-        //$recordModel->updateCallDetails($params);
-        // SalesPlatform.ru end
+        
+        $recordModel->updateCallDetails($params);
     }
     
     /**
@@ -237,13 +189,9 @@ class PBXManager_PBXManager_Connector {
      */
     public function handleRecording($details) {
         $callid = $details->get('callUUID');
-
-        // SalesPlatform.ru begin
-        PBXManager_Record_Model::updateCallRecordBySourceUUID($callid, $details->get('recordinglink'));
-        //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
-        //$params['recordingurl'] = $details->get('recordinglink');
-        //$recordModel->updateCallDetails($params);
-        // SalesPlatform.ru end
+        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
+        $params['recordingurl'] = $details->get('recordinglink');
+        $recordModel->updateCallDetails($params);
     }
     
     /**
@@ -253,9 +201,7 @@ class PBXManager_PBXManager_Connector {
     public function handleStartupCall($details, $userInfo, $customerInfo) {
         global $current_user;
         $params = $this->prepareParameters($details, self::RINGING_TYPE);
-        //SalesPlatform.ru begin
-        //$direction = $details->get('Direction');
-        //SalesPlatform.ru end
+        $direction = $details->get('Direction');
 
         // To add customer and user information in params
         $params['Customer'] = $customerInfo['id'];
@@ -267,47 +213,19 @@ class PBXManager_PBXManager_Connector {
         } else if ($details->get('to')) {
             $params['CustomerNumber'] = $details->get('to');
         }
-
-        // SalesPlatform.ru begin Set user timezone for starttime param
-        $date = new DateTimeField( null );      
-        //$params['starttime'] = $details->get('StartTime');
-        $params['starttime'] = DateTimeField::convertToDBFormat($date->getDisplayDate()).' '.$date->getDisplayTime();
-        // SalesPlatform.ru end
         
+        $params['starttime'] = $details->get('StartTime');
         $params['callstatus'] = "ringing";
         $user = CRMEntity::getInstance('Users');
-        // SalesPlatform.ru begin
-        $current_user = $user->retrieveCurrentUserInfoFromFile($userInfo['id']);
-        //$current_user = $user->getActiveAdminUser();
-        // SalesPlatform.ru end
+        $current_user = $user->getActiveAdminUser();
         
-        //SalesPlatform.ru begin fix multiplication on call transfer
-        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($params['SourceUUID'], $userInfo);
-        if($recordModel->get('pbxmanagerid') == null) {
-            $recordModel->saveRecordWithArrray($params);
-        } else {
-            $updateParams = array();
-            $updateParams['user'] = $userInfo['id'];
-            $updateParams['callstatus'] = 'ringing';
-            $updateParams['customertype'] = $params['CustomerType'];
-            $updateParams['customernumber'] = $params['CustomerNumber'];
-            $updateParams['customer'] = $customerInfo['id'];
-            
-            $recordModel->updateAssignedUser($userInfo['id']);
-            $recordModel->updateCallDetails($updateParams, $userInfo);
-        }
+        $recordModel = PBXManager_Record_Model::getCleanInstance();
+        $recordModel->saveRecordWithArrray($params);
         
-        //$recordModel = PBXManager_Record_Model::getCleanInstance();
-        //$recordModel->saveRecordWithArrray($params);
-        //SalesPlatform.ru end
-        
-        
-        //SalesPlatform.ru begin delete no-need code
-        //if ($direction == self::INCOMING_TYPE)
-        //    $this->respondToIncomingCall($details);
-        //else
-        //    $this->respondToOutgoingCall($params['CustomerNumber']);
-        //SalesPlatform.ru end
+        if ($direction == self::INCOMING_TYPE)
+            $this->respondToIncomingCall($details);
+        else
+            $this->respondToOutgoingCall($params['CustomerNumber']);
     }
     
     /**
@@ -349,15 +267,8 @@ class PBXManager_PBXManager_Connector {
             $params['callstatus'] = 'no-answer';
             $params['starttime'] = $date;
             $params['endtime'] = $date;
-
-            // SalesPlatform.ru begin
-            $userNumber = $details->get('dialString');
-            $user = PBXManager_Record_Model::getUserInfoWithNumber($userNumber);
-            $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($details->get('callUUID'), $user);
-            $recordModel->updateCallDetails($params, $user);
-            //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($details->get('callUUID'));
-            //$recordModel->updateCallDetails($params);
-            // SalesPlatform.ru end
+            $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($details->get('callUUID'));
+            $recordModel->updateCallDetails($params);
         }
         $response .= '</Dial></Response>';
         echo $response;

@@ -11,7 +11,7 @@
 class SPPDFTemplates_SavePDFTemplate_Action extends Vtiger_Save_Action {
     
     public function process(Vtiger_Request $request) {
-        
+
         $record = new SPPDFTemplates_Record_Model();
         $record->set('templateid', $request->get('templateid'));
         $record->set('module', $request->get('modulename'));
@@ -19,6 +19,7 @@ class SPPDFTemplates_SavePDFTemplate_Action extends Vtiger_Save_Action {
         $record->set('header_size', $request->get('header_size'));
         $record->set('footer_size', $request->get('footer_size'));
         $record->set('page_orientation', $request->get('page_orientation'));
+        $record->set('spcompany', $request->get('spcompany'));
         $record->set('template', fck_from_html($_REQUEST["body"]));             //hack to save template html-structures
         
         $record->save();

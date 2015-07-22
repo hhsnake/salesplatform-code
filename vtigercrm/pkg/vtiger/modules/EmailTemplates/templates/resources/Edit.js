@@ -52,20 +52,14 @@ Vtiger_Edit_Js("EmailTemplates_Edit_Js",{},{
 					var fieldName = moduleSpecificFields[i][0].split(':');
 					options += '<option value="'+moduleSpecificFields[i][1]+'"';
 					if(fieldName[0] == moduleName) {
-                        // SalesPlatform.ru begin
-                        options += '>'+app.vtranslate(fieldName[1])+'</option>';
-						//options += '>'+fieldName[1]+'</option>';
-                        // SalesPlatform.ru end
+						options += '>'+fieldName[1]+'</option>';
 					} else {
-                        // SalesPlatform.ru begin
-                        options += '>'+app.vtranslate(moduleSpecificFields[i][0])+'</option>';
-						//options += '>'+moduleSpecificFields[i][0]+'</option>';
-                        // SalesPlatform.ru end
+						options += '>'+moduleSpecificFields[i][0]+'</option>';
 					}
 				}
 			}
 		}
-
+		
 		if(options == '')
 			options = '<option value="">NONE</option>';
 		

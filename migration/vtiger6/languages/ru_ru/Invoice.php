@@ -38,6 +38,10 @@ $languageStrings = array(
 	'Cancel'                       => 'Отменен'            , // KEY 5.x: LBL_CANCEL_BUTTON_LABEL
     
     'LBL_INVOICE_ADD_CONSIGNMENT'  => 'Создать Реализацию',
+        
+    //SalesPlatform.ru begin
+    'Self Company' => 'Юр. лицо',
+    //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

@@ -872,6 +872,8 @@ $languageStrings = array(
     'Date of Birth' => 'Дата рождения',
     'Mailing Address' => 'Адрес',
     'Other Address' => 'Доп. адрес',
+	'Default'                      => 'По умолчанию',
+    'ReasonToEdit'                 => 'Причина изменения',
     // SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
@@ -1041,7 +1043,6 @@ $jsLanguageStrings = array(
     'Current Date' => 'Текущая дата',
     'Current Time' => 'Текущее время',
     'JS_SUITABLE_VTIGER_FIELD_NOT_AVAILABLE_FOR_MAPPING' => 'Не доступно для сопоставления',
-    'JS_CONFIRM_APPLY_FILTER' => 'Вы уверены, что хотите добавить записи из фильтра?',
     //SalesPlatform.ru end
 );
 

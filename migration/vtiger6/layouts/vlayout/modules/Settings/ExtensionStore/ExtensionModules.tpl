@@ -17,7 +17,6 @@
                     <div class="extension_header">
                             <div class="font-x-x-large boxSizingBorderBox" style="cursor:pointer">{vtranslate($EXTENSION->get('label'), $QUALIFIED_MODULE)}</div>
                             <input type="hidden" name="extensionName" value="{$EXTENSION->get('name')}" />
-                            <input type="hidden" name="extensionUrl" value="{$EXTENSION->get('downloadURL')}" />
                             <input type="hidden" name="moduleAction" value="{if ($EXTENSION->isAlreadyExists()) and (!$EXTENSION_MODULE_MODEL->get('trial'))}{if $EXTENSION->isUpgradable()}Upgrade{else}Installed{/if}{else}Install{/if}" />
                             <input type="hidden" name="extensionId" value="{$EXTENSION->get('id')}" />
                     </div>

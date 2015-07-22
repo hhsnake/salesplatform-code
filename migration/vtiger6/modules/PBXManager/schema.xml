@@ -18,6 +18,7 @@
   `user` varchar(100) DEFAULT NULL,
   `customernumber` varchar(100) DEFAULT NULL,
   `customertype` varchar(100) DEFAULT NULL,
+  `incominglinename` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`pbxmanagerid`),
   KEY `index_sourceuuid` (`sourceuuid`),
   KEY `index_pbxmanager_id` (`pbxmanagerid`)

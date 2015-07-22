@@ -58,8 +58,12 @@ class Settings_Vtiger_CustomRecordNumberingModule_Model extends Vtiger_Module_Mo
 	 * Function to get module custom numbering data
 	 * @return <Array> data of custom numbering data
 	 */
-	public function getModuleCustomNumberingData() {
-		$moduleInfo = $this->getFocus()->getModuleSeqInfo($this->getName());
+        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+        public function getModuleCustomNumberingData($spCompany = '') {
+            $moduleInfo = $this->getFocus()->getModuleSeqInfo($this->getName(), $spCompany);
+	//public function getModuleCustomNumberingData() {
+            //$moduleInfo = $this->getFocus()->getModuleSeqInfo($this->getName());
+        // SalesPlatform.ru end	
 		return array(
 				'prefix' => $moduleInfo[0],
 				'sequenceNumber' => $moduleInfo[1]
@@ -70,17 +74,26 @@ class Settings_Vtiger_CustomRecordNumberingModule_Model extends Vtiger_Module_Mo
 	 * Function to set Module sequence
 	 * @return <Array> result of success
 	 */
-	public function setModuleSequence() {
+        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+        public function setModuleSequence($spCompany = '') {
+	//public function setModuleSequence() {
+        // SalesPlatform.ru end
 		$moduleName = $this->getName();
 		$prefix = $this->get('prefix');
 		$sequenceNumber = $this->get('sequenceNumber');
-
-		$status = $this->getFocus()->setModuleSeqNumber('configure', $moduleName, $prefix, $sequenceNumber);
+                
+                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                $status = $this->getFocus()->setModuleSeqNumber('configure', $moduleName, $prefix, $sequenceNumber, $spCompany);
+		//$status = $this->getFocus()->setModuleSeqNumber('configure', $moduleName, $prefix, $sequenceNumber);
+                // SalesPlatform.ru end
 
 		$success = array('success' => $status);
 		if (!$status) {
 			$db = PearDatabase::getInstance();
-			$result = $db->pquery("SELECT cur_id FROM vtiger_modentity_num WHERE semodule = ? AND prefix = ?", array($moduleName, $prefix));
+                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                        $result = $db->pquery("SELECT cur_id FROM vtiger_modentity_num WHERE semodule = ? AND prefix = ? and spcompany=?", array($moduleName, $prefix, $spCompany));
+			//$result = $db->pquery("SELECT cur_id FROM vtiger_modentity_num WHERE semodule = ? AND prefix = ?", array($moduleName, $prefix));
+                        // SalesPlatform.ru end
 			$success['sequenceNumber'] = $db->query_result($result, 0, 'cur_id');
 		}
 
@@ -91,8 +104,12 @@ class Settings_Vtiger_CustomRecordNumberingModule_Model extends Vtiger_Module_Mo
 	 * Function to update record sequences which are under this module
 	 * @return <Array> result of success
 	 */
-	public function updateRecordsWithSequence() {
-		return $this->getFocus()->updateMissingSeqNumber($this->getName());
+        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+        public function updateRecordsWithSequence($spCompany = '') {
+            return $this->getFocus()->updateMissingSeqNumber($this->getName(), $spCompany);
+	//public function updateRecordsWithSequence() {
+            //return $this->getFocus()->updateMissingSeqNumber($this->getName());
+        //SalesPlatform.ru end    
 	}
 
 }

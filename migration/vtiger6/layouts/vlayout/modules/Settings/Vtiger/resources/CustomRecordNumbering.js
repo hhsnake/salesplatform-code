@@ -36,12 +36,27 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 				'sourceModule' : sourceModule
 			}
 			
+                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                        var selectCompanyElement = editViewForm.find('[name="spCompany"]');
+                        if(sourceModule === 'Invoice') {
+                            params.spCompany = selectCompanyElement.val();
+                        } else {
+                            editViewForm.find('#spcompanyRow').hide();
+                        }
+                        // SalesPlatform.ru end 
+                    
 			AppConnector.request(params).then(
 					function(data){
-						if(data){
+						if(data){                                              
 							editViewForm.find('[name="prefix"]').val(data.result.prefix);
 							editViewForm.find('[name="sequenceNumber"]').val(data.result.sequenceNumber);
 							editViewForm.find('[name="sequenceNumber"]').data('oldSequenceNumber',data.result.sequenceNumber);
+                                                        
+                                                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                                                        if(sourceModule === 'Invoice') {
+                                                            editViewForm.find('#spcompanyRow').show();
+                                                        } 
+                                                        // SalesPlatform.ru end 
 						}
 					},
 					function(jqXHR,textStatus, errorThrown){
@@ -49,6 +64,15 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 		})
 	},
 	
+        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+        registerOnChangeCompany : function(){
+            var editViewForm = this.getForm();
+            editViewForm.find('[name="spCompany"]').on('change', function(e) {
+                editViewForm.find('[name="sourceModule"]').change();
+            });
+        },
+        // SalesPlatform.ru end
+        
 	/**
 	 * Function to register event for saving module custom numbering
 	 */
@@ -83,6 +107,12 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 			'sequenceNumber' : sequenceNumber
 		}
 		
+                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                if(sourceModule === 'Invoice') {
+                    params.spCompany = editViewForm.find('[name="spCompany"]').val();
+                }
+                // SalesPlatform.ru end
+                
 		jQuery('.saveButton').attr("disabled","disabled");
 		AppConnector.request(params).then(
 				function(data){
@@ -124,6 +154,12 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 				'sourceModule' : sourceModule
 			}
 			
+                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                        if(sourceModule === 'Invoice') {
+                            params.spCompany = editViewForm.find('[name="spCompany"]').val();
+                        }
+                        // SalesPlatform.ru end
+                        
 			AppConnector.request(params).then(
 					function(data){
 						var successfullSaveMessage = app.vtranslate('JS_RECORD_NUMBERING_UPDATED_SUCCESSFULLY_FOR')+" "+sourceModuleLabel;
@@ -157,6 +193,9 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 	registerEvents : function(){
 		var thisInstance = this;
 		var editViewForm = this.getForm();
+                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+                this.registerOnChangeCompany();
+                // SalesPlatform.ru end
 		this.registerOnChangeEventOfSourceModule();
 		this.registerEventToUpdateRecordsWithSequenceNumber();
 		this.registerChangeEventForPrefixAndSequenceNumber();

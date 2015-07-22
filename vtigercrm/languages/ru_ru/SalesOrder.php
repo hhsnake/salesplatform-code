@@ -43,6 +43,10 @@ $languageStrings = array(
         'Net 30 days' => 'Всего 30 дней',
         'Net 45 days' => 'Всего 45 дней',
         'Net 60 days' => 'Всего 60 дней',
+    
+    //SalesPlatform.ru begin
+    'Self Company' => 'Юр. лицо',
+    //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

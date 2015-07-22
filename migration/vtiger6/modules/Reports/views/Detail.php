@@ -108,7 +108,7 @@ class Reports_Detail_View extends Vtiger_Index_View {
             }
         }
         // End
-
+		
 		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $primaryModuleRecordStructure);
 		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $secondaryModuleRecordStructures);
 

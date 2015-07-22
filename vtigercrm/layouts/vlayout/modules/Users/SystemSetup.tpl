@@ -337,7 +337,7 @@
 										{if $COUNTER eq 0}		
 											<div class="row-fluid">
 												<div class="offset2 span10">
-													<input type="hidden" name="packages[{$PACKAGE_NAME}]" value="on"/>                                                                                                     {*vtiger commented code
+													<input type="hidden" name="packages[{$PACKAGE_NAME}]" value="on"/>
 													<strong> This feature will be installed by default </strong></label>
                                                                                                         *}
                                                                                                         {*SalesPlatform.ru end*}

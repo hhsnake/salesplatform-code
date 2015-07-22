@@ -35,7 +35,7 @@ function getFieldByReportLabel($module, $label) {
 	if(empty($cachedModuleFields)) {
 		return null;
 	}
-        
+    
 	foreach ($cachedModuleFields as $fieldInfo) {
 		$fieldLabel = str_replace(' ', '_', $fieldInfo['fieldlabel']);
         $fieldLabel = decode_html($fieldLabel);
@@ -135,7 +135,7 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 			}
 			$date = new DateTimeField($value.' '.$endTime);
 			$fieldvalue = $date->getDisplayDate();
-		} else {
+		} else if(!($field->getUIType() == '5')) {
             $date = new DateTimeField($fieldvalue);
             $fieldvalue = $date->getDisplayDateTimeValue();
 		}

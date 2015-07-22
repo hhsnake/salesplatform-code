@@ -45,11 +45,11 @@
 	<table class="table table-bordered listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
-				<th width="5%" class="{$WIDTHTYPE}">
+				<th width="5%">
 					<input type="checkbox" id="listViewEntriesMainCheckBox" />
 				</th>
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-				<th nowrap {if $LISTVIEW_HEADER@last} colspan="2" {/if} class="{$WIDTHTYPE}">
+				<th nowrap {if $LISTVIEW_HEADER@last} colspan="2" {/if}>
 					<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $SOURCE_MODULE)}
 						&nbsp;&nbsp;{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}<img class="{$SORT_IMAGE} icon-white">{/if}</a>
 				</th>

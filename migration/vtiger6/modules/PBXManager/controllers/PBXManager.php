@@ -107,7 +107,7 @@ class PBXManager_PBXManager_Controller {
      */
     function processStartupCall($request) {
         $connector = $this->getConnector();
-	
+
         $temp = $request->get('channel');
         $temp = explode("-", $temp);
         $temp = explode("/", $temp[0]);

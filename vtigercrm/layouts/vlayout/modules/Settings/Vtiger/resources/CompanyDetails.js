@@ -12,6 +12,11 @@ jQuery.Class("Settings_Vtiger_CompanyDetails_Js",{},{
 	registerUpdateDetailsClickEvent : function() {
 		jQuery('#updateCompanyDetails').on('click',function(e){
 			jQuery('#CompanyDetailsContainer').addClass('hide');
+                        
+            //SalesPlatform.ru begin
+            jQuery('#company').addClass('hide');
+            //SalesPlatform.ru end
+                        
 			jQuery('#updateCompanyDetailsForm').removeClass('hide');
             jQuery('#updateCompanyDetails').addClass('hide');
 		});
@@ -31,11 +36,47 @@ jQuery.Class("Settings_Vtiger_CompanyDetails_Js",{},{
 	registerCancelClickEvent : function () {
 		jQuery('.cancelLink').on('click',function() {
 			jQuery('#CompanyDetailsContainer').removeClass('hide');
+                        
+            //SalesPlatform.ru begin
+            jQuery('#company').removeClass('hide');
+            //SalesPlatform.ru end
+                        
 			jQuery('#updateCompanyDetailsForm').addClass('hide');
             jQuery('#updateCompanyDetails').removeClass('hide');
 		});
 	},
 	
+        //SalesPlatform.ru begin
+        registerCreateCompanyEvent : function() {
+            jQuery('#createCompany').on('click',function(e) {
+                jQuery('#companyControlForm [name="action"]').val('CreateCompany');
+                jQuery('#companyControlForm').submit();
+            });
+        },
+        
+        registerDeleteCompanyEvent : function() {
+            jQuery('#deleteCompany').on('click',function(e) {
+                Vtiger_Helper_Js.showConfirmationBox({'message' : app.vtranslate('JS_LBL_CONFIRM_DELETE_COMPANY')}).then(
+                    function(e) {
+                        jQuery('#companyControlForm [name="action"]').val('DeleteCompany');
+                        jQuery('#companyControlForm').submit();
+                    },
+                    function(error, err){}
+                );
+        
+                /* Stop default action */
+                return false;
+            });
+        },
+        
+        registerChangeCompanyEvent : function() {
+            jQuery('#currentCompany').on('change',function(e) {
+                location.href = 'index.php?parent=Settings&module=Vtiger&view=CompanyDetails&company=' + encodeURIComponent(this.value);
+            });
+        },
+        //SalesPlatform.ru end
+        
+        
 	checkValidation : function() {
 		var imageObj = jQuery('#logoFile');
 		var imageName = imageObj.val();
@@ -68,6 +109,12 @@ jQuery.Class("Settings_Vtiger_CompanyDetails_Js",{},{
 	},
 	
 	registerEvents: function() {
+                //SalesPlatform.ru begin
+                this.registerChangeCompanyEvent();
+                this.registerCreateCompanyEvent();
+                this.registerDeleteCompanyEvent();
+                //SalesPlatform.ru end
+                
 		this.registerUpdateDetailsClickEvent();
 		this.registerSaveCompanyDetailsEvent();
 		this.registerCancelClickEvent();
@@ -76,7 +123,9 @@ jQuery.Class("Settings_Vtiger_CompanyDetails_Js",{},{
 
 });
 
-jQuery(document).ready(function(e){
-	var instance = new Settings_Vtiger_CompanyDetails_Js();
-	instance.registerEvents();
-})
+//SalesPlatform.ru begin fix double apply events
+//jQuery(document).ready(function(e){
+//	var instance = new Settings_Vtiger_CompanyDetails_Js();
+//	instance.registerEvents();
+//})
+//SalesPlatform.ru end

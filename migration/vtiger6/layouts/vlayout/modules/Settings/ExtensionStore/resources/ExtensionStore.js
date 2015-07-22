@@ -66,19 +66,18 @@ jQuery.Class('Settings_ExtensionStore_Js', {
      */
     registerEventForIndexView: function() {
         this.registerRaty();
-        var detailContentsHolder = jQuery('.contentsDiv');
         app.showScrollBar(jQuery('.extensionDescription'), {'height': '120px', 'width': '100%', 'railVisible': true});
-        this.registerEventsForExtensionStore(detailContentsHolder);
     },
     /**
      * Function to register event related to Import extrension Modules in index
      */
     registerEventsForExtensionStore: function(container) {
         var thisInstance = this;
-        jQuery(container).find('.installExtension, .installPaidExtension').on('click', function(e) {
+
+        jQuery(container).on('click', '.installExtension, .installPaidExtension', function(e) {
             thisInstance.installExtension(e);
         });
-
+        
         jQuery(container).on('keydown', '#searchExtension', function(e) {
             var currentTarget = jQuery(e.currentTarget);
             var code = e.keyCode;
@@ -140,10 +139,11 @@ jQuery.Class('Settings_ExtensionStore_Js', {
                                             } else {
                                                 progressIndicatorElement.progressIndicator({'mode': 'hide'});
                                                 app.hideModalWindow();
-                                                var error = data['error'];
+                                                var error = data['error']['message'];
                                                 var params = {
                                                     text: error,
-                                                    type: 'error'
+                                                    type: 'error',
+                                                    title : app.vtranslate('JS_WARNING')
                                                 };
                                                 Settings_Vtiger_Index_Js.showMessage(params);
                                             }
@@ -188,7 +188,7 @@ jQuery.Class('Settings_ExtensionStore_Js', {
                                             var params = {
                                                     type: 'error',
                                                     text: error,
-                                                    title : app.vtranslate('LBL_WARNING')
+                                                    title : app.vtranslate('JS_WARNING')
                                             };
                                             Settings_Vtiger_Index_Js.showMessage(params);
                                         }
@@ -210,6 +210,46 @@ jQuery.Class('Settings_ExtensionStore_Js', {
 
         });
         
+
+     jQuery(container).on('click', '#logoutMarketPlace', function(e) {
+            var element = jQuery(e.currentTarget);
+            var aDeferred = jQuery.Deferred();
+            var message = app.vtranslate('JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_LOGOUT_FROM_EXTENSION');
+   
+            Vtiger_Helper_Js.showConfirmationBox({
+                'message' : message
+            }).then(     
+                function(e) {
+                    var params = {
+                        'module': app.getModuleName(),
+                        'parent': app.getParentModuleName(),
+                        'action' : "Basic",
+                        'mode' : "logoutMarketPlace"
+                    };
+                    var progressIndicatorElement = jQuery.progressIndicator();
+       
+                    AppConnector.request(params).then(
+                        function(data) {
+                            progressIndicatorElement.progressIndicator({
+                                'mode': 'hide'
+                            });
+                            location.reload();
+                            aDeferred.resolve(data);
+                        },
+                        function(error) {
+                            progressIndicatorElement.progressIndicator({
+                                'mode': 'hide'
+                            });
+                            aDeferred.reject(error);
+                        }
+                        );
+                    return aDeferred.promise();
+                },
+                function(error, err){
+                }
+                );
+           
+        });
        /* 
         * Function related extension store pro
          jQuery(container).on('click', '#registerUser', function(e) {
@@ -367,7 +407,10 @@ jQuery.Class('Settings_ExtensionStore_Js', {
             var extensionId = extensionContainer.find('[name="extensionId"]').val();
             var moduleAction = extensionContainer.find('[name="moduleAction"]').val();
             var extensionName = extensionContainer.find('[name="extensionName"]').val();
-
+	     var message = app.vtranslate('JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_INSTALL_THIS_EXTENSION');
+   
+             Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(     
+             	function(e) {
             if(element.hasClass('loginRequired')){
                 var loginError = app.vtranslate('JS_PLEASE_LOGIN_TO_MARKETPLACE_FOR_INSTALLING_EXTENSION');
                 var loginErrorParam = {
@@ -436,6 +479,10 @@ jQuery.Class('Settings_ExtensionStore_Js', {
                 };
                 app.showModalWindow(modalData);
             });
+           },
+				function(error, err){
+							}
+       );
         });
 
         jQuery(container).on('click', '#installLoader', function(e) {
@@ -520,6 +567,11 @@ jQuery.Class('Settings_ExtensionStore_Js', {
 
         container.find('#installExtension').on('click', function(e) {
             var element = jQuery(e.currentTarget);
+	    var message = app.vtranslate('JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_INSTALL_THIS_EXTENSION');
+   
+             Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(     
+             	function(e) {
+            
             if(element.hasClass('loginRequired')){
                 var loginError = app.vtranslate('JS_PLEASE_LOGIN_TO_MARKETPLACE_FOR_INSTALLING_EXTENSION');
                 var loginErrorParam = {
@@ -574,6 +626,10 @@ jQuery.Class('Settings_ExtensionStore_Js', {
                 };
                 app.showModalWindow(modalData);
             });
+            },
+							function(error, err){
+							}
+       );
         });
 
         container.find('#uninstallModule').on('click', function(e) {
@@ -679,7 +735,9 @@ jQuery.Class('Settings_ExtensionStore_Js', {
     },
     
     registerEvents: function() {
+        var detailContentsHolder = jQuery('.contentsDiv');
         this.registerEventForIndexView();
+        this.registerEventsForExtensionStore(detailContentsHolder);
     }
 });
 

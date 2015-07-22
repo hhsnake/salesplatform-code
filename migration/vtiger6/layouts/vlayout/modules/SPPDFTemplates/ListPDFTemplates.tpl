@@ -82,11 +82,12 @@ function massDelete()
         <table class="table table-bordered listViewEntriesTable">
             <thead>
                 <tr class="listViewHeaders">
-                    <th width=2% class="listViewHeaderValues">#</td>
-                    <th width=3% class="listViewHeaderValues">{vtranslate('LBL_LIST_SELECT', $MODULE)}</td>
-                    <th width=20% class="listViewHeaderValues">{vtranslate('LBL_TEMPLATE_NAME', $MODULE)}</td>
-                    <th width=20% class="listViewHeaderValues">{vtranslate('LBL_MODULENAMES', $MODULE)}</td>
-                    <th width=10% class="listViewHeaderValues">{vtranslate('LBL_ACTION', $MODULE)}</td>
+                    <th width=2% class="listViewHeaderValues">#</th>
+                    <th width=3% class="listViewHeaderValues">{vtranslate('LBL_LIST_SELECT', $MODULE)}</th>
+                    <th width=20% class="listViewHeaderValues">{vtranslate('LBL_TEMPLATE_NAME', $MODULE)}</th>
+                    <th width=20% class="listViewHeaderValues">{vtranslate('LBL_MODULENAMES', $MODULE)}</th>
+                    <th width=20% class="listViewHeaderValues">{vtranslate('LBL_COMPANY', 'Settings:Vtiger')}</th> 
+                    <th width=10% class="listViewHeaderValues">{vtranslate('LBL_ACTION', $MODULE)}</th>
                 </tr>
             </thead>
 
@@ -96,6 +97,7 @@ function massDelete()
             <td class="listViewEntryValue" valign=top><input type="checkbox" class=small name="selected_id" value="{$template->getId()}"></td>
             <td class="listViewEntryValue" valign=top>  <b><a href="{$template->getDetailViewUrl()}"> {$template->get('name')} </a></b></td>
             <td class="listViewEntryValue" valign=top>{vtranslate($template->get('module'))}</td>
+            <td class="listViewEntryValue" valign=top><b>{vtranslate($template->get('spcompany'), 'Settings:Vtiger')}</b></a></td> 
             <td class="listViewEntryValue" valign=top nowrap>
                 <a href="{$template->getEditViewUrl()}">{vtranslate('LBL_EDIT', $MODULE)}</a> | <a href="{$template->getDuplicateRecordUrl()}">{vtranslate('LBL_DUPLICATE', $MODULE)}</a>
             </td>

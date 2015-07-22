@@ -99,10 +99,7 @@ class Import_FileReader_Reader {
             $fieldObject = $moduleFields[$fieldName];
             $columnsListQuery .= $this->getDBColumnType($fieldObject, $fieldTypes);
 		}
-        // SalesPlatform.ru begin Correct SQL request
-        $createTableQuery = 'CREATE TABLE '. $tableName . ' ('.$columnsListQuery.') ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci';
-		//$createTableQuery = 'CREATE TABLE '. $tableName . ' ('.$columnsListQuery.') ENGINE=MyISAM ';
-        // SalesPlatform.end
+		$createTableQuery = 'CREATE TABLE '. $tableName . ' ('.$columnsListQuery.') ENGINE=MyISAM ';
 		$db->query($createTableQuery);
 		return true;
 	}

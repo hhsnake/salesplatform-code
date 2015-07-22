@@ -8,25 +8,21 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Assets'                => 'Актив'                , 
-	'LBL_ADD_RECORD'               => 'Добавить Актив'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Список Активов'                 , // TODO: Review
+	'SINGLE_Assets'                => 'Активы'                , 
+	'LBL_ADD_RECORD'               => 'Add Asset'                   , // TODO: Review
+	'LBL_RECORDS_LIST'             => 'Assets List'                 , // TODO: Review
 	'LBL_ASSET_INFORMATION'        => 'Информация Актива', 
 	'Asset No'                     => 'Актив №'              , 
-	'Serial Number'                => 'Серийный номер' , 
-	'Date Sold'                    => 'Дата продажи'     , 
-	'Date in Service'              => 'Дата сервиса'     , 
-	'Tag Number'                   => 'Номер тега'         , 
+	'Serial Number'                => 'Серийный Номер' , 
+	'Date Sold'                    => 'Дата Продажи'     , 
+	'Date in Service'              => 'Дата Сервиса'     , 
+	'Tag Number'                   => 'Номер Тега'         , 
 	'Invoice Name'                 => 'Счет'                    , 
-	'Shipping Method'              => 'Метод доставки' , 
-	'Shipping Tracking Number'     => 'Номер доставки' , 
+	'Shipping Method'              => 'Метод Доставки' , 
+	'Shipping Tracking Number'     => 'Номер Доставки' , 
 	'Asset Name'                   => 'Название Актива', 
 	'Customer Name'                => 'Название Клиента', 
 	'Notes'                        => 'Примечания'        , 
 	'In Service'                   => 'Обслуживается'  , 
 	'Out-of-service'               => 'Не обслуживается', 
 );
-
-// SalesPlatform.ru begin SPConfiguration fix
-include 'renamed/Assets.php';
-// SalesPlatform.ru end

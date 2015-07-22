@@ -598,7 +598,7 @@ Vtiger_Widget_Js('Vtiger_MultiBarchat_Widget_Js',{
                         //SalesPlatform.ru end
 		};
 	},
-          
+    
 	loadChart : function(){
 		var chartRelatedData = this.getCharRelatedData();
 		var chartData = chartRelatedData.data;

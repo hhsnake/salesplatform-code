@@ -696,6 +696,7 @@ class Install_InitSchema_Model {
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",13,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",14,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",18,10,0)", array());
+        
 
 		//Inserting into vtiger_profile2utility Sales Profile
 		//Import Export Not Allowed.
@@ -729,7 +730,7 @@ class Install_InitSchema_Model {
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",13,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",14,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",18,10,0)", array());
-
+       
 		//Inserting into vtiger_profile2utility Support Profile
 		//Import Export Not Allowed.
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",2,5,1)", array());
@@ -762,6 +763,7 @@ class Install_InitSchema_Model {
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",13,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",14,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",18,10,0)", array());
+        
 
 		//Inserting into vtiger_profile2utility Guest Profile Read-Only
 		//Import Export BusinessCar Not Allowed.
@@ -795,6 +797,7 @@ class Install_InitSchema_Model {
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",13,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",14,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",18,10,0)", array());
+        
 
 		 // Invalidate any cached information
     	VTCacheUtils::clearRoleSubordinates();
@@ -1231,6 +1234,20 @@ class Install_InitSchema_Model {
 		$task->methodName = "SendPortalLoginDetails";
 		$taskManager->saveTask($task);
 
+		$task->active=true;
+		$task->recepient = "\$(assigned_user_id : (Users) email1)";
+		$task->subject = "Regarding Contact Assignment";
+		$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
+				"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
+				"Lead Source:".'<b>$leadsource</b><br>'.
+				"Department:".'<b>$department</b><br>'.
+				"Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " .
+				"EmailID :-".'$email<br>'."<br>Thank You<br>Admin";
+
+		$task->summary="An contact has been created ";
+		$tm->saveTask($task);
+		$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+                
 		// Trouble Tickets workflow on creation from Customer Portal
 		$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 		$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';

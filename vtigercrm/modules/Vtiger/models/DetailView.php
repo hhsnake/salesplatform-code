@@ -118,9 +118,9 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
                 
                 /* Two cycles - to order */
                 $pdfTemplates = new SPPDFTemplates_Module_Model();
-                $avalibleTemplates = $pdfTemplates->getModuleTemplates($this->getModuleName());
+                $availableTemplates = $pdfTemplates->getModuleTemplates($this->getModuleName(), $this->record->get('spcompany'));
                 
-                foreach($avalibleTemplates as $template) {
+                foreach($availableTemplates as $template) {
                     
                    /* Export PDF links */
                    $pdfTemplateLink = array(
@@ -130,7 +130,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
                    $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($pdfTemplateLink);
                 }
                 
-                foreach($avalibleTemplates as $template) {
+                foreach($availableTemplates as $template) {
                    
                    /* Email link */
                    $sendEmailLink = array(

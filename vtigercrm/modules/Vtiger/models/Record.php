@@ -432,47 +432,49 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		}
 		return true;
 	}
-        
-        //Salesplatform.ru start
-        /**
-         * Print record PDF template
-         * @param int $templateId
-         */
-        public function getSalesPlatformPDF($templateId) {
-		$recordId = $this->getId();
-		$moduleName = $this->getModuleName();
 
-		$controllerClassName = "SalesPlatform_". $moduleName ."PDFController";
+    //Salesplatform.ru begin
+    /**
+     * Print record PDF template
+     * @param int $templateId
+     */
+    public function getSalesPlatformPDF($templateId) {
+        $recordId = $this->getId();
+        $moduleName = $this->getModuleName();
 
-		$controller = new $controllerClassName($moduleName, $templateId);
-		$controller->loadRecord($recordId);
+        $controllerClassName = "SalesPlatform_". $moduleName ."PDFController";
 
-		$fileName = $moduleName.'_'.getModuleSequenceNumber($moduleName, $recordId);
-		$controller->Output($fileName.'.pdf', 'D');
-	}
-        
-        /**
-        * Function to get the pdf file name. This will conver save file in storage.
-        * @param int $templateId
-        * @return <String>
-        */
-       public function getSalesPlatformPDFFileName($templateId) {
-           $moduleName = $this->getModuleName();
-           $recordId = $this->getId();
-           
-           vimport("~~/modules/$moduleName/$moduleName" . "PDFController.php");         //import controller
-           
-           $controllerClassName = "SalesPlatform_" . $moduleName . "PDFController";
-           $controller = new $controllerClassName($moduleName, $templateId);
-           $controller->loadRecord($recordId);
+        $controller = new $controllerClassName($moduleName, $templateId);
+        $controller->loadRecord($recordId);
 
-           $sequenceNo = getModuleSequenceNumber($moduleName,$recordId);
-           $translatedName = vtranslate($moduleName, $moduleName);
-           $filePath = "storage/$translatedName"."_".$sequenceNo.".pdf";
+        $fileName = $moduleName.'_'.getModuleSequenceNumber($moduleName, $recordId);
+        $controller->Output($fileName.'.pdf', 'D');
+    }
 
-           $controller->Output($filePath,'F');
-           return $filePath;
-       }
-        //SalesPlatform.ru end
+    /**
+     * Function to get the pdf file name. This will conver save file in storage.
+     * @param int $templateId
+     * @return <String>
+     */
+    public function getSalesPlatformPDFFileName($templateId) {
+        global $root_directory;
+
+        $moduleName = $this->getModuleName();
+        $recordId = $this->getId();
+
+        vimport("~~/modules/$moduleName/$moduleName" . "PDFController.php");         //import controller
+
+        $controllerClassName = "SalesPlatform_" . $moduleName . "PDFController";
+        $controller = new $controllerClassName($moduleName, $templateId);
+        $controller->loadRecord($recordId);
+
+        $sequenceNo = getModuleSequenceNumber($moduleName,$recordId);
+        $translatedName = vtranslate($moduleName, $moduleName);
+        $filePath = $root_directory."/storage/$translatedName"."_".$sequenceNo.".pdf";
+
+        $controller->Output($filePath,'F');
+        return $filePath;
+    }
+    //SalesPlatform.ru end
 
 }

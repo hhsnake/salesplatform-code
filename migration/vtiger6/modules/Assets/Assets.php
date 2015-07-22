@@ -385,7 +385,10 @@ class Assets extends CRMEntity {
 			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($moduleName));
 			if (!($adb->num_rows($result))) {
 				//Initialize module sequence for the module
-				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
+                                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+                                $adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1, ''));
+				//$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
+                                // SalesPlatform.ru end
 			}
 
 		} else if($eventType == 'module.disabled') {
@@ -402,7 +405,10 @@ class Assets extends CRMEntity {
 			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active =1 ", array($moduleName));
 			if (!($adb->num_rows($result))) {
 				//Initialize module sequence for the module
-				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
+                                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+                                $adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1, ''));
+				//$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
+                                // SalesPlatform.ru end
 			}
 		}
  	}

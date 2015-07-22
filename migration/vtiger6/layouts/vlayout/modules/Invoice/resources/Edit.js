@@ -111,7 +111,7 @@ Inventory_Edit_Js("Invoice_Edit_Js",{},{
         },
         //SalesPlatform.ru end
 
-	registerEvents: function() {
+	registerEvents: function(){
 		this._super();
 		this.registerForTogglingBillingandShippingAddress();
 		this.registerEventForCopyAddress();

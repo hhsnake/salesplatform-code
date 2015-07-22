@@ -56,6 +56,7 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 	}
 
 	function getProducts() {
+                $numOfCurrencyDecimalPlaces = getCurrencyDecimalPlaces(); 
 		$relatedProducts = getAssociatedProducts($this->getModuleName(), $this->getEntity());
 		$productsCount = count($relatedProducts);
 
@@ -64,13 +65,13 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 						+ (float)$relatedProducts[1]['final_details']['shipping_handling_charge']
 						- (float)$relatedProducts[1]['final_details']['discountTotal_final'];
 
-		$relatedProducts[1]['final_details']['preTaxTotal'] = number_format($preTaxTotal, getCurrencyDecimalPlaces(),'.','');
+		$relatedProducts[1]['final_details']['preTaxTotal'] = number_format($preTaxTotal, $numOfCurrencyDecimalPlaces,'.','');
 		
 		//Updating Total After Discount
 		$totalAfterDiscount = (float)$relatedProducts[1]['final_details']['hdnSubTotal']
 								- (float)$relatedProducts[1]['final_details']['discountTotal_final'];
 		
-		$relatedProducts[1]['final_details']['totalAfterDiscount'] = number_format($totalAfterDiscount, getCurrencyDecimalPlaces(),'.','');
+		$relatedProducts[1]['final_details']['totalAfterDiscount'] = number_format($totalAfterDiscount, $numOfCurrencyDecimalPlaces,'.','');
 		
 		//Updating Tax details
 		$taxtype = $relatedProducts[1]['final_details']['taxtype'];
@@ -83,7 +84,7 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 			if ($taxtype == 'individual') {
 				$taxDetails = getTaxDetailsForProduct($productId, 'all');
 				$taxCount = count($taxDetails);
-				$taxTotal = '0.00';
+				$taxTotal = '0';
 
 				for($j=0; $j<$taxCount; $j++) {
 					$taxValue = $product['taxes'][$j]['percentage'];
@@ -197,6 +198,10 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
      *
      */
     public function getPDFFileName() {
+        // SalesPlatform.ru begin
+        global $root_directory;
+        // SalesPlatform.ru end
+
         $moduleName = $this->getModuleName();
         
         //SalesPlatform.ru begin equally controller class name form
@@ -217,7 +222,10 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 
         $sequenceNo = getModuleSequenceNumber($moduleName,$recordId);
 		$translatedName = vtranslate($moduleName, $moduleName);
-        $filePath = "storage/$translatedName"."_".$sequenceNo.".pdf";
+        // SalesPlatform.ru begin
+        $filePath = $root_directory."/storage/$translatedName"."_".$sequenceNo.".pdf";
+        //$filePath = "storage/$translatedName"."_".$sequenceNo.".pdf";
+        // SalesPlatform.ru end
         //added file name to make it work in IE, also forces the download giving the user the option to save
         $controller->Output($filePath,'F');
         return $filePath;
