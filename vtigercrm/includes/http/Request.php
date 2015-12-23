@@ -209,9 +209,16 @@ class Vtiger_Request {
 		// Referer check if present - to over come 
 		if (isset($_SERVER['HTTP_REFERER']) && $user) {//Check for user post authentication.
 			global $site_URL;
+			// SalesPlatform.ru begin Check referer setting
+			global $sp_check_site_url;
+			if ($sp_check_site_url == 'true') {
+			// SalesPlatform.ru end
 			if ((stripos($_SERVER['HTTP_REFERER'], $site_URL) !== 0) && ($this->get('module') != 'Install')) {
 				throw new Exception('Illegal request');
 			}
+			// SalesPlatform.ru begin
+			}
+			// SalesPlatform.ru end
 		}
 		return true;
 	}

@@ -388,3 +388,7 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 		})
 	}
 });
+
+//Salesplatform.ru begin
+Vtiger_DashBoard_Js('Vtiger_DetailDashBoard_Js',{},{});
+//Salesplatform.ru end

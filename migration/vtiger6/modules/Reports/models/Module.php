@@ -46,6 +46,18 @@ class Reports_Module_Model extends Vtiger_Module_Model {
 				$deleteQuery = 'DELETE FROM vtiger_homestuff WHERE stuffid IN (' . implode(",", $homePageChartIdsList) . ')';
 				$db->pquery($deleteQuery, array());
 			}
+                        
+            //SalesPlatform.ru begin clear widgets
+            $widgetURL = $reportModel->getWidgetReportURL();
+            if($widgetURL != '') {
+                $result = $db->pquery("SELECT linkid FROM vtiger_links WHERE linkurl=?", array($widgetURL));
+                while($row = $db->fetchByAssoc($result)) {
+                    $db->pquery("DELETE FROM vtiger_module_dashboard_widgets WHERE linkid=?", array($row['linkid']));
+                    $db->pquery("DELETE FROM vtiger_links WHERE linkid=?", array($row['linkid'])); 
+                }
+            }
+            //SalesPlatform.ru end
+                        
 			return true;
 		}
 		return false;
@@ -125,4 +137,30 @@ class Reports_Module_Model extends Vtiger_Module_Model {
     public function isUtilityActionEnabled() {
         return true;
     }
+    
+    //SalesPlatform.ru begin
+    /**
+     * Get report-templates models for transmittrd module
+     * 
+     * @param string $moduleName
+     * @return Reports_Record_Model[]
+     */
+    public static function getTemplatesReportModels($moduleName) {
+        $db = PearDatabase::getInstance();
+        $reportResult = $db->pquery('SELECT vtiger_report.* FROM vtiger_report '
+                . 'INNER JOIN vtiger_reportfolder ON vtiger_reportfolder.folderid=vtiger_report.folderid '
+                . 'INNER JOIN vtiger_reportmodules ON vtiger_reportmodules.reportmodulesid=vtiger_report.reportid '
+                . 'WHERE vtiger_reportfolder.foldername=? AND vtiger_reportmodules.primarymodule=?', array('Templates', $moduleName));
+        
+        $reportsModelsList = array();
+        while( ($values = $db->fetchByAssoc($reportResult)) ) {
+            $reportModel = Reports_Record_Model::getCleanInstance();
+            $reportModel->setData($values)->setId($values['reportid'])->setModuleFromInstance(Vtiger_Module_Model::getInstance('Reports'));
+            $reportModel->initialize();
+            
+            $reportsModelsList[] = $reportModel;
+        }
+        return $reportsModelsList;
+    }
+    //SalesPLatform.ru end
 }

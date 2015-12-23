@@ -12,6 +12,11 @@ require_once('include/database/PearDatabase.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once 'modules/Reports/ReportUtils.php';
+
+//SalesPlatform.ru begin
+require_once 'modules/Reports/SPReportTemplateController.php';
+//SalesPlatform.ru end
+
 global $calpath;
 global $app_strings,$mod_strings;
 global $app_list_strings;
@@ -105,6 +110,10 @@ class Reports extends CRMEntity{
 	var $adv_rel_fields = Array();
 
 	var $module_list = Array();
+        
+    //SalesPlatform.ru begin
+    private $templateReportController;
+    //SalesPlatform.ru end
 
 	/** Function to set primodule,secmodule,reporttype,reportname,reportdescription,folderid for given vtiger_reportid
 	 *  This function accepts the vtiger_reportid as argument
@@ -115,6 +124,11 @@ class Reports extends CRMEntity{
 	{
 		global $adb,$current_user,$theme,$mod_strings;
 		$this->initListOfModules();
+                
+        //SalesPlatform.ru begin
+        $this->templateReportController = new SPReportTemplateController();
+        //SalesPlatform.ru end
+                
 		if($reportid != "")
 		{
 			// Lookup information in cache first
@@ -1401,13 +1415,24 @@ function getEscapedColumns($selectedfields)
 			$result = $adb->pquery($ssql, array($reportid, $groupId));
 			$noOfColumns = $adb->num_rows($result);
 			if($noOfColumns <= 0) continue;
-
+                        
+            //SalesPlatform.ru begin
+            if(isset($_REQUEST['report_record_id'])) {
+                $this->templateReportController->loadRecord($_REQUEST['report_record_id']);
+            }
+            //SalesPlatform.ru end
+                        
 			while($relcriteriarow = $adb->fetch_array($result)) {
 				$columnIndex = $relcriteriarow["columnindex"];
 				$criteria = array();
 				$criteria['columnname'] = $relcriteriarow["columnname"];
 				$criteria['comparator'] = $relcriteriarow["comparator"];
-				$advfilterval = $relcriteriarow["value"];
+                                
+                //SalesPlatform.ru begin
+				//$advfilterval = $relcriteriarow["value"];
+                $advfilterval = $this->templateReportController->getTransformedValue($relcriteriarow["value"]);
+                //SalesPlatform.ru end
+                                
 				$col = explode(":",$relcriteriarow["columnname"]);
 
 				$moduleFieldLabel = $col[2];

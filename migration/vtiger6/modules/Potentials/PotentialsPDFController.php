@@ -21,19 +21,17 @@ class SalesPlatform_PotentialsPDFController extends SalesPlatform_PDF_SPPDFContr
 
             $this->generateEntityModel($this->focus, 'Potentials', 'potential_', $model);
 
-            if ($this->focusColumnValue('related_to'))
-                $setype = getSalesEntityType($this->focusColumnValue('related_to'));
+            $entity = new Accounts();
+            if($this->focusColumnValue('related_to')) {
+                $entity->retrieve_entity_info($this->focusColumnValue('related_to'), 'Accounts');
+            }
+            $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
 
-            $account = new Accounts();
-            $contact = new Contacts();
-
-            if ($setype == 'Accounts')
-                $account->retrieve_entity_info($this->focusColumnValue('related_to'), $setype);
-            elseif ($setype == 'Contacts')
-                $contact->retrieve_entity_info($this->focusColumnValue('related_to'), $setype);
-
-            $this->generateEntityModel($account, 'Accounts', 'account_', $model);
-            $this->generateEntityModel($contact, 'Contacts', 'contact_', $model);
+            $entity = new Contacts();
+            if($this->focusColumnValue('contact_id')) {
+                $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
+            }
+            $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
             $this->generateUi10Models($model);
             $this->generateRelatedListModels($model);

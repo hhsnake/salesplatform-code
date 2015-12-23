@@ -580,6 +580,19 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 					}
 
 					//Utility permissions
+                    //SalesPlatform.ru begin fix duplicate profile utility
+                    foreach (Vtiger_Action_Model::$utilityActions as $utilityActionId => $utilityActionName) {
+						if(!isset($utilityIdsList[$utilityActionId])) {
+                            if($utilityActionName !== 'ConvertLead' ) {
+                                $utilityIdsList[$utilityActionId] = 'off';
+                            } else {
+                                if($moduleModel->getName() === 'Leads') {
+                                    $utilityIdsList[$utilityActionId] = 'off';
+                                }
+                            }
+						}
+					}
+                    //SalesPlatform.ru end
 					$i = 0;
 					$count = count($utilityIdsList);
 					$utilityInsertQuery .= 'INSERT INTO vtiger_profile2utility(profileid, tabid, activityid, permission) VALUES ';

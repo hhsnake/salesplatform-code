@@ -360,7 +360,7 @@ class Install_Utils_Model {
 		$db_creation_failed = false; // did we try to create a database and fail?
 		$db_exist_status = false; // does the database exist?
 		$db_utf8_support = false; // does the database support utf8?
-
+        
 		//Checking for database connection parameters
 		if($db_type) {
 			$conn = &NewADOConnection($db_type);
@@ -412,13 +412,27 @@ class Install_Utils_Model {
 					$db_exist_status = true;
 					if(!$db_utf8_support) {
 						$db_utf8_support = Vtiger_Util_Helper::checkDbUTF8Support($conn);
+                        
+                        //SalesPlatform.ru begin
+                        if(!$db_utf8_support) {
+                            if(!$conn->Execute("ALTER DATABASE " . $db_name . " DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci")) {
+                                $dbCheckResult['flag'] = false;
+                                $dbCheckResult['error_msg'] = getTranslatedString('ERR_NO_UTF8_OR_NO_ALTER_RIGHTS', 'Install');
+                                $dbCheckResult['error_msg_info'] = '';
+                                $dbCheckResult['db_utf8_support'] = $db_utf8_support;
+
+                                return $dbCheckResult;
+                            }
+                            $db_utf8_support = true;
+                        }
+                        //SalesPlatform.ru end
 					}
 				}
 				$conn->Close();
 			}
 		}
 		$dbCheckResult['db_utf8_support'] = $db_utf8_support;
-
+        
 		$error_msg = '';
 		$error_msg_info = '';
 

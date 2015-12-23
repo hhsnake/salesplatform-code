@@ -16,7 +16,7 @@
 class Settings_Vtiger_CreateCompany_Action extends Settings_Vtiger_Basic_Action {
 
     public function process(Vtiger_Request $request) {
-        $newCompany = htmlentities($request->get('newCompany'), ENT_QUOTES);
+        $newCompany = htmlspecialchars($request->get('newCompany'), ENT_QUOTES);
         if( !empty($newCompany) && Settings_Vtiger_CompanyDetails_Model::addCompanyType($newCompany)) {
             header("Location: index.php?parent=Settings&module=Vtiger&view=CompanyDetails&company=" . html_entity_decode($newCompany, ENT_QUOTES));
         }else {

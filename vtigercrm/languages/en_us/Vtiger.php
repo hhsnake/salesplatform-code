@@ -630,21 +630,36 @@ $languageStrings = array(
 	'Website: ' => 'Website: ',
 	'Word of mouth' => 'Word of mouth',
     	  
-        //Promotion translations
-        'LBL_HIDE_PROMOTION' => 'Hide Promotion',
-        'LBL_SHOW_PROMOTION' => 'Show Promotion',
-    
-        //customerportal forgot password 
-        'LBL_LOGIN_DETAILS' => 'Login Details' ,
-        'LBL_USERNAME' => ' Username',
-        'LBL_PASSWORD' => 'Password',
-        'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Portal Login Details',
-         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
-        'Users' => 'Users', 
-        'Service Requests' => 'Service Requests', 
-        'Terms &amp; Conditions' => 'Terms & Conditions', 
+    //Promotion translations
+    'LBL_HIDE_PROMOTION' => 'Hide Promotion',
+    'LBL_SHOW_PROMOTION' => 'Show Promotion',
+
+    //customerportal forgot password 
+    'LBL_LOGIN_DETAILS' => 'Login Details' ,
+    'LBL_USERNAME' => ' Username',
+    'LBL_PASSWORD' => 'Password',
+    'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Portal Login Details',
+     //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+    'Users' => 'Users', 
+    'Service Requests' => 'Service Requests', 
+    'Terms &amp; Conditions' => 'Terms & Conditions', 
 	'LBL_CONVERSION_RATE'          => 'Conversion Rate',
     
+    //Email template  edit Convertion
+    'LBL_CURRENT_DATE' => 'Current Date',
+    'LBL_CURRENT_TIME' => 'Current Time',
+
+    'LBL_LEFT_PANEL_SHOW_HIDE' => 'Left panel show/hide',
+    
+    //SalesPLatform.ru begin
+    'LBL_EVENT_INFORMATION' => 'Event Details',
+    'LBL_CREATE_FOLLOWUP_EVENT' => 'Create follow-up event',
+    'LBL_EMAIL_INFORMATION' => 'Email Information',
+    'LBL_EMAIL_INFORMATION' => 'Information',
+    'Emails_Block1' => 'Create info',
+    'Emails_Block2' => 'Theme',
+    'Emails_Block3' => 'Description',
+    //SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(
@@ -761,7 +776,9 @@ $jsLanguageStrings = array(
 	'JS_YOU_CAN_SELECT_ONLY' => 'You can select only',
 	'LBL_DELETE_CONFIRMATION' => 'Are you sure you want to delete?', // This is added as duplicate as we need to show different message for different modules. Ex:Accounts has different message
 	'LBL_DELETE_USER_CONFIRMATION' => 'When a User is deleted, the user will be marked as "Inactive" and no new records can be assigned to the User, and the user will not be able to login. Are you sure you want to delete?',
-	'LBL_IMAGE_DELETED_SUCCESSFULLY' => 'Image Deleted Successfully',
+	'LBL_RESTORE_CONFIRMATION' => 'Records previously assigned to this user will not be restored. Are you sure you want to restore this user?',
+    'LBL_DELETE_USER_PERMANENT_CONFIRMATION' => 'Once deleted this user cannot be restored back. Are you sure you want to delete this user permanently?',
+    'LBL_IMAGE_DELETED_SUCCESSFULLY' => 'Image Deleted Successfully',
 	'LBL_IMAGE_NOT_DELETED' => 'Image Not Deleted',
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Are you sure you want to delete the selected Records?',
 	'LBL_NO' => 'No',
@@ -787,4 +804,12 @@ $jsLanguageStrings = array(
     
     //Edit view mode Translations
         'JS_CHANGES_WILL_BE_LOST' => 'Your Changes Will Be Lost!',
+    
+    //Mass edit failure
+    'JS_MASS_EDIT_NOT_SUCCESSFULL' => 'Mass edit of some record is not successfull',
+    //SalesPlatform.ru begin 
+ 	'JS_ACCEPT_MOBILE_MASK' => 'Mobile phone must contain from 11 to 15 digits', 
+    'JS_NO_EDIT_PERMISSION' => 'You do not have permission to modify calendar entries.', 
+    'JS_PERMISSION_DENIED' => 'Permission denied',
+ 	//SalesPlatform.ru end 
 );

@@ -87,7 +87,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
     public function getAddSupportedFieldTypes() {
         return array(
             'Text','Decimal','Integer','Percent','Currency','Date','Email','Phone','Picklist',
-            'URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time'
+            'URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time', 'SPMobilePhone'
         );
     }
 
@@ -271,6 +271,12 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 							   }
                                $uichekdata='I~O';
                                break;
+                //SalesPLatform.ru begin
+                case 'SPMobilePhone':
+                    $uitype = 512;
+                    $type = "VARCHAR(63)";
+                    $uichekdata='V~O';
+                //SalesPlatform.ru end
         }
         return array(
             'uitype' => $uitype,

@@ -22,6 +22,10 @@ require_once("vtlib/Vtiger/Module.php");
 require_once('modules/Vtiger/helpers/Util.php');
 require_once('include/RelatedListView.php');
 
+//SalesPlatform.ru begin
+require_once 'modules/Reports/SPReportTemplateController.php';
+//SalesPlatform.ru end
+
 /*
  * Helper class to determine the associative dependency between tables.
  */
@@ -245,6 +249,10 @@ class ReportRun extends CRMEntity
 	// Added to support line item fields calculation, if line item fields
 	// are selected then module fields cannot be selected and vice versa
 	var $lineItemFieldsInCalculation = false;
+        
+    //SalesPlatform.ru begin
+    private $templateReportController;
+    //SalesPlatform.ru end
 
         /** Function to set reportid,primarymodule,secondarymodule,reporttype,reportname, for given reportid
 	 *  This function accepts the $reportid as argument
@@ -262,6 +270,10 @@ class ReportRun extends CRMEntity
 		$this->reporttype = $oReport->reporttype;
 		$this->reportname = $oReport->reportname;
 		$this->queryPlanner = new ReportRunQueryPlanner();
+                
+        //SalesPlatform.ru begin
+        $this->templateReportController = new SPReportTemplateController();
+        //SalesPlatform.ru end
 	}
 
         public static function getInstance($reportid) {
@@ -284,6 +296,15 @@ class ReportRun extends CRMEntity
 	{
 		// Have we initialized information already?
 		if($this->_columnslist !== false) {
+            
+            //SalesPlatform.ru begin fix bug with call getReportCalulationData before getReportData
+            if ($outputformat == "HTML" || $outputformat == "PDF" || $outputformat == "PRINT") {
+                if(!array_key_exists('vtiger_crmentity:crmid:LBL_ACTION:crmid:I', $this->_columnslist)) {
+                    $this->_columnslist['vtiger_crmentity:crmid:LBL_ACTION:crmid:I'] = 'vtiger_crmentity.crmid AS "'.$this->primarymodule.'_LBL_ACTION"' ;
+                }
+            }
+            //SalesPlatform.ru end
+            
 			return $this->_columnslist;
 		}
 
@@ -885,7 +906,13 @@ class ReportRun extends CRMEntity
 			$result = $adb->pquery($ssql, array($reportid, $groupId));
 			$noOfColumns = $adb->num_rows($result);
 			if($noOfColumns <= 0) continue;
-
+                        
+            //SalesPlatform.ru begin
+            if(isset($_REQUEST['report_record_id'])) {
+                $this->templateReportController->loadRecord($_REQUEST['report_record_id']);
+            }
+            //SalesPlatform.ru end
+                        
 			while($relcriteriarow = $adb->fetch_array($result)) {
 				$columnIndex = $relcriteriarow["columnindex"];
 				$criteria = array();
@@ -893,7 +920,15 @@ class ReportRun extends CRMEntity
 				$criteria['comparator'] = $relcriteriarow["comparator"];
 				$advfilterval = $relcriteriarow["value"];
 				$col = explode(":",$relcriteriarow["columnname"]);
-				$criteria['value'] = $advfilterval;
+                                
+                //SalesPlatform.ru begin
+				//$criteria['value'] = $advfilterval;
+                if($this->templateReportController->isTemplateValue($advfilterval) && 
+                    !$this->templateReportController->isTemplateValueExists($advfilterval)) {
+                    continue;
+                }
+                $criteria['value'] = $this->templateReportController->getTransformedValue($advfilterval);
+                //SalesPlatform.ru end
 				$criteria['column_condition'] = $relcriteriarow["column_condition"];
 
 				$advft_criteria[$i]['columns'][$j] = $criteria;
@@ -1430,6 +1465,13 @@ class ReportRun extends CRMEntity
 		$advfilterlist = array();
         $advfiltersql = '';
 		if(!empty($advft_criteria)) {
+                    
+            //SalesPlatform.ru begin
+            if(isset($_REQUEST['report_record_id'])) {
+                $this->templateReportController->loadRecord($_REQUEST['report_record_id']);
+            }
+            //SalesPlatform.ru end
+                    
 			foreach($advft_criteria as $column_index => $column_condition) {
 
 				if(empty($column_condition)) continue;
@@ -1483,7 +1525,15 @@ class ReportRun extends CRMEntity
 				$criteria = array();
 				$criteria['columnname'] = $adv_filter_column;
 				$criteria['comparator'] = $adv_filter_comparator;
-				$criteria['value'] = $adv_filter_value;
+                //SalesPlatform.ru begin
+				//$criteria['value'] = $adv_filter_value;
+                if($this->templateReportController->isTemplateValue($adv_filter_value) && 
+                    !$this->templateReportController->isTemplateValueExists($adv_filter_value)) {
+                    continue;
+                }
+                $criteria['value'] = $this->templateReportController->getTransformedValue($adv_filter_value);
+                //SalesPlatform.ru end
+				
 				$criteria['column_condition'] = $adv_filter_column_condition;
 
 				$advfilterlist[$adv_filter_groupid]['columns'][] = $criteria;
@@ -1575,8 +1625,11 @@ class ReportRun extends CRMEntity
 	 */
 
 
-	function getStandarFiltersStartAndEndDate($type)
+		function getStandarFiltersStartAndEndDate($type)
 	{
+        global $current_user;
+        $userPeferredDayOfTheWeek = $current_user->column_fields['dayoftheweek'];
+
 		$today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
         $todayName =  date('l', strtotime( $today));
 
@@ -1590,26 +1643,29 @@ class ReportRun extends CRMEntity
 		$nextmonth0 = date("Y-m-d",mktime(0, 0, 0, date("m")+1, "01",   date("Y")));
 		$nextmonth1 = date("Y-m-t", strtotime("+1 Month"));
 
-        // (Last Week) If Today is "Sunday" then "-2 week Sunday" will give before last week Sunday date
-        if($todayName == "Sunday")
-            $lastweek0 = date("Y-m-d",strtotime("-1 week Sunday"));
+          // (Last Week) If Today is "Sunday" then "-2 week Sunday" will give before last week Sunday date
+        if($todayName == $userPeferredDayOfTheWeek)
+            $lastweek0 = date("Y-m-d",strtotime("-1 week $userPeferredDayOfTheWeek"));
         else
-            $lastweek0 = date("Y-m-d",strtotime("-2 week Sunday"));
-		$lastweek1 = date("Y-m-d",strtotime("-1 week Saturday"));
+            $lastweek0 = date("Y-m-d", strtotime("-2 week $userPeferredDayOfTheWeek"));
+        $prvDay = date('l',  strtotime(date('Y-m-d', strtotime('-1 day', strtotime($lastweek0)))));
+        $lastweek1 = date("Y-m-d", strtotime("-1 week $prvDay"));
 
         // (This Week) If Today is "Sunday" then "-1 week Sunday" will give last week Sunday date
-        if($todayName == "Sunday")
-            $thisweek0 = date("Y-m-d",strtotime("-0 week Sunday"));
+        if($todayName == $userPeferredDayOfTheWeek)
+            $thisweek0 = date("Y-m-d",strtotime("-0 week $userPeferredDayOfTheWeek"));
         else
-            $thisweek0 = date("Y-m-d",strtotime("-1 week Sunday"));
-		$thisweek1 = date("Y-m-d",strtotime("this Saturday"));
+            $thisweek0 = date("Y-m-d", strtotime("-1 week $userPeferredDayOfTheWeek"));
+        $prvDay = date('l',  strtotime(date('Y-m-d', strtotime('-1 day', strtotime($thisweek0)))));
+		$thisweek1 = date("Y-m-d", strtotime("this $prvDay"));
 
-        // (Next Week) If Today is "Sunday" then "this Sunday" will give Today's date
-		if($todayName == "Sunday")
-            $nextweek0 = date("Y-m-d",strtotime("+1 week Sunday"));
+         // (Next Week) If Today is "Sunday" then "this Sunday" will give Today's date
+		if($todayName == $userPeferredDayOfTheWeek)
+            $nextweek0 = date("Y-m-d",strtotime("+1 week $userPeferredDayOfTheWeek"));
         else
-            $nextweek0 = date("Y-m-d",strtotime("this Sunday"));
-		$nextweek1 = date("Y-m-d",strtotime("+1 week Saturday"));
+            $nextweek0 = date("Y-m-d", strtotime("this $userPeferredDayOfTheWeek"));
+        $prvDay = date('l',  strtotime(date('Y-m-d', strtotime('-1 day', strtotime($nextweek0)))));
+		$nextweek1 = date("Y-m-d", strtotime("+1 week $prvDay"));
 
 		$next7days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+6, date("Y")));
 		$next30days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+29, date("Y")));

@@ -384,7 +384,7 @@ class ServiceContracts extends CRMEntity {
 			$helpDeskInstance->setRelatedList($moduleInstance,"Service Contracts",Array('ADD','SELECT'));
 
 			// Initialize module sequence for the module
-                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+                        // SalesPlatform.ru begin: Added separate numbering for self organizations
                         $adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1,'')); 
 			//$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1));
                         // SalesPlatform.ru end 

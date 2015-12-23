@@ -1,8 +1,15 @@
 <?php
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: SalesPlatform Ltd
+ * The Initial Developer of the Original Code is SalesPlatform Ltd.
+ * All Rights Reserved.
+ * If you have any questions or comments, please email: devel@salesplatform.ru
+ ************************************************************************************/
 /*******************************************************************************
 
-Функции формирования XML-POST-запросов на сервер xml.szk-info.ru
+Функции формирования XML-POST-запросов на сервер http://gateway.api.sc/xml/
 
 Для формирования запросов используется библиотека cURL из PHP.
 (на PHP серевре должны быть разрешены исходящие запросы и установлен
@@ -12,203 +19,62 @@
 
 *******************************************************************************/
 
-Class STREAMSMS
-   {
-    /**
-    * GetCommandStatus - декодирует ответ от сервера
-    *
-    * @param $status string - Статус комманды от сервера
-    *
-    * @return string Расшифровка - статус комманды от сервера
-    */
-    function GetCommandStatus($status)
-     {
-      switch($status)
-       {
-        case 'OK_Operation_Completed':
-          return 'Операция выполнена';
-        break;
-
-        case 'Error_Not_Enough_Credits':
-          return 'Ошибка: недостаточно кредитов';
-        break;
-
-        case 'Error_Message_Rejected':
-          return 'Ошибка: сообщение отклонено';
-        break;
-
-        case 'Error_Invalid_Destination_Address':
-          return 'Ошибка: некорректный номер получателя сообщения';
-        break;
-
-        case 'Error_Invalid_Source_Address':
-          return 'Ошибка: некорректный адрес отправителя сообщения';
-        break;
-
-        case 'Error_SMS_User_Disabled':
-          return 'Ошибка: СМС-пользователь заблокирован';
-        break;
-
-        case 'Error_Invalid_MessageID':
-          return 'Ошибка: некорректный идентификатор сообщения';
-        break;
-
-        case 'Error_Invalid_Login':
-          return 'Ошибка: неправильный логин';
-        break;
-
-        case 'Error_Invalid_Password':
-          return 'Ошибка: неправильный пароль';
-        break;
-
-        case 'Error_Unauthorised_IP_Address':
-          return 'Ошибка: неавторизованный IP-адрес';
-        break;
-
-        case 'Error_Message_Queue_Full':
-          return 'Ошибка: очередь сообщений полна';
-        break;
-
-        case 'Error_Gateway_Offline':
-          return 'Ошибка: сервер недоступен';
-        break;
-
-        case 'Error_Gateway_Busy':
-          return 'Ошибка: сервер занят другим запросом';
-        break;
-
-        case 'Error_Database_Offline':
-          return 'Ошибка: сервер базы данных недоступен';
-        break;
-
-        default:
-          return 'Ответ не распознан';
-        break;
-      } // switch($status)
-
-    } // GetCommandStatus
+Class STREAMSMS {
 
     /**
     * GetMessageStatus - Расшифровка статуса сообщения
     *
     * @param $status string Статус сообщения
-    *
     * @return string Расшифровка статуса сообщения
     */
-    function GetMessageStatus($status)
-     {
-      switch($status)
-       {
-        case 'Enqueued':
-          return 'Сообщение ожидает отправки';
-        break;
-
-        case 'Delivered_To_Gateway':
-          return 'Сообщение доставлено на сервер';
-        break;
-
-        case 'Sent':
-          return 'Сообщение передано в мобильную сеть';
-        break;
-
-        case 'Delivered_To_Recipient':
-          return 'Сообщение доставлено получателю';
-        break;
-
-        case 'Error_Invalid_Destination_Address':
-          return 'Ошибка: некорректный номер получателя сообщения';
-        break;
-
-        case 'Error_Invalid_Source_Address':
-          return 'Ошибка: некорректный адрес отправителя сообщения';
-        break;
-
-        case 'Error_Rejected':
-          return 'Ошибка: сообщение отклонено';
-        break;
-
-        case 'Error_Expired':
-          return 'Ошибка: истек срок жизни сообщения';
-        break;
-
-        default:
-          return 'Статус не распознан';
-        break;
-      } // switch($status)
-
-    } // GetMessageStatus
+    function GetMessageStatus($status) {
+        switch($status) {
+            case 'partly_deliver':
+                $msg = 'Сообщение доставлено на сервер';
+                break;
+            case 'send':
+                $msg = 'Сообщение передано в мобильную сеть';
+                break;
+            case 'deliver':
+                $msg = 'Сообщение доставлено получателю';
+                break;
+            case 'not_deliver':
+                $msg = 'Ошибка: сообщение отклонено';
+                break;
+            case 'expired':
+                $msg = 'Ошибка: истек срок жизни сообщения';
+                break;
+            default:
+                $msg = 'Статус не распознан';
+                break;
+        }
+        return $msg;
+    }
 
     /**
-    * SendToServer - отправка запроса на сервер через cURL
-    *
-    * @param $xml_data string XML-запрос к серверу (SOAP)
-    * @param $headers string Заголовки запроса к серверу (SOAP)
-    *
-    * @return string XML-ответ от сервера (SOAP)
-    */
-    function SendToServer($xml_data,$headers)
-       {
-        $ch = curl_init(); // Инициализировать библиотеку cURL
-        curl_setopt($ch, CURLOPT_URL,"http://xml.szk-info.ru");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Должен быть ответ (ожидание ответа) от сервера
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60); // Задать тайм-аут работы с сокетами
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); // Задать заголовки HTTP запроса
-        curl_setopt($ch, CURLOPT_POST, 1); // Будет POST запрос
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_data); // Задать тело POST
-        $data = curl_exec($ch); // Выполнить HTTP обмен
+     * SendToServer - отправка запроса на сервер через cURL
+     *
+     * @param $xml_data string XML-запрос к серверу (SOAP)
+     * @param $URL
+     * @return string XML-ответ от сервера (SOAP)
+     */
+    function SendToServer($xml_data, $URL) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/xml; charset=utf-8'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CRLF, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_data);
+        curl_setopt($ch, CURLOPT_URL, $URL);
+        $data = curl_exec($ch);
 
-        if(curl_errno($ch))
-           {
+        if(curl_errno($ch)) {
             die("Error: ".curl_error($ch));
-            }
-        else
-           {
+        } else {
             curl_close($ch);
             return $data;
-            }
-
-        } // SendToServer
-
-    /**
-    * GetCreditBalance – запрос на получение баланса пользователя
-    *
-    * @param $login string Логин пользователя
-    * @param $password string Пароль пользователя
-    *
-    * @return array("Ответ сервера" => (string), "Балланс" => (decimal)) Ответ сервера в виде массива данных
-    */
-    function GetCreditBalance($login,$password)
-       {
-        $xml_data = '<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-<soap:Body>
-<GetCreditBalance xmlns="http://xml.szk-info.ru">
-<smsUser>'.$login.'</smsUser>
-<password>'.$password.'</password>
-</GetCreditBalance>
-</soap:Body>
-</soap:Envelope>';
-
-        $headers = array(
-            "POST web.szk-info.ru HTTP/1.1",
-            "HOST xml.szk-info.ru",
-            "Content-Type: text/xml; charset=utf-8",
-            "Content-length: ".strlen($xml_data),
-            "SOAPAction: http://xml.szk-info.ru"
-            );
-
-        $data = $this->SendToServer($xml_data,$headers);
-        // Show me the result
-        $p = xml_parser_create();
-        xml_parse_into_struct($p,$data,$results);
-        xml_parser_free($p);
-        return array(
-            "Ответ сервера" => $this->GetCommandStatus($results[3]['value']),
-            "Балланс" => $results[5]['value']
-            );
-        } // GetCreditBalance
+        }
+    }
 
     /**
     * SendTextMessage - передача простого текстового SMS-сообщения
@@ -218,51 +84,40 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
     * @param $destinationAddress string Мобильный телефонный номер получателя сообщения, в международном формате: код страны + код сети + номер телефона. Пример: 7903123456
     * @param $messageData string Текст сообщения, поддерживаемые кодировки IA5 и UCS2
     * @param $sourceAddress string Адрес отправителя сообщения. До 11 латинских символов или до 15 цифровых
-    * @param $deliveryReport boolean Запрашивать отчет о статусе данного сообщения
-    * @param $flashMessage boolean Отправка Flash-SMS
-    * @param $validityPeriod integer Время жизни сообщения, устанавливается в минутах
-    *
     * @return array("Ответ сервера" => (string), "ID сообщения" => (decimal)) Ответ сервера в виде массива данных
     */
-    function SendTextMessage($login,$password,$destinationAddress,$messageData,$sourceAddress,$deliveryReport,$flashMessage,$validityPeriod)
-       {
+    function SendTextMessage($login, $password, $destinationAddress, $messageData, $sourceAddress) {
+        $xml_data = '<?xml version="1.0" encoding="UTF-8"?>
+            <request>
+                <security>
+                    <login value="'.$login.'" />
+                    <password value="'.$password.'" />
+                </security>
+                <message>
+                    <sender>'.$sourceAddress.'</sender>
+                    <text>'.$messageData.'</text>
+                    <abonent phone="'.$destinationAddress.'"/>
+                </message>
+            </request>';
 
-        $xml_data = '<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-<soap:Body>
-<SendTextMessage xmlns="http://xml.szk-info.ru/">
-<smsUser>'.$login.'</smsUser>
-<password>'.$password.'</password>
-<destinationAddress>'.$destinationAddress.'</destinationAddress>
-<messageData>'.$messageData.'</messageData>
-<sourceAddress>'.$sourceAddress.'</sourceAddress>
-<deliveryReport>'.$deliveryReport.'</deliveryReport>
-<flashMessage>'.$flashMessage.'</flashMessage>
-<validityPeriod>'.$validityPeriod.'</validityPeriod>
-</SendTextMessage>
-</soap:Body>
-</soap:Envelope>';
+        $data = $this->SendToServer($xml_data, 'http://gateway.api.sc/xml/');
 
-        $headers = array(
-            "POST web.szk-info.ru HTTP/1.1",
-            "HOST xml.szk-info.ru",
-            "Content-Type: text/xml; charset=utf-8",
-            "Content-length: ".strlen($xml_data),
-            "SOAPAction: http://xml.szk-info.ru"
-            );
-
-        $data = $this->SendToServer($xml_data,$headers);
-        // Show me the result
         $p = xml_parser_create();
         xml_parse_into_struct($p,$data,$results);
         xml_parser_free($p);
-        return array(
-            "Ответ сервера" => $this->GetCommandStatus($results[3]['value']),
-            "ID сообщения" => $results[6]['value']
+
+        if($results[1]['tag'] == 'ERROR') {
+            return array(
+                'Ответ сервера' => $results[1]['value'],
+                'ID сообщения' => ''
             );
-        } // SendTextMessage
+        } else {
+            return array(
+                'Ответ сервера' => 'Операция выполнена',
+                'ID сообщения' => $results[1]['attributes']['ID_SMS']
+            );
+        }
+    }
 
     /**
     * GetMessageState – запрос на получение статус отправленного SMS-сообщения
@@ -270,133 +125,37 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
     * @param $login string Логин пользователя
     * @param $password string Пароль пользователя
     * @param $messageId string Идентификатор сообщения
-    *
-    * @return array("Ответ сервера" => (string), "Отчёт получен" => (string), "Статус сообщения" => (string)) Ответ сервера в виде массива данных
+    * @return array("Ответ сервера" => (string), "Отчёт получен" => (string), "Статус сообщения" => (string))
     */
-    function GetMessageState($login,$password,$messageId)
-       {
-        $xml_data = '<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-<soap:Body>
-<GetMessageState xmlns="http://xml.szk-info.ru">
-<smsUser>'.$login.'</smsUser>
-<password>'.$password.'</password>
-<messageId>'.$messageId.'</messageId>
-</GetMessageState>
-</soap:Body>
-</soap:Envelope>';
+    function GetMessageState($login, $password, $messageId) {
+        $xml_data = '<?xml version="1.0" encoding="utf-8" ?>
+            <request>
+                <security>
+                    <login value="'.$login.'" />
+                    <password value="'.$password.'" />
+                </security>
+                <get_state>
+                    <id_sms>'.$messageId.'</id_sms>
+                </get_state>
+            </request>';
 
-        $headers = array(
-            "POST web.szk-info.ru HTTP/1.1",
-            "HOST xml.szk-info.ru",
-            "Content-Type: text/xml; charset=utf-8",
-            "Content-length: ".strlen($xml_data),
-            "SOAPAction: http://xml.szk-info.ru"
-            );
+        $data = $this->SendToServer($xml_data, 'http://gateway.api.sc/xml/state.php');
 
-        $data = $this->SendToServer($xml_data,$headers);
-        // Show me the result
         $p = xml_parser_create();
         xml_parse_into_struct($p,$data,$results);
         xml_parser_free($p);
-        return array(
-            "Ответ сервера" => $this->GetCommandStatus($results[3]['value']),
-	    // SalesPlatform.ru begin PHP 5.4 migration
-            "Отчёт получен" => join(' ',explode('T',$results[4]['value'])),
-            //"Отчёт получен" => join(' ',split('T',$results[4]['value'])),
-	    // SalesPlatform.ru end
-            "Статус сообщения" => $this->GetMessageStatus($results[5]['value'])
+
+        if($results[1]['tag'] == 'ERROR') {
+            return array(
+                "Ответ сервера" => $results[1]['value'],
+                "Статус сообщения" => 'Ответ не распознан'
             );
-    } // GetMessageState
-
-    /**
-    * GetMessageState2 – запрос на получение статус отправленного SMS-сообщения (если с момента отправки ссобщения прошло более 2х суток)
-    *
-    * @param $login string Логин пользователя
-    * @param $password string Пароль пользователя
-    * @param $messageId string Идентификатор сообщения
-    *
-    * @return array("Ответ сервера" => (string), "Отчёт получен" => (string), "Статус сообщения" => (string)) Ответ сервера в виде массива данных
-    */
-    function GetMessageState2($login,$password,$messageId)
-       {
-        $xml_data = '<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-<soap:Body>
-<GetMessageState xmlns="http://xml.szk-info.ru">
-<smsUser>'.$login.'</smsUser>
-<password>'.$password.'</password>
-<messageId>'.$messageId.'</messageId>
-</GetMessageState>
-</soap:Body>
-</soap:Envelope>';
-
-        $headers = array(
-            "POST web.szk-info.ru HTTP/1.1",
-            "HOST xml.szk-info.ru",
-            "Content-Type: text/xml; charset=utf-8",
-            "Content-length: ".strlen($xml_data),
-            "SOAPAction: http://xml.szk-info.ru"
-        );
-
-        $data = $this->SendToServer($xml_data,$headers);
-        // Show me the result
-        $p = xml_parser_create();
-        xml_parse_into_struct($p,$data,$results);
-        xml_parser_free($p);
-        return array(
-          "Ответ сервера" => $this->GetCommandStatus($results[3]['value']),
-	// SalesPlatform.ru begin PHP 5.4 migration
-          "Отчёт получен" => join(' ',explode('T',$results[4]['value'])),
-        //  "Отчёт получен" => join(' ',split('T',$results[4]['value'])),
-	// SalesPlatform.ru end
-          "Статус сообщения" => $this->GetMessageStatus($results[5]['value'])
-        );
-    } // GetMessageState
+        } else {
+            return array(
+                "Ответ сервера" => 'Операция выполнена',
+                "Статус сообщения" => $this->GetMessageStatus($results[1]['value'])
+            );
+        }
+    }
 }
-
-/*******************************************************************************
-Пример использования:
-
-  # Устанавливаем логин, пароль и отправителя
-  $user = 'username';
-  $password = 'password';
-  $response = 'SMS-Notify'; // Имя отправителя должно жестко соответствовать логину
-
-  # Объявляем класс, создаем объект
-  include("STREAMSMS.Class.php");
-  $streamsms = new STREAMSMS();
-
-  # Получаем балланс
-  print_r($streamsms->GetCreditBalance($user,$password));
-  echo "<br />"; flush();
-
-  # Отправляем сообщение на номер 79118887766
-  $message = 'Проверка!';
-  $to = '79118887766';
-  $status = 1;
-  $flash = 0;
-  $time = 10;
-
-  $message = htmlspecialchars($message); // Для преобразования символов (например ' <> & ) к XML формату
-
-  $result = $streamsms->SendTextMessage($user,$password,$to,iconv("WINDOWS-1251","UTF-8",$message),$response,$status,$flash,$time);
-  print_r($result);
-  echo "<br />"; flush();
-
-  # Ждём 5 секунд пока сообщение отсылается
-  sleep(5);
-
-  # Проверяем статус отосланого сообщения
-  print_r($streamsms->GetMessageState($user,$password,$result['ID сообщения']));
-  echo "<br />"; flush();
-
-  # Получаем балланс после отправки
-  print_r($streamsms->GetCreditBalance($user,$password));
-  echo "<br />"; flush();
-*******************************************************************************/
 ?>

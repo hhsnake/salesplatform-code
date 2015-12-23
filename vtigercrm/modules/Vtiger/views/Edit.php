@@ -86,7 +86,18 @@ Class Vtiger_Edit_View extends Vtiger_Index_View {
         // SalesPlatform.ru begin Unifying method for EditView preparing 
         $recordModel = prepareEditView($recordModel, $_REQUEST, $viewer); 
         // SalesPlatform.ru end 
-        
+
+        // SalesPlatform.ru begin Set company
+        if($request->get('relationOperation')) {
+            $sourceRecordModel = Vtiger_Record_Model::getInstanceById($request->get('sourceRecord'));
+            if($sourceRecordModel->get('spcompany') != null && $sourceRecordModel->get('spcompany') != '') {
+                if($recordModel->getField('spcompany')) {
+                    $recordModel->set('spcompany', $sourceRecordModel->get('spcompany'));
+                }
+            }
+        }
+        // SalesPlatform.ru end
+
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);
 		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 

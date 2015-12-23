@@ -10,8 +10,8 @@
  * *********************************************************************************** */
 $languageStrings = array(
     'LBL_SELECT_ONE' => 'Выберите',
-    'LBL_PBXMANAGER' => 'Менеджер PBX',
-    'LBL_PBXMANAGER_CONFIG' => 'Подробные сведения об Vtiger Askterisk Connector',
+    'LBL_PBXMANAGER' => 'Звонки',
+    'LBL_PBXMANAGER_CONFIG' => 'Подробные сведения о SalesPlatform Asterisk Connector',
     'LBL_NOTE' => 'Примечание:',
     'LBL_INFO_WEBAPP_URL' => 'Укажите URL адрес в формате', 
     //SalesPlatform.ru begin
@@ -20,7 +20,7 @@ $languageStrings = array(
     //SalesPlatform.ru end
     'LBL_FORMAT_INFO_WEBAPP_URL' => 'например: http://0.0.0.0:5000',
     'LBL_INFO_CONTEXT' => 'Vtiger Specfic контекст, настроенных в Asterisk сервер (extensions.conf)',
-    'LBL_PBXMANAGER_INFO' => 'Не забудьте настроить параметры конфигурации Vtiger Asterisk Connector после его установки на сервер',
+    'LBL_PBXMANAGER_INFO' => 'Не забудьте настроить параметры конфигурации SalesPlatform Asterisk Connector после его установки на сервер',
     
     
     'webappurl' => 'URL адрес',

@@ -14,7 +14,7 @@ class Settings_Vtiger_CompanyDetails_View extends Settings_Vtiger_Index_View {
         $qualifiedModuleName = $request->getModule(false);
 
         //SalesPlatform.ru begin
-        $selectedCompany = htmlentities($request->get('company'), ENT_QUOTES);
+        $selectedCompany = htmlspecialchars($request->get('company'), ENT_QUOTES);
         if($selectedCompany == '') {
             $selectedCompany = 'Default';
         }
@@ -25,7 +25,7 @@ class Settings_Vtiger_CompanyDetails_View extends Settings_Vtiger_Index_View {
         $viewer = $this->getViewer($request);
 
         //SalesPlatform.ru begin
-        $viewer->assign('SELECTED_COMPANY', htmlentities($selectedCompany));
+        $viewer->assign('SELECTED_COMPANY', htmlspecialchars($selectedCompany));
         //SalesPlatform.ru end
 
         $viewer->assign('MODULE_MODEL', $moduleModel);

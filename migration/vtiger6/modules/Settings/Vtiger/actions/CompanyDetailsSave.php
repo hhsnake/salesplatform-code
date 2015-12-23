@@ -14,7 +14,7 @@ class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Ac
     public function process(Vtiger_Request $request) {
         $qualifiedModuleName = $request->getModule(false);
         //SalesPlatform.ru begin
-        $moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance(htmlentities($request->get('company'), ENT_QUOTES));
+        $moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance(htmlspecialchars($request->get('company'), ENT_QUOTES));
         //$moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance();
         //SalesPlatform.ru end
         $status = false;
@@ -52,7 +52,10 @@ class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Ac
                 }
 
                 if ($fieldName === 'company') {
-                    $fieldValue = htmlentities($request->get('company'), ENT_QUOTES);
+                    // SalesPlatform.ru begin
+                    $fieldValue = htmlspecialchars($request->get('company'), ENT_QUOTES);
+                    //$fieldValue = htmlentities($request->get('company'), ENT_QUOTES);
+                    // SalesPlatform.ru end
                 }
 
                 $moduleModel->set($fieldName, $fieldValue);

@@ -134,7 +134,10 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 						if(!empty($value) && (!$emailOptOutValue)) {
 							$to[] =	$value;
 							$toMailInfo[$id][] = $value;
-							$toMailNamesList[$id][] = array('label' => $recordModel->getName(), 'value' => $value);
+                            //SalesPlatform.ru begin
+							$toMailNamesList[$id][] = array('label' => html_entity_decode($recordModel->getName(), ENT_COMPAT|ENT_HTML401, 'UTF-8'), 'value' => $value);
+                            //$toMailNamesList[$id][] = array('label' => $recordModel->getName(), 'value' => $value);
+                            //SalesPlatform.ru end
 						}
 					}
 				}
@@ -197,7 +200,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 	}
 
 	public function process(Vtiger_Request $request) {
-            ini_set('error_reporting', '6135');
+        ini_set('error_reporting', '6135');
 		$mode = $request->getMode();
 		if(!empty($mode)) {
 			echo $this->invokeExposedMethod($mode, $request);
@@ -348,7 +351,10 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 				if (in_array($emailValue, $TO)) {
 					//expecting parent ids and to will be same order
 					$toMailInfo[$parentId][] = $emailValue;
-					$toMailNamesList[$parentId][] = array('label' => $parentRecordModel->getName(), 'value' => $emailValue);
+                    //SalesPlatform.ru begin
+                    $toMailNamesList[$parentId][] = array('label' => html_entity_decode($parentRecordModel->getName(), ENT_COMPAT|ENT_HTML401, 'UTF-8'), 'value' => $emailValue);
+                    //$toMailNamesList[$parentId][] = array('label' => $parentRecordModel->getName(), 'value' => $emailValue);
+                    //SalesPlatform.ru end
 				}
 			}
         }

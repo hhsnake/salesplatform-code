@@ -121,7 +121,7 @@ class SalesOrderController extends OperationController {
      * @return array 
      */
     protected function getBasicRest() {
-        $restData['1c_id'] = $this->cmlSalesOrder->getOneEsId();
+        $restData['one_s_id'] = $this->cmlSalesOrder->getOneEsId();
         return $restData;
     }
     
@@ -280,8 +280,8 @@ class SalesOrderController extends OperationController {
      * @param array $salesOrderRest
      */
     protected function addXmlOrderIdentificator($order, $salesOrderRest) {
-        if($salesOrderRest['1c_id']!=null){
-            $order->addChild("Ид", $salesOrderRest['1c_id']);
+        if($salesOrderRest['one_s_id']!=null){
+            $order->addChild("Ид", $salesOrderRest['one_s_id']);
         } else {
             $order->addChild("Ид", $salesOrderRest['salesorder_no']);
         }

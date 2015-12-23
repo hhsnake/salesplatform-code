@@ -23,5 +23,8 @@ $languageStrings = array(
 	'Comment' => 'Comment',
 	'Creator' => 'Creator',
 	'Related To Comments' => 'Related To',
-	
+    //SalesPlatform.ru begin
+	'UserId' => 'User',
+    'Customer' => 'Customer',
+    //SalesPlatform.ru end
 );

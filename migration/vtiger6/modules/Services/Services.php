@@ -1088,7 +1088,7 @@ class Services extends CRMEntity {
 			$pbModuleInstance->setRelatedList($moduleInstance,'Services',array('select'),'get_pricebook_services');
 
 			// Initialize module sequence for the module
-                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                        // SalesPlatform.ru begin: Added separate numbering for self organizations
                         $adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SER',1,1,1,'')); 
 			//$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SER',1,1,1));
                         // SalesPlatform.ru end 

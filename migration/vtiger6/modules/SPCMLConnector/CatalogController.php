@@ -210,8 +210,8 @@ class CatalogController extends OperationController {
      * @param array $catalogRest
      */
     private function addXmlCatalogIdentificator($document, $catalogRest) {
-        if($catalogRest['1c_id'] != null) {
-            $document->addChild("Ид", $catalogRest['1c_id']);
+        if($catalogRest['one_s_id'] != null) {
+            $document->addChild("Ид", $catalogRest['one_s_id']);
         } else {
             $document->addChild("Ид", $catalogRest['bookname']);
         }
@@ -223,8 +223,8 @@ class CatalogController extends OperationController {
      * @param array $catalogRest
      */
     private function addXmlPackageIdentificator($document, $catalogRest) {
-        if($catalogRest['1c_id'] != null) {
-            $document->addChild("ИдКаталога", $catalogRest['1c_id']);
+        if($catalogRest['one_s_id'] != null) {
+            $document->addChild("ИдКаталога", $catalogRest['one_s_id']);
         } else {
             $document->addChild("ИдКаталога", $catalogRest['bookname']);
         }

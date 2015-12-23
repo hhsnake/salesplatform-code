@@ -93,6 +93,11 @@
     
     // called with scope of a series
     $.jqplot.FunnelRenderer.prototype.init = function(options, plot) {
+        //SalesPlatform.ru begin hack legend view and sort 
+        this._plotDimensions.width = this._plotDimensions.width * 0.95; 
+        this.sort = true; 
+        //SalesPlatform.ru end
+        
         // Group: Properties
         //
         // prop: padding
@@ -179,8 +184,14 @@
         for (var i=0; i<idxs.length; i++) {
             idxs[i].push(i);
         }
-        this.data.sort( function (a, b) { return b[1] - a[1]; } );
-        idxs.sort( function (a, b) { return b[1] - a[1]; });
+        //SalesPlatform.ru begin hack sorting 
+        if(this.sort) { 
+        //SalesPlatform.ru end hack sorting     
+           this.data.sort( function (a, b) { return b[1] - a[1]; } ); 
+           idxs.sort( function (a, b) { return b[1] - a[1]; });  
+        //SalesPlatform.ru begin hack sorting    
+        } 
+        //SalesPlatform.ru end hack sorting 
         for (var i=0; i<idxs.length; i++) {
             this._dataIndices.push(idxs[i][2]);
         }

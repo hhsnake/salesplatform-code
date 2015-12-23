@@ -23,7 +23,7 @@ class AccountsController extends OperationController {
      * @param array $accountRest
      */
     private function addXmlAccountId($account, $accountRest) {
-        $accountId = $accountRest['1c_id'];
+        $accountId = $accountRest['one_s_id'];
         if($accountId == null) {
             $accountId = $accountRest['accountname'];
         }

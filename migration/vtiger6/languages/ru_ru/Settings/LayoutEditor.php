@@ -61,9 +61,10 @@ $languageStrings = array(
 	'TextArea'                     => 'Текстовое поле' , // KEY 5.x: LBL_TEXT_AREA
 	'Skype'                        => 'Skype'                       , 
 	'Time'                         => 'Время'                  , // KEY 5.x: LBL_TIME
-        //SalesPlatform.ru begin fieldname tooltip
-        'System name'                  => 'Системное имя',
-        //SalesPlatform.ru end 
+    //SalesPlatform.ru begin fieldname tooltip
+    'System name'                  => 'Системное имя',
+    'SPMobilePhone' => 'Мобильный телефон',
+    //SalesPlatform.ru end 
 );
 $jsLanguageStrings = array(
 	'JS_BLOCK_VISIBILITY_SHOW'     => 'Отображение блока включено'          , 

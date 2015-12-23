@@ -9,15 +9,24 @@
   *
  ********************************************************************************/
 -->*}
-{* SalesPlatform.ru begin *}
-{include file="Header.tpl"|vtemplate_path:'Vtiger'}
-{* SalesPlatform.ru end *}
 <div>
-	<table width="100%" cellpadding="3" cellspacing="1" border="0" class="lvt small">
+    {* SalesPlatform.ru begin *}
+	<table width="100%" cellpadding="3" cellspacing="1" border="0" class="table table-bordered detailview-table">
+    {* <table width="100%" cellpadding="3" cellspacing="1" border="0" class="lvt small"> *}
+    {* SalesPlatform.ru end *}
         {* SalesPlatform.ru begin *}
+        {if $RECORDS|@count ne 0}
+            <tr>
+                <th>{vtranslate('LBL_NUMBER', $MODULE)}</th>
+                <th>{vtranslate('LBL_STATUS', $MODULE)}</th>
+                <th>{vtranslate('LBL_STATUS_MESSAGE', $MODULE)}</th>
+            </tr>    
+        {/if}
         {foreach item=RECORD from=$RECORDS}
-		<tr>
-			<td nowrap="nowrap" title="{$RECORD['statusmessage']}" bgcolor="{SMSNotifier_Record_Model::getBackgroundColorForStatus($RECORD['status'])}" width="25%">{$RECORD['tonumber']}</td>
+		<tr bgcolor="{SMSNotifier_Record_Model::getBackgroundColorForStatus($RECORD['status'])}">
+			<td nowrap="nowrap" width="33%">{$RECORD['tonumber']}</td>
+            <td nowrap="nowrap" width="33%">{vtranslate($RECORD['status'], $MODULE)}</td>
+            <td nowrap="nowrap" width="33%">{$RECORD['statusmessage']}</td>
             {*<td nowrap="nowrap" bgcolor="{$RECORD->get('statuscolor')}" width="25%">{$RECORD->get('tonumber')}</td>*}
 		</tr>
         {/foreach}

@@ -25,8 +25,11 @@ class SMSNotifier_MassSaveAjax_Action extends Vtiger_Mass_Action {
 	 * @param Vtiger_Request $request
 	 */
 	public function process(Vtiger_Request $request) {
-		$moduleName = $request->getModule();
-
+        //SalesPLatform.ru begin
+        $sourceModuleName = $request->get('source_module');
+		//$moduleName = $request->getModule();
+        //SalesPlatform.ru end
+        
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$recordIds = $this->getRecordsListFromRequest($request);
 		$phoneFieldList = $request->get('fields');
@@ -50,7 +53,10 @@ class SMSNotifier_MassSaveAjax_Action extends Vtiger_Mass_Action {
 		$response = new Vtiger_Response();
         
 		if(!empty($toNumbers)) {
-			SMSNotifier_Record_Model::SendSMS($message, $toNumbers, $currentUserModel->getId(), $recordIds, $moduleName);
+            //SalesPlatform.ru begin
+            SMSNotifier_Record_Model::SendSMS($message, $toNumbers, $currentUserModel->getId(), $recordIds, $sourceModuleName);
+			//SMSNotifier_Record_Model::SendSMS($message, $toNumbers, $currentUserModel->getId(), $recordIds, $moduleName);
+            //SalesPlatform.ru end
 			$response->setResult(true);
 		} else {
 			$response->setResult(false);

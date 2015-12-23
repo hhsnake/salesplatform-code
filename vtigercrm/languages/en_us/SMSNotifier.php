@@ -25,4 +25,10 @@ $languageStrings = array(
 	//Blocks
 	'LBL_SMSNOTIFIER_INFORMATION' => 'SMS Information',
 	'SINGLE_SMSNotifier' => 'SMS Notifier',
+    
+    //SalesPlatform.ru begin
+    'LBL_NUMBER' => 'Number',
+    'LBL_STATUS' => 'Status',
+    'LBL_STATUS_MESSAGE' => 'Status message',
+    //SalesPlatform.ru end
 );

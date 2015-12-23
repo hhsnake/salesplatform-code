@@ -87,7 +87,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		// Merge Users module merge tags based on current user.
 		$mergedDescription = getMergedDescription($this->get('description'), $currentUserModel->getId(), 'Users');
                 $mergedSubject = getMergedDescription($this->get('subject'),$currentUserModel->getId(), 'Users');
-                
+
 		foreach($toEmailInfo as $id => $emails) {
 			$mailer->reinitialize();
 			$mailer->ConfigSenderInfo($fromEmail, $userName, $replyTo);
@@ -160,45 +160,57 @@ class Emails_Record_Model extends Vtiger_Record_Model {
                                         // SalesPlatform.ru end
 				}
 			}
-                        // SalesPlatform.ru begin
-                        $idn = new idna_convert();
-                        $query = "select * from vtiger_systems where server_type=?";
-                        $params = array('email');
-                        
-                        //SalesPlatform begin fix bug
-                        $adb = PearDatabase::getInstance();
-                        //SalesPaltform.ru end
-                        
-                        $result = $adb->pquery($query, $params);
-                        $server_username = $adb->query_result($result, 0, 'server_username');
-                        $from_name_db = $adb->query_result($result, 0, 'from_name');
-                        $server_port = $adb->query_result($result, 0, 'server_port');
-                        $server_tls = $adb->query_result($result, 0, 'server_tls');
-                        
-                        if($server_username != '') {
-                            $server_username = $idn->encode($server_username);
-                            $mailer->Username = $server_username;
-                        }
-                        if(isset($from_name_db) && $from_name_db != '') {
-                            $mailer->FromName = decode_html($from_name_db);
-                        }
-                        $from_email = $adb->query_result($result, 0, 'from_email_field');
-                        if($from_email != '') {
-                            $mailer->From = $idn->encode($from_email);
-                        }
-                        if(!empty($server_port) && $server_port != 0) {
-                            $mailer->Port = $server_port;
-                        }
-                        if(!empty($server_tls) && $server_tls != 'no') {
-                            $mailer->SMTPSecure = $server_tls;
-                        }
-                        $use_sendmail = $adb->query_result($result, 0, 'use_sendmail');
-                        if ($use_sendmail == "on") {
-                            $mailer->IsSendmail();
-                        } else {
-                            $mailer->IsSMTP();
-                        }
-                        // SalesPlatform.ru end
+            // SalesPlatform.ru begin
+            $idn = new idna_convert();
+            $query = "select * from vtiger_systems where server_type=?";
+            $params = array('email');
+
+            //SalesPlatform begin fix bug
+            $adb = PearDatabase::getInstance();
+            //SalesPlatform.ru end
+
+            $result = $adb->pquery($query, $params);
+            $server_username = $adb->query_result($result, 0, 'server_username');
+            $from_name_db = $adb->query_result($result, 0, 'from_name');
+            $server_port = $adb->query_result($result, 0, 'server_port');
+            $server_tls = $adb->query_result($result, 0, 'server_tls');
+
+            if($server_username != '') {
+                $server_username = $idn->encode($server_username);
+                $mailer->Username = $server_username;
+            }
+            if(isset($from_name_db) && $from_name_db != '') {
+                $mailer->FromName = decode_html($from_name_db);
+            }
+            $from_email = $adb->query_result($result, 0, 'from_email_field');
+            if($from_email != '') {
+                $mailer->From = $idn->encode($from_email);
+            }
+            if(!empty($server_port) && $server_port != 0) {
+                $mailer->Port = $server_port;
+            }
+            if(!empty($server_tls) && $server_tls != 'no') {
+                $mailer->SMTPSecure = $server_tls;
+            }
+            $use_sendmail = $adb->query_result($result, 0, 'use_sendmail');
+            if ($use_sendmail == "on") {
+                $mailer->IsSendmail();
+            } else {
+                $mailer->IsSMTP();
+            }
+
+            // SalesPlatform.ru begin Use User mail account from MailManager
+            $use_mail_account = $adb->query_result($result, 0, 'use_mail_account');
+            if($use_mail_account == "on") {
+                $mailBoxModel = MailManager_Mailbox_Model::activeInstance();
+                if($mailBoxModel->exists()) {
+                    $mailer->Username = $mailBoxModel->username();
+                    $mailer->Password = $mailBoxModel->password();
+                    $mailer->ConfigSenderInfo($fromEmail, $userName, $replyTo);
+                }
+            }
+            // SalesPlatform.ru end
+
 			$status = $mailer->Send(true);
 			if(!$status) {
 				$status = $mailer->getError();
@@ -224,11 +236,21 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 
 		$fromEmail = false;
-		$result = $db->pquery('SELECT from_email_field FROM vtiger_systems WHERE server_type=?', array('email'));
+        // SalesPlatform.ru begin Use User mail account from MailManager
+        $useMailAccount = false;
+        // SalesPlatform.ru end
+		$result = $db->pquery('SELECT from_email_field, use_mail_account FROM vtiger_systems WHERE server_type=?', array('email'));
 		if ($db->num_rows($result)) {
 			$fromEmail = decode_html($db->query_result($result, 0, 'from_email_field'));
+            // SalesPlatform.ru begin Use User mail account from MailManager
+            $useMailAccount = decode_html($db->query_result($result, 0, 'use_mail_account'));
+            // SalesPlatform.ru end
 		}
-		if (empty($fromEmail)) $fromEmail = $currentUserModel->get('email1');
+        // SalesPlatform.ru begin Use User mail account from MailManager
+        $useMailAccount = ($useMailAccount == 'on' || $useMailAccount == 1) ? "true" : "false";
+        if (empty($fromEmail) || $useMailAccount) $fromEmail = $currentUserModel->get('email1');
+		//if (empty($fromEmail)) $fromEmail = $currentUserModel->get('email1');
+        // SalesPlatform.ru end
 		return $fromEmail;
 	}
 

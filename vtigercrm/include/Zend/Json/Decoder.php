@@ -348,7 +348,6 @@ class Zend_Json_Decoder
                     }
 
                     $chr = $str{$i};
-
                     if ($chr == '\\') {
                         $i++;
                         if ($i >= $str_length) {

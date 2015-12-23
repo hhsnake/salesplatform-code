@@ -220,7 +220,10 @@ jQuery.Class("Vtiger_Detail_Js",{
 
 },{
         targetPicklistChange : false,  
- 	targetPicklist : false,
+ 	//SalesPlatform.ru begin 
+    targetPicklist : [], 
+    //targetPicklist : false, 
+    //SalesPlatform.ru end
 	detailViewContentHolder : false,
 	detailViewForm : false,
         detailViewDetailsTabLabel : 'LBL_RECORD_DETAILS',
@@ -1028,15 +1031,25 @@ jQuery.Class("Vtiger_Detail_Js",{
                         fieldnameElement.data('prevValue', ajaxEditNewValue);
                         fieldElement.data('selectedValue', ajaxEditNewValue); 
                         //After saving source field value, If Target field value need to change by user, show the edit view of target field. 
-                        if(thisInstance.targetPicklistChange) { 
-                                if(jQuery('.summaryView', thisInstance.getForm()).length > 0) { 
-                                        thisInstance.targetPicklist.find('.summaryViewEdit').trigger('click'); 
-                                } else { 
-                                        thisInstance.targetPicklist.trigger('click'); 
-                                } 
-                                thisInstance.targetPicklistChange = false; 
-                                thisInstance.targetPicklist = false; 
+                        //SalesPlatform.ru begin 
+                        while(thisInstance.targetPicklist.length > 0) { 
+                            var dependentPicklist = thisInstance.targetPicklist.pop(); 
+                            if($('.summaryView', thisInstance.getForm()).length > 0) {  
+                                dependentPicklist.find('.summaryViewEdit').trigger('click');  
+                            } else {  
+                                dependentPicklist.trigger('click');  
+                            }  
                         } 
+                        //if(thisInstance.targetPicklistChange) {  
+                        //        if(jQuery('.summaryView', thisInstance.getForm()).length > 0) {  
+                        //                thisInstance.targetPicklist.find('.summaryViewEdit').trigger('click');  
+                        //        } else {  
+                        //                thisInstance.targetPicklist.trigger('click');  
+                        //        }  
+                        //        thisInstance.targetPicklistChange = false;  
+                        //        thisInstance.targetPicklist = false;  
+                        //}  
+                        //SalesPlatform.ru end 
                         },
                         function(error){
                             //TODO : Handle error
@@ -1613,9 +1626,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 				function(data){
 					thisInstance.deSelectAllrelatedTabs();
 					thisInstance.markTabAsSelected(tabElement);
-                                        app.registerEventForDatePickerFields(detailContentsHolder);
-                                        //Attach time picker event to time fields
-                                        app.registerEventForTimeFields(detailContentsHolder);
+                    app.registerEventForDatePickerFields(detailContentsHolder);
+                    //Attach time picker event to time fields
+                    app.registerEventForTimeFields(detailContentsHolder);
 					Vtiger_Helper_Js.showHorizontalTopScrollBar();
 					element.progressIndicator({'mode': 'hide'});
 					if(typeof callBack == 'function'){
@@ -1625,10 +1638,18 @@ jQuery.Class("Vtiger_Detail_Js",{
 					if(tabElement.data('linkKey') == thisInstance.detailViewSummaryTabLabel) {
 						thisInstance.loadWidgets();
 						thisInstance.registerSummaryViewContainerEvents(detailContentsHolder);
-                                                thisInstance.registerEventForPicklistDependencySetup(thisInstance.getForm());
+                        thisInstance.registerEventForPicklistDependencySetup(thisInstance.getForm());
+                        //SalesPlatform.ru begin
+                        app.showSelect2ElementView(thisInstance.getForm().find('select.select2'));
+                        thisInstance.registerSpMobilePhoneFields(thisInstance.getForm()); 
+                        //SalesPlatform.ru end
 					}else if(tabElement.data('linkKey') == thisInstance.detailViewDetailsTabLabel){ 
-                                                thisInstance.registerEventForPicklistDependencySetup(thisInstance.getForm()); 
-                                        } 
+                        thisInstance.registerEventForPicklistDependencySetup(thisInstance.getForm()); 
+                        //SalesPlatform.ru begin
+                        app.showSelect2ElementView(thisInstance.getForm().find('select.select2'));
+                        thisInstance.registerSpMobilePhoneFields(thisInstance.getForm()); 
+                        //SalesPlatform.ru end
+                    } 
 
 					// Let listeners know about page state change.
 					app.notifyPostAjaxReady();
@@ -1659,73 +1680,235 @@ jQuery.Class("Vtiger_Detail_Js",{
 
         var sourcePickListNames = "";
         for (var i = 0; i < sourcePicklists.length; i++) {
-            sourcePickListNames += '[name="' + sourcePicklists[i] + '"],';
+            //SalesPlatform.ru begin
+			sourcePickListNames += 'select[name*="'+sourcePicklists[i]+'"],';
+            //sourcePickListNames += '[name="'+sourcePicklists[i]+'"],';
+            //SalesPlatform.ru end
         }
         var sourcePickListElements = container.find(sourcePickListNames);
         sourcePickListElements.on('change', function(e) {
-            var currentElement = jQuery(e.currentTarget);
-            var sourcePicklistname = currentElement.attr('name');
-
-            var configuredDependencyObject = picklistDependencyMapping[sourcePicklistname];
-            var selectedValue = currentElement.val();
-            var targetObjectForSelectedSourceValue = configuredDependencyObject[selectedValue];
-            var picklistmap = configuredDependencyObject["__DEFAULT__"];
-
-            if (typeof targetObjectForSelectedSourceValue == 'undefined') {
-                targetObjectForSelectedSourceValue = picklistmap;
-            }
-            jQuery.each(picklistmap, function(targetPickListName, targetPickListValues) {
-                var targetPickListMap = targetObjectForSelectedSourceValue[targetPickListName];
-                if (typeof targetPickListMap == "undefined") {
-                    targetPickListMap = targetPickListValues;
-                }
-                var targetPickList = jQuery('[name="' + targetPickListName + '"]', container);
-                if (targetPickList.length <= 0) {
-                    return;
-                }
-
-                //On change of SourceField value, If TargetField value is not there in mapping, make user to select the new target value also. 
-                var selectedValue = targetPickList.data('selectedValue');
-                if (jQuery.inArray(selectedValue, targetPickListMap) == -1) {
-                    thisInstance.targetPicklistChange = true;
-                    thisInstance.targetPicklist = targetPickList.closest('td');
-                } else {
-                    thisInstance.targetPicklistChange = false;
-                    thisInstance.targetPicklist = false;
-                }
-
-                var listOfAvailableOptions = targetPickList.data('availableOptions');
-                if (typeof listOfAvailableOptions == "undefined") {
-                    listOfAvailableOptions = jQuery('option', targetPickList);
-                    targetPickList.data('available-options', listOfAvailableOptions);
-                }
-
-                var targetOptions = new jQuery();
-                var optionSelector = [];
-                optionSelector.push('');
-                for (var i = 0; i < targetPickListMap.length; i++) {
-                    optionSelector.push(targetPickListMap[i]);
-                }
-
-                jQuery.each(listOfAvailableOptions, function(i, e) {
-                    var picklistValue = jQuery(e).val();
-                    if (jQuery.inArray(picklistValue, optionSelector) != -1) {
-                        targetOptions = targetOptions.add(jQuery(e));
-                    }
-                })
-                var targetPickListSelectedValue = '';
-                targetPickListSelectedValue = targetOptions.filter('[selected]').val();
-                if (targetPickListMap.length == 1) {
-                    targetPickListSelectedValue = targetPickListMap[0]; // to automatically select picklist if only one picklistmap is present. 
-                }
-                targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
-            })
-
+            //SalesPlatform.ru begin
+            thisInstance.onPicklistChange(e, container);
+            //var currentElement = jQuery(e.currentTarget);
+            //var sourcePicklistname = currentElement.attr('name');
+            //
+            //var configuredDependencyObject = picklistDependencyMapping[sourcePicklistname];
+            //var selectedValue = currentElement.val();
+            //var targetObjectForSelectedSourceValue = configuredDependencyObject[selectedValue];
+            //var picklistmap = configuredDependencyObject["__DEFAULT__"];
+            //
+            //if (typeof targetObjectForSelectedSourceValue == 'undefined') {
+            //    targetObjectForSelectedSourceValue = picklistmap;
+            //}
+            //jQuery.each(picklistmap, function(targetPickListName, targetPickListValues) {
+            //    var targetPickListMap = targetObjectForSelectedSourceValue[targetPickListName];
+            //    if (typeof targetPickListMap == "undefined") {
+            //        targetPickListMap = targetPickListValues;
+            //    }
+            //    var targetPickList = jQuery('[name="' + targetPickListName + '"]', container); 
+            //    if (targetPickList.length <= 0) {
+            //        return;
+            //    }
+            //
+            //    //On change of SourceField value, If TargetField value is not there in mapping, make user to select the new target value also. 
+            //    var selectedValue = targetPickList.data('selectedValue');
+            //    if (jQuery.inArray(selectedValue, targetPickListMap) == -1) { 
+            //        thisInstance.targetPicklistChange = true; 
+            //        thisInstance.targetPicklist = targetPickList.closest('td'); 
+            //    } else { 
+            //        thisInstance.targetPicklistChange = false; 
+            //        thisInstance.targetPicklist = false; 
+            //    } 
+            //
+            //    var listOfAvailableOptions = targetPickList.data('availableOptions');
+            //    if (typeof listOfAvailableOptions == "undefined") {
+            //        listOfAvailableOptions = jQuery('option', targetPickList);
+            //        targetPickList.data('available-options', listOfAvailableOptions);
+            //    }
+            //
+            //    var targetOptions = new jQuery();
+            //    var optionSelector = [];
+            //    optionSelector.push('');
+            //    for (var i = 0; i < targetPickListMap.length; i++) {
+            //        optionSelector.push(targetPickListMap[i]);
+            //    }
+            //
+            //    jQuery.each(listOfAvailableOptions, function(i, e) {
+            //        var picklistValue = jQuery(e).val();
+            //        if (jQuery.inArray(picklistValue, optionSelector) != -1) {
+            //            targetOptions = targetOptions.add(jQuery(e));
+            //        }
+            //    })
+            //    var targetPickListSelectedValue = '';
+            //    targetPickListSelectedValue = targetOptions.filter('[selected]').val();
+            //    if (targetPickListMap.length == 1) {
+            //        targetPickListSelectedValue = targetPickListMap[0]; // to automatically select picklist if only one picklistmap is present. 
+            //    }
+            //    targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
+            //})
+            //SalesPlatform.ru end
         });
         //To Trigger the change on load 
         sourcePickListElements.trigger('change');
     },
 	
+    //SalesPlatform.ru begin
+    onPicklistChange : function(e, container) {
+        
+        /* Prepare data of dependency and selected values of picklist */
+        var currentElement = $(e.currentTarget);
+        var sourcePicklistName = currentElement.attr('name').replace("[]", "");
+        var picklistDependencyElement = $('[name="picklistDependency"]', container);
+        var picklistDependencyMap = JSON.parse(picklistDependencyElement.val());
+        var configuredDependencyObject = picklistDependencyMap[sourcePicklistName];
+        var selectedValue = currentElement.val();
+        var dependencyForSelectedValues = {};
+        
+        /* Get selectable values for dependent picklist */
+        if($.isArray(selectedValue)) {
+            dependencyForSelectedValues = this.getDependentMultipicklistValues(selectedValue, configuredDependencyObject);
+        } else {
+            dependencyForSelectedValues = this.getDependentPicklistValues(selectedValue, configuredDependencyObject);
+        }
+        var picklistMap = configuredDependencyObject["__DEFAULT__"];
+        if(typeof dependencyForSelectedValues == 'undefined'){
+            dependencyForSelectedValues = picklistMap;
+        }
+        
+        /* Reconfigurate dependent picklists */
+        var thisInstance = this;
+        $.each(picklistMap, function(targetPickListName, targetPickListValues){
+            var targetPickListMap = dependencyForSelectedValues[targetPickListName];
+            if(typeof targetPickListMap == "undefined"){
+                targetPickListMap = targetPickListValues;
+            }
+            
+            /* Replace options with remember selected */
+            var targetPickList = $('select[name*="' + targetPickListName + '"]', container); 
+            var listOfAvailableOptions = targetPickList.data('availableOptions');
+            if(typeof listOfAvailableOptions == "undefined"){
+                listOfAvailableOptions = $('option', targetPickList);
+                targetPickList.data('available-options', listOfAvailableOptions);
+            }
+            
+            var currentSelectedValues = $(targetPickList).val();
+            if($.isArray(currentSelectedValues)) {
+                for(var index = 0; index < currentSelectedValues.length; index++) {
+                    if($.inArray(currentSelectedValues[index], targetPickListMap) == -1) { 
+                        thisInstance.targetPicklist.push(targetPickList.closest('td')); 
+                        break;
+                    }
+                }
+            } else {
+                if($.inArray(selectedValue, targetPickListMap) == -1) { 
+                    thisInstance.targetPicklist.push(targetPickList.closest('td')); 
+                } 
+            }
+            
+            var optionSelector = [];
+            optionSelector.push('');
+            for(var i=0; i<targetPickListMap.length; i++){
+                optionSelector.push(targetPickListMap[i]);
+            }
+            
+            var targetOptions = new $();
+            $.each(listOfAvailableOptions, function(i,e) {
+                $(e).prop("selected", false);
+                var picklistValue = $(e).val();
+                if($.inArray(picklistValue, optionSelector) != -1) {
+                    targetOptions = targetOptions.add($(e));
+                }
+            });
+            targetPickList.html(targetOptions);
+            
+            /* Set selected options which include in dependency */
+            if(currentSelectedValues != null) {
+                if($.isArray(currentSelectedValues)) {
+                    for(var selectIndex = 0; selectIndex < currentSelectedValues.length; selectIndex++) {
+                        var selectedValue = currentSelectedValues[selectIndex];
+                        if($.inArray(selectedValue, targetPickListMap) !== -1) {
+                            $("option[value='" + selectedValue + "']", targetPickList).prop("selected", true);
+                        }
+                    }
+                } else {
+                    targetPickList.val(currentSelectedValues);
+                }
+            }
+            
+            /* Refresh select2 view */
+            if($(targetPickList).attr('name').indexOf("[]") !== -1) {
+                app.getSelect2ElementFromSelect(targetPickList).select2('destroy'); 
+                app.showSelect2ElementView(targetPickList);
+            } else {
+                targetPickList.trigger("liszt:updated");
+            }
+        })
+    },
+    
+    /**
+     * Return dependent picklist values for changend multipicklist
+     * 
+     * @param {type} selectedValues
+     * @param {type} configuredDependencyObject
+     * @returns {unresolved}
+     */
+    getDependentMultipicklistValues : function(selectedValues, configuredDependencyObject) {
+        var dependentPicklistValuesMap = {};
+        for(var selectedValueIndex = 0; selectedValueIndex < selectedValues.length; selectedValueIndex++) {
+            var currentValue = selectedValues[selectedValueIndex];
+            var targetPicklistValuesMap = configuredDependencyObject[currentValue];
+
+            /* Iterate all values in dependency */
+            for(var masterPicklistValue in targetPicklistValuesMap) {
+                this.mergeMultiPicklistDependencyValues(dependentPicklistValuesMap, masterPicklistValue,  targetPicklistValuesMap);
+            }
+        }
+        
+        return dependentPicklistValuesMap;
+    },
+    
+    /**
+     * Merges select values for dependent picklist
+     * @param {type} dependentPicklistValues
+     * @param {type} masterPicklistValue
+     * @param {type} targetPicklistValuesMap
+     * @returns {undefined}
+     */
+    mergeMultiPicklistDependencyValues : function(dependentPicklistValues, masterPicklistValue, targetPicklistValuesMap) {
+        if(masterPicklistValue in dependentPicklistValues) {
+            var mergeValues = dependentPicklistValues[masterPicklistValue];
+            var additionalSelectValues = [];
+            var maxMapIndex = 0;
+            var targetValues = targetPicklistValuesMap[masterPicklistValue];
+            for(var targetValueIndex = 0; targetValueIndex < targetValues.length; targetValueIndex++) {
+                var targetValue = targetValues[targetValueIndex];
+                var valueNotIncluded = true;
+                for(var finalTargetProp = 0; finalTargetProp < mergeValues.length; finalTargetProp++) {
+                    if(targetValue === mergeValues[finalTargetProp]) {
+                        valueNotIncluded = false;
+                    }
+                    maxMapIndex = finalTargetProp;
+                }
+
+                if(valueNotIncluded) {
+                    additionalSelectValues.push(targetValue);
+                }
+            }
+
+            for(var index = 0; index < additionalSelectValues.length; index++) {
+                mergeValues[maxMapIndex + index + 1] = additionalSelectValues[index];
+            }
+            dependentPicklistValues[masterPicklistValue] = mergeValues;
+        } else {
+            dependentPicklistValues[masterPicklistValue] = targetPicklistValuesMap[masterPicklistValue];
+        }
+    },
+    
+    getDependentPicklistValues : function(selectedValue, configuredDependencyObject) {
+        return configuredDependencyObject[selectedValue];
+    },
+    //SalesPlatform.ru end
+    
 	/**
 	 * Function to get child comments
 	 */
@@ -1805,7 +1988,13 @@ jQuery.Class("Vtiger_Detail_Js",{
 	getCustomFieldNameValueMap : function(fieldNameValueMap){
 		return fieldNameValueMap;
 	},
-	
+    
+    //SalesPlatform.ru begin
+	registerSpMobilePhoneFields : function(container) { 
+        $('.spMobilePhone', container).inputmask("+9{11,15}"); 
+    }, 
+    //SalesPlatform.ru end
+    
 	registerEvents : function(){
 		var thisInstance = this;
 		//thisInstance.triggerDisplayTypeEvent();
@@ -1827,7 +2016,10 @@ jQuery.Class("Vtiger_Detail_Js",{
 		this.registerEventForRelatedTabClick();
 		Vtiger_Helper_Js.showHorizontalTopScrollBar();
 		this.registerUrlFieldClickEvent();
-		
+		//SalesPlatform.ru begin #3324 
+        this.registerSpMobilePhoneFields(this.getForm()); 
+        //SalesPlatform.ru end #3324 
+        
 		var detailViewContainer = jQuery('div.detailViewContainer');
 		if(detailViewContainer.length <= 0) {
 			// Not detail view page

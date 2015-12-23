@@ -198,53 +198,50 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	if($module == "Support" || $logo ==1)
 		$mail->AddEmbeddedImage('layouts/vlayout/skins/images/logo_mail.jpg', 'logo', 'logo.jpg',"base64","image/jpg");
 
-        // SalesPlatform.ru begin
-        $mail->Timeout = 20;
-        // SalesPlatform.ru end
+    // SalesPlatform.ru begin
+    $mail->Timeout = 20;
+    // SalesPlatform.ru end
         $mail->Subject = $subject;
 	//Added back as we have changed php mailer library, older library was using html_entity_decode before sending mail
 	$mail->Body = decode_html($contents);
 	//$mail->Body = html_entity_decode(nl2br($contents));	//if we get html tags in mail then we will use this line
 	$mail->AltBody = strip_tags(preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$contents));
 
-        // SalesPlatform.ru begin
-	$query = "select * from vtiger_systems where server_type=?";
-	$params = array('email');
-	$result = $adb->pquery($query,$params);
+    // SalesPlatform.ru begin
+    $query = "select * from vtiger_systems where server_type=?";
+    $params = array('email');
+    $result = $adb->pquery($query,$params);
 
-        if(isset($_REQUEST['use_sendmail']))
-	{
-		$use_sendmail = $_REQUEST['use_sendmail'];
-		if($use_sendmail == 'on')
-			$use_sendmail = 'true';
-	}
-	else if (isset($_REQUEST['module']) && $_REQUEST['module'] == 'Settings' && (!isset($_REQUEST['use_sendmail'])))
-	{
-		//added to avoid issue while editing the values in the outgoing mail server.
-		$use_sendmail = 'false';
-	}
-	else
-        {
-            $use_sendmail = $adb->query_result($result,0,'use_sendmail');
-        }
+    if(isset($_REQUEST['use_sendmail'])) {
+        $use_sendmail = $_REQUEST['use_sendmail'];
+        if($use_sendmail == 'on')
+            $use_sendmail = 'true';
+    }
+    else if (isset($_REQUEST['module']) && $_REQUEST['module'] == 'Settings' && (!isset($_REQUEST['use_sendmail']))) {
+        //added to avoid issue while editing the values in the outgoing mail server.
+        $use_sendmail = 'false';
+    }
+    else {
+        $use_sendmail = $adb->query_result($result,0,'use_sendmail');
+    }
 
-        if ($use_sendmail == "true" || $use_sendmail == "on")
-            $mail->IsSendmail();
-        else
-            $mail->IsSMTP();
-//	$mail->IsSMTP();		//set mailer to use SMTP
-        // SalesPlatform.ru end
+    if ($use_sendmail == "true" || $use_sendmail == "on")
+        $mail->IsSendmail();
+    else
+        $mail->IsSMTP();
+    //	$mail->IsSMTP();		//set mailer to use SMTP
+    // SalesPlatform.ru end
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
 
 	setMailServerProperties($mail);
 
-        // SalesPlatform.ru begin
+    // SalesPlatform.ru begin
 	$idn = new idna_convert();
-        // SalesPlatform.ru end
+    // SalesPlatform.ru end
         
 	//Handle the from name and email for HelpDesk
-        // SalesPlatform.ru begin
-        $mail->From = $idn->encode($from_email);
+    // SalesPlatform.ru begin
+    $mail->From = $idn->encode($from_email);
 	$from_name_db = $adb->query_result($result,0,'from_name');
 	if(isset($from_name_db) && $from_name_db!=''){
 		//setting from _email to the defined email address in the outgoing server configuration
@@ -279,7 +276,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 				// SalesPlatform.ru begin
 				$mail->addAddress($idn->encode($to_email[$j]));
 //				$mail->addAddress($to_email[$j]);
-// SalesPlatform.ru end
+    // SalesPlatform.ru end
 			}
 		} else {
 			$_tmp = explode(",",$to_email);
@@ -287,7 +284,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 				// SalesPlatform.ru begin
 				$mail->addAddress($idn->encode($_tmp[$j]));
 //				$mail->addAddress($_tmp[$j]);
-// SalesPlatform.ru end
+    // SalesPlatform.ru end
 			}
 		}
 	}

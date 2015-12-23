@@ -100,8 +100,11 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 		}
 		echo $this->getReport($request);
 	}
-
-	function getReport(Vtiger_Request $request) {
+        
+    //SalesPlatform.ru begin
+	function getReport(Vtiger_Request $request, $isWidgetDisplay = false) {
+    //function getReport(Vtiger_Request $request) {
+    //SalesPlatform.ru end    
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 
@@ -130,7 +133,14 @@ class Reports_ChartDetail_View extends Vtiger_Index_View {
 		$viewer->assign('SECONDARY_MODULES',$secondaryModules);
 		$viewer->assign('MODULE', $moduleName);
 
-		$viewer->view('ChartReportContents.tpl', $moduleName);
+        //SalesPlatform.ru begin
+        if($isWidgetDisplay) {
+            return $viewer->view('WidgetChartReportContents.tpl', $moduleName, true);
+        } else {
+            $viewer->view('ChartReportContents.tpl', $moduleName);
+        }
+		//$viewer->view('ChartReportContents.tpl', $moduleName);
+        //SalesPlatform.ru end    
 	}
 
 	/**

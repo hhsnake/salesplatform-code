@@ -33,6 +33,14 @@ class PBXManager_Detail_View extends Vtiger_Detail_View{
         if($recordModel->get('callstatus') != 'completed') { 
             $recordModel->set('recordingurl', ''); 
         }
+        // SalesPlatform.ru begin
+        if($recordModel->get('callstatus') == 'completed') {
+            $recordModel->set('recordingurl', '<audio src="index.php?module=PBXManager&action=ListenRecord&record='.$recordId.'" controls>
+                    <a href="index.php?module=PBXManager&action=ListenRecord&record='.$recordId.'" ><i class="icon-volume-up"></i></a>
+                </audio>');
+        }
+        // SalesPlatform.ru end
+
         return parent::preProcess($request, true);
 	}
 }

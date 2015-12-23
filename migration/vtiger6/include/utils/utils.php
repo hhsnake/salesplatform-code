@@ -1899,7 +1899,10 @@ function getBlockName($blockid) {
 }
 
 function validateAlphaNumericInput($string){
-    preg_match('/^[\w _\-]+$/', $string, $matches);
+    //SalesPlatform.ru begin Added russian letters and email in scannername
+    preg_match('/[\wа-яА-Я@. _\-]+$/', $string, $matches);
+    //preg_match('/^[\w _\-]+$/', $string, $matches);
+    // SalesPlatform.ru end  
     if(count($matches) == 0) {
         return false;
 	}

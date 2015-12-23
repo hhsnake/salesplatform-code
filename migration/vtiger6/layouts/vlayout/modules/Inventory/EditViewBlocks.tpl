@@ -20,21 +20,10 @@
 		<input type="hidden" name="module" value="{$MODULE}" />
 		<input type="hidden" name="action" value="Save" />
 		<input type="hidden" name="record" value="{$RECORD_ID}" />
-
-                {* SalesPlatform.ru begin add relation create for Act from Invoice *}
-		{if $IS_RELATION_OPERATION || $IS_FROM_INVOICE_CREATE}
-                {* {if $IS_RELATION_OPERATION} *}
-                {* SalesPlatform.ru end *}
-
+		{if $IS_RELATION_OPERATION }
 			<input type="hidden" name="sourceModule" value="{$SOURCE_MODULE}" />
 			<input type="hidden" name="sourceRecord" value="{$SOURCE_RECORD}" />
-                        
-                        {* SalesPlatform.ru begin add relation create for Act from Invoice *}
-                        {if $IS_RELATION_OPERATION}
 			<input type="hidden" name="relationOperation" value="{$IS_RELATION_OPERATION}" />
-                        {/if}
-                        {* <input type="hidden" name="relationOperation" value="{$IS_RELATION_OPERATION}" /> *}
-                        {* SalesPlatform.ru end *}
 		{/if}
         
         {* SalesPlatform.ru begin For CheckBeforeSave tag*}

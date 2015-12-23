@@ -100,6 +100,12 @@ jQuery.Class("Vtiger_Header_Js", {
     quickCreateSave: function(form) {
         var aDeferred = jQuery.Deferred();
         var quickCreateSaveUrl = form.serializeFormData();
+        // SalesPlatform begin
+        if(!sp_js_quickcreate_checkBeforeSave(quickCreateSaveUrl)) {
+            aDeferred.reject('CheckBeforeSave');
+            return aDeferred.promise();
+        }
+        // SalesPlatform end
         AppConnector.request(quickCreateSaveUrl).then(
                 function(data) {
                     //TODO: App Message should be shown
@@ -294,6 +300,14 @@ jQuery.Class("Vtiger_Header_Js", {
                                 }
                             },
                             function(error, err) {
+                                // SalesPlatform begin
+                                // If validation fails, form should submit again
+                                form.removeData('submit');
+                                form.closest('#globalmodal').find('.modal-header h3').progressIndicator({
+                                    'mode': 'hide'
+                                });
+                                e.preventDefault();
+                                // SalesPlatform end
                             }
                     );
                 } else {
@@ -500,3 +514,60 @@ jQuery(document).ready(function() {
     Vtiger_Header_Js.getInstance().registerEvents();
 
 });
+
+// SalesPlatform.ru begin
+/**
+ * Quick create check before save implementation
+ * @param fieldData
+ * @returns {*}
+ */
+function sp_js_quickcreate_checkBeforeSave(fieldData) {
+
+    var data = encodeURIComponent(JSON.stringify(fieldData));
+    var urlstring = "index.php?module="+fieldData['module']+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&QuickCreateMode=true";
+
+    /* Need sync request with crf protect */
+    var params = {
+        url : urlstring,
+        async : false,
+        data : {}
+    };
+
+    var continue_fl;    // true - continue, false - break
+    AppConnector.request(params).then( function (responseObj) {
+        if(!empty(responseObj)) {
+            if(responseObj.response === undefined) {
+
+                continue_fl = true;
+            }
+            if(responseObj.response === "OK") {
+                if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                    alert(responseObj.message);
+                }
+                continue_fl = true;
+            } else if(responseObj.response === "ALERT") {
+                if (responseObj.message !== undefined) {
+                    alert(responseObj.message);
+                } else {
+                    alert('Alert');
+                }
+                continue_fl = false;
+            } else if(responseObj.response === "CONFIRM") {
+                var confirmMessage;
+                if (responseObj.message !== undefined) {
+                    confirmMessage = responseObj.message;
+                } else {
+                    confirmMessage = 'Confirm';
+                }
+                continue_fl = !!confirm(confirmMessage);
+            } else {
+
+                continue_fl = true;
+            }
+        } else {
+            continue_fl = true;
+        }
+    });
+    return continue_fl;
+}
+// SalesPlatform.ru end

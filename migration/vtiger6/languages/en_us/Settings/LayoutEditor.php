@@ -64,6 +64,9 @@ $languageStrings = array(
 	'Text'=>'Text',
 	'Time'=>'Time',
 	'URL' => 'URL',
+    //SalesPlatform. ru begin
+    'SPMobilePhone' => 'Мобильный телефон',
+    //SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

@@ -108,20 +108,30 @@ class Act extends CRMEntity {
 	{
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if(isset($_REQUEST)) {
-			if($_REQUEST['action'] != 'ActAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
-					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
-			{
+            //SalesPlatform.ru begin
+            if($_REQUEST['action'] != 'SaveAjax'&& $_REQUEST['action'] != 'ActAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
+					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates') {
+            
+			//if($_REQUEST['action'] != 'ActAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
+			//		&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
+			//{
+            //SalesPlatform.ru end
 				//Based on the total Number of rows we will save the product relationship with this entity
 				saveInventoryProductDetails($this, 'Act');
 			}
 		}
 		
-		
+
 		// Update the currency id and the conversion rate for the act
 		$update_query = "update vtiger_sp_act set currency_id=?, conversion_rate=? where actid=?";
 		
 		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
 		$this->db->pquery($update_query, $update_params);
+
+        // Update Invoice Act id field
+        if(($_REQUEST['sourceModule'] == 'Invoice') && $_REQUEST['sourceRecord'] != null) {
+            $this->db->pquery("update vtiger_invoice set sp_act_id = ? where invoiceid = ?", array($this->id, $_REQUEST['sourceRecord']));
+        }
 	}
         
 	/**	function used to get the name of the current object
@@ -353,11 +363,14 @@ class Act extends CRMEntity {
             
             //SalesPlatform.ru begin link Invoice
             $invoiceInstance->addLink('DETAILVIEWBASIC', 'LBL_INVOICE_ADD_ACT',
-                    'index.php?module=Act&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&convertFromInvoice=true',
+                    'index.php?module=Act&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&relationOperation=true',
                     'themes/images/actionGenerateInvoice.gif');
             //SalesPlatform.ru end 
             
-            $accountsInstance->setRelatedlist($actInstance,'Act',array(ADD),'get_dependents_list');
+            $accountsInstance->setRelatedlist($actInstance,'Act',array('ADD'),'get_dependents_list');
+
+            $modFocus = CRMEntity::getInstance('Act');
+            $modFocus->setModuleSeqNumber('configure', 'Act', '', '1');
 
 		} else if($eventType == 'module.disabled') {
 			$invoiceInstance = Vtiger_Module::getInstance('Invoice');
@@ -369,6 +382,9 @@ class Act extends CRMEntity {
             $actInstance = Vtiger_Module::getInstance('Act');
             $accountsInstance->deleteLink('DETAILVIEWBASIC', 'LBL_ACCOUNTS_ADD_ACT');
             // SalesPlatform.ru end
+            //SalesPlatform.ru begin unlink Invoice
+            $invoiceInstance->deleteLink('DETAILVIEWBASIC', 'LBL_INVOICE_ADD_ACT');
+            //SalesPlatform.ru end
 
             $accountsInstance->unsetRelatedlist($actInstance,'Act','get_dependents_list');
                         
@@ -388,7 +404,7 @@ class Act extends CRMEntity {
             
             //SalesPlatform.ru begin link Invoice
             $invoiceInstance->addLink('DETAILVIEWBASIC', 'LBL_INVOICE_ADD_ACT',
-                    'index.php?module=Act&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&convertFromInvoice=true',
+                    'index.php?module=Act&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&relationOperation=true',
                     'themes/images/actionGenerateInvoice.gif');
             //SalesPlatform.ru end
             

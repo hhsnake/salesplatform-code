@@ -176,7 +176,10 @@ Vtiger_Base_Validator_Js('Vtiger_Url_Validator_Js',{},{
 	 */
 	validate: function(){
 		var fieldValue = this.getFieldValue();
-		var regexp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        // SalesPlatform.ru begin
+        var regexp = /(^|\s)((https?:\/\/)?[\wа-яА-Я-]+(\.[\wа-яА-Я-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+		//var regexp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        // SalesPlatform.ru end
 		var result = regexp.test(fieldValue);
 		if (!result ) {
 			var errorInfo = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');//"Please enter valid url";
@@ -939,7 +942,10 @@ Vtiger_Base_Validator_Js("Vtiger_AlphaNumeric_Validator_Js",{
 	validate: function(){
 		var field = this.getElement();
 		var fieldValue = field.val();
-		var alphaNumericRegex = /^[a-z0-9 _-]*$/i;
+        // SalesPlatform.ru begin
+		var alphaNumericRegex = /^[а-яa-z0-9 _-]*$/i;
+        //var alphaNumericRegex = /^[a-z0-9 _-]*$/i;
+        // SalesPlatform.ru end
 		if (!fieldValue.match(alphaNumericRegex)) {
 			var errorInfo = app.vtranslate("JS_CONTAINS_ILLEGAL_CHARACTERS");
 			this.setError(errorInfo);
@@ -948,3 +954,49 @@ Vtiger_Base_Validator_Js("Vtiger_AlphaNumeric_Validator_Js",{
         return true;
 	}
 })
+
+
+//SalesPlatform.ru begin
+Vtiger_Base_Validator_Js("Vtiger_SPMobilePhoneField_Validator_Js",{ 
+
+    /** 
+     *Function which invokes field validation 
+     *@param accepts field element as parameter 
+     * @return error if validation fails true on success 
+     */ 
+    invokeValidation: function(field, rules, i, options){ 
+            var validatorInstance = new Vtiger_SPMobilePhoneField_Validator_Js(); 
+            validatorInstance.setElement(field); 
+            if(!validatorInstance.validate()) { 
+                    return validatorInstance.getError(); 
+            } 
+    } 
+
+},{ 
+    /** 
+     * Function to validate the Positive Numbers 
+     * @return true if validation is successfull 
+     * @return false if validation error occurs 
+     */ 
+    validate: function(){ 
+    var element = this.getElement(); 
+            var fieldValue = element.val(); 
+    var fieldInfo = element.data('fieldinfo'); 
+
+    var validateStatus = true; 
+    if(fieldValue == "" && fieldInfo.mandatory) { 
+        var errorInfo = app.vtranslate('JS_REQUIRED_FIELD'); 
+        this.setError(errorInfo); 
+        validateStatus = false; 
+    } 
+
+    if(validateStatus && !fieldValue.match(/\+[0-9]{11,15}$/)) { 
+        var errorInfo = app.vtranslate('JS_ACCEPT_MOBILE_MASK'); 
+        this.setError(errorInfo); 
+        validateStatus = false; 
+    } 
+
+            return validateStatus; 
+    } 
+});
+//SalesPlatform.ru end  

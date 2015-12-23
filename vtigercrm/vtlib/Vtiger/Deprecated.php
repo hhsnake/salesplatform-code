@@ -568,6 +568,19 @@ class Vtiger_Deprecated {
 				$moduleSeqNo = $adb->query_result($res, 0, 'consignment_no');
 				break;
             // SalesPlatform.ru end
+            // SalesPlatform.ru begin Add SPPayments module
+            case "SPPayments":
+                $res = $adb->query("SELECT pay_no FROM sp_payments WHERE payid = $recordId");
+                $moduleSeqNo = $adb->query_result($res, 0, 'pay_no');
+                break;
+            // SalesPlatform.ru end
+            // SalesPlatform.ru begin Add Potentials module
+            case "Potentials":
+                $res = $adb->query("SELECT potential_no FROM vtiger_potential WHERE potentialid = $recordId");
+                $moduleSeqNo = $adb->query_result($res, 0, 'potential_no');
+                break;
+            // SalesPlatform.ru end
+
 		}
 		return $moduleSeqNo;
 	}

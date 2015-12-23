@@ -338,9 +338,9 @@
 											<div class="row-fluid">
 												<div class="offset2 span10">
 													<input type="hidden" name="packages[{$PACKAGE_NAME}]" value="on"/>
-													<strong> This feature will be installed by default </strong></label>
-                                                                                                        *}
-                                                                                                        {*SalesPlatform.ru end*}
+                                                    {* SalesPlatform.ru begin *}
+													{*<strong> This feature will be installed by default </strong></label>*}
+                                                    {*SalesPlatform.ru end*}
 												</div>
 											</div>
 										{/if}

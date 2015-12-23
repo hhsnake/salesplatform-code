@@ -76,6 +76,7 @@ $languageStrings = array(
 	'LBL_ONE_LAST_THING' => 'И еще кое-что...',
 	// SalesPlatform.ru begin
 	'LBL_MB_STRING' => 'Поддержка mbstring',
+    'ERR_NO_UTF8_OR_NO_ALTER_RIGHTS' => 'Нет поддержки utf8 или у пользователя нет прав на изменение кодировки БД',
 	// SalesPlatform.ru end
 );
 

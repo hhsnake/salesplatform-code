@@ -194,6 +194,9 @@ $listview_max_textlength = 40;
 // Maximum time limit for PHP script execution (in seconds)
 $php_max_execution_time = 0;
 
+// Maximum number of  Mailboxes in mail converter
+$max_mailboxes = 3;
+
 // Set the default timezone as per your preference
 $default_timezone = 'Europe/Moscow';
 
@@ -201,4 +204,13 @@ $default_timezone = 'Europe/Moscow';
 if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set($default_timezone);
 }
+
+//Set the default layout 
+$default_layout = 'vlayout';
+
+// SalesPlatform.ru begin Check referer setting
+$sp_check_site_url = 'false';
+// SalesPlatform.ru end
+
+include_once 'config.security.php';
 ?>

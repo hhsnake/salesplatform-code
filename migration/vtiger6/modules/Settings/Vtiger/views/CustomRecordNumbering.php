@@ -21,16 +21,17 @@ class Settings_Vtiger_CustomRecordNumbering_View extends Settings_Vtiger_Index_V
 		} else {
 			$defaultModuleModel = reset($supportedModules);
 		}
-                              
+
 		$viewer = $this->getViewer($request);
 		$viewer->assign('SUPPORTED_MODULES', $supportedModules);
 		$viewer->assign('DEFAULT_MODULE_MODEL', $defaultModuleModel);
 		$viewer->assign('QUALIFIED_MODULE',$qualifiedModuleName);
 		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());    
                 
-                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
-                $viewer->assign('SP_PDF_COMPANIES', Settings_Vtiger_CompanyDetails_Model::getCompanies());
-                // SalesPlatform.ru end
+        // SalesPlatform.ru begin: Added separate numbering for self organizations
+        $viewer->assign('HIDE_SP_COMPANY_ROW', Settings_Vtiger_CompanyDetails_Model::hideCompanyRow($defaultModuleModel));
+        $viewer->assign('SP_PDF_COMPANIES', Settings_Vtiger_CompanyDetails_Model::getCompanies());
+        // SalesPlatform.ru end
                 
 		$viewer->view('CustomRecordNumbering.tpl', $qualifiedModuleName);
 	}

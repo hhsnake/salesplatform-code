@@ -146,20 +146,23 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 		$isRelationOperation = $request->get('relationOperation');
 
 		//if it is relation edit
-                
-                //SalesPlatform.ru begin add relation create for Act from Invoice
-                $isFromInvoiceCreate = $request->get('convertFromInvoice');
-                $viewer->assign('IS_FROM_INVOICE_CREATE', $isFromInvoiceCreate);
-                //SalesPlatform.ru end
-                
 		$viewer->assign('IS_RELATION_OPERATION', $isRelationOperation);
-                //SalesPlatform.ru begin add relation create for Act from Invoice
-		if($isRelationOperation || $isFromInvoiceCreate) {
-                //if($isRelationOperation)
-                //SalesPlatform.ru end
+		if($isRelationOperation) {
 			$viewer->assign('SOURCE_MODULE', $sourceModule);
 			$viewer->assign('SOURCE_RECORD', $sourceRecord);
 		}
+
+        // SalesPlatform.ru begin Set company
+        if($isRelationOperation) {
+            $sourceRecordModel = Vtiger_Record_Model::getInstanceById($request->get('sourceRecord'));
+            if($sourceRecordModel->get('spcompany') != null && $sourceRecordModel->get('spcompany') != '') {
+                if($recordModel->getField('spcompany')) {
+                    $recordModel->set('spcompany', $sourceRecordModel->get('spcompany'));
+                }
+            }
+        }
+        // SalesPlatform.ru end
+
 		if(!empty($record)  && $request->get('isDuplicate') == true) {
 			$viewer->assign('IS_DUPLICATE',true);
 		} else {

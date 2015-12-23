@@ -326,6 +326,9 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				Array(
 					// Include only file/folders that need to be extracted
 					'include' => Array('templates', "modules/$module", 'cron', 'languages',
+					// SalesPlatform.ru begin Allow install custom reports
+					'modules/Reports/sp_custom_reports',
+					// SalesPlatform.ru end
 						'settings/actions', 'settings/views', 'settings/models', 'settings/templates', 'settings/connectors', 'settings/libraries',
 						"$module.png", 'layouts'),
 					// NOTE: If excludes is not given then by those not mentioned in include are ignored.

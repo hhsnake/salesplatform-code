@@ -55,7 +55,7 @@ class SalesPlatform_PDF_SPPDFController {
 		global $current_user;
 		$this->focus = $focus = CRMEntity::getInstance($this->moduleName);
 		$focus->retrieve_entity_info($id,$this->moduleName);
-		$focus->apply_field_security();
+		$focus->apply_field_security($this->moduleName);
 		$focus->id = $id;
 	}
 
@@ -114,77 +114,93 @@ class SalesPlatform_PDF_SPPDFController {
 		return $footerModel;
 	}
 
-        function buildDocumentModel() {
-	
-		global $adb;
-		
-		$model = new Vtiger_PDF_Model();
+    function buildDocumentModel() {
 
-                if ( isset ($this->focus->column_fields["spcompany"]) && $this->focus->column_fields["spcompany"] != '') { 
- 		    $selfcompany = html_entity_decode($this->focus->column_fields["spcompany"], ENT_QUOTES, 'UTF-8'); 
-                } else {
- 		    $selfcompany = "Default";
-                }
+        global $adb;
 
-		// Company information 
-		$result = $adb->pquery("SELECT * FROM vtiger_organizationdetails WHERE company=?", array($selfcompany));
-		$num_rows = $adb->num_rows($result);
-		if($num_rows) {
-			$resultrow = $adb->fetch_array($result);
+        $model = new Vtiger_PDF_Model();
 
-			$model->set('orgAddress', $adb->query_result($result,0,"address"));
-			$model->set('orgCity', $adb->query_result($result,0,"city"));
-			$model->set('orgState', $adb->query_result($result,0,"state"));
-			$model->set('orgCountry', $adb->query_result($result,0,"country"));
-			$model->set('orgCode', $adb->query_result($result,0,"code"));
-			
-			$model->set('orgBillingAddress', implode(', ', 
-			    array($adb->query_result($result,0,"code"), 
-				  $adb->query_result($result,0,"city"),
-				  $adb->query_result($result,0,"address"))));
-			
-			$model->set('orgPhone', $adb->query_result($result,0,"phone"));
-			$model->set('orgFax', $adb->query_result($result,0,"fax"));
-			$model->set('orgWebsite', $adb->query_result($result,0,"website"));
-			$model->set('orgInn', $adb->query_result($result,0,"inn"));
-			$model->set('orgKpp', $adb->query_result($result,0,"kpp"));
-			$model->set('orgBankAccount', $adb->query_result($result,0,"bankaccount"));
-			$model->set('orgBankName', $adb->query_result($result,0,'bankname'));
-			$model->set('orgBankId', $adb->query_result($result,0,'bankid'));
-			$model->set('orgCorrAccount', $adb->query_result($result,0,'corraccount'));
-                        $model->set('orgOKPO', $adb->query_result($result,0,"okpo"));
+        if ( isset ($this->focus->column_fields["spcompany"]) && $this->focus->column_fields["spcompany"] != '') {
+            $selfcompany = html_entity_decode($this->focus->column_fields["spcompany"], ENT_QUOTES, 'UTF-8');
+        } else {
+            $selfcompany = "Default";
+        }
 
-			if($adb->query_result($result,0,'director')) {
-			    $model->set('orgDirector', $adb->query_result($result,0,'director'));
-			} else {
-			    $model->set('orgDirector', str_repeat('_', 15));
-			}
-			if($adb->query_result($result,0,'bookkeeper')) {
-			    $model->set('orgBookkeeper', $adb->query_result($result,0,'bookkeeper'));
-			} else {
-			    $model->set('orgBookkeeper', str_repeat('_', 15));
-			}
-			if($adb->query_result($result,0,'entrepreneur')) {
-			    $model->set('orgEntrepreneur', $adb->query_result($result,0,'entrepreneur'));
-			} else {
-			    $model->set('orgEntrepreneur', str_repeat('_', 15));
-			}
-			if($adb->query_result($result,0,'entrepreneurreg')) {
-			    $model->set('orgEntrepreneurreg', $adb->query_result($result,0,'entrepreneurreg'));
-			} else {
-			    $model->set('orgEntrepreneurreg', str_repeat('_', 50));
-			}
+        // Company information
+        $result = $adb->pquery("SELECT * FROM vtiger_organizationdetails WHERE company=?", array($selfcompany));
+        $num_rows = $adb->num_rows($result);
+        if($num_rows) {
+            $resultrow = $adb->fetch_array($result);
 
-			$model->set('orgLogo', '<img src="test/logo/'.$resultrow['logoname'].'" />');
-			$model->set('orgLogoPath', 'test/logo/'.$resultrow['logoname']);
-			$model->set('orgName', decode_html($resultrow['organizationname']));
-		}
+            $model->set('orgAddress', $adb->query_result($result,0,"address"));
+            $model->set('orgCity', $adb->query_result($result,0,"city"));
+            $model->set('orgState', $adb->query_result($result,0,"state"));
+            $model->set('orgCountry', $adb->query_result($result,0,"country"));
+            $model->set('orgCode', $adb->query_result($result,0,"code"));
 
-		$model->set('billingAddress', $this->buildHeaderBillingAddress());
-		$model->set('shippingAddress', $this->buildHeaderShippingAddress());
+            $model->set('orgBillingAddress', implode(', ',
+                array($adb->query_result($result,0,"code"),
+                    $adb->query_result($result,0,"city"),
+                    $adb->query_result($result,0,"address"))));
 
-		return $model;
-	}
+            $model->set('orgPhone', $adb->query_result($result,0,"phone"));
+            $model->set('orgFax', $adb->query_result($result,0,"fax"));
+            $model->set('orgWebsite', $adb->query_result($result,0,"website"));
+            $model->set('orgInn', $adb->query_result($result,0,"inn"));
+            $model->set('orgKpp', $adb->query_result($result,0,"kpp"));
+            $model->set('orgBankAccount', $adb->query_result($result,0,"bankaccount"));
+            $model->set('orgBankName', $adb->query_result($result,0,'bankname'));
+            $model->set('orgBankId', $adb->query_result($result,0,'bankid'));
+            $model->set('orgCorrAccount', $adb->query_result($result,0,'corraccount'));
+            $model->set('orgOKPO', $adb->query_result($result,0,"okpo"));
+
+            if($adb->query_result($result,0,'director')) {
+                $model->set('orgDirector', $adb->query_result($result,0,'director'));
+            } else {
+                $model->set('orgDirector', str_repeat('_', 15));
+            }
+            if($adb->query_result($result,0,'bookkeeper')) {
+                $model->set('orgBookkeeper', $adb->query_result($result,0,'bookkeeper'));
+            } else {
+                $model->set('orgBookkeeper', str_repeat('_', 15));
+            }
+            if($adb->query_result($result,0,'entrepreneur')) {
+                $model->set('orgEntrepreneur', $adb->query_result($result,0,'entrepreneur'));
+            } else {
+                $model->set('orgEntrepreneur', str_repeat('_', 15));
+            }
+            if($adb->query_result($result,0,'entrepreneurreg')) {
+                $model->set('orgEntrepreneurreg', $adb->query_result($result,0,'entrepreneurreg'));
+            } else {
+                $model->set('orgEntrepreneurreg', str_repeat('_', 50));
+            }
+
+            $model->set('orgLogo', '<img src="test/logo/'.$resultrow['logoname'].'" />');
+            $model->set('orgLogoPath', 'test/logo/'.$resultrow['logoname']);
+            $model->set('orgName', decode_html($resultrow['organizationname']));
+        }
+
+        $model->set('billingAddress', $this->buildHeaderBillingAddress());
+        $model->set('shippingAddress', $this->buildHeaderShippingAddress());
+
+        // Add owner info into model
+        if(isset($this->focus->column_fields['record_id']) && $this->focus->column_fields['record_id'] != '') {
+            $ownerArr = getRecordOwnerId($this->focus->column_fields['record_id']);
+            if(isset($ownerArr['Users'])) {
+                $userEntity = new Users();
+                $userEntity->retrieve_entity_info($ownerArr['Users'], 'Users');
+                $this->generateEntityModel($userEntity, 'Users', 'owner_', $model);
+            }
+            if(isset($ownerArr['Groups'])) {
+                $groupInstance = Settings_Groups_Record_Model::getInstance($ownerArr['Groups']);
+                $model->set('owner_groupid', $groupInstance->getId());
+                $model->set('owner_groupname', $groupInstance->getName());
+                $model->set('owner_description', $groupInstance->getDescription());
+            }
+        }
+
+        return $model;
+    }
 
 	function focusColumnValues($names, $delimeter="\n") {
 		if(!is_array($names)) {

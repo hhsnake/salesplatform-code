@@ -263,6 +263,31 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		return 'index.php?module='.$this->get('name').'&view='.$this->getListViewName();
 	}
 
+     /**
+     * Function to get listview url with all filter
+     * @return <string> URL
+     */
+    
+    public function getListViewUrlWithAllFilter(){
+        return $this->getListViewUrl().'&viewname='.$this->getAllFilterCvidForModule();
+    }
+    
+      /**
+	 * Function returns the All filter for the module
+	 * @return <Int> custom filter id
+	 */
+    public function getAllFilterCvidForModule() {
+		$db = PearDatabase::getInstance();
+
+		$result = $db->pquery("SELECT cvid FROM vtiger_customview WHERE viewname = 'All' AND entitytype = ?",
+					array($this->getName()));
+		if ($db->num_rows($result)) {
+			return $db->query_result($result, 0, 'cvid');
+		}
+		return false;
+	}
+    
+    
 	/**
 	 * Function to get the url for the Create Record view of the module
 	 * @return <String> - url
@@ -376,6 +401,16 @@ class Vtiger_Module_Model extends Vtiger_Module {
         if(!is_array($type)) {
             $type = array($type);
         }
+        
+        //SalesPlatform.ru begin
+        foreach($type as $typeName) { 
+            if($typeName == 'phone') { 
+                array_push($type, 'SPMobilePhone'); 
+                break; 
+            } 
+        } 
+        //SalesPlatform.ru end
+        
 		$fields = $this->getFields();
 		$fieldList = array();
 		foreach($fields as $field) {
@@ -554,18 +589,19 @@ class Vtiger_Module_Model extends Vtiger_Module {
      * @return <Array> returns related fields list.
      */
 	public function getRelatedListFields() {
-            $entityInstance = CRMEntity::getInstance($this->getName());
-            $list_fields_name = $entityInstance->list_fields_name;
-            $list_fields = $entityInstance->list_fields;
-            $relatedListFields = array();
-            foreach ($list_fields as $key => $fieldInfo) {
-                $columnName = $fieldInfo[1];
-                if(array_key_exists($key, $list_fields_name)){
+        $entityInstance = CRMEntity::getInstance($this->getName());
+        $list_fields_name = $entityInstance->list_fields_name;
+        $list_fields = $entityInstance->list_fields;
+        $relatedListFields = array();
+        foreach ($list_fields as $key => $fieldInfo) {
+            foreach ($fieldInfo as $columnName) {
+                if (array_key_exists($key, $list_fields_name)) {
                     $relatedListFields[$columnName] = $list_fields_name[$key];
                 }
             }
-            return $relatedListFields;
-	}
+        }
+        return $relatedListFields;
+    }
 
 	public function getConfigureRelatedListFields(){
 		$showRelatedFieldModel = $this->getSummaryViewFieldsList();
@@ -1439,9 +1475,17 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	}
 
 	public function transferRecordsOwnership($transferOwnerId, $relatedModuleRecordIds){
-		$db = PearDatabase::getInstance();
-		$query = 'UPDATE vtiger_crmentity SET smownerid = ? WHERE crmid IN ('.  generateQuestionMarks($relatedModuleRecordIds).')';
-		$db->pquery($query, array($transferOwnerId,$relatedModuleRecordIds));
+        // SalesPlatform.ru begin Mark in record history
+        foreach($relatedModuleRecordIds as $id) {
+            $recordModel = Vtiger_Record_Model::getInstanceById($id);
+            $recordModel->set('mode', 'edit');
+            $recordModel->set('assigned_user_id', $transferOwnerId);
+            $recordModel->save();
+        }
+		//$db = PearDatabase::getInstance();
+		//$query = 'UPDATE vtiger_crmentity SET smownerid = ? WHERE crmid IN ('.  generateQuestionMarks($relatedModuleRecordIds).')';
+		//$db->pquery($query, array($transferOwnerId,$relatedModuleRecordIds));
+        // SalesPlatform.ru end
 	}
 
     /**

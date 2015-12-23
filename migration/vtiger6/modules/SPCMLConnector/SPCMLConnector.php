@@ -26,17 +26,17 @@ class SPCMLConnector {
             $blockInstance = Vtiger_Block::getInstance('LBL_ACCOUNT_INFORMATION', $module);
 
             $fieldInstance = new Vtiger_Field();
-            $fieldInstance->label = '1c_id';
-            $fieldInstance->name = '1c_id';
+            $fieldInstance->label = '1C ID';
+            $fieldInstance->name = 'one_s_id';
             $fieldInstance->table = 'vtiger_account';
-            $fieldInstance->column = '1c_id';
+            $fieldInstance->column = 'one_s_id';
             $fieldInstance->columntype = 'varchar';
             $fieldInstance->uitype = 1;
             $fieldInstance->displaytype = 3;
             $fieldInstance->typeofdata = 'V~O';
             $blockInstance->addField($fieldInstance);
 
-            $sql = "ALTER TABLE `vtiger_account` ADD COLUMN `1c_id` VARCHAR(255) NULL ;";
+            $sql = "ALTER TABLE `vtiger_account` ADD COLUMN `one_s_id` VARCHAR(255) NULL ;";
             $params = array();
             $adb->pquery($sql, $params);
 
@@ -47,17 +47,17 @@ class SPCMLConnector {
             $blockInstance = Vtiger_Block::getInstance('LBL_PRICEBOOK_INFORMATION', $module);
 
             $fieldInstance = new Vtiger_Field();
-            $fieldInstance->label = '1c_id';
-            $fieldInstance->name = '1c_id';
+            $fieldInstance->label = '1C ID';
+            $fieldInstance->name = 'one_s_id';
             $fieldInstance->table = 'vtiger_pricebook';
-            $fieldInstance->column = '1c_id';
+            $fieldInstance->column = 'one_s_id';
             $fieldInstance->columntype = 'varchar';
             $fieldInstance->uitype = 1;
             $fieldInstance->displaytype = 3;
             $fieldInstance->typeofdata = 'V~O';
             $blockInstance->addField($fieldInstance);
 
-            $sql = "ALTER TABLE `vtiger_pricebook` ADD COLUMN `1c_id` VARCHAR(255) NULL ;";
+            $sql = "ALTER TABLE `vtiger_pricebook` ADD COLUMN `one_s_id` VARCHAR(255) NULL ;";
             $params = array();
             $adb->pquery($sql, $params);
 
@@ -67,17 +67,17 @@ class SPCMLConnector {
             $blockInstance = Vtiger_Block::getInstance('LBL_PRODUCT_INFORMATION', $module);
 
             $fieldInstance = new Vtiger_Field();
-            $fieldInstance->label = '1c_id';
-            $fieldInstance->name = '1c_id';
+            $fieldInstance->label = '1C ID';
+            $fieldInstance->name = 'one_s_id';
             $fieldInstance->table = 'vtiger_products';
-            $fieldInstance->column = '1c_id';
+            $fieldInstance->column = 'one_s_id';
             $fieldInstance->columntype = 'varchar';
             $fieldInstance->uitype = 1;
             $fieldInstance->displaytype = 3;
             $fieldInstance->typeofdata = 'V~O';
             $blockInstance->addField($fieldInstance);
 
-            $sql = "ALTER TABLE `vtiger_products` ADD COLUMN `1c_id` VARCHAR(255) NULL ;";
+            $sql = "ALTER TABLE `vtiger_products` ADD COLUMN `one_s_id` VARCHAR(255) NULL ;";
             $params = array();
             $adb->pquery($sql, $params);
 
@@ -87,17 +87,17 @@ class SPCMLConnector {
             $blockInstance = Vtiger_Block::getInstance('LBL_SO_INFORMATION', $module);
 
             $fieldInstance = new Vtiger_Field();
-            $fieldInstance->label = '1c_id';
-            $fieldInstance->name = '1c_id';
+            $fieldInstance->label = '1C ID';
+            $fieldInstance->name = 'one_s_id';
             $fieldInstance->table = 'vtiger_salesorder';
-            $fieldInstance->column = '1c_id';
+            $fieldInstance->column = 'one_s_id';
             $fieldInstance->columntype = 'varchar';
             $fieldInstance->uitype = 1;
             $fieldInstance->displaytype = 3;
             $fieldInstance->typeofdata = 'V~O';
             $blockInstance->addField($fieldInstance);
 
-            $sql = "ALTER TABLE `vtiger_salesorder` ADD COLUMN `1c_id` VARCHAR(255) NULL ;";
+            $sql = "ALTER TABLE `vtiger_salesorder` ADD COLUMN `one_s_id` VARCHAR(255) NULL ;";
             $params = array();
             $adb->pquery($sql, $params);
             
@@ -125,17 +125,17 @@ class SPCMLConnector {
             $blockInstance = Vtiger_Block::getInstance('LBL_SERVICE_INFORMATION', $module);
 
             $fieldInstance = new Vtiger_Field();
-            $fieldInstance->label = '1c_id';
-            $fieldInstance->name = '1c_id';
+            $fieldInstance->label = '1C ID';
+            $fieldInstance->name = 'one_s_id';
             $fieldInstance->table = 'vtiger_service';
-            $fieldInstance->column = '1c_id';
+            $fieldInstance->column = 'one_s_id';
             $fieldInstance->columntype = 'varchar';
             $fieldInstance->uitype = 1;
             $fieldInstance->displaytype = 3;
             $fieldInstance->typeofdata = 'V~O';
             $blockInstance->addField($fieldInstance);
 
-            $sql = "ALTER TABLE `vtiger_service` ADD COLUMN `1c_id` VARCHAR(255) NULL ;";
+            $sql = "ALTER TABLE `vtiger_service` ADD COLUMN `one_s_id` VARCHAR(255) NULL ;";
             $params = array();
             $adb->pquery($sql, $params);
             
@@ -161,17 +161,37 @@ class SPCMLConnector {
             $adb->pquery($sql,array());
             
         } else if($event_type == 'module.disabled') {
-		// TODO Handle actions when this module is disabled.
+            $this->disableModule();
         } else if($event_type == 'module.enabled') {
-		// TODO Handle actions when this module is enabled.
-	} else if($event_type == 'module.preuninstall') {
+            $this->enableModule();
+        } else if($event_type == 'module.preuninstall') {
 		// TODO Handle actions when this module is about to be deleted.
-	} else if($event_type == 'module.preupdate') {
-		// TODO Handle actions before this module is updated.
-	} else if($event_type == 'module.postupdate') {
-		// TODO Handle actions after this module is updated.
-	}
+        } else if($event_type == 'module.preupdate') {
+            // TODO Handle actions before this module is updated.
+        } else if($event_type == 'module.postupdate') {
+            // TODO Handle actions after this module is updated.
+        }
         
+    }
+    
+    /**
+     * Disable one_s_id field on module disable
+     */
+    private function disableModule() {
+        $db = PearDatabase::getInstance();
+        $db->query("UPDATE vtiger_field SET presence=1 WHERE fieldname='one_s_id' AND "
+                 . "tablename IN('vtiger_account','vtiger_pricebook','vtiger_products','vtiger_salesorder','vtiger_service')");
+        
+        $db->query("UPDATE vtiger_cron_task SET status=0 WHERE module='SPCMLConnector'");
+    }
+    
+    /**
+     * Enable one_s_id field on module enable
+     */
+    private function enableModule() {
+        $db = PearDatabase::getInstance();
+        $db->query("UPDATE vtiger_field SET presence=2 WHERE fieldname='one_s_id' AND "
+                 . "tablename IN('vtiger_account','vtiger_pricebook','vtiger_products','vtiger_salesorder','vtiger_service')");
     }
 }
 

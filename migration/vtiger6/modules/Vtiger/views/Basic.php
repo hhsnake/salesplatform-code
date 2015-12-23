@@ -110,6 +110,11 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 			"modules.$moduleName.resources.SearchAdvanceFilter",
 			'modules.Vtiger.resources.AdvanceSearch',
 			"modules.$moduleName.resources.AdvanceSearch",
+            //SalesPlatform.ru begin
+            '~libraries/inputmask/inputmask.js', 
+            '~libraries/inputmask/jquery.inputmask.js', 
+            //SalesPlatform.ru end 
+ 		             
 		);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);

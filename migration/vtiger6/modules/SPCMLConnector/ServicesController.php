@@ -26,8 +26,8 @@ class ServicesController extends InventoryController {
      * @param array $serviceRest
      */
     private function addXmlIdentifier($xmlProduct, $serviceRest) {
-        if($serviceRest['1c_id'] != null ) {
-            $xmlProduct->addChild("Ид", $serviceRest['1c_id']); 
+        if($serviceRest['one_s_id'] != null ) {
+            $xmlProduct->addChild("Ид", $serviceRest['one_s_id']); 
         } else {
             $xmlProduct->addChild("Ид", $serviceRest['servicename']); 
         }

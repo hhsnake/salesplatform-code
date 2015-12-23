@@ -80,7 +80,7 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 							<h4 class=""> Менеджер миграции </h4>
 						</div>
 						<div class="span2">
-							<a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630" target="_blank" class="pull-right">
+							<a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_640" target="_blank" class="pull-right">
 								<img src="resources/images/help40.png" alt="Help-Icon"/>
 							</a>
 						</div>
@@ -101,11 +101,11 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 								}?>
 								<p>Обнаружена установленная <strong>SalesPlatform Vtiger <?php echo $vtiger_current_version?> </strong>версии. <br> <br> </p>
 								<p>
-									<strong> Предупреждение: </strong>Пожалуйста, учтите что возврат к SalesPlatform Vtiger <?php echo $vtiger_current_version?> невозможен после обновления до SalesPlatform Vtiger 6.3.0-201507 <br><br>
+									<strong> Предупреждение: </strong>Пожалуйста, учтите что возврат к SalesPlatform Vtiger <?php echo $vtiger_current_version?> невозможен после обновления до SalesPlatform Vtiger 6.4.0-201512 <br><br>
 									Необходимо сделать бэкап установленной SalesPlatform Vtiger <?php echo $vtiger_current_version?> включая исходный код и базу данных.</p>
 								<form action="index.php" method="POST">
-									<div><input type="checkbox" id="checkBox1" name="checkBox1"/> <div class="chkbox"></div> Я сделал(-а) бэкап базы данных <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630_%D0%9C%D0%B8%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F" target="_blank" >(руководство)</a> </div><br>
-									<div><input type="checkbox" id="checkBox2" name="checkBox2"/> <div class="chkbox"></div> Я сделал(-а) бэкап папки с исходным кодом <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630_%D0%9C%D0%B8%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F" target="_blank" >(руководство)</a></div><br>
+									<div><input type="checkbox" id="checkBox1" name="checkBox1"/> <div class="chkbox"></div> Я сделал(-а) бэкап базы данных <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_640_%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5_%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE#.D0.9C.D0.B8.D0.B3.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D1.81_.D0.BF.D1.80.D0.B5.D0.B4.D1.8B.D0.B4.D1.83.D1.89.D0.B8.D1.85_.D0.B2.D0.B5.D1.80.D1.81.D0.B8.D0.B9" target="_blank" >(руководство)</a> </div><br>
+									<div><input type="checkbox" id="checkBox2" name="checkBox2"/> <div class="chkbox"></div> Я сделал(-а) бэкап папки с исходным кодом <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_640_%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5_%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE#.D0.9C.D0.B8.D0.B3.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D1.81_.D0.BF.D1.80.D0.B5.D0.B4.D1.8B.D0.B4.D1.83.D1.89.D0.B8.D1.85_.D0.B2.D0.B5.D1.80.D1.81.D0.B8.D0.B9" target="_blank" >(руководство)</a></div><br>
 									<br><div>
 										<span id="error"></span>
 										Пользователь <span class="no">&nbsp;</span>
@@ -124,7 +124,7 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 								<h3><font color='red'>Предупреждение: Невозможно продолжить миграцию</font></h3>
 								<p>
 									Обнаружена версия <strong>SalesPlatform Vtiger </strong><?php if($vtiger_current_version < 6 ) { echo '<b>'.$vtiger_current_version.'</b>'; } ?>.
-									Пожалуйста, обновите версию системы до <strong>SalesPlatform Vtiger 5.4.0-201310</strong> перед тем как использовать Менеджер миграции. <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630_%D0%9C%D0%B8%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F" target="_blank" >(руководство)</a>
+									Пожалуйста, обновите версию системы до <strong>SalesPlatform Vtiger 5.4.0-201310</strong> перед тем как использовать Менеджер миграции. <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_640_%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5_%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE#.D0.9C.D0.B8.D0.B3.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D1.81_.D0.BF.D1.80.D0.B5.D0.B4.D1.8B.D0.B4.D1.83.D1.89.D0.B8.D1.85_.D0.B2.D0.B5.D1.80.D1.81.D0.B8.D0.B9" target="_blank" >(руководство)</a>
 								</p>
 								<br><br><br><br>
 								<div class="button-container">

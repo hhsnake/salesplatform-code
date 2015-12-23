@@ -195,12 +195,9 @@ $languageStrings = array(
 	'website' => 'Website',
         'vatid'=>'VAT ID', 
         //Exchange Connector
-        'LBL_EXCHANGE_CONNECTOR' => 'Exchange Connector',
-        
-        //SalesPlatform.ru begin
-        'LBL_COMPANY'                  => 'Company',
-        'LBL_NEW_COMPANY'              => 'New company', 
-        //SalesPlatform.ru end
+     'LBL_EXCHANGE_CONNECTOR' => 'Exchange Connector',
+   'LBL_DEFAULT_LAYOUT' => 'Default Layout',   
+        'LBL_SP_CHECK_SITE_URL' => 'Check site URL',
 );
 
 $jsLanguageStrings = array(
@@ -223,7 +220,4 @@ $jsLanguageStrings = array(
 	'LBL_NO_LOGO_SELECTED' => 'No logo selected',
 	'LBL_PREFIX_IN_USE' => 'Prefix in use',
 	'LBL_WRONG_IMAGE_TYPE' => 'not supported Image type',
-        //SalesPlatform.ru begin
-        'JS_LBL_CONFIRM_DELETE_COMPANY' => 'Do you really want to delete the company?',
-        //SalesPlatform.ru end
 );

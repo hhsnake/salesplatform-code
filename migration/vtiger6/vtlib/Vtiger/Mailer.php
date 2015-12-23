@@ -123,21 +123,21 @@ class Vtiger_Mailer extends PHPMailer {
 	/**
 	 * Configure sender information
 	 */
-	function ConfigSenderInfo($fromemail, $fromname='', $replyto='') {
-		if(empty($fromname)) $fromname = $fromemail;
+    function ConfigSenderInfo($fromemail, $fromname='', $replyto='') {
+        if(empty($fromname)) $fromname = $fromemail;
 
-		$this->From = $fromemail;
-		//fix for (http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/8001)
-                $this->FromName = decode_html($fromname); 
-                // SalesPlatform.ru begin: from Community user ilapko: Empty ReplyTo bugfix
-                if (!empty($replyto)) {
-                    $this->ClearReplyTos();
-                // SalesPlatform.ru end
-		$this->AddReplyTo($replyto);
-                // SalesPlatform.ru begin
-                }
-                // SalesPlatform.ru end
-	}
+        $this->From = $fromemail;
+        //fix for (http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/8001)
+        $this->FromName = decode_html($fromname);
+        // SalesPlatform.ru begin: from Community user ilapko: Empty ReplyTo bugfix
+        if (!empty($replyto)) {
+            $this->ClearReplyTos();
+            // SalesPlatform.ru end
+            $this->AddReplyTo($replyto);
+            // SalesPlatform.ru begin
+        }
+        // SalesPlatform.ru end
+    }
 
 	/**
 	 * Overriding default send

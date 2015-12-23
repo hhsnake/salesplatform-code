@@ -218,6 +218,17 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
         return $companiesList;
     }
 
+    // SalesPlatform.ru begin: Added separate numbering for self organizations
+    /**
+     * Hide or show sp company row
+     * @param $moduleModel
+     * @return bool
+     */
+    public static function hideCompanyRow($moduleModel) {
+        return !in_array($moduleModel->getName(), array('Invoice', 'Act', 'Consignment'));
+    }
+    // SalesPlatform.ru end
+
 //	public static function getInstance() {
 //		$moduleModel = new self();
 //		$db = PearDatabase::getInstance();

@@ -33,6 +33,12 @@ class Vtiger_Datetime_UIType extends Vtiger_Date_UIType {
 	 * @return <String>
 	 */
 	public static function getDisplayDateTimeValue($date) {
+            //SalesPlatform.ru begin 
+            if($date == null) { 
+                return ''; 
+            } 
+            //SalesPlatform.ru end 
+        
             $date = new DateTimeField($date);
             $dateValue = $date->getDisplayDateTimeValue();
             list($dateInUserFormat, $timeInUserFormat) = explode(' ', $dateValue);

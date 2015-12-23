@@ -53,12 +53,18 @@ class SMSNotifier extends SMSNotifierBase {
 
 			if($linktoModule !== false) {
 				relateEntities($focus, $moduleName, $focus->id, $linktoModule, $linktoids);
+                //SalesPlatform.ru begin
+                self::updateLastSMSDate($linktoModule, $linktoids);
+                //SalesPlatform.ru end
 			} else {
 				// Link modulename not provided (linktoids can belong to mix of module so determine proper modulename)
 				$linkidsetypes = $adb->pquery( "SELECT setype,crmid FROM vtiger_crmentity WHERE crmid IN (".generateQuestionMarks($linktoids) . ")", array($linktoids) );
 				if($linkidsetypes && $adb->num_rows($linkidsetypes)) {
 					while($linkidsetypesrow = $adb->fetch_array($linkidsetypes)) {
 						relateEntities($focus, $moduleName, $focus->id, $linkidsetypesrow['setype'], $linkidsetypesrow['crmid']);
+                        //SalesPlatform.ru begin
+                        self::updateLastSMSDate($linkidsetypesrow['setype'], array($linkidsetypesrow['crmid']));
+                        //SalesPlatform.ru end
 					}
 				}
 			}
@@ -66,7 +72,7 @@ class SMSNotifier extends SMSNotifierBase {
 		$responses = self::fireSendSMS($message, $tonumbers);
 		$focus->processFireSendSMSResponse($responses);
 	}
-
+    
 	/**
 	 * Detect the related modules based on the entity relation information for this instance.
 	 */
@@ -165,7 +171,9 @@ class SMSNotifier extends SMSNotifierBase {
 
 			$needlookup = 1;
 			if($response['error']) {
-				$responseStatus = ISMSProvider::MSG_STATUS_FAILED;
+                // SalesPlatform.ru begin
+                $responseStatus = SMSNotifier_ISMSProvider_Model::MSG_STATUS_FAILED;
+                //$responseStatus = ISMSProvider::MSG_STATUS_FAILED;
 				$needlookup = 0;
 			} else {
 				$responseID = $response['id'];
@@ -238,6 +246,17 @@ class SMSNotifier extends SMSNotifierBase {
 		}
 		return $results;
 	}
+    
+    // SalesPlatform.ru begin: Add last SMS date
+    private static function updateLastSMSDate($moduleName, $crmids) {
+        $db = PearDatabase::getInstance();
+        $rel_focus = CRMEntity::getInstance($moduleName);
+        if(!is_array($crmids)) $crmids = Array($crmids);
+
+        $db->pquery('UPDATE ' . $rel_focus->table_name . ' SET splastsms=Now() WHERE ' . $rel_focus->table_index . ' IN (' . generateQuestionMarks($crmids) . ')',
+                array($crmids));
+    }
+    // SalesPlatform.ru end
 }
 
 class SMSNotifierManager {

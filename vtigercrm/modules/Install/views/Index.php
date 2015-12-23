@@ -124,8 +124,12 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$createDataBase = false;
 		$createDB = $request->get('create_db');
 		if($createDB == 'on') {
-			$rootUser = $request->get('db_username');
-			$rootPassword = $request->get('db_password');
+            //SalesPlatform.ru begin
+            $rootUser = $request->get('db_root_username');
+			$rootPassword = $request->get('db_root_password');
+			//$rootUser = $request->get('db_username');
+			//$rootPassword = $request->get('db_password');
+            //SalesPlatform.ru end
 			$createDataBase = true;
 		}
 		$authKey = $_SESSION['config_file_info']['authentication_key'] = md5(microtime());
@@ -198,7 +202,7 @@ class Install_Index_view extends Vtiger_View_Controller {
                     Install_Utils_Model::installModules();
 
                     Install_InitSchema_Model::upgrade();
-
+                    
                     $viewer = $this->getViewer($request);
                     $viewer->assign('PASSWORD', $_SESSION['config_file_info']['password']);
                     $viewer->assign('APPUNIQUEKEY', $this->retrieveConfiguredAppUniqueKey());

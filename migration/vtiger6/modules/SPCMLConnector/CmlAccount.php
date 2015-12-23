@@ -63,7 +63,7 @@ class CmlAccount {
         $restDescription['discontinued'] = 1;           //active paccount
         $restDescription['bill_street'] = $this->billingStreet;
         $restDescription['ship_street'] = $this->shippingStreet;
-        $restDescription['1c_id'] = $this->oneEsIdentifier;
+        $restDescription['one_s_id'] = $this->oneEsIdentifier;
         $restDescription['inn'] = $this->inn;
         $restDescription['kpp'] = $this->kpp;
         

@@ -499,7 +499,7 @@ function updateRecordLabel($module,$recordId){
 
 
 function get_group_options() {
-	return Vtiger_Functions::get_group_options();
+return Vtiger_Functions::get_group_options();
 }
 
 // SalesPlatform.ru begin

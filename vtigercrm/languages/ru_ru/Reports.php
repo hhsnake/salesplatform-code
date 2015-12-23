@@ -192,6 +192,8 @@ $languageStrings = array(
 
     'LBL_MORE_RECORDS_TXT' => 'Показаны только 1000 записей. Для просмотра всех записей необходим экспорт.',
     'LBL_NEXT_TRIGGER_TIME' => 'Следующее время отправки/выполнения',
+    'Templates' => 'Шаблоны',
+    'Report templates for modules' => 'Шаблоны отчетов для модулей',
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(

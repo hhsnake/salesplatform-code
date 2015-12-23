@@ -53,8 +53,8 @@
                         </td>
                     </tr>
                     
-                    {* SalesPlatform.ru begin: Added separate Invoice numbering for self organizations *}
-                    <tr id="spcompanyRow" style="display: none;">
+                    {* SalesPlatform.ru begin: Added separate numbering for self organizations *}
+                    <tr id="spcompanyRow" {if $HIDE_SP_COMPANY_ROW}style="display: none;"{/if}>
                         <td class="{$WIDTHTYPE}">
                             <label class="pull-right marginRight10px"><b>{vtranslate('LBL_COMPANY', $QUALIFIED_MODULE)}</b></label>
                         </td>
@@ -67,8 +67,8 @@
                                 {/foreach}
                             </select> 
                         </td>
-                        {* SalesPlatform.ru end *}
                     </tr>
+                    {* SalesPlatform.ru end *}
                     <tr>
                         <td class="{$WIDTHTYPE}">
                             <label class="pull-right marginRight10px"><b>{vtranslate('LBL_USE_PREFIX', $QUALIFIED_MODULE)}</b></label>

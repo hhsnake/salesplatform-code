@@ -22,6 +22,7 @@ $languageStrings = array(
 	'LBL_BACK_TO_MAILBOXES'        => 'Назад к почтовым ящикам'           , // TODO: Review
 	'LBL_MARK_MESSAGE_AS'          => 'Отметить сообщение как', 
 	'LBL_MAX_LIMIT_ONLY_TWO'       => 'Вы можете настроить только два почтовых ящика', // TODO: Review
+	'LBL_MAX_LIMIT_EXCEEDED'       => 'Достигнут предел количества почтовых ящиков', // TODO: Review
 	'LBL_IS_IN_RUNNING_STATE'      => 'запущен'         , // TODO: Review
 	'LBL_SAVED_SUCCESSFULLY'       => 'Сохранено успешно'          , // TODO: Review
 	'LBL_CONNECTION_TO_MAILBOX_FAILED' => 'Соединение с почтовым ящиком завершилось неудачно!', // TODO: Review
@@ -120,5 +121,5 @@ $languageStrings = array(
 );
 $jsLanguageStrings = array(
 	'JS_MAILBOX_DELETED_SUCCESSFULLY' => 'Почтовый ящик успешно удален', // TODO: Review
-	'JS_MAILBOX_LOADED_SUCCESSFULLY' => 'Почтовый ящик успешко загружен' , // TODO: Review
+	'JS_MAILBOX_LOADED_SUCCESSFULLY' => 'Почтовый ящик успешно загружен' , // TODO: Review
 );

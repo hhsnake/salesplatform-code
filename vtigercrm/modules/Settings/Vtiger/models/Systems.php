@@ -29,6 +29,11 @@ class Settings_Vtiger_Systems_Model extends Vtiger_Base_Model{
         $use_sendmail = $this->get('use_sendmail'); 
         return ($use_sendmail == 'on' || $use_sendmail == 1) ? "true" : "false";
     }
+
+    public function isUseMailAccountEnabled() {
+        $use_mail_account = $this->get('use_mail_account');
+        return ($use_mail_account == 'on' || $use_mail_account == 1) ? "true" : "false";
+    }
     // SalesPlatform.ru end
 
     public function save() {
@@ -38,23 +43,23 @@ class Settings_Vtiger_Systems_Model extends Vtiger_Base_Model{
         $params = array();
         // SalesPlatform.ru begin
         array_push($params, $this->get('server'),$this->get('server_port'),$this->get('server_username'),$this->get('server_password'),$this->get('server_type'),
-                   $this->isSmtpAuthEnabled(),$this->get('server_path'),$this->get('from_email_field'),$this->get('server_tls'),$this->get('from_name'),$this->get('use_sendmail'));
+                   $this->isSmtpAuthEnabled(),$this->get('server_path'),$this->get('from_email_field'),$this->get('server_tls'),$this->get('from_name'),$this->get('use_sendmail'),$this->get('use_mail_account'));
         //array_push($params, $this->get('server'),$this->get('server_port'),$this->get('server_username'),$this->get('server_password'),$this->get('server_type'),
                    //$this->isSmtpAuthEnabled(),$this->get('server_path'),$this->get('from_email_field'));
         // SalesPlatform.ru end
-        
+
         if(empty($id)) {
             $id = $db->getUniqueID(self::tableName);
             //To keep id in the beginning
             array_unshift($params, $id);
             // SalesPlatform.ru begin
-            $query = 'INSERT INTO '.self::tableName.' VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
+            $query = 'INSERT INTO '.self::tableName.' VALUES(' . generateQuestionMarks($params) . ')';
             //$query = 'INSERT INTO '.self::tableName.' VALUES(?,?,?,?,?,?,?,?,?)';
             // SalesPlatform.ru end
         }else{
             // SalesPlatform.ru begin
             $query = 'UPDATE '.self::tableName.' SET server = ?, server_port= ?, server_username = ?, server_password = ?,
-                server_type = ?,  smtp_auth= ?, server_path = ?, from_email_field=?, server_tls=?, from_name=?, use_sendmail=? WHERE id = ?';
+                server_type = ?,  smtp_auth= ?, server_path = ?, from_email_field=?, server_tls=?, from_name=?, use_sendmail=?, use_mail_account=? WHERE id = ?';
             //$query = 'UPDATE '.self::tableName.' SET server = ?, server_port= ?, server_username = ?, server_password = ?,
             //    server_type = ?,  smtp_auth= ?, server_path = ?, from_email_field=? WHERE id = ?';
             // SalesPlatform.ru end

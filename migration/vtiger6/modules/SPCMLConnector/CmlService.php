@@ -27,7 +27,7 @@ class CmlService extends AbstractProduct {
         $restDescription['qty'] = $this->stockCount;
         $restDescription['currency_id'] = $this->currency;
         $restDescription['conversion_rate'] = $this->conversionRate;
-        $restDescription['1c_id'] = $this->oneEsIdentifier;
+        $restDescription['one_s_id'] = $this->oneEsIdentifier;
         
         return $restDescription;
     }

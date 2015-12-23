@@ -40,6 +40,8 @@ $languageStrings = array(
 	'LBL_CONVERT_FAQ'              => 'Преобразовать в ЧаВо'              , 
 	'LBL_RELATED_TO'               => 'Связан с'             ,
     'LBL_SETUP_WEBFORMS'           => 'Установка Веб-Форм',
+    'LBL_EXPORT_TO_PDF'            => 'Экспорт в PDF:', 
+    'LBL_SEND_MAIL_PDF'            => 'Отправить PDF по Email:', 
 
 	//added to support i18n in ticket mails
 	'Hi' => 'Привет',

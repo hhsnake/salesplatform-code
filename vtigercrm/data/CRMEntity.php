@@ -136,6 +136,18 @@ class CRMEntity {
 		} else {
 			$file_name = $file_details['name'];
 		}
+                
+                $save_file = 'true'; 
+                //only images are allowed for Image Attachmenttype 
+                $mimeType = mime_content_type($file_details['tmp_name']); 
+                $mimeTypeContents = explode('/', $mimeType); 
+                // For contacts and products we are sending attachmentType as value 
+                if ($attachmentType == 'Image' || ($file_details['size'] && $mimeTypeContents[0] == 'image')) { 
+                        $save_file = validateImageFile($file_details); 
+                } 
+                if ($save_file == 'false') { 
+                        return false; 
+                } 
 
 		$binFile = sanitizeUploadFileName($file_name, $upload_badext);
 
@@ -151,12 +163,15 @@ class CRMEntity {
 
 		//upload the file in server
 		$upload_status = move_uploaded_file($filetmp_name, $upload_file_path . $current_id . "_" . $binFile);
-
+        
+        
 		$save_file = 'true';
 		//only images are allowed for these modules
-		if ($module == 'Contacts' || $module == 'Products') {
-			$save_file = validateImageFile($file_details);
-		}
+        //SalesPlatform.ru begin
+		//if ($module == 'Contacts' || $module == 'Products') {
+		//	$save_file = validateImageFile($file_details);
+		//}
+        //SalesPlatform.ru end
 
 		if ($save_file == 'true' && $upload_status == 'true') {
 			//This is only to update the attached filename in the vtiger_notes vtiger_table for the Notes module
@@ -436,15 +451,17 @@ class CRMEntity {
 			if ($uitype == 4 && $insertion_mode != 'edit') {
 				$fldvalue = '';
 				// Bulk Save Mode: Avoid generation of module sequence number, take care later.
-				if (!CRMEntity::isBulkSaveMode())
-                                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
-                                        if($module === 'Invoice' && isset($this->column_fields['spcompany'])) {
-                                            $fldvalue = $this->setModuleSeqNumber("increment", $module, '', '', $this->column_fields['spcompany']);
-                                        } else {
-                                            $fldvalue = $this->setModuleSeqNumber("increment", $module);
-                                        }
-                                        //$fldvalue = $this->setModuleSeqNumber("increment", $module);
-                                        // SalesPlatform.ru end
+                // SalesPlatform.ru begin: Added separate numbering for self organizations
+				if (!CRMEntity::isBulkSaveMode()) {
+                    $modules = array('Invoice', 'Act', 'Consignment');
+                    if (in_array($module, $modules) && isset($this->column_fields['spcompany'])) {
+                        $fldvalue = $this->setModuleSeqNumber("increment", $module, '', '', $this->column_fields['spcompany']);
+                    } else {
+                        $fldvalue = $this->setModuleSeqNumber("increment", $module);
+                    }
+                    //$fldvalue = $this->setModuleSeqNumber("increment", $module);
+                }
+                // SalesPlatform.ru end
 				$this->column_fields[$fieldname] = $fldvalue;
 			}
 			if (isset($this->column_fields[$fieldname])) {
@@ -472,7 +489,12 @@ class CRMEntity {
 					} else {
 						$field_list = $this->column_fields[$fieldname];
 					}
-					$fldvalue = $field_list;
+					if ($field_list == '') {
+                      $fldvalue = NULL;
+                    }
+                    else {
+                      $fldvalue = $field_list;
+                    }
 				} elseif ($uitype == 5 || $uitype == 6 || $uitype == 23) {
 					//Added to avoid function call getDBInsertDateValue in ajax save
 					if (isset($current_user->date_format) && !$ajaxSave) {
@@ -1364,48 +1386,49 @@ class CRMEntity {
 	}
 
 	/* Function to set the Sequence string and sequence number starting value */
-    // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+    // SalesPlatform.ru begin: Added separate numbering for self organizations
     function setModuleSeqNumber($mode, $module, $req_str = '', $req_no = '', $spCompany = '') {
     //function setModuleSeqNumber($mode, $module, $req_str = '', $req_no = '') {
     // SalesPlatform.ru end
 		global $adb;
 		//when we configure the invoice number in Settings this will be used
 		if ($mode == "configure" && $req_no != '') {
-            // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+            // SalesPlatform.ru begin: Added separate numbering for self organizations
             $adb->pquery("ALTER TABLE vtiger_modentity_num ADD spcompany varchar(200) COLLATE utf8_unicode_ci DEFAULT ''", array());
             $check = $adb->pquery("select cur_id from vtiger_modentity_num where semodule=? and prefix = ? and spcompany=?", array($module, $req_str, $spCompany));
             //$check = $adb->pquery("select cur_id from vtiger_modentity_num where semodule=? and prefix = ?", array($module, $req_str));
             // SalesPlatform.ru end
 			if ($adb->num_rows($check) == 0) {
 				$numid = $adb->getUniqueId("vtiger_modentity_num");
-                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+                // SalesPlatform.ru begin: Added separate numbering for self organizations
                 $active = $adb->pquery("select num_id from vtiger_modentity_num where semodule=? and active=1 and spcompany=?", array($module, $spCompany));
                 //$active = $adb->pquery("select num_id from vtiger_modentity_num where semodule=? and active=1", array($module));
                 // SalesPlatform.ru end
 				$adb->pquery("UPDATE vtiger_modentity_num SET active=0 where num_id=?", array($adb->query_result($active, 0, 'num_id')));
 
-                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+                // SalesPlatform.ru begin: Added separate numbering for self organizations
                 $adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?,?)", array($numid, $module, $req_str, $req_no, $req_no, 1, $spCompany));
                 //$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)", array($numid, $module, $req_str, $req_no, $req_no, 1));
                 // SalesPlatform.ru end
 				return true;
 			} else if ($adb->num_rows($check) != 0) {
-				$num_check = $adb->query_result($check, 0, 'cur_id');
-				if ($req_no < $num_check) {
-					return false;
-				} else {
-                    // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
-                    $adb->pquery("UPDATE vtiger_modentity_num SET active=0 where active=1 and semodule=? and spcompany=?", array($module, $spCompany));
-                    $adb->pquery("UPDATE vtiger_modentity_num SET cur_id=?, active = 1 where prefix=? and semodule=? and spcompany=?", array($req_no, $req_str, $module, $spCompany));
-                    //$adb->pquery("UPDATE vtiger_modentity_num SET active=0 where active=1 and semodule=?", array($module));
-                    //$adb->pquery("UPDATE vtiger_modentity_num SET cur_id=?, active = 1 where prefix=? and semodule=?", array($req_no, $req_str, $module));
-                    // SalesPlatform.ru end
-					return true;
-				}
+                // SalesPlatform.ru begin Added separate numbering for self organizations
+				//$num_check = $adb->query_result($check, 0, 'cur_id');
+				//if ($req_no < $num_check) {
+				//	return false;
+				//} else {
+                //    $adb->pquery("UPDATE vtiger_modentity_num SET active=0 where active=1 and semodule=?", array($module));
+                //    $adb->pquery("UPDATE vtiger_modentity_num SET cur_id=?, active = 1 where prefix=? and semodule=?", array($req_no, $req_str, $module));
+				//	return true;
+				//}
+                $adb->pquery("UPDATE vtiger_modentity_num SET active=0 where active=1 and semodule=? and spcompany=?", array($module, $spCompany));
+                $adb->pquery("UPDATE vtiger_modentity_num SET cur_id=?, active = 1 where prefix=? and semodule=? and spcompany=?", array($req_no, $req_str, $module, $spCompany));
+                return true;
+                // SalesPlatform.ru end
 			}
 		} else if ($mode == "increment") {
 			//when we save new invoice we will increment the invoice id and write
-            // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+            // SalesPlatform.ru begin: Added separate numbering for self organizations
             $check = $adb->pquery("select cur_id,prefix from vtiger_modentity_num where semodule=? and active = 1 and spcompany=?", array($module, $spCompany));
             //$check = $adb->pquery("select cur_id,prefix from vtiger_modentity_num where semodule=? and active = 1", array($module));
             // SalesPlatform.ru end
@@ -1417,7 +1440,7 @@ class CRMEntity {
 				$strip = 0;
 			$temp = str_repeat("0", $strip);
 			$req_no.= $temp . ($curid + 1);
-            // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+            // SalesPlatform.ru begin: Added separate numbering for self organizations
             $adb->pquery("UPDATE vtiger_modentity_num SET cur_id=? where cur_id=? and active=1 AND semodule=? and spcompany=?", array($req_no, $curid, $module, $spCompany));
             //$adb->pquery("UPDATE vtiger_modentity_num SET cur_id=? where cur_id=? and active=1 AND semodule=?", array($req_no, $curid, $module));
             // SalesPlatform.ru end
@@ -1428,12 +1451,12 @@ class CRMEntity {
 	// END
 
 	/* Function to check if module sequence numbering is configured for the given module or not */
-    // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+    // SalesPlatform.ru begin: Added separate numbering for self organizations
     function isModuleSequenceConfigured($module, $spCompany = '') {
 	//function isModuleSequenceConfigured($module) {
     // SalesPlatform.ru end
 		$adb = PearDatabase::getInstance();
-            // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+            // SalesPlatform.ru begin: Added separate numbering for self organizations
             $result = $adb->pquery('SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1 and spcompany=?', array($module, $spCompany));
             //$result = $adb->pquery('SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1', array($module));
             // SalesPlatform.ru end
@@ -1444,12 +1467,12 @@ class CRMEntity {
 	}
 
 	/* Function to get the next module sequence number for a given module */
-    // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+    // SalesPlatform.ru begin: Added separate numbering for self organizations
     function getModuleSeqInfo($module, $spCompany = '') {
 	//function getModuleSeqInfo($module) {
     // SalesPlatform.ru end
 		global $adb;
-        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+        // SalesPlatform.ru begin: Added separate numbering for self organizations
         $check = $adb->pquery("select cur_id,prefix from vtiger_modentity_num where semodule=? and active = 1 and spcompany=?", array($module, $spCompany));
         //$check = $adb->pquery("select cur_id,prefix from vtiger_modentity_num where semodule=? and active = 1", array($module));
         // SalesPlatform.ru end
@@ -1477,7 +1500,7 @@ class CRMEntity {
 
 	// END
         
-    // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+    // SalesPlatform.ru begin: Added separate numbering for self organizations
     function updateMissingSeqNumber($module, $spCompany = '') {
 	//function updateMissingSeqNumber($module) {
     // SalesPlatform.ru end
@@ -1486,7 +1509,7 @@ class CRMEntity {
 
 		vtlib_setup_modulevars($module, $this);
 
-        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations
+        // SalesPlatform.ru begin: Added separate numbering for self organizations
         if (!$this->isModuleSequenceConfigured($module, $spCompany))
         //if (!$this->isModuleSequenceConfigured($module))
         // SalesPlatform.ru end
@@ -1512,7 +1535,7 @@ class CRMEntity {
 					$returninfo['totalrecords'] = $adb->num_rows($records);
 					$returninfo['updatedrecords'] = 0;
                                         
-                                        // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                                        // SalesPlatform.ru begin: Added separate numbering for self organizations
 					$modseqinfo = $this->getModuleSeqInfo($module, $spCompany);
                                         //$modseqinfo = $this->getModuleSeqInfo($module);
                                         // SalesPlatform.ru end 
@@ -1527,7 +1550,7 @@ class CRMEntity {
 						$returninfo['updatedrecords'] = $returninfo['updatedrecords'] + 1;
 					}
 					if ($old_cur_id != $cur_id) {
-                                                // SalesPlatform.ru begin: Added separate Invoice numbering for self organizations 
+                                                // SalesPlatform.ru begin: Added separate numbering for self organizations
                                                 $adb->pquery("UPDATE vtiger_modentity_num set cur_id=? where semodule=? and active=1 and spcompany=?", Array($cur_id, $module, $spCompany));
 						//$adb->pquery("UPDATE vtiger_modentity_num set cur_id=? where semodule=? and active=1", Array($cur_id, $module));
                                                 // SalesPlatform.ru end 
@@ -2009,6 +2032,11 @@ class CRMEntity {
 		if ($queryPlanner->requireTable('vtiger_lastModifiedBy'.$module)) {
 			$query .= " left join vtiger_users as vtiger_lastModifiedBy" . $module . " on vtiger_lastModifiedBy" . $module . ".id = vtiger_crmentity.modifiedby";
 		}
+        //SalesPlatform.ru begin
+        if($queryPlanner->requireTable("vtiger_createdby$module")){
+            $query .= " LEFT JOIN vtiger_users AS vtiger_createdby$module ON vtiger_createdby$module.id = vtiger_crmentity.smcreatorid";
+        }
+        //SalesPlaform.ru end
 
 		// TODO Optimize the tables below based on requirement
 		$query .= "	left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid";

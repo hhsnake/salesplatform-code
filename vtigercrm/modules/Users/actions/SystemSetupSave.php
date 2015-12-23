@@ -22,6 +22,10 @@ class Users_SystemSetupSave_Action extends Users_Save_Action {
 		$packages = $request->get(packages);
 		$userModuleModel = Users_Module_Model::getInstance($moduleName);
 		$userModuleModel::savePackagesInfo($packages);
+        //SalesPlatform.ru begin
+        create_tab_data_file();
+        create_parenttab_data_file();
+        //SalesPlatform.ru end
 		header ('Location: index.php?module=Users&parent=Settings&view=UserSetup');
 		exit();
 	}

@@ -733,7 +733,6 @@ function sp_js_editview_checkBeforeSave(module, thisForm, mode) {
     }            
     
     var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));               
-    VtigerJS_DialogBox.block();
 
     var urlstring = "index.php?module="+module+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&EditViewAjaxMode=true&CreateMode="+createMode;
     if(mode == 'edit') {

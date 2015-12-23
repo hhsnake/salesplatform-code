@@ -247,7 +247,10 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 				// or the picklist is multiselect type.
 				if($uitype == 33 || $uitype == 16 || array_key_exists($value,$this->picklistValues[$fieldname])){
 					// NOTE: multipicklist (uitype=33) values will be concatenated with |# delim
-					$value = trim($value);
+                    //SalesPlatform.ru begin
+                    $value = vtranslate(trim($value), $moduleName);
+					//$value = trim($value);
+                    //SalesPlatform.ru end
 				} else {
 					$value = '';
 				}

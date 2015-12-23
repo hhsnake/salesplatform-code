@@ -26,7 +26,12 @@ $languageStrings = array(
 	'username'                          => 'Имя пользователя', 
 	'password'                          => 'Пароль',
     'LBL_SMS_MAX_CHARACTERS_ALLOWED'    => 'Максимум 160 символов',
-
+    //SalesPlatform.ru begin
+    'LBL_NUMBER' => 'Номер',
+    'LBL_STATUS' => 'Статус',
+    'LBL_STATUS_MESSAGE' => 'Информация по статусу',
+    'Failed' => 'Отменено',
+    //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

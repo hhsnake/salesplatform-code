@@ -9,7 +9,7 @@
  ************************************************************************************/
 $languageStrings = array(
         'LBL_INTEGRATION' => 'Интеграция',
-        'LBL_PBXMANAGER' => 'PBXManager',
+        'LBL_PBXMANAGER' => 'Звонки',
 	'Settings'                     => 'Настройки'          , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Поиск настроек'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Итог'                    , 
@@ -139,7 +139,7 @@ $languageStrings = array(
 	'LBL_REQUIRES_AUTHENTICATION'  => 'Требует аутентификацию?',
     'LBL_OUTGOING_SERVER'          => 'Сервер исходящей почты', // KEY 5.x: LBL_MAIL_SERVER_SETTINGS
 	'LBL_OUTGOING_SERVER_DESC'     => 'Настроить Сервер исходящей почты', // KEY 5.x: LBL_MAIL_SERVER_DESC
-    'LBL_OUTGOING_SERVER_NOTE'     => 'Примечание: Для сервера исходящей почты должен быть выбран SSL или TLS протокол и если поле "E-mail отправителя" пустое, то будет выбрано поле "Пользователь".',
+    'LBL_OUTGOING_SERVER_NOTE'     => 'Примечание: Для сервера исходящей почты должен быть выбран SSL или TLS протокол и если поле "E-mail отправителя" пустое, то будет выбрано поле "Пользователь". Обратите внимание, что для некоторых провайдеров (например Yandex) поле "E-mail отправителя" является обязательным и как правило совпадает с полем "Пользователь"',
     'LBL_DEFAULT'                  => 'По умолчанию в учетной записи SMTP в качестве исходящего сервера установлен od1.vtiger.com. Чтобы избежать удаления исходящих сообщений СПАМ-фильтрами получателя мы рекомендуем сделать следующее.',
 	'LBL_OPTIONS1'                 => 'Отправлять сообщения через ваш сервер<br>
                                         - Укажите настройки учетной записи SMTP (Имя сервера, Пользователь, Пароль).', 
@@ -220,12 +220,10 @@ $languageStrings = array(
     'LoginHistory' => 'Журнал регистрации в системе',
     'LBL_LOGIN_HISTORY_DETAILS' => 'Журнал регистрации в системе',
     'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Отобразить Журнал регистрации пользователей в системе',
-	'LBL_USER_NAME'=> 'Пользователь',
-	'LBL_USER_IP_ADDRESS'=> 'IP адрес пользователя', 
+	'LBL_USER_IP_ADDRESS'=> 'IP адрес пользователя',
 	'LBL_LOGIN_TIME' => 'Время входа',
 	'LBL_LOGGED_OUT_TIME' => 'Время выхода', 
-	'LBL_STATUS' => 'Статус',
-    
+
     //SalesPlatform.ru begin
     'LBL_CML_SETTINGS'             => 'Настройки обмена по CommerceML', 
     'LBL_CML_SETTINGS_DESCRIPTION' => 'Настройка параметров обмена по стандарту CommerceML',
@@ -234,13 +232,14 @@ $languageStrings = array(
     'LBL_TLS'                      => 'TLS',
     'LBL_SSL'                      => 'SSL',
     'LBL_SENDMAIL'                 => 'Использовать системный sendmail',
+    'LBL_USE_MAIL_ACCOUNT'         => 'Использовать учетную запись Менеджера почты',
+    'LBL_OUTGOING_SERVER_NOTE_2'   => 'Примечание: При выборе пункта "Использовать учетную запись Менеджера почты" логин и пароль для Сервера исходящей почты подставляются из настроек <br>
+                                        Менеджера почты конкретного Пользователя CRM, при условии, что Пользователь настроил Менеждер почты и логин и пароль подходят для SMTP сервера Исходящей почты',
     'LBL_FROM_NAME'                => 'Имя отправителя',
     'LBL_SERVER_PORT'              => 'Порт',
     'LBL_CONFIG_EDITOR_DESCRIPTION' => 'Обновление файла конфигурации',
     'LBL_SP_CONFIGURATION'         =>  'Менеджер Конфигураций',
-    'LBL_PBXMANAGER'               => 'Менеджер PBX',
-    'PBXManager module Configuration' => 'Конфигурация Менеджера PBX',
-    'LBL_INTEGRATION'              => 'Интеграция',
+    'PBXManager module Configuration' => 'Конфигурация Звонков',
     'LBL_EXTENSION_STORE'          => 'Магазин расширений',
     'Signed in'                    => 'Вошел',
     'Signed off'                   => 'Вышел',
@@ -248,6 +247,8 @@ $languageStrings = array(
     'LBL_COMPANY'                  => 'Юр. лицо',
     'Default'                      => 'По умолчанию',
     'LBL_NEW_COMPANY'              => 'Новое юр.лицо', 
+    'LBL_DEFAULT_LAYOUT'           => 'Расположение блоков',
+    'LBL_SP_CHECK_SITE_URL'        => 'Контролировать URL системы',
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(

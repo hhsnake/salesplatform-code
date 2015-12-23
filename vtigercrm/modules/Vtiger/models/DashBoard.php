@@ -73,7 +73,78 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 
 		return $widgets;
 	}
+        
+    //SalesPlatform.ru begin
+    /**
+     * Retrurns selectable detail view widgets
+     * @param type $moduleName
+     */
+    public function getSelectableDetailDashboards($moduleName, $recordId) {
+        $dashboardsUrls = array();
+        foreach (Reports_Module_Model::getTemplatesReportModels($moduleName) as $report) {
+            $dashboardsUrls[] = $report->getWidgetReportURL();
+        }
 
+        $detailSelectableWidgets = array();
+        if(!empty($dashboardsUrls)) {
+            $inCriteria = '(' . substr(str_repeat('?,', count($dashboardsUrls)), 0, -1) . ')';
+            $sql = 'SELECT * FROM vtiger_links WHERE linktype=?' .
+                    'AND tabid=? AND linkid NOT IN (SELECT linkid FROM vtiger_module_dashboard_widgets
+                    WHERE userid=?) AND linkurl IN' . $inCriteria;
+
+            $db = PearDatabase::getInstance();
+            $currentUser = Users_Record_Model::getCurrentUserModel();
+            $result = $db->pquery($sql, array_merge(
+                array('DASHBOARDWIDGET', getTabid($moduleName), $currentUser->getId()),
+                $dashboardsUrls
+            ));
+            while($row = $db->fetchByAssoc($result)) {
+
+                /* Prepare URL for report template */
+                $widgetModel = Vtiger_Widget_Model::getInstanceFromValues($row);
+                $widgetModel->applyTemplateRecordId($recordId);
+                $detailSelectableWidgets[] = $widgetModel;
+            }
+        }
+
+        return $detailSelectableWidgets;
+    }
+
+
+    public function getDetailDashboards($moduleName, $recordId) {
+        $dashboardsUrls = array();
+        foreach (Reports_Module_Model::getTemplatesReportModels($moduleName) as $report) {
+            $dashboardsUrls[] = $report->getWidgetReportURL();
+        }
+
+        $detailWidgets = array();
+        if(!empty($dashboardsUrls)) {
+            $inCriteria = '(' . substr(str_repeat('?,', count($dashboardsUrls)), 0, -1) . ')';
+            $sql = "SELECT vtiger_links.*, vtiger_module_dashboard_widgets.userid, vtiger_module_dashboard_widgets.id as widgetid, vtiger_module_dashboard_widgets.position as position, vtiger_links.linkid FROM vtiger_links " .
+                   "INNER JOIN vtiger_module_dashboard_widgets ON vtiger_links.linkid=vtiger_module_dashboard_widgets.linkid ".
+                   "WHERE (linktype=? AND tabid=? AND vtiger_module_dashboard_widgets.userid=? AND linkurl IN" . $inCriteria . ")";
+
+            $db = PearDatabase::getInstance();
+            $currentUser = Users_Record_Model::getCurrentUserModel();
+            $result = $db->pquery($sql, array_merge(
+                array('DASHBOARDWIDGET', getTabid($moduleName), $currentUser->getId()),
+                $dashboardsUrls
+            ));
+            while($row = $db->fetchByAssoc($result)) {
+
+                /* Prepare URL for report template */
+                if($this->checkModulePermission($row)) {
+                    $widgetModel = Vtiger_Widget_Model::getInstanceFromValues($row);
+                    $widgetModel->applyTemplateRecordId($recordId);
+                    $detailWidgets[] = $widgetModel;
+                }
+            }
+        }
+
+        return $detailWidgets;
+    }
+    //SalesPlatform.ru end
+        
 	/**
 	 * Function returns List of User's selected Dashboard Widgets
 	 * @return <Array of Vtiger_Widget_Model>

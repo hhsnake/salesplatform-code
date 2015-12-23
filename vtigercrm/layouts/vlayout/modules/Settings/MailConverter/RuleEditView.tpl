@@ -66,7 +66,7 @@
 				{assign var=RADIO_OPTIONS value=$FIELD_MODEL->getRadioOptions()}
 				{foreach key=RADIO_NAME item=RADIO_VALUE from=$RADIO_OPTIONS}
 				    <label class="radio inline">
-					<input class="radio" type="radio" name="{$FIELD_MODEL->getName()}" value="{$RADIO_NAME}"
+					<input class="radio" type="radio" name="{$FIELD_MODEL->getName()}" value="{$RADIO_NAME}" 
 				    {if empty($RECORD_ID) && ($RADIO_NAME eq 'AND')} checked="" {/if} {if $RECORD_MODEL->get($FIELD_NAME) eq $RADIO_NAME} checked {/if} />
 				{$RADIO_VALUE}
 			    </label>
@@ -75,7 +75,7 @@
 			<input type="text" name="{$FIELD_MODEL->getName()}" value="{$RECORD_MODEL->get($FIELD_NAME)}" data-validation-engine="validate[funcCall[Vtiger_Email_Validator_Js.invokeValidation]]"/>
 		    {else}
 			<input type="text" name="{$FIELD_MODEL->getName()}" value="{$RECORD_MODEL->get($FIELD_NAME)}"/>
-		    {/if}
+		    {/if}	
 		</div>
 	    </div>	
 	{/foreach}

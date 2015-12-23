@@ -375,7 +375,10 @@ class Consignment extends CRMEntity {
                     'index.php?module=Consignment&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&relationOperation=true');
             // SalesPlatform.ru end
             
-            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_dependents_list');
+            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array('ADD'),'get_dependents_list');
+
+            $modFocus = CRMEntity::getInstance('Consignment');
+            $modFocus->setModuleSeqNumber('configure', 'Consignment', '', '1');
 
 		} else if($eventType == 'module.disabled') {
 			$consignmentInstance = Vtiger_Module::getInstance('Consignment');
@@ -394,7 +397,7 @@ class Consignment extends CRMEntity {
 		} else if($eventType == 'module.enabled') {
 			$consignmentInstance = Vtiger_Module::getInstance('Consignment');
 			$invoiceInstance = Vtiger_Module::getInstance('Invoice');
-			$invoiceInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_dependents_list');
+			$invoiceInstance->setRelatedlist($consignmentInstance,'Consignment',array('ADD'),'get_dependents_list');
             // SalesPlatform.ru begin link Accounts
             $accountsInstance = Vtiger_Module::getInstance('Accounts');
 
@@ -413,7 +416,7 @@ class Consignment extends CRMEntity {
                     'index.php?module=Consignment&view=Edit&sourceModule=$MODULE$&sourceRecord=$RECORD$&invoice_id=$RECORD$&relationOperation=true');
             // SalesPlatform.ru end
             
-            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_dependents_list');
+            $accountsInstance->setRelatedlist($consignmentInstance,'Consignment',array('ADD'),'get_dependents_list');
             
 		} else if($eventType == 'module.preuninstall') {
 		// TODO Handle actions when this module is about to be deleted.

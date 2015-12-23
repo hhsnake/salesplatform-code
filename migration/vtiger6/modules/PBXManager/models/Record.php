@@ -228,42 +228,65 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
       * * Function to check the customer with number in phonelookup table
       * @param <string> $from
       */
-    public static function lookUpRelatedWithNumber($from){
+    //SalesPlatform.ru begin
+    public static function lookUpRelatedWithNumber($from, $callAssignedIserId = null){
+    //public static function lookUpRelatedWithNumber($from){
+    //SalesPlatform.ru end
         $db = PearDatabase::getInstance();
         $fnumber = preg_replace('/[-()\s+]/', '',$from);
-        $rnumber = strrev($fnumber);
         
         //SalesPlatform.ru begin fix search entity by number
         if($from == NULL) {
             return;
         }
-
+        
+        /* Prepare entity search params and conditions */
+        $numberSql = "?";
+        $numberSqlArg = $fnumber;
         if(strlen($fnumber) >= 10) {
-            // Select by last 10 numbers
-            $result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE "%"?', array(substr($fnumber, -10, 10)));
-        } else {
-            // Select exact matching number
-            $result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE ?', array($fnumber));
+            $numberSql = '"%"?';
+            $numberSqlArg = array(substr($fnumber, -10, 10));
         }
         
-        //$result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE "'. $fnumber . '%" OR rnumber LIKE "'. $rnumber . '%" ', array());
-        //SalesPlatform.ru end
+        $result = $db->pquery(
+            'SELECT vtiger_crmentity.crmid AS id,vtiger_crmentity.label AS name,vtiger_crmentity.setype,vtiger_crmentity.smownerid, ' . 
+            self::lookuptableName . '.fieldname FROM ' . self::lookuptableName . ' ' .
+            'INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=' . self::lookuptableName . '.crmid ' .
+            'WHERE ' . self::lookuptableName . '.fnumber LIKE ' . $numberSql . ' AND vtiger_crmentity.deleted=0', 
+            array($numberSqlArg)
+        );
         
-        if($db->num_rows($result)){
-            $crmid = $db->query_result($result, 0, 'crmid');
-            $fieldname = $db->query_result($result, 0, 'fieldname');
-            $contact = $db->pquery('SELECT label,setype FROM '.self::entitytableName.' WHERE crmid=? AND deleted=0', array($crmid));
-            if($db->num_rows($result)){
-                $data['id'] = $crmid;
-                $data['name'] = $db->query_result($contact, 0, 'label');
-                $data['setype'] = $db->query_result($contact, 0, 'setype');
-                $data['fieldname'] = $fieldname;
-                return $data;
+        /* Search first entity data with match to assigned user if need */
+        $callerEntityData = $db->fetchByAssoc($result);
+        if($callAssignedIserId != null && $callerEntityData['smownerid'] != $callAssignedIserId) {
+            while($row = $db->fetchByAssoc($result)) {
+                if($row['smownerid'] == $callAssignedIserId) {
+                    $callerEntityData = $row;
+                    break;
+                }
             }
-            else
-                return;
-        }
-        return;
+        } 
+
+        return $callerEntityData;
+        
+        //$rnumber = strrev($fnumber);
+        //$result = $db->pquery('SELECT crmid, fieldname FROM '.self::lookuptableName.' WHERE fnumber LIKE "'. $fnumber . '%" OR rnumber LIKE "'. $rnumber . '%" ', array());
+        //if($db->num_rows($result)){
+        //    $crmid = $db->query_result($result, 0, 'crmid');
+        //    $fieldname = $db->query_result($result, 0, 'fieldname');
+        //    $contact = $db->pquery('SELECT label,setype FROM '.self::entitytableName.' WHERE crmid=? AND deleted=0', array($crmid));
+        //    if($db->num_rows($result)){
+        //        $data['id'] = $crmid;
+        //        $data['name'] = $db->query_result($contact, 0, 'label');
+        //        $data['setype'] = $db->query_result($contact, 0, 'setype');
+        //        $data['fieldname'] = $fieldname;
+        //        return $data;
+        //    }
+        //    else
+        //        return;
+        //}
+        //return;
+        //SalesPlatform.ru end
     }
     
      /**
@@ -345,6 +368,88 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
                 $numbers[$userId] = $number;
         }
         return $numbers;
+    }
+
+    /**
+     * Function to retrieve display value for a field
+     * @param $fieldName
+     * @param bool $recordId
+     * @return bool|string <String>
+     * @internal param $ <String> $fieldName - field name for which values need to get
+     */
+    public function getDisplayValue($fieldName,$recordId = false) {
+        if(empty($recordId)) {
+            $recordId = $this->getId();
+        }
+
+        $fieldModel = $this->getModule()->getField($fieldName);
+        if(!$fieldModel) {
+            return false;
+        }
+
+        // Replace RecordingUrl by Icon
+        if($fieldName == 'recordingurl') {
+            $value = $fieldModel->getDisplayValue($this->get($fieldName), $recordId, $this);
+            $recordingUrl = explode('>', $value);
+            $url = explode('<', $recordingUrl[1]);
+            if ($url[0] != '' && $this->get('callstatus') == 'completed') {
+                // SalesPlatform.ru begin
+                return '<audio src="index.php?module=PBXManager&action=ListenRecord&record='.$recordId.'" controls>
+                    <a href="index.php?module=PBXManager&action=ListenRecord&record='.$recordId.'" ><i class="icon-volume-up"></i></a>
+                </audio>';
+                //return $recordingUrl[0] . '>' . '<i class="icon-volume-up"></i>' . '</a>';
+                // SalesPlatform.ru end
+            } else {
+                return '';
+            }
+        }
+
+        // Display custom call status
+        if($fieldName == 'callstatus') {
+            $callStatus = '';
+            $value = $fieldModel->getDisplayValue($this->get($fieldName), $recordId, $this);
+            $recordInstance = PBXManager_Record_Model::getInstanceById($recordId);
+            if ($recordInstance->get('direction') == 'outbound') {
+                if ($this->get('callstatus') == 'ringing' || $this->get('callstatus') == 'in-progress') {
+
+                    $callStatus = '<span class="label label-info"><i class="icon-arrow-up icon-white"></i>&nbsp;' . vtranslate($value, $this->getModuleName()) . '</span>';
+
+                } else if ($this->get('callstatus') == 'completed') {
+
+                    $callStatus = '<span class="label label-success"><i class="icon-arrow-up icon-white"></i>&nbsp;' . vtranslate($value, $this->getModuleName()) . '</span>';
+
+                } else if ($this->get('callstatus') == 'no-answer') {
+
+                    $callStatus = '<span class="label label-important"><i class="icon-arrow-up icon-white"></i>&nbsp;' . vtranslate($value, $this->getModuleName()) . '</span>';
+
+                } else {
+
+                    $callStatus = '<span class="label label-warning"><i class="icon-arrow-up icon-white"></i>&nbsp;' . vtranslate($value, $this->getModuleName()) . '</span>';
+
+                }
+            } else if ($recordInstance->get('direction') == 'inbound') {
+                if ($this->get('callstatus') == 'ringing' || $this->get('callstatus') == 'in-progress') {
+
+                    $callStatus = '<span class="label label-info"><i class="icon-arrow-down icon-white"></i>&nbsp;' . vtranslate($value, $this->getModuleName()) . '</span>';
+
+                } else if ($this->get('callstatus') == 'completed') {
+
+                    $callStatus = '<span class="label label-success"><i class="icon-arrow-down icon-white"></i>&nbsp;' . vtranslate($value, $this->getModuleName()) . '</span>';
+
+                } else if ($this->get('callstatus') == 'no-answer') {
+
+                    $callStatus = '<span class="label label-important"><i class="icon-arrow-down icon-white"></i>&nbsp;' . vtranslate($value, $this->getModuleName()) . '</span>';
+
+                } else {
+
+                    $callStatus = '<span class="label label-warning"><i class="icon-arrow-down icon-white"></i>&nbsp;' . vtranslate($value, $this->getModuleName()) . '</span>';
+
+                }
+            }
+            return $callStatus;
+        }
+
+        return $fieldModel->getDisplayValue($this->get($fieldName), $recordId, $this);
     }
 }
 ?>

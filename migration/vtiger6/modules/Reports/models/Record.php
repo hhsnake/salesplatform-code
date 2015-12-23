@@ -440,8 +440,64 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 
 			$this->saveAdvancedFilters();
 		}
-	}
+                
+        //SalesPlatform.ru begin add widget on dashboards
+        if($this->get('reporttype') == 'chart') {
 
+            /* Search which modules need add widget */
+            $widgetModules = array('Home');
+            $result = $db->query("SELECT folderid FROM vtiger_reportfolder WHERE foldername='Templates';");
+            if( ($resultRow = $db->fetchByAssoc($result)) && ($resultRow['folderid'] == $this->get('folderid')) ) {
+                $widgetModules[] = $this->getPrimaryModule();
+                foreach(explode(":", $this->getSecondaryModules()) as $secondaryModule) {
+                    if($secondaryModule != '') {
+                        $widgetModules[] = $secondaryModule;
+                    }
+                }
+            }
+
+            /* Add widget to modules if need */
+            foreach($widgetModules as $module) {
+                $moduleTabId = getTabid($module);
+
+                /* Exists or not */
+                $queryResult = $db->pquery("SELECT linkid FROM vtiger_links WHERE linkurl=? AND tabid=?", array(
+                    $this->getWidgetReportURL(),
+                    $moduleTabId
+                ));
+
+                /* Create widget or update */
+                $widgetData = $db->fetch_row($queryResult);
+                if(!$widgetData) {
+                    $db->pquery("INSERT INTO vtiger_links(linkid, tabid, linktype, linklabel, linkurl, linkicon, sequence) VALUES(?,?,?,?,?,?,?)", array(
+                        $db->getUniqueID('vtiger_links'),
+                        $moduleTabId,
+                        'DASHBOARDWIDGET',
+                        vtranslate('SINGLE_Reports', 'Reports') . ' «' .$this->getName() . '»',
+                        $this->getWidgetReportURL(),
+                        '',
+                        0
+                    ));
+                } else {
+                    $db->pquery("UPDATE vtiger_links SET linklabel=? WHERE linkid=?", array(
+                        vtranslate('SINGLE_Reports', 'Reports') . ' «' .$this->getName() . '»',
+                        $widgetData['linkid']
+                    ));
+                }
+            }  
+        }
+        //SalesPlatform.ru end
+	}
+        
+    //SalesPLatform.ru begin
+    public function getWidgetReportURL() {
+        if($this->get('reporttype') == 'chart') {
+            return 'index.php?module=' . $this->getModuleName() . '&view=ShowWidget&name=ChartReportWidget&record=' . $this->getId();
+        }
+        return '';
+    }
+    //SalesPlatform.ru end
+        
 	/**
 	 * Function saves Reports Sorting Fields
 	 */
@@ -796,7 +852,10 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 				foreach ($blocks as $fieldType => $fieldName) {
 					$fieldDetails = explode(':', $fieldType);
                     if($fieldName == 'Send Reminder' && $primaryModule == 'Calendar') continue;
-					if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") {
+                    //SalesPlatform.ru begin
+                    if ( ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") && !$this->isLinkField($fieldDetails, $primaryModule) ) {
+					//if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") {
+                    //SalesPlatform.ru end
 						$calculationFields[$fieldType] = $fieldName;
 					}
 				}
@@ -827,7 +886,10 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 						foreach ($blocks as $fieldType => $fieldName) {
 							$fieldDetails = explode(':', $fieldType);
                             if($fieldName == 'Send Reminder' && $secondaryModule == 'Calendar') continue;
-							if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") {
+                            //SalesPlatform.ru begin
+							if ( ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") && !$this->isLinkField($fieldDetails, $secondaryModule) ) {
+                            //if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") {
+                            //SalesPlatform.ru end
 								$calculationFields[$fieldType] = $fieldName;
 							}
 						}
@@ -838,7 +900,21 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		}
 		return $secondaryModuleCalculationFields;
 	}
-
+    
+    //SalesPlatform.ru begin
+    function isLinkField($fieldDetails, $moduleName) {
+        
+        /* Get field by name */
+        $isLinkField = false;
+        $fieldModel = Vtiger_Field_Model::getInstance($fieldDetails[3], Vtiger_Module_Model::getInstance($moduleName));
+        if($fieldModel != null) {
+            $isLinkField = ($fieldModel->isOwnerField() || $fieldModel->isReferenceField());
+        }
+        
+        return $isLinkField;
+    }
+    //SalesPlatform.ru end
+    
 	/**
 	 * Function to get Calculation fields for entire Report
 	 * @return <Array> report calculation fields
@@ -955,13 +1031,13 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 
 		$this->reportRun = ReportRun::getInstance($this->getId());
 
-        // SalesPlatform.ru begin
-        if(in_array($this->reportRun->reporttype, getCustomReportsList())) {
-            $filterQuery = $this->reportRun->generateAdvFilterArray($advancedFilterCriteria);
-        } else {
-            $filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria, $advancedFilterCriteriaGroup);
-        }
-        // SalesPlatform.ru end
+                // SalesPlatform.ru begin
+                if(in_array($this->reportRun->reporttype, getCustomReportsList())) {
+                    $filterQuery = $this->reportRun->generateAdvFilterArray($advancedFilterCriteria);
+                } else {
+                    $filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria, $advancedFilterCriteriaGroup);
+                }
+                // SalesPlatform.ru end
 
 		return $filterQuery;
 	}

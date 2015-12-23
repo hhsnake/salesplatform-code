@@ -135,7 +135,7 @@
 												{/if}
 												{if isset($smarty.request.statusError)}
 													<div class="alert alert-error">
-														<p>Сервер исходящнй почты не настроен</p>
+														<p>Сервер исходящей почты не настроен</p>
 													</div>
 												{/if}
 												<div class="control-group">

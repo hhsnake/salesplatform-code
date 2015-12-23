@@ -39,7 +39,6 @@ for($i = 0; $i <= count($unWanted); $i++){
     }
 }
 
-// Ticket #2629
 global $adb;
 $query = 'SELECT tabid FROM vtiger_tab where name = ?';
 $result = $adb->pquery($query, array('Accounts'));
@@ -49,7 +48,7 @@ Migration_Index_View::ExecuteQuery('UPDATE vtiger_relatedlists SET name=? WHERE 
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_relatedlists SET name=? WHERE tabid=? AND label=?',
     array('get_dependents_list', $tabId, 'Consignment'));
 
-// Begin Ticket #2601 Creating Workflow for Updating Inventory Stock for Invoice
+// Begin creating Workflow for Updating Inventory Stock for Invoice
 $checkQuery = "SELECT * FROM com_vtiger_workflows WHERE module_name = ? AND summary = ?";
 $result = $adb->pquery($checkQuery, array('Invoice', 'UpdateInventoryProducts On Every Save'));
 if($adb->num_rows($result) < 1) {
@@ -61,14 +60,14 @@ if($adb->num_rows($result) < 1) {
     $vtWorkFlow->save($invWorkFlow);
 }
 
-// Begin Ticket #2668
+// Begin
 $query = 'SELECT blockid FROM vtiger_settings_blocks WHERE label = ?';
 $result = $adb->pquery($query, array('LBL_INTEGRATION'));
 $blockId = $adb->query_result($result, 0 ,'blockid');
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_field SET blockid = ? WHERE name = ? OR name = ?',
     array($blockId, 'LBL_CML_SETTINGS', 'LBL_SOCIALCONNECTOR_SETTINGS'));
 
-// Begin Ticket #2789
+// Begin
 $query = 'SELECT tabid FROM vtiger_tab where name = ?';
 $result = $adb->pquery($query, array('PBXManager'));
 $tabId = $adb->query_result($result, 0 ,'tabid');
@@ -77,7 +76,7 @@ Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET fieldname = ? WHERE 
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET fieldname = ? WHERE tabid = ? AND fieldname = ?',
     array('modifiedtime', $tabId, 'ModifiedTime'));
 
-// Begin Ticket #2823
+// Begin
 $relModulesArray = array('Contacts', 'Leads','Accounts');
 
 $query = 'SELECT tabid FROM vtiger_tab where name = ?';

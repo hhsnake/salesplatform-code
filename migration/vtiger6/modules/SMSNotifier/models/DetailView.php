@@ -28,11 +28,14 @@ class SMSNotifier_DetailView_Model extends Vtiger_DetailView_Model {
 			$linkModel = $linkModelDetailViewList[$i];
 			if ($linkModel->get('linklabel') == 'LBL_CHECK_STATUS') {
 				$linkModelList['DETAILVIEW'][$i]->set('linklabel', vtranslate('LBL_CHECK_STATUS', 'SMSNotifier'));
+                //SalesPlatform.ru begin
 				$linkModelList['DETAILVIEW'][$i]->set('linkurl', $recordModel->getCheckStatusUrl());
+                $linkModelList['DETAILVIEW'][$i]->set('linkurl', 'javascript:SMSNotifier_Detail_Js.checkStatus("'.$recordModel->getCheckStatusUrl().'",this);');
+                //SalesPlatform.ru end
 				break;
 			}
 		}
-		
+        
 		return $linkModelList;
 	}
 }

@@ -116,7 +116,7 @@ class CmlCatalog {
     public function toRestDescription() {
         $restDescription['bookname'] = $this->name;
         $restDescription['active'] = 1;           //active catalog
-        $restDescription['1c_id'] = $this->oneEsIdentifier;
+        $restDescription['one_s_id'] = $this->oneEsIdentifier;
         $restDescription['currency_id'] = $this->currency;
         
         return $restDescription;

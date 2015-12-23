@@ -13,8 +13,11 @@
 class Vtiger_Widget_Model extends Vtiger_Base_Model {
 
 	public function getWidth() {
-		$largerSizedWidgets = array('GroupedBySalesPerson', 'PipelinedAmountPerSalesPerson', 'GroupedBySalesStage', 'Funnel Amount','LeadsByIndustry');
-		$title = $this->getName();
+        //SalesPlatform.ru begin
+		$largerSizedWidgets = array('SalesFunnelWidget', 'GroupedBySalesPerson', 'PipelinedAmountPerSalesPerson', 'GroupedBySalesStage', 'Funnel Amount','LeadsByIndustry');
+        //$largerSizedWidgets = array('GroupedBySalesPerson', 'PipelinedAmountPerSalesPerson', 'GroupedBySalesStage', 'Funnel Amount','LeadsByIndustry');
+		//SalesPlatform.ru end
+        $title = $this->getName();
 		if(in_array($title, $largerSizedWidgets)) {
 			$this->set('width', '6');
 		}
@@ -218,4 +221,12 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 	public function getDefaultWidgets() {
 		return array();
 	}
+        
+    //SalesPlatform.ru begin
+    public function applyTemplateRecordId($recordId) {
+        if($recordId != '') {
+            $this->set('linkurl', $this->get('linkurl') . '&report_record_id=' . $recordId);
+        }
+    }
+    //SalesPlatform.ru end
 }

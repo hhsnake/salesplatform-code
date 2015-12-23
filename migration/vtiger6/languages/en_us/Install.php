@@ -68,4 +68,7 @@ $languageStrings = array(
         'LBL_MYSQLI_CONNECT_SUPPORT'=>'mysqli support',
         'LBL_OPEN_SSL'=>'openssl support',
         'LBL_CURL'=>'cURL support',
+    //SalesPlatform.ru begin
+    'ERR_NO_UTF8_OR_NO_ALTER_RIGHTS' => 'No utf8 support or no user access to alter database',
+    //SalesPlatform.ru end
 );

@@ -381,7 +381,10 @@ class SPPayments extends CRMEntity {
                         $sql = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,templateid) values (?,?,?,?,?,?,?)";
                         $params = array($templatename, $modulename, $body, $header_size, $footer_size, $page_orientation, $templateid);
                         $adb->pquery($sql, $params);
-                        
+
+            $modFocus = CRMEntity::getInstance('SPPayments');
+            $modFocus->setModuleSeqNumber('configure', 'SPPayments', '', '1');
+
 		} else if($event_type == 'module.disabled') {
                         $this->unlinkDetails($modulename);
 			// TODO Handle actions when this module is disabled. 

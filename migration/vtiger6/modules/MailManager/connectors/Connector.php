@@ -340,7 +340,10 @@ class MailManager_Connector_Connector {
 	 * @param Integer $maxLimit - Number of mails
 	 */
 	public function searchMails($query, $folder, $start, $maxLimit) {
-		$nos = imap_search($this->mBox, $query);
+        // SalesPlatform.ru begin
+		$nos = imap_search($this->mBox, $query, SE_FREE, 'UTF-8');
+        //$nos = imap_search($this->mBox, $query);
+        // SalesPlatform.ru end
 
 		if (!empty($nos)) {
 			$nmsgs = count($nos);

@@ -26,8 +26,8 @@ class ProductsController extends InventoryController {
      * @param array $productRest
      */
     private function addXmlIdentifier($xmlProduct, $productRest) {
-        if($productRest['1c_id'] != null ) {
-            $xmlProduct->addChild("Ид", $productRest['1c_id']); 
+        if($productRest['one_s_id'] != null ) {
+            $xmlProduct->addChild("Ид", $productRest['one_s_id']); 
         } else {
             $xmlProduct->addChild("Ид", $productRest['productname']); 
         }

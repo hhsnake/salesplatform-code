@@ -17,6 +17,10 @@ $languageStrings = array(
 	'Comment'                      => 'Комментарий'      , 
 	'Creator'                      => 'Автор'                  , 
 	'Related To Comments'          => 'Относится к Комментарию', 
+    //SalesPlatform.ru begin
+	'UserId' => 'Идентификатор пользователя',
+    'Customer' => 'Клиент',
+    //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

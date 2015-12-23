@@ -354,6 +354,13 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 
 			$this->importedRecordInfo[$rowId] = $entityInfo;
 			$this->updateImportStatus($rowId, $entityInfo);
+            
+            //SalesPlatform.ru begin
+            if($entityInfo['id'] != null) {
+                $recordId = end(explode("x", $entityInfo['id']));
+                $this->entityData[] = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
+            }
+            //SalesPlatform.ru end
 		}
         if($this->entityData) {
             $entity = new VTEventsManager($adb);

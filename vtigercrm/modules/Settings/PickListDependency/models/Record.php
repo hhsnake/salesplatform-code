@@ -53,7 +53,10 @@ class Settings_PickListDependency_Record_Model extends Settings_Vtiger_Record_Mo
 		$tabId = getTabid($this->get('sourceModule'));
 
 		$query="select vtiger_field.fieldlabel,vtiger_field.fieldname FROM vtiger_field" .
-				" where displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','16') " .
+                //SalesPlatform.ru begin
+				" where displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','16', '33') " .
+                //" where displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','16') " .
+                //SalesPlatform.ru end
 				" and vtiger_field.presence in ('0','2') and vtiger_field.block != 'NULL'";
 
 		$result = $db->pquery($query, array($tabId));

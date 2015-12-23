@@ -40,7 +40,15 @@ jQuery.Class('Settings_MailConverter_List_Js',{
 				if(typeof response.result != 'undefined'){
 					var params = {};
 					params.record = response.result.id;
-					Settings_MailConverter_List_Js.loadMailBox(params);
+                    //SalesPlatform.ru begin
+                    Vtiger_Helper_Js.showPnotify({
+                        title : app.vtranslate('JS_MESSAGE'),
+                        text: response.result.message,
+                        animation: 'show',
+                        type: 'success'
+                    });
+					//Settings_MailConverter_List_Js.loadMailBox(params);
+                    //SalesPlatform.ru end
 				} else {
 					var params = {
 						title : app.vtranslate('JS_MESSAGE'),

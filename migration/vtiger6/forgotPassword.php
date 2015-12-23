@@ -64,7 +64,12 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['email'])) {
         // SalesPlatform.ru end
 
         // SalesPlatform.ru begin
-        setMailerProperties($mail, 'Восстановление пароля', $content, null, $username, $email);
+        $fromEmail = null;
+        $result = $adb->pquery('select from_email_field from vtiger_systems where server_type=?', array('email'));
+        if ($adb->num_rows($result) > 0) {
+            $fromEmail = $adb->query_result($result, 0, 'from_email_field');
+        }
+        setMailerProperties($mail, 'Восстановление пароля', $content, $fromEmail, $username, $email);
         //setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $content, 'support@vtiger.com', $username, $email);
         // SalesPlatform.ru end
 

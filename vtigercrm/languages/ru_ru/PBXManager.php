@@ -8,18 +8,18 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Asterisk'                     => 'Asterisk'                    , 
-	'PBXManager'                   => 'Менеджер PBX'        , 
-	'SINGLE_PBXManager'            => 'Запись PBX'        , // KEY 5.x: PBXManager
-	'LBL_CALL_INFORMATION'         => 'Информиация о звонке', 
-	'Call From'                    => 'Звонок От'           , 
-	'Call To'                      => 'Звонок'                , 
-	'Time Of Call'                 => 'Время Звонка'     , 
-	'PBXManager ID'                => 'ID Записи PBX',
+	'Asterisk'                     => 'Asterisk',
+	'PBXManager'                   => 'Звонки',
+	'SINGLE_PBXManager'            => 'Звонок',
+	'LBL_CALL_INFORMATION'         => 'Информиация о Звонке',
+	'Call From'                    => 'Звонок от',
+	'Call To'                      => 'Звонок',
+	'Time Of Call'                 => 'Время Звонка',
+	'PBXManager ID'                => 'ID записи Звонка',
     
     //Blocks
-    'LBL_PBXMANAGER_INFORMATION' => 'Детали звонка',
-    'LBL_CUSTOM_INFORMATION'=>'Информация',
+    'LBL_PBXMANAGER_INFORMATION'   => 'Детали Звонка',
+    'LBL_CUSTOM_INFORMATION'       => 'Информация',
     
     // list view settings links
     'LBL_SERVER_CONFIGURATION' => 'Настройка конфигурации',
@@ -33,20 +33,20 @@ $languageStrings = array(
   
     // Fields
     'Total Duration' => 'Длительность (сек)',
-    'Recording URL' => 'Запись звонка',
+    'Recording URL' => 'Запись Звонка',
     
-    'SINGLE_PBXManager' => 'Детали звонка' ,
-    'Call Status' => 'Статус звонка',
+    'SINGLE_PBXManager' => 'Детали Звонка' ,
+    'Call Status' => 'Статус',
     'Customer Number' => 'Телефон клиента',
     'Customer' => 'Клиент',
     'User' => 'Пользователь',
-    'Start Time' => 'Время начала звонка',
+    'Start Time' => 'Время начала Звонка',
     'Office Phone' => 'Рабочий телефон',
-    'Direction' => 'Тип звонка',
+    'Direction' => 'Тип Звонка',
     'Bill Duration' => 'Время разговора (сек)',
     'Gateway' => 'Имя шлюза',
     'Customer Type' => 'Тип клиента',
-    'End Time' => 'Время завершения звонка',
+    'End Time' => 'Время завершения Звонка',
     'Source UUID' => 'Идентификатор источника',
 
     //SalesPlatform.ru begin
@@ -57,6 +57,9 @@ $languageStrings = array(
     'completed' => 'Завершен',
     'busy' => 'Занято',
     'no-answer' => 'Нет ответа',
+    'Answered elsewhere' => 'Ответили в другом месте',
+    'No user responding' => 'Нет ответа',
+    'Circuit/channel congestion' => 'Линия занята',
     'Incoming Line Name' => 'Входящая линия',
     //SalesPlatform.ru end
 );

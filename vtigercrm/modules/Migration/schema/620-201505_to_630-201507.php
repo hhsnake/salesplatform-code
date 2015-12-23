@@ -68,7 +68,7 @@ for($i = 0; $i <= count($unWanted); $i++){
     }
 }
 
-// Begin Ticket #2884 Multiple organizations
+// Begin Multiple organizations
 Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_organizationdetails ADD company varchar(200) COLLATE utf8_unicode_ci DEFAULT 'Default'", array());
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_organizationdetails SET company='Default'", array());
 
@@ -202,9 +202,9 @@ Migration_Index_View::ExecuteQuery("update sp_templates set spcompany='All'", ar
 if(defined('VTIGER_UPGRADE')) {
     Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_modentity_num ADD spcompany varchar(200) COLLATE utf8_unicode_ci DEFAULT ''", array());
 }
-// End Ticket #2884
+// End
 
-// Begin Ticket #2744 Update pdf templates
+// Begin Update pdf templates
 if(defined('INSTALLATION_MODE')) {
     $invoiceTemplate = '{header}
 
@@ -798,7 +798,7 @@ if(defined('INSTALLATION_MODE')) {
 </p>
 {/ending}';
     Migration_Index_View::ExecuteQuery("UPDATE sp_templates SET template = ? WHERE name = 'Счет-фактура'", array($factura));
-// End Ticket #2884
+// End
 
     $torg = '{header}
 <!-- Table marking up header, goods table and footer -->
@@ -1533,7 +1533,7 @@ if(defined('INSTALLATION_MODE')) {
 {/content}';
     Migration_Index_View::ExecuteQuery("UPDATE sp_templates SET template = ? WHERE name = 'Приходный кассовый ордер'", array($order));
 }
-// End Ticket #2744
+// End
 
 /* Apply new changes for PBX */
 updateVtlibModule('PBXManager', 'packages/vtiger/mandatory/PBXManager.zip');

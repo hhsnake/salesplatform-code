@@ -183,7 +183,10 @@ class Vtiger_MailBox {
 			$imapfolders = imap_list($this->_imap, $this->_imapurl, '*');
 			if($imapfolders) {
 				foreach($imapfolders as $imapfolder) {
-					$folders[] = substr($imapfolder, strlen($this->_imapurl));
+                    // SalesPlatform.ru begin Convert character encoding 
+                    $folders[] = mb_convert_encoding(substr($imapfolder, strlen($this->_imapurl)), 'UTF-8', 'UTF7-IMAP');
+					//$folders[] = substr($imapfolder, strlen($this->_imapurl));
+                    // SalesPlatform.ru end 
 				}
 			} else {
                             return imap_last_error();

@@ -23,11 +23,11 @@ class Inventory_ExportPDF_Action extends Vtiger_Action_Controller {
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
                 
-                //SalesPlatform.ru begin get PDF template
-                $templateId = $request->get('templateid');
+        //SalesPlatform.ru begin get PDF template
+        $templateId = $request->get('templateid');
 		$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
 		//$recordModel->getPDF();
-                $recordModel->getSalesPlatformPDF($templateId);
-                //SalesPlatform.ru end
+        $recordModel->getSalesPlatformPDF($templateId);
+        //SalesPlatform.ru end
 	}
 }

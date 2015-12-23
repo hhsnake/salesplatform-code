@@ -147,20 +147,27 @@ class Settings_Groups_Record_Model extends Settings_Vtiger_Record_Model {
 	public function recalculate($oldUsersList) {
 		set_time_limit(vglobal('php_max_execution_time'));
 		require_once('modules/Users/CreateUserPrivilegeFile.php');
-
-		$userIdsList = array();
-		foreach ($oldUsersList as $userId => $userRecordModel) {
-			$userIdsList[$userId] = $userId;
-		}
-
-		$this->members = null;
-		foreach ($this->getUsersList(true) as $userId => $userRecordModel) {
-			$userIdsList[$userId] = $userId;
-		}
-
-		foreach ($userIdsList as $userId) {
-			createUserPrivilegesfile($userId);
-		}
+        
+        //SalesPlatform.ru begin
+		/* Simple way - recalculate all users privileges files */
+        foreach(Users_Record_Model::getAll() as $userModel) {
+            createUserPrivilegesfile($userModel->getId());
+        }
+        
+        //$userIdsList = array();
+		//foreach ($oldUsersList as $userId => $userRecordModel) {
+		//	$userIdsList[$userId] = $userId;
+		//}
+        //
+		//$this->members = null;
+		//foreach ($this->getUsersList(true) as $userId => $userRecordModel) {
+		//	$userIdsList[$userId] = $userId;
+		//}
+        //
+		//foreach ($userIdsList as $userId) {
+		//	createUserPrivilegesfile($userId);
+		//}
+        //SalesPlatform.ru end
 	}
 
 	/**

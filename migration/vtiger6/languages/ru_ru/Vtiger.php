@@ -831,7 +831,7 @@ $languageStrings = array(
     'Portal'                       => 'Наши сайты',
     'SPUnits'                      => 'Единицы измерения',
     'SPPDFTemplates'               => 'Шаблоны PDF',
-    'PBXManager'                   => 'Менеджер PBX',
+    'PBXManager'                   => 'Звонки',
     'Reports'                      => 'Отчеты',
     'LBL_DELETE_USER_PERMANENTLY'  => 'Удалить Пользователя навсегда',
     'Service Name'                 => 'Название Услуги',  
@@ -843,7 +843,6 @@ $languageStrings = array(
     'Manuf. Country'               => 'Страна происхождения',
 	'Customs ID'                   => 'Номер ГТД',
     'Mf. Country Code'             => 'Код страны',
-    '1c_id'                        => '1C ID',
     'NOT_A_BUNDLE'                 => 'Не пакет',
     'Last SMS Date'                => 'Дата последнего SMS',
     'LBL_MARK_AS_HELD'             => 'Отметить как завершенное',
@@ -874,6 +873,14 @@ $languageStrings = array(
     'Other Address' => 'Доп. адрес',
 	'Default'                      => 'По умолчанию',
     'ReasonToEdit'                 => 'Причина изменения',
+    'Self Company'                 => 'Юр. лицо',
+    'LBL_CARD_WIDGETS' => 'Виджеты Карточки',
+    'LBL_EVENT_INFORMATION' => 'Детали События' ,
+    'LBL_CREATE_FOLLOWUP_EVENT' => 'Создать напоминание',
+    'LBL_EMAIL_INFORMATION' => 'Информация',
+    'Emails_Block1' => 'Время создания',
+    'Emails_Block2' => 'Тема',
+    'Emails_Block3' => 'Описание',
     // SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
@@ -1011,8 +1018,8 @@ $jsLanguageStrings = array(
     'JS_NO_RESULTS_FOUND' => 'Результаты не найдены',
     'JS_PBX_CALL_FROM' => 'Звонок от',
     'JS_PBX_FILL_ALL_FIELDS' => 'Пожалуйста, заполните все поля',
-    'JS_PBX_INCOMING_CALL' => 'Входящий звонок',
-    'JS_PBX_OUTGOING_FAILURE' => 'Сбой при исходящем звонке',
+    'JS_PBX_INCOMING_CALL' => 'Входящий Звонок',
+    'JS_PBX_OUTGOING_FAILURE' => 'Сбой при исходящем Звонке',
     'JS_PBX_OUTGOING_SUCCESS' => 'Ожидание ответа абонента',
     'JS_PBX_ENTER_EMAIL' => 'Ведите E-mail',
     'JS_SAVE' => 'Сохранить',
@@ -1043,6 +1050,14 @@ $jsLanguageStrings = array(
     'Current Date' => 'Текущая дата',
     'Current Time' => 'Текущее время',
     'JS_SUITABLE_VTIGER_FIELD_NOT_AVAILABLE_FOR_MAPPING' => 'Не доступно для сопоставления',
+    'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_INSTALL_THIS_EXTENSION' => 'Вы уверены, что хотите установить данное расширение?',
+
+    'JS_NO_REPORT_WIDGET_DATA_AVAILABLE' => 'Нет данных',
+ 	'JS_ACCEPT_MOBILE_MASK' => 'В мобильном телефоне должно быть от 11 до 15 цифр', 
+    'JS_MASS_EDIT_NOT_SUCCESSFULL' => 'Массовое изменение некоторых записей не произведено',
+    'JS_NO_EDIT_PERMISSION' => 'У Вас недостаточно прав для изменения элементов Календаря',
+    'JS_PERMISSION_DENIED' => 'Доступ запрещен',
+    'JS_SELECT_RECORDS_TO_MERGE_FROM_SAME_GROUP' => 'Для объединения Вы должны выбрать записи в одной группе',
     //SalesPlatform.ru end
 );
 

@@ -990,60 +990,213 @@ jQuery.Class("Vtiger_Edit_Js",{
 
 		var sourcePickListNames = "";
 		for(var i=0;i<sourcePicklists.length;i++){
-			sourcePickListNames += '[name="'+sourcePicklists[i]+'"],';
+            //SalesPlatform.ru begin
+			sourcePickListNames += 'select[name*="'+sourcePicklists[i]+'"],';
+            //sourcePickListNames += '[name="'+sourcePicklists[i]+'"],';
+            //SalesPlatform.ru end
 		}
 		var sourcePickListElements = container.find(sourcePickListNames);
-
-		sourcePickListElements.on('change',function(e){
-			var currentElement = jQuery(e.currentTarget);
-			var sourcePicklistname = currentElement.attr('name');
-
-			var configuredDependencyObject = picklistDependencyMapping[sourcePicklistname];
-			var selectedValue = currentElement.val();
-			var targetObjectForSelectedSourceValue = configuredDependencyObject[selectedValue];
-			var picklistmap = configuredDependencyObject["__DEFAULT__"];
-
-			if(typeof targetObjectForSelectedSourceValue == 'undefined'){
-				targetObjectForSelectedSourceValue = picklistmap;
-			}
-			jQuery.each(picklistmap,function(targetPickListName,targetPickListValues){
-				var targetPickListMap = targetObjectForSelectedSourceValue[targetPickListName];
-				if(typeof targetPickListMap == "undefined"){
-					targetPickListMap = targetPickListValues;
-				}
-				var targetPickList = jQuery('[name="'+targetPickListName+'"]',container);
-				if(targetPickList.length <= 0){
-					return;
-				}
-
-				var listOfAvailableOptions = targetPickList.data('availableOptions');
-				if(typeof listOfAvailableOptions == "undefined"){
-					listOfAvailableOptions = jQuery('option',targetPickList);
-					targetPickList.data('available-options', listOfAvailableOptions);
-				}
-
-				var targetOptions = new jQuery();
-				var optionSelector = [];
-				optionSelector.push('');
-				for(var i=0; i<targetPickListMap.length; i++){
-					optionSelector.push(targetPickListMap[i]);
-				}
-				
-				jQuery.each(listOfAvailableOptions, function(i,e) {
-					var picklistValue = jQuery(e).val();
-					if(jQuery.inArray(picklistValue, optionSelector) != -1) {
-						targetOptions = targetOptions.add(jQuery(e));
-					}
-				})
-				var targetPickListSelectedValue = '';
-				var targetPickListSelectedValue = targetOptions.filter('[selected]').val();
-				targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
-			})
+        
+        //SalesPlatform.ru begin
+        var thisInstance = this;
+        //SalesPlatform.ru end
+		sourcePickListElements.on('change', function(e){
+            //SalesPlatform.ru begin
+            thisInstance.onPicklistChange(e, container);
+            
+            //var currentElement = jQuery(e.currentTarget);
+			//var sourcePicklistname = currentElement.attr('name');
+            //
+			//var configuredDependencyObject = picklistDependencyMapping[sourcePicklistname];
+			//var selectedValue = currentElement.val();
+			//var targetObjectForSelectedSourceValue = configuredDependencyObject[selectedValue];
+			//var picklistmap = configuredDependencyObject["__DEFAULT__"];
+            //
+			//if(typeof targetObjectForSelectedSourceValue == 'undefined'){
+			//	targetObjectForSelectedSourceValue = picklistmap;
+			//}
+			//jQuery.each(picklistmap,function(targetPickListName,targetPickListValues){
+			//	var targetPickListMap = targetObjectForSelectedSourceValue[targetPickListName];
+			//	if(typeof targetPickListMap == "undefined"){
+			//		targetPickListMap = targetPickListValues;
+			//	}
+			//	var targetPickList = jQuery('[name="'+targetPickListName+'"]',container);
+			//	if(targetPickList.length <= 0){
+			//		return;
+			//	}
+            //
+			//	var listOfAvailableOptions = targetPickList.data('availableOptions');
+			//	if(typeof listOfAvailableOptions == "undefined"){
+			//		listOfAvailableOptions = jQuery('option',targetPickList);
+			//		targetPickList.data('available-options', listOfAvailableOptions);
+			//	}
+            //
+			//	var targetOptions = new jQuery();
+			//	var optionSelector = [];
+			//	optionSelector.push('');
+			//	for(var i=0; i<targetPickListMap.length; i++){
+			//		optionSelector.push(targetPickListMap[i]);
+			//	}
+			//	
+			//	jQuery.each(listOfAvailableOptions, function(i,e) {
+			//		var picklistValue = jQuery(e).val();
+			//		if(jQuery.inArray(picklistValue, optionSelector) != -1) {
+			//			targetOptions = targetOptions.add(jQuery(e));
+			//		}
+			//	})
+			//	var targetPickListSelectedValue = '';
+			//	var targetPickListSelectedValue = targetOptions.filter('[selected]').val();
+			//	targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
+            //})
+            //SalesPlatform.ru end
 		});
 
 		//To Trigger the change on load
 		sourcePickListElements.trigger('change');
 	},
+    
+    //SalesPlatform.ru begin
+    onPicklistChange : function(e, container) {
+        
+        /* Prepare data of dependency and selected values of picklist */
+        var currentElement = $(e.currentTarget);
+        var sourcePicklistName = currentElement.attr('name').replace("[]", "");
+        var picklistDependencyElement = $('[name="picklistDependency"]', container);
+        var picklistDependencyMap = JSON.parse(picklistDependencyElement.val());
+        var configuredDependencyObject = picklistDependencyMap[sourcePicklistName];
+        var selectedValue = currentElement.val();
+        var dependencyForSelectedValues = {};
+        
+        /* Get selectable values for dependent picklist */
+        if($.isArray(selectedValue)) {
+            dependencyForSelectedValues = this.getDependentMultipicklistValues(selectedValue, configuredDependencyObject);
+        } else {
+            dependencyForSelectedValues = this.getDependentPicklistValues(selectedValue, configuredDependencyObject);
+        }
+        var picklistMap = configuredDependencyObject["__DEFAULT__"];
+        if(typeof dependencyForSelectedValues == 'undefined'){
+            dependencyForSelectedValues = picklistMap;
+        }
+        
+        /* Reconfigurate dependent picklists */
+        $.each(picklistMap, function(targetPickListName, targetPickListValues){
+            var targetPickListMap = dependencyForSelectedValues[targetPickListName];
+            if(typeof targetPickListMap == "undefined"){
+                targetPickListMap = targetPickListValues;
+            }
+            
+            /* Replace options with remember selected */
+            var targetPickList = $('select[name*="' + targetPickListName + '"]', container); 
+            var listOfAvailableOptions = targetPickList.data('availableOptions');
+            if(typeof listOfAvailableOptions == "undefined"){
+                listOfAvailableOptions = $('option', targetPickList);
+                targetPickList.data('available-options', listOfAvailableOptions);
+            }
+            
+            var currentSelectedValues = $(targetPickList).val();
+            var optionSelector = [];
+            optionSelector.push('');
+            for(var i=0; i<targetPickListMap.length; i++){
+                optionSelector.push(targetPickListMap[i]);
+            }
+            
+            var targetOptions = new $();
+            $.each(listOfAvailableOptions, function(i,e) {
+                $(e).prop("selected", false);
+                var picklistValue = $(e).val();
+                if($.inArray(picklistValue, optionSelector) != -1) {
+                    targetOptions = targetOptions.add($(e));
+                }
+            });
+            targetPickList.html(targetOptions);
+            
+            /* Set selected options which include in dependency */
+            if(currentSelectedValues != null) {
+                if($.isArray(currentSelectedValues)) {
+                    for(var selectIndex = 0; selectIndex < currentSelectedValues.length; selectIndex++) {
+                        var selectedValue = currentSelectedValues[selectIndex];
+                        if($.inArray(selectedValue, targetPickListMap) !== -1) {
+                            $("option[value='" + selectedValue + "']", targetPickList).prop("selected", true);
+                        }
+                    }
+                } else {
+                    targetPickList.val(currentSelectedValues);
+                }
+            }
+            
+            /* Refresh select2 view */
+            if($(targetPickList).attr('name').indexOf("[]") !== -1) {
+                app.getSelect2ElementFromSelect(targetPickList).select2('destroy'); 
+                app.showSelect2ElementView(targetPickList);
+            } else {
+                targetPickList.trigger("liszt:updated");
+            }
+        })
+    },
+    
+    /**
+     * Return dependent picklist values for changend multipicklist
+     * 
+     * @param {type} selectedValues
+     * @param {type} configuredDependencyObject
+     * @returns {unresolved}
+     */
+    getDependentMultipicklistValues : function(selectedValues, configuredDependencyObject) {
+        var dependentPicklistValuesMap = {};
+        for(var selectedValueIndex = 0; selectedValueIndex < selectedValues.length; selectedValueIndex++) {
+            var currentValue = selectedValues[selectedValueIndex];
+            var targetPicklistValuesMap = configuredDependencyObject[currentValue];
+
+            /* Iterate all values in dependency */
+            for(var masterPicklistValue in targetPicklistValuesMap) {
+                this.mergeMultiPicklistDependencyValues(dependentPicklistValuesMap, masterPicklistValue,  targetPicklistValuesMap);
+            }
+        }
+        
+        return dependentPicklistValuesMap;
+    },
+    
+    /**
+     * Merges select values for dependent picklist
+     * @param {type} dependentPicklistValues
+     * @param {type} masterPicklistValue
+     * @param {type} targetPicklistValuesMap
+     * @returns {undefined}
+     */
+    mergeMultiPicklistDependencyValues : function(dependentPicklistValues, masterPicklistValue, targetPicklistValuesMap) {
+        if(masterPicklistValue in dependentPicklistValues) {
+            var mergeValues = dependentPicklistValues[masterPicklistValue];
+            var additionalSelectValues = [];
+            var maxMapIndex = 0;
+            var targetValues = targetPicklistValuesMap[masterPicklistValue];
+            for(var targetValueIndex = 0; targetValueIndex < targetValues.length; targetValueIndex++) {
+                var targetValue = targetValues[targetValueIndex];
+                var valueNotIncluded = true;
+                for(var finalTargetProp = 0; finalTargetProp < mergeValues.length; finalTargetProp++) {
+                    if(targetValue === mergeValues[finalTargetProp]) {
+                        valueNotIncluded = false;
+                    }
+                    maxMapIndex = finalTargetProp;
+                }
+
+                if(valueNotIncluded) {
+                    additionalSelectValues.push(targetValue);
+                }
+            }
+
+            for(var index = 0; index < additionalSelectValues.length; index++) {
+                mergeValues[maxMapIndex + index + 1] = additionalSelectValues[index];
+            }
+            dependentPicklistValues[masterPicklistValue] = mergeValues;
+        } else {
+            dependentPicklistValues[masterPicklistValue] = targetPicklistValuesMap[masterPicklistValue];
+        }
+    },
+    
+    getDependentPicklistValues : function(selectedValue, configuredDependencyObject) {
+        return configuredDependencyObject[selectedValue];
+    },
+    //SalesPlatform.ru end
     
 	 registerLeavePageWithoutSubmit : function(form){
         InitialFormData = form.serialize();
@@ -1053,7 +1206,13 @@ jQuery.Class("Vtiger_Edit_Js",{
             }
         };
     },
-
+    
+    //SalesPlatform.ru begin
+ 	registerSpMobilePhoneFields : function(container) { 
+        $('.spMobilePhone', container).inputmask("+9{11,15}"); 
+    }, 
+    //SalesPlatform.ru end
+    
 	registerEvents: function(){
 		var editViewForm = this.getForm();
 		var statusToProceed = this.proceedRegisterEvents();
@@ -1065,7 +1224,10 @@ jQuery.Class("Vtiger_Edit_Js",{
 		this.registerEventForImageDelete();
 		this.registerSubmitEvent();
 		this.registerLeavePageWithoutSubmit(editViewForm);
-
+        //SalesPlatform.ru begin
+        this.registerSpMobilePhoneFields(editViewForm);
+        //SalesPlatform.ru end
+        
 		app.registerEventForDatePickerFields('#EditView');
 		
 		var params = app.validationEngineOptions;
@@ -1377,7 +1539,6 @@ function sp_js_editview_checkBeforeSave(module, thisForm, mode) {
     }            
     
     var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));               
-    VtigerJS_DialogBox.block();
 
     var urlstring = "index.php?module="+module+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&EditViewAjaxMode=true&CreateMode="+createMode;
     if(mode == 'edit') {

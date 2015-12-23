@@ -38,10 +38,16 @@ class Emails extends CRMEntity {
 		'vtiger_seactivityrel' => 'activityid', 'vtiger_cntactivityrel' => 'activityid', 'vtiger_email_track' => 'mailid', 'vtiger_emaildetails' => 'emailid');
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-		'Subject' => Array('activity' => 'subject'),
-		'Related to' => Array('seactivityrel' => 'parent_id'),
-		'Date Sent' => Array('activity' => 'date_start'),
-        'Time Sent' => Array('activity' => 'time_start'),
+        // SalesPlatform.ru begin
+		'Subject' => Array('activity', 'subject'),
+		'Related to' => Array('seactivityrel', 'parent_id'),
+		'Date Sent' => Array('activity', 'date_start'),
+        'Time Sent' => Array('activity', 'time_start'),
+        //'Subject' => Array('activity' => 'subject'),
+        //'Related to' => Array('seactivityrel' => 'parent_id'),
+        //'Date Sent' => Array('activity' => 'date_start'),
+        //'Time Sent' => Array('activity' => 'time_start'),
+        // SalesPlatform.ru end
 		'Assigned To' => Array('crmentity', 'smownerid'),
 		'Access Count' => Array('email_track', 'access_count')
 	);
