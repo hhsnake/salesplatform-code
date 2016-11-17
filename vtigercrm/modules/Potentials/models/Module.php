@@ -106,10 +106,10 @@ class Potentials_Module_Model extends Vtiger_Module_Model {
 			$row = $db->query_result_rowdata($result, $i);
 			$response[$i]['count'] = $row['count'];
 			$response[$i]['last_name'] = $row['last_name'];
-                        $response[$i]['sales_stage'] = decode_html($row['sales_stage']);
-                        //SalesPlatform.ru begin add locale
-                        $response[$i]['sales_stage_translated'] = vtranslate($response[$i]['sales_stage'], $this->getName());
-                        //SalesPlatform.ru end
+            $response[$i]['sales_stage'] = decode_html($row['sales_stage']);
+            //SalesPlatform.ru begin add locale
+            $response[$i]['sales_stage_translated'] = vtranslate($response[$i]['sales_stage'], $this->getName());
+            //SalesPlatform.ru end
  		}
 		return $response;
 	}
@@ -133,9 +133,9 @@ class Potentials_Module_Model extends Vtiger_Module_Model {
 			$row = $db->query_result_rowdata($result, $i);
                         $row['last_name'] = decode_html($row['last_name']);
                         
-                        //SalesPlatform.ru begind add locale
-                        $row['sales_stage_translated'] = vtranslate(decode_html($row['sales_stage']), $this->getName());
-                        //SalesPlatform.ru end
+            //SalesPlatform.ru begind add locale
+            $row['sales_stage_translated'] = vtranslate(decode_html($row['sales_stage']), $this->getName());
+            //SalesPlatform.ru end
 			$data[] = $row;
 		}
 		return $data;
@@ -324,9 +324,9 @@ class Potentials_Module_Model extends Vtiger_Module_Model {
 				if(!empty($amount)){
 					$values[0] = $db->query_result($result, $i, 'amount');
 					$values[1] = vtranslate($picklistValue, $this->getName());
-                                        //SalesPlatform.ru begin fix widget filters
-                                        $values[2] = $picklistValue;
-                                        //SalesPlatform.ru end
+                    //SalesPlatform.ru begin fix widget filters
+                    $values[2] = $picklistValue;
+                    //SalesPlatform.ru end
 					$data[] = $values;
 				}
 				

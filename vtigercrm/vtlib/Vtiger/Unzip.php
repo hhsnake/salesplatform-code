@@ -41,8 +41,12 @@ class Vtiger_Unzip extends dUnzip2 {
 	 * Allows you to rename while unzipping and handle exclusions.
 	 * @access private
 	 */
-	Function unzipAllEx($targetDir=false, $includeExclude=false, $renamePaths=false, $ignoreFiles=false,
-		$baseDir="", $applyChmod=0755){
+    //SalesPlatform.ru begin 
+    Function unzipAllEx($targetDir=false, $includeExclude=false, $renamePaths=false, $ignoreFiles=false,
+		$baseDir="", $applyChmod=false){
+	//Function unzipAllEx($targetDir=false, $includeExclude=false, $renamePaths=false, $ignoreFiles=false,
+	//	$baseDir="", $applyChmod=0755){
+    //SalesPlatform.ru end
 
 		// We want to always maintain the structure
 		$maintainStructure = true;

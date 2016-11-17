@@ -11,7 +11,9 @@
 
 require_once('modules/Settings/MailConverter/handlers/MailScannerInfo.php');
 require_once('modules/Settings/MailConverter/handlers/MailRecord.php');
-
+//SalesPlatform.ru begin
+require_once('modules/Emails/models/Record.php');
+//SalesPlatform.ru end
 /**
  * Class to work with server mailbox.
  */
@@ -133,7 +135,11 @@ class Vtiger_MailBox {
 		$isconnected = false;
 		$connectString = $this->_imapurl;
 		$this->log("Trying to open folder using $connectString$folder");
-		$imap = @imap_open("$connectString$folder", $mailboxsettings[username], $mailboxsettings[password]);
+        //SalesPlatform.ru begin
+        $correctFolder = Emails_Record_Model::convertMailBoxName($folder);
+        $imap = @imap_open("$connectString$correctFolder", $mailboxsettings[username], $mailboxsettings[password]);
+		//$imap = @imap_open("$connectString$folder", $mailboxsettings[username], $mailboxsettings[password]);
+        //SalesPlatform.ru end
 		if($imap) {
 
 			// Perform cleanup task before re-initializing the connection

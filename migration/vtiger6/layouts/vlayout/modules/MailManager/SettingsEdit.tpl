@@ -108,18 +108,38 @@
 					<td class="fieldLabel" nowrap>
 						<label class="muted pull-right marginRight10px">{vtranslate('LBL_CHOOSE_EXISTING_FOLDER',$MODULE)}</label>
 					</td>
-					<td class="fieldValue narrowWidthType selectFolderValue {if $MAILBOX->folder() eq ''}hide{/if}" nowrap style="width: 70%;">
+                    {* SalesPlatform.ru begin *}
+                    <td class="fieldValue narrowWidthType selectFolderValue" nowrap style="width: 70%;">
+					{* <td class="fieldValue narrowWidthType selectFolderValue {if $MAILBOX->folder() eq ''}hide{/if}" nowrap style="width: 70%;"> *}
+                    {* SalesPlatform.ru end *}
 						<select name="_mbox_sent_folder">
+                            {* SalesPlatform.ru begin *}
+                            {if count($FOLDERS) neq 0}
+                            {* SalesPlatform.ru end *}
 							{foreach item=FOLDER from=$FOLDERS}
 								<option value="{$FOLDER->name()}" {if $FOLDER->name() eq $MAILBOX->folder()} selected {/if}>{$FOLDER->name()}</option>
 							{/foreach}
+                            {* SalesPlatform.ru begin *}
+                            {else}
+                                <option value="{vtranslate('Sent', $MODULE)}" selected>{vtranslate('Sent',$MODULE)}</option>
+                            {/if}
+                            {* SalesPlatform.ru end *}
 						</select>
 						<span class="mm_blur"> {vtranslate('LBL_CHOOSE_FOLDER',$MODULE)}</span>
                     </td>
-					<td class="fieldValue narrowWidthType selectFolderDesc alert alert-info {if $MAILBOX->folder() neq ''}hide{/if}" nowrap style="width: 70%;">
+                    {* SalesPlatform.ru begin *}
+					{* <td class="fieldValue narrowWidthType selectFolderDesc alert alert-info {if $MAILBOX->folder() neq ''}hide{/if}" nowrap style="width: 70%;"> *}
+					{*	{vtranslate('LBL_CHOOSE_FOLDER_DESC',$MODULE)} *}
+					{*</td> *}
+                    {* SalesPLatform.ru end *}
+				</tr>
+                {* SalesPlatform.ru begin *}
+                <tr>
+                    <td colspan="2" class="fieldValue narrowWidthType selectFolderDesc alert alert-info {if $MAILBOX->folder() neq ''}hide{/if}" nowrap style="width: 70%;">
 						{vtranslate('LBL_CHOOSE_FOLDER_DESC',$MODULE)}
 					</td>
-				</tr>
+                </tr>
+                {* SalesPLatform.ru end *}
 			</tbody>
 		</table>
 		<br>

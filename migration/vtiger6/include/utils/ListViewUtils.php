@@ -653,7 +653,10 @@ function getEntityId($module, $entityName) {
 	if ($entityName != '') {
 		$sql = "select $entityidfield from $tablename INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $tablename.$entityidfield " .
 				" WHERE vtiger_crmentity.deleted = 0 and $fieldsname=?";
-		$result = $adb->pquery($sql, array($entityName));
+        //SalesPlatform.ru begin 
+		$result = $adb->pquery($sql, array(decode_html($entityName)));
+        //$result = $adb->pquery($sql, array($entityName));
+        //SalesPlatform.ru end
 		if ($adb->num_rows($result) > 0) {
 			$entityId = $adb->query_result($result, 0, $entityidfield);
 		}
@@ -667,7 +670,7 @@ function getEntityId($module, $entityName) {
 function decode_html($str) {
 	global $default_charset;$default_charset='UTF-8'; 
 	// Direct Popup action or Ajax Popup action should be treated the same.
-	if ($_REQUEST['action'] == 'Popup' || $_REQUEST['file'] == 'Popup')
+	if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'Popup') || (isset($_REQUEST['file']) && $_REQUEST['file'] == 'Popup'))
 		return html_entity_decode($str);
 	else
 		return html_entity_decode($str, ENT_QUOTES, $default_charset);

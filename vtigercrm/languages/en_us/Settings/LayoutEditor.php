@@ -65,7 +65,7 @@ $languageStrings = array(
 	'Time'=>'Time',
 	'URL' => 'URL',
     //SalesPlatform. ru begin
-    'SPMobilePhone' => 'Мобильный телефон',
+    'SPMobilePhone' => 'Mobile phone',
     //SalesPlatform.ru end
 );
 

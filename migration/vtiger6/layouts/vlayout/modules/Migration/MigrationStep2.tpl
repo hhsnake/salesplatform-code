@@ -56,10 +56,7 @@
                                 {* SalesPlatform.ru end *}
 								<br><br>
 							<div class="button-container">
-                                {* SalesPlatform.ru begin *}
 								<input type="button" onclick="window.location.href='index.php'" class="btn btn-large btn-primary" value="{vtranslate('Finish', $MODULE)}"/>
-                                {*<input type="button" onclick="window.location.href='index.php'" class="btn btn-large btn-primary" value="Finish"/>*}
-                                {* SalesPlatform.ru end *}
 							</div>
 					</div>
 				</div>

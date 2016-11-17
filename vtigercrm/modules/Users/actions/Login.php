@@ -21,14 +21,25 @@ class Users_Login_Action extends Vtiger_Action_Controller {
 
 	function process(Vtiger_Request $request) {
 		$username = $request->get('username');
-		$password = $request->get('password');
+		$password = $request->getRaw('password');
 
 		$user = CRMEntity::getInstance('Users');
 		$user->column_fields['user_name'] = $username;
 
 		if ($user->doLogin($password)) {
-			session_regenerate_id(true); // to overcome session id reuse.
-
+            // SalesPlatform.ru begin Fix cookie error
+			if(isset($_SESSION['return_params'])){ 
+                $return_params = $_SESSION['return_params']; 
+                
+            }
+			session_destroy();
+			session_start();
+			if(isset($return_params)){ 
+                $_SESSION['return_params'] = $return_params; 
+            }
+            // session_regenerate_id(true); // to overcome session id reuse.
+			// SalesPlatform.ru end
+     
 			$userid = $user->retrieve_user_id($username);
 			Vtiger_Session::set('AUTHUSERID', $userid);
 

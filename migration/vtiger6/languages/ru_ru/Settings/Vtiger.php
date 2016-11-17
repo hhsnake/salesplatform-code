@@ -249,6 +249,8 @@ $languageStrings = array(
     'LBL_NEW_COMPANY'              => 'Новое юр.лицо', 
     'LBL_DEFAULT_LAYOUT'           => 'Расположение блоков',
     'LBL_SP_CHECK_SITE_URL'        => 'Контролировать URL системы',
+    'Search'                       => 'Конфигурация поиска' ,
+    'Global Search' => 'Глобальный поиск',
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(

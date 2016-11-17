@@ -17,10 +17,10 @@
             <div class="row-fluid">
                 <div class="span8">
                     <span class="row-fluid marginLeftZero">
-                                                {* SalesPlafrom.ru fix display *}
+                        {* SalesPlafrom.ru fix display *}
 						{* <span class="logo span2"> *}
-                                                   <span class="span2">
-                                                {* SalesPlafrom.ru end *}
+                       	<span class="span2">
+                        {* SalesPlafrom.ru end *}
 							{foreach key=ITER item=IMAGE_INFO from=$RECORD->getImageDetails()}
 								{if !empty($IMAGE_INFO.path) && !empty($IMAGE_INFO.orgname)}
 									<img src="{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}" alt="{$IMAGE_INFO.orgname}" title="{$IMAGE_INFO.orgname}" data-image-id="{$IMAGE_INFO.id}">

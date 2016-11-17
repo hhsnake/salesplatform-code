@@ -29,7 +29,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 	 * which are registered for 5.x modules (and now provided for 6.x as well).
 	 */
 	protected function checkFileUriInRelocatedMouldesFolder($fileuri) {
-		list ($filename, $query) = explode('?', $fileuri);
+		list ($filename, $query) = array_pad(explode('?', $fileuri, 2), 2, null);
 
 		// prefix the base lookup folder (relocated file).
 		if (strpos($filename, 'modules') === 0) {
@@ -68,7 +68,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 						'linktype' => 'HEADERLINK',
 						'linklabel' => 'LBL_DOCUMENTATION',
                                                 // SalesPlatform.ru begin Doc links fixed
-						'linkurl' => 'http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630',
+						'linkurl' => 'http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_640',
 						//'linkurl' => 'https://wiki.vtiger.com/vtiger6/index.php/Main_Page',
                                                 // SalesPlatform.ru end
 						'linkicon' => '',
@@ -156,10 +156,15 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 			}
 			$headerLinkInstances[$index++] = $headerLinkInstance;
 		}
+
+		// Fix for http://code.vtiger.com/vtiger/vtigercrm/issues/49
+		// Push HEADERLINKS to drop-down menu shown with username (last-one) as structured above.
+		$lastindex = count($headerLinkInstances)-1;
 		$headerLinks = Vtiger_Link_Model::getAllByType(Vtiger_Link::IGNORE_MODULE, array('HEADERLINK'));
+		if ($headerLinks) $headerLinkInstances[$lastindex]->addChildLink(Vtiger_Link_Model::getInstanceFromValues(array())); // Separator
 		foreach($headerLinks as $headerType => $headerLinks) {
 			foreach($headerLinks as $headerLink) {
-				$headerLinkInstances[$index++] = Vtiger_Link_Model::getInstanceFromLinkObject($headerLink);
+				$headerLinkInstances[$lastindex]->addChildLink(Vtiger_Link_Model::getInstanceFromLinkObject($headerLink));
 			}
 		}
 		return $headerLinkInstances;

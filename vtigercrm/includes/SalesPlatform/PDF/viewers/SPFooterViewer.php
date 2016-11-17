@@ -26,7 +26,25 @@ class SalesPlatform_PDF_SPFooterViewer extends Vtiger_PDF_FooterViewer {
 	function totalHeight($parent) {
 		return $this->height;
 	}
-
+    //SalesPlatform.ru begin 
+    public function getContent() {
+        $content = '';
+        if($this->model) {		
+			try {
+                $template = new Aste_Template($this->template);
+			    $footer = $template->getBlock('footer');
+                //SalesPlatform.ru begin 
+                foreach($this->model->keys() as $key) {
+    				 $footer->setVar($key, $this->model->get($key));
+    			}
+                //SalesPlatform.ru end
+                $content = $footer->fetch();
+			} catch(Aste_Exception $e) {
+			}
+		}       
+        return $content;
+    }
+    //SalesPlatform.ru end
 	function display($parent) {
 
 		$pdf = $parent->getPDF();
@@ -37,10 +55,17 @@ class SalesPlatform_PDF_SPFooterViewer extends Vtiger_PDF_FooterViewer {
 			try {
     			    $template = new Aste_Template($this->template);
 			    $footer = $template->getBlock('footer');
+                //SalesPlatform.ru begin 
+                foreach($this->model->keys() as $key) {
+    				 $footer->setVar($key, $this->model->get($key));
+    			}
+                
     			    $content = $footer->fetch();
-			    $pdf->writeHTMLCell($footerFrame->w, $footerFrame->h,$footerFrame->x, $footerFrame->y, $content);
+                //$pdf->writeHTMLCell($footerFrame->w, $footerFrame->h,$footerFrame->x, $footerFrame->y, $content);
 			} catch(Aste_Exception $e) {
 			}
+            //$pdf->MultiCell($footerFrame->w, $footerFrame->h-$footerFrame->y, "", 0, 'L', 0, 1, $footerFrame->x, $footerFrame->y);
+            //SalesPlatform.ru end
 		}	
 
 	}

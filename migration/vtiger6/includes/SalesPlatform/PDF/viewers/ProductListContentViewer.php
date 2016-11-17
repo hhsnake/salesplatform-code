@@ -20,8 +20,9 @@ class SalesPlatform_PDF_ProductListDocumentContentViewer extends SalesPlatform_P
                 $totalServices = 0;
 		$pdf = $parent->getPDF();
 		$pdf->setPageOrientation($this->orientation);
-		$pdf->SetAutoPageBreak(true, 10);
-		
+        //SalesPlatform.ru begin
+		//$pdf->SetAutoPageBreak(true, 10);
+		//SalesPlatform.ru end
 		$parent->createPage();
 		$contentFrame = $parent->getContentFrame();
 		

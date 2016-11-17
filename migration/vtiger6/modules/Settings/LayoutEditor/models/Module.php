@@ -85,10 +85,16 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 	}
 
     public function getAddSupportedFieldTypes() {
+		//SalesPlatform.ru begin
+		//return array(
+        //    'Text','Decimal','Integer','Percent','Currency','Date','Email','Phone','Picklist',
+        //    'URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time'
+        //);
         return array(
             'Text','Decimal','Integer','Percent','Currency','Date','Email','Phone','Picklist',
             'URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time', 'SPMobilePhone'
         );
+		//SalesPlatform.ru end
     }
 
     /**

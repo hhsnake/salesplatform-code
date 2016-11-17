@@ -630,28 +630,27 @@ $languageStrings = array(
 	'Website: ' => 'Website: ',
 	'Word of mouth' => 'Word of mouth',
     	  
-    //Promotion translations
-    'LBL_HIDE_PROMOTION' => 'Hide Promotion',
-    'LBL_SHOW_PROMOTION' => 'Show Promotion',
-
-    //customerportal forgot password 
-    'LBL_LOGIN_DETAILS' => 'Login Details' ,
-    'LBL_USERNAME' => ' Username',
-    'LBL_PASSWORD' => 'Password',
-    'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Portal Login Details',
-     //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
-    'Users' => 'Users', 
-    'Service Requests' => 'Service Requests', 
-    'Terms &amp; Conditions' => 'Terms & Conditions', 
+        //Promotion translations
+        'LBL_HIDE_PROMOTION' => 'Hide Promotion',
+        'LBL_SHOW_PROMOTION' => 'Show Promotion',
+    
+        //customerportal forgot password 
+        'LBL_LOGIN_DETAILS' => 'Login Details' ,
+        'LBL_USERNAME' => ' Username',
+        'LBL_PASSWORD' => 'Password',
+        'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Portal Login Details',
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Users' => 'Users', 
+        'Service Requests' => 'Service Requests', 
+        'Terms &amp; Conditions' => 'Terms & Conditions', 
 	'LBL_CONVERSION_RATE'          => 'Conversion Rate',
     
-    //Email template  edit Convertion
-    'LBL_CURRENT_DATE' => 'Current Date',
-    'LBL_CURRENT_TIME' => 'Current Time',
-
-    'LBL_LEFT_PANEL_SHOW_HIDE' => 'Left panel show/hide',
+      //Email template  edit Convertion
+       'LBL_CURRENT_DATE' => 'Current Date',
+       'LBL_CURRENT_TIME' => 'Current Time',
     
     //SalesPLatform.ru begin
+    'LBL_LEFT_PANEL_SHOW_HIDE' => 'Left panel show/hide',
     'LBL_EVENT_INFORMATION' => 'Event Details',
     'LBL_CREATE_FOLLOWUP_EVENT' => 'Create follow-up event',
     'LBL_EMAIL_INFORMATION' => 'Email Information',
@@ -659,6 +658,9 @@ $languageStrings = array(
     'Emails_Block1' => 'Create info',
     'Emails_Block2' => 'Theme',
     'Emails_Block3' => 'Description',
+    'LBL_ERROR' => 'Error',
+    'LBL_BE_CAREFUL_WITH_EMAIL_TEMPLATES' => 'Be careful with email templates. Field search will be done by every record',
+    'Global Search' => 'Глобальный поиск',
     //SalesPlatform.ru end
 );
 
@@ -719,6 +721,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_CALL_FROM' => 'Call From',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Please fill all the fields',
 	'JS_PBX_INCOMING_CALL' => 'Incoming Call',
+	'JS_PBX_OUTGOING_CALL' => 'Outgoing Call',
 	'JS_PBX_OUTGOING_FAILURE'=>'Call Failed',
 	'JS_PBX_OUTGOING_SUCCESS'=>'Pick up the extension receiver to dial the number',
 	'JS_PERCENTAGE_VALUE_SHOULD_BE_LESS_THAN_100' => 'Percentage value should be less than 100',
@@ -738,6 +741,7 @@ $jsLanguageStrings = array(
 	'JS_PLEASE_SELECT_ATLEAST_ONE_MANDATORY_FIELD' => 'Please select at least one Mandatory Field',
 	'JS_PLEASE_SELECT_ATLEAST_ONE_OPTION' => 'Please select at least one option',
 	'JS_PLEASE_SELECT_BASE_CURRENCY_FOR_PRODUCT' => 'Please select base currency for product',
+	'JS_BASE_CURRENCY_CHANGED_TO_DISABLE_CURRENCY' => 'Base Currency has to be changed to disable ',
 	'JS_PLEASE_SELECT_ONE_FIELD_FOR_MERGE' => 'Select at least one field for merge criteria',
 	'JS_PLEASE_SELECT_ONE_RECORD' => 'Please select at least one record',
 	'JS_PLEASE_SPLIT_FILE_AND_IMPORT_AGAIN' => 'Please split the file into smaller files and import again.',
@@ -774,6 +778,7 @@ $jsLanguageStrings = array(
 	'JS_VALUE_SHOULD_NOT_BE_LESS_THAN' => 'Frequency of any cron job configured should not be less than',
 	'JS_YOU_ARE_IN_PAGE_NUMBER' => 'You are in page number',
 	'JS_YOU_CAN_SELECT_ONLY' => 'You can select only',
+	'JS_DECIMAL_SEPARATOR_AND_GROUPING_SEPARATOR_CANT_BE_SAME' => 'Decimal separator and Grouping separator cant be same',
 	'LBL_DELETE_CONFIRMATION' => 'Are you sure you want to delete?', // This is added as duplicate as we need to show different message for different modules. Ex:Accounts has different message
 	'LBL_DELETE_USER_CONFIRMATION' => 'When a User is deleted, the user will be marked as "Inactive" and no new records can be assigned to the User, and the user will not be able to login. Are you sure you want to delete?',
 	'LBL_RESTORE_CONFIRMATION' => 'Records previously assigned to this user will not be restored. Are you sure you want to restore this user?',
@@ -811,5 +816,6 @@ $jsLanguageStrings = array(
  	'JS_ACCEPT_MOBILE_MASK' => 'Mobile phone must contain from 11 to 15 digits', 
     'JS_NO_EDIT_PERMISSION' => 'You do not have permission to modify calendar entries.', 
     'JS_PERMISSION_DENIED' => 'Permission denied',
+    'JS_ERROR_SEND_REQUEST' => 'Error on send request, please, try again',
  	//SalesPlatform.ru end 
 );

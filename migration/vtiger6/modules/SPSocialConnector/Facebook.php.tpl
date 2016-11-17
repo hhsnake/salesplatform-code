@@ -8,8 +8,7 @@
 include_once(dirname(__DIR__).'/hybridauth/Hybrid/Providers/Facebook.php');
 
 class Hybrid_Providers_Extended_Facebook extends Hybrid_Providers_Facebook {
-    public $scope = "email, user_about_me, user_birthday, user_hometown, user_website, read_stream, 
-                        offline_access, publish_stream, read_friendlists";
+    public $scope = "email, user_about_me, user_birthday, user_hometown, user_website";
 
     // new function: view user profile by id
     function getUserProfileByID( $id ) {

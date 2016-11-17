@@ -22,10 +22,7 @@ class CustomView_Approve_Action extends Vtiger_Action_Controller {
 		header("Location: $listViewUrl");
 	}
         
-         public function validateRequest(Vtiger_Request $request) {
-             // SalesPlatform.ru begin
-             $request->validateWriteAccess(true);
-             //$request->validateWriteAccess();
-             // SalesPlatform.ru end
+         public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
         } 
 }

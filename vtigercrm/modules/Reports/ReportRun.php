@@ -415,7 +415,7 @@ class ReportRun extends CRMEntity
 
 
 	function getColumnSQL($selectedfields) {
-		global $adb;
+		global $adb, $current_user;
 		$header_label = $selectedfields[2]; // Header label to be displayed in the reports table
 
 		list($module,$field) = split("_",$selectedfields[2]);
@@ -481,7 +481,8 @@ class ReportRun extends CRMEntity
                 } else if ($selectedfields[0] == "vtiger_crmentity" . $this->primarymodule) {
                     $columnSQL = "vtiger_crmentity." . $selectedfields[1] . " AS '" . decode_html($header_label) . "'";
                 } else {
-                    $columnSQL = $selectedfields[0] . "." . $selectedfields[1] . " AS '" . decode_html($header_label) . "'";
+                    $userformat=str_replace(array("dd-mm-yyyy","mm-dd-yyyy","yyyy-mm-dd"),array("%d-%m-%Y","%m-%d-%Y","%Y-%m-%d"),$current_user->date_format);
+                    $columnSQL = "date_format (" . $selectedfields[0] . "." . $selectedfields[1] . ",'$userformat') AS '" . decode_html($header_label) . "'";
                 }
                 $this->queryPlanner->addTable($selectedfields[0]);
             }
@@ -651,7 +652,9 @@ class ReportRun extends CRMEntity
 				foreach($fieldSqlColumns as $columnSql) {
 					$queryColumn .= " WHEN $columnSql NOT LIKE '' THEN $columnSql";
 				}
-				$queryColumn .= " ELSE '' END) ELSE '' END) AS $moduleFieldLabel";
+				// Fix for http://code.vtiger.com/vtiger/vtigercrm/issues/48
+				$moduleFieldLabel = vtlib_purify(decode_html($moduleFieldLabel));
+				$queryColumn .= " ELSE '' END) ELSE '' END) AS '$moduleFieldLabel'";
 				$this->queryPlanner->addTable($tableName);
 			}
 		}
@@ -2071,7 +2074,7 @@ class ReportRun extends CRMEntity
                         if(count($secondarymodule) > 1){
                             $query .= $focQuery . $this->getReportsNonAdminAccessControlQuery($value,$current_user,$value);
                         }else{
-                            $query .= $focQuery . getNonAdminAccessControlQuery($value,$current_user,$value);;
+                            $query .= $focQuery . getNonAdminAccessControlQuery($value,$current_user,$value);
                         }
 					}
 			}
@@ -4476,7 +4479,7 @@ class ReportRun extends CRMEntity
         $arr_val = $reportData['data'];
 
 		$fp = fopen($fileName, 'w+');
-
+		fputs($fp,chr(239) . chr(187) . chr(191));//UTF-8 byte order mark
 		if(isset($arr_val)) {
 			$csv_values = array();
 			// Header

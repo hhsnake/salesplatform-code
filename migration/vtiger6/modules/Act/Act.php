@@ -210,8 +210,12 @@ class Act extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_sp_act","actid");
+    //SalesPlatform.ru begin
+    function generateReportsSecQuery($module,$secmodule,$queryplanner){
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_sp_act","actid",$queryplanner);
+	//function generateReportsSecQuery($module,$secmodule){
+	//	$query = $this->getRelationQuery($module,$secmodule,"vtiger_sp_act","actid");
+    //SalesPlatform.ru end    
 		$query .= " left join vtiger_crmentity as vtiger_crmentityAct on vtiger_crmentityAct.crmid=vtiger_sp_act.actid and vtiger_crmentityAct.deleted=0
 			left join vtiger_sp_actcf on vtiger_sp_act.actid = vtiger_sp_actcf.actid
 			left join vtiger_salesorder as vtiger_salesorderAct on vtiger_salesorderAct.salesorderid=vtiger_sp_act.salesorderid

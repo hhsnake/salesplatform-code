@@ -59,7 +59,7 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 		$privilegeModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$moduleName = 'Accounts';
 
-		if(!Users_Privileges_Model::isPermitted($moduleName, 'EditView')) {
+		if(!Users_Privileges_Model::isPermitted($moduleName, 'CreateView')) {
 			return;
 		}
 
@@ -75,7 +75,14 @@ class Leads_Record_Model extends Vtiger_Record_Model {
                         unset($complusoryFields[$keyIndex]);
                     }
 					$leadMappedField = $this->getConvertLeadMappedField($fieldName, $moduleName);
-					$fieldModel->set('fieldvalue', $this->get($leadMappedField));
+					// SalesPlatform.ru begin Fix setting default values 
+					$fieldvalue = $this->get($leadMappedField);
+					if (!isset($fieldvalue) || empty($fieldvalue)) {
+                        $fieldvalue = $fieldModel->get('defaultvalue');
+					} 
+					$fieldModel->set('fieldvalue', $fieldvalue);
+                    // $fieldModel->set('fieldvalue', $this->get($leadMappedField));
+					// SalesPlatform.ru end
 					$accountsFields[] = $fieldModel;
 				}
 			}
@@ -101,7 +108,7 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 		$privilegeModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$moduleName = 'Contacts';
 
-		if(!Users_Privileges_Model::isPermitted($moduleName, 'EditView')) {
+		if(!Users_Privileges_Model::isPermitted($moduleName, 'CreateView')) {
 			return;
 		}
 
@@ -148,7 +155,7 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 		$privilegeModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$moduleName = 'Potentials';
 
-		if(!Users_Privileges_Model::isPermitted($moduleName, 'EditView')) {
+		if(!Users_Privileges_Model::isPermitted($moduleName, 'CreateView')) {
 			return;
 		}
 

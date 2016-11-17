@@ -89,7 +89,7 @@ class SPSocialConnectorHelper {
             $req->logout(); 
 
         } catch( Exception $e ) {  
-            print_r($e);
+            echo '<div style="text-align: center; margin: 10px;">' . vtranslate("LBL_ERROR") . ": " . $e->getMessage() . '</div>';
         }    
      
         return $msg_id;
@@ -124,7 +124,7 @@ class SPSocialConnectorHelper {
 
             $req->logout(); 
         } catch( Exception $e ) {  
-            print_r($e);
+            echo '<div style="text-align: center; margin: 10px;">' . vtranslate("LBL_ERROR") . ": " . $e->getMessage() . '</div>';
         }    
 
         return $user_profile;
@@ -353,7 +353,7 @@ class SPSocialConnectorHelper {
             $req->logout();
 
         } catch( Exception $e ) {
-            print_r($e);
+            echo '<div style="text-align: center; margin: 10px;">' . vtranslate("LBL_ERROR") . ": " . $e->getMessage() . '</div>';
         }
 
         return $msg_id;

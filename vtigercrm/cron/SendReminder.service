@@ -41,6 +41,10 @@ if(empty($from)) {
 	$from = "reminders@localserver.com";
 }
 
+//SalesPlatform.ru begin
+global $HELPDESK_SUPPORT_NAME;
+//SalesPlatform.ru end
+
 // Get the list of activity for which reminder needs to be sent
 
 global $adb;
@@ -148,18 +152,25 @@ if($adb->num_rows($result) >= 1)
 							$app_strings['Visit_Link']." <a href='".$site_URL."/index.php?view=Detail&module=Calendar&record=".$activity_id."'>".$app_strings['Click here']."</a>";
 			if(count($to_addr) >=1)
 			{
-				send_email($to_addr,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password);
-				$upd_query = "UPDATE vtiger_activity_reminder SET reminder_sent=1 where activity_id=?";
-				$upd_params = array($activity_id);
+                //SalesPlatform.ru begin
+                $to_addr = join(",", $to_addr);
+                $status = send_mail('Caledar', $to_addr, $HELPDESK_SUPPORT_NAME, $from, $subject, $contents);
+                if($status == 1) {
+                    //send_email($to_addr,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password);
+                    //SalesPlatform.ru end
+                    $upd_query = "UPDATE vtiger_activity_reminder SET reminder_sent=1 where activity_id=?";
+                    $upd_params = array($activity_id);
 
-				if($recur_id!=0)
-				{
-					$upd_query.=" and recurringid =?";
-					array_push($upd_params, $recur_id);
-				}
+                    if($recur_id!=0)
+                    {
+                        $upd_query.=" and recurringid =?";
+                        array_push($upd_params, $recur_id);
+                    }
 
-				$adb->pquery($upd_query, $upd_params);
-
+                    $adb->pquery($upd_query, $upd_params);
+                //SalesPlatform.ru begin
+                }
+                //SalesPlatform.ru end
 			}
 		}
 	}
@@ -227,6 +238,10 @@ function send_email($to,$from,$subject,$contents,$mail_server,$mail_server_usern
 
 	$flag = MailSend($mail);
 	$log->info("After executing the mail->Send() function.");
+    
+    //SalesPlatform.ru begin
+    return $flag;
+    //SalesPlatform.ru end
 }
 
 /**

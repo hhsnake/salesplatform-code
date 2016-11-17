@@ -187,4 +187,25 @@ abstract class InventoryController extends OperationController {
         return $taxRates;
     }
     
+    /**
+     * Adds usageUnit node 
+     * @param SimpleXMLElement $xmlNode
+     * @param string $usageUnit
+     */
+    protected function addUsageUnit($xmlNode, $usageUnit) {
+        $xmlNode->addChild("БазоваяЕдиница");
+        $usageUnitXml = $xmlNode->БазоваяЕдиница;
+
+        $unitCode = UnitsConverter::convertFromCrmValueToCode($usageUnit);
+        if($unitCode == null) {
+            $unitCode = UnitsConverter::getDefaultUnitCode();
+        }
+        
+        $usageUnitXml->addAttribute('Код', $unitCode);
+        $usageUnitXml->addAttribute('НаименованиеПолное', vtranslate($usageUnit));
+        $usageUnitXml->addChild('Пересчет');
+        $recalculation = $usageUnitXml->Пересчет;
+        $recalculation->addChild('Единица', $unitCode);
+        $recalculation->addChild('Пересчет', 1);
+    }
 }

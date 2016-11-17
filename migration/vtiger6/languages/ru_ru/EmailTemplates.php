@@ -25,9 +25,6 @@ $languageStrings = array(
         'Templatename'=>'Имя шаблона',
         'Email Template - Properties of ' => 'Шаблон Email - Свойства ',
 );
-$jsLanguageStrings = array(
-            'LBL_GENERAL_FIELDS' => 'General Fields',
-);
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/EmailTemplates.php';

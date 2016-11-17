@@ -12,7 +12,9 @@ require_once 'modules/SPCMLConnector/SiteExchangeSettings.php';
 require_once 'modules/SPCMLConnector/CatalogController.php';
 require_once 'modules/SPCMLConnector/UploadFileManager.php';
 require_once 'modules/SPCMLConnector/TranzactionHistory.php';
+require_once 'includes/runtime/LanguageHandler.php';
 require_once 'modules/SPCMLConnector/WebsiteSalesOrderController.php';
+require_once 'modules/SPCMLConnector/UnitsConverter.php';
 require_once 'modules/SPCMLConnector/CmlParser.php';
 
 /**

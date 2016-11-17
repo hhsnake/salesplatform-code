@@ -102,10 +102,7 @@
 								<tr><td></td></tr>
 								<tr>
 									<td></td>
-									{* SalesPlatform.ru begin *}
 									<td><input type="submit" id="btn" value={vtranslate('Submit', $MODULE)} onclick="return checkPassword();"/></td>
-									{*<td><input type="submit" id="btn" value="Submit" onclick="return checkPassword();"/></td>*}
-									{* SalesPlatform.ru end *}
 								</tr>
 							</table>
 						</form>

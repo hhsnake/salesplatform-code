@@ -345,11 +345,16 @@ $toHtml = array(
        */
 function to_html($string, $encode=true)
 {
+        $startstring=$string;
+	$cachedresult=Vtiger_Cache::get('to_html',$startstring);
+	if($cachedresult){
+		return $cachedresult;
+	}
+
 	global $log,$default_charset;
 	//$log->debug("Entering to_html(".$string.",".$encode.") method ...");
-	global $toHtml;
-	$action = $_REQUEST['action'];
-	$search = $_REQUEST['search'];
+	$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+	$search = isset($_REQUEST['search']) ? $_REQUEST['search'] : null;
 
 	$doconvert = false;
 
@@ -359,12 +364,14 @@ function to_html($string, $encode=true)
 		$inUTF8 = (strtoupper($default_charset) == 'UTF-8');
 	}
 
-	if($_REQUEST['module'] != 'Settings' && $_REQUEST['file'] != 'ListView' && $_REQUEST['module'] != 'Portal' && $_REQUEST['module'] != "Reports")// && $_REQUEST['module'] != 'Emails')
-		$ajax_action = $_REQUEST['module'].'Ajax';
+	$module = isset($_REQUEST['module']) ? $_REQUEST['module'] : null;
+	$file = isset($_REQUEST['file']) ? $_REQUEST['file'] : null;
+	if($module != 'Settings' && $file != 'ListView' && $module != 'Portal' && $module != "Reports")// && $module != 'Emails')
+		$ajax_action = $module.'Ajax';
 
 	if(is_string($string))
 	{
-		if($action != 'CustomView' && $action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail' && (!isset($_REQUEST['submode'])) )
+		if($action != 'CustomView' && $action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $module != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail' && (!isset($_REQUEST['submode'])) )
 		{
 			$doconvert = true;
 		}
@@ -385,6 +392,7 @@ function to_html($string, $encode=true)
 	}
 
 	//$log->debug("Exiting to_html method ...");
+	Vtiger_Cache::set('to_html', $startstring, $string);
 	return $string;
 }
 
@@ -477,9 +485,15 @@ function getColumnFields($module)
 
 	if($module == 'Calendar') {
 		$cachedEventsFields = VTCacheUtils::lookupFieldInfo_Module('Events');
-		if ($cachedEventsFields) {
-			if(empty($cachedModuleFields)) $cachedModuleFields = $cachedEventsFields;
-			else $cachedModuleFields = array_merge($cachedModuleFields, $cachedEventsFields);
+		if (!$cachedEventsFields) {
+			getColumnFields('Events');
+			$cachedEventsFields = VTCacheUtils::lookupFieldInfo_Module('Events');
+		}
+
+		if (!$cachedModuleFields) {
+			$cachedModuleFields = $cachedEventsFields;
+		} else {
+			$cachedModuleFields = array_merge($cachedModuleFields, $cachedEventsFields);
 		}
 	}
 
@@ -2302,4 +2316,36 @@ function getCompanyDetails() {
 function lower_array(&$string){
 		$string = strtolower(trim($string));
 }
+
+/* PHP 7 support */
+function php7_compat_split($delim, $str, $ignore_case=false) {
+	$splits = array();
+	while ($str) {
+		$pos = $ignore_case ? stripos($str, $delim) : strpos($str, $delim);
+		if ($pos !== false) {
+			$splits[] = substr($str, 0, $pos);
+			$str = substr($str, $pos + strlen($delim));
+		} else {
+			$splits[] = $str;
+			$str = false;
+		}
+	}
+	return $splits;
+}
+
+if (!function_exists('split'))  { function split($delim, $str)  {return php7_compat_split($delim, $str); } }
+if (!function_exists('spliti')) { function spliti($delim, $str) {return php7_compat_split($delim, $str, true);}}
+
+function php7_compat_ereg($pattern, $str, $ignore_case=false) {
+	$regex = '/'. preg_replace('/\//', '\\/', $pattern) .'/' . ($ignore_case ? 'i': '');
+	return preg_match($regex, $str);
+}
+
+if (!function_exists('ereg')) { function ereg($pattern, $str) { return php7_compat_ereg($pattern, $str); } }
+if (!function_exists('eregi')) { function eregi($pattern, $str) { return php7_compat_ereg($pattern, $str, true); } }
+
+if (!function_exists('get_magic_quotes_runtime')) { function get_magic_quotes_runtime() { return false; } }
+if (!function_exists('set_magic_quotes_runtime')) { function set_magic_quotes_runtime($flag) {} }
+
+
 ?>

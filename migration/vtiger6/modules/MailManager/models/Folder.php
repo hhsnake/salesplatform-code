@@ -83,10 +83,7 @@ class MailManager_Folder_Model {
 
 		$e = min($st + $this->mPageLimit, $this->mCount);
 		$t = $this->mCount;
-        // SalesPlatform.ru begin
-		return sprintf("%s - %s из %s", $s, $e, $t);
-        //return sprintf("%s - %s of %s", $s, $e, $t);
-        // SalesPlatform.ru end
+		return sprintf("%s - %s ".vtranslate('LBL_OF')." %s", $s, $e, $t);
 	}
 
 	public function pageCurrent($offset=0) {

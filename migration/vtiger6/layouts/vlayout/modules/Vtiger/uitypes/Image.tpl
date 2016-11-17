@@ -26,10 +26,7 @@
 				<span class="span8" name="existingImages"><img src="{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}" data-image-id="{$IMAGE_INFO.id}"></span>
 				<span class="span3 row-fluid">
 					<span class="row-fluid">[{$IMAGE_INFO.name}]</span>
-                    {* SalesPlatform.ru begin *}
-                    <span class="row-fluid"><input type="button" id="file_{$ITER}" value={vtranslate("LBL_DELETE")} class="imageDelete"></span>
-					{*<span class="row-fluid"><input type="button" id="file_{$ITER}" value="Delete" class="imageDelete"></span>*}
-                    {* SalesPlatform.ru end *}
+					<span class="row-fluid"><input type="button" id="file_{$ITER}" value={vtranslate("LBL_DELETE")} class="imageDelete"></span>
 				</span>
 			{/if}
 		</div>

@@ -10,13 +10,13 @@
 
 class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model {
 
-    STATIC $logoSupportedFormats = array('jpeg', 'jpg', 'png', 'gif', 'pjpeg', 'x-png');
+	STATIC $logoSupportedFormats = array('jpeg', 'jpg', 'png', 'gif', 'pjpeg', 'x-png');
 
-    var $baseTable = 'vtiger_organizationdetails';
-    var $baseIndex = 'organization_id';
-    var $listFields = array('organizationname');
-    var $nameFields = array('organizationname');
-    var $logoPath = 'test/logo/';
+	var $baseTable = 'vtiger_organizationdetails';
+	var $baseIndex = 'organization_id';
+	var $listFields = array('organizationname');
+	var $nameFields = array('organizationname');
+	var $logoPath = 'test/logo/';
 
     var $fields = array(
         'organizationname' => 'text',
@@ -47,111 +47,111 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
         // SalesPlatform.ru end
     );
 
-    /**
-     * Function to get Edit view Url
-     * @return <String> Url
-     */
-    public function getEditViewUrl() {
-        return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetailsEdit';
-    }
-
-    /**
-     * Function to get CompanyDetails Menu item
-     * @return menu item Model
-     */
-    public function getMenuItem() {
-        $menuItem = Settings_Vtiger_MenuItem_Model::getInstance('LBL_COMPANY_DETAILS');
-        return $menuItem;
-    }
-
-    /**
-     * Function to get Index view Url
-     * @return <String> URL
-     */
-    public function getIndexViewUrl() {
-        $menuItem = $this->getMenuItem();
+	/**
+	 * Function to get Edit view Url
+	 * @return <String> Url
+	 */
+	public function getEditViewUrl() {
+		return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetailsEdit';
+	}
+	
+	/**
+	 * Function to get CompanyDetails Menu item
+	 * @return menu item Model
+	 */
+	public function getMenuItem() {
+		$menuItem = Settings_Vtiger_MenuItem_Model::getInstance('LBL_COMPANY_DETAILS');
+		return $menuItem;
+	}
+	
+	/**
+	 * Function to get Index view Url
+	 * @return <String> URL
+	 */
+	public function getIndexViewUrl() {
+		$menuItem = $this->getMenuItem();
         //SalesPlatform.ru begin
         return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetails&block='.$menuItem->get('blockid').'&fieldid='.$menuItem->get('fieldid').'&company='. html_entity_decode($this->get('company'), ENT_QUOTES);
         //return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetails&block='.$menuItem->get('blockid').'&fieldid='.$menuItem->get('fieldid');
         //SalesPlatform.ru end
+	}
 
-    }
+	/**
+	 * Function to get fields
+	 * @return <Array>
+	 */
+	public function getFields() {
+		return $this->fields;
+	}
 
-    /**
-     * Function to get fields
-     * @return <Array>
-     */
-    public function getFields() {
-        return $this->fields;
-    }
+	/**
+	 * Function to get Logo path to display
+	 * @return <String> path
+	 */
+	public function getLogoPath() {
+		$logoPath = $this->logoPath;
+		$handler = @opendir($logoPath);
+		$logoName = $this->get('logoname');
+		if ($logoName && $handler) {
+			while ($file = readdir($handler)) {
+				if($logoName === $file && in_array(str_replace('.', '', strtolower(substr($file, -4))), self::$logoSupportedFormats) && $file != "." && $file!= "..") {
+					closedir($handler);
+					return $logoPath.$logoName;
+				}
+			}
+		}
+		return '';
+	}
 
-    /**
-     * Function to get Logo path to display
-     * @return <String> path
-     */
-    public function getLogoPath() {
-        $logoPath = $this->logoPath;
-        $handler = @opendir($logoPath);
-        $logoName = $this->get('logoname');
-        if ($logoName && $handler) {
-            while ($file = readdir($handler)) {
-                if($logoName === $file && in_array(str_replace('.', '', strtolower(substr($file, -4))), self::$logoSupportedFormats) && $file != "." && $file!= "..") {
-                    closedir($handler);
-                    return $logoPath.$logoName;
-                }
-            }
-        }
-        return '';
-    }
+	/**
+	 * Function to save the logoinfo
+	 */
+	public function saveLogo($binFileName) {
+		if ($binFileName) {
+			$uploadDir = vglobal('root_directory'). '/' .$this->logoPath;
+			$logoName = $uploadDir.$binFileName;
+			move_uploaded_file($_FILES["logo"]["tmp_name"], $logoName);
+			copy($logoName, $uploadDir.'application.ico');
+		}
+	}
 
-    /**
-     * Function to save the logoinfo
-     */
-    public function saveLogo() {
-        $uploadDir = vglobal('root_directory'). '/' .$this->logoPath;
-        $logoName = $uploadDir.$_FILES["logo"]["name"];
-        move_uploaded_file($_FILES["logo"]["tmp_name"], $logoName);
-        copy($logoName, $uploadDir.'application.ico');
-    }
+	/**
+	 * Function to save the Company details
+	 */
+	public function save() {
+		$db = PearDatabase::getInstance();
+		$id = $this->get('id');
+		$fieldsList = $this->getFields();
+		unset($fieldsList['logo']);
+		$tableName = $this->baseTable;
 
-    /**
-     * Function to save the Company details
-     */
-    public function save() {
-        $db = PearDatabase::getInstance();
-        $id = $this->get('id');
-        $fieldsList = $this->getFields();
-        unset($fieldsList['logo']);
-        $tableName = $this->baseTable;
+		if ($id) {
+			$params = array();
 
-        if ($id) {
-            $params = array();
+			$query = "UPDATE $tableName SET ";
+			foreach ($fieldsList as $fieldName => $fieldType) {
+				$query .= " $fieldName = ?, ";
+				array_push($params, $this->get($fieldName));
+			}
+			$query .= " logo = NULL WHERE organization_id = ?";
 
-            $query = "UPDATE $tableName SET ";
-            foreach ($fieldsList as $fieldName => $fieldType) {
-                $query .= " $fieldName = ?, ";
-                array_push($params, $this->get($fieldName));
-            }
-            $query .= " logo = NULL WHERE organization_id = ?";
-
-            array_push($params, $id);
-        } else {
-            $params = $this->getData();
+			array_push($params, $id);
+		} else {
+			$params = $this->getData();
             //SalesPlatform.ru begin
             unset($params['logo']);
             //SalesPlatform.ru end
 
+			$query = "INSERT INTO $tableName (";
+			foreach ($fieldsList as $fieldName => $fieldType) {
+				$query .= " $fieldName,";
+			}
+			$query .= " organization_id) VALUES (". generateQuestionMarks($params). ", ?)";
 
-            $query = "INSERT INTO $tableName (";
-            foreach ($fieldsList as $fieldName => $fieldType) {
-                $query .= " $fieldName,";
-            }
-            $query .= " organization_id) VALUES (". generateQuestionMarks($params). ", ?)";
-
-            array_push($params, $db->getUniqueID($this->baseTable));
-        }
-        $db->pquery($query, $params);
-    }
+			array_push($params, $db->getUniqueID($this->baseTable));
+		}
+		$db->pquery($query, $params);
+	}
 
     /**
      * Function to get the instance of Company details module model
@@ -186,7 +186,17 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
             $db->pquery('UPDATE vtiger_spcompany_seq SET id=?', array($companyid));
             $db->pquery('INSERT INTO vtiger_spcompany(spcompanyid,spcompany,picklist_valueid) VALUES(?,?,?)',
                 array($companyid, $company, $picklistid));
-
+            
+            //SalesPlatform.ru begin
+            $moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance($company);
+            foreach(array_keys($moduleModel->fields) as $fieldName) {
+                $moduleModel->set($fieldName, '');
+            }
+            $moduleModel->set('organizationname', $company);
+            $moduleModel->set('company', $company);
+            $moduleModel->save();
+            //SalesPlatform.ru end
+            
             return true;
         }
         return false;
@@ -242,5 +252,22 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 //		$moduleModel->getFields();
 //		return $moduleModel;
 //      }
-    //SalesPlatform.ru end
+//SalesPlatform.ru end
+        
+        /** 
+        * @var array(string => string) 
+        */ 
+       private static $settings = array();  
+
+       /** 
+        * @param string $fieldname 
+        * @return string 
+        */ 
+       public static function getSetting($fieldname) { 
+            global $adb; 
+            if (!self::$settings) { 
+                    self::$settings = $adb->database->GetRow("SELECT * FROM vtiger_organizationdetails"); 
+            } 
+            return self::$settings[$fieldname]; 
+       } 
 }

@@ -96,6 +96,8 @@ class SPPayments extends CRMEntity {
 	// Refers to vtiger_field.fieldname values.
 	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'pay_no');
 	
+    var $related_tables = Array('sp_paymentscf' => Array('payid')); 
+    
 	function __construct() {
 		global $log;
                 $this->column_fields = getColumnFields('SPPayments');

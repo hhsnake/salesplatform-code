@@ -329,10 +329,10 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 			'~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick.js',
 		);
                 
-                //SalesPlatform.ru begin add current locale for datepicker
-                global $current_language;
-                $jsFileNames[] = "~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick-" .substr($current_language, 0, 2). ".js";
-                //SalesPLatform.ru end
+        //SalesPlatform.ru begin add current locale for datepicker
+        global $current_language;
+        $jsFileNames[] = "~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick-" .substr($current_language, 0, 2). ".js";
+        //SalesPLatform.ru end
                 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
 		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);

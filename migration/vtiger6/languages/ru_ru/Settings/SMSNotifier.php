@@ -8,11 +8,11 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD'               => 'Новая конфигурция',
+	'LBL_ADD_RECORD'               => 'Новая конфигурация',
 	'SMSNotifier'                  => 'SMS-Уведомления', 
 	'LBL_ADD_CONFIGURATION'        => 'Новая конфигурция',
 	'LBL_EDIT_CONFIGURATION'       => 'Изменить конфигурцию',
-	'LBL_SELECT_ONE'               => 'Select One',
+	'LBL_SELECT_ONE'               => 'Выберите',
 	'providertype'                 => 'Провайдер',
 	'isactive'                     => 'Активен', // KEY 5.x: LBL_ACTIVE
 	'username'                     => 'Пользователь', // KEY 5.x: LBL_USERNAME

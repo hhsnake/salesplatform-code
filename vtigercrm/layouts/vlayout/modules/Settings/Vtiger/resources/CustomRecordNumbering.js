@@ -117,8 +117,13 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 
         // SalesPlatform.ru begin: Added separate numbering for self organizations
         var modules = ['Invoice', 'Act', 'Consignment'];
+        var selectCompanyElement = editViewForm.find('[name="spCompany"]');
         if(modules.indexOf(sourceModule) != -1) {
-            params.spCompany = editViewForm.find('[name="spCompany"]').val();
+            if(selectCompanyElement.val() == 'Default') {
+                params.spCompany = '';
+            } else {
+                params.spCompany = selectCompanyElement.val();
+            }
         }
         // SalesPlatform.ru end
 
@@ -164,9 +169,14 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 			}
 
             // SalesPlatform.ru begin: Added separate numbering for self organizations
+            var selectCompanyElement = editViewForm.find('[name="spCompany"]');
             var modules = ['Invoice', 'Act', 'Consignment'];
             if(modules.indexOf(sourceModule) != -1) {
-                params.spCompany = editViewForm.find('[name="spCompany"]').val();
+                if(selectCompanyElement.val() == 'Default') {
+                    params.spCompany = '';
+                } else {
+                    params.spCompany = selectCompanyElement.val();
+                }
             }
             // SalesPlatform.ru end
 

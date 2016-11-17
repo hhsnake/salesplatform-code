@@ -90,7 +90,7 @@ class SMSNotifier_DevinoTelecom_Provider implements SMSNotifier_ISMSProvider_Mod
                         }
                         if (!empty($result_devino)) {
                             $result['id'] = $result_devino[0];
-                            $status = $this->_devino->getSMSState($session_id);
+                            $status = $this->_devino->getSMSState($result['id']);
                             $result['status'] = self::MSG_STATUS_PROCESSING;
                             $result['statusmessage'] = $status['StateDescription'];
                         }

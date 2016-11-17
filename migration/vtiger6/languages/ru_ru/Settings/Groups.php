@@ -21,6 +21,6 @@ $languageStrings = array(
     'LBL_CREATING_NEW'             => 'Создание',
 );
 $jsLanguageStrings = array(
-	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Пожалуйста, выберите одного члена Группы', // TODO: Review
+	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Пожалуйста, выберите по крайней мере одного члена для группы', // TODO: Review
 	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Группа удалена'  , // TODO: Review
 );

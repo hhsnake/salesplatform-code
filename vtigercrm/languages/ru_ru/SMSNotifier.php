@@ -31,6 +31,7 @@ $languageStrings = array(
     'LBL_STATUS' => 'Статус',
     'LBL_STATUS_MESSAGE' => 'Информация по статусу',
     'Failed' => 'Отменено',
+    'LBL_NO_NUMBERS_TO_SEND_SMS' => 'Все номера для отправки смс пустые. Сообщение не отправлено.'
     //SalesPlatform.ru end
 );
 

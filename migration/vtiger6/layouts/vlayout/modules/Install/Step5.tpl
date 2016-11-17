@@ -23,7 +23,7 @@
 				</div>
 				<div class="span2">
 					{* SalesPlatform.ru begin Link to SP wiki *}
-                    <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630" target="_blank" class="pull-right">
+                    <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_640" target="_blank" class="pull-right">
                     {*<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">*}
                     {* SalesPlatform.ru end *}
 						<img src="{'help.png'|vimage_path}" alt="Help-Icon"/>

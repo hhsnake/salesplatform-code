@@ -18,11 +18,8 @@
 						<span class="font-x-large">{$RECORD->getName()}</span>
 					<div class="pull-right btn-group">
 						<button class="btn dropdown-toggle" data-toggle="dropdown">
-                            {* SalesPlatform.ru begin *}
 							{vtranslate('Actions',$QUALIFIED_MODULE)}
-                            {* Actions *}
-							{* SalesPlatform.ru end *}
-                            <span class="caret"></span>
+							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu pull-right">
 							{foreach item=LINK from=$RECORD->getRecordLinks()}

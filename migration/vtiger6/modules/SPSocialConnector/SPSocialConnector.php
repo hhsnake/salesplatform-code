@@ -109,7 +109,21 @@ class SPSocialConnector extends CRMEntity {
     
     function save_module($module) {
     }
+    
 
+    function getListQuery($module, $where='') {
+        global $current_user;
+        $query = "SELECT vtiger_crmentity.*, "
+                . "vtiger_sp_socialconnector.* "
+                . "FROM vtiger_sp_socialconnector "
+                . "INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_sp_socialconnector.socialconnectorid ";
+            $query .= getNonAdminAccessControlQuery($module, $current_user);
+            $query .= "WHERE vtiger_crmentity.deleted = 0 ". $where;
+            
+        return $query;
+    }
+
+    
     /**
      * Invoked when special actions are performed on the module.
      * @param String Module name

@@ -16,6 +16,9 @@ $languageStrings = array(
 	'LBL_EDIT_LIST_PRICE'          => 'Редактировать список цен'             , 
 	'Price Book Name'              => 'Название'            , 
 	'PriceBook No'                 => 'Каталог №'          , 
+	
+	'LBL_UNIT_PRICE' => 'Цена за штуку',
+	'LBL_ADD_TO' => 'Добавлять к',
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

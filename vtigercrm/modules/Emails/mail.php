@@ -107,10 +107,10 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	else
 	{
 		$mail_error = $mail_status;
-                // SalesPlatform.ru begin corrected date of sending
-                $query = 'UPDATE vtiger_emaildetails SET email_flag ="SENT" WHERE emailid=?';
-                $adb->pquery($query, array($emailid));
-                // SalesPlatform.ru end
+        // SalesPlatform.ru begin corrected date of sending
+        $query = 'UPDATE vtiger_emaildetails SET email_flag ="SENT" WHERE emailid=?';
+        $adb->pquery($query, array($emailid));
+        // SalesPlatform.ru end
 	}
 
 	return $mail_error;

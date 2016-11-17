@@ -251,8 +251,12 @@ class Consignment extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_sp_consignment","consignmentid");
+    //SalesPlatform.ru begin
+    function generateReportsSecQuery($module,$secmodule,$queryplanner){
+        $query = $this->getRelationQuery($module,$secmodule,"vtiger_sp_consignment","consignmentid",$queryplanner);
+    //function generateReportsSecQuery($module,$secmodule){
+		//$query = $this->getRelationQuery($module,$secmodule,"vtiger_sp_consignment","consignmentid");
+    //SalesPlatform.ru end
                 // SalesPlatform.ru begin support for additional modules
 		$query .= " left join vtiger_crmentity as vtiger_crmentityConsignment on vtiger_crmentityConsignment.crmid=vtiger_sp_consignment.consignmentid and vtiger_crmentityConsignment.deleted=0
 			left join vtiger_sp_consignmentcf on vtiger_sp_consignment.consignmentid = vtiger_sp_consignmentcf.consignmentid

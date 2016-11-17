@@ -23,7 +23,7 @@
 				</div>
 				<div class="span2">
 					{* SalesPlatform.ru begin Link to SP wiki *}
-                    <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630" target="_blank" class="pull-right">
+                    <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_640" target="_blank" class="pull-right">
                     {*<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">*}
                     {* SalesPlatform.ru end *}
 						<img src="{'help.png'|vimage_path}" alt="Help-Icon"/>
@@ -172,7 +172,7 @@
 
 <div id="progressIndicator" class="row-fluid main-container hide">
 	<div class="inner-container">
-		<div class="span12 inner-container">
+		<div class="inner-container">
 			<div class="row-fluid">
 				<div class="span12 welcome-div alignCenter">
 					<h3>{vtranslate('LBL_INSTALLATION_IN_PROGRESS','Install')}...</h3><br>

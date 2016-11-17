@@ -22,7 +22,7 @@
 				</div>
 				<div class="span2">
 					{* SalesPlatform.ru begin Link to SP wiki *}
-                    <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_630" target="_blank" class="pull-right">
+                    <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_640" target="_blank" class="pull-right">
                     {*<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">*}
                     {* SalesPlatform.ru end *}
 						<img src="{'help.png'|vimage_path}" alt="Help-Icon"/>
@@ -45,8 +45,27 @@
 						<table class="config-table">
 							<tr><th>{vtranslate('LBL_PHP_CONFIGURATION', 'Install')}</th><th>{vtranslate('LBL_REQUIRED_VALUE', 'Install')}</th><th>{vtranslate('LBL_PRESENT_VALUE', 'Install')}</th></tr>
 							{foreach key=CONFIG_NAME item=INFO from=$SYSTEM_PREINSTALL_PARAMS}
-								<tr><td>{vtranslate($CONFIG_NAME, 'Install')}</td><td>{if $INFO.1 eq 1} {vtranslate('LBL_TRUE', 'Install')} {else} {$INFO.1} {/if}</td>
-									<td {if $INFO.2 eq false} class="no" > {vtranslate('LBL_NO', 'Install')} {else if ($INFO.2 eq true and $INFO.1 === true)} > {vtranslate('LBL_YES', 'Install')} {else} > {$INFO.0} {/if}</td></tr>
+								<tr><td>{vtranslate($CONFIG_NAME, 'Install')}</td>
+									<td>
+										{if $INFO.1 eq 1} 
+											{vtranslate('LBL_YES', 'Install')} 
+										{else} 
+											{$INFO.1} 
+										{/if}
+									</td>
+									<td 
+										{if $INFO.2 eq false} class="no" >
+											{if $CONFIG_NAME = 'LBL_PHP_VERSION'}
+												{$INFO.0}
+											{else}
+												{vtranslate('LBL_NO', 'Install')}
+											{/if}
+										{else if ($INFO.2 eq true and $INFO.1 === true)} > 
+											{vtranslate('LBL_YES', 'Install')} 
+										{else} > 
+											{$INFO.0} 
+										{/if}
+									</td></tr>
 							{/foreach}
 						</table>
 						<br>

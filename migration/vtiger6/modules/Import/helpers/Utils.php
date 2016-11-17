@@ -16,10 +16,19 @@ class Import_Utils_Helper {
 	static $AUTO_MERGE_OVERWRITE = 2;
 	static $AUTO_MERGE_MERGEFIELDS = 3;
 
-    // SalesPlatform.ru begin Add CP1251
-	static $supportedFileEncoding = array('UTF-8'=>'UTF-8', 'CP1251'=>'CP1251', 'ISO-8859-1'=>'ISO-8859-1');
-    //static $supportedFileEncoding = array('UTF-8'=>'UTF-8', 'ISO-8859-1'=>'ISO-8859-1');
-    // SalesPlatform.ru end
+	static $supportedFileEncoding = array(
+		'UTF-8'=>'UTF-8',
+		'ISO-8859-1'=>'ISO-8859-1',
+		'Windows-1250'=>'Windows-1250',
+		'Windows-1251'=>'Windows-1251',
+		'Windows-1252'=>'Windows-1252',
+		'Windows-1253'=>'Windows-1253',
+		'Windows-1254'=>'Windows-1254',
+		'Windows-1255'=>'Windows-1255',
+		'Windows-1256'=>'Windows-1256',
+		'Windows-1257'=>'Windows-1257',
+		'Windows-1258'=>'Windows-1258',
+		);
 	static $supportedDelimiters = array(','=>'comma', ';'=>'semicolon');
 	static $supportedFileExtensions = array('csv','vcf');
 
@@ -35,11 +44,13 @@ class Import_Utils_Helper {
 		return self::$supportedDelimiters;
 	}
 
-	public static function getAutoMergeTypes() {
-		return array(
-			self::$AUTO_MERGE_IGNORE => 'Skip',
-			self::$AUTO_MERGE_OVERWRITE => 'Overwrite',
-			self::$AUTO_MERGE_MERGEFIELDS => 'Merge');
+	public static function getAutoMergeTypes($moduleName) {
+		$mergeTypes = array(self::$AUTO_MERGE_IGNORE => 'Skip');
+		if (Users_Privileges_Model::isPermitted($moduleName, 'EditView')) {
+			$mergeTypes[self::$AUTO_MERGE_OVERWRITE]		= 'Overwrite';
+			$mergeTypes[self::$AUTO_MERGE_MERGEFIELDS]	= 'Merge';
+		}
+		return $mergeTypes;
 	}
 
 	public static function getMaxUploadSize() {

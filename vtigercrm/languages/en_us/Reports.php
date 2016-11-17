@@ -164,7 +164,9 @@ $languageStrings = array(
 	'LBL_CHARTS' => 'Charts',
     //Schedule Reports - Mail Content
     'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'This is an auto-generated email sent on behalf of a scheduled report.',
-
+    //SalesPlatform.ru begin
+    'LBL_NO_COLUMN_VALUE' => '--No field value--',
+    //SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

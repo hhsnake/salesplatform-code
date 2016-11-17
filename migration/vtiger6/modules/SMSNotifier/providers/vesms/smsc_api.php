@@ -7,8 +7,10 @@ define("SMSC_POST", 0);                    // использовать мето�
 define("SMSC_HTTPS", 0);                // использовать HTTPS протокол
 define("SMSC_CHARSET", "windows-1251");    // кодировка сообщения: utf-8, koi8-r или windows-1251 (по умолчанию)
 define("SMSC_DEBUG", 0);                // флаг отладки
-define("SMTP_FROM", "api@cab.vesms.ru");     // e-mail адрес отправителя
-
+//SalesPlatform.ru begin
+define("SMTP_FROM", "api@smsc.ru");     // e-mail адрес отправителя
+//define("SMTP_FROM", "api@cab.vesms.ru");     // e-mail адрес отправителя
+//SalesPlatform.ru end
 // Функция отправки SMS
 //
 // обязательные параметры:
@@ -63,7 +65,10 @@ function send_sms($phones, $message, $translit = 0, $time = 0, $id = 0, $format 
 
 function send_sms_mail($phones, $message, $translit = 0, $time = 0, $id = 0, $format = 0, $sender = "")
 {
-    return mail("send@send.cab.vesms.ru", "", SMSC_LOGIN.":".SMSC_PASSWORD.":$id:$time:$translit,$format,$sender:$phones:$message", "From: ".SMTP_FROM."\nContent-Type: text/plain; charset=".SMSC_CHARSET."\n");
+    //SalesPlatfrom.ru begin change domain
+    return mail("send@smsc.ru", "", SMSC_LOGIN.":".SMSC_PASSWORD.":$id:$time:$translit,$format,$sender:$phones:$message", "From: ".SMTP_FROM."\nContent-Type: text/plain; charset=".SMSC_CHARSET."\n");
+    //return mail("send@send.cab.vesms.ru", "", SMSC_LOGIN.":".SMSC_PASSWORD.":$id:$time:$translit,$format,$sender:$phones:$message", "From: ".SMTP_FROM."\nContent-Type: text/plain; charset=".SMSC_CHARSET."\n");
+    //SalesPlatfrom.ru end
 }
 
 // Функция получения стоимости SMS
@@ -184,7 +189,8 @@ function _smsc_send_cmd($cmd, $arg = "", $login = "", $password = "")
 // SalesPlatform.ru end
 {
     // SalesPlatform.ru begin added login/password
-    $url = (SMSC_HTTPS ? "https" : "http")."://cab.vesms.ru/sys/$cmd.php?login=".urlencode($login)."&psw=".urlencode($password)."&fmt=1&charset=".SMSC_CHARSET."&".$arg;
+    $url = (SMSC_HTTPS ? "https" : "http")."://smsc.ru/sys/$cmd.php?login=".urlencode($login)."&psw=".urlencode($password)."&fmt=1&charset=".SMSC_CHARSET."&".$arg;
+    //$url = (SMSC_HTTPS ? "https" : "http")."://cab.vesms.ru/sys/$cmd.php?login=".urlencode($login)."&psw=".urlencode($password)."&fmt=1&charset=".SMSC_CHARSET."&".$arg;
     //$url = (SMSC_HTTPS ? "https" : "http")."://cab.vesms.ru/sys/$cmd.php?login=".urlencode(SMSC_LOGIN)."&psw=".urlencode(SMSC_PASSWORD)."&fmt=1&charset=".SMSC_CHARSET."&".$arg;
     // SalesPlatform.ru end
     
@@ -244,8 +250,10 @@ function _smsc_read_url($url)
         $fp = fsockopen($m["host"], 80, $errno, $errstr, 10);
 
         if ($fp) {
-            fwrite($fp, ($post ? "POST $m[path]" : "GET $m[path]?$m[query]")." HTTP/1.1\r\nHost: cab.vesms.ru\r\nUser-Agent: PHP".($post ? "\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ".strlen($m['query']) : "")."\r\nConnection: Close\r\n\r\n".($post ? $m['query'] : ""));
-
+            //SalesPlatfrom.ru begin change domain
+            fwrite($fp, ($post ? "POST $m[path]" : "GET $m[path]?$m[query]")." HTTP/1.1\r\nHost: smsc.ru\r\nUser-Agent: PHP".($post ? "\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ".strlen($m['query']) : "")."\r\nConnection: Close\r\n\r\n".($post ? $m['query'] : ""));
+            //fwrite($fp, ($post ? "POST $m[path]" : "GET $m[path]?$m[query]")." HTTP/1.1\r\nHost: cab.vesms.ru\r\nUser-Agent: PHP".($post ? "\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ".strlen($m['query']) : "")."\r\nConnection: Close\r\n\r\n".($post ? $m['query'] : ""));
+            //SalesPlatfrom.ru end
             while (!feof($fp))
                 $ret .= fgets($fp, 1024);
             list(, $ret) = explode("\r\n\r\n", $ret, 2);

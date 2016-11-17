@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'CustomerPortal'               => 'Клиентский портал', 
+	'CustomerPortal'               => 'Клиентский Портал', 
 	'LBL_PORTAL_DESCRIPTION'       => 'Установка прав пользователя портала', 
 	'LBL_PRIVILEGES'               => 'Профили пользователей', 
 	'LBL_DEFAULT_ASSIGNEE'         => 'Правопреемник по умолчанию',

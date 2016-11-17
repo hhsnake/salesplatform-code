@@ -99,7 +99,10 @@
             </th>
         </tr>
         <tr>
-            <td><b>{vtranslate('LBL_TOOLS',$MODULE)}</b></td>
+            {* SalesPlatform.ru begin Small column name*}
+            <td><b>{vtranslate('',$MODULE)}</b></td>
+            {*<td><b>{vtranslate('LBL_TOOLS',$MODULE)}</b></td>*}
+            {* SalesPlatform.ru begin Small column name*}
             <td><span class="redColor">*</span><b>{vtranslate('LBL_ITEM_NAME',$MODULE)}</b></td>
             <td><b>{vtranslate('LBL_QTY',$MODULE)}</b></td>
             <td><b>{vtranslate('LBL_LIST_PRICE',$MODULE)}</b></td>

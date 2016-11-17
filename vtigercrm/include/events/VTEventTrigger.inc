@@ -14,11 +14,8 @@
 		/* EventTrigger cache management */
 		private static $cache = array();
 		private static $cacheLookupType = '';
-        
-        //SalesPlatform.ru begin
+
 		private static $mandatoryEventClass = array('VTEntityDelta', 'ModTrackerHandler', 'PBXManagerBatchHandler');
-        //private static $mandatoryEventClass = array('VTEntityDelta', 'ModTrackerHandler');
-        //SalesPlatform.ru end
 
 		const CACHE_LOOKUP_TYPE_ALL = 'ALL';
 
@@ -98,8 +95,8 @@
 					'handler_path'  => $row->handler_path,
 					'dependent_on'	=> $row->dependent_on,
 				);
-            }
-            
+			}
+
 			if($name) return $evtinfosbyname[$name];
 			else return $evtinfosbyname;
 		}

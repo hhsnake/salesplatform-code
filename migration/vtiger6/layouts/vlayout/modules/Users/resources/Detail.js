@@ -199,7 +199,31 @@ Vtiger_Detail_Js("Users_Detail_Js",{
 				}
 			}
 		);
-	}
+	},
+
+	triggerChangeAccessKey: function (url) {
+		var title = app.vtranslate('JS_NEW_ACCESS_KEY_REQUESTED');
+		var message = app.vtranslate('JS_CHANGE_ACCESS_KEY_CONFIRMATION');
+		Vtiger_Helper_Js.showConfirmationBox({'title': title,'message': message}).then(function (data) {
+			AppConnector.request(url).then(function(data) {
+				var params = {};
+				if(data['success']) {
+					data = data.result;
+					params['type'] = 'success';
+					message = app.vtranslate(data.message);
+					var accessKeyEle = jQuery('#Users_detailView_fieldValue_accesskey');
+					if (accessKeyEle.length) {
+						accessKeyEle.find('.value').html(data.accessKey);
+					}
+				} else {
+					message = app.vtranslate(data['error']['message']);
+				}
+				params['text'] = message;
+				Vtiger_Helper_Js.showPnotify(params);
+			});
+		});
+	},
+
 },{
 	
 	usersEditInstance : false,
@@ -236,9 +260,9 @@ Vtiger_Detail_Js("Users_Detail_Js",{
 		this.updateStartHourElement(form);
 		this.hourFormatUpdateEvent();
 		this.startHourUpdateEvent(form);
-                //SalesPlatform.ru begin fix currency separatiors
-                Users_PreferenceEdit_Js.registerChangeEventForCurrencySeperator();
-                //SalesPlatform.end
+        //SalesPlatform.ru begin fix currency separators
+        Users_PreferenceEdit_Js.registerChangeEventForCurrencySeparator();
+        //SalesPlatform.end
 	}
-	
+
 });

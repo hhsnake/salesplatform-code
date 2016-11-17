@@ -161,10 +161,10 @@ class Install_Utils_Model {
 	 * Function checks for vtigerCRM installation prerequisites
 	 * @return <Array>
 	 */
-	function getSystemPreInstallParameters() {
+	public static function getSystemPreInstallParameters() {
 		$preInstallConfig = array();
 		// Name => array( System Value, Recommended value, supported or not(true/false) );
-		$preInstallConfig['LBL_PHP_VERSION']	= array(phpversion(), '5.2.1 - 5.6', (version_compare(phpversion(), '5.7.0', '<=')));
+		$preInstallConfig['LBL_PHP_VERSION']	= array(phpversion(), '5.4.0', (version_compare(phpversion(), '5.4.0', '>=')));
 		$preInstallConfig['LBL_IMAP_SUPPORT']	= array(function_exists('imap_open'), true, (function_exists('imap_open') == true));
 		$preInstallConfig['LBL_ZLIB_SUPPORT']	= array(function_exists('gzinflate'), true, (function_exists('gzinflate') == true));
                 if ($preInstallConfig['LBL_PHP_VERSION'] >= '5.5.0') {
@@ -194,7 +194,7 @@ class Install_Utils_Model {
 	 * Function that provides default configuration based on installer setup
 	 * @return <Array>
 	 */
-	function getDefaultPreInstallParameters() {
+	public static function getDefaultPreInstallParameters() {
 		include 'config.db.php';
 		
 		$parameters = array(
@@ -315,6 +315,33 @@ class Install_Utils_Model {
 		return $currencies;
 	}
 
+
+	/**
+	 * Returns an array with the list of languages which are available in source
+	 * Note: the DB has not been initialized at this point, so we have to look at
+	 * the contents of the `languages/` directory.
+	 * @return <Array>
+	 */
+	public static function getLanguageList() {
+		$languageFolder = 'languages/';
+		$handle = opendir($languageFolder);
+		$language_list = array();
+		while ($prefix = readdir($handle)) {
+			if (substr($prefix, 0, 1) === '.' || $prefix === 'Settings') {
+				continue;
+			}
+			if (is_dir('languages/' . $prefix) && is_file('languages/' . $prefix . '/Install.php')) {
+				$language_list[$prefix] = $prefix;
+			}
+		}
+
+		ksort($language_list);
+
+		return $language_list;
+	}
+
+
+
 	/**
 	 * Function checks if its mysql type
 	 * @param type $dbType
@@ -360,10 +387,10 @@ class Install_Utils_Model {
 		$db_creation_failed = false; // did we try to create a database and fail?
 		$db_exist_status = false; // does the database exist?
 		$db_utf8_support = false; // does the database support utf8?
-        
+
 		//Checking for database connection parameters
 		if($db_type) {
-			$conn = &NewADOConnection($db_type);
+			$conn = NewADOConnection($db_type);
 			$db_type_status = true;
 			if(@$conn->Connect($db_hostname,$db_username,$db_password)) {
 				$db_server_status = true;
@@ -373,7 +400,7 @@ class Install_Utils_Model {
 				}
 				if($create_db) {
 					// drop the current database if it exists
-					$dropdb_conn = &NewADOConnection($db_type);
+					$dropdb_conn = NewADOConnection($db_type);
 					if(@$dropdb_conn->Connect($db_hostname, $root_user, $root_password, $db_name)) {
 						$query = "DROP DATABASE ".$db_name;
 						$dropdb_conn->Execute($query);
@@ -382,7 +409,7 @@ class Install_Utils_Model {
 
 					// create the new database
 					$db_creation_failed = true;
-					$createdb_conn = &NewADOConnection($db_type);
+					$createdb_conn = NewADOConnection($db_type);
 					if(@$createdb_conn->Connect($db_hostname, $root_user, $root_password)) {
 						$query = "CREATE DATABASE ".$db_name;
 						if($create_utf8_db == 'true') {
@@ -432,7 +459,7 @@ class Install_Utils_Model {
 			}
 		}
 		$dbCheckResult['db_utf8_support'] = $db_utf8_support;
-        
+
 		$error_msg = '';
 		$error_msg_info = '';
 

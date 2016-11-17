@@ -233,6 +233,8 @@ $languageStrings = array(
 	'Asia/Vladivostok'             => '(UTC+10:00) Владивосток',
 	'Asia/Kamchatka'               => '(UTC+10:00) Камчатка',
 	'Asia/Magadan'                 => '(UTC+10:00) Магадан',
+    'LBL_CHANGE_ACCESS_KEY' => 'Изменить ключ доступа',
+    'LBL_ACCESS_KEY_UPDATED_SUCCESSFULLY' => 'Ключ доступа изменен',
 	// SalesPlatform.ru end
 );
 
@@ -245,6 +247,8 @@ $jsLanguageStrings = array(
 	'JS_PASSWORD_CHANGE_FAILED_1'=>'Смена пароля прошла неудачно для ',
 	'JS_PASSWORD_CHANGE_FAILED_2'=>' Ошибка. Новый пароль должен быть задан.',
 	'JS_PASSWORD_INCORRECT_OLD'=>'Указан неверно старый пароль. Введите пароль повторно.',
+	'JS_NEW_ACCESS_KEY_REQUESTED' => 'Ключ доступа Новый просил',
+	'JS_CHANGE_ACCESS_KEY_CONFIRMATION' => 'Вы запросили новый ключ доступа. После его смены необходимо заменить старый ключ доступа на новый во всех приложениях, использующих REST API системы. Вы хотите продолжить?',
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

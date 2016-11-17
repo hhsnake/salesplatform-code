@@ -47,10 +47,7 @@
 					<input type="hidden" id="module" name="module" value="Migration">
 					<input type="hidden" id="view" name="view" value="Index">
 					<input type="hidden" name="mode" value="step2">
-                    {* SalesPlatform.ru begin *}
 					<input type="submit" class="btn btn-large btn-primary" value="{vtranslate('Next', $MODULE)}"/>
-                    {*<input type="submit" class="btn btn-large btn-primary" value="Next"/>*}
-                    {* SalesPlatform.ru end *}
 				</form>
 			</div>
 		</div>

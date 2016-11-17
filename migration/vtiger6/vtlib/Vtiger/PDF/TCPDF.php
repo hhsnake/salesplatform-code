@@ -16,6 +16,10 @@ require_once 'libraries/tcpdf/tcpdf.php';
 class Vtiger_PDF_TCPDF extends TCPDF {
 
 	protected $FontFamily;
+    //SalesPlatform.ru begin
+    protected $footerModel;
+    protected $footerFrame;
+    //SalesPlatform.ru beginend
 
 	public function __construct($orientation='P', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8') {
 		parent::__construct($orientation, $unit, $format, $unicode, $encoding);
@@ -86,5 +90,17 @@ class Vtiger_PDF_TCPDF extends TCPDF {
 		$this->CurrentFont = &$this->fonts[$fontdata['fontkey']];
 		$this->SetFontSize($size);
 	}
+    //SalesPlatform.ru begin
+    public function setFooterModel($footerModel, $footerFrame) {
+        $this->footerModel = $footerModel;
+        $this->footerFrame = $footerFrame;
+    }
+    public function Footer() {
+        $this->SetFont('','', 8);
+        if ($this->footerFrame->h > 0) {
+            $this->writeHTMLCell($this->footerFrame->w,$this->footerFrame->h, $this->footerFrame->x, $this->footerFrame->y+20, $this->footerModel->getContent());
+        }
+    }
+    //SalesPlatform.ru end
 }
 ?>

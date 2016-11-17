@@ -194,6 +194,7 @@ $languageStrings = array(
     'LBL_NEXT_TRIGGER_TIME' => 'Следующее время отправки/выполнения',
     'Templates' => 'Шаблоны',
     'Report templates for modules' => 'Шаблоны отчетов для модулей',
+ 	'LBL_NO_COLUMN_VALUE' => '--Пустое значение поля--', 
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(

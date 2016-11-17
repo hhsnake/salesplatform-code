@@ -359,8 +359,11 @@ class MailManager_Message_Model extends Vtiger_MailRecord  {
 
 		$db = PearDatabase::getInstance();
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-
-		$filename = imap_utf8($filename);
+        
+        //SalesPlatform.ru begin
+        $filename = urldecode(imap_utf8($filename));
+		//$filename = imap_utf8($filename);
+        //SalesPlatform.ru end
 		$dirname = decideFilePath();
 		$usetime = $db->formatDate(date('ymdHis'), true);
 		$binFile = sanitizeUploadFileName($filename, vglobal('upload_badext'));

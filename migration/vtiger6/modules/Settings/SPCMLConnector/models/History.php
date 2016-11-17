@@ -24,7 +24,9 @@ class Settings_SPCMLConnector_History_Model {
      */
     public function getEntries() {
         $db = PearDatabase::getInstance();
-        $result = $db->query('select date, type, status, direction, error from sp_commercetranzaction');
+        $result = $db->pquery('select date, type, status, direction, error from sp_commercetranzaction '
+                . 'WHERE `date` > (NOW() - INTERVAL ? DAY)', array(30));
+        //$result = $db->query('select date, type, status, direction, error from sp_commercetranzaction');
 
         $entries = array();
         while($row = $db->fetchByAssoc($result)) {

@@ -136,10 +136,11 @@ class CRMEntity {
 		} else {
 			$file_name = $file_details['name'];
 		}
-                
+
+		// Check 1
                 $save_file = 'true'; 
                 //only images are allowed for Image Attachmenttype 
-                $mimeType = mime_content_type($file_details['tmp_name']); 
+                $mimeType = vtlib_mime_content_type($file_details['tmp_name']); 
                 $mimeTypeContents = explode('/', $mimeType); 
                 // For contacts and products we are sending attachmentType as value 
                 if ($attachmentType == 'Image' || ($file_details['size'] && $mimeTypeContents[0] == 'image')) { 
@@ -148,6 +149,13 @@ class CRMEntity {
                 if ($save_file == 'false') { 
                         return false; 
                 } 
+
+		// Check 2
+		$save_file = 'true';
+		//only images are allowed for these modules
+		if ($module == 'Contacts' || $module == 'Products') {
+			$save_file = validateImageFile($file_details);
+		}
 
 		$binFile = sanitizeUploadFileName($file_name, $upload_badext);
 
@@ -163,15 +171,6 @@ class CRMEntity {
 
 		//upload the file in server
 		$upload_status = move_uploaded_file($filetmp_name, $upload_file_path . $current_id . "_" . $binFile);
-        
-        
-		$save_file = 'true';
-		//only images are allowed for these modules
-        //SalesPlatform.ru begin
-		//if ($module == 'Contacts' || $module == 'Products') {
-		//	$save_file = validateImageFile($file_details);
-		//}
-        //SalesPlatform.ru end
 
 		if ($save_file == 'true' && $upload_status == 'true') {
 			//This is only to update the attached filename in the vtiger_notes vtiger_table for the Notes module
@@ -1388,6 +1387,9 @@ class CRMEntity {
 	/* Function to set the Sequence string and sequence number starting value */
     // SalesPlatform.ru begin: Added separate numbering for self organizations
     function setModuleSeqNumber($mode, $module, $req_str = '', $req_no = '', $spCompany = '') {
+        if($spCompany == 'Default') {
+            $spCompany = '';
+        }
     //function setModuleSeqNumber($mode, $module, $req_str = '', $req_no = '') {
     // SalesPlatform.ru end
 		global $adb;
@@ -1453,6 +1455,9 @@ class CRMEntity {
 	/* Function to check if module sequence numbering is configured for the given module or not */
     // SalesPlatform.ru begin: Added separate numbering for self organizations
     function isModuleSequenceConfigured($module, $spCompany = '') {
+        if($spCompany == 'Default') {
+            $spCompany = '';
+        }
 	//function isModuleSequenceConfigured($module) {
     // SalesPlatform.ru end
 		$adb = PearDatabase::getInstance();
@@ -1469,6 +1474,9 @@ class CRMEntity {
 	/* Function to get the next module sequence number for a given module */
     // SalesPlatform.ru begin: Added separate numbering for self organizations
     function getModuleSeqInfo($module, $spCompany = '') {
+        if($spCompany == 'Default') {
+            $spCompany = '';
+        }
 	//function getModuleSeqInfo($module) {
     // SalesPlatform.ru end
 		global $adb;
@@ -1502,6 +1510,9 @@ class CRMEntity {
         
     // SalesPlatform.ru begin: Added separate numbering for self organizations
     function updateMissingSeqNumber($module, $spCompany = '') {
+        if($spCompany == 'Default') {
+            $spCompany = '';
+        }
 	//function updateMissingSeqNumber($module) {
     // SalesPlatform.ru end
         global $log, $adb;
@@ -2450,6 +2461,9 @@ class CRMEntity {
 					$i++;
 				}
 			}
+		}
+		if($this->table_name == 'vtiger_leaddetails') {
+			$query .= " AND $this->table_name.converted = 0 ";
 		}
 		return $query;
 	}

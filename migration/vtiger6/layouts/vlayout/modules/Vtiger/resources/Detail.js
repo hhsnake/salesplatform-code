@@ -984,10 +984,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 
 
 
-
                 fieldElement.validationEngine('hide');
                 //Before saving ajax edit values we need to check if the value is changed then only we have to save
-                if(previousValue == ajaxEditNewValue) {
+                if((""+previousValue) == (""+ajaxEditNewValue)) { // Normalize(99!="099") Fix http://code.vtiger.com/vtiger/vtigercrm/issues/16 
                     editElement.addClass('hide');
                     detailViewValue.removeClass('hide');
 					actionElement.show();
@@ -1201,26 +1200,30 @@ jQuery.Class("Vtiger_Detail_Js",{
 				var fieldName = fieldnameElement.val();
 				var fieldElement = jQuery('[name="'+ fieldName +'"]', editElement);
 				var previousValue = fieldnameElement.data('prevValue');
-				var ajaxEditNewValue = fieldElement.find('option:selected').text();
+                //SalesPlatform.ru begin
+                //var ajaxEditNewValue = fieldElement.find('option:selected').text();
+				var ajaxEditNewValue = fieldElement.find('option:selected').val();
+                var displayValue = fieldElement.find('option:selected').text();
+                //SalesPlatform.ru end
 
 				if(previousValue == ajaxEditNewValue) {
-                                        editElement.addClass('hide');
-                                        detailViewElement.removeClass('hide');
+                    editElement.addClass('hide');
+                    detailViewElement.removeClass('hide');
 					currentTarget.show();
-                                } else {
-                                        var errorExists = fieldElement.validationEngine('validate');  
-                                        //If validation fails  
-                                        if(errorExists) {  
-                                                Vtiger_Helper_Js.addClickOutSideEvent(currentDiv, callbackFunction);   
-                                                                return;   
-                                        }
+                } else {
+                    var errorExists = fieldElement.validationEngine('validate');  
+                    //If validation fails  
+                    if(errorExists) {  
+                        Vtiger_Helper_Js.addClickOutSideEvent(currentDiv, callbackFunction);   
+                        return;   
+                }
 					var activityDiv = currentDiv.closest('.activityEntries');
 					var activityId = activityDiv.find('.activityId').val();
 					var moduleName = activityDiv.find('.activityModule').val();
 					var activityType = activityDiv.find('.activityType').val();
 
 					currentDiv.progressIndicator();
-                                        editElement.addClass('hide');
+                    editElement.addClass('hide');
 					var params = {
 						action : 'SaveAjax',
 						record : activityId,
@@ -1235,7 +1238,10 @@ jQuery.Class("Vtiger_Detail_Js",{
 							currentDiv.progressIndicator({'mode':'hide'});
 							detailViewElement.removeClass('hide');
 							currentTarget.show();
-							detailViewElement.html(ajaxEditNewValue);
+                            //SalesPlatform.ru begin
+                            //detailViewElement.html(ajaxEditNewValue);
+							detailViewElement.html(displayValue);
+                            //SalesPlatform.ru end
 							fieldnameElement.data('prevValue', ajaxEditNewValue);
 						}
 					);
@@ -1626,9 +1632,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 				function(data){
 					thisInstance.deSelectAllrelatedTabs();
 					thisInstance.markTabAsSelected(tabElement);
-                    app.registerEventForDatePickerFields(detailContentsHolder);
-                    //Attach time picker event to time fields
-                    app.registerEventForTimeFields(detailContentsHolder);
+                                        app.registerEventForDatePickerFields(detailContentsHolder);
+                                        //Attach time picker event to time fields
+                                        app.registerEventForTimeFields(detailContentsHolder);
 					Vtiger_Helper_Js.showHorizontalTopScrollBar();
 					element.progressIndicator({'mode': 'hide'});
 					if(typeof callBack == 'function'){
@@ -1784,7 +1790,10 @@ jQuery.Class("Vtiger_Detail_Js",{
             }
             
             /* Replace options with remember selected */
-            var targetPickList = $('select[name*="' + targetPickListName + '"]', container); 
+            var targetPickList = $('select[name*="' + targetPickListName + '"]', container);
+            if(targetPickList.length <= 0){
+                return;
+            }
             var listOfAvailableOptions = targetPickList.data('availableOptions');
             if(typeof listOfAvailableOptions == "undefined"){
                 listOfAvailableOptions = $('option', targetPickList);
@@ -2016,9 +2025,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 		this.registerEventForRelatedTabClick();
 		Vtiger_Helper_Js.showHorizontalTopScrollBar();
 		this.registerUrlFieldClickEvent();
-		//SalesPlatform.ru begin #3324 
+		//SalesPlatform.ru begin 
         this.registerSpMobilePhoneFields(this.getForm()); 
-        //SalesPlatform.ru end #3324 
+        //SalesPlatform.ru end
         
 		var detailViewContainer = jQuery('div.detailViewContainer');
 		if(detailViewContainer.length <= 0) {

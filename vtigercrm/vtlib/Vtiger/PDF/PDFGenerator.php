@@ -25,7 +25,9 @@ class Vtiger_PDF_Generator {
 		$this->pdf = new Vtiger_PDF_TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT);
 
 		$this->pdf->setPrintHeader(false);
-		$this->pdf->setPrintFooter(false);
+        //SalesPlatform.ru begin
+        //$this->pdf->setPrintFooter(true);
+        //SalesPlatform.ru end
 	}
 
 	function setHeaderViewer($viewer) {
@@ -156,9 +158,18 @@ class Vtiger_PDF_Generator {
 			$this->footerFrame->y = $totalHeight+$margins['top']-$totalHeightFooter;
 			$this->footerFrame->h = $totalHeightFooter;
 			$this->footerFrame->w = $this->totalWidth;
-
-			$this->footerViewer->initDisplay($this);
-			$this->footerViewer->display($this);
+            //SalesPlatform.ru begin 
+            if ($this->footerFrame->h > 0) {
+                $pdf->setPrintFooter(true);
+                $pdf->SetAutoPageBreak(true, $totalHeightFooter);
+            } else {
+                $pdf->setPrintFooter(false);
+                $pdf->SetAutoPageBreak(true, 10);
+            }            
+            $pdf->setFooterModel($this->footerViewer, $this->footerFrame);
+			//$this->footerViewer->initDisplay($this);
+			//$this->footerViewer->display($this);
+            //SalesPlatform.ru end
 		}
 		
 		if($this->pagerViewer) {

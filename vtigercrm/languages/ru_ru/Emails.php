@@ -44,7 +44,12 @@ $languageStrings = array(
         //SalesPlatform.ru begin add locale
         'LBL_ATTACHED' => 'Прикреплено',
         'LBL_DRAFT' => 'Черновик',
-        'LBL_MAIL_DATE' => 'Дата письма'
+        'LBL_MAIL_DATE' => 'Дата письма',
+        'LBL_EMAIL_INFORMATION' => 'Информация о E-Mail сообщении',
+        'Emails_Block1' => 'Описание',
+        'Emails_Block2' => 'Подробности Сообщения',
+        'Emails_Block3' => 'Текст Сообщения',
+        'Date_Sent'     => 'Отправлено',
         //SalesPlatform.ru end
 );
 

@@ -218,6 +218,14 @@ abstract class Base_Chart extends Vtiger_Base_Model{
 
 		$columnSQL = $reportRunObject->getColumnSQL($selectedfields);
 
+		// Fix for http://code.vtiger.com/vtiger/vtigercrm/issues/4
+		switch ($selectedfields[count($selectedfields)-1]) {
+			case 'MY':
+				$columnSQL = str_replace('%M', '%m', $columnSQL); // %M (yields Jan), %m - 01
+				break;
+		}
+		// End
+
 		$reportRunObject->append_currency_symbol_to_value = $append_currency_symbol_to_value;
 		return $columnSQL;
 	}
@@ -502,10 +510,13 @@ class PieChart extends Base_Chart {
 			} else {
 				$label = $row[strtolower($legend)];
 			}
-                        //SalesPlatform.ru begin
-                        $labels[] = (mb_strlen($label, 'UTF-8') > 30) ? mb_substr($label, 0, 30).'..' : $label;
-			//$labels[] = (strlen($label) > 30) ? substr($label, 0, 30).'..' : $label;
-                        //SalesPlatform.ru end
+            //SalesPlatform.ru begin
+            if($label == "") { 
+                $label = vtranslate('LBL_NO_COLUMN_VALUE', 'Reports'); 
+            } 
+            $labels[] = (mb_strlen($label, 'UTF-8') > 30) ? mb_substr($label, 0, 30).'..' : $label;
+            //$labels[] = (strlen($label) > 30) ? substr($label, 0, 30).'..' : $label;
+            //SalesPlatform.ru end
 			$links[] = $this->generateLink($legendField->get('reportcolumninfo'), $row[strtolower($legend)]);
 		}
 
@@ -585,10 +596,13 @@ class VerticalbarChart extends Base_Chart {
                         //$label = $row[strtolower($gFieldModel->get('reportlabel'))];
                         // SalesPlatform.ru end
 					}
-                                        //SalesPlatform.ru begin   
-                                        $labels[] = (mb_strlen($label, 'UTF-8') > 30) ? mb_substr($label, 0, 30).'..' : $label; 
+                    //SalesPlatform.ru begin
+                    if($label == "") { 
+                        $label = vtranslate('LBL_NO_COLUMN_VALUE', 'Reports'); 
+                    }
+                    $labels[] = (mb_strlen($label, 'UTF-8') > 30) ? mb_substr($label, 0, 30).'..' : $label; 
 					//$labels[] = (strlen($label) > 30) ? substr($label, 0, 30).'..' : $label;
-                                        //SalesPlatform.ru end
+                    //SalesPlatform.ru end
 					$links[] = $this->generateLink($gFieldModel->get('reportcolumninfo'), $row[strtolower($gFieldModel->get('reportlabel'))]);
 				}
 			}

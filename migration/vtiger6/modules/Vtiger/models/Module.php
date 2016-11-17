@@ -1451,7 +1451,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 				$sql = "SELECT vtiger_crmentity.crmid FROM vtiger_crmentity";
 				if($tablename == 'vtiger_crmentityrel'){
 					$sql .= " INNER JOIN $tablename ON ($tablename.relcrmid = vtiger_crmentity.crmid OR $tablename.crmid = vtiger_crmentity.crmid)
-						WHERE ($tablename.crmid IN (".  generateQuestionMarks($recordIds).")) OR ($tablename.relcrmid IN (".  generateQuestionMarks($recordIds)."))";
+						WHERE ($tablename.crmid IN (".  generateQuestionMarks($recordIds).") OR $tablename.relcrmid IN (".  generateQuestionMarks($recordIds)."))";
 					foreach ($recordIds as $key => $recordId) {
 						array_push($params, $recordId);
 					}
@@ -1459,9 +1459,12 @@ class Vtiger_Module_Model extends Vtiger_Module {
 					$sql .= " INNER JOIN $tablename ON $tablename.$tabIndex = vtiger_crmentity.crmid
 						WHERE $tablename.$relIndex IN (".  generateQuestionMarks($recordIds).")";
 				}
+
+				$sql .=' AND vtiger_crmentity.deleted = 0';
 				foreach ($recordIds as $key => $recordId) {
 					array_push($params, $recordId);
 				}
+
 				$result1 = $db->pquery($sql, $params);
 				$num_rows = $db->num_rows($result1);
 				for($j=0; $j<$num_rows; $j++){

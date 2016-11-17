@@ -24,8 +24,8 @@ $languageStrings = array(
 	'LBL_DUPLICATE_RECORD'         => 'Дублировать'      , // KEY 5.x: LBL_DUPLICATE_BUTTON
 	'LBL_DELETE_RECORD'            => 'Удалить'              , // KEY 5.x: LBL_DELETE
 	'LBL_VIEW_PRVILIGE'            => 'Просмотр'            , // KEY 5.x: LBL_VIEW
-	'LBL_EDIT_PRVILIGE'            => 'Создание/Изменение', // KEY 5.x: LBL_CREATE_EDIT
-	'LBL_DELETE_PRVILIGE'          => 'Удалить'              , // KEY 5.x: LBL_DELETE
+	'LBL_EDIT_PRVILIGE'            => 'Изменение',
+	'LBL_DELETE_PRVILIGE'          => 'Удаление',
 	'LBL_INIVISIBLE'               => 'Невидимое'                   , // TODO: Review
 	'LBL_READ_ONLY'                => 'Только Чтение'   , 
 	'LBL_WRITE'                    => 'Запись'                       , // TODO: Review
@@ -39,6 +39,10 @@ $languageStrings = array(
 	'LBL_EDIT_ALL_DESC'            => 'Разрешено редактировать все данные модуля', // TODO: Review
 	'LBL_DUPLICATES_EXIST'         => 'Дубликат профиля существует'    , // TODO: Review
     'Name'                         => 'Название',
+    
+    //SalesPlatform.ru begin 
+    'LBL_CREATE_PRVILIGE' => 'Создание',
+    //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
 	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Профиль удален', // TODO: Review

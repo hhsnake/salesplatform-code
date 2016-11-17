@@ -62,6 +62,7 @@
 		<div class="container">
 			<div class="modal-backdrop"></div>
 			<form class="form" method="POST" action="index.php?module=Users&action=UserSetupSave">
+				<input type="hidden" name="record" value="{$CURRENT_USER_MODEL->getId()}">
 				<div class="modal" {if false && $IS_FIRST_USER}style="width: 700px;"{/if}> {* FirstUser information gather - paused *}
 					<div class="modal-header">
 						<h3>{vtranslate('LBL_ALMOST_THERE', $MODULE)}</h3>
@@ -276,12 +277,12 @@
 										<option value="Qatar">Qatar</option>
 										<option value="Reunion (FR)">Reunion (FR)</option>
 										<option value="Romania">Romania</option>
-                                                                                {*SalesPlatform.ru begin*}
-                                                                                <option value="Russia (Russian Fed.)">Россия (Российская Фед.)</option>
-                                                                                {*vtiger commented code
+                                        {*SalesPlatform.ru begin*}
+                                        <option value="Russia (Russian Fed.)">Россия (Российская Фед.)</option>
+                                        {*vtiger commented code
 										<option value="Russia (Russian Fed.)">Russia (Russian Fed.)</option>
-                                                                                *}
-                                                                                {*SalesPlatform.ru end*}
+                                        *}
+                                        {*SalesPlatform.ru end*}
 										<option value="Rwanda">Rwanda</option>
 										<option value="Sahara, Western">Sahara, Western</option>
 										<option value="Saint Barthelemy (FR)">Saint Barthelemy (FR)</option>
@@ -408,11 +409,9 @@
 							{/if}
 
 							<div class="span4">
-                                {* SalesPlatform.ru begin *}
 								<label class="control-label"><strong>{vtranslate('Preferences', $MODULE)}</strong> <span class="muted">{vtranslate('LBL_ALL_FIELDS_BELOW_ARE_REQUIRED', $MODULE)}</label>
-                                {*<label class="control-label"><strong>Preferences</strong> <span class="muted">{vtranslate('LBL_ALL_FIELDS_BELOW_ARE_REQUIRED', $MODULE)}</label>*}
-								{* SalesPlatform.ru end *}
-                                {if $IS_FIRST_USER}
+
+								{if $IS_FIRST_USER}
 								<div class="controls" id="currency_name_controls">
 									<select name="currency_name" id="currency_name" placeholder="{vtranslate('LBL_BASE_CURRENCY', $MODULE)}" data-errormessage="{vtranslate('LBL_CHOOSE_BASE_CURRENCY', $MODULE)}" class="validate[required]" style="width:250px;">
 										<option value=""></option>

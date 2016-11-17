@@ -70,8 +70,8 @@ class ServicesController extends InventoryController {
         if($serviceRest != null) {
             $xmlService = new SimpleXMLElement("<Товар></Товар>");
             $xmlService->addChild("Наименование", $serviceRest['servicename']);
-            $xmlService->addChild("БазоваяЕдиница", $serviceRest['service_usageunit']);
-            $xmlService->addChild("Единица", $serviceRest['service_usageunit']);
+            $this->addUsageUnit($xmlService, $serviceRest['service_usageunit']);
+            $xmlService->addChild("Единица", vtranslate($serviceRest['service_usageunit']));
             $this->addXmlIdentifier($xmlService, $serviceRest);
             $this->addXmlProps($xmlService);
         }

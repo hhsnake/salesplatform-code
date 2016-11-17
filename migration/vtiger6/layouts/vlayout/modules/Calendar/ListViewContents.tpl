@@ -81,10 +81,7 @@
              </td>
          {/foreach}
          <td> 
-             <!-- SalesPlatform.ru begin add locale -->
-             <button data-trigger="listSearch">{vtranslate('LBL_SEARCH', $MODULE)}</button>
-             <!-- <button data-trigger="listSearch">Search</button> -->
-             <!-- SalesPlatform.ru end -->
+             <button data-trigger="listSearch">{vtranslate('LBL_SEARCH', $MODULE )}</button> 
          </td>
         </tr>
 		{foreach item=LISTVIEW_ENTRY from=$LISTVIEW_ENTRIES name=listview}
@@ -162,10 +159,7 @@
 			<tr>
 				<td>
 					{assign var=SINGLE_MODULE value="SINGLE_$MODULE"}
-                    {* SalesPlatform.ru begin *}
-                    {vtranslate('LBL_NOT_FOUND')} {vtranslate($MODULE, $MODULE)}.{if $IS_MODULE_EDITABLE} {vtranslate('LBL_CREATE')} <a href="{$MODULE_MODEL->getCreateRecordUrl()}">{vtranslate($SINGLE_MODULE, $MODULE)}</a>{/if}
-					{*{vtranslate('LBL_NO')} {vtranslate($MODULE, $MODULE)} {vtranslate('LBL_FOUND')}.{if $IS_MODULE_EDITABLE} {vtranslate('LBL_CREATE')} <a href="{$MODULE_MODEL->getCreateRecordUrl()}">{vtranslate($SINGLE_MODULE, $MODULE)}</a>{/if}*}
-                    {* SalesPlatform.ru end *}
+					{vtranslate('LBL_EQ_ZERO')} {vtranslate($MODULE, $MODULE)} {vtranslate('LBL_FOUND')}.{if $IS_RECORD_CREATABLE} {vtranslate('LBL_CREATE')} <a href="{$MODULE_MODEL->getCreateRecordUrl()}">{vtranslate($SINGLE_MODULE, $MODULE)}</a>{/if}
 				</td>
 			</tr>
 		</tbody>

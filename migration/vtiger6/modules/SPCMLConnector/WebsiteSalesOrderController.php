@@ -8,6 +8,8 @@
  * If you have any questions or comments, please email: devel@salesplatform.ru
  ************************************************************************************/
 
+require_once 'includes/runtime/LanguageHandler.php';
+require_once 'modules/SPCMLConnector/UnitsConverter.php';
 require_once "modules/SPCMLConnector/SalesOrderController.php";
 require_once "modules/SPCMLConnector/SiteExchangeSettings.php";
 

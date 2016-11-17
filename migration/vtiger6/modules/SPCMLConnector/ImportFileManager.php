@@ -31,17 +31,6 @@ class ImportFileManager {
     }
     
     /**
-     * Return number in document name
-     * @param type $importFileName
-     * @return int | NULL
-     */
-    private function getImportFileNumber($importFileName) {
-        $result = array();
-        preg_match("/(\d{1,})/", $importFileName, $result);
-        return current($result);
-    }
-    
-    /**
      * Return an array of files name, sorted by $order and 
      * satisfy mask $mask. Not my realization.
      * @param string $searchDirectory
@@ -62,12 +51,12 @@ class ImportFileManager {
     
     /**
      * Return name of the offers file by import file name.
-     * @param String $importFileName
+     * @param String $offersFileName
      * @return String
      */
-    private function getOfferFileName($importFileName) {
-        $fileNumber = $this->getImportFileNumber($importFileName);
-        return 'offers'.$fileNumber.'.xml';
+    private function getImportFileName($offersFileName) {
+        $suffixName = substr($offersFileName, strlen('offers'));
+        return 'import' . $suffixName;
     }
     
     /**
@@ -94,7 +83,7 @@ class ImportFileManager {
     /**
      * Unzip all zip files and delete unzipped archives. 
      */
-    private function unzipLoadedFiles() {
+    public function unzipLoadedFiles() {
         $files = $this->getFiles(self::UPLOAD_DIR, "*.zip"); 
         foreach ($files as $file) {
             $unzip = new Vtiger_Unzip(self::UPLOAD_DIR.$file);
@@ -110,9 +99,8 @@ class ImportFileManager {
     
     /**
      * Return order.xml file content
-     * @param type $importFileName
      */
-    public function getOrdersFileContent($importFileName) {
+    public function getOrdersFileContent() {
         $this->unzipLoadedFiles();
         $files = $this->getFiles(self::UPLOAD_DIR, "orders*.xml");
         $ordersContent = file_get_contents(self::UPLOAD_DIR.$files[0]);
@@ -122,21 +110,29 @@ class ImportFileManager {
     
     /**
      * Return import.xml file content.
-     * @param type $importFileName
+     * @param type $offersFileName
      */
-    public function getImportFileContent($importFileName) {
-        $this->unzipLoadedFiles();
-        return file_get_contents(self::UPLOAD_DIR.$importFileName);
+    public function getImportFileContentByOffersFileName($offersFileName) {
+        $importFileName = $this->getImportFileName($offersFileName);
+        return file_get_contents(self::UPLOAD_DIR . $importFileName);
     }
     
     /**
-     * Return offer.xml file contrnt
-     * @param type $importFileName
+     * Return offers file content
+     * @param type $offerFileName
      */
-    public function getOffersFileContent($importFileName) {
-        $this->unzipLoadedFiles();
-        $offerFileName = $this->getOfferFileName($importFileName);      //specific of vtiger data model need
-        return file_get_contents(self::UPLOAD_DIR.$offerFileName);
+    public function getOffersFileContent($offerFileName) {
+        return file_get_contents(self::UPLOAD_DIR . $offerFileName);
+    }
+    
+    public function isOrdersZipFull($importFileName) {
+        $zip = new ZipArchive();
+        $res = $zip->open(self::UPLOAD_DIR . $importFileName, ZipArchive::CHECKCONS);
+        if($res === true) {
+            $zip->close();
+        }
+         
+        return ($res === true);
     }
     
 }

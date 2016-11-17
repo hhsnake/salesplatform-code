@@ -30,5 +30,6 @@ $languageStrings = array(
     'LBL_NUMBER' => 'Number',
     'LBL_STATUS' => 'Status',
     'LBL_STATUS_MESSAGE' => 'Status message',
+    'LBL_NO_NUMBERS_TO_SEND_SMS' => 'All number for send sms are empty. Sms not send.'
     //SalesPlatform.ru end
 );

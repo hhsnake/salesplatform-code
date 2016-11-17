@@ -8,6 +8,13 @@
  * All Rights Reserved.
  ************************************************************************************/
 
+//SalesPlatform.ru begin
+require_once 'includes/SalesPlatform/ShutdownHandler.php';
+
+$shutDownhandler = new ShutdownHandler();
+$shutDownhandler->registerSystemEventsLog();
+//SalesPlatform.ru end
+
 //Overrides GetRelatedList : used to get related query
 //TODO : Eliminate below hacking solution
 include_once 'include/Webservices/Relation.php';

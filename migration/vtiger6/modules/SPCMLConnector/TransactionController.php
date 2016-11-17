@@ -12,6 +12,8 @@ require_once 'modules/SPCMLConnector/SalesOrderController.php';
 require_once 'modules/SPCMLConnector/CatalogController.php';
 require_once 'modules/SPCMLConnector/TranzactionHistory.php';
 require_once 'modules/SPCMLConnector/ImportFileManager.php';
+require_once 'includes/runtime/LanguageHandler.php';
+require_once 'modules/SPCMLConnector/UnitsConverter.php';
 require_once 'modules/SPCMLConnector/CmlParser.php';
 
 /**
@@ -90,8 +92,7 @@ class TransactionController {
             case 'checkauth':
                 break;
             case 'init':
-                $status = "zip=yes
-                10240000000";
+                $status = "zip=yes\nfile_limit=1024000";
                 break;
             case 'query':
                 $status = $this->salesOrderQuery();
@@ -101,7 +102,16 @@ class TransactionController {
                 break;            
             case 'file':       
                 $orderFileName = vtlib_purify($request['filename']);
-                $status = $this->executeSalesOrderImport($orderFileName);
+                $saveStatus = $this->importFileManager->saveRequestFile($orderFileName);
+                if(!$saveStatus) {
+                    $status = 'Failure. File ' . $orderFileName . ' not saved!';
+                } else {
+                    
+                    /* One es dont tell - is it part of zip or full, so need check before run */
+                    if($this->importFileManager->isOrdersZipFull($orderFileName)) {
+                        $status = $this->executeSalesOrderImport();
+                    } 
+                }
                 break;
             default:
                 $status = 'Failure. Unknow mode!';
@@ -125,13 +135,12 @@ class TransactionController {
             case 'checkauth':
                 break;
             case 'init':
-                $status = "zip=yes
-                1024000";
+                $status = "zip=yes\nfile_limit=1024000";
                 break;
             case 'file':       
                 $fileName = vtlib_purify($request['filename']);
                 if(!$this->importFileManager->saveRequestFile($fileName)) {
-                    $status = 'Failure. File not saved';
+                    $status = 'Failure. File' . $fileName . ' not saved';
                 }
                 break;
             case 'import':
@@ -139,7 +148,7 @@ class TransactionController {
                 $status = $this->executeCatalogImport($fileName); 
                 break;
             default:
-                $status = 'Fail. Unknow mode!';
+                $status = 'Fail. Unknow mode catalog import query!';
                 break;
         }
       
@@ -148,16 +157,10 @@ class TransactionController {
     
     /**
      * Save order file and import it. Return import status.
-     * @param String $ordersFileName
      * @return String
      */
-    private function executeSalesOrderImport($ordersFileName) {
-        $saveStatus = $this->importFileManager->saveRequestFile($ordersFileName);
-        if(!$saveStatus) {
-            return 'Failure. File not saved!';
-        }
-        
-        $ordersFileContent = $this->importFileManager->getOrdersFileContent($ordersFileName);
+    private function executeSalesOrderImport() {
+        $ordersFileContent = $this->importFileManager->getOrdersFileContent();
         return $this->startSalesOrderUpdate($ordersFileContent);
     }
     
@@ -179,7 +182,7 @@ class TransactionController {
             
             $this->transactionHistory->fixSuccessTranzaction('SalesOrder', 'from_1c');
         } catch (Exception $ex) {
-            $status = 'Failure. '.$ex->getMessage();
+            $status = 'Failure. ' . $ex->getMessage();
             $this->transactionHistory->fixTranzactionError('SalesOrder', 'from_1c', $status);
         }
         
@@ -194,7 +197,7 @@ class TransactionController {
         $salesOrderController = new SalesOrderController($this->userName);
         $beginTime = $this->transactionHistory->getLastSalesOneEsTranzaction();
         $xmlSalesOrders = $salesOrderController->getXmlOrders($beginTime);
-
+               
         /* One es system don't know utf-8 encoding */
         $xmlSalesOrders = str_replace("UTF-8", "windows-1251", $xmlSalesOrders);                
         return iconv("utf-8","windows-1251", $xmlSalesOrders);
@@ -202,16 +205,16 @@ class TransactionController {
        
     /**
      * Imports catalog and return import status.
-     * @param String $importFileName
+     * @param String $fileName
      * @return String
      */
-    private function executeCatalogImport($importFileName) {
+    private function executeCatalogImport($fileName) {
         $status = 'success';
-        
+
         /* Ignore file name contains offer - because we can import only two files together or will be error  */
-        if(strpos($importFileName, 'import') !== false) {
+        if(strpos($fileName, 'offers') !== false) {
             try {
-                $this->startCatalogsUpdate($importFileName);
+                $this->startCatalogsUpdate($fileName);
                 $this->transactionHistory->fixSuccessTranzaction('Products', 'from_1c');
             } catch (Exception $ex) {
                 $status = 'Failure. '.$ex->getMessage();
@@ -224,12 +227,13 @@ class TransactionController {
       
     /**
      * Execute catalog update step.
-     * @param type $name Description
+     * @param type $fileName Description
      * @return String
      */
-    private function startCatalogsUpdate($importFileName) {
-        $importFileContent = $this->importFileManager->getImportFileContent($importFileName);
-        $offersFileContent = $this->importFileManager->getOffersFileContent($importFileName);
+    private function startCatalogsUpdate($fileName) {
+        $this->importFileManager->unzipLoadedFiles();
+        $importFileContent = $this->importFileManager->getImportFileContentByOffersFileName($fileName);
+        $offersFileContent = $this->importFileManager->getOffersFileContent($fileName);
 
         $parser = new CmlParser();
         $cmlCatalog = $parser->parseCatalog($importFileContent, $offersFileContent);

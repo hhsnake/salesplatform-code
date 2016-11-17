@@ -528,7 +528,10 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var taxDiv = '<div class="taxUI validCheck hide" id="tax_div'+rowNumber+'">'+
 			'<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable" id="tax_table'+rowNumber+'">'+
 			   '<tr>'+
-					'<th id="tax_div_title'+rowNumber+'" align="left" ><b>Set Tax for :</b></th>'+
+                                      // SalesPlatform.ru begin Translate for LBL_SET_TAX_FOR
+					'<th id="tax_div_title'+rowNumber+'" align="left" ><b>'+app.vtranslate("LBL_SET_TAX_FOR")+':</b></th>'+
+                                      //'<th id="tax_div_title'+rowNumber+'" align="left" ><b>Set Tax for :</b></th>'+
+                                      // SalesPlatform.ru end                     
 					'<th colspan="2"><button aria-hidden="true" data-dismiss="modal" class="close closeDiv" type="button">x</button>'+
 						'</th>'+
 			   '</tr>';
@@ -885,34 +888,47 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		amount = parseFloat(amount).toFixed(numberOfDecimal);
 		var groupTaxContainer = jQuery('#group_tax_div');
 		var groupTaxTotal = 0;
-		groupTaxContainer.find('.groupTaxPercentage').each(function(index,domElement){
-			var groupTaxPercentageElement = jQuery(domElement);
-			var groupTaxRow = groupTaxPercentageElement.closest('tr');
-            if(isNaN(groupTaxPercentageElement.val())){
-                var groupTaxValue = "0";
-            } else {
-                var groupTaxValue = Math.abs(amount * groupTaxPercentageElement.val())/100;
-                //SalesPlatform.ru begin 
-                if(currentInstance.isGroupIncTaxMode()) { 
-                    groupTaxValue = Math.abs( amount * parseFloat(groupTaxPercentageElement.val()) ) / 
-                            ( 100 + parseFloat(groupTaxPercentageElement.val()) ); 
-                } 
-                //SalesPlatform.ru end 
-            }
-			groupTaxValue = parseFloat(groupTaxValue).toFixed(numberOfDecimal);
-			groupTaxRow.find('.groupTaxTotal').val(groupTaxValue);
-			groupTaxTotal += parseFloat(groupTaxValue);
-		});
+        
+        //SalesPlatform.ru begin 
+        if(currentInstance.isGroupIncTaxMode()) { 
+            var lineItemsElement = $(".lineItemTable");
+            lineItemsElement.find('.taxPercentage').each(function(index,domElement){
+                if(!parseFloat($(domElement).val()) <=0) {
+                    var taxPercentage = parseFloat($(domElement).val());
+                    var taxContainer = $(domElement).closest('.taxDivContainer');
+                    var priceContainer = taxContainer.closest('td');
+                    var lineItemRow = priceContainer.closest('tr');
+                    var itemCount = parseFloat($(".qty", lineItemRow).val());
+                    var priceValue = parseFloat($('.listPrice', priceContainer).val());
+                    groupTaxTotal += parseFloat(itemCount * Math.abs( priceValue * taxPercentage ) / ( 100 + taxPercentage ));
+                }
+                
+            });
+        } else {
+        //SalesPlatform.ru end 
+            groupTaxContainer.find('.groupTaxPercentage').each(function(index,domElement){
+                var groupTaxPercentageElement = jQuery(domElement);
+                var groupTaxRow = groupTaxPercentageElement.closest('tr');
+                if(isNaN(groupTaxPercentageElement.val())){
+                    var groupTaxValue = "0";
+                } else {
+                    var groupTaxValue = Math.abs(amount * groupTaxPercentageElement.val())/100;
+                }
+                groupTaxValue = parseFloat(groupTaxValue).toFixed(numberOfDecimal);
+                groupTaxRow.find('.groupTaxTotal').val(groupTaxValue);
+                groupTaxTotal += parseFloat(groupTaxValue);
+            });
 		//SalesPlatform.ru begin
-                this.setGroupTaxTotal(groupTaxTotal.toFixed(numberOfDecimal));
+        }
+        this.setGroupTaxTotal(groupTaxTotal.toFixed(numberOfDecimal));
 		//this.setGroupTaxTotal(groupTaxTotal);
-                //SalesPlatform.ru end
+        //SalesPlatform.ru end
 	},
 
 	calculateShippingAndHandlingTaxCharges : function() {
-                //SalesPlatform.ru begin 
-                var currentInstance = this; 
-                //SalesPlatform.ru end 
+        //SalesPlatform.ru begin 
+        var currentInstance = this; 
+        //SalesPlatform.ru end 
 		var shippingHandlingCharge = this.getShippingAndHandling();
 		var shippingTaxDiv = jQuery('#shipping_handling_div');
 		var shippingTaxPercentage = shippingTaxDiv.find('.shippingTaxPercentage');
@@ -955,13 +971,13 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var adjustment = this.getAdjustmentValue();
 		var grandTotal = parseFloat(netTotal) - parseFloat(discountTotal) + parseFloat(shippingHandlingCharge) + parseFloat(shippingHandlingTax);
                 
-                //SalesPlatform.ru begin
-                if(this.isGroupIncTaxMode()) {
-                    grandTotal -= parseFloat(shippingHandlingTax);
-                }
-                //SalesPlatform.ru end
-                
-                if(this.isGroupTaxMode()){   
+            //SalesPlatform.ru begin
+            if(this.isGroupIncTaxMode()) {
+                grandTotal -= parseFloat(shippingHandlingTax);
+            }
+            //SalesPlatform.ru end
+
+            if(this.isGroupTaxMode()){   
 			grandTotal +=  this.getGroupTaxTotal();
 		}
 

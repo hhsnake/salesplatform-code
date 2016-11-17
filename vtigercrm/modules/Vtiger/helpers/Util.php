@@ -28,7 +28,10 @@ class Vtiger_Util_Helper {
 			if(is_array($subName)) {
 				foreach(array_keys($subName) as $key) {
 					$files[$name][$key] = array(
-							'name'     => $file['name'][$key],
+                            //SalesPlatform.ru begin
+							'name'     => urldecode($file['name'][$key]),
+                            //'name'     => $file['name'][$key],
+                            //SalesPlatform.ru end
 							'type'     => $file['type'][$key],
 							'tmp_name' => $file['tmp_name'][$key],
 							'error'    => $file['error'][$key],
@@ -163,7 +166,7 @@ class Vtiger_Util_Helper {
 			}
 		} else {
 			/**
-			 * To support strtotime() for 'mm-dd-yyyy' format the seperator should be '/'
+			 * To support strtotime() for 'mm-dd-yyyy' format the separator should be '/'
 			 * For more referrences
 			 * http://php.net/manual/en/datetime.formats.date.php
 			 */
@@ -220,7 +223,7 @@ class Vtiger_Util_Helper {
 		$displayTime = $hours .':'. $minutes .' '. $meridiem;
         
 		/**
-		 * To support strtotime() for 'mm-dd-yyyy' format the seperator should be '/'
+		 * To support strtotime() for 'mm-dd-yyyy' format the separator should be '/'
 		 * For more referrences
 		 * http://php.net/manual/en/datetime.formats.date.php
 		 */

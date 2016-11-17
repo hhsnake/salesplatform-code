@@ -425,7 +425,7 @@ class SalesPlatform_PDF_SPPDFController {
     protected function generateEntityModel($entity, $module, $prefix, $model) {
 	// Get only active field information
         $cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
-    
+        
         if(isset($this->focus->column_fields['currency_id'])) {
             $currencyInfo = getCurrencyInfo($this->focus->column_fields['currency_id']);
             $currency = $currencyInfo['code'];
@@ -448,7 +448,13 @@ class SalesPlatform_PDF_SPPDFController {
 		} else if($uitype == 117) {
 		    $currencyInfo = getCurrencyInfo($entity->column_fields[$fieldname]);
 		    $model->set($prefix.$fieldname, getTranslatedString($currencyInfo['name'], $module));
-		} else {
+		//SalesPlatform.ru begin 
+        } else if ($uitype == 33) {
+            $fieldValue = str_replace(' |##| ', ', ', $entity->column_fields[$fieldname]); 
+            $model->set($prefix.$fieldname, $fieldValue);
+        } 
+        //SalesPlatform.ru end
+        else {
 		
 		    switch($type[0]) {
 		    case 'N':

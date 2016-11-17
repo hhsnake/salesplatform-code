@@ -90,14 +90,14 @@ class Vtiger_StringTemplate {
 				$matchstr_regex = $this->__formatAsRegex($matchstr);
 
 				$replacewith = $this->get($matchkey);
-                                // SalesPlatform.ru begin Replace with empty string
+                // SalesPlatform.ru begin Replace with empty string
 				//if($replacewith) {
-                                // SalesPlatform.ru end
+                // SalesPlatform.ru end
 					$instring = preg_replace(
 						"/$matchstr_regex/", $replacewith, $instring);
-                                // SalesPlatform.ru begin Replace with empty string
+                // SalesPlatform.ru begin Replace with empty string
 				//}
-                                // SalesPlatform.ru end
+                // SalesPlatform.ru end
 			}
 		}
 		return $instring;

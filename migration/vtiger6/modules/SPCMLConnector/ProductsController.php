@@ -78,8 +78,8 @@ class ProductsController extends InventoryController {
             $xmlProduct = new SimpleXMLElement("<Товар></Товар>");
             $xmlProduct->addChild("Наименование", $productRest['productname']);
             $xmlProduct->addChild("Артикул", $productRest['productcode']);
-            $xmlProduct->addChild("БазоваяЕдиница", $productRest['usageunit']);
-            $xmlProduct->addChild("Единица", $productRest['usageunit']);
+            $this->addUsageUnit($xmlProduct, $productRest['usageunit']);
+            $xmlProduct->addChild("Единица", vtranslate($productRest['usageunit']));
             $this->addXmlIdentifier($xmlProduct, $productRest);
             $this->addXmlProps($xmlProduct);
         }

@@ -29,8 +29,8 @@ $languageStrings = Array(
     'Payer' => 'Плательщик/Получатель',
     'Document no' => '№ платежного документа',
     'Type payment' => 'Вид оплаты',
-    'Cash Payment' => 'Безналичный расчет',
-    'Cashless Transfer' => 'Наличные',
+    'Cash Payment' => 'Наличные',
+    'Cashless Transfer' => 'Безналичный расчет',
     'Amount' => 'Сумма',
     
     'LBL_DESCRIPTION_INFORMATION' => 'Описание',

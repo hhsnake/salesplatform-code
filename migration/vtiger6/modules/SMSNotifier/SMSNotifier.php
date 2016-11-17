@@ -31,47 +31,126 @@ class SMSNotifier extends SMSNotifierBase {
 	 * @param mixed $linktoids List of CRM record id to link SMS record
 	 * @param String $linktoModule Modulename of CRM record to link with (if not provided lookup it will be calculated)
 	 */
-	static function sendsms($message, $tonumbers, $ownerid = false, $linktoids = false, $linktoModule = false) {
+    //SalesPlatform.ru begin
+    static function sendsms($message, $tonumbers, $ownerid = false, $linktoids = false, $linktoModule = false, $recipientsTemplate = null) {
+	//static function sendsms($message, $tonumbers, $ownerid = false, $linktoids = false, $linktoModule = false) {
+    //SalesPlatform.ru end
 		global $current_user, $adb;
+        //SalesPlatform.ru begin
+        if(!empty($tonumbers)) {
+        //SalesPlatform.ru end
+            if($ownerid === false) {
+                if(isset($current_user) && !empty($current_user)) {
+                    $ownerid = $current_user->id;
+                } else {
+                    $ownerid = 1;
+                }
+            }
 
-		if($ownerid === false) {
-			if(isset($current_user) && !empty($current_user)) {
-				$ownerid = $current_user->id;
-			} else {
-				$ownerid = 1;
-			}
-		}
+            $moduleName = 'SMSNotifier';
+            $focus = CRMEntity::getInstance($moduleName);
 
-		$moduleName = 'SMSNotifier';
-		$focus = CRMEntity::getInstance($moduleName);
+            $focus->column_fields['message'] = $message;
+            $focus->column_fields['assigned_user_id'] = $ownerid;
+            $focus->save($moduleName);
 
-		$focus->column_fields['message'] = $message;
-		$focus->column_fields['assigned_user_id'] = $ownerid;
-		$focus->save($moduleName);
+            if($linktoids !== false) {
 
-		if($linktoids !== false) {
-
-			if($linktoModule !== false) {
-				relateEntities($focus, $moduleName, $focus->id, $linktoModule, $linktoids);
-                //SalesPlatform.ru begin
-                self::updateLastSMSDate($linktoModule, $linktoids);
-                //SalesPlatform.ru end
-			} else {
-				// Link modulename not provided (linktoids can belong to mix of module so determine proper modulename)
-				$linkidsetypes = $adb->pquery( "SELECT setype,crmid FROM vtiger_crmentity WHERE crmid IN (".generateQuestionMarks($linktoids) . ")", array($linktoids) );
-				if($linkidsetypes && $adb->num_rows($linkidsetypes)) {
-					while($linkidsetypesrow = $adb->fetch_array($linkidsetypes)) {
-						relateEntities($focus, $moduleName, $focus->id, $linkidsetypesrow['setype'], $linkidsetypesrow['crmid']);
-                        //SalesPlatform.ru begin
-                        self::updateLastSMSDate($linkidsetypesrow['setype'], array($linkidsetypesrow['crmid']));
-                        //SalesPlatform.ru end
-					}
-				}
-			}
-		}
-		$responses = self::fireSendSMS($message, $tonumbers);
-		$focus->processFireSendSMSResponse($responses);
+                if($linktoModule !== false) {
+                    //SalesPlatform.ru begin
+                    self::spHandleSendSMS($focus, $moduleName, $focus->id, $linktoModule, $linktoids, $recipientsTemplate);
+                    //relateEntities($focus, $moduleName, $focus->id, $linktoModule, $linktoids);
+                    //SalesPlatform.ru end
+                } else {
+                    // Link modulename not provided (linktoids can belong to mix of module so determine proper modulename)
+                    $linkidsetypes = $adb->pquery( "SELECT setype,crmid FROM vtiger_crmentity WHERE crmid IN (".generateQuestionMarks($linktoids) . ")", array($linktoids) );
+                    if($linkidsetypes && $adb->num_rows($linkidsetypes)) {
+                        while($linkidsetypesrow = $adb->fetch_array($linkidsetypes)) {
+                            //SalesPlatform.ru begin
+                            self::spHandleSendSMS($focus, $moduleName, $focus->id, $linkidsetypesrow['setype'], $linkidsetypesrow['crmid'], $recipientsTemplate);
+                            //relateEntities($focus, $moduleName, $focus->id, $linkidsetypesrow['setype'], $linkidsetypesrow['crmid']);
+                            //SalesPlatform.ru end
+                        }
+                    }
+                }
+            }
+            $responses = self::fireSendSMS($message, $tonumbers);
+            $focus->processFireSendSMSResponse($responses);
+        //SalesPlatform.ru begin
+        }
+        //SalesPlatform.ru end
 	}
+    
+    //SalesPlatform.ru begin
+    private static function spHandleSendSMS($smsNotifierEntity, $smsNotifierModuleName, $smsRecordId, $linkToModule, $linkToIds, $recipientsTemplate) {
+        $smsRelatedModules = Vtiger_Relation_Model::getAllRelations(Vtiger_Module_Model::getInstance($smsNotifierModuleName));
+        $relatedModulesNames = array();
+        foreach($smsRelatedModules as $relatedModule) {
+            $relatedModulesNames[] = $relatedModule->getRelationModuleName();
+        }
+        
+        if(in_array($linkToModule, $relatedModulesNames)) {
+            relateEntities($smsNotifierEntity, $smsNotifierModuleName, $smsRecordId, $linkToModule, $linkToIds);
+            self::updateLastSMSDate($linkToModule, $linkToIds);
+        } else {
+            self::spHandleIndirectlySendSMS($relatedModulesNames, $smsNotifierEntity, $smsNotifierModuleName, $smsRecordId, $linkToModule, $linkToIds, $recipientsTemplate);
+        }
+    }
+    
+    private static function spHandleIndirectlySendSMS($relatedModulesNames, $smsNotifierEntity, $smsNotifierModuleName, $smsRecordId, $linkToModule, $linkToIds, $recipientsTemplate) {
+        $recordModel = Vtiger_Record_Model::getInstanceById($linkToIds, $linkToModule);
+
+        /* Get real recipients of sms */
+        $matches = array();
+        $relatedRecordsIdToModuleMap = array();
+        $recipientsVariables = explode(",", $recipientsTemplate);
+        foreach($recipientsVariables as $recipientTemplate) {
+            if(preg_match_all('/\\$\w+|\((\w+) : \(([_\w]+)\) (\w+)\)/', $recipientTemplate, $matches)) {
+                self::addRelateEntitiesIdToModuleMap($relatedRecordsIdToModuleMap, $relatedModulesNames, $recordModel, $linkToModule, $matches);
+            }
+        }
+        
+        /* Relate sms to entities */
+        foreach($relatedRecordsIdToModuleMap as $recordId => $recordModuleName) {
+            relateEntities($smsNotifierEntity, $smsNotifierModuleName, $smsRecordId, $recordModuleName, $recordId);
+            self::updateLastSMSDate($recordModuleName, $recordId);
+        }
+    }
+    
+    private static function addRelateEntitiesIdToModuleMap(&$relatedRecordsIdToModuleMap, $relatedModulesNames, $recordModel, $linkToModule, $matches) {
+        list($fullMatch, $referenceField, $referenceModule, $fieldName) = $matches;
+        $referenceField = $referenceField[0];
+        $referenceModule = $referenceModule[0];
+        $fieldName = $fieldName[0];
+        if(in_array($referenceModule, $relatedModulesNames)) {
+            $referenceRecordsIds = array((int) $recordModel->get($referenceField));
+            /* Special for Events Contacts handling */
+            if($linkToModule === "Events" && $referenceModule === "Contacts") {
+                $referenceRecordsIds = array();
+                foreach(explode(";", $_REQUEST['contactidlist']) as $contactId) {
+                    $referenceRecordsIds[] = (int) $contactId;
+                }
+            }
+
+            foreach($referenceRecordsIds as $referenceRecordId) {
+                if($referenceRecordId > 0) {
+
+                    /* Check for deleted and add to map */
+                    $db = PearDatabase::getInstance();
+                    $result = $db->pquery("SELECT deleted FROM vtiger_crmentity WHERE crmid=?", array($referenceRecordId));
+                    if($resultRow = $db->fetchByAssoc($result) && (int) $resultRow['deleted'] == 0 && 
+                            !array_key_exists($referenceRecordId, $relatedRecordsIdToModuleMap)) {
+
+                        $referenceRecordModel = Vtiger_Record_Model::getInstanceById($referenceRecordId, $referenceModule);
+                        if($referenceRecordModel->get($fieldName) != null) {
+                            $relatedRecordsIdToModuleMap[$referenceRecordId] = $referenceModule;
+                        }
+                    } 
+                }
+            }
+        }
+    }
+    //SalesPlatform.ru end
     
 	/**
 	 * Detect the related modules based on the entity relation information for this instance.

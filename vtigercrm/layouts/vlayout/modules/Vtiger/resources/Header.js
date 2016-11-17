@@ -126,6 +126,10 @@ jQuery.Class("Vtiger_Header_Js", {
         //As formData contains information about both view and action removed action and directed to view
         delete formData.module;
         delete formData.action;
+        // SalesPlatform.ru begin Fix 414 http error 
+        delete formData.picklistDependency;
+        // SalesPlatform.ru end
+        
         var formDataUrl = jQuery.param(formData);
         var completeUrl = editViewUrl + "&" + formDataUrl;
         window.location.href = completeUrl;

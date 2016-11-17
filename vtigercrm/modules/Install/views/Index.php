@@ -11,6 +11,7 @@
 class Install_Index_view extends Vtiger_View_Controller {
 
 	protected $debug = false;
+	protected $viewer = null;
 
 	function loginRequired() {
 		return false;
@@ -26,7 +27,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$this->exposeMethod('Step7');
 	}
 
-	public function preProcess(Vtiger_Request $request) {
+	public function preProcess(Vtiger_Request $request, $display = true) {
 		date_default_timezone_set('Europe/London'); // to overcome the pre configuration settings
 		// Added to redirect to default module if already installed
 		$configFileName = 'config.inc.php';
@@ -41,8 +42,15 @@ class Install_Index_view extends Vtiger_View_Controller {
 		parent::preProcess($request);
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
-		$defaultLanguage = ($request->get('lang'))?$request->get('lang'):'ru_ru';
-		vglobal('default_language', $defaultLanguage);
+		if ($chosenLanguage = $request->get('lang')) {
+			$_SESSION['config_file_info']['default_language'] = $chosenLanguage;
+		} elseif (empty($_SESSION['config_file_info']['default_language'])) {
+			//SalesPlatform.ru begin
+			//$_SESSION['config_file_info']['default_language'] = 'en_us';
+			$_SESSION['config_file_info']['default_language'] = 'ru_ru';
+			//SalesPlatform.ru end
+		}
+		vglobal('default_language', $_SESSION['config_file_info']['default_language']);
 
 		define('INSTALLATION_MODE', true);
 		define('INSTALLATION_MODE_DEBUG', $this->debug);
@@ -70,6 +78,8 @@ class Install_Index_view extends Vtiger_View_Controller {
 	public function Step1(Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
+		$viewer->assign('CURRENT_LANGUAGE', vglobal('default_language'));
+		$viewer->assign('LANGUAGES', Install_Utils_model::getLanguageList());
 		$viewer->view('Step1.tpl', $moduleName);
 	}
 
@@ -202,7 +212,7 @@ class Install_Index_view extends Vtiger_View_Controller {
                     Install_Utils_Model::installModules();
 
                     Install_InitSchema_Model::upgrade();
-                    
+
                     $viewer = $this->getViewer($request);
                     $viewer->assign('PASSWORD', $_SESSION['config_file_info']['password']);
                     $viewer->assign('APPUNIQUEKEY', $this->retrieveConfiguredAppUniqueKey());

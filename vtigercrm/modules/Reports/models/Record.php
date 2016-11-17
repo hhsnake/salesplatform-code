@@ -280,7 +280,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			$dbFieldLabel = trim(str_replace(array($module, '_'), " ", $moduleFieldLabel));
 			$translatedFieldLabel = vtranslate($dbFieldLabel, $module);
 			if(CheckFieldPermission($fieldName, $module) == 'true' && $columnName != 'crmid') {
-				$selectedColumns[$translatedFieldLabel] = $column;
+				$selectedColumns[$module.'_'.$translatedFieldLabel] = $column;
 			}
 		}
 		return $selectedColumns;
@@ -1031,13 +1031,13 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 
 		$this->reportRun = ReportRun::getInstance($this->getId());
 
-                // SalesPlatform.ru begin
-                if(in_array($this->reportRun->reporttype, getCustomReportsList())) {
-                    $filterQuery = $this->reportRun->generateAdvFilterArray($advancedFilterCriteria);
-                } else {
-                    $filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria, $advancedFilterCriteriaGroup);
-                }
-                // SalesPlatform.ru end
+        // SalesPlatform.ru begin
+        if(in_array($this->reportRun->reporttype, getCustomReportsList())) {
+            $filterQuery = $this->reportRun->generateAdvFilterArray($advancedFilterCriteria);
+        } else {
+            $filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria, $advancedFilterCriteriaGroup);
+        }
+        // SalesPlatform.ru end
 
 		return $filterQuery;
 	}

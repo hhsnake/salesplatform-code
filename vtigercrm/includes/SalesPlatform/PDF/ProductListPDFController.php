@@ -42,7 +42,10 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 
 	function getFooterViewer() {
 		$footerViewer = new SalesPlatform_PDF_ProductListDocumentFooterViewer($this->template, $this->footerSize);
-		$footerViewer->setModel($this->buildFooterModel());
+        //SalesPlatform.ru begin 
+		$footerViewer->setModel($this->buildDocumentModel());
+        //$footerViewer->setModel($this->buildFooterModel());
+        //SalesPlatform.ru begin end
 		$footerViewer->setLabelModel($this->buildFooterLabelModel());
 		$footerViewer->setOnLastPage();
                 

@@ -197,7 +197,7 @@ $languageStrings = array(
         //Exchange Connector
      'LBL_EXCHANGE_CONNECTOR' => 'Exchange Connector',
    'LBL_DEFAULT_LAYOUT' => 'Default Layout',   
-        'LBL_SP_CHECK_SITE_URL' => 'Check site URL',
+   'LBL_SP_CHECK_SITE_URL' => 'Check site URL',
 );
 
 $jsLanguageStrings = array(

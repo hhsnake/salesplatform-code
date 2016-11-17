@@ -151,9 +151,10 @@ class Users_Record_Model extends Vtiger_Record_Model {
 			$currentUserModel = NULL;
 			if (isset(self::$currentUserModels[$currentUser->id])) {
 				$currentUserModel = self::$currentUserModels[$currentUser->id];
-				if ($currentUser->column_fields['modifiedtime'] != $currentUserModel->get('modifiedtime')) {
+				if (isset($currentUser->column_fields['modifiedtime']) && 
+				    $currentUser->column_fields['modifiedtime'] != $currentUserModel->get('modifiedtime')) {
 					$currentUserModel = NULL;
-		}
+		        }
 			}
 			if (!$currentUserModel) {
 				$currentUserModel = self::getInstanceFromUserObject($currentUser);
@@ -162,6 +163,15 @@ class Users_Record_Model extends Vtiger_Record_Model {
 			return $currentUserModel;
 		}
 		return new self();
+	}
+
+	/**
+	 * Function to return user object from preference file.
+	 */
+	public static function getInstanceFromPreferenceFile($userId) {
+		$focusObj = new Users();
+		$focusObj->retrieveCurrentUserInfoFromFile($userId);
+		return self::getInstanceFromUserObject($focusObj);
 	}
 
 	/**
@@ -638,7 +648,8 @@ class Users_Record_Model extends Vtiger_Record_Model {
         public function isAccountOwner() {
 		$db = PearDatabase::getInstance();
 		$query = 'SELECT is_owner FROM vtiger_users WHERE id = ?';
-		$isOwner = $db->query_result($db->pquery($query, array($this->getId())), 0, 'is_owner');
+		$res = $db->pquery($query, array($this->getId()));
+		$isOwner = $db->query_result($res, 0, 'is_owner');
 		if($isOwner == 1) {
 			return true;
 		} 

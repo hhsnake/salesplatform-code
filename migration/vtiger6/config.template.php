@@ -14,8 +14,9 @@
 ********************************************************************************/
 
 // Adjust error_reporting favourable to deployment.
-version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT); // PRODUCTION
+version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & E_ERROR) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED  & E_ERROR & ~E_STRICT); // PRODUCTION
 //ini_set('display_errors','on'); version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);   // DEBUGGING
+//ini_set('display_errors','on'); error_reporting(E_ALL); // STRICT DEVELOPMENT
 
 
 include('vtigerversion.php');
@@ -31,9 +32,6 @@ $WORLD_CLOCK_DISPLAY = 'true';
 $CALCULATOR_DISPLAY = 'true';
 $CHAT_DISPLAY = 'true'; 
 $USE_RTE = 'true';
-
-// url for customer portal (Example: http://vtiger.com/portal)
-$PORTAL_URL = 'http://vtiger.com/customerportal';
 
 // helpdesk support email id and support name (Example: 'support@vtiger.com' and 'vtiger support')
 $HELPDESK_SUPPORT_EMAIL_ID = '_USER_SUPPORT_EMAIL_';
@@ -86,6 +84,8 @@ $host_name = $dbconfig['db_hostname'];
 
 $site_URL = '_SITE_URL_';
 
+// url for customer portal (Example: http://vtiger.com/portal)
+$PORTAL_URL = $site_URL.'/customerportal';
 // root directory path
 $root_directory = '_VT_ROOTDIR_';
 
@@ -170,7 +170,7 @@ $default_charset = '_VT_CHARSET_';
 
 // default language
 // default_language default value = en_us
-$default_language = 'ru_ru';
+$default_language = '_VT_DEFAULT_LANGUAGE_';
 
 // add the language pack name to every translation string in the display.
 // translation_string_prefix default value = false
@@ -193,9 +193,6 @@ $listview_max_textlength = 40;
 
 // Maximum time limit for PHP script execution (in seconds)
 $php_max_execution_time = 0;
-
-// Maximum number of  Mailboxes in mail converter
-$max_mailboxes = 3;
 
 // Set the default timezone as per your preference
 $default_timezone = 'Europe/Moscow';

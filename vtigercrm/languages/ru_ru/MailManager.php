@@ -119,6 +119,8 @@ $languageStrings = Array (
     'Travel' => 'Путешествие',
     'Work' => 'Работа',
     'Drafts' => 'Черновики',
+    'Sent' => 'Отправленные',
+    'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Не может быть присвоен Будущему событию',
     //SalesPlatform.ru end
 );
 

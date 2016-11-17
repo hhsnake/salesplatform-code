@@ -86,11 +86,8 @@
 
 			<div class="textAlignCenter">
 				<button class="btn btn-success" type="submit">{vtranslate('LBL_SAVE',$MODULE)}</button>
-                {* SalesPlatform.ru begin *}
-				<a class="cancelLink" onclick="javascript:window.history.back();" type="reset">{vtranslate('Cancel',$MODULE)}</a>
-                {*<a class="cancelLink" onclick="javascript:window.history.back();" type="reset">Cancel</a>*}
-                {* SalesPlatform.ru end *}
-            </div>
+				<a class="cancelLink" onclick="javascript:window.history.back();" type="reset">{vtranslate('LBL_CANCEL',$MODULE)}</a>
+			</div>
 			<br>
 		</form>
 	</div>

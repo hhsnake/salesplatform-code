@@ -19,7 +19,7 @@ class Users_Field_Model extends Vtiger_Field_Model {
 	 */
 	public function isReadOnly() {
         $currentUserModel = Users_Record_Model::getCurrentUserModel();
-        if(($currentUserModel->isAdminUser() == false && $this->get('uitype') == 98) || $this->get('uitype') == 156 || $this->get('uitype') == 115) {
+        if(($currentUserModel->isAdminUser() == false && $this->get('uitype') == 98) || in_array($this->get('uitype'), array(106, 115, 156))) {
             return true;
         }
 	}
@@ -106,7 +106,7 @@ class Users_Field_Model extends Vtiger_Field_Model {
 	 * @param <String> $value - value which need to be converted to display value
 	 * @return <String> - converted display value
 	 */
-    public function getDisplayValue($value, $recordId = false) {
+    public function getDisplayValue($value, $recordId = false, $recordInstance = false) {
         
 		 if($this->get('uitype') == 32){
 			return Vtiger_Language_Handler::getLanguageLabel($value);

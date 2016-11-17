@@ -37,10 +37,10 @@ class Vtiger_Export_View extends Vtiger_Index_View {
 		$viewer->assign('SOURCE_MODULE', $source_module);
 		$viewer->assign('MODULE','Export');
                 
-                //SalesPlatform.ru add encoding and delimiter support
-                $viewer->assign('SUPPORTED_FILE_ENCODING', Import_Utils_Helper::getSupportedFileEncoding());
+        //SalesPlatform.ru add encoding and delimiter support
+        $viewer->assign('SUPPORTED_FILE_ENCODING', Import_Utils_Helper::getSupportedFileEncoding());
 		$viewer->assign('SUPPORTED_DELIMITERS', Import_Utils_Helper::getSupportedDelimiters());
-                //SalesPlatform.ru end
+        //SalesPlatform.ru end
         
         $searchKey = $request->get('search_key');
         $searchValue = $request->get('search_value');

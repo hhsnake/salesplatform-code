@@ -110,7 +110,10 @@
                     {foreach item=ATTACHVALUE key=ATTACHNAME from=$ATTACHMENTS name="attach"}
                         {if $INLINE_ATT[$ATTACHNAME] eq null}
                             <img border=0 src="{'attachments.gif'|@vimage_path}">
-                            <a href="index.php?module={$MODULE}&view=Index&_operation=mail&_operationarg=attachment_dld&_muid={$MAIL->muid()}&_atname={$ATTACHNAME|@escape:'htmlall':'UTF-8'}">{$ATTACHNAME}</a>
+                            {* SalesPlatform.ru begin *}
+                            <a href="index.php?module={$MODULE}&view=Index&_operation=mail&_operationarg=attachment_dld&_muid={$MAIL->muid()}&_atname={urlencode($ATTACHNAME)|@escape:'htmlall':'UTF-8'}">{$ATTACHNAME}</a>
+                            {* <a href="index.php?module={$MODULE}&view=Index&_operation=mail&_operationarg=attachment_dld&_muid={$MAIL->muid()}&_atname={$ATTACHNAME|@escape:'htmlall':'UTF-8'}">{$ATTACHNAME}</a> *}
+                            {* SalesPlatform.ru end *}
                             &nbsp;
                         {/if}
                     {/foreach}

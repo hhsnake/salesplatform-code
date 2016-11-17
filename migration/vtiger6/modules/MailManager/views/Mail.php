@@ -39,6 +39,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 
 			$metainfo  = array(
 					'from' => $mail->from(), 'subject' => $mail->subject(),
+					'sendto'=>$mail->to(),
 					'msgno' => $mail->msgNo(), 'msguid' => $mail->uniqueid(),
 					'folder' => $foldername );
 
@@ -220,7 +221,10 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			}
 
 		} else if ('attachment_dld' == $this->getOperationArg($request)) {
-			$attachmentName = $request->get('_atname');
+            //SalesPlatform.ru begin
+            $attachmentName = decode_html($request->get('_atname'));
+			//$attachmentName = $request->get('_atname');
+            //SalesPlatform.ru end
 			$attachmentName= str_replace(' ', '_', $attachmentName);
 
 			if (MailManager_Utils_Helper::allowedFileExtension($attachmentName)) {
@@ -236,7 +240,10 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 					header("Content-type: application/octet-stream");
 					header("Pragma: public");
 					header("Cache-Control: private");
-					header("Content-Disposition: attachment; filename=$attachmentName");
+                    //SalesPlatform.ru begin
+                    header("Content-Disposition: attachment; filename=\"" . $attachmentName . "\"");
+					//header("Content-Disposition: attachment; filename=$attachmentName");
+                    //SalesPlatform.ru end
 					echo $attachment[$attachmentName];
 				} else {
 					header("Content-Disposition: attachment; filename=INVALIDFILE");

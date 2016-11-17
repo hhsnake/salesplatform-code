@@ -60,6 +60,10 @@ $languageStrings = array(
     'LBL_TASKS_OTHER'              => 'Другой приоритет',
         );
 
+$jsLanguageStrings = array(
+    'JS_LBL_SELECT_STATUS' => 'Выбор Статус',
+    'JS_LBL_SELECT_PROGRESS' => 'Выберите Прогресс',
+);
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Project.php';
 // SalesPlatform.ru end

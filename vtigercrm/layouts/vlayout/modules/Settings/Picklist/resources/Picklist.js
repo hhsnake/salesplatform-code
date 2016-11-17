@@ -371,9 +371,9 @@ var Settings_Picklist_Js = {
 				mode : 'getPickListValueByRole',
 				rolesSelected : rolesList.val(),
 				pickListFieldId : jQuery('#modulePickList').val(),
-                                //SalesPlatform.ru begin fix source_module localization
-                                source_module: jQuery('#pickListModules').val()
-                                //SalesPlatform. ru end
+                //SalesPlatform.ru begin fix source_module localization
+                source_module: jQuery('#pickListModules').val()
+                //SalesPlatform. ru end
 			}
 			AppConnector.request(params).then(function(data) {
 				jQuery('#pickListValeByRoleContainer').html(data);

@@ -189,6 +189,10 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
 			$orderBy = 'modifiedtime';
 			$sortOrder = 'DESC';
+			if (PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+                                $orderBy = $moduleFocus->default_order_by;
+                                $sortOrder = $moduleFocus->default_sort_order;
+                        }
 		}
 
         if(!empty($orderBy)){
@@ -420,7 +424,7 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 	 */
 	public function getAdvancedLinks(){
 		$moduleModel = $this->getModule();
-		$createPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'EditView');
+		$createPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'CreateView');
 		$advancedLinks = array();
 		$importPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'Import');
 		if($importPermission && $createPermission) {
@@ -471,7 +475,7 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 	public function getBasicLinks(){
 		$basicLinks = array();
 		$moduleModel = $this->getModule();
-		$createPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'EditView');
+		$createPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'CreateView');
 		if($createPermission) {
 			$basicLinks[] = array(
 					'linktype' => 'LISTVIEWBASIC',

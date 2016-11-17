@@ -20,61 +20,53 @@ class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Ac
         $status = false;
 
         if ($request->get('organizationname')) {
-            $saveLogo = $status = true;
-            if(!empty($_FILES['logo']['name'])) {
-                $logoDetails = $_FILES['logo'];
-                $fileType = explode('/', $logoDetails['type']);
-                $fileType = $fileType[1];
+			$saveLogo = $status = true;
+			$binFileName = false;
+			if(!empty($_FILES['logo']['name'])) {
+				$logoDetails = $_FILES['logo'];
+				$saveLogo = Vtiger_Functions::validateImage($logoDetails);
+				if (is_string($saveLogo)) $saveLogo = ($saveLogo == 'false')? false : true;
 
-                if (!$logoDetails['size'] || !in_array($fileType, Settings_Vtiger_CompanyDetails_Model::$logoSupportedFormats)) {
-                    $saveLogo = false;
-                }
-                // Check for php code injection
-                $imageContents = file_get_contents($_FILES["logo"]["tmp_name"]);
-                if (preg_match('/(<\?php?(.*?))/i', $imageContents) == 1) {
-                    $saveLogo = false;
-                }
+				global $upload_badext;
+				$binFileName = sanitizeUploadFileName($logoDetails['name'], $upload_badext);
                 if ($saveLogo) {
-                    $moduleModel->saveLogo();
+                    $moduleModel->saveLogo($binFileName);
                 }
             }else{
                 $saveLogo = true;
             }
-            $fields = $moduleModel->getFields();
-            foreach ($fields as $fieldName => $fieldType) {
-                $fieldValue = $request->get($fieldName);
-                if ($fieldName === 'logoname') {
-                    if (!empty($logoDetails['name'])) {
-                        $fieldValue = ltrim(basename(" " . $logoDetails['name']));
-                    } else {
-                        $fieldValue = $moduleModel->get($fieldName);
-                    }
-                }
-
+			$fields = $moduleModel->getFields();
+			foreach ($fields as $fieldName => $fieldType) {
+				$fieldValue = $request->get($fieldName);
+				if ($fieldName === 'logoname') {
+					if (!empty($logoDetails['name']) && $binFileName) {
+						$fieldValue = ltrim(basename(" " . $binFileName));
+					} else {
+						$fieldValue = $moduleModel->get($fieldName);
+					}
+				}
+				// SalesPlatform.ru begin
                 if ($fieldName === 'company') {
-                    // SalesPlatform.ru begin
                     $fieldValue = htmlspecialchars($request->get('company'), ENT_QUOTES);
-                    //$fieldValue = htmlentities($request->get('company'), ENT_QUOTES);
-                    // SalesPlatform.ru end
                 }
+				// SalesPlatform.ru end
+				$moduleModel->set($fieldName, $fieldValue);
+			}
+			$moduleModel->save();
+		}
 
-                $moduleModel->set($fieldName, $fieldValue);
-            }
-            $moduleModel->save();
-        }
+		$reloadUrl = $moduleModel->getIndexViewUrl();
+		if ($saveLogo && $status) {
 
-        $reloadUrl = $moduleModel->getIndexViewUrl();
-        if ($saveLogo && $status) {
+		} else if (!$saveLogo) {
+			$reloadUrl .= '&error=LBL_INVALID_IMAGE';
+		} else {
+			$reloadUrl = $moduleModel->getEditViewUrl() . '&error=LBL_FIELDS_INFO_IS_EMPTY';
+		}
+		header('Location: ' . $reloadUrl);
+	}
 
-        } else if (!$saveLogo) {
-            $reloadUrl .= '&error=LBL_INVALID_IMAGE';
-        } else {
-            $reloadUrl = $moduleModel->getEditViewUrl() . '&error=LBL_FIELDS_INFO_IS_EMPTY';
-        }
-        header('Location: ' . $reloadUrl);
-    }
-
-    public function validateRequest(Vtiger_Request $request) {
-        $request->validateWriteAccess();
-    }
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

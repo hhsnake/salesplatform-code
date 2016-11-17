@@ -36,7 +36,9 @@ class Migration_Module_Model extends Vtiger_Module_Model {
 				array('610-201412' => '6.1.0-201412'),
                 array('620-201505' => '6.2.0-201505'),
                 array('630-201507' => '6.3.0-201507'),
-                array('640-201512' => '6.4.0-201512')
+                array('640-201512' => '6.4.0-201512'),
+                array('640-201604' => '6.4.0-201604'),
+				array('650-201607' => '6.5.0-201607'),
 			);
 		} else {
 			$versions = array(
@@ -46,7 +48,8 @@ class Migration_Module_Model extends Vtiger_Module_Model {
 				array('610-201412' => '6.1.0-201412'),
                 array('620-201505' => '6.2.0-201505'),
                 array('630-201507' => '6.3.0-201507'),
-                array('640-201512' => '6.4.0-201512')
+                array('640-201512' => '6.4.0-201512'),
+                array('650-201611' => '6.5.0-201611'),
 			);
 		}
 		// SalesPlatform.ru end

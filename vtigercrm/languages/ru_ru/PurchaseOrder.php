@@ -19,13 +19,11 @@ $languageStrings = array(
 	'PurchaseOrder No'             => 'Закупка №', 
 	'Requisition No'               => '№'              , 
 	'Tracking Number'              => 'Отслеживаемый номер', 
-	'Sales Commission'             => 'Коммисия'            , 
+	'Sales Commission'             => 'Комиссия'            ,
 	'LBL_PAID'                     => 'Оплачено'                        , // TODO: Review
 	'LBL_BALANCE'                  => 'Баланс'                     , // TODO: Review
 	'Received Shipment'            => 'Получено с доставкой', 
-        //SalesPlatform.ru begin
-        'LBL_COPY_COMPANY_ADDRESS' => 'Копировать адрес компании',
-        //SalesPlatform.ru end
+        'LBL_COPY_COMPANY_ADDRESS'     => 'Копировать адрес компании',
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

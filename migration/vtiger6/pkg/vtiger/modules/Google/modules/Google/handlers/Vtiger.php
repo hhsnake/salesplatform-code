@@ -25,7 +25,12 @@ class Google_Vtiger_Handler extends vtigerCRMHandler {
             $createdRecords = $this->fillMandatoryFields($createdRecords, $user);
         }
         foreach ($createdRecords as $index => $record) {
-            $createdRecords[$index] = vtws_create($record['module'], $record, $this->user);
+			try {
+				$createdRecords[$index] = vtws_create($record['module'], $record, $this->user);
+			} catch (Exception $ex) {
+				unset($createdRecords[$index]);
+				continue;
+			}
         }
 
         if (count($updatedRecords) > 0) {
@@ -69,6 +74,7 @@ class Google_Vtiger_Handler extends vtigerCRMHandler {
                     $this->assignToChangedRecords[$index] = $record;
                 }
             } catch (Exception $e) {
+				unset($updatedRecords[$index]);
                 continue;
             }
         }
@@ -102,6 +108,7 @@ class Google_Vtiger_Handler extends vtigerCRMHandler {
                     try {
                         vtws_delete($record, $this->user);
                     } catch (Exception $e) {
+						unset($deletedRecords[$index]);
                         continue;
                     }
                 }

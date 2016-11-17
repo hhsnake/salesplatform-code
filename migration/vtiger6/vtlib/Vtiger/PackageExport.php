@@ -429,12 +429,12 @@ class Vtiger_PackageExport {
 			$this->outputNode($fieldresultrow['info_type'],     'info_type');
 			$this->outputNode('<![CDATA['.$fieldresultrow['helpinfo'].']]>', 'helpinfo');
                         
-                        // SalesPlatform.ru begin added columntype
-                        $sql = "DESCRIBE ".$fieldresultrow['tablename']." ".$fieldresultrow['columnname'];
-                        $coltype = $adb->pquery($sql, array());
-                        $columntype = $adb->query_result($coltype, 0, 1);
-                        $this->outputNode($columntype, 'columntype');
-                        // SalesPlatform.ru end
+            // SalesPlatform.ru begin added columntype
+            $sql = "DESCRIBE ".$fieldresultrow['tablename']." ".$fieldresultrow['columnname'];
+            $coltype = $adb->pquery($sql, array());
+            $columntype = $adb->query_result($coltype, 0, 1);
+            $this->outputNode($columntype, 'columntype');
+            // SalesPlatform.ru end
                         
 			if(isset($fieldresultrow['masseditable'])) {
 				$this->outputNode($fieldresultrow['masseditable'], 'masseditable');
@@ -458,9 +458,9 @@ class Vtiger_PackageExport {
 				} else {
 					$picklistvalues = vtlib_getPicklistValues_AccessibleToAll($fieldname);
 				}
-                                // SalesPlatform.ru begin
-                                $this->outputNode(1, 'cleanpicklistvalues');
-                                // SalesPlatform.ru end
+                // SalesPlatform.ru begin
+                $this->outputNode(1, 'cleanpicklistvalues');
+                // SalesPlatform.ru end
 				$this->openNode('picklistvalues');
 				foreach($picklistvalues as $picklistvalue) {
 					$this->outputNode($picklistvalue, 'picklistvalue');

@@ -87,7 +87,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		// Merge Users module merge tags based on current user.
 		$mergedDescription = getMergedDescription($this->get('description'), $currentUserModel->getId(), 'Users');
                 $mergedSubject = getMergedDescription($this->get('subject'),$currentUserModel->getId(), 'Users');
-
+                
 		foreach($toEmailInfo as $id => $emails) {
 			$mailer->reinitialize();
 			$mailer->ConfigSenderInfo($fromEmail, $userName, $replyTo);
@@ -146,7 +146,9 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 
 				$ccs = array_filter(explode(',',$this->get('ccmail')));
 				$bccs = array_filter(explode(',',$this->get('bccmail')));
-
+                //SalesPlatform.ru begin
+                $idn = new idna_convert();
+                //SalesPlatform.ru end
 				if(!empty($ccs)) {
                                         // SalesPlatform.ru begin
 					foreach($ccs as $cc) $mailer->AddCC($idn->encode($cc));
@@ -161,7 +163,9 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 				}
 			}
             // SalesPlatform.ru begin
-            $idn = new idna_convert();
+            // //SalesPlatform.ru begin
+            //$idn = new idna_convert();
+            //SalesPlatform.ru end
             $query = "select * from vtiger_systems where server_type=?";
             $params = array('email');
 
@@ -220,13 +224,24 @@ class Emails_Record_Model extends Vtiger_Record_Model {
                 $folderName = $mailBoxModel->folder();
                 if(!empty($folderName) && !empty($mailString)) {
                     $connector = MailManager_Connector_Connector::connectorWithModel($mailBoxModel, '');
-                    imap_append($connector->mBox, $connector->mBoxUrl.$folderName, $mailString, "\\Seen");
+                    //SalesPlatform.ru begin
+                    imap_append($connector->mBox, $connector->mBoxUrl . $this->convertMailBoxName($folderName), $mailString, "\\Seen");
+                    //imap_append($connector->mBox, $connector->mBoxUrl.$folderName, $mailString, "\\Seen");
+                    //SalesPlatform.ru end
                 }
             }
 		}
 		return $status;
 	}
-
+    
+    //SalesPlatform.ru begin
+    public static function convertMailBoxName($folderName) {
+        return (function_exists('mb_convert_encoding')) ? 
+            mb_convert_encoding($folderName, 'UTF7-IMAP', 'UTF-8') :
+            iconv($folderName, 'UTF7-IMAP', 'UTF-8');
+    }
+    //SalesPlatform.ru end
+    
 	/**
 	 * Returns the From Email address that will be used for the sent mails
 	 * @return <String> - from email address

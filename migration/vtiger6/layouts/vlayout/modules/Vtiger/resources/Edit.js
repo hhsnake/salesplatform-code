@@ -1086,7 +1086,10 @@ jQuery.Class("Vtiger_Edit_Js",{
             }
             
             /* Replace options with remember selected */
-            var targetPickList = $('select[name*="' + targetPickListName + '"]', container); 
+            var targetPickList = $('select[name*="' + targetPickListName + '"]', container);
+            if(targetPickList.length <= 0){
+                return;
+            }
             var listOfAvailableOptions = targetPickList.data('availableOptions');
             if(typeof listOfAvailableOptions == "undefined"){
                 listOfAvailableOptions = $('option', targetPickList);

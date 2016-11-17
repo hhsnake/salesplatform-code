@@ -56,7 +56,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 	 *                   array('linktype'=>list of link models);
 	 */
 	public function getDetailViewLinks($linkParams) {
-		$linkTypes = array('DETAILVIEWBASIC','DETAILVIEW');
+		$linkTypes = array('DETAILVIEWBASIC','DETAILVIEW','DETAILVIEWTAB');
 		$moduleModel = $this->getModule();
 		$recordModel = $this->getRecord();
 
@@ -94,7 +94,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($deletelinkModel);
 		}
 
-		if(Users_Privileges_Model::isPermitted($moduleName, 'EditView', $recordId)) {
+		if(Users_Privileges_Model::isPermitted($moduleName, 'CreateView', $recordId)) {
 			$duplicateLinkModel = array(
 						'linktype' => 'DETAILVIEWBASIC',
 						'linklabel' => 'LBL_DUPLICATE',
@@ -149,6 +149,13 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 			$linkModelList[$relatedLink->getType()][] = $relatedLink;
 		}
 
+                $detailViewBasicTablinks = $linkModelListDetails['DETAILVIEWTAB'];
+                if(!empty($detailViewBasicTablinks)) {
+                    foreach($detailViewBasicTablinks as $linkModel) {
+                        $linkModelList['DETAILVIEWTAB'][] = $linkModel;
+                    }
+                }
+                
 		$widgets = $this->getWidgets();
 		foreach($widgets as $widgetLinkModel) {
 			$linkModelList['DETAILVIEWWIDGET'][] = $widgetLinkModel;

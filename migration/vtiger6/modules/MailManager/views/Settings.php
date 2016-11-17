@@ -46,14 +46,32 @@ class MailManager_Settings_View extends MailManager_MainUI_View {
 			$model->setRefreshTimeOut($request->get('_mbox_refresh_timeout'));
 			$connector = $this->getConnector();
             $sentFolder = $request->get('_mbox_sent_folder');
-            if($connector->isConnected() && empty($sentFolder)) {
+            //SalesPlatform.ru begin
+            if($connector->isConnected()) {
                 $folderInstaces = $connector->folders();
+                
+                /* Default folder if no match to sent folder */
+                $firstFolderInstance = current($folderInstaces);
+                $sentFolder = $firstFolderInstance->name();
+                
+                /* Lookup folder which match to name */
+                $mboxFolder = strtolower($request->get('_mbox_sent_folder'));
                 foreach($folderInstaces as $folder) {
-                    if (strpos(strtolower($folder->name()), 'sent') !== false) {
+                    if(strtolower($folder->name()) == $mboxFolder) {
                         $sentFolder = $folder->name();
                     }
                 }
             }
+            
+            //if($connector->isConnected() && empty($sentFolder)) {
+            //    $folderInstaces = $connector->folders();
+            //    foreach($folderInstaces as $folder) {
+            //        if (strpos(strtolower($folder->name()), 'sent') !== false) {
+            //            $sentFolder = $folder->name();
+            //        }
+            //    }
+            //}
+            //SalesPlatform.ru end
             $model->setFolder($sentFolder);
 			if ($connector->isConnected()) {
 				$model->save();

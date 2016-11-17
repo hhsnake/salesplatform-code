@@ -769,6 +769,7 @@ if (typeof(MailManager) == 'undefined') {
 
 			var meta = MailManager.mail_open_meta;
                         AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=find&_mfrom=" + encodeURIComponent(meta['from']) +
+                        '&_msendto='+ encodeURIComponent(meta['sendto']) +
 				'&_folder=' +encodeURIComponent(meta['folder']) +'&_msgno=' +encodeURIComponent(meta['msgno']) +'&_msguid=' +
 				encodeURIComponent(meta['msguid'].replace('<', '&lt;').replace('>', '&gt;'))).then(function(responseJSON) { 
                                         responseJSON = JSON.parse(responseJSON);
@@ -903,7 +904,7 @@ if (typeof(MailManager) == 'undefined') {
 						'mode' : 'hide'
 					})
 					//var response = MailManager.removeHidElement(transport.responseText);
-					//var responseJSON = JSON.parse(response);
+					responseJSON = JSON.parse(response);
 					var resultJSON = responseJSON['result'];
 					if (resultJSON['ui']) {
 						MailManager.mail_associate_create_cancel();

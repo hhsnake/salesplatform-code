@@ -39,10 +39,10 @@ function getFieldByReportLabel($module, $label) {
 	foreach ($cachedModuleFields as $fieldInfo) {
 		$fieldLabel = str_replace(' ', '_', $fieldInfo['fieldlabel']);
         $fieldLabel = decode_html($fieldLabel);
-                //SalesPlatform.ru begin fix get field info by label
-                if($label == $fieldLabel || $label == getTranslatedString($fieldLabel, $module)) {
+        //SalesPlatform.ru begin fix get field info by label
+        if($label == $fieldLabel || $label == getTranslatedString($fieldLabel, $module)) {
 		//if($label == $fieldLabel) {
-                //SalesPlatform.ru end    
+        //SalesPlatform.ru end    
 			VTCacheUtils::setReportFieldByLabel($module, $label, $fieldInfo);
 			return $fieldInfo;
 		}
@@ -135,7 +135,7 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 			}
 			$date = new DateTimeField($value.' '.$endTime);
 			$fieldvalue = $date->getDisplayDate();
-		} else if(!($field->getUIType() == '5')) {
+		} else if(!($field->getUIType() == '5'||$field->getUiType() =='23')) {
             $date = new DateTimeField($fieldvalue);
             $fieldvalue = $date->getDisplayDateTimeValue();
 		}

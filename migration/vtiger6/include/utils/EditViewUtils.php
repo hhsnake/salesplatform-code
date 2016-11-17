@@ -364,7 +364,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		}
         // SalesPlatform.ru end
         
-		$taxTotal = '0.00';
+		$taxTotal = '0';
 		$taxTotal = number_format($taxTotal, $no_of_decimal_places,'.','');
 		$product_Detail[$i]['taxTotal'.$i] = $taxTotal;
 
@@ -385,8 +385,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 		}
 		$product_Detail[$i]['netPrice'.$i] = $netPrice;
 
+		$taxMode = ($focus->id) ? 'available_associated' : 'all';
 		//First we will get all associated taxes as array
-		$tax_details = getTaxDetailsForProduct($hdnProductId,'all');
+		$tax_details = getTaxDetailsForProduct($hdnProductId, $taxMode);
 		//Now retrieve the tax values from the current query with the name
 		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 		{
@@ -397,10 +398,12 @@ function getAssociatedProducts($module,$focus,$seid='')
 			//condition to avoid this function call when create new PO/SO/Quotes/Invoice from Product module
 			if($focus->id != '')
 			{
-				if($taxtype == 'individual')//if individual then show the entered tax percentage
-					$tax_value = getInventoryProductTaxValue($focus->id, $hdnProductId, $tax_name);
-				else//if group tax then we have to show the default value when change to individual tax
+				if($taxtype == 'individual') {//if individual then show the entered tax percentage
+					$tax_value = ($adb->query_result($result, $i-1, $tax_name));
+					$tax_value = ($tax_value) ? $tax_value : 0;
+				} else {//if group tax then we have to show the default value when change to individual tax
 					$tax_value = $tax_details[$tax_count]['percentage'];
+				}
 			}
 			else//if the above function not called then assign the default associated value of the product
 				$tax_value = $tax_details[$tax_count]['percentage'];
@@ -408,8 +411,16 @@ function getAssociatedProducts($module,$focus,$seid='')
 			$product_Detail[$i]['taxes'][$tax_count]['taxname'] = $tax_name;
 			$product_Detail[$i]['taxes'][$tax_count]['taxlabel'] = $tax_label;
 			$product_Detail[$i]['taxes'][$tax_count]['percentage'] = $tax_value;
-		}
 
+            // SalesPlatform.ru begin
+            $taxAmount = $totalAfterDiscount*$tax_value/(100.0+$tax_value);
+            $taxAmount = number_format($taxAmount, $no_of_decimal_places,'.','');
+            $taxTotal = $taxTotal + $taxAmount;
+            // SalesPlatform.ru end
+		}
+        // SalesPlatform.ru begin
+        $product_Detail[$i]['taxTotal'.$i] = $taxTotal;
+        // SalesPlatform.ru end
 	}
 
 	//set the taxtype
@@ -483,11 +494,14 @@ function getAssociatedProducts($module,$focus,$seid='')
 			$tax_percent = $tax_details[$tax_count]['percentage'];//$adb->query_result($result,0,$tax_name);
 
 		if($tax_percent == '' || $tax_percent == 'NULL')
-			$tax_percent = '0.00';
+			$tax_percent = '0';
         // SalesPlatform.ru begin
-		if($taxtype == 'group_tax_inc')
-			$taxamount = ($subTotal-$finalDiscount)*$tax_percent/(100.0+$tax_percent);
-		else
+		if($taxtype == 'group_tax_inc') {
+            $taxamount = 0;
+            for($i = 1; $i <= $num_rows; $i++) {
+                $taxamount += $product_Detail[$i]['taxTotal'.$i];
+            }
+        } else
 		// SalesPlatform.ru end
 		$taxamount = ($subTotal-$finalDiscount)*$tax_percent/100;
 		$taxamount = number_format($taxamount, $no_of_decimal_places,'.','');

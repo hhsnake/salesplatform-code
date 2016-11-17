@@ -15,21 +15,25 @@
     {* <table width="100%" cellpadding="3" cellspacing="1" border="0" class="lvt small"> *}
     {* SalesPlatform.ru end *}
         {* SalesPlatform.ru begin *}
+        <tr>
+            <th>{vtranslate('LBL_NUMBER', $MODULE)}</th>
+            <th>{vtranslate('LBL_STATUS', $MODULE)}</th>
+            <th>{vtranslate('LBL_STATUS_MESSAGE', $MODULE)}</th>
+        </tr> 
         {if $RECORDS|@count ne 0}
+            {foreach item=RECORD from=$RECORDS}
+            <tr bgcolor="{SMSNotifier_Record_Model::getBackgroundColorForStatus($RECORD['status'])}">
+                <td nowrap="nowrap" width="33%">{$RECORD['tonumber']}</td>
+                <td nowrap="nowrap" width="33%">{vtranslate($RECORD['status'], $MODULE)}</td>
+                <td nowrap="nowrap" width="33%">{$RECORD['statusmessage']}</td>
+                {*<td nowrap="nowrap" bgcolor="{$RECORD->get('statuscolor')}" width="25%">{$RECORD->get('tonumber')}</td>*}
+            </tr>
+            {/foreach}
+        {else}
             <tr>
-                <th>{vtranslate('LBL_NUMBER', $MODULE)}</th>
-                <th>{vtranslate('LBL_STATUS', $MODULE)}</th>
-                <th>{vtranslate('LBL_STATUS_MESSAGE', $MODULE)}</th>
-            </tr>    
+                <td nowrap="nowrap" width="100%" colspan="3">{vtranslate('LBL_NO_NUMBERS_TO_SEND_SMS', $MODULE)}</td>
+            </tr>
         {/if}
-        {foreach item=RECORD from=$RECORDS}
-		<tr bgcolor="{SMSNotifier_Record_Model::getBackgroundColorForStatus($RECORD['status'])}">
-			<td nowrap="nowrap" width="33%">{$RECORD['tonumber']}</td>
-            <td nowrap="nowrap" width="33%">{vtranslate($RECORD['status'], $MODULE)}</td>
-            <td nowrap="nowrap" width="33%">{$RECORD['statusmessage']}</td>
-            {*<td nowrap="nowrap" bgcolor="{$RECORD->get('statuscolor')}" width="25%">{$RECORD->get('tonumber')}</td>*}
-		</tr>
-        {/foreach}
         {* SalesPlatform.ru end *}
 	</table>
 </div>

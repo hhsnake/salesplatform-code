@@ -275,12 +275,20 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 					$value = '';
 				}
 			} elseif($uitype == 72 || $uitype == 71) {
-                $value = CurrencyField::convertToUserFormat($value, null, true, true);
+                //SalesPlatform.ru begin
+                $value = CurrencyField::convertToUserFormat($value);
+                //$value = CurrencyField::convertToUserFormat($value, null, true, true);
+                //SalesPlatform.ru end
 			} elseif($uitype == 7 && $fieldInfo->get('typeofdata') == 'N~O' || $uitype == 9){
 				$value = decimalFormat($value);
 			} else if($type == 'date' || $type == 'datetime'){
                 $value = DateTimeField::convertToUserFormat($value);
             }
+            //SalesPlatform.ru begin
+              else if($uitype == 117) {
+                $value = vtranslate($value);
+            }
+            //SalesPlatform.ru end
 			if($moduleName == 'Documents' && $fieldname == 'description'){
 				$value = strip_tags($value);
 				$value = str_replace('&nbsp;','',$value);
