@@ -81,9 +81,12 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 
 				$targetdir  = substr($filename, 0, strripos($filename,'/'));
 				$targetfile = basename($filename);
-
-				$prefixparts = split('_', $prefix);
-
+                
+                //SalesPlatform.ru begin
+                //$prefixparts = split('_', $prefix);
+				$prefixparts = explode('_', $prefix);
+                //SalesPlatform.ru end
+                
 				$dounzip = false;
 				if(is_dir($targetdir)) {
 					// Case handling for jscalendar

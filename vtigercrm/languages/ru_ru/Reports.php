@@ -52,7 +52,7 @@ $languageStrings = array(
 	'LBL_SUM_VALUE'                => 'Сумма'                  , // KEY 5.x: LBL_COLUMNS_SUM
 	'LBL_AVERAGE'                  => 'Среднее'              , // KEY 5.x: LBL_COLUMNS_AVERAGE
 	'LBL_LOWEST_VALUE'             => 'Наименьшая величина', // KEY 5.x: LBL_COLUMNS_LOW_VALUE
-	'LBL_HIGHEST_VALUE'            => 'Наибольная величина'               , // TODO: Review
+	'LBL_HIGHEST_VALUE'            => 'Наибольшая величина'               , // TODO: Review
 	'LBL_GENERATE_REPORT'          => 'Сгенерировать Отчет'             , // TODO: Review
 	'LBL_SUM'                      => 'СУМ'                      , // KEY 5.x: SUM
 	'LBL_AVG'                      => 'СРЕДН'                  , // KEY 5.x: AVG
@@ -195,13 +195,68 @@ $languageStrings = array(
     'Templates' => 'Шаблоны',
     'Report templates for modules' => 'Шаблоны отчетов для модулей',
  	'LBL_NO_COLUMN_VALUE' => '--Пустое значение поля--', 
+    'LBL_VIEWTYPE' => 'Тип построения',
+    'LBL_AGREGATE_BY' => 'Рассчитать по',
+    'table' => 'Таблица',
+    'pie' => 'Круговая диаграмма',
+    'barchart' => 'Столбиковая диаграмма',
+    'linear' => 'График',
+    'custom' => 'Произвольный формат',
     //SalesPlatform.ru end
-);
+    'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Максимальный лимит превышен',
+    'LBL_CREATING_PIVOT_REPORT' => 'Создать сводный отчет',
+    'LBL_EDITING_PIVOT_REPORT' => 'Изменить сводный отчет',
+    'LBL_SELECT_PIVOT_FIELDS' => 'Выберите поля для отчета',
+    'LBL_SELECT_ROWS' => 'Выберите строки',
+    'LBL_SELECT_DATA_FIELDS' => 'Выберите поля данных',
+    'LBL_ADD_ROWS' => 'Добавление строк',
+    'LBL_ADD_COLUMNS' => 'Добавление столбцов',
+    'LBL_ADD_DATA_FIELDS' => 'Добавить поля данных',
+    'LBL_PIVOT_FIELDS' => 'Выберите сводные поля',
+    'LBL_SELECT_PIVOT_FIELDS_WARNING' => 'Внимание: Пожалуйста, выберите хотя бы одно поле строки, поле столбца и поле данных',
+    'LBL_PIVOT_DATA_FIELDS_WARNING' => 'Внимание: В колонке данных - сводные функции (сумма, в среднем, минимум и максимум) не должны повторяться.',
+    'LBL_MODIFY_CONDITIONS' => 'Изменить условия',
+    'LBL_PIVOT_PREVIEW_EX' => 'Предварительный просмотр отчета (пример)',
+    'LBL_PIVOT_REPORT' => 'Сводный отчет',
+    'LBL_PIN_CHART_TO_DASHBOARD' => 'График Pin на панель инструментов',
+    'LBL_FILE_FORMAT' => 'Формат файла',
+    'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'Это автоматически сгенерированный сообщения, отправленные от имени запланированного отчета.',
+    'LBL_PIN_CHART_TO_DASHBOARD' => 'График Pin на панель инструментов',
+    'LBL_FILE_FORMAT' => 'Формат файла',
+    'Report Type' => 'Тип отчета',
+    'tabular' => 'Подробно',
+    'summary' => 'Подробно',
+    'pivot' => 'Стержень',
+    'chart' => 'Диаграмма',
+    'LBL_REPORTS_MOVED_SUCCESSFULLY'=>'Отчеты успешно перемещены.',
+    'LBL_SAME_SOURCE_AND_TARGET_FOLDER'=>'Целевая папка идентична исходной папке.',
+    'LBL_SEARCH_FOR_FOLDERS' => 'Поиск для папок',
+    'LBL_CHART_REPORT' => 'Графический отчет',
+    'LBL_UNPIN_CHART_FROM_DASHBOARD' => 'Открепить график из приборной панели',
+    'LBL_SAME_LEVEL_ROLES' => 'Роли одного уровня',
+    'LBL_SUBORDINATE_ROLES' => 'Подчиненные Роли',
+    'LBL_SHARE_REPORT' => 'Поделиться Отчетом',
+    'LBL_SHARED_REPORTS' => 'Поделился со мной',
+    'LBL_PINNED' => 'Закрепленные',
+    'LBL_UNPINNED' => 'Открепить',
+    'LBL_REPORTS_DELETED_SUCCESSFULLY' => 'Отчеты успешно удалены',
+    'Primary Module' => 'Основной модуль',     
+    );
 $jsLanguageStrings = array(
 	'JS_DUPLICATE_RECORD'          => 'Дубликат отчета'            , // TODO: Review
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Ограничение: Поля товарной части(Розничная цена, Скидка и Кол-во) могут использоваться только когда другие расчетные поля не выбраны.', // TODO: Review
     'JS_NO_CHART_DATA_AVAILABLE' => 'Нет данных',
-);
+    //SalesPlatform.ru begin
+    'JS_LBL_NO_DATA_FOR_SELECTED_FILTERS' => 'Для выбранных фильров нет данных',    
+    //SalesPlatform.ru end
+    'JS_CHART_PINNED_TO_DASHBOARD' => 'Диаграмма, прикрепленная к панели приборов',
+    'JS_CHART_ALREADY_PINNED_TO_DASHBOARD' => 'Диаграмма уже привязана к  панели приборов',
+    'JS_MOVE_REPORTS'=>'Перемещение отчетов',
+    'JS_SCHEDULED_DATE_TIME_ERROR' => 'Запланированная дата и время должно быть больше текущей даты и времени',
+    'JSLBL_PIN_CHART_TO_DASHBOARD' => 'График ПИН-код для приборной панели',
+    'JSLBL_UNPIN_CHART_FROM_DASHBOARD' => 'Открепить диаграмму из приборной панели',
+    'JS_CHART_REMOVED_FROM_DASHBOARD' => 'Диаграмма удалена из панели',
+    );
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Reports.php';

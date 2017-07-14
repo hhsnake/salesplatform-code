@@ -13,17 +13,18 @@ class Settings_Vtiger_CompanyDetails_View extends Settings_Vtiger_Index_View {
 	public function process(Vtiger_Request $request) {
 		$qualifiedModuleName = $request->getModule(false);
         //SalesPlatform.ru begin
-        $selectedCompany = htmlspecialchars($request->get('company'), ENT_QUOTES);
-        if($selectedCompany == '') {
-            $selectedCompany = 'Default';
-        }
+        $selectedCompany = decode_html($request->get('company'));
         $moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance($selectedCompany);
+        if($moduleModel->getId() == null) {
+            $moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance();
+            $selectedCompany = $moduleModel->get('company');
+        }
         //$moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance();
         //SalesPlatform.ru end
 
 		$viewer = $this->getViewer($request);
         //SalesPlatform.ru begin
-        $viewer->assign('SELECTED_COMPANY', htmlspecialchars($selectedCompany));
+        $viewer->assign('SELECTED_COMPANY', $selectedCompany);
         //SalesPlatform.ru end
 		$viewer->assign('MODULE_MODEL', $moduleModel);
 		$viewer->assign('ERROR_MESSAGE', $request->get('error'));

@@ -36,6 +36,12 @@ $languageStrings = array(
     'Archived'                     => 'Архив',
     'Normal'                       => 'Нормальный',
     'Due date'                     => 'Дата окончания',
+    'Type'                         => 'Тип' ,
+    'Low'                          => 'Низкий',
+    'High'                         => 'Высокий',
+    'Services'                     => 'Сервисы',
+    'In Progress'                  => 'В процессе',
+    'Service Contracts' => 'Сервисные Контракты',    
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

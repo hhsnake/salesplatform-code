@@ -33,14 +33,15 @@
                  {/if}
                 </div>
                  {/foreach}
-                         
-			</div>
+            {*SalesPlatform begin*}                     
+			{*</div>*}
+            {*SalesPlatform end*}
 		</div>
 		{/foreach}
 	</div>
 {else}
 	<span class="noDataMsg">
-		{vtranslate('LBL_NO')} {vtranslate($MODULE_NAME, $MODULE_NAME)} {vtranslate('LBL_MATCHED_THIS_CRITERIA')}
+		{vtranslate('LBL_EQ_ZERO')} {vtranslate($MODULE_NAME, $MODULE_NAME)} {vtranslate('LBL_MATCHED_THIS_CRITERIA')}
 	</span>
 {/if}
 </div>

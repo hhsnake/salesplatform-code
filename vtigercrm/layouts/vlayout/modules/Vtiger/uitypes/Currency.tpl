@@ -24,10 +24,7 @@
 {else if ($FIELD_MODEL->get('uitype') eq '72') && ($FIELD_MODEL->getName() eq 'unit_price')}
 	<div class="input-prepend">
 		<div class="row-fluid">
-            <!-- SalesPlatform.ru begin -->
-            <span class="span1" style="min-width: 25px">
-			<!-- <span class="span1"> -->
-            <!-- SalesPlatform.ru end -->
+			<span class="span1">
 				<span class="add-on row-fluid">{$BASE_CURRENCY_SYMBOL}</span>
 			</span>
 			<span class="span10 row-fluid">

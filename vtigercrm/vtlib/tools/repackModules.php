@@ -14,31 +14,42 @@ $repacker->repack();
 
 class SPRepackModules {
     
-    private $skipModules = ['Dashboard', 'Events', 'Webmails'];
+    private $skipModules = ['Dashboard', 'Events', 'Webmails', 'Search'];
     private $projectsBundle = ['Project', 'ProjectMilestone', 'ProjectTask'];
+    private $dismissManifest = false;
     
+    //SalesPlatform.ru: set "--manifest dismiss" in cli if you need don't update manifest in zip
     public function repack() {
+        $options = getopt("v::",array("manifest:"));
+        
+        if ($options['manifest'] == 'dismiss') {
+            $this->dismissManifest = true;
+        }
+        
         SPRepackLogger::log("Running repack all modules");
         $package = new Vtiger_Package();
         foreach(Vtiger_Module_Model::getAll() as $module) {
             if($this->isRepackableModule($module->getName())) {
                 SPRepackLogger::log("Start repack " . $module->getName() . " module");
                 $packagePath = $this->searchPackagePath($module->getName());
-                if($packagePath != null) {
-                    if(file_exists($packagePath)) {
-                        unset($packagePath);
+                if(file_exists($packagePath)) { 
+                    if ($this->dismissManifest) {
+                        $result = file_get_contents('zip://' . $packagePath . '#manifest.xml'); 
+                        
+                        file_put_contents('tmp.xml', $result);
                     }
-                    
-                    $package->export(
-                        $module, 
-                        $packagePath,
-                        $this->getPackageName($module->getName())
-                    );
-                } else {
-                    SPRepackLogger::log("Not found zip package of module " . $module->getName() . ". No need repack");
+                    unlink($packagePath); 
+                    $packageName = $this->getPackageName($module->getName()); 
+                    $package->export($module, $packagePath, $packageName, false, $this->dismissManifest); 
+
+                    if(file_exists('tmp.xml')) {
+                        unlink('tmp.xml');
+                    }
+                    SPRepackLogger::log("Repack of " . $module->getName() . " finished"); 
+                    continue; 
                 }
                 
-                SPRepackLogger::log("Repack of " . $module->getName() . " finished");
+                SPRepackLogger::log("Not found zip package of module " . $module->getName() . ". No need repack");
             }
         }
         
@@ -47,7 +58,7 @@ class SPRepackModules {
         SPRepackLogger::log("End repack special modules");
     }
     
-    private function repackSpecialModules() {
+        private function repackSpecialModules() {
         SPRepackLogger::log("Start Projects bundle repack");
         
         $package = new Vtiger_Package();

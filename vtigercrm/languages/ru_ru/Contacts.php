@@ -52,6 +52,12 @@ $languageStrings = array(
     'Contacted - Successful'       => 'Успешный Контакт', 
     'LBL_SETUP_WEBFORMS'           => 'Установка Веб-Форм',
     'Please Login Here'            => 'Войти',
+    'Support Start Date'           => 'Дата начала поддержки',
+    'Support End Date'             => 'Дата завершения поддержки',
+    'LBL_TRANSACTIONS' => 'Операции',
+    'Other Phone' => 'Другой тел.',
+    'Email' => 'Основной адрес электронной почты',
+    'Secondary Email' => 'Второй адрес электронной почты',
 );
 $jsLanguageStrings = array(
     'LBL_SYNC_BUTTON'              => 'Синхронизировать',

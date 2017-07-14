@@ -261,12 +261,18 @@ for($i=0; $i<$numOfRows; $i++) {
                     $newConditions = array_merge($oldCondtions, $newConditions);
 
                     $workflowModel->test = Zend_Json::encode($newConditions);
-                    $workflowModel->description = 'Ticket Creation From Portal : Send Email to Record Owner and Contact';
+                    //SalesPlatform.ru begin
+                    $workflowModel->description = vtranslate("LBL_TICKET_CREATION_FROM_PORTAL", 'Install');
+                    //$workflowModel->description = 'Ticket Creation From Portal : Send Email to Record Owner and Contact';
+                    //SalesPlatform.ru end
                     $wfs->save($workflowModel);
 
                     $emailTask->id = '';
                     $emailTask->workflowId = $properties['workflowId'];
-                    $emailTask->summary = 'Notify Record Owner when Ticket is created from Portal';
+                    //SalesPlatform.ru begin
+                    $emailTask->summary = vtranslate('LBL_NOTIFY_RECORD_OWNER_AFTER_TICKET_CREATION', 'Install');
+                    //$emailTask->summary = 'Notify Record Owner when Ticket is created from Portal';
+                    //SalesPlatform.ru end
                     $emailTask->fromEmail =  '$(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname)&lt;$(general : (__VtigerMeta__) supportEmailId)&gt;';
                     $emailTask->recepient = ',$(assigned_user_id : (Users) email1)';
                     $emailTask->subject =  '[From Portal] $ticket_no [ Ticket Id : $(general : (__VtigerMeta__) recordId) ] $ticket_title';
@@ -382,11 +388,17 @@ for($i=0; $i<$numOfRows; $i++) {
 
                             unset($newWorkflowModel->id);
                             $newWorkflowModel->test = Zend_Json::encode($newWorkflowConditions);
-                            $newWorkflowModel->description = 'Send Email to Organization on Ticket Update';
+                            //SalesPlatform.ru begin
+                            $newWorkflowModel->description = vtranslate('LBL_EMAIL_TO_ORGANIZATION_ON_TICKET_UPDATE', 'Install');
+                            //$newWorkflowModel->description = 'Send Email to Organization on Ticket Update';
+                            //SalesPlatform.ru end
                             $wfs->save($newWorkflowModel);
 
                             $emailTask->id = '';
-                            $emailTask->summary = 'Send Email to Organization on Ticket Update';
+                            //SalesPlatform.ru begin
+                            $emailTask->summary = vtranslate('LBL_EMAIL_TO_ORGANIZATION_ON_TICKET_UPDATE', 'Install');
+                            //$emailTask->summary = 'Send Email to Organization on Ticket Update';
+                            //SalesPlatform.ru end
                             $emailTask->fromEmail = '$(general : (__VtigerMeta__) supportName)&lt;$(general : (__VtigerMeta__) supportEmailId)&gt;';
                             $emailTask->recepient = ',$(parent_id : (Accounts) email1)';
                             $emailTask->subject = '$ticket_no [ Ticket Id : $(general : (__VtigerMeta__) recordId) ] $ticket_title';
@@ -420,12 +432,18 @@ for($i=0; $i<$numOfRows; $i++) {
                             unset($newWorkflowModel->id);
                             $newWorkflowModel->executionCondition = 1;
                             $newWorkflowModel->test = Zend_Json::encode(array_merge($newAccountCondition, $portalCondition));
-                            $newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Organization';
+                            //SalesPlatform.ru begin
+                            $newWorkflowModel->description = vtranslate('LBL_EMAIL_ORGANIZATION_ON_TICKET_CREATE', 'Install');
+                            //$newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Organization';
+                            //SalesPlatform.ru end
                             $wfs->save($newWorkflowModel);
 
                             $emailTask->id = '';
                             $emailTask->workflowId = $newWorkflowModel->id;
-                            $emailTask->summary = 'Ticket Creation From CRM : Send Email to Organization';
+                            //SalesPlatform.ru begin
+                            $emailTask->summary = vtranslate('LBL_EMAIL_ORGANIZATION_ON_TICKET_CREATE', 'Install');
+                            //$emailTask->summary = 'Ticket Creation From CRM : Send Email to Organization';
+                            //SalesPlatform.ru end
                             $tm->saveTask($emailTask);
 
                             $newContactCondition = array(
@@ -440,12 +458,18 @@ for($i=0; $i<$numOfRows; $i++) {
                             $newConditions = array_merge($newContactCondition, $newConditions);
 
                             $workflowModel->test = Zend_Json::encode($newConditions);
-                            $workflowModel->description = 'Send Email to Contact on Ticket Update';
+                            //SalesPlatform.ru begin
+                            $workflowModel->description = vtranslate('LBL_SEND_EMAIL_TO_CONTACT_ON_TICKET_UPDATE', 'Install');
+                            //$workflowModel->description = 'Send Email to Contact on Ticket Update';
+                            //SalesPlatform.ru end
                             $wfs->save($workflowModel);
 
                             $emailTask->id = $properties['id'];
                             $emailTask->workflowId = $properties['workflowId'];
-                            $emailTask->summary = 'Send Email to Contact on Ticket Update';
+                            //SalesPlatform.ru begin
+                            $emailTask->summary = vtranslate('LBL_SEND_EMAIL_TO_CONTACT_ON_TICKET_UPDATE', 'Install');
+                            //$emailTask->summary = 'Send Email to Contact on Ticket Update';
+                            //SalesPlatform.ru end
                             $emailTask->recepient = ',$(contact_id : (Contacts) email)';
                             $emailTask->content = 'Ticket ID : $(general : (__VtigerMeta__) recordId)<br>Ticket Title : $ticket_title<br><br>
                                                             Dear $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname),<br><br>
@@ -466,12 +490,18 @@ for($i=0; $i<$numOfRows; $i++) {
                             unset($newWorkflowModel->id);
                             $newWorkflowModel->executionCondition = 1;
                             $newWorkflowModel->test = Zend_Json::encode(array_merge($newContactCondition, $portalCondition));
-                            $newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Contact';
+                            //SalesPaltform.ru begin
+                            $newWorkflowModel->description = vtranslate('LBL_TICKET_CREATION_SEND_EMAIL_TO_CONTACT', 'Install');
+                            //$newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Contact';
+                            //SalesPaltform.ru end
                             $wfs->save($newWorkflowModel);
 
                             $emailTask->id = '';
                             $emailTask->workflowId = $newWorkflowModel->id;
-                            $emailTask->summary = 'Ticket Creation From CRM : Send Email to Contact';
+                            //SalesPaltform.ru begin
+                            $emailTask->summary = vtranslate('LBL_TICKET_CREATION_SEND_EMAIL_TO_CONTACT', 'Install');
+                            //$emailTask->summary = 'Ticket Creation From CRM : Send Email to Contact';
+                            //SalesPaltform.ru end
                             $tm->saveTask($emailTask);
                             break;
 
@@ -569,12 +599,18 @@ for($i=0; $i<$numOfRows; $i++) {
 
                             unset($newWorkflowModel->id);
                             $newWorkflowModel->test = Zend_Json::encode($newConditions);
-                            $newWorkflowModel->description = 'Send Email to Record Owner on Ticket Update';
+                            //SalesPlatform.ru begin
+                            $newWorkflowModel->description = vtranslate('LBL_SEND_EMAIL_TO_RECORD_OWNER_ON_TICKET_UPDATE', 'Install');
+                            //$newWorkflowModel->description = 'Send Email to Record Owner on Ticket Update';
+                            //SalesPlatform.ru end
                             $wfs->save($newWorkflowModel);
 
                             $emailTask->id = '';
                             $emailTask->workflowId = $newWorkflowModel->id;
-                            $emailTask->summary = 'Send Email to Record Owner on Ticket Update';
+                            //SalesPlatform.ru begin
+                            $emailTask->summary = vtranslate('LBL_SEND_EMAIL_TO_RECORD_OWNER_ON_TICKET_UPDATE', 'Install');
+                            //$emailTask->summary = 'Send Email to Record Owner on Ticket Update';
+                            //SalesPlatform.ru end
                             $emailTask->fromEmail = '$(general : (__VtigerMeta__) supportName)&lt;$(general : (__VtigerMeta__) supportEmailId)&gt;';
                             $emailTask->recepient = ',$(assigned_user_id : (Users) email1)';
                             $emailTask->subject =  'Ticket Number : $ticket_no $ticket_title';
@@ -606,12 +642,18 @@ for($i=0; $i<$numOfRows; $i++) {
                             unset($newWorkflowModel->id);
                             $newWorkflowModel->executionCondition = 1;
                             $newWorkflowModel->test = Zend_Json::encode($portalCondition);
-                            $newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Record Owner';
+                            //SalesPlatform.ru begin
+                            $newWorkflowModel->description = vtranslate('TICKET_CREATION_FROM_CRM_SEND_EMAIL_TO_OWNER', 'Install');
+                            //$newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Record Owner';
+                            //SalesPlatform.ru end
                             $wfs->save($newWorkflowModel);
 
                             $emailTask->id = '';
                             $emailTask->workflowId = $newWorkflowModel->id;
-                            $emailTask->summary = 'Ticket Creation From CRM : Send Email to Record Owner';
+                            //SalesPlatform.ru begin
+                            $emailTask->summary = vtranslate('TICKET_CREATION_FROM_CRM_SEND_EMAIL_TO_OWNER', 'Install');
+                            //$emailTask->summary = 'Ticket Creation From CRM : Send Email to Record Owner';
+                            //SalesPlatform.ru end
                             $tm->saveTask($emailTask);
                             break;
             }

@@ -15,6 +15,7 @@ $languageStrings = array(
 	'LBL_NO_PERMITTED_MODULES'     => 'Нет доступных модулей', 
 	'LBL_RECORDS_LIST'             => 'Список'            , // TODO: Review
 	'LBL_NO_RECORDS_FOUND'         => 'Не найдено записей для востановления в модуле', // KEY 5.x: LBL_EMPTY_MODULE
+        'Recycle Bin' => 'Корзина',         
 );
 $jsLanguageStrings = array(
 	'JS_MSG_EMPTY_RB_CONFIRMATION' => 'Вы уверены, что хотите навсегда удалить из базы данных все удаленные записи?', 
@@ -23,6 +24,8 @@ $jsLanguageStrings = array(
     'JS_RESTORING_RECORDS' => 'Восстановление записей',
     'JS_MASS_DELETE_CONFIRMATION_RB' => 'Вы уверены, что хотите навсегда удалить записи?',
     'JS_DELETE_CONFIRMATION_RB'   => 'Вы уверены, что хотите навсегда удалить запись?',
+    'JS_RESTORING_RECORD' => 'Восстановление записи',
+    'JS_RESTORE_AND_UNTRASH_FILE_IN_DRIVE' => 'Восстановление в Vtiger и на диске',    
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

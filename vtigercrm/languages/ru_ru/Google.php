@@ -64,7 +64,24 @@ $languageStrings = array(
     'home-page' => 'Домашняя страничка',
     'Name Prefix' => 'Префикс имени',
     // SalesPlatform.ru end
-);
+    'Office Phone' => 'Служебный телефон',
+    'Work Phone' => 'Рабочий телефон',
+    'Home Phone' => 'Домашний телефон',
+    'LBL_CUSTOM' => 'Клиент',
+    'CALENDAR_SYNC_SETTINGS' => 'Настройки синхронизации Календаря',
+    'LBL_SELECT_GOOGLE_CALENDAR_TO_SYNC' => 'Выберите Календарь Google',
+    'LBL_SAVE_AND_START_SYNC' => 'Сохранить и запустить синхронизацию',
+    'LBL_PRIMARY' => 'Основной',
+    'LBL_SYNC_FROM_GOOGLE_TO_VTIGER' => 'Синхронизация с Google для Vtiger',
+    'LBL_SYNC_FROM_VTIGER_TO_GOOGLE' => 'Синхронизация с Vtiger для Google',
+    'LBL_GOOGLE_CONNECT_MSG' => 'Подключение к учетной записи Google для извлечения',
+    'LBL_SIGN_IN_WITH_GOOGLE' => 'Войти в Google',
+    'LBL_GOOGLE_ACCOUNT_DETAILS' => 'Детали учетной записи Google',
+    'LBL_GOOGLE_ACCOUNT_SYNCED_WITH' => 'Google аккаунт, синхронизированные с',
+    'LBL_CHANGE_USER' => 'Сменить пользователя',
+    'LBL_SAVE_AND_IMPORT' => 'Сохранить и импортировать',
+    'LBL_IMPORT_RESULTS_GOOGLE' => 'Результаты импорта Google',
+    );
 $jsLanguageStrings = array(
     'LBL_SYNC_BUTTON'              => 'Синхронизировать',
     'LBL_SYNCRONIZING'             => 'Синхронизация....',

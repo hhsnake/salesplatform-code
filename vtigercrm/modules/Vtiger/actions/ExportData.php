@@ -16,7 +16,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 
 		$currentUserPriviligesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		if(!$currentUserPriviligesModel->hasModuleActionPermission($moduleModel->getId(), 'Export')) {
-			throw new AppException('LBL_PERMISSION_DENIED');
+			throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));
 		}
 	}
 
@@ -40,12 +40,22 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		$moduleName = $request->get('source_module');
 
 		$this->moduleInstance = Vtiger_Module_Model::getInstance($moduleName);
-		$this->moduleFieldInstances = $this->moduleInstance->getFields();
+		$this->moduleFieldInstances = $this->moduleFieldInstances($moduleName);
 		$this->focus = CRMEntity::getInstance($moduleName);
 
 		$query = $this->getExportQuery($request);
 		$result = $db->pquery($query, array());
 
+		$translatedHeaders = $this->getHeaders();
+		$entries = array();
+		for ($j = 0; $j < $db->num_rows($result); $j++) {
+			$entries[] = $this->sanitizeValues($db->fetchByAssoc($result, $j));
+		}
+
+		$this->output($request, $translatedHeaders, $entries);
+	}
+
+	public function getHeaders() {
 		$headers = array();
 		//Query generator set this when generating the query
 		if(!empty($this->accessibleFields)) {
@@ -54,22 +64,27 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 				$fieldModel = $this->moduleFieldInstances[$fieldName];
 				// Check added as querygenerator is not checking this for admin users
 				$presence = $fieldModel->get('presence');
-				if(in_array($presence, $accessiblePresenceValue)) {
+				if(in_array($presence, $accessiblePresenceValue) && $fieldModel->get('displaytype') != '6') {
 					$headers[] = $fieldModel->get('label');
 				}
 			}
 		} else {
-			foreach($this->moduleFieldInstances as $field) $headers[] = $field->get('label');
+			foreach($this->moduleFieldInstances as $field) {
+				$headers[] = $field->get('label');
+			}
 		}
+
 		$translatedHeaders = array();
-		foreach($headers as $header) $translatedHeaders[] = vtranslate(html_entity_decode($header, ENT_QUOTES), $moduleName);
-
-		$entries = array();
-		for($j=0; $j<$db->num_rows($result); $j++) {
-			$entries[] = $this->sanitizeValues($db->fetchByAssoc($result, $j));
+		foreach($headers as $header) {
+			$translatedHeaders[] = vtranslate(html_entity_decode($header, ENT_QUOTES), $this->moduleInstance->getName());
 		}
 
-		$this->output($request, $translatedHeaders, $entries);
+		$translatedHeaders = array_map('decode_html', $translatedHeaders);
+		return $translatedHeaders;
+	}
+
+	function getAdditionalQueryModules(){
+		return array_merge(getInventoryModules(), array('Products', 'Services', 'PriceBooks'));
 	}
 
 	/**
@@ -83,30 +98,82 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		$cvId = $request->get('viewname');
 		$moduleName = $request->get('source_module');
 
-		$queryGenerator = new QueryGenerator($moduleName, $currentUser);
+		$queryGenerator = new EnhancedQueryGenerator($moduleName, $currentUser);
 		$queryGenerator->initForCustomViewById($cvId);
 		$fieldInstances = $this->moduleFieldInstances;
 
-        $accessiblePresenceValue = array(0,2);
+		$orderBy = $request->get('orderby');
+		$orderByFieldModel = $fieldInstances[$orderBy];
+		$sortOrder = $request->get('sortorder');
+
+		if ($mode !== 'ExportAllData') {
+			$operator = $request->get('operator');
+			$searchKey = $request->get('search_key');
+			$searchValue = $request->get('search_value');
+
+			$tagParams = $request->get('tag_params');
+			if (!$tagParams) {
+				$tagParams = array();
+			}
+
+			$searchParams = $request->get('search_params');
+			if (!$searchParams) {
+				$searchParams = array();
+			}
+
+			$glue = '';
+			if($searchParams && count($queryGenerator->getWhereFields())) {
+				$glue = QueryGenerator::$AND;
+			}
+			$searchParams = array_merge($searchParams, $tagParams);
+			$searchParams = Vtiger_Util_Helper::transferListSearchParamsToFilterCondition($searchParams, $this->moduleInstance);
+			$queryGenerator->parseAdvFilterList($searchParams, $glue);
+
+			if($searchKey) {
+				$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
+			}
+
+			if ($orderBy && $orderByFieldModel) {
+				if ($orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE || $orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::OWNER_TYPE) {
+					$queryGenerator->addWhereField($orderBy);
+				}
+			}
+		}
+
+		/**
+		 *  For Documents if we select any document folder and mass deleted it should delete documents related to that 
+		 *  particular folder only
+		 */
+		if($moduleName == 'Documents'){
+			$folderValue = $request->get('folder_value');
+			if(!empty($folderValue)){
+				 $queryGenerator->addCondition($request->get('folder_id'),$folderValue,'e');
+			}
+		}
+
+		$accessiblePresenceValue = array(0,2);
 		foreach($fieldInstances as $field) {
-            // Check added as querygenerator is not checking this for admin users
-            $presence = $field->get('presence');
-            if(in_array($presence, $accessiblePresenceValue)) {
-                $fields[] = $field->getName();
-            }
-        }
+			// Check added as querygenerator is not checking this for admin users
+			$presence = $field->get('presence');
+			if(in_array($presence, $accessiblePresenceValue) && $field->get('displaytype') != '6') {
+				$fields[] = $field->getName();
+			}
+		}
 		$queryGenerator->setFields($fields);
 		$query = $queryGenerator->getQuery();
 
-		if(in_array($moduleName, getInventoryModules())){
+		$additionalModules = $this->getAdditionalQueryModules();
+		if(in_array($moduleName, $additionalModules)) {
 			$query = $this->moduleInstance->getExportQuery($this->focus, $query);
 		}
 
 		$this->accessibleFields = $queryGenerator->getFields();
 
 		switch($mode) {
-			case 'ExportAllData' :	return $query;
-									break;
+			case 'ExportAllData'	:	if ($orderBy && $orderByFieldModel) {
+											$query .= ' ORDER BY '.$queryGenerator->getOrderByColumn($orderBy).' '.$sortOrder;
+										}
+										break;
 
 			case 'ExportCurrentPage' :	$pagingModel = new Vtiger_Paging_Model();
 										$limit = $pagingModel->getPageLimit();
@@ -116,9 +183,11 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 
 										$currentPageStart = ($currentPage - 1) * $limit;
 										if ($currentPageStart < 0) $currentPageStart = 0;
-										$query .= ' LIMIT '.$currentPageStart.','.$limit;
 
-										return $query;
+										if ($orderBy && $orderByFieldModel) {
+											$query .= ' ORDER BY '.$queryGenerator->getOrderByColumn($orderBy).' '.$sortOrder;
+										}
+										$query .= ' LIMIT '.$currentPageStart.','.$limit;
 										break;
 
 			case 'ExportSelectedRecords' :	$idList = $this->getRecordsListFromRequest($request);
@@ -132,13 +201,16 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 											} else {
 												$query .= ' AND '.$baseTable.'.'.$baseTableColumnId.' NOT IN ('.implode(',',$request->get('excluded_ids')).')';
 											}
-											return $query;
+
+											if ($orderBy && $orderByFieldModel) {
+												$query .= ' ORDER BY '.$queryGenerator->getOrderByColumn($orderBy).' '.$sortOrder;
+											}
 											break;
 
 
-			default :	return $query;
-						break;
+			default :	break;
 		}
+		return $query;
 	}
 
 	/**
@@ -162,8 +234,10 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 	function output($request, $headers, $entries) {
 		$moduleName = $request->get('source_module');
 		$fileName = str_replace(' ','_',decode_html(vtranslate($moduleName, $moduleName)));
+		// for content disposition header comma should not be there in filename 
+		$fileName = str_replace(',', '_', $fileName);
 		$exportType = $this->getExportContentType($request);
-
+                
 		header("Content-Disposition:attachment;filename=$fileName.csv");
 		header("Content-Type:$exportType;charset=UTF-8");
 		header("Expires: Mon, 31 Dec 2000 00:00:00 GMT" );
@@ -171,31 +245,39 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		header("Cache-Control: post-check=0, pre-check=0", false );
                 
                 //SalesPlatform.ru begin support custom delimiter
-                $header = implode("\"" . $request->get('delimiter') . "\"", $headers);
+                $delimiter = $request->get('delimiter');
+                if (empty($request->get('delimiter'))) {
+                    $delimiter = ',';
+                }
+                $header = implode("\"" . $delimiter . "\"", $headers);
 		//$header = implode("\", \"", $headers);
                 //SalesPlatform.ru end
 		$header = "\"" .$header;
 		$header .= "\"\r\n";
 
                 //SalesPlatform.ru begin support custom encoding
-                echo iconv("UTF-8", $request->get('file_encoding'), $header);
+                $enc = $request->get('file_encoding');
+                if ($enc == '') {
+                    $enc = 'UTF-8';
+                }
+                echo iconv("UTF-8", $enc, $header);
 		//echo $header;
                 //SalesPlatform.ru end
 
 		foreach($entries as $row) {
                     //SalesPlatform.ru begin support custom delimiter
-                    $line = implode("\"" . $request->get('delimiter') . "\"",$row);
+                    $line = implode("\"" . $delimiter . "\"",$row);
                     //$line = implode("\",\"",$row);
                     //SalesPlatform.ru end
                     
                     $line = "\"" .$line;
                     $line .= "\"\r\n";
-                    
                     //SalesPlatform.ru begin support custom encoding
-                    echo iconv("UTF-8", $request->get('file_encoding'), $line); 
+                    echo iconv("UTF-8", $enc, $line); 
                     //echo $line;
                     //SalesPlatform.ru end
 		}
+            die;
 	}
 
 	private $picklistValues;
@@ -230,7 +312,11 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 				unset($arr[$fieldName]);
 				continue;
 			}
-			$value = trim(decode_html($value),"\"");
+			//Track if the value had quotes at beginning
+			$beginsWithDoubleQuote = strpos($value, '"') === 0;
+			$endsWithDoubleQuote = substr($value,-1) === '"'?1:0;
+
+			$value = trim($value,"\"");
 			$uitype = $fieldInfo->get('uitype');
 			$fieldname = $fieldInfo->get('name');
 
@@ -239,6 +325,9 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 			}
 			$type = $this->fieldDataTypeCache[$fieldName];
 
+			//Restore double quote now.
+			if ($beginsWithDoubleQuote) $value = "\"{$value}";
+			if($endsWithDoubleQuote) $value = "{$value}\"";
 			if($fieldname != 'hdnTaxType' && ($uitype == 15 || $uitype == 16 || $uitype == 33)){
 				if(empty($this->picklistValues[$fieldname])){
 					$this->picklistValues[$fieldname] = $this->fieldArray[$fieldname]->getPicklistValues();
@@ -247,10 +336,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 				// or the picklist is multiselect type.
 				if($uitype == 33 || $uitype == 16 || array_key_exists($value,$this->picklistValues[$fieldname])){
 					// NOTE: multipicklist (uitype=33) values will be concatenated with |# delim
-                    //SalesPlatform.ru begin
-                    $value = vtranslate(trim($value), $moduleName);
-					//$value = trim($value);
-                    //SalesPlatform.ru end
+					$value = trim($value);
 				} else {
 					$value = '';
 				}
@@ -275,20 +361,25 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 					$value = '';
 				}
 			} elseif($uitype == 72 || $uitype == 71) {
-                //SalesPlatform.ru begin
-                $value = CurrencyField::convertToUserFormat($value);
-                //$value = CurrencyField::convertToUserFormat($value, null, true, true);
-                //SalesPlatform.ru end
+                $value = CurrencyField::convertToUserFormat($value, null, true, true);
 			} elseif($uitype == 7 && $fieldInfo->get('typeofdata') == 'N~O' || $uitype == 9){
 				$value = decimalFormat($value);
-			} else if($type == 'date' || $type == 'datetime'){
-                $value = DateTimeField::convertToUserFormat($value);
-            }
-            //SalesPlatform.ru begin
-              else if($uitype == 117) {
-                $value = vtranslate($value);
-            }
-            //SalesPlatform.ru end
+			} elseif($type == 'date') {
+				if ($value && $value != '0000-00-00') {
+					$value = DateTimeField::convertToUserFormat($value);
+				}
+			} elseif($type == 'datetime') {
+				if ($moduleName == 'Calendar' && in_array($fieldName, array('date_start', 'due_date'))) {
+					$timeField = 'time_start';
+					if ($fieldName === 'due_date') {
+						$timeField = 'time_end';
+					}
+					$value = $value.' '.$arr[$timeField];
+				}
+				if (trim($value) && $value != '0000-00-00 00:00:00') {
+					$value = Vtiger_Datetime_UIType::getDisplayDateTimeValue($value);
+				}
+			}
 			if($moduleName == 'Documents' && $fieldname == 'description'){
 				$value = strip_tags($value);
 				$value = str_replace('&nbsp;','',$value);
@@ -296,5 +387,9 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 			}
 		}
 		return $arr;
+	}
+
+	public function moduleFieldInstances($moduleName) {
+		return $this->moduleInstance->getFields();
 	}
 }

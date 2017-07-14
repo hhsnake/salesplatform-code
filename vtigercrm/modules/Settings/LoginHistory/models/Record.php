@@ -50,7 +50,11 @@ class Settings_LoginHistory_Record_Model extends Settings_Vtiger_Record_Model {
 			}else{
 				return '---';
 			}
-		} else {
+        //SalesPaltform.ru begin
+		} else if ($fieldName == 'status') {
+            return vtranslate($this->get($fieldName));
+        //SalesPlatform.ru end
+        } else {
 			return $this->get($fieldName);
 		}
 		

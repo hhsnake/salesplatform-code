@@ -69,9 +69,14 @@ $languageStrings = array(
     // SalesPlatform.ru begin localization
     'Medium'                       => 'Средний',    
     'Mobile Call'                  => 'Звонок с мобильного',
-    'Busy'                         => 'Занят',
+    'Busy'                         => 'Занят', 
     // SalesPlatform.ru end
-);
+    'INVITATION'                    => ' Приглашение ',
+    'LBL_INVITE_PEOPLE'              => 'Пригласить людей',
+    'LBL_CREATE_FOLLOWUP_EVENT'    => 'Создать последующее событие' ,
+    'Related To'                   => 'В связи с'              ,
+    'End Date'                     => 'Дата и Время Завершения',
+    );
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Events.php';

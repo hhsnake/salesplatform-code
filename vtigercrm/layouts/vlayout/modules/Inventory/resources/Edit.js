@@ -234,6 +234,12 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		}
 		return this.editViewForm;
 	},
+    
+    //SalesPlatform.ru begin
+    getMassEditForm : function() {
+        return jQuery('#massEdit');
+    },
+    //SalesPlatform.ru end
 
 	/**
 	 * Function which gives quantity value
@@ -1639,7 +1645,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	registerSubmitEvent : function () {
 		var thisInstance = this;
 		var editViewForm = this.getForm();
-		this._super();
+        //SalesPlatform.ru begin
+		//this._super();
+        //SalesPlatform.ru end
 		editViewForm.submit(function(e){
 			var deletedItemInfo = jQuery('.deletedItem',editViewForm);
 			if(deletedItemInfo.length > 0){
@@ -1659,10 +1667,19 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			thisInstance.lineItemToTalResultCalculations();
 			thisInstance.saveProductCount();
 			thisInstance.saveSubTotalValue();
-			thisInstance.saveTotalValue();
-			thisInstance.savePreTaxTotalValue();
-		})
-	},
+            thisInstance.saveTotalValue();
+            thisInstance.savePreTaxTotalValue();
+            
+            //SalesPlatform.ru begin
+            e.preventDefault();
+            return false;
+            //SalesPlatform.ru end
+        })
+        
+        //SalesPlatform.ru begin
+		this._super();
+        //SalesPlatform.ru end
+    },
 
 	/**
 	 * Function which will register event for Reference Fields Selection

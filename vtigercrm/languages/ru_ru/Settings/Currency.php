@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD'               => 'Добавить Валюту'                , // TODO: Review
-	'LBL_EDIT_CURRENCY'            => 'Редактировать Валюту'               , // TODO: Review
-	'LBL_ADD_NEW_CURRENCY'         => 'Добавить Валюту'            , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Добавить валюту'                , // TODO: Review
+	'LBL_EDIT_CURRENCY'            => 'Редактировать валюту'               , // TODO: Review
+	'LBL_ADD_NEW_CURRENCY'         => 'Добавить валюту'            , // TODO: Review
 	'LBL_CURRENCY_NAME'            => 'Валюта'                , 
-	'LBL_CURRENCY_CODE'            => 'Код Валюты'         , 
+	'LBL_CURRENCY_CODE'            => 'Код валюты'         , 
 	'LBL_CURRENCY_SYMBOL'          => 'Символ'                , 
 	'LBL_CONVERSION_RATE'          => 'Обменный курс'   , 
 	'LBL_ENTER_CONVERSION_RATE'    => 'Введите обменный курс', 
-	'LBL_CURRENCY_STATUS_DESC'     => 'Включить флажок, чтобы Валюта была активной',
-	'LBL_TRANSFER_CURRENCY'        => 'Заменить Валюту', 
-	'LBL_CURRENT_CURRENCY'         => 'Текущая Валюта', 
+	'LBL_CURRENCY_STATUS_DESC'     => 'Включить флажок, чтобы валюта была активной',
+	'LBL_TRANSFER_CURRENCY'        => 'Заменить валюту', 
+	'LBL_CURRENT_CURRENCY'         => 'Текущая валюта', 
 	'Albania, Leke'                => 'Albania, Leke'               , // TODO: Review
 	'Argentina, Pesos'             => 'Argentina, Pesos'            , // TODO: Review
 	'Aruba, Guilders'              => 'Aruba, Guilders'             , // TODO: Review
@@ -158,6 +158,6 @@ $languageStrings = array(
         //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
-	'JS_CURRENCY_DETAILS_SAVED'    => 'Данные Валюты сохранены'      , // TODO: Review
+	'JS_CURRENCY_DETAILS_SAVED'    => 'Данные валюты сохранены'      , // TODO: Review
 	'JS_CURRENCY_DELETED_SUEESSFULLY' => 'Валюта успешно удалена', // TODO: Review
 );

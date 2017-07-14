@@ -26,12 +26,15 @@ $languageStrings = array(
 	'LBL_PRIVILEGES'               => 'Права'                  , 
 	'LBL_DUPLICATES_EXIST'         => 'Дубликат роли существует'       , // TODO: Review
     
-    'LBL_CAN_ASSIGN_RECORDS_TO'    => 'Прикрепить записи',
+        'LBL_CAN_ASSIGN_RECORDS_TO'    => 'Может выбирать в качестве Ответственного',
 	'LBL_ALL_USERS'                => 'Всех пользователей',
 	'LBL_USERS_WITH_LOWER_LEVEL'   => 'Пользователей, имеющих подчиненную роль',
-	'LBL_USERS_WITH_SAME_OR_LOWER_LEVEL' => 'Пользователей, имеющих ту же роль или второстепенную роль',
+	'LBL_USERS_WITH_SAME_OR_LOWER_LEVEL' => 'Пользователей, имеющих ту же роль или подчиненную роль',
     'Сancel'                       => 'Отменить',
     'Import'                       => 'Импорт',
+    'LBL_TRANSFER_TO_OTHER_ROLE' =>'Передача прав собственности на другую роль',
+    'LBL_EDIT_ROLE' => 'Изменить Роль',
+    'LBL_CREATE_ROLE' => 'Создать Роль',    
 );
 
 $jsLanguageStrings = array(

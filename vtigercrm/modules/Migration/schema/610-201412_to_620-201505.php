@@ -55,7 +55,7 @@ if($adb->num_rows($result) < 1) {
     $vtWorkFlow = new VTWorkflowManager($adb);
     $invWorkFlow = $vtWorkFlow->newWorkFlow("Invoice");
     $invWorkFlow->test = '[{"fieldname":"subject","operation":"does not contain","value":"`!`"}]';
-    $invWorkFlow->description = "UpdateInventoryProducts On Every Save";
+    $invWorkFlow->description = vtranslate('LBL_UPDATE_INVENTORY_PRODUCTS','Install');
     $invWorkFlow->defaultworkflow = 1;
     $vtWorkFlow->save($invWorkFlow);
 }

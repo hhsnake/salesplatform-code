@@ -18,18 +18,22 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	var $nameFields = array('organizationname');
 	var $logoPath = 'test/logo/';
 
-    var $fields = array(
-        'organizationname' => 'text',
-        'logoname' => 'text',
-        'logo' => 'file',
-        'address' => 'textarea',
-        'city' => 'text',
-        'state' => 'text',
-        'code'  => 'text',
-        'country' => 'text',
-        'phone' => 'text',
-        'fax' => 'text',
-        'website' => 'text',
+	var $fields = array(
+        //SalesPlatform.ru begin
+        'company' => 'text',
+        //SalesPlatform.ru end
+		'organizationname' => 'text',
+		'logoname' => 'text',
+		'logo' => 'file',
+		'address' => 'textarea',
+		'city' => 'text',
+		'state' => 'text',
+		'code'  => 'text',
+		'country' => 'text',
+		'phone' => 'text',
+		'fax' => 'text',
+		'website' => 'text',
+
         // SalesPlatform.ru begin
         //'vatid' => 'text',
         'inn' => 'text',
@@ -43,9 +47,42 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
         'entrepreneur' => 'text',
         'entrepreneurreg' => 'text',
         'okpo' => 'text',
-        'company' => 'text'
         // SalesPlatform.ru end
-    );
+	);
+
+	var $companyBasicFields = array(
+        //SalesPlatform.ru begin
+        'company' => 'text',
+        //SalesPlatform.ru end
+		'organizationname' => 'text',
+		'logoname' => 'text',
+		'logo' => 'file',
+		'address' => 'textarea',
+		'city' => 'text',
+		'state' => 'text',
+		'code'  => 'text',
+		'country' => 'text',
+		'phone' => 'text',
+		'fax' => 'text',
+        // SalesPlatform.ru begin
+        //'vatid' => 'text',
+        'inn' => 'text',
+        'kpp' => 'text',
+        'bankaccount' => 'text',
+        'bankname' => 'text',
+        'bankid' => 'text',
+        'corraccount' => 'text',
+        'director' => 'text',
+        'bookkeeper' => 'text',
+        'entrepreneur' => 'text',
+        'entrepreneurreg' => 'text',
+        'okpo' => 'text',
+        // SalesPlatform.ru end
+	);
+
+	var $companySocialLinks = array(
+		'website' => 'text',
+	);
 
 	/**
 	 * Function to get Edit view Url
@@ -54,7 +91,7 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	public function getEditViewUrl() {
 		return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetailsEdit';
 	}
-	
+
 	/**
 	 * Function to get CompanyDetails Menu item
 	 * @return menu item Model
@@ -63,7 +100,7 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 		$menuItem = Settings_Vtiger_MenuItem_Model::getInstance('LBL_COMPANY_DETAILS');
 		return $menuItem;
 	}
-	
+
 	/**
 	 * Function to get Index view Url
 	 * @return <String> URL
@@ -71,7 +108,7 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	public function getIndexViewUrl() {
 		$menuItem = $this->getMenuItem();
         //SalesPlatform.ru begin
-        return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetails&block='.$menuItem->get('blockid').'&fieldid='.$menuItem->get('fieldid').'&company='. html_entity_decode($this->get('company'), ENT_QUOTES);
+        return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetails&block='.$menuItem->get('blockid').'&fieldid='.$menuItem->get('fieldid').'&company='. urlencode(decode_html($this->get('company')));
         //return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetails&block='.$menuItem->get('blockid').'&fieldid='.$menuItem->get('fieldid');
         //SalesPlatform.ru end
 	}
@@ -91,7 +128,7 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	public function getLogoPath() {
 		$logoPath = $this->logoPath;
 		$handler = @opendir($logoPath);
-		$logoName = $this->get('logoname');
+		$logoName = decode_html($this->get('logoname'));
 		if ($logoName && $handler) {
 			while ($file = readdir($handler)) {
 				if($logoName === $file && in_array(str_replace('.', '', strtolower(substr($file, -4))), self::$logoSupportedFormats) && $file != "." && $file!= "..") {
@@ -106,13 +143,11 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	/**
 	 * Function to save the logoinfo
 	 */
-	public function saveLogo($binFileName) {
-		if ($binFileName) {
-			$uploadDir = vglobal('root_directory'). '/' .$this->logoPath;
-			$logoName = $uploadDir.$binFileName;
-			move_uploaded_file($_FILES["logo"]["tmp_name"], $logoName);
-			copy($logoName, $uploadDir.'application.ico');
-		}
+	public function saveLogo() {
+		$uploadDir = vglobal('root_directory'). '/' .$this->logoPath;
+		$logoName = $uploadDir.$_FILES["logo"]["name"];
+		move_uploaded_file($_FILES["logo"]["tmp_name"], $logoName);
+		copy($logoName, $uploadDir.'application.ico');
 	}
 
 	/**
@@ -151,17 +186,34 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 			array_push($params, $db->getUniqueID($this->baseTable));
 		}
 		$db->pquery($query, $params);
+        
+        //SalesPlatform.ru begin
+		//$companyName = $this->get('organizationname');
+		//$companyName = preg_replace(array("/>/", "/</", "/&/", "/'/", '/""/', '/gt;/', '/lt;/', '/;/'), '', $companyName);
+		//$fileContent = file_get_contents('portal/config.inc.php');
+		//$pattern = '/\$companyName[\s]+=([^;]+);/';
+		//$replacedValue = sprintf("\$%s = '%s';", 'companyName', $companyName);
+		//$fileContent = preg_replace($pattern, $replacedValue, $fileContent);
+		//$fp = fopen('portal/config.inc.php', 'w');
+		//fwrite($fp, $fileContent);
+		//fclose($fp);
+        if($this->getId() == null) {
+            $this->addCompanyType();
+        }
+        
+        //SalesPlatform.ru end
+		// End
 	}
-
-    /**
-     * Function to get the instance of Company details module model
-     * @return <Settings_Vtiger_CompanyDetais_Model> $moduleModel
-     */
+    
     //SalesPlatform.ru begin
+    public function getId() {
+        return $this->get('organization_id');
+    }
+    
     public static function getInstance($company = 'Default') {
         $moduleModel = new self();
         $db = PearDatabase::getInstance();
-
+        
         $result = $db->pquery("SELECT DISTINCT * FROM vtiger_organizationdetails where company=?", array($company));
         if ($db->num_rows($result) == 1) {
             $moduleModel->setData($db->query_result_rowdata($result));
@@ -170,48 +222,47 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 
         return $moduleModel;
     }
-
+    
+    public static function getCleanInstance() {
+        return new self();
+    }
+    
     /**
      * Add value to companies picklist
      */
-    public static function addCompanyType($company) {
+    private function addCompanyType() {
         $db = PearDatabase::getInstance();
-        $res = $db->pquery('select * from vtiger_spcompany where spcompany=?', array($company));
-        if($db->num_rows($res) == 0) {
-            $res = $db->pquery('SELECT id+1 as id FROM vtiger_picklistvalues_seq', array());
-            $picklistid = $db->query_result($res, 0, 'id');
-            $db->pquery('UPDATE vtiger_picklistvalues_seq SET id=?', array($picklistid));
-            $res = $db->pquery('SELECT id+1 as id FROM vtiger_spcompany_seq', array());
-            $companyid = $db->query_result($res, 0, 'id');
-            $db->pquery('UPDATE vtiger_spcompany_seq SET id=?', array($companyid));
-            $db->pquery('INSERT INTO vtiger_spcompany(spcompanyid,spcompany,picklist_valueid) VALUES(?,?,?)',
-                array($companyid, $company, $picklistid));
+        $result = $db->pquery('select * from vtiger_spcompany where spcompany=?', array($this->get('company')));
+        if($db->num_rows($result) == 0) {
+            $result = $db->pquery('SELECT id+1 AS id FROM vtiger_picklistvalues_seq', array());
+            $picklistId = $db->query_result($result, 0, 'id');
             
-            //SalesPlatform.ru begin
-            $moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance($company);
-            foreach(array_keys($moduleModel->fields) as $fieldName) {
-                $moduleModel->set($fieldName, '');
-            }
-            $moduleModel->set('organizationname', $company);
-            $moduleModel->set('company', $company);
-            $moduleModel->save();
-            //SalesPlatform.ru end
+            $db->pquery('UPDATE vtiger_picklistvalues_seq SET id=?', array($picklistId));
+            $result = $db->pquery('SELECT id+1 as id FROM vtiger_spcompany_seq', array());
+            $companyId = $db->query_result($result, 0, 'id');
             
-            return true;
+            $db->pquery('UPDATE vtiger_spcompany_seq SET id=?', array($companyId));
+            $db->pquery('INSERT INTO vtiger_spcompany(spcompanyid,spcompany,picklist_valueid) VALUES(?,?,?)', array(
+                $companyId, 
+                $this->get('company'), 
+                $picklistId
+            ));
+
         }
-        return false;
     }
 
     /**
      * Delete info about company. It deletes only it company field from picklist table - not
      * physically from companydetails table.
      */
-    public static function deleteCompanyType($company) {
+    public static function deleteCompany($company) {
         $db = PearDatabase::getInstance();
         $db->pquery('delete from vtiger_spcompany where spcompany=?', array($company));
         $db->pquery('update vtiger_invoice set spcompany = "Default" where spcompany=?', array($company));
         $db->pquery('update vtiger_quotes set spcompany = "Default" where spcompany=?', array($company));
         $db->pquery('update vtiger_salesorder set spcompany = "Default" where spcompany=?', array($company));
+        
+        $db->pquery("DELETE FROM vtiger_organizationdetails WHERE company=?", array($company));
     }
 
     /**
@@ -237,37 +288,26 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
     public static function hideCompanyRow($moduleModel) {
         return !in_array($moduleModel->getName(), array('Invoice', 'Act', 'Consignment'));
     }
+    
+    public static function getDefaultCompanyType() {
+        return 'Default';
+    }
     // SalesPlatform.ru end
 
-//	public static function getInstance() {
-//		$moduleModel = new self();
-//		$db = PearDatabase::getInstance();
-//
-//		$result = $db->pquery("SELECT * FROM vtiger_organizationdetails", array());
-//		if ($db->num_rows($result) == 1) {
-//			$moduleModel->setData($db->query_result_rowdata($result));
-//			$moduleModel->set('id', $moduleModel->get('organization_id'));
-//		}
-//
-//		$moduleModel->getFields();
-//		return $moduleModel;
-//      }
-//SalesPlatform.ru end
-        
-        /** 
-        * @var array(string => string) 
-        */ 
-       private static $settings = array();  
-
-       /** 
-        * @param string $fieldname 
-        * @return string 
-        */ 
-       public static function getSetting($fieldname) { 
-            global $adb; 
-            if (!self::$settings) { 
-                    self::$settings = $adb->database->GetRow("SELECT * FROM vtiger_organizationdetails"); 
-            } 
-            return self::$settings[$fieldname]; 
-       } 
+    //	public static function getInstance() {
+    //		$moduleModel = new self();
+    //		$db = PearDatabase::getInstance();
+    //
+    //		$result = $db->pquery("SELECT * FROM vtiger_organizationdetails", array());
+    //		if ($db->num_rows($result) == 1) {
+    //			$moduleModel->setData($db->query_result_rowdata($result));
+    //			$moduleModel->set('id', $moduleModel->get('organization_id'));
+    //		}
+    //
+    //		$moduleModel->getFields();
+    //		return $moduleModel;
+    //      }
+    //SalesPlatform.ru end
+    
+    
 }

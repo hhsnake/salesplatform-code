@@ -336,6 +336,10 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 				thisInstance.getMoreCurrenciesUI().then(function(data){
 					thisInstance.preSaveConfigOfForm(form);
 					InitialFormData = form.serialize();
+                    //SalesPlatform.ru begin 
+                    form.removeData('submit');
+                    form.data('isNeedCheckBeforeSave', false);
+                    //SalesPlatform.ru end
 					form.submit();
 				})
 			}else if(multiCurrencyContent.length > 0){
@@ -410,7 +414,11 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 	
 	registerSubmitEvent: function() {
 		var editViewForm = this.getForm();
-
+        
+        //SalesPlatform.ru begin
+        var thisInstance = this;
+        //SalesPlatform.ru end
+        
 		editViewForm.submit(function(e){
             
             //SalesPlatform begin
@@ -425,16 +433,67 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 				return false;
 			} else {
 				var module = jQuery(e.currentTarget).find('[name="module"]').val();
+                
+                //SalesPlatform.ru begin
+                editViewForm.removeClass('validating');
+                //SalesPlatform.ru end
 				if(editViewForm.validationEngine('validate')) {
+                    //SalesPlatform.ru begin
+                    thisInstance.updateCKFieldsContents();
+                    //SalesPlatform.ru end
 					//Once the form is submiting add data attribute to that form element
 					editViewForm.data('submit', 'true');
                     
                     //SalesPlatform begin
-                    if(!sp_js_editview_checkBeforeSave(module, editViewForm, mode)) {
+                    e.preventDefault();
+                    sp_js_editview_checkBeforeSave(module, editViewForm, mode).then(function () {
+                        //on submit form trigger the recordPreSave event
+                        var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
+                        editViewForm.trigger(recordPreSaveEvent, {'value': 'edit'});
+                        if (recordPreSaveEvent.isDefaultPrevented()) {
+                            //If duplicate record validation fails, form should submit again
+                            editViewForm.removeData('submit');
+                            e.preventDefault();
+                            return false;
+                        }
+                        e.preventDefault();
+                        var progressIndicator = $.progressIndicator({message: app.vtranslate('JS_SAVE')});
+                        editViewForm.ajaxSubmit({
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success) {
+                                    location.href = response.result.location;
+                                } else {
+                                    progressIndicator.hide();
+                                    editViewForm.removeData('submit');
+                                    Vtiger_Helper_Js.showPnotify({
+                                        type: 'error',
+                                        title: app.vtranslate('JS_SAVE_ERROR'),
+                                        text: response.error.message,
+                                        delay: 20000
+                                    });
+                                }
+                            },
+                            error: function () {
+                                editViewForm.removeData('submit');
+                                progressIndicator.hide();
+                                Vtiger_Helper_Js.showPnotify({
+                                    type: 'error',
+                                    text: app.vtranslate('JS_ERROR_SEND_REQUEST'),
+                                    delay: 10000
+                                });
+                            }
+                        });
+                    },
+                    function (error) {
+                        editViewForm.removeData('submit');
+                        return false;
+                    });
+                    
+                    /*if(!sp_js_editview_checkBeforeSave(module, editViewForm, mode)) {
                         return false;
                     }
-                    //SalesPlatform end
-                    
+                                        
 						//on submit form trigger the recordPreSave event
 						var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
 						editViewForm.trigger(recordPreSaveEvent, {'value' : 'edit'});
@@ -442,7 +501,10 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 							//If duplicate record validation fails, form should submit again
 							editViewForm.removeData('submit');
 							e.preventDefault();
-						}
+                        }
+                        
+                    */
+                    //SalesPlatform.ru end
 				} else {
 					//If validation fails, form should submit again
 					editViewForm.removeData('submit');
@@ -699,105 +761,88 @@ function IsJsonString(str) {
 
 //Check before save implementation
 function sp_js_editview_checkBeforeSave(module, thisForm, mode) {
-    var fldvalObjectArr = {};
+    var values = thisForm.serializeFormData();
+    
+    var data = encodeURIComponent(JSON.stringify(values));
     var createMode;
     if(mode == 'edit') {
         createMode = 'edit';
     } else {
         createMode = 'create';
     }
-        
-    for (var i = 0; i < fieldname.length; i++) {
-        var obj = getObj(fieldname[i]);
-        if (empty(obj)) {
-            obj = getObj(fieldname[i]+"[]");
-        }
-       
-        if(!empty(obj)) {
-            if(obj.tagName == 'SELECT' && obj.hasAttribute('multiple')) {
-                var selectValuesArr = {};
-                for (var j = 0; j < obj.options.length; j++) {
-                    if (obj.options[j].selected) {
-                        selectValuesArr[j] = obj.options[j].value;
-                    }
-                }
-                
-                fldvalObjectArr[fieldname[i]] = selectValuesArr;
-            } else if(obj[1] != null && obj[1].getAttribute('type') == 'checkbox') {
-                var fieldvalue;
-                if(obj[1].checked) {
-                    fieldvalue = 1;
-                } else {
-                    fieldvalue = 0;
-                }
-                
-                fldvalObjectArr[fieldname[i]] = fieldvalue;
-            } else {
-                if(obj.getAttribute('type') !== 'file') {
-                    var fieldvalue = getObj(fieldname[i]).value;
-                
-                    fldvalObjectArr[fieldname[i]] = fieldvalue;
-                }
-            }
-        } 
-       
-    }            
     
-    var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));               
-
-    var urlstring = "index.php?module="+module+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&EditViewAjaxMode=true&CreateMode="+createMode;
-    if(mode == 'edit') {
-        urlstring = urlstring + "&id=" + crmId;
+    var urlstring = "index.php?module="+module+"&action=CheckBeforeSave&checkBeforeSaveData="+
+            data+"&EditViewAjaxMode=true&CreateMode="+createMode;
+    
+    if (typeof values['record'] != 'undefined') {
+        urlstring += "&record="+values['record'];
     }
-
-    var continue_fl;    // true - continue, false - break  
-    $.ajax({
-        url: urlstring,            
-        type: "POST",
-        async: false,
-        dataType : "json",                     
-        complete: function (response, textStatus) {
-			    if(!empty(response.responseText) && IsJsonString(response.responseText)) {	                         
-                    var responseObj= JSON.parse(response.responseText);
-                    if(responseObj.response === undefined) {
-                        continue_fl = true;
-                    }
-                    if(responseObj.response === "OK") {
-                        if (responseObj.message !== undefined && !empty(responseObj.message)) {
-                            alert(responseObj.message);
+    var params = {  
+        url : urlstring,
+        async : false, 
+        data : {} 
+    }; 
+    
+    var checkResult = jQuery.Deferred();
+    //Disable twice check before save
+    if (typeof thisForm.data('isNeedCheckBeforeSave') != 'undefined' && !thisForm.data('isNeedCheckBeforeSave')) {
+        checkResult.resolve();
+    } else {
+        AppConnector.request(params).then(
+                function (responseObj) {
+                    if (!empty(responseObj)) {
+                        if (responseObj.response === undefined) {
+                            checkResult.resolve();
                         }
-                        continue_fl = true;
-                    } else if(responseObj.response === "ALERT") {
-                        VtigerJS_DialogBox.unblock();
-                        if (responseObj.message !== undefined) {
-                            alert(responseObj.message);
+                        if (responseObj.response === "OK") {
+                            if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                                Vtiger_Helper_Js.showAlertBox({'message': responseObj.message}).then(
+                                        function (e) {
+                                            checkResult.resolve();
+                                        });
+                            } else {
+                                checkResult.resolve();
+                            }
+                        } else if (responseObj.response === "ALERT") {
+                            var alertMessage;
+                            if (responseObj.message !== undefined) {
+                                alertMessage = responseObj.message;
+                            } else {
+                                alertMessage = 'Alert';
+                            }
+                            Vtiger_Helper_Js.showAlertBox({'message': alertMessage}).then(
+                                    function (e) {
+                                        checkResult.reject();
+                                    }
+                            );
+                            checkResult.reject();
+                        } else if (responseObj.response === "CONFIRM") {
+                            var confirmMessage;
+                            if (responseObj.message !== undefined) {
+                                confirmMessage = responseObj.message;
+                            } else {
+                                confirmMessage = 'Confirm';
+                            }
+                            Vtiger_Helper_Js.showConfirmationBox({'message': confirmMessage}).then(
+                                    function (e) {
+                                        checkResult.resolve();
+                                    },
+                                    function (error) {
+                                        checkResult.reject();
+                                    }
+                            );
                         } else {
-                            alert('Alert');
-                        }
-                        thisForm.removeData('submit');
-                        continue_fl = false;
-                    } else if(responseObj.response === "CONFIRM") {
-                        var confirmMessage;
-                        if (responseObj.message !== undefined) {
-                            confirmMessage =responseObj.message;
-                        } else {
-                            confirmMessage = 'Confirm';
-                        }
-                        if (confirm(confirmMessage)) {
-                            continue_fl = true;
-                        } else {
-                            VtigerJS_DialogBox.unblock();
-                            thisForm.removeData('submit');
-                            continue_fl = false;
+                            checkResult.resolve();
                         }
                     } else {
-                        continue_fl = true;
+                        checkResult.resolve();
                     }
-                } else {
-                    continue_fl = true;
+                },
+                function (error) {
+                    checkResult.resolve();
                 }
-        }
-	});
-    return continue_fl;
+        );
+    }
+    return checkResult.promise();
 }
 //SalesPlatform.ru end

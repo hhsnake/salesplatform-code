@@ -26,7 +26,12 @@ $languageStrings = array(
     //SalesPlatform.ru begin
     'Self Company' => 'Юр. лицо',
     //SalesPlatform.ru end
-);
+    'Quotes'  => 'Предложение' ,
+    'Related To'  => 'В связи с',
+    'LBL_THIS' => 'Это',
+    'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'будет удален из системы. Просьба удалить или заменить этот пункт',
+    'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Эта позиция удаляется из системы, пожалуйста, удалите эту строку элементов',
+    );
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Quotes.php';

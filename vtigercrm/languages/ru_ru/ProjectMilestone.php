@@ -23,6 +23,7 @@ $languageStrings = array(
     'LBL_PROJECTS_LIST'            => 'Список Проектов',
 	'LBL_TASKS_LIST'               => 'Список Проектных задач',
     'LBL_MILESTONES_LIST'          => 'Список Контрольных точек',
+    'Type'=> 'Тип' ,    
     
 );
 

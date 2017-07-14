@@ -57,10 +57,16 @@ foreach($event_fields as $key=>$val){
 
 $tz = new iCalendar_timezone;
 if(!empty($default_timezone)){
-	$tzid = split('/',$default_timezone);
+    //SalesPlatform.ru begin
+	//$tzid = split('/',$default_timezone);
+    $tzid = explode('/',$default_timezone);
+    //SalesPlatform.ru end
 } else {
 	$default_timezone = date_default_timezone_get();
-	$tzid = split('/',$default_timezone);
+    //SalesPlatform.ru begin
+	//$tzid = split('/',$default_timezone);
+    $tzid = explode('/',$default_timezone);
+    //SalesPlatform.ru end
 }
 
 if(!empty($tzid[1])){

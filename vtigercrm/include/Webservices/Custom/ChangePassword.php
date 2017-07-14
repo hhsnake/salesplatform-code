@@ -70,6 +70,4 @@ function vtws_changePassword($id, $oldPassword, $newPassword, $confirmPassword, 
         // SalesPlatform.ru end
     }
 }
-
-
 ?>

@@ -43,9 +43,9 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 
 	$initialfrom = $from;
 
-        // SalesPlatform.ru begin
+    // SalesPlatform.ru begin
 	//$mail->IsSMTP();                                      // set mailer to use SMTP
-        // SalesPlatform.ru end
+    // SalesPlatform.ru end
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
 	$mail->Host = $mail_server;  // specify main and backup server
 	if($smtp_auth == 'true')

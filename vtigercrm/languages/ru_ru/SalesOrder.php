@@ -29,7 +29,9 @@ $languageStrings = array(
 	'End Period'                   => 'Конец'                  , 
 	'Payment Duration'             => 'Продолжительность оплаты', 
 	'Invoice Status'               => 'Статус Счета'     , 
-	'Sub Total'                    => 'Итого'                  , 
+ 	//SalesPlatform.ru begin History of products changes 
+ 	//'Sub Total'                    => 'Итого'                  ,  
+ 	//SalesPlatform.ru end History of products changes
 	'AutoCreated'                  => 'Автосоздан'        , 
 	'Sent'                         => 'Отправлен'          , 
 	'Credit Invoice'               => 'Кредит'                , 
@@ -45,9 +47,13 @@ $languageStrings = array(
         'Net 60 days' => 'Всего 60 дней',
     
     //SalesPlatform.ru begin
-    'Self Company' => 'Юр. лицо',
+    'Self Company' => 'Юр. лицо',    
     //SalesPlatform.ru end
-);
+    'SalesOrder' => 'Заказы на продажу',
+    'LBL_THIS' => 'Это',
+    'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'будет удален из системы. Просьба удалить или заменить этот пункт',
+    'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Эта позиция удаляется из системы,пожалуйста, удалите эту строку элементов',
+    );
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/SalesOrder.php';

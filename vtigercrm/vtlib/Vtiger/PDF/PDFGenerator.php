@@ -159,6 +159,7 @@ class Vtiger_PDF_Generator {
 			$this->footerFrame->h = $totalHeightFooter;
 			$this->footerFrame->w = $this->totalWidth;
             //SalesPlatform.ru begin 
+            /*
             if ($this->footerFrame->h > 0) {
                 $pdf->setPrintFooter(true);
                 $pdf->SetAutoPageBreak(true, $totalHeightFooter);
@@ -167,8 +168,10 @@ class Vtiger_PDF_Generator {
                 $pdf->SetAutoPageBreak(true, 10);
             }            
             $pdf->setFooterModel($this->footerViewer, $this->footerFrame);
-			//$this->footerViewer->initDisplay($this);
-			//$this->footerViewer->display($this);
+             * 
+             */
+			$this->footerViewer->initDisplay($this);
+			$this->footerViewer->display($this);
             //SalesPlatform.ru end
 		}
 		

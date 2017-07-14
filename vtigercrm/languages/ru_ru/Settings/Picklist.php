@@ -38,6 +38,8 @@ $languageStrings = array(
 	'LBL_SELECTED_VALUES'          => 'Выбранные значения',
 	'NO_PICKLIST_FIELDS'           => 'отсутствуют поля-списки',
         'LBL_NON_EDITABLE_PICKLIST_VALUES' => 'Не редактируемые значения списка',
+        'LBL_EDIT_PICKLIST_ITEM'       => 'Изменить элемент списка',
+	'Calendar'                     => 'Задача',       
 );
 $jsLanguageStrings = array(
 	'JS_ITEM_RENAMED_SUCCESSFULLY' => 'Значение успешно переименовано', 
@@ -51,4 +53,6 @@ $jsLanguageStrings = array(
 	'JS_SEQUENCE_UPDATED_SUCCESSFULLY' => 'Последовательность успешно обновлена',
 	'JS_VALUE_ASSIGNED_SUCCESSFULLY' => 'Значение успешно назначено', 
 	'JS_PLEASE_SELECT_MODULE'      => 'Пожалуйста, выберите модуль', 
+        'JS_SPECIAL_CHARACTERS' => 'Специальные символы, такие как',
+        'JS_NOT_ALLOWED' => 'не разрешается',        
 );

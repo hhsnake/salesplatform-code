@@ -181,60 +181,35 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 			$email_body = HelpDesk::getTicketEmailContents($entityData);
 		}
 
-		//added condition to check the emailoptout(this is for contacts and vtiger_accounts.)
-		if($emailoptout == 0) {
-
-                        // SalesPlatform.ru begin
-                        //if($isPortalUser == 1){
-			//	$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$entityId."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
-			//	$email_body = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData);
-			//}
-			//else {
-			//	$email_body = HelpDesk::getTicketEmailContents($entityData);
-			//}
-                        // SalesPlatform.ru end
-			if($isNew) {
-                                // SalesPlatform.ru begin
-				if($isPortalUser == 1){
+		if($isNew) {
+            // SalesPlatform.ru begin
+            //send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+			 if($isPortalUser == 1){
 					$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$entityId."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
 					$email_body = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData, true);
-				}
-				else {
-					$email_body = HelpDesk::getTicketEmailContents($entityData);
-                                // SalesPlatform.ru end
-				}
-				$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 			} else {
-				$entityDelta = new VTEntityDelta();
-				$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
-				$solutionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'solution');
-				$ownerHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'assigned_user_id');
-				$commentsHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'comments');
-                                // SalesPlatform.ru begin
-                                if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged) {
-					if($isPortalUser == 1){
-						$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$entityId."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
-						$email_body = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData, false, $statusHasChanged, $solutionHasChanged, $ownerHasChanged, $commentsHasChanged);
-					}
-					else {
-						$email_body = HelpDesk::getTicketEmailContents($entityData);
-					}
-				//if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged || $ownerHasChanged) {
-                                // SalesPlatform.ru end
-
-					$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
-				}
+				$email_body = HelpDesk::getTicketEmailContents($entityData);
 			}
-			$mail_status_str .= $parent_email."=".$mail_status."&&&";
-
-		} else {
+            $mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+            // SalesPlatform.ru end		
+        } else {
 			$entityDelta = new VTEntityDelta();
 			$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
 			$solutionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'solution');
 			$descriptionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'description');
 
-			if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $solutionHasChanged || $descriptionHasChanged) {
-				send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+			// SalesPlatform.ru begin
+            if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged) {
+			    if($isPortalUser == 1){
+					$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$entityId."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
+					$email_body = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData, false, $statusHasChanged, $solutionHasChanged, $ownerHasChanged, $commentsHasChanged);
+				} else {
+					$email_body = HelpDesk::getTicketEmailContents($entityData);
+				}
+				//if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged || $ownerHasChanged) {
+                // SalesPlatform.ru end
+
+				$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 			}
 		}
 	}

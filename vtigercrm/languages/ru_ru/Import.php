@@ -78,12 +78,49 @@ $languageStrings = array(
 	'ISO-8859-1' => 'ISO-8859-1',
 	'comma' => ', (запятая)',
 	'semicolon' => '; (точка с запятой)',
+	'Pipe' => '|',
+	'Caret' => '^',
     
     'Skip' => 'Пропустить',
 	'Overwrite' => 'Перезаписать',
 	'Merge' => 'Совместить',
+    
+    'SCHEDULED_IMPORT_REPORT' => 'Vtiger CRM - Запланированный отчет об импорте для ',
+    'LBL_COMPLETED_ IMPORT_PROCESS' => 'Vtiger CRM только что завершила свой процесс импорта.',
+    'LBL_CHECK_ IMPORT_SUCCESSFUL' => 'Мы рекомендуем вам войти в CRM и проверить несколько записей, чтобы убедиться, что импорт был успешным.',
     // SalesPlatform.ru end
-);
+    'LBL_IMPORT_LINEITEMS_CURRENCY'=> 'Валюта (Позиции)',
+    'LBL_SKIP_THIS_STEP' => 'Пропустить этот шаг',
+    'Skip this step' => 'Пропустить этот шаг',    
+    'LBL_UPLOAD_ICS' => 'Загрузить файл ICS',
+    'LBL_ICS_FILE' => 'ICS файла',
+    'LBL_IMPORT_FROM_ICS_FILE' => 'Импорт из файла ICS',
+    'LBL_SELECT_ICS_FILE' => 'Выберите файл ICS',
+    'LBL_USE_SAVED_MAPS' => 'Использовать сохраненное Соответствие',
+    'LBL_IMPORT_MAP_FIELDS' => 'Соответствие колонок полям модуля',
+    'LBL_UPLOAD_CSV' => 'Загрузить CSV файл',
+    'LBL_UPLOAD_VCF' => 'Загрузить файл vcf',
+    'LBL_DUPLICATE_HANDLING' => 'Обработка дублирующихся записей',
+    'LBL_FIELD_MAPPING' => 'Сопоставление полей',
+    'LBL_IMPORT_FROM_CSV_FILE' => 'Импорт из CSV-файла',
+    'LBL_SELECT_IMPORT_FILE_FORMAT' => 'Где бы вы хотели импортировать из ?',
+    'LBL_CSV_FILE' => 'CSV-файл',
+    'LBL_VCF_FILE' => 'Vcf файл',
+    'LBL_GOOGLE' => 'Гугл',
+    'LBL_IMPORT_COMPLETED' => 'Импорт Завершен',
+    'LBL_IMPORT_SUMMARY' => 'Импорт резюме',
+    'LBL_DELETION_COMPLETED' => 'Удаление Завершено.',
+    'LBL_TOTAL_RECORDS_SCANNED' => 'Всего записей отсканированных',
+    'LBL_SKIP_BUTTON' => 'Пропустить',
+    'LBL_DUPLICATE_RECORD_HANDLING' => 'Обработка дублирующихся записей ( Выберите эту опцию для включения и задания критериев слияния дубликатов )',
+    'LBL_IMPORT_FROM_VCF_FILE' => 'Импорт из vcf файл',
+    'LBL_SELECT_VCF_FILE' => 'Выберите файл vcf',
+    'LBL_DONE_BUTTON' => 'Сделано',
+    'LBL_DELETION_SUMMARY' => 'Удалить резюме',    
+    // SalesPlatform.ru begin
+    'Select from My Computer'=> 'Выберите файл',
+    // SalesPlatform.ru end
+    );
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Import.php';

@@ -97,7 +97,10 @@
 		{/if}
 		{* Summary View HelpDesk Widget Ends here *}
 	</div>
-	<div class='span5' style="overflow: hidden">
+	{* SalesPlatform.ru begin *}
+    <div class='span5'>
+    {* <div class='span5' style="overflow: hidden"> *}
+    {* SalesPlatform.ru end *}
 
 		{* Summary View MileStone Widget*}
 		{if $MILESTONE_WIDGET_MODEL}

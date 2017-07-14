@@ -182,4 +182,8 @@ $languageStrings = Array(
 'Documents'=>'Documents',
 
 'SINGLE_Consignment'=>'Consignment',
+    
+//SalesPaltform.ru begin
+'LBL_GOODS_CONSIGNMENT' => 'Goods consigment',    
+//SalesPlatform.ru end   
 );

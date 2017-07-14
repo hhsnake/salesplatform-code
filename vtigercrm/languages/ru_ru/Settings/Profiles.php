@@ -41,9 +41,13 @@ $languageStrings = array(
     'Name'                         => 'Название',
     
     //SalesPlatform.ru begin 
-    'LBL_CREATE_PRVILIGE' => 'Создание',
+    'LBL_CREATE_PRVILIGE' => 'Создание',   
     //SalesPlatform.ru end
-);
+    'LBL_GLOBAL_PERMISSION_WARNING' => 'Предупреждение: Пользователи, связанные с этим профилем, могут получить доступ ко всем записям в CRM',
+    'LBL_EDIT_PRIVILEGES_OF_THIS_PROFILE' => 'Редактировать привилегии для данного профиля:',
+    'LBL_EDIT_PROFILE' => 'Изменить профиль',
+    'LBL_FIELD_AND_TOOL_PRIVILEGES' => 'Привилегии для полей и инструментов',
+    );
 $jsLanguageStrings = array(
 	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Профиль удален', // TODO: Review
 );

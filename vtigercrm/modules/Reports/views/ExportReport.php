@@ -26,7 +26,7 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 
 		$currentUserPriviligesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		if(!$currentUserPriviligesModel->hasModulePermission($moduleModel->getId())) {
-			throw new AppException('LBL_PERMISSION_DENIED');
+			throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));
 		}
 	}
 
@@ -52,8 +52,19 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 	function GetXLS(Vtiger_Request $request) {
 		$recordId = $request->get('record');
 		$reportModel = Reports_Record_Model::getInstanceById($recordId);
+        //SalesPlatform.ru begin #4177
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReport = AbstractCustomReportModel::getInstance($reportModel);
+            $viewTypeDetails = new ViewTypeDetails($request->get('displayType'),
+                $request->get('groupBy'),
+                $request->get('agregateBy')
+            );
+            $viewTypeDetails->setCustomControlData($request->get('customControls', array()));
+            $customReport->setViewTypeDetails($viewTypeDetails);
+        }
+        //SalesPlatform.ru end #4177
         $reportModel->set('advancedFilter', $request->get('advanced_filter'));
-		$reportModel->getReportXLS();
+		$reportModel->getReportXLS($request->get('source'));
 	}
 
 	/**
@@ -61,10 +72,21 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 	 * @param Vtiger_Request $request
 	 */
 	function GetCSV(Vtiger_Request $request) {
-		$recordId = $request->get('record');
-		$reportModel = Reports_Record_Model::getInstanceById($recordId);
+        $recordId = $request->get('record');
+        $reportModel = Reports_Record_Model::getInstanceById($recordId);
+        //SalesPlatform.ru begin #4177
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReport = AbstractCustomReportModel::getInstance($reportModel);
+            $viewTypeDetails = new ViewTypeDetails($request->get('displayType'),
+                $request->get('groupBy'),
+                $request->get('agregateBy')
+            );
+            $viewTypeDetails->setCustomControlData($request->get('customControls', array()));
+            $customReport->setViewTypeDetails($viewTypeDetails);
+        }
+        //SalesPlatform.ru end #4177
         $reportModel->set('advancedFilter', $request->get('advanced_filter'));
-		$reportModel->getReportCSV();
+		$reportModel->getReportCSV($request->get('source'));
 	}
 
 	/**
@@ -78,6 +100,19 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 		$recordId = $request->get('record');
 		$reportModel = Reports_Record_Model::getInstanceById($recordId);
         $reportModel->set('advancedFilter', $request->get('advanced_filter'));
+        
+        //SalesPlatform.ru begin #4395
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReport = AbstractCustomReportModel::getInstance($reportModel);
+            $viewTypeDetails = new ViewTypeDetails($request->get('displayType'),
+                $request->get('groupBy'),
+                $request->get('agregateBy')
+            );
+            $viewTypeDetails->setCustomControlData($request->get('customControls', array()));
+            $customReport->setViewTypeDetails($viewTypeDetails);
+        }
+        //SalesPlatform.ru end #4395
+        
 		$printData = $reportModel->getReportPrint();
 
 		$viewer->assign('REPORT_NAME', $reportModel->getName());

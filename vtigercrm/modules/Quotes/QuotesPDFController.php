@@ -59,17 +59,28 @@ class SalesPlatform_QuotesPDFController extends SalesPlatform_PDF_ProductListDoc
 
             $this->generateEntityModel($this->focus, 'Quotes', 'quote_', $model);
 
-            $entity = new Potentials();
+            //SalesPaltform.ru begin
+            $entity = CRMEntity::getInstance('Potentials');
+            //$entity = new Potentials();
+            //SalesPaltform.ru end
             if ($this->focusColumnValue('potential_id'))
                 $entity->retrieve_entity_info($this->focusColumnValue('potential_id'), 'Potentials');
             $this->generateEntityModel($entity, 'Potentials', 'potential_', $model);
 
-            $entity = new Accounts();
+            //SalesPaltform.ru begin
+            $entity = CRMEntity::getInstance('Accounts');
+            //$entity = new Accounts();
+            //SalesPlatform.ru end
+            
             if ($this->focusColumnValue('account_id'))
                 $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
             $this->generateEntityModel($entity, 'Accounts', 'account_', $model);
 
-            $entity = new Contacts();
+            //SalesPaltform.ru begin
+            $entity = CRMEntity::getInstance('Contacts');
+            //$entity = new Contacts();
+            //SalesPlatform.ru end
+            
             if ($this->focusColumnValue('contact_id'))
                 $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
             $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);

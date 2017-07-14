@@ -19,6 +19,12 @@ $languageStrings = Array(
     'Unit Name' => 'Name',
     'Usage Unit' => 'Usage Unit',
     'Unit Code' => 'Unit Code',
+    'LBL_WF1_SUMMARY' => 'An automatic handler for modification of Products/Services',
+    'LBL_WF1_TASK_SUMMARY' => 'Units Modification',
+    'LBL_WF2_SUMMARY' => 'An automatic handler for modification of Units code',
+    'LBL_WF2_TASK_SUMMARY' => 'Modification of units code for Products',
+    'LBL_WF3_SUMMARY' => 'An automatic handler for modification of Units code',
+    'LBL_WF3_TASK_SUMMARY' => 'Modification of units code for Services', 
 
 );
 

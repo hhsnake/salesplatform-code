@@ -37,6 +37,8 @@ $languageStrings = array(
     'LBL_ROUNDROBIN_USERS_LIST'    => 'Пользователи',
     'LBL_HIDDEN'                   => 'Скрытое',
     'LBL_SAVE_FIELDS_ORDER'        => 'Сохранить последовательность',
+    'LBL_ENABLE_TARGET_MODULES_FOR_WEBFORM' => 'Включить целевые модули для веб-формы',
+    'LBL_ADD_RECORD' => 'Добавить Веб-Форму',    
 );
 $jsLanguageStrings = array(
 	'JS_WEBFORM_DELETED_SUCCESSFULLY' => 'Вебформа успешно удалена', 
@@ -47,4 +49,6 @@ $jsLanguageStrings = array(
 	'JS_REFERENCE_FIELDS_CANT_BE_MANDATORY_WITHOUT_OVERRIDE_VALUE' => 'Cсылающиеся поля не могут быть обязательными без перезаписи значения',
 	'JS_TYPE_TO_SEARCH' => 'Искать',
 	'JS_WEBFORM_WITH_THIS_NAME_ALREADY_EXISTS' => 'Вебформа с данным именем уже существует',
+    "JS_WEBFORM_WITH_THIS_NAME_ALREADY_EXISTS" => 'Вебформа с таким именем уже существует',
+    'JS_SELECT_AN_OPTION' => 'Выберите вариант',   
 );

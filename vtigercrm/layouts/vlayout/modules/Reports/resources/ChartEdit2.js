@@ -26,7 +26,18 @@ Reports_Edit3_Js("Reports_ChartEdit2_Js",{},{
 			this.setContainer(jQuery('#chart_report_step2'));
 		}
 	},
-
+    
+    //SalesPlatform.ru begin
+    registerSubmitEvent : function(){
+		var thisInstance = this;
+		var form = this.getContainer();
+        
+		form.submit(function(e){
+			thisInstance.calculateValues();
+        });
+    },
+    //SalesPlatform.ru end
+    
 	submit : function(){
 		var thisInstance = this;
 		var aDeferred = jQuery.Deferred();

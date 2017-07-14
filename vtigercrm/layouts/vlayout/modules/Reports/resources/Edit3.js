@@ -58,7 +58,44 @@ Reports_Edit_Js("Reports_Edit3_Js",{},{
 		var thisInstance = this;
 		var form = this.getContainer();
 		form.submit(function(e){
+            //SalesPlatform.ru begin
+            thisInstance.updateCKFieldsContents();
+            //SalesPlatform.ru end
 			thisInstance.calculateValues();
+            
+            //SalesPlatform.ru begin
+            e.preventDefault();
+            var progressIndicator = $.progressIndicator({message : app.vtranslate('JS_SAVE')});
+            form.ajaxSubmit({
+                dataType : 'json',
+                success : function(response) {
+                    if(response.success) {
+                        location.href = response.result.location;
+                    } else {
+                        progressIndicator.hide();
+                        form.removeData('submit');
+                        Vtiger_Helper_Js.showPnotify({
+                            type : 'error',
+                            title : app.vtranslate('JS_SAVE_ERROR'),
+                            text : response.error.message,
+                            delay : 20000
+                        });
+                    }
+                },
+
+                error : function() {
+                    form.removeData('submit');
+                    progressIndicator.hide();
+                    Vtiger_Helper_Js.showPnotify({
+                        type : 'error',
+                        text : app.vtranslate('JS_ERROR_SEND_REQUEST'),
+                        delay : 10000
+                    });
+                }
+            });
+            
+            return false;
+            //SalesPlatform.ru end
 		});
 	},
 	

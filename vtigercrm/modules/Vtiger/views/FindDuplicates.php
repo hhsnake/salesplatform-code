@@ -61,7 +61,8 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		$moduleModel = Vtiger_Module_Model::getInstance($module);
 
 		$massActionLinks = array();
-		if ($moduleModel->isPermitted('Delete')) {
+		$userPrivilegesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+		if ($userPrivilegesModel->hasModuleActionPermission($moduleModel->getId(), 'Delete')) {
 			$massActionLink = array(
 				'linktype' => 'LISTVIEWBASIC',
 				'linklabel' => 'LBL_DELETE',
@@ -70,6 +71,8 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 			);
 			$massActionLinks[] = Vtiger_Link_Model::getInstanceFromValues($massActionLink);
 		}
+
+		$viewer->assign('CURRENT_USER_PRIVILAGES_MODEL', $userPrivilegesModel);
 		$viewer->assign('LISTVIEW_LINKS', $massActionLinks);
 		$viewer->assign('MODULE_MODEL', $moduleModel);
 
@@ -119,7 +122,6 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		$viewer->assign('PAGING_MODEL', $pagingModel);
 		$viewer->assign('PAGE_NUMBER',$pageNumber);
 		$viewer->assign('MODULE', $module);
-		$viewer->assign('IS_MODULE_EDITABLE', $moduleModel->isPermitted('EditView'));
 		$viewer->assign('DUPLICATE_SEARCH_FIELDS', $duplicateSearchFields);
 
 		$customViewModel = CustomView_Record_Model::getAllFilterByModule($module);

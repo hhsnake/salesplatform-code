@@ -336,12 +336,9 @@ Class ChartUtils {
 		require_once 'modules/Reports/CustomReportUtils.php';
 		require_once('include/Webservices/Utils.php');
 		require_once('include/Webservices/Query.php');
-        // SalesPlatform.ru begin Added Acts and Consignments
 		global $adb, $current_user, $theme, $default_charset;
-		$inventorymodules = array('Quotes', 'SalesOrder', 'PurchaseOrder', 'Invoice', 'Products', 'PriceBooks', 'Vendors', 'Services', 'Act', 'Consignment');
-		//$inventorymodules = array('Quotes', 'SalesOrder', 'PurchaseOrder', 'Invoice', 'Products', 'PriceBooks', 'Vendors', 'Services');
-        // SalesPlatform.ru end	
-        $rows = $adb->num_rows($queryResult);
+		$inventorymodules = array('Quotes', 'SalesOrder', 'PurchaseOrder', 'Invoice', 'Products', 'PriceBooks', 'Vendors', 'Services');
+		$rows = $adb->num_rows($queryResult);
 		$condition = "is";
 		$current_theme = $theme;
 		$groupByFields = array();

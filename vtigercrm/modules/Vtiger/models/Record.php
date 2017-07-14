@@ -33,11 +33,37 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	}
 
 	/**
+	 * Function to get column fields of record
+	 * @return <Array> 
+	 */
+	public function getData(){
+		$data = $this->valueMap;
+		// column_fields will be a trackable object, we should get column fields from that object
+		if(is_object($data)){
+			return $data->getColumnFields();
+		}
+		return $data;
+	}
+
+	/**
 	 * Fuction to get the Name of the record
 	 * @return <String> - Entity Name of the record
 	 */
 	public function getName() {
 		$displayName = $this->get('label');
+		$module = $this->getModule();
+		$entityFields = $module->getNameFields();
+		if($entityFields){
+			foreach($entityFields as $field){
+				if($this->get($field)){
+					$name[] = $this->get($field);
+				}
+			}
+			if(!empty($name)){
+				$displayName = implode(" ", $name);
+			}
+		}
+
 		if(empty($displayName)) {
 			$displayName = $this->getDisplayName();
 		}
@@ -123,7 +149,10 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	 */
 	public function getFullDetailViewUrl() {
 		$module = $this->getModule();
-		return 'index.php?module='.$this->getModuleName().'&view='.$module->getDetailViewName().'&record='.$this->getId().'&mode=showDetailViewByMode&requestMode=full';
+		// If we don't send tab label then it will show full detail view, but it will select summary tab
+		$moduleName = $this->getModuleName();
+		$fullDetailViewLabel = vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_DETAILS', $moduleName);
+		return 'index.php?module='.$moduleName.'&view='.$module->getDetailViewName().'&record='.$this->getId().'&mode=showDetailViewByMode&requestMode=full&tab_label='.$fullDetailViewLabel;
 	}
 
 	/**
@@ -165,7 +194,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	 * @return <String> - Entity Display Name for the record
 	 */
 	public function getDisplayName() {
-		return Vtiger_Util_Helper::getLabel($this->getId());
+		return Vtiger_Util_Helper::getRecordName($this->getId());
 	}
 
 	/**
@@ -178,22 +207,22 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 			$recordId = $this->getId();
 		}
 		$fieldModel = $this->getModule()->getField($fieldName);
-       
-        // For showing the "Date Sent" and "Time Sent" in email related list in user time zone
-        if($fieldName == "time_start" && $this->getModule()->getName() == "Emails"){
-            $date = new DateTime();
-            $dateTime = new DateTimeField($date->format('Y-m-d').' '.$this->get($fieldName));
-            $value = $dateTime->getDisplayTime();
-            $this->set($fieldName, $value);
-            return $value;
-        }else if($fieldName == "date_start" && $this->getModule()->getName() == "Emails"){
-            $dateTime = new DateTimeField($this->get($fieldName).' '.$this->get('time_start'));
-            $value = $dateTime->getDisplayDate();
-            $this->set($fieldName, $value);
-            return $value;
-        }
-        // End
-        
+
+		// For showing the "Date Sent" and "Time Sent" in email related list in user time zone
+		if($fieldName == "time_start" && $this->getModule()->getName() == "Emails"){
+			$date = new DateTime();
+			$dateTime = new DateTimeField($date->format('Y-m-d').' '.$this->get($fieldName));
+			$value = Vtiger_Time_UIType::getDisplayValue($dateTime->getDisplayTime());
+			$this->set($fieldName, $value);
+			return $value;
+		}else if($fieldName == "date_start" && $this->getModule()->getName() == "Emails"){
+			$dateTime = new DateTimeField($this->get($fieldName).' '.$this->get('time_start'));
+			$value = $dateTime->getDisplayDate();
+			$this->set($fieldName, $value);
+			return $value;
+		}
+		// End
+
 		if($fieldModel) {
 			return $fieldModel->getDisplayValue($this->get($fieldName), $recordId, $this);
 		}
@@ -218,7 +247,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		$data = $this->getData();
 		foreach($data as $fieldName=>$value) {
 			$fieldValue = $this->getDisplayValue($fieldName);
-			$displayableValues[$fieldName] = ($fieldValue) ? $fieldValue : $value;
+			$displayableValues[$fieldName] = ($fieldValue || $fieldValue === '0') ? $fieldValue : $value;
 		}
 		return $displayableValues;
 	}
@@ -276,8 +305,76 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		return $instance->setData($focus->column_fields)->set('id',$recordId)->setModuleFromInstance($module)->setEntity($focus);
 	}
 
-	//SalesPlatform.ru begin 
-    /**
+	//SalesPlatform.ru begin Vtiger 7 global search support
+
+    private static function getGlobalSearchResult($query, $moduleName) {
+        $matchingRecords = array();
+        $db = PearDatabase::getInstance();
+        $tab_result = $db->pquery($query, array());
+        $tab_noOfRows = $db->num_rows($tab_result);
+        $tabid = getTabid($moduleName);
+        for($u=0; $u<$tab_noOfRows; ++$u) {
+            $row = $db->query_result_rowdata($tab_result, $u);
+
+            $moduleModels = array();
+            if(!array_key_exists($moduleName, $moduleModels)) {
+                $moduleModels[$moduleName] = Vtiger_Module_Model::getInstance($moduleName);
+
+            }
+
+            $moduleModel = $moduleModels[$moduleName];
+            $modelClassName = Vtiger_Loader::getComponentClassName('Model', 'Record', $moduleName);
+            $recordInstance = new $modelClassName();
+            //resolve related fields by uitype
+            $moduleInfo = Vtiger_Functions::getModuleFieldInfos($moduleName);
+            $moduleInfoExtend = array ();
+            if (count($moduleInfo) > 0) {
+                foreach ($moduleInfo as $field => $fieldInfo) {
+                    $moduleInfoExtend[$fieldInfo['columnname']] = $fieldInfo;
+                }
+            }
+            $label_name = array();
+            $label_search = array();
+            $serachcol_arr = Vtiger_Record_Model::getDisplayLabelsArray($tabid);
+            foreach ($serachcol_arr as $columnName) {
+                if ($moduleInfoExtend && in_array($moduleInfoExtend[$columnName]['uitype'], array(10, 51,73,76, 75, 81))) {
+                    //get module of the related record
+                    if ($row[$columnName] > 0) {
+                        $setype = 'SELECT setype FROM vtiger_crmentity WHERE crmid = ?';
+                        $setype_result = $db->pquery($setype, array($row[$columnName]));
+                        $entityinfo = 'SELECT tablename, fieldname, entityidfield FROM vtiger_entityname WHERE modulename = ?';
+                        $entityinfo_result = $db->pquery($entityinfo, array($db->query_result($setype_result, 0, "setype")));
+                        $label_query = "Select ".$db->query_result($entityinfo_result, 0, "fieldname")." from ".$db->query_result($entityinfo_result, 0, "tablename")." where ".$db->query_result($entityinfo_result, 0, "entityidfield")." =?";
+                        $label_result = $db->pquery($label_query, array($row[$columnName]));
+                        $label_name[$columnName] = $db->query_result($label_result, 0, $db->query_result($entityinfo_result, 0, "fieldname"));
+                    }
+                    else {
+                        $label_name[$columnName] ='';
+                    }
+                }
+                else {
+                    $label_name[$columnName] = $row[$columnName];
+                }
+            }
+            $row['label'] ='';
+            foreach ($serachcol_arr as $displaylabel) {
+                if ($row['label'] =='') {
+                    $row['label'] = $label_name[$displaylabel];
+                }
+                else {
+                    $row['label'] .= ' |'.$label_name[$displaylabel];
+                }
+            }
+            $row['id'] =$row['crmid'];
+            $matchingRecords[$moduleName][$row['id']] = $recordInstance->setData($row)->setModuleFromInstance($moduleModel);
+        }
+        
+        return $matchingRecords;
+    }
+    
+    //SalesPlatform.ru end Vtiger 7 global search support
+    
+/**
 	 * Function to get the listquery for a full search
 	 * @param  string $tabid  -- tabid of the module to search
 	 * @param  string $searchKey -- search term
@@ -328,6 +425,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		return $listquery;
         
 	}
+
 	/**
 	 * Function to get the where condition for a module based on the field table entries
 	 * @param  string $listquery  -- ListView query for the module
@@ -395,83 +493,19 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		}
 		return $serachcol_array;
 	}
-    
-    
-    private static function getGlobalSearchResult($query, $moduleName) {
-        $matchingRecords = array();
-        $db = PearDatabase::getInstance();
-        $tab_result = $db->pquery($query, array());
-        $tab_noOfRows = $db->num_rows($tab_result);
-        $tabid = getTabid($moduleName);
-        for($u=0; $u<$tab_noOfRows; ++$u) {
-            $row = $db->query_result_rowdata($tab_result, $u);
 
-            $moduleModels = array();
-            if(!array_key_exists($moduleName, $moduleModels)) {
-                $moduleModels[$moduleName] = Vtiger_Module_Model::getInstance($moduleName);
-
-            }
-
-            $moduleModel = $moduleModels[$moduleName];
-            $modelClassName = Vtiger_Loader::getComponentClassName('Model', 'Record', $moduleName);
-            $recordInstance = new $modelClassName();
-            //resolve related fields by uitype
-            $moduleInfo = Vtiger_Functions::getModuleFieldInfos($moduleName);
-            $moduleInfoExtend = array ();
-            if (count($moduleInfo) > 0) {
-                foreach ($moduleInfo as $field => $fieldInfo) {
-                    $moduleInfoExtend[$fieldInfo['columnname']] = $fieldInfo;
-                }
-            }
-            $label_name = array();
-            $label_search = array();
-            $serachcol_arr = Vtiger_Record_Model::getDisplayLabelsArray($tabid);
-            foreach ($serachcol_arr as $columnName) {
-                if ($moduleInfoExtend && in_array($moduleInfoExtend[$columnName]['uitype'], array(10, 51,73,76, 75, 81))) {
-                    //get module of the related record
-                    if ($row[$columnName] > 0) {
-                        $setype = 'SELECT setype FROM vtiger_crmentity WHERE crmid = ?';
-                        $setype_result = $db->pquery($setype, array($row[$columnName]));
-                        $entityinfo = 'SELECT tablename, fieldname, entityidfield FROM vtiger_entityname WHERE modulename = ?';
-                        $entityinfo_result = $db->pquery($entityinfo, array($db->query_result($setype_result, 0, "setype")));
-                        $label_query = "Select ".$db->query_result($entityinfo_result, 0, "fieldname")." from ".$db->query_result($entityinfo_result, 0, "tablename")." where ".$db->query_result($entityinfo_result, 0, "entityidfield")." =?";
-                        $label_result = $db->pquery($label_query, array($row[$columnName]));
-                        $label_name[$columnName] = $db->query_result($label_result, 0, $db->query_result($entityinfo_result, 0, "fieldname"));
-                    }
-                    else {
-                        $label_name[$columnName] ='';
-                    }
-                }
-                else {
-                    $label_name[$columnName] = $row[$columnName];
-                }
-            }
-            $row['label'] ='';
-            foreach ($serachcol_arr as $displaylabel) {
-                if ($row['label'] =='') {
-                    $row['label'] = $label_name[$displaylabel];
-                }
-                else {
-                    $row['label'] .= ' |'.$label_name[$displaylabel];
-                }
-            }
-            $row['id'] =$row['crmid'];
-            $matchingRecords[$moduleName][$row['id']] = $recordInstance->setData($row)->setModuleFromInstance($moduleModel);
-        }
-        
-        return $matchingRecords;
-    }
-    
-    //SalesPlatform.ru end
-    
+        //SalesPlatform.ru begin Vtiger 7 global search support
 	/**
 	 * Static Function to get the list of records matching the search key
 	 * @param <String> $searchKey
 	 * @return <Array> - List of Vtiger_Record_Model or Module Specific Record Model instances
 	 */
 	public static function getSearchResult($searchKey, $module=false) {
-        //SalesPlatform.ru begin
+                
+        //    private static function getGlobalSearchResult($query, $moduleName) {
+        //        $matchingRecords = array();
         $searchInstance = Vtiger_Module_Model::getInstance('Search');
+        
         if($searchInstance != null && $searchInstance->get('presence') != 1) {
             $db = PearDatabase::getInstance();
             //decide search mode
@@ -486,6 +520,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
                         //search all activated
                         $tabid = $db->query_result($searchdata_result, $v, "gstabid");
                         $query = Vtiger_Record_Model::dofullmodulesearch($tabid, $searchKey);
+                        //SalesPlatform.ru end Vtiger 7 global search support
                         $tab_result = $db->pquery($query, array());
                         $tab_noOfRows = $db->num_rows($tab_result);
                         $moduleName = vtlib_getModuleNameById($tabid);
@@ -545,6 +580,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
                             $matchingRecords[$moduleName][$row['id']] = $recordInstance->setData($row)->setModuleFromInstance($moduleModel);
                         }
                     }
+                    //SalesPlatform.ru start Vtiger 7 global search support
                     else {
                         //"search all" is not activated
                         $moduleModels = $leadIdsList = $convertedInfo = array();
@@ -637,7 +673,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
             
             return $matchingRecords;
         } else {
-            //SallesPlatform.ru end
+            //SalesPlatform.ru end
             $db = PearDatabase::getInstance();
 
             $query = 'SELECT label, crmid, setype, createdtime FROM vtiger_crmentity WHERE label LIKE ? AND vtiger_crmentity.deleted = 0';
@@ -683,10 +719,8 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
             return $matchingRecords;        
         //SalesPlatform.ru begin    
         }
-        //SalesPlatform.ru end
-        
-		
 	}
+        //SalesPlatform.ru end
 
 	/**
 	 * Function to get details for user have the permissions to do actions
@@ -747,6 +781,42 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	}
 
 	/**
+	 * Function to get Image Details
+	 * @return <array> Image Details List
+	 */
+	public function getImageDetails() {
+		$db = PearDatabase::getInstance();
+		$imageDetails = array();
+		$recordId = $this->getId();
+
+		if ($recordId) {
+			$sql = "SELECT vtiger_attachments.*, vtiger_crmentity.setype FROM vtiger_attachments
+						INNER JOIN vtiger_seattachmentsrel ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+						INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_attachments.attachmentsid
+						WHERE vtiger_crmentity.setype = ? and vtiger_seattachmentsrel.crmid = ?";
+
+			$result = $db->pquery($sql, array($this->getModuleName().' Image',$recordId));
+
+			$imageId = $db->query_result($result, 0, 'attachmentsid');
+			$imagePath = $db->query_result($result, 0, 'path');
+			$imageName = $db->query_result($result, 0, 'name');
+
+			//decode_html - added to handle UTF-8 characters in file names
+			$imageOriginalName = urlencode(decode_html($imageName));
+
+			if(!empty($imageName)){
+				$imageDetails[] = array(
+						'id' => $imageId,
+						'orgname' => $imageOriginalName,
+						'path' => $imagePath.$imageId,
+						'name' => $imageName
+				);
+			}
+		}
+		return $imageDetails;
+	}
+
+	/**
 	 * Function to delete corresponding image
 	 * @param <type> $imageId
 	 */
@@ -754,11 +824,11 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		$db = PearDatabase::getInstance();
 
 		$checkResult = $db->pquery('SELECT crmid FROM vtiger_seattachmentsrel WHERE attachmentsid = ?', array($imageId));
-		$crmId = $db->query_result($checkResult, 0, 'crmid');
-
-		if ($this->getId() === $crmId) {
+		$crmId = intval($db->query_result($checkResult, 0, 'crmid'));
+		if (intval($this->getId()) === $crmId) {
+			$db->pquery('DELETE FROM vtiger_seattachmentsrel WHERE crmid = ? AND attachmentsid = ?', array($crmId,$imageId));
 			$db->pquery('DELETE FROM vtiger_attachments WHERE attachmentsid = ?', array($imageId));
-			$db->pquery('DELETE FROM vtiger_seattachmentsrel WHERE attachmentsid = ?', array($imageId));
+			$db->pquery('DELETE FROM vtiger_crmentity WHERE crmid = ?',array($imageId));
 			return true;
 		}
 		return false;
@@ -794,6 +864,258 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		return true;
 	}
 
+	/**
+	  * Function to get the url for getting the related Popup contents
+	  * @return <string>
+	  */
+	function getParentPopupContentsUrl() {
+		return 'index.php?module='.$this->getModuleName().'&mode=getRelatedRecordInfo&action=RelationAjax&id=' . $this->getId();
+	}
+
+	/**
+	 * Function to get the record models from set of record ids and moudlename.
+	 * This api will be used in cases(eg: Import) where we need to create 
+	 * record models from set of ids. Normally we use self::getInstaceById($recordId),
+	 * but it is a performance hit for set of records. 
+	 * @param <array> $recordIds
+	 * @param <string> $moduleName
+	 * @return <mixed> $records
+	 */
+	public static function getInstancesFromIds($recordIds, $moduleName) {
+		$records = array();
+		$module = Vtiger_Module_Model::getInstance($moduleName);
+		$adb = PearDatabase::getInstance();
+		$user = Users_Record_Model::getCurrentUserModel();
+		$queryGenerator = new QueryGenerator($module->getName(), $user);
+
+		$meta = $queryGenerator->getMeta($module->getName());
+		$moduleFieldNames = $meta->getModuleFields();
+		$inventoryModules = getInventoryModules();
+
+		if (in_array($module, $inventoryModules)) {
+			$fields = vtws_describe('LineItem', $user);
+			foreach ($fields['fields'] as $field) {
+				unset($moduleFieldNames[$field['name']]);
+			}
+			foreach ($moduleFieldNames as $field => $fieldObj) {
+				if (substr($field, 0, 5) == 'shtax') {
+					unset($moduleFieldNames[$field]);
+				}
+			}
+		}
+
+		$fieldArray = array_keys($moduleFieldNames);
+		$fieldArray[] = 'id';
+		$queryGenerator->setFields($fieldArray);
+		//getting updated meta after setting the fields
+		$meta = $queryGenerator->getMeta($module->getName());
+
+		$query = $queryGenerator->getQuery();
+		$baseTable = $meta->getEntityBaseTable();
+		$moduleTableIndexList = $meta->getEntityTableIndexList();
+		$baseTableIndex = $moduleTableIndexList[$baseTable];
+		if($moduleName == 'Users') {
+			$query .= ' AND vtiger_users.id IN (' . generateQuestionMarks($recordIds) . ')';
+		} else{
+			$query .= ' AND vtiger_crmentity.crmid IN (' . generateQuestionMarks($recordIds) . ')';
+		}
+		$result = $adb->pquery($query, array($recordIds));
+
+		if ($result) {
+			while ($row = $adb->fetchByAssoc($result)) {
+				$newRow = array();
+				$fieldColumnMapping = $meta->getFieldColumnMapping();
+				$columnFieldMapping = array_flip($fieldColumnMapping);
+				foreach ($row as $col => $val) {
+					if (array_key_exists($col, $columnFieldMapping))
+						$newRow[$columnFieldMapping[$col]] = decode_html($val);
+				}
+				$newRow['id'] = $row[$baseTableIndex];
+				$record = self::getCleanInstance($meta->getEntityName());
+				$record->setData($newRow);
+				//Updating entity details
+				$entity = $record->getEntity();
+				$entity->column_fields = $record->getData();
+				$entity->id = $record->getId();
+				$record->setEntity($entity);
+				$records[$record->getId()] = $record;
+			}
+		}
+		$result = null;
+		return $records;
+	}
+
+	public function getFileDetails($attachmentId = false) {
+		$db = PearDatabase::getInstance();
+		$fileDetails = array();
+		$query = "SELECT * FROM vtiger_attachments
+				INNER JOIN vtiger_seattachmentsrel ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+				WHERE crmid = ? ";
+		$params = array($this->get('id'));
+		if($attachmentId) {
+			$query .= 'AND vtiger_attachments.attachmentsid = ?';
+			$params[] = $attachmentId;
+		}
+		$result = $db->pquery($query, $params);
+
+		while($row = $db->fetch_array($result)){
+			if(!empty($row)){
+				$fileDetails[] = $row;
+			}
+		}
+		return $fileDetails;
+	}
+
+	public function downloadFile($attachmentId = false) {
+		$attachments = $this->getFileDetails($attachmentId);
+		if(is_array($attachments[0])) {
+			$fileDetails = $attachments[0];
+		} else {
+			$fileDetails = $attachments;
+		}
+		$fileContent = false;
+		if (!empty ($fileDetails)) {
+			$filePath = $fileDetails['path'];
+			$fileName = $fileDetails['name'];
+			$fileName = html_entity_decode($fileName, ENT_QUOTES, vglobal('default_charset'));
+			$savedFile = $fileDetails['attachmentsid']."_".$fileName;
+			$fileSize = filesize($filePath.$savedFile);
+			$fileSize = $fileSize + ($fileSize % 1024);
+			if (fopen($filePath.$savedFile, "r")) {
+				$fileContent = fread(fopen($filePath.$savedFile, "r"), $fileSize);
+				header("Content-type: ".$fileDetails['type']);
+				header("Pragma: public");
+				header("Cache-Control: private");
+				header("Content-Disposition: attachment; filename=\"$fileName\"");
+				header("Content-Description: PHP Generated Data");
+				header("Content-Encoding: none");
+			}
+		}
+		echo $fileContent;
+	}
+
+	public function getTitle($fieldInstance) {
+		$fieldName = $fieldInstance->get('listViewRawFieldName');
+		$fieldValue = $this->get($fieldName); 
+		$rawData = $this->getRawData();
+		$rawValue = $rawData[$fieldName];
+		if ($fieldInstance) {
+			$dataType = $fieldInstance->getFieldDataType();
+			$uiType = $fieldInstance->get('uitype');
+			$nonRawValueDataTypes = array('date', 'datetime', 'time', 'currency', 'boolean', 'owner');
+			$nonRawValueUITypes = array(117);
+
+			if (in_array($dataType, $nonRawValueDataTypes) || in_array($uiType, $nonRawValueUITypes)) {
+				return $fieldValue;
+			}
+			if (in_array($dataType, array('reference', 'multireference'))) {
+				$recordName = Vtiger_Util_Helper::getRecordName($rawValue);
+				if ($recordName) {
+					return $recordName;
+				} else {
+					return '';
+				}
+			}
+			if($dataType == 'multipicklist') {
+				$rawValue = $fieldInstance->getDisplayValue($rawValue);
+			}
+		}
+		return $rawValue;
+	}
+
+	function getRollupCommentsForModule($startIndex = 0, $pageLimit = 10) {
+		$rollupComments = array();
+		$modulename = $this->getModuleName();
+		$recordId = $this->getId();
+
+		$relatedModuleRecordIds = $this->getCommentEnabledRelatedEntityIds($modulename, $recordId);
+		array_unshift($relatedModuleRecordIds, $recordId);
+
+		if ($relatedModuleRecordIds) {
+
+			$listView = Vtiger_ListView_Model::getInstance('ModComments');
+			$queryGenerator = $listView->get('query_generator');
+			$queryGenerator->setFields(array('parent_comments', 'createdtime', 'modifiedtime', 'related_to', 'assigned_user_id',
+				'commentcontent', 'creator', 'id', 'customer', 'reasontoedit', 'userid', 'from_mailconverter', 'is_private', 'customer_email'));
+
+			$query = $queryGenerator->getQuery();
+
+			$query .= " AND vtiger_modcomments.related_to IN (" . generateQuestionMarks($relatedModuleRecordIds)
+					. ") AND vtiger_modcomments.parent_comments=0 ORDER BY vtiger_crmentity.createdtime DESC LIMIT "
+					. " $startIndex,$pageLimit";
+
+			$db = PearDatabase::getInstance();
+			$result = $db->pquery($query, $relatedModuleRecordIds);
+			if ($db->num_fields($result)) {
+				for ($i = 0; $i < $db->num_rows($result); $i++) {
+					$rowdata = $db->query_result_rowdata($result, $i);
+					$recordInstance = new ModComments_Record_Model();
+					$rowdata['module'] = getSalesEntityType($rowdata['related_to']);
+					$recordInstance->setData($rowdata);
+					$rollupComments[] = $recordInstance;
+				}
+			}
+		}
+
+		return $rollupComments;
+	}
+
+	function getCommentEnabledRelatedEntityIds($modulename, $recordId) {
+		$user = Users_Record_Model::getCurrentUserModel();
+		$relatedModuleRecordIds = array();
+		$restrictedFieldnames = array('modifiedby', 'created_user_id', 'assigned_user_id');
+		$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $modulename);
+		$moduleInstance = Vtiger_Module_Model::getInstance($modulename);
+		$referenceFieldsModels = $moduleInstance->getFieldsByType('reference');
+		$userPrevilegesModel = Users_Privileges_Model::getInstanceById($user->id);
+		$directrelatedModuleRecordIds = array();
+
+		foreach ($referenceFieldsModels as $referenceFieldsModel) {
+			$relmoduleFieldname = $referenceFieldsModel->get('name');
+			$relModuleFieldValue = $recordModel->get($relmoduleFieldname);
+
+			if (!empty($relModuleFieldValue) && !in_array($relmoduleFieldname, $restrictedFieldnames) && isRecordExists($relModuleFieldValue)) {
+				$relModuleRecordModel = Vtiger_Record_Model::getInstanceById($relModuleFieldValue);
+				$relmodule = $relModuleRecordModel->getModuleName();
+
+				$relatedmoduleModel = Vtiger_Module_Model::getInstance($relmodule);
+				$isCommentEnabled = $relatedmoduleModel->isCommentEnabled();
+
+				if ($isCommentEnabled) {
+					$tabid = getTabid($relmodule);
+					$modulePermission = $userPrevilegesModel->hasModulePermission($tabid);
+					$hasDetailViewPermission = Users_Privileges_Model::isPermitted($relmodule, 'DetailView', $relModuleFieldValue);
+
+					if ($modulePermission && $hasDetailViewPermission)
+						$directrelatedModuleRecordIds[] = $relModuleFieldValue;
+				}
+			}
+		}
+
+		$moduleModel = Vtiger_Module_Model::getInstance($modulename);
+		$relatedModuleModels = Vtiger_Relation_Model::getAllRelations($moduleModel, false);
+		$commentEnabledModules = array();
+
+		foreach ($relatedModuleModels as $relatedModuleModel) {
+			$relatedModuleName = $relatedModuleModel->get('relatedModuleName');
+			$relatedmoduleModel = Vtiger_Module_Model::getInstance($relatedModuleName);
+			$isCommentEnabled = $relatedmoduleModel->isCommentEnabled();
+
+			if ($isCommentEnabled) {
+				$tabid = getTabid($relatedModuleName);
+				$modulePermission = $userPrevilegesModel->hasModulePermission($tabid);
+
+				if ($modulePermission)
+					$commentEnabledModules['related_modules'][] = $relatedModuleModel->get('relation_id');
+			}
+		}
+
+		//To get all the record ids for all the modules that are shown in related tab
+		$indirectrelatedModuleRecordIds = $moduleModel->getRelatedModuleRecordIds(new Vtiger_Request($commentEnabledModules), array($recordId), true);
+
+		return array_merge($relatedModuleRecordIds, $directrelatedModuleRecordIds, $indirectrelatedModuleRecordIds);
+	}
+    
     //SalesPlatform.ru begin
     /**
      * Print record PDF template
@@ -872,5 +1194,18 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
         return strtr($string, $converter);
     }
     //SalesPlatform.ru end
+    //SalesPlatform.ru begin DetailViewLink insertion
+    public static function isEntityDeleted($id) {
+            $adaptedId = (int) $id;
+            if($adaptedId <= 0) {
+                return true;
+            }
 
+            $db = PearDatabase::getInstance();
+            $result = $db->pquery("SELECT deleted FROM vtiger_crmentity WHERE crmid=?", array($adaptedId));
+            $resultRow = $db->fetchByAssoc($result);
+
+            return ($resultRow == null || $resultRow['deleted'] == 1);
+        }
+    //SalesPlatform.ru end DetailViewLink insertion
 }

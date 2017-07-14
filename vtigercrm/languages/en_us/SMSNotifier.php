@@ -9,6 +9,7 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
+	'SMSNotifier'=>'SMS Notifier',
 	'LBL_SEND_SMS_TO_SELECTED_NUMBERS' => 'Send SMS to the selected numbers',
 	'LBL_STEP_1' => 'Step 1',
 	'LBL_STEP_2' => 'Step 2',
@@ -25,11 +26,4 @@ $languageStrings = array(
 	//Blocks
 	'LBL_SMSNOTIFIER_INFORMATION' => 'SMS Information',
 	'SINGLE_SMSNotifier' => 'SMS Notifier',
-    
-    //SalesPlatform.ru begin
-    'LBL_NUMBER' => 'Number',
-    'LBL_STATUS' => 'Status',
-    'LBL_STATUS_MESSAGE' => 'Status message',
-    'LBL_NO_NUMBERS_TO_SEND_SMS' => 'All number for send sms are empty. Sms not send.'
-    //SalesPlatform.ru end
 );

@@ -17,7 +17,7 @@ jQuery.Class('Install_Index_Js', {}, {
 			var elements = jQuery('.no')
 			if(elements.length > 0) {
                                 //SalesPlatform.ru begin
-                                var msg = "Некоторые Параметры PHP не соответствуют рекомендованным значениям. Это может повлиять на некоторые функции Vtiger CRM. Вы уверены, что хотите продолжить?";
+                                var msg = app.vtranslate('JS_PHP_INCORRECT_VALUE','Install');
                                 /*vtiger commented code
 				var msg = "Some of the PHP Settings do not meet the recommended values. This might affect some of the features of vtiger CRM. Are you sure, you want to proceed?";
 				*/
@@ -60,7 +60,7 @@ jQuery.Class('Install_Index_Js', {}, {
 
 		function setPasswordError() {
                         //SalesPlatform.ru begin
-                        jQuery('#passwordError').html('Пожалуйста, введите пароль заново. Значения полей \"Пароль\" и \"Повторите пароль\" не совпадают.');
+                        jQuery('#passwordError').html(app.vtranslate('JS_PASSWORD_MISMATCH'));
                         /*vtiger commented code
 			jQuery('#passwordError').html('Please re-enter passwords.  The \"Password\" and \"Re-type password\" values do not match.');
                         */
@@ -80,7 +80,7 @@ jQuery.Class('Install_Index_Js', {}, {
 			var retypePassword = jQuery('input[name="retype_password"]');
 			if(retypePassword.val() != '' && retypePassword.val() !== jQuery(e.currentTarget).val()) {
 				//SalesPlatform.ru begin
-                                jQuery('#passwordError').html('Пожалуйста, введите пароль заново. Значения полей \"Пароль\" и \"Повторите пароль\" не совпадают.');
+                                jQuery('#passwordError').html(app.vtranslate('JS_PASSWORD_MISMATCH'));
                                 /*vtiger commented code
 			        jQuery('#passwordError').html('Please re-enter passwords.  The \"Password\" and \"Re-type password\" values do not match.');
                                 */
@@ -137,7 +137,7 @@ jQuery.Class('Install_Index_Js', {}, {
                                                                             '<div class="alert alert-error">'+ 
                                                                                     '<button class="close" data-dismiss="alert" type="button">x</button>'+
 																					//SalesPlatform.ru begin 
-																					'Ошибка! Некорректный E-mail адрес.'+
+																					app.vtranslate('JS_INCORRECT_EMAIL')+
                                                                                     //'Warning! Invalid email address.'+ 
 																					//SalesPlatform.ru end 
                                                                             '</div>'+ 
@@ -147,7 +147,7 @@ jQuery.Class('Install_Index_Js', {}, {
 									'<div class="alert alert-error">'+
 										'<button class="close" data-dismiss="alert" type="button">x</button>'+
 										//SalesPlatform.ru begin 
-										'Ошибка! Не заполнены обязательные поля.'+
+										app.vtranslate('JS_EMPTY_MAJOR_FIELDS')+
 										//'Warning! Required fields missing values.'+
 										//SalesPlatform.ru end 
 									'</div>'+
@@ -165,7 +165,7 @@ jQuery.Class('Install_Index_Js', {}, {
 			var error = jQuery('#errorMessage');
 			if(error.length) {
                                 //SalesPlatform.ru begin
-                                alert('Пожалуйста, исправьте ошибку прежде чем продолжить установку');
+                                alert(app.vtranslate('JS_PLEASE_RESOLVE_ERROR'));
                                 /*vtiger commented code
 				alert('Please resolve the error before proceeding with the installation');
                                 */
@@ -182,7 +182,7 @@ jQuery.Class('Install_Index_Js', {}, {
 			var industry = jQuery('select[name="industry"]').val();
 			if (industry.length < 1) {
                                 //SalesPlatform.ru begin
-                                alert('Пожалуйста, выберите вид вашей деятельности.');
+                                alert(app.vtranslate('JS_YOUR_INDUSTRY'));
                                 /*vtiger commented code
 				alert('Please select appropriate industry option.');
                                 */

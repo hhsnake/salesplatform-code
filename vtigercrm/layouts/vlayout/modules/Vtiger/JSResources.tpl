@@ -16,14 +16,20 @@
 	<script type="text/javascript" src="libraries/jquery/chosen/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="libraries/jquery/select2/select2.min.js"></script>
     {* SalesPLatform.ru begin *}
-    <script type="text/javascript" src="libraries/jquery/select2/select2_locale_ru.js"></script>
+    {assign var=USER_MODEL value=Users_Record_Model::getCurrentUserModel()}
+    {if $USER_MODEL->get('language') eq 'ru_ru'}
+        <script type="text/javascript" src="libraries/jquery/select2/select2_locale_ru.js"></script>
+    {/if}
 	{* SalesPLatform.ru end *}
     <script type="text/javascript" src="libraries/jquery/jquery-ui/js/jquery-ui-1.8.16.custom.min.js"></script>
 	<script type="text/javascript" src="libraries/jquery/jquery.class.min.js"></script>
 	<script type="text/javascript" src="libraries/jquery/defunkt-jquery-pjax/jquery.pjax.js"></script>
 	<script type="text/javascript" src="libraries/jquery/jstorage.min.js"></script>
 	<script type="text/javascript" src="libraries/jquery/autosize/jquery.autosize-min.js"></script>
-
+    
+    {*SalesPlatform.ru begin*}
+    <script type="text/javascript" src="libraries/visibility/visibility.min.js"></script>
+    {*SalesPlatform.ru end*}
 	<script type="text/javascript" src="libraries/jquery/rochal-jQuery-slimScroll/slimScroll.min.js"></script>
 	<script type="text/javascript" src="libraries/jquery/pnotify/jquery.pnotify.min.js"></script>
 	<script type="text/javascript" src="libraries/jquery/jquery.hoverIntent.minified.js"></script>
@@ -47,7 +53,9 @@
 	<script type="text/javascript" src="libraries/jquery/dangrossman-bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript" src="libraries/jquery/jquery.ba-outside-events.min.js"></script>
 	<script type="text/javascript" src="libraries/jquery/jquery.placeholder.js"></script>
-
+    {* SalesPlatform.ru begin*}
+    <script type="text/javascript" src="libraries/jquery/jquery.form.js"></script> 
+    {* SalesPlatform.ru*}
 	{foreach key=index item=jsModel from=$SCRIPTS}
             <script type="{$jsModel->getType()}" src="{vresource_url($jsModel->getSrc())}"></script>
 	{/foreach}

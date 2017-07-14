@@ -37,7 +37,7 @@
 						<tbody>
 							<tr>
 								<td>    {*SalesPlatform.ru begin*}
-									<strong>Пожалуйста, выберите вид вашей деятельности</strong> <span class="no">*</span>
+									<strong>{vtranslate('LBL_YOUR_INDUSTRY','Install')}</strong> <span class="no">*</span>
                                                                         {*vtiger commented code
                                                                         <strong>Please let us know your Industry</strong> <span class="no">*</span>
                                                                         *}
@@ -45,48 +45,48 @@
 								</td>
 								<td>
                                                                         {*SalesPlatform.ru begin*}
-                                                                        <select name="industry" class="select2" required="true" style="width:235px;" placeholder="Выбрать...">
+                                					<select name="industry" class="select2" required="true" style="width:250px;" placeholder={vtranslate('LBL_CHOOSE_ONE','Install')}>
 										<option value=""></option> 
-										<option>Автомобилестроение</option>
-                                                                                <option>Аренда</option>
-                                                                                <option>Банковские и финансовые услуги</option>
-                                                                                <option>Биотехнологии</option>
-                                                                                <option>Бухгалтерия</option> 
-                                                                                <option>Государственная служба</option>
-                                                                                <option>Здравоохранение</option>
-                                                                                <option>Колл-Центр</option>
-                                                                                <option>Коммунальные услуги</option>
-                                                                                <option>Компьютерная техника</option>
-                                                                                <option>Консалтинг</option>
-                                                                                <option>Логистика</option>
-                                                                                <option>Машиностроение</option>
-                                                                                <option>Медиа</option>
-                                                                                <option>Недвижимость</option>
-                                                                                <option>Некоммерческое</option>
-                                                                                <option>Обрабатывающая промышленность</option>
-                                                                                <option>Образование</option>
-                                                                                <option>Одежда и аксессуары</option>
-                                                                                <option>Охранная деятельность</option>
-                                                                                <option>Перевозки</option>
-                                                                                <option>Подбор персонала</option>
-                                                                                <option>Программное обеспечение</option>
-                                                                                <option>Продукты питания и услуги</option>
-                                                                                <option>Развлечения</option>
-										<option>Реклама</option>
-                                                                                <option>Розничная и оптовая торговля</option>                                                                         
-										<option>Сельское хозяйство</option>
-                                                                                <option>Спорт</option>
-                                                                                <option>Страхование</option>
-                                                                                <option>Строительство</option>
-                                                                                <option>Телекоммуникации</option>
-										<option>Тузизм</option>
-                                                                                <option>Услуги</option>
-                                                                                <option>Фармацевтика</option>
-                                                                                <option>Финансы</option>
-										<option>Химическая промышленность</option>
-										<option>Энергетика</option>
-										<option>Юриспруденция</option>
-										<option>Другое</option>
+										<option>{vtranslate('LBL_ACCOUNTING','Install')}</option> 
+										<option>{vtranslate('LBL_ADVERTISING','Install')}</option>
+										<option>{vtranslate('LBL_AGRICULTURE','Install')}</option>
+										<option>{vtranslate('LBL_APPAREL_ACCESSORIES','Install')}</option>
+										<option>{vtranslate('LBL_AUTOMOTIVE','Install')}</option>
+										<option>{vtranslate('LBL_BANKING_FINANCIAL_SERVICES','Install')}</option>
+										<option>{vtranslate('LBL_BIOTECHNOLOGY','Install')}</option>
+										<option>{vtranslate('LBL_CALL_CENTERS','Install')}</option>
+										<option>{vtranslate('LBL_CAREERS_EMPLOYMENT','Install')}</option>
+										<option>{vtranslate('LBL_CHEMICAL','Install')}</option>
+										<option>{vtranslate('LBL_COMPUTER_HARDWARE','Install')}</option>
+										<option>{vtranslate('LBL_COMPUTER_SOFTWARE','Install')}</option>
+										<option>{vtranslate('LBL_CONSULTING','Install')}</option>
+										<option>{vtranslate('LBL_CONSTRUCTION','Install')}</option>
+										<option>{vtranslate('LBL_EDUCATION','Install')}</option>
+										<option>{vtranslate('LBL_ENERGY_SERVICES','Install')}</option>
+										<option>{vtranslate('LBL_ENGINEERING','Install')}</option>
+										<option>{vtranslate('LBL_ENTERTAINMENT','Install')}</option>
+										<option>{vtranslate('LBL_FINANCIAL','Install')}</option>
+										<option>{vtranslate('LBL_FOOD','Install')}</option>
+										<option>{vtranslate('LBL_GOVERNMENT','Install')}</option>
+										<option>{vtranslate('LBL_HEALTH_CARE','Install')}</option>
+										<option>{vtranslate('LBL_INSURANCE','Install')}</option>
+										<option>{vtranslate('LBL_LEGAL','Install')}</option>
+										<option>{vtranslate('LBL_LOGISTICS','Install')}</option>
+										<option>{vtranslate('LBL_MANUFACTURING','Install')}</option>
+										<option>{vtranslate('LBL_MEDIA_PRODUCTION','Install')}</option>
+										<option>{vtranslate('LBL_NON_PROFIT','Install')}</option>
+										<option>{vtranslate('LBL_PHARMACEUTICAL','Install')}</option>
+										<option>{vtranslate('LBL_REAL_ESTATE','Install')}</option>
+										<option>{vtranslate('LBL_RENTAL','Install')}</option>
+										<option>{vtranslate('LBL_RETAIL_WHOLESALE','Install')}</option>
+										<option>{vtranslate('LBL_SECURITY','Install')}</option>
+										<option>{vtranslate('LBL_SERVICE','Install')}</option>
+										<option>{vtranslate('LBL_SPORTS','Install')}</option>
+										<option>{vtranslate('LBL_TELECOMMUNICATIONS','Install')}</option>
+										<option>{vtranslate('LBL_TRANSPORTATION','Install')}</option>
+										<option>{vtranslate('LBL_TRAVEL_TOURISM','Install')}</option>
+										<option>{vtranslate('LBL_UTILITIES','Install')}</option>
+										<option>{vtranslate('LBL_OTHER','Install')}</option>
 									</select>
                                                                         {*vtiger commented code
 									<select name="industry" class="select2" required="true" style="width:250px;" placeholder="Choose one...">
@@ -139,11 +139,7 @@
 							<tr>
 								<td colspan="2">
                                                                         {*SalesPlatform.ru begin*}
-                                                                        Мы собираем анонимную информацию, чтобы помочь нам улучшить 
-                                                                        будущие версии Vtiger. Данные о том, как и где используется CRM, помогают 
-                                                                        нам определить области в продукте, которые должны быть улучшены. Эти улучшения
-                                                                        позволят в будущем сделать Vtiger еще более удобным и эффективным. Собранные
-                                                                        данные не будут переданы третьим лицам.
+                                                                        {vtranslate('LBL_WE_COLLECT_INFORMATION','Install')}
                                                                         {*vtiger commented code
 									We collect anonymous information (Country, OS) 
 									to help us improve future versions of Vtiger. 

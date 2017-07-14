@@ -15,4 +15,8 @@ $languageStrings = array(
 	'LBL_DATABASE_QUERY_ERROR' => 'Ошибка базы данных при выполнении операции',
 	'LBL_INVALID_OLD_PASSWORD' => 'Неверно указан старый пароль',
 	'LBL_NEW_PASSWORD_MISMATCH' => "Пароли не совпадают",
+        'Invalid value given for old password.' => 'Добавьте шаблон печати',
+        "New Password and confirm password don't match" => 'Новый пароль и пароль подтверждения не совпадают ',
+        'Database error while performing requested operation' => 'Ошибка базы данных при выполнении запрошенной операции',
+        'Failed to change password' => 'Не удалось изменить пароль',       
 );

@@ -16,13 +16,15 @@ $languageStrings = Array(
     'LBL_SENDER' => 'Источник',
     'LBL_FEED_SOURCE' => 'RSS источник',
     'LBL_ENTER_FEED_SOURCE' => 'Введите источник',  
-    'SINGLE_Rss' => 'RSS-лента',
+    'SINGLE_Rss' => 'RSS-лента',    
+    'Rss'=>'Rss',    
 );
 
 $jsLanguageStrings = array(
 	'JS_RSS_SUCCESSFULLY_SAVED' => 'RSS успешно сохранены',
     'JS_INVALID_RSS_URL' => 'Неверный RSS адрес',
-    'JS_RSS_MADE_AS_DEFAULT' => 'RSS Сделано Использовать по умолчанию',
+    'JS_RSS_MADE_AS_DEFAULT' => 'RSS Сделано Использовать по умолчанию',    
+    'JS_NO_RECORDS' => 'Нет записей',    
     
 );
 

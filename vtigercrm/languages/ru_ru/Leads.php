@@ -50,6 +50,11 @@ $languageStrings = array(
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Изменить соответствия полей'          , // TODO: Review
     'LBL_SETUP_WEBFORMS'           => 'Установка Веб-Форм'              , // TODO: Review
     'Prospecting'                  => 'Разведка',
+    'LBL_IMAGE_INFORMATION' => 'Изображение профиля',
+    'Lead Image' => 'Изображение Обращения',
+    'Phone' => 'Основной телефон',
+    'Secondary Email' => 'Второй адрес электронной почты',
+    'Email' => 'Основной адрес электронной почты',    
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Выберите контакты для продолжения'  , // TODO: Review

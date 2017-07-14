@@ -33,7 +33,9 @@ $languageStrings = array(
     
         //SalesPLatfomr.ru begin add locale
         'LBL_VENDORS_ADD_EVENT' => 'Добавить Событие',
-        'LBL_VENDORS_ADD_TASK'   => 'Добавить Задачу'
+        'LBL_VENDORS_ADD_TASK'   => 'Добавить Задачу',
+        'Phone' => 'Основной телефон',
+        'Email' => 'Основной адрес электронной почты',
         //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(

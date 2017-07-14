@@ -1,4 +1,10 @@
 <?php
+/**
+ * DOWNLOADED FROM: http://www.phpclasses.org/browse/package/2495/
+ * License: 	BSD License
+ */
+?>
+<?php
 class dZip{
 	var $filename;
 	var $overwrite;
@@ -36,7 +42,7 @@ class dZip{
 			return false;
 		}
 		else{
-			$details['uncsize'] = strlen($filename);
+			$details['uncsize'] = strlen($data); // Prasad: Fixed instead of strlen($filename)
 			// DATA is given.. use it! :|
 		}
 		
@@ -144,3 +150,4 @@ class dZip{
 		$this->centraldirs[$filename] = $properties;
 	}
 }
+?>

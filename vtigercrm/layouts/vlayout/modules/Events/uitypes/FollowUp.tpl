@@ -47,6 +47,4 @@
 		</div>	
 	</div>
 </td>
-<!-- SalesPlatform.ru begin Markup bug-->
-<!-- <td></td><td></td> --> 
-<!-- SalesPlatform.ru end -->
+<td></td><td></td>

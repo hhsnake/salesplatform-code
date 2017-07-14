@@ -45,6 +45,12 @@ $languageStrings = array(
 	'KPP'                          => 'КПП',
     'LBL_SETUP_WEBFORMS'           => 'Установка Веб-Форм',
     // SalesPlatform.ru end
+    'Type'                         => 'Тип' ,
+    'LBL_IMAGE_INFORMATION' => 'Изображение профиля',
+    'Organization Image' => 'Изображение организации',
+    'Other Phone' => 'Другой тел.',
+    'Phone' => 'Основной телефон',
+    'Email' => 'Основной адрес электронной почты',
 );
 $jsLanguageStrings = array(
 	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Вы уверены, что хотите удалить запись?', // TODO: Review

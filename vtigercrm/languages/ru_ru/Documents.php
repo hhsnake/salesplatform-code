@@ -49,7 +49,35 @@ $languageStrings = array(
         //SalesPlatform.ru begin add locale
         'LBL_EMAIL_FILE_AS_ATTACHMENT' => 'Отправить Документ по E-Mail',
         //SalesPlatform.ru end
-);
+        'LBL_VIEW_FILE' => 'Посмотреть файла',
+        'LBL_PREVIEW_NOT_AVAILABLE' => 'Предварительный просмотр недоступен',
+        'LBL_VIEW_FILE' => 'Посмотреть файла',
+        'LBL_PREVIEW_NOT_AVAILABLE' => 'Предварительный просмотр недоступен',
+        'LBL_INTERNAL_DOCUMENT_TYPE' =>'Внутренний документ',
+        'LBL_EXTERNAL_DOCUMENT_TYPE' =>'Внешний URL',
+        'LBL_WEBDOCUMENT_TYPE' =>'Веб Документ',
+        'LBL_DRAG_&_DROP_FILE_HERE' => 'Перетащите файл сюда',
+        'LBL_WEB' => 'Сеть',
+        'LBL_UPLOAD_DOCUMENT_TO_VTIGER' => 'Передать документы в Vtiger',
+        'LBL_ROOT' => 'Корень',
+        'LBL_AUTHORIZE' => 'Авторизуйте',
+        'LBL_DOCUMENT_SOURCE' => 'Источник документа',
+        'LBL_FILE_URL' => 'адреса файла',
+        'LBL_UPLOAD_TO' => 'Загрузить',
+        'LBL_NEW_DOCUMENT' => 'Новый Документ',
+        'LBL_VTIGER' => 'Vtiger',
+        'LBL_CREATE_YOUR_OWN' => 'Создайте свой собственный',
+        'LBL_SHARE_DOCUMENT' => 'Совместное использование документа',
+        'LBL_UPLOAD_TO_VTIGER' => 'Загрузить документ в Vtiger',
+        'LBL_UPLOAD' => 'Загрузить',
+        'LBL_SELECT_FILE_FROM_COMPUTER' => 'Выберите файл',
+        'LBL_FILE_UPLOAD' => 'Загрузка Файла',
+        'LBL_LINK_EXTERNAL_DOCUMENT' => 'Ссылка на Документ',
+        'LBL_TO_SERVICE' => 'В %s',
+        'LBL_FROM_SERVICE' => 'Из %s',
+        'LBL_CREATE_NEW' => 'Создать новый %s',
+	'LBL_SELECT_A_FOLDER_TO_MOVE' => 'Пожалуйста, выберите папку для перемещения',
+    );
 $jsLanguageStrings = array(
 	'JS_EXCEEDS_MAX_UPLOAD_SIZE'   => 'Превышен максимальный размер загрузки', // TODO: Review
 	'JS_NEW_FOLDER'                => 'Новая папка'                  , // TODO: Review
@@ -57,6 +85,18 @@ $jsLanguageStrings = array(
 	'JS_ARE_YOU_SURE_YOU_WANT_TO_MOVE_DOCUMENTS_TO' => 'Вы уверены, что хотите переместить файлы в', // TODO: Review
 	'JS_FOLDER'                    => 'папка'                      , // TODO: Review
 	'JS_OPERATION_DENIED'          => 'Операция запрещена'            , // TODO: Review
+        'JS_FOLDER_IS_NOT_EMPTY' => 'Пожалуйста Удалить / Переместить все документы в текущей папке перед удалением',
+        'JS_SPECIAL_CHARACTERS' => 'Специальные символы, такие как',
+	'JS_NOT_ALLOWED' => 'не допускаются',
+        'JS_DELETE_AND_TRASH_FILE_IN_DRIVE' => 'Удалить ненужный файл на диске',
+        'JS_FAILED_TO_UPLOAD_FILE' => 'Не удалось загрузить файл',
+        'JS_ARE_YOU_SURE_TO_REVOKE_ACCESS' => 'Вы уверены, что хотите отозвать доступ?',
+        'JS_ACCESS_REVOKED' => 'Доступ отменен',
+        'JS_DELETE_AND_TRASH_FILE_IN_DROPBOX' => 'Удалить и мусор файл в Dropbox',
+        'JS_UPLOAD_SUCCESSFUL' => 'Файл успешно загружен',
+        'JS_UPLOAD_FAILED' => 'Ошибка загрузки файла',
+        'JS_DOCUMENT_CREATED' => 'Документ создан',
+        'JS_DOCUMENT_CREATION_FAILED' => 'Не удалось создать документ',
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

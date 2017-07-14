@@ -8,16 +8,16 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Faq'                          => 'ЧаВо'                    , 
-	'SINGLE_Faq'                   => 'ЧаВо'                    , 
-	'LBL_RECORDS_LIST'             => 'Список ЧаВо'                   , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Добавить ЧаВо'                     , // TODO: Review
-	'LBL_FAQ_INFORMATION'          => 'Информация ЧаВо', 
+	'Faq'                          => 'База знаний'                    , 
+	'SINGLE_Faq'                   => 'Элемент БЗ'                    , 
+	'LBL_RECORDS_LIST'             => 'Список элементов БЗ'                   , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Добавить элемент БЗ'                     , // TODO: Review
+	'LBL_FAQ_INFORMATION'          => 'Информация БЗ', 
 	'LBL_COMMENT_INFORMATION'      => 'Комментарий'      , 
 	'Question'                     => 'Вопрос'                , 
 	'Answer'                       => 'Ответ'                  , 
 	'Comments'                     => 'Комментарии'      , 
-	'Faq No'                       => 'ЧаВо №'                , 
+	'Faq No'                       => 'База знаний №'                , 
 	'General'                      => 'Общее'                  , 
 	'Draft'                        => 'Черновик'            , 
 	'Published'                    => 'Опубликовано'    , 

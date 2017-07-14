@@ -47,9 +47,10 @@ $languageStrings = array(
     'LBL_MILESTONES_LIST'          => 'Список Контрольных точек',
     
     //SalesPlatform.ru begin add locale
-    'Project Task'                 => 'Проектные задачи',
+    'Project Task'                 => 'Проектные задачи',  
     //SalesPaltform.ru end
-);
+  'LBL_NO_DATE_VALUE_MSG' => 'или Задачи проекта не имеют начальной и/или конечной даты',
+    );
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/ProjectTask.php';

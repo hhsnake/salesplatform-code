@@ -47,11 +47,21 @@ $languageStrings = array(
     'LBL_SETUP_WEBFORMS'           => 'Установка Веб-Форм',
     'LBL_EXPORT_TO_PDF'            => 'Экспорт в PDF:', 
     'LBL_SEND_MAIL_PDF'            => 'Отправить PDF по Email:', 
+    'Related To'                   => 'Название организации',
+    'Type'                         => 'Тип'                      , 
+    'LBL_CONVERT_POTENTIAL' => 'Преобразование возможности',
+    'LBL_POTENTIALS_FIELD_MAPPING' => 'Возможности отображение полей',
+    'LBL_CONVERT_POTENTIALS_ERROR' => 'Вы должны включить проект для преобразования возможности',
+    'LBL_POTENTIALS_FIELD_MAPPING_INCOMPLETE' => 'Отображение возможностей полей является неполным (Настройки> Менеджер модулей> Возможности> Возможности Поле Mapping)',
+    'LBL_CREATE_PROJECT' => 'Создать проект',
+    'LBL_CUSTOM_FIELD_MAPPING'=> 'Возможность сопоставления проектов',
+    'Contact Name' => 'Имя Контакта',   
 );
 
 $jsLanguageStrings = array(
 	'Prospecting' => 'Переговоры',
     'Qualification' => 'Оценка',
+    'JS_SELECT_PROJECT_TO_CONVERT_LEAD' => 'Для преобразования требуется выбор проекта',    
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

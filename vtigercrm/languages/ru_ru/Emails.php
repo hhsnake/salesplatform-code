@@ -49,10 +49,18 @@ $languageStrings = array(
         'Emails_Block1' => 'Описание',
         'Emails_Block2' => 'Подробности Сообщения',
         'Emails_Block3' => 'Текст Сообщения',
-        'Date_Sent'     => 'Отправлено',
+        'Date_Sent'     => 'Отправлено',        
         //SalesPlatform.ru end
-);
+        'LBL_EMAILTEMPLATE_WARNING'    => 'Правильны ли ваши метки слияния',
+        'LBL_EMAILTEMPLATE_WARNING_CONTENT' => 'Пожалуйста, убедитесь, что выбранный шаблон имеет метки слияния, относящиеся к записи получателя. 
+                                            Если вы отправляете электронное письмо на Обращение, но теги слияния принадлежат модулю Контакты (например: $contacts-lastname$), 
+                                            то значения не будут объединены.', 
+        'Draft'                        => 'Черновик',
+    );
 
+$jsLanguageStrings = array(
+    'JS_WARNING' => 'Предупреждение',
+); 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Emails.php';
 // SalesPlatform.ru end

@@ -34,7 +34,10 @@ class Services_Module_Model extends Products_Module_Model {
 
 			$pos = stripos($listQuery, 'where');
 			if ($pos) {
-				$split = spliti('where', $listQuery);
+                //SalesPlatform.ru begin
+				//$split = spliti('where', $listQuery);
+                $split = preg_split('/where/i', $listQuery);
+                //SalesPlatform.ru end
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
 			} else {
 				$overRideQuery = $listQuery . ' WHERE ' . $condition;
@@ -64,4 +67,11 @@ class Services_Module_Model extends Products_Module_Model {
 		
 		return $query;
 	}
+    
+    /*
+     * Function to get supported utility actions for a module
+     */
+    function getUtilityActionsNames() {
+        return array('Import', 'Export', 'DuplicatesHandling');
+    }
 }

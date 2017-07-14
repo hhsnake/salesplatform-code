@@ -29,7 +29,10 @@ $languageStrings = array(
         'Module' => 'Модуль',
         'Selected Values' => 'Выбранные значения',
         //SalesPlatform.ru end
-);
+    	'LBL_SELECT_ALL_VALUES' => 'Выбрать все',
+	'LBL_UNSELECT_ALL_VALUES' => 'Снять все',
+        'LBL_CYCLIC_DEPENDENCY_ERROR' => 'Это может привести к циклической избыточности в поле %s уже настроен для области %s',
+    );
 $jsLanguageStrings = array(
 	'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE' => 'Вы уверены,  что хотите удалить эту зависимость списков?',
 	'JS_DEPENDENCY_DELETED_SUEESSFULLY' => 'Зависимость успешно удалена',

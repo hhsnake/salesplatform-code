@@ -17,6 +17,9 @@ $languageStrings = Array(
     'LBL_FEED_SOURCE' => 'fonte di alimentazione',
     'LBL_ENTER_FEED_SOURCE' => 'Inserisci fonte di alimentazione',  
     'SINGLE_Rss' => 'di feed RSS',
+
+  'Rss' => 'Rss',
+
 );
 
 $jsLanguageStrings = array(
@@ -24,6 +27,9 @@ $jsLanguageStrings = array(
     'JS_INVALID_RSS_URL' => 'Non valido Rss Url',
     'JS_RSS_MADE_AS_DEFAULT' => 'Rss Fatto come predefinito',
     
+
+  'JS_NO_RECORDS' => 'Nessun Record',
+
 );
 
 

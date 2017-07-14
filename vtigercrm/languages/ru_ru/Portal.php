@@ -30,4 +30,5 @@ $languageStrings = array(
 
 $jsLanguageStrings = array(
     
+    'JS_ENTER_MANDATORY_FIELDS' => 'Пожалуйста, введите все обязательные поля',   
 );

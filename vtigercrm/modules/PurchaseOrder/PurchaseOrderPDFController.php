@@ -80,13 +80,21 @@ class SalesPlatform_PurchaseOrderPDFController extends SalesPlatform_PDF_Product
 
             $this->generateEntityModel($this->focus, 'PurchaseOrder', 'purchaseorder_', $model);
 
-            $entity = new Contacts();
+            //SalesPaltform.ru begin
+            $entity = CRMEntity::getInstance('Contacts');
+            //$entity = new Contacts();
+            //SalesPlatform.ru end
+            
             if ($this->focusColumnValue('contact_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
             }
             $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
-            $entity = new Vendors();
+            //SalesPaltform.ru begin
+            $entity = CRMEntity::getInstance('Vendors');
+            //$entity = new Vendors();
+            //SalesPlatform.ru end
+            
             if ($this->focusColumnValue('vendor_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('vendor_id'), 'Vendors');
             }

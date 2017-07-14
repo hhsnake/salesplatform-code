@@ -101,8 +101,6 @@ if (defined('VTIGER_UPGRADE')) {
     // Begin Fix Webforms tables
     Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms COLLATE utf8_unicode_ci', array());
     Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms_field COLLATE utf8_unicode_ci', array());
-    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms_field DROP FOREIGN KEY fk_3_vtiger_webforms_field', array());
-    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms_field ADD CONSTRAINT fk_2_vtiger_webforms_field FOREIGN KEY (fieldname) REFERENCES vtiger_field (fieldname) ON DELETE CASCADE', array());
     // End
     
     $result = $adb->pquery("SELECT tabid FROM vtiger_tab WHERE name IN(?,?)", array('SPUnits', 'SPPayments'));

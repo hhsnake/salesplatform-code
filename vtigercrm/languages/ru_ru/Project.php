@@ -58,11 +58,28 @@ $languageStrings = array(
     'LBL_TASKS_NORMAL'             => 'Нормальный приоритет',
     'LBL_TASKS_LOW'                => 'Низкий приоритет',
     'LBL_TASKS_OTHER'              => 'Другой приоритет',
+    'Project' => 'Проект',
+    'Type'  => 'Тип' ,
+    'LBL_SELECT_PROGRESS' => 'Прогресс - Все',
+    'LBL_SELECT_STATUS' => 'Выберите статус',
+    'LBL_CHART' => 'Диаграмма Ганта',
+    'LBL_PROGRESS_CHART' => 'Диаграмма Ганта',
+    'LBL_TASK_NAME' => 'Имя задачи',
+    'LBL_START_DATE' => 'дата начала',
+    'LBL_END_DATE' => 'дата окончания',
+    'LBL_DURATION' => 'Продолжительность',
+    'LBL_INFO' => 'Информация',
+    'LBL_GANTT_INFO1' => 'Сдвиньте правую сторону задачи, чтобы увеличить продолжительность',
+    'LBL_GANTT_INFO2' => 'Перетащите влево или в центр задачи, чтобы изменить дату начала и окончания.',
+    'LBL_EDIT_PROJECT_TASK_STATUS_COLOR' => 'Изменить цвет задачи задачи проекта',
+    'LBL_SELECT_PROJECT_TASK_STATUS_COLOR' => 'Выберите цвет задачи проекта',
+    'LBL_EDIT_COLOR' => 'Изменить цвет', 
         );
 
 $jsLanguageStrings = array(
     'JS_LBL_SELECT_STATUS' => 'Выбор Статус',
     'JS_LBL_SELECT_PROGRESS' => 'Выберите Прогресс',
+    'JS_COLOR_SAVED_SUCESSFULLY' => 'Цвет успешно сохранен',    
 );
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Project.php';

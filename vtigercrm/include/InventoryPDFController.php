@@ -31,10 +31,7 @@ class Vtiger_InventoryPDFController {
 		global $current_user;
 		$this->focus = $focus = CRMEntity::getInstance($this->moduleName);
 		$focus->retrieve_entity_info($id,$this->moduleName);
-        // SalesPlatform.ru begin
-        //$focus->apply_field_security();
-        $focus->apply_field_security($this->moduleName);
-        // SalesPlatform.ru end
+		$focus->apply_field_security();
 		$focus->id = $id;
 		$this->associated_products = getAssociatedProducts($this->moduleName,$focus);
 	}

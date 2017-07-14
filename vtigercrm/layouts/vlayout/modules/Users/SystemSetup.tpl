@@ -282,7 +282,7 @@
                         <div class="row-fluid">
                             <div class="span8">
                                 {*SalesPlatform.ru begin*}
-                                <h3 style="display: inline-block;float:left;"> Какие возможности Vtiger CRM вы хотите использовать? </h3> 
+                                <h3 style="display: inline-block;float:left;">{vtranslate('LBL_WHAT_WOULD_YOU_LIKE', 'Install')}</h3> 
                                 {*vtiger commented code
                                 <h3 style="display: inline-block;float:left;"> What would you like to use Vtiger CRM for? </h3> 
 								<p style="display: inline-block;float:left;margin-top:4px;">&nbsp;&nbsp;(Select features you want to enable)</p>
@@ -291,7 +291,7 @@
                             </div>
 							<div class="span4">
                                                                 {*SalesPlatform.ru begin*}
-                                                                <div class="pull-right"><label for="checkbox-1" style="vertical-align:bottom;margin:0;margin-top:8px\9;margin-left:10px\9;font-size:15px;"><strong> Выбрать все</strong></label> <input type="checkbox" name="selectAll" class="selectAll"/><div class="chkbox"></div></div>
+                                                                <div class="pull-right"><label for="checkbox-1" style="vertical-align:bottom;margin:0;margin-top:8px\9;margin-left:10px\9;font-size:15px;"><strong>{vtranslate('LBL_SELECT_ALL')}</strong></label> <input type="checkbox" name="selectAll" class="selectAll"/><div class="chkbox"></div></div>
 								{*vtiger commented code
                                                                 <div class="pull-right"><label for="checkbox-1" style="vertical-align:bottom;margin:0;margin-top:8px\9;margin-left:10px\9;font-size:15px;"><strong> Select All</strong></label> <input type="checkbox" name="selectAll" class="selectAll"/><div class="chkbox"></div></div>
                                                                 *}
@@ -307,7 +307,7 @@
 									{/if}
 									<div class="group-container {if $COUNTER eq 0} span12 selectedContainer js-basePack {else} span6 {/if}">
                                                                                 {*SalesPlatform.ru begin*}
-                                                                                <div class="module_list"><a> Список модулей </a></div>
+                                                                                <div class="module_list"><a>{vtranslate('LBL_VIEW_MODULES','Install')}</a></div>
                                                                                 {*vtiger commented code
 										<div class="module_list"><a> View Modules </a></div>
                                                                                 *}
@@ -348,7 +348,7 @@
 											<div>
 												{* Vtranslate did not supported here *}
                                                                                                 {*SalesPlatform.ru begin*}
-                                                                                                <strong>Для данной возможности будут включены следующие модули</strong><hr>
+                                                                                                <strong>{vtranslate('LBL_ENABLED_FOR_THIS_FEATURE','Install')}</strong><hr>
                                                                                                 {*vtiger commented code
 												<strong>These Modules will be enabled for this feature</strong><hr>
                                                                                                 *}
@@ -379,7 +379,7 @@
 							<div class="row-fluid">
 								<div class="span9">
                                                                         {*SalesPlatform.ru begin*}
-                                                                        <strong>Примечание: </strong> Позже вы можете включить/выключить модули через Менеджер модулей  
+                                                                        <strong>{vtranslate('LBL_NOTE','Install')}: </strong>{vtranslate('LBL_NOTE_ABOUT_MODULE_MANAGER','Install')} 
                                                                         {*vtiger commented code
 									<strong>Note: </strong> You can Enable/Disable modules from module manager later   
                                                                         *}
@@ -388,7 +388,7 @@
 								<div class="span3">
 									<div class="button-container">
                                                                                 {*SalesPlatform.ru begin*}
-                                                                                <button type="submit" class="btn btn-large btn-primary next" value="Next"> Далее </button>
+                                                                                <button type="submit" class="btn btn-large btn-primary next" value="Next">{vtranslate('LBL_NEXT','Install')}</button>
                                                                                 {*vtiger commented code
 										<button type="submit" class="btn btn-large btn-primary next" value="Next"> Next </button>
                                                                                 *}

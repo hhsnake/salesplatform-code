@@ -40,9 +40,16 @@ $languageStrings = array(
     'LBL_INVOICE_ADD_CONSIGNMENT'  => 'Создать Реализацию',
         
     //SalesPlatform.ru begin
-    'Self Company' => 'Юр. лицо',
+    'Self Company' => 'Юр. лицо',    
     //SalesPlatform.ru end
-);
+    'Invoice'                      => 'Счета',
+    'LBL_NOT_A_BUNDLE' => 'Не связаны',
+    'LBL_SUB_PRODUCTS'	=> 'Вспомогательные изделия',
+    'LBL_ACTION'	=> 'Действие',
+    'LBL_THIS' => 'Это',
+    'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'Удаляется из системы. Пожалуйста, удалите или замените этот элемент',
+    'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Эта позиция удаляется из системы,пожалуйста, удалите эту строку элементов',
+    );
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Invoice.php';

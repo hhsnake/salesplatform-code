@@ -29,5 +29,5 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
-    
+    'JS_ENTER_MANDATORY_FIELDS' => 'Va rugam sa introduceti toate câmp obligatoriu',
 );

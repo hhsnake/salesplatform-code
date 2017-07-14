@@ -9,14 +9,12 @@
  *************************************************************************************/
 
 class Inventory_DetailView_Model extends Vtiger_DetailView_Model {
-
     //SalesPlatform.ru begin migrate to SP PDF templates
-    
 	/**
 	 * Function to get the detail view links (links and widgets)
 	 * @param <array> $linkParams - parameters which will be used to calicaulate the params
 	 * @return <array> - array of link models in the format as below
-	 *                   array('linktype'=>list of link models);
+	 *					 array('linktype'=>list of link models);
 	 */
 //	public function getDetailViewLinks($linkParams) {
 //		$linkModelList = parent::getDetailViewLinks($linkParams);
@@ -28,20 +26,19 @@ class Inventory_DetailView_Model extends Vtiger_DetailView_Model {
 //					'linklabel' => vtranslate('LBL_EXPORT_TO_PDF', $moduleName),
 //					'linkurl' => $recordModel->getExportPDFURL(),
 //					'linkicon' => ''
-//			);
+//						);
 //			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($detailViewLinks);
 //
-//            $sendEmailLink = array(
+//			$sendEmailLink = array(
 //                'linklabel' => vtranslate('LBL_SEND_MAIL_PDF', $moduleName),
 //                'linkurl' => 'javascript:Inventory_Detail_Js.sendEmailPDFClickHandler(\''.$recordModel->getSendEmailPDFUrl().'\')',
 //                'linkicon' => ''
 //            );
-//            
+//
 //            $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($sendEmailLink);
 //		}
-//            
+//
 //		return $linkModelList;
 //	}
-        
-    //SalesPlatform.ru end    
+    //SalesPlatform.ru end
 }

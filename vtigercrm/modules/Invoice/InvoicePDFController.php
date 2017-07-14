@@ -62,12 +62,12 @@ class Vtiger_InvoicePDFController extends Vtiger_InventoryPDFController{
 	}
 }
 
-
 //SalesPlatform.ru begin add SP PDF controller
 
 include_once 'includes/SalesPlatform/PDF/ProductListPDFController.php';
 require_once 'modules/SalesOrder/SalesOrder.php';
 require_once 'modules/Accounts/Accounts.php';
+require_once 'modules/Contacts/Contacts.php';
 
 class SalesPlatform_InvoicePDFController extends SalesPlatform_PDF_ProductListDocumentPDFController{
 
@@ -79,19 +79,28 @@ class SalesPlatform_InvoicePDFController extends SalesPlatform_PDF_ProductListDo
 
             $this->generateEntityModel($this->focus, 'Invoice', 'invoice_', $model);
 
-            $entity = new SalesOrder();
+            //SalesPaltform.ru begin
+            $entity = CRMEntity::getInstance('SalesOrder');
+            //$entity = new SalesOrder();
+            //SalesPaltform.ru end
             if ($this->focusColumnValue('salesorder_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('salesorder_id'), 'SalesOrder');
             }
             $this->generateEntityModel($entity, 'SalesOrder', 'salesorder_', $model);
 
-            $entity = new Contacts();
+            //SalesPaltform.ru begin
+            $entity = CRMEntity::getInstance('Contacts');
+            //$entity = new Contacts();
+            //SalesPaltform.ru end
             if ($this->focusColumnValue('contact_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('contact_id'), 'Contacts');
             }
             $this->generateEntityModel($entity, 'Contacts', 'contact_', $model);
 
-            $entity = new Accounts();
+            //SalesPaltform.ru begin
+            $entity = CRMEntity::getInstance('Accounts');
+            //$entity = new Accounts();
+            //SalesPaltform.ru end
             if ($this->focusColumnValue('account_id')) {
                 $entity->retrieve_entity_info($this->focusColumnValue('account_id'), 'Accounts');
             }

@@ -123,8 +123,8 @@ class Vtiger_Mailer extends PHPMailer {
 	/**
 	 * Configure sender information
 	 */
-    function ConfigSenderInfo($fromemail, $fromname='', $replyto='') {
-        if(empty($fromname)) $fromname = $fromemail;
+	function ConfigSenderInfo($fromemail, $fromname='', $replyto='') {
+		if(empty($fromname)) $fromname = $fromemail;
 
         $this->From = $fromemail;
         //fix for (http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/8001)
@@ -245,13 +245,13 @@ class Vtiger_Mailer extends PHPMailer {
 		}
 	}
 
-    /**
-     * Function to prepares email as string
-     * @return type
-     */
-    public function getMailString() {
-        return $this->MIMEHeader.$this->MIMEBody;
-    }
+	/**
+	 * Function to prepares email as string
+	 * @return type
+	 */
+	public function getMailString() {
+		return $this->MIMEHeader.$this->MIMEBody;
+	}
 
 	/**
 	 * Dispatch (send) email that was queued.
@@ -261,7 +261,7 @@ class Vtiger_Mailer extends PHPMailer {
 		if(!Vtiger_Utils::CheckTable('vtiger_mailer_queue')) return;
 
 		$mailer = new self();
-		$queue = $adb->pquery('SELECT * FROM vtiger_mailer_queue WHERE failed != ?', array(1));
+		$queue = $adb->pquery('SELECT * FROM vtiger_mailer_queue', array());
 		if($adb->num_rows($queue)) {
 			for($index = 0; $index < $adb->num_rows($queue); ++$index) {
 				$mailer->reinitialize();
@@ -269,11 +269,11 @@ class Vtiger_Mailer extends PHPMailer {
 				$queue_record = $adb->fetch_array($queue, $index);
 				$queueid = $queue_record['id'];
 				$relcrmid= $queue_record['relcrmid'];
-
+				
 				$mailer->From = $queue_record['fromemail'];
 				$mailer->From = $queue_record['fromname'];
 				$mailer->Subject=$queue_record['subject'];
-				$mailer->Body = decode_html($queue_record['body']);
+				$mailer->Body = decode_emptyspace_html($queue_record['body']);
 				$mailer->Mailer=$queue_record['mailer'];
 				$mailer->ContentType = $queue_record['content_type'];
 

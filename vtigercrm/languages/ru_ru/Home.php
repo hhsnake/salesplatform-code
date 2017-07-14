@@ -18,12 +18,15 @@ $languageStrings = array(
 	'ILTI'                         => 'Последние Счета', // KEY 5.x: Top Invoices
 	'HDB'                          => 'Панель Главной Страницы', // KEY 5.x: Home Page Dashboard
     'OLTPO'                        => 'Последние Закупки', // KEY 5.x: Top Purchase Orders
-	'LTFAQ'                        => 'Мои Частые ЧаВо', // KEY 5.x: My Recent FAQs
+	'LTFAQ'                        => 'Последние элементы БЗ', // KEY 5.x: My Recent FAQs
 	'UA'                           => 'Ближайшие События', // KEY 5.x: LBL_UPCOMING_EVENTS
 	'PA'                           => 'События в процессе', // KEY 5.x: LBL_PENDING_EVENTS
     'Home'                         => 'Главная',
 	'Key Metrics'                  => 'Ключевые показатели',
     'Tag Cloud'                    => 'Облако Тегов',
+        'LBL_SAVE_ORDER' => 'Сохранить Порядок',
+        'LBL_ADD_NEW_DASHBOARD' => 'Добавить новую панель',
+	'LBL_MAX_CHARACTERS_ALLOWED_DASHBOARD' => 'Максимум 30 символов разрешено для имени панели.',        
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

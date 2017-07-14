@@ -68,6 +68,9 @@
 		<field name="end_hour" type="C" size="30">
 			<default value="23:00" />
 		</field>
+		<field name="is_owner" type="C" size="100">
+			<default value="0" />
+		</field>
 		<field name="activity_view" type="C" size="200">
 			<default value="Today" />
 		</field>
@@ -149,6 +152,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="smgroupid" type="I" size="19" />
 
 		<index name="crmentity_smcreatorid_idx">
 			<col>smcreatorid</col>
@@ -201,7 +205,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
-                <field name="trial" type="I"  size="1">
+		<field name="trial" type="I"  size="1">
 			<notnull />
 			<default value="0" />
 		</field>
@@ -682,8 +686,8 @@
 		<field name="assignleadchk" type="I" size="1">
 			<default value="0" />
 		</field>
-		<field name="splastsms" type="T" />
-
+        <field name="splastsms" type="T" />
+        
 		<index name="leaddetails_converted_leadstatus_idx">
 			<col>converted</col>
 			<col>leadstatus</col>
@@ -1157,9 +1161,12 @@
 			<notnull />
 			<default value="1" />
 		</field>
-		<field name="manuf_country" type="C" size="100">
-			<default value="" />
+		<field name="is_subproducts_viewable" type="I" size="1">
+			<default value="1" />
 		</field>
+        <field name="manuf_country" type="C" size="100">
+			<default value="" />
+        </field>
 		<field name="customs_id" type="C" size="100">
 			<default value="" />
 		</field>
@@ -1735,6 +1742,9 @@
 		<field name="setype" type="C" size="30">
 			<notnull />
 		</field>
+		<field name="quantity" type="I" size="19">
+			<default value="1" />
+		</field>
 
 		<index name="seproductsrel_productid_idx">
 			<col>productid</col>
@@ -1805,7 +1815,7 @@
 			<deftimestamp />
 		</field>
 		<field name="date_modified" type="T">
-            <!-- Troublesome with STRICT_TRANS_TABLE mode depends on MySQL 5.5 or 5.6+ -->
+			<!-- Troublesome with STRICT_TRANS_TABLE mode depends on MySQL 5.5 or 5.6+ -->
 			<!--
 			<notnull />
 			<deftimestamp />
@@ -1886,6 +1896,7 @@
 	<table name="vtiger_emailtemplates">
 		<field name="foldername" type="C" size="100" />
 		<field name="templatename" type="C" size="100" />
+		<field name="templatepath" type="C" size="100" />
 		<field name="subject" type="C" size="100" />
 		<field name="description" type="X" />
 		<field name="body" type="X" />
@@ -1897,6 +1908,11 @@
 			<key />
 			<autoincrement />
 		</field>
+		<field name="systemtemplate" type="I" size="1">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="module" type="C" size="100" />
 
 		<index name="emailtemplates_foldernamd_templatename_subject_idx">
 			<col>foldername</col>
@@ -2500,22 +2516,22 @@
 		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-        
-        <table name="vtiger_faqcf"> 
-            <field name="faqid" type="I" size="19"> 
-                    <key /> 
-                    <default value="0" /> 
-            </field> 
 
-            <opt platform="mysql">Engine=InnoDB</opt> 
-        </table> 
+	<table name="vtiger_faqcf"> 
+		<field name="faqid" type="I" size="19"> 
+			<key /> 
+			<default value="0" /> 
+		</field> 
 
-        <table name="vtiger_faqcf" alter="true"> 
-            <constraint>ADD CONSTRAINT fk_1_vtiger_faqcf FOREIGN KEY (faqid) REFERENCES vtiger_faq(id) ON DELETE CASCADE</constraint> 
-            <opt>Engine=InnoDB</opt> 
-            <data> 
-            </data> 
-        </table> 
+		<opt platform="mysql">Engine=InnoDB</opt> 
+	</table> 
+
+	<table name="vtiger_faqcf" alter="true"> 
+		<constraint>ADD CONSTRAINT fk_1_vtiger_faqcf FOREIGN KEY (faqid) REFERENCES vtiger_faq(id) ON DELETE CASCADE</constraint> 
+		<opt>Engine=InnoDB</opt> 
+		<data> 
+		</data> 
+	</table> 
 
 	<table name="vtiger_rating">
 		<field name="rating_id" type="I" size="19">
@@ -2893,6 +2909,7 @@
 		<field name="enable_recurring" type="I">
 			<default value="0" />
 		</field>
+		<field name="compound_taxes_info" type="X" />
 		<index name="salesorder_vendorid_idx">
 			<col>vendorid</col>
 		</index>
@@ -3034,6 +3051,10 @@
 			<notnull />
 			<default value="" />
 		</field>
+		<field name="relationfieldid" type="I" size="19" />
+		<field name="source" type="C" size="25" />
+		<field name="relationtype" type="C" size="10" />
+
 		<index name="relatedlists_relation_id_idx">
 			<col>relation_id</col>
 		</index>
@@ -3211,6 +3232,7 @@
 			<notnull />
 			<default value="1.000" />
 		</field>
+		<field name="compound_taxes_info" type="X" />
 		<index name="quote_quotestage_idx">
 			<col>quotestage</col>
 		</index>
@@ -3330,6 +3352,7 @@
 			<notnull />
 			<default value="1.000" />
 		</field>
+		<field name="compound_taxes_info" type="X" />
 
 		<index name="purchaseorder_vendorid_idx">
 			<col>vendorid</col>
@@ -3456,6 +3479,7 @@
 			<notnull />
 			<default value="1.000" />
 		</field>
+		<field name="compound_taxes_info" type="X" />
 		<index name="invoice_purchaseorderid_idx">
 			<col>invoiceid</col>
 		</index>
@@ -3961,19 +3985,19 @@
 		</data>
 	</table>
 
-        <table name="vtiger_reporttype">
-            <field name="reportid" type="I" size="10">
-                    <key />
-            </field>
-            <field name="data" type="X" />
-        </table>
-        <table name="vtiger_reporttype" alter="true">
+	<table name="vtiger_reporttype">
+		<field name="reportid" type="I" size="10">
+			<key />
+		</field>
+		<field name="data" type="X" />
+	</table>
+	<table name="vtiger_reporttype" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_reporttype FOREIGN KEY (reportid) REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 		<data>
 		</data>
 	</table>
-        
+
 	<table name="vtiger_usageunit">
 		<field name="usageunitid" type="I" size="19">
 			<key />
@@ -5128,6 +5152,13 @@
 			<notnull />
 			<default value="" />
 		</field>
+		<field name="visibility" type="C" size="100">
+			<notnull />
+			<default value="PRIVATE" />
+		</field>
+		<field name="owner" type="I" size="19">
+			<notnull />
+		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -5204,6 +5235,7 @@
 		<field name="inviteeid" type="I" size="19">
 			<KEY/>
 		</field>
+		<field name="status" type="C" size="50" />
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -5236,6 +5268,7 @@
 		</field>
 		<field name="taxpercentage" type="N" size="7.3">
 		</field>
+		<field name="regions" type="X" />
 
 		<index name="producttaxrel_productid_idx">
 			<col>productid</col>
@@ -6083,6 +6116,9 @@
 		<field name="searchfor" type="C" size="10"></field>
 		<field name="markas" type="C" size="10"></field>
 		<field name="isvalid" type="I" size="1"></field>
+		<field name="scanfrom" type="C" size="10">
+			<default value="ALL" />
+		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -6090,6 +6126,7 @@
 		<field name="scannerid" type="I"></field>
 		<field name="messageid" type="X"></field>
 		<field name="crmid" type="I"></field>
+		<field name="refids" type="X"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -6175,7 +6212,7 @@
 	</table>
 	<!-- END -->
 
-    <!-- com_vtiger_workflow -->
+	<!-- com_vtiger_workflow -->
 	<table name="com_vtiger_workflows">
 		<field name="workflow_id" type="I" >
 			<key />
@@ -6198,18 +6235,21 @@
 		</field>
 		<field name="filtersavedinnew" type="I" size="1">
 		</field>
-                <field name="schtypeid" type="I" size="10">
+		<field name="schtypeid" type="I" size="10">
 		</field>
-                 <field name="schdayofmonth" type="C" size="100">
+		<field name="schdayofmonth" type="C" size="100">
 		</field>
-                 <field name="schdayofweek" type="C" size="100">
+		<field name="schdayofweek" type="C" size="100">
 		</field>
-                 <field name="schannualdates" type="C" size="100">
+		<field name="schannualdates" type="C" size="100">
 		</field>
-                 <field name="schtime" type="C" size="50">
+		<field name="schtime" type="C" size="50">
 		</field>
-                 <field name="nexttrigger_time" type="T">
+		<field name="nexttrigger_time" type="T">
 		</field>
+		<field name="status" type="I" size="1" />
+		<field name="workflowname" type="C" size="100" />
+
 		<index name="com_vtiger_workflows_idx">
 			<unique />
 			<col>workflow_id</col>
@@ -6255,6 +6295,8 @@
 		</field>
 		<field name="do_after" type="I" >
 		</field>
+		<field name="relatedinfo" type="C" size="255" />
+		
 		<index name="com_vtiger_workflowtask_queue_idx">
 			<unique />
 			<col>task_id</col>
@@ -6317,7 +6359,7 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-    <!-- com_vtiger_workflow ends-->
+	<!-- com_vtiger_workflow ends-->
 
 	<!--  asterisk integration starts -->
 	<table name="vtiger_asteriskextensions">
@@ -6499,6 +6541,7 @@
 		<field name="handler" type="C" size="50">
 			<default value="NULL" />
 		</field>
+		<field name="parent_link" type="I" size="19" />
 		<opt platform="mysql">Engine=InnoDB</opt>
 		<index name="link_tabidtype_idx">
 			<col>tabid</col>
@@ -6617,6 +6660,9 @@
 		</field>
 		<field name="productid" type="I" size="19">
 			<notnull />
+		</field>
+		<field name="quantity" type="I" size="19">
+			<default value="1" />
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
@@ -6964,55 +7010,59 @@
 		<field name="setup_status" type="I" size="2" />
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-        
-        <table name="vtiger_feedback">
+
+	<table name="vtiger_feedback">
 		<field name="userid" type="I" size="19">
 		</field>
 		<field name="dontshow" type="C" size="19" >
-                    <default value="false" />
-                </field>
+			<default value="false" />
+		</field>
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-        
-        <table name="vtiger_shareduserinfo">
+
+	<table name="vtiger_shareduserinfo">
 		<field name="userid" type="I" size="19">
-                    <notnull />
-                    <default value="0" />
+			<notnull />
+			<default value="0" />
 		</field>
 		<field name="shareduserid" type="I" size="19">
-                    <notnull />
-                    <default value="0" />
+			<notnull />
+			<default value="0" />
 		</field>
-                <field name="color" type="C" size="50" />
-                <field name="visible" type="I" size="19" >
-                    <default value="1" />
-                </field>
+		<field name="color" type="C" size="50" />
+		<field name="visible" type="I" size="19" >
+			<default value="1" />
+		</field>
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-        
-        <table name="vtiger_calendar_default_activitytypes">
+
+	<table name="vtiger_calendar_default_activitytypes">
 		<field name="id" type="I" size="19">
 			<key />
 		</field>
 		<field name="module" type="C" size="50" />
-                <field name="fieldname" type="C" size="50" />
-                <field name="defaultcolor" type="C" size="50" />
+		<field name="fieldname" type="C" size="50" />
+		<field name="defaultcolor" type="C" size="50" />
+		<field name="isdefault" type="I" size="11" >
+			<default value="1" />
+		</field>
+		<field name="conditions" type="C" size="255" />
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-        
-        <table name="vtiger_calendar_user_activitytypes">
+
+	<table name="vtiger_calendar_user_activitytypes">
 		<field name="id" type="I" size="19">
 			<key />
 		</field>
 		<field name="defaultid" type="I" size="19" />
-                <field name="userid" type="I" size="19" />
-                <field name="color" type="C" size="50" />
-                <field name="visible" type="I" size="19" >
-                    <default value="1" />
-                </field>
+		<field name="userid" type="I" size="19" />
+		<field name="color" type="C" size="50" />
+		<field name="visible" type="I" size="19" >
+			<default value="1" />
+		</field>
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
@@ -7021,18 +7071,6 @@
     <table name="sp_custom_reports">
         <field name="reporttype" type="C" size="50">
             <key />
-        </field>
-        <field name="datefilter" type="I" size="1">
-            <default value="0" />
-        </field>
-        <field name="ownerfilter" type="I" size="1">
-            <default value="0" />
-        </field>
-        <field name="accountfilter" type="I" size="1">
-            <default value="0" />
-        </field>
-        <field name="functionname" type="C" size="255">
-            <notnull />
         </field>
         <opt platform="mysql">Engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci</opt>
     </table>

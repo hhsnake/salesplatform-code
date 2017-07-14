@@ -26,7 +26,10 @@
 		<script type="text/javascript" src="libraries/bootstrap/js/bootstrap-tooltip.js"></script>
 		<script type="text/javascript" src="libraries/jquery/select2/select2.min.js"></script>
         {* SalesPLatform.ru begin *}
-        <script type="text/javascript" src="libraries/jquery/select2/select2_locale_ru.js"></script>
+        {assign var=USER_MODEL value=Users_Record_Model::getCurrentUserModel()}
+        {if $USER_MODEL->get('language') eq 'ru_ru'}
+            <script type="text/javascript" src="libraries/jquery/select2/select2_locale_ru.js"></script>
+        {/if}
         {* SalesPLatform.ru end *}
 		<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine.js" ></script>
 		<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine-en.js" ></script>

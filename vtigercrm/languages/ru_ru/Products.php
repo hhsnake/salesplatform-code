@@ -88,8 +88,20 @@ $languageStrings = array(
     'Days' => 'Дни',
     'Incidents' => 'События',
     //SalesPlatform.ru end
+    'LBL_PRODUCTSMOD_DISABLED'     => 'Включить модуль товаров для просмотра товаров',
+    'LBL_SHOW_BUNDLE_IN_INVENTORY' => 'Показывать элементы пакета в Счете/Предложении/Заказе/Заказе на поставку',
+    'LBL_BUNDLE_TOTAL_COST' => 'Общая стоимость комплекта',
+    'LBL_UPDATE_BUNDLE_PRICE' => 'Обновить стоимость пакета',
+    'LBL_PRODUCT_NAME' => 'Наименование Товара',
+    'LBL_PRICE_QUANTITY' => 'Цена х Количество',   
 );
 
+$jsLanguageStrings = array(
+	'JS_SUB_PRODUCTS_WILL_BE_SHOWN_IN_INVENTORY' => 'Вспомогательные товары будут показаны в инвентаризации',
+	'JS_SUB_PRODUCTS_WILL_NOT_BE_SHOWN_IN_INVENTORY' => 'Вспомогательные товары не будут отображаться в инвентаризации',
+	'JS_SUCCESSFULLY_CHANGED_BUNDLE_COST' => 'Успешно изменилась общая стоимость пакета',
+	'JS_DELETION_OR_IN_ACTIVATION_CHILD_PRODUCT_MESSAGE' => 'Этот продукт является частью пакета продуктов. Цена пакета остается неизменной, когда элемент пакета удаляется или инактивируется. Вы уверены, что хотите продолжить?',
+);
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/Products.php';
 // SalesPlatform.ru end

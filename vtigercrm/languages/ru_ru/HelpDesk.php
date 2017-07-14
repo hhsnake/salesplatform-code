@@ -37,7 +37,7 @@ $languageStrings = array(
 	'Closed'                       => 'Закрыто'              , 
 	'LBL_STATUS'                   => 'Статус'                , 
 	'LBL_SEVERITY'                 => 'Важность'            , // KEY 5.x: Severity
-	'LBL_CONVERT_FAQ'              => 'Преобразовать в ЧаВо'              , 
+	'LBL_CONVERT_FAQ'              => 'Преобразовать в базу знаний'              , 
 	'LBL_RELATED_TO'               => 'Связан с'             ,
     'LBL_SETUP_WEBFORMS'           => 'Установка Веб-Форм',
     'LBL_EXPORT_TO_PDF'            => 'Экспорт в PDF:', 
@@ -85,6 +85,12 @@ $languageStrings = array(
 	'HelpDesk ID' => 'Поддержка ID',
 	'Ticket ID' => 'Номер',
 	'LBL_TICKET_NUMBER' => 'Количество билетов',
+        'Related To'                   => 'В связи с',
+        'Contact Name' => 'Имя Контакта',
+        'LBL_SUBJECT' => 'Тема : ',
+        'LBL_ADD_DOCUMENT' => 'Добавить Документ',
+        'LBL_OPEN_TICKETS' => 'Открытые Задачи',
+        'LBL_CREATE_TICKET' => 'Создать Задачу',        
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

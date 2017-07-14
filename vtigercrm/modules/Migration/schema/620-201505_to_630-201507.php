@@ -78,6 +78,7 @@ Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_spcompany 
   presence int(1) NOT NULL DEFAULT '1',
   picklist_valueid int(19) NOT NULL DEFAULT '0',
   sortorderid int(1) DEFAULT NULL,
+  color varchar(10) DEFAULT NULL,
   PRIMARY KEY (spcompanyid),
   UNIQUE KEY sp_spcompany_idx (spcompany)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", array());
@@ -85,7 +86,7 @@ Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_spcompany 
 $query = "SELECT id+1 as id FROM vtiger_picklistvalues_seq";
 $result = $adb->pquery($query, array());
 $max_picklistvalue_id = $adb->query_result($result, 0 ,'id');
-Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_spcompany VALUES (?,?,?,?,?)", array(1, 'Default', 1, $max_picklistvalue_id, 1));
+Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_spcompany VALUES (?,?,?,?,?,?)", array(1, 'Default', 1, $max_picklistvalue_id, 1, NULL));
 Migration_Index_View::ExecuteQuery("update vtiger_picklistvalues_seq set id = ?", array($max_picklistvalue_id));
 
 Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_spcompany_seq (
@@ -125,9 +126,13 @@ $result = $adb->pquery($query, array($block_id, $tab_id));
 $field_seq = $adb->query_result($result, 0 ,'sequence') + 1;
 
 /* Создание полей модуля */
-Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-array($tab_id, $field_id, $columnname, "vtiger_invoice", 1, $uitype, $fieldname, $fieldlabel, 1, 0, 0, 100, $field_seq, $block_id, 1, "V~O", 1, NULL, "BAS", 1, NULL, 0));
-
+if (Install_Utils_Model::checkHeaderColumn()) {
+    Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    array($tab_id, $field_id, $columnname, "vtiger_invoice", 1, $uitype, $fieldname, $fieldlabel, 1, 0, 0, 100, $field_seq, $block_id, 1, "V~O", 1, NULL, "BAS", 1, NULL, 0, NULL));
+} else {
+   Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    array($tab_id, $field_id, $columnname, "vtiger_invoice", 1, $uitype, $fieldname, $fieldlabel, 1, 0, 0, 100, $field_seq, $block_id, 1, "V~O", 1, NULL, "BAS", 1, NULL, 0)); 
+}
 /* Регистрация полей модуля */
 Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_profile2field SELECT profileid, $tab_id, $field_id, 0, 1 FROM vtiger_profile", array());
 Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_def_org_field VALUES($tab_id, $field_id, 0, 1)", array());
@@ -157,9 +162,14 @@ $result = $adb->pquery($query, array($block_id, $tab_id));
 $field_seq = $adb->query_result($result, 0 ,'sequence') + 1;
 
 /* Создание полей модуля */
-Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+if (Install_Utils_Model::checkHeaderColumn()) {
+Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    array($tab_id, $field_id, $columnname, "vtiger_quotes", 1, $uitype, $fieldname, $fieldlabel, 1, 0, 0, 100, $field_seq, $block_id, 1, "V~O", 1, NULL, "BAS", 1, NULL, 0, NULL));
+} else {
+    Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
     array($tab_id, $field_id, $columnname, "vtiger_quotes", 1, $uitype, $fieldname, $fieldlabel, 1, 0, 0, 100, $field_seq, $block_id, 1, "V~O", 1, NULL, "BAS", 1, NULL, 0));
 
+}
 /* Регистрация полей модуля */
 Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_profile2field SELECT profileid, $tab_id, $field_id, 0, 1 FROM vtiger_profile", array());
 Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_def_org_field VALUES($tab_id, $field_id, 0, 1)", array());
@@ -189,9 +199,13 @@ $result = $adb->pquery($query, array($block_id, $tab_id));
 $field_seq = $adb->query_result($result, 0 ,'sequence') + 1;
 
 /* Создание полей модуля */
-Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-    array($tab_id, $field_id, $columnname, "vtiger_salesorder", 1, $uitype, $fieldname, $fieldlabel, 1, 0, 0, 100, $field_seq, $block_id, 1, "V~O", 1, NULL, "BAS", 1, NULL, 0));
-
+if (Install_Utils_Model::checkHeaderColumn()) {
+    Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        array($tab_id, $field_id, $columnname, "vtiger_salesorder", 1, $uitype, $fieldname, $fieldlabel, 1, 0, 0, 100, $field_seq, $block_id, 1, "V~O", 1, NULL, "BAS", 1, NULL, 0, NULL));
+} else {
+    Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_field VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        array($tab_id, $field_id, $columnname, "vtiger_salesorder", 1, $uitype, $fieldname, $fieldlabel, 1, 0, 0, 100, $field_seq, $block_id, 1, "V~O", 1, NULL, "BAS", 1, NULL, 0));
+}
 /* Регистрация полей модуля */
 Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_profile2field SELECT profileid, $tab_id, $field_id, 0, 1 FROM vtiger_profile", array());
 Migration_Index_View::ExecuteQuery("INSERT INTO vtiger_def_org_field VALUES($tab_id, $field_id, 0, 1)", array());

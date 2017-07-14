@@ -67,23 +67,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 	}
 
 },{
-        
-        //SalesPlatform.ru begin kladr integration
-        
-        /* 
-         * This provides mappings of form input names, which contains 
-         * integration fields on which we need apply callbacks and use it values 
-         */
-        
-        kladrFieldsList : {
-                                standartAddressFields : [
-                                    {code : 'bill_code', city: 'bill_city', state: 'bill_state', region: 'bill_region', street: 'bill_street'},
-                                    {code : 'ship_code', city: 'ship_city', state: 'ship_state', region: 'ship_region', street: 'ship_street'}
-                                ],
-                                fullAddressFields : []                      
-                              },
-        //SalesPLatform.ru end
-        
+
 	formElement : false,
 
 	getForm : function() {
@@ -440,418 +424,8 @@ jQuery.Class("Vtiger_Edit_Js",{
 		this.registerEventStatusChangeEvent(container);
 		this.registerRecordAccessCheckEvent(container);
 		this.registerEventForPicklistDependencySetup(container);
-                
-                //SalesPlatform.ru begin kladr integration
-                this.registerKladrIntegration(container); 
-                //SalesPlatform.ru end kladr integration
 	},
-        
-        //SalesPlatform.ru begin kladr integration
-        /**
-         * Check is KLADR module enabled, and if it is - register helper callbacks.
-         * To check module enable - send request to it
-         * @param {$} container
-         * @returns {undefined}
-         */
-        registerKladrIntegration : function(container) {
-            //We need save pointer to current object - to register KLADR handlers in callback answer function
-            var parentPointer = this;
-            AppConnector.request({ 
-                module: 'SPKladr',
-                action: 'EnterAddress',  
-                mode: 'checkEnable'
-            }).then(function(data) {
-                if(data != null && data.success && data.result) {
-                    if(parentPointer.isLocalStorageAvailible()) {
-                        parentPointer.registerAddressFieldsActions(container);
-                    } else {
-                        alert(app.vtranslate('JS_LBL_LOCAL_STORAGE_FAIL'));
-                    }
-                }
-            });
-        },
-        
-        /**
-         * Check support of current browser of local storage. If it not exists - kladr
-         * will not to work.
-         * 
-         * @returns {window|Boolean|String}
-         */
-        isLocalStorageAvailible : function() {
-            try {
-                return 'localStorage' in window && window['localStorage'] !== null;
-            } catch (e) {
-                return false;
-            }
-        },
-        
-        /**
-         * Register all needed callbacks for KLADR integration
-         * @param {$} editForm
-         * @returns {undefined}
-         */
-        registerAddressFieldsActions : function (editForm) {
-                       
-            /* Set of callbacks for standart address fields in modules */
-            for(var currentNumber in this.kladrFieldsList.standartAddressFields) {
-                this.addAddressCallback(editForm, this.kladrFieldsList.standartAddressFields[currentNumber]);
-                this.addCityCallback(editForm, this.kladrFieldsList.standartAddressFields[currentNumber]);
-                this.addStateCallback(editForm, this.kladrFieldsList.standartAddressFields[currentNumber]);
-            }
-            
-            /* Callbacks for fields, which contain all address in one string */
-            for(var currentNumber in this.kladrFieldsList.fullAddressFields) {
-                this.addFullAddressFieldCallback(editForm, this.kladrFieldsList.fullAddressFields[currentNumber]);
-            }
-        },
-        
-        /**
-         * provides autocomplete in full addres field which include city strret and house number
-         * 
-         * @param {$} editForm
-         * @param {string} fieldName
-         * @returns {undefined}
-         */
-        addFullAddressFieldCallback: function(editForm, fieldName) {
-            var parentEntity = this;
-            var requestParams = {
-                module: 'SPKladr',
-                action: 'EnterAddress',  
-                mode: 'fullAddressTyped',
-                cityRecordsLimit : 10,
-                cityOffset : 0
-            };
-            
-            editForm.find('[name="' + fieldName + '"]').autocomplete({
-                delay : 300,
-                minLength : 3,
-                             
-                source : function(request, response) {
-                    var addressParts = request.term.split(",");
-                    switch(addressParts.length) {
 
-                        /* Step 1 - get city */
-                        case 1:
-                            requestParams.requestStep = 1;
-                            requestParams.cityName = request.term;
-                            parentEntity.loadCities(request, response, requestParams, fieldName);
-                            break;
-
-                        /* Step 2 - get street name in selected city */
-                        case 2:  
-                            requestParams.requestStep = 2;
-                            requestParams.cityCode = localStorage.getItem(fieldName + 'cityCode');
-                            requestParams.streetName = addressParts[1];
-
-                            /* Request for second param - street or another small location */
-                            AppConnector.request(requestParams).then(function(data) {
-                                var selectValues = [];
-                                if(data !== null && data.success) {
-                                    selectValues = data.result;      
-                                } 
-
-                                response($.map(selectValues, function(item){
-                                   item.label = addressParts[0] + ', ' + item.streetSocr + ' ' + item.streetName;
-                                   item.value = item.label + ', ';
-
-                                   /* Prepare to save item in storage on click */
-                                   item.saveFieldName = fieldName + 'streetCode';
-                                   item.saveFieldValue = item.streetCode;
-
-                                   return item;
-                                }));
-                            });
-                            break;
-
-                        /* Step 3 - get hoouse number on selected street */
-                        case 3:
-                            requestParams.requestStep = 3;
-                            requestParams.houseNumber = addressParts[2];
-                            requestParams.streetCode = localStorage.getItem(fieldName + 'streetCode');
-
-                            /* Get help info abount number of house */
-                            AppConnector.request(requestParams).then(function(data) {
-                                var selectValues = [];
-                                if(data !== null && data.success) {
-                                    selectValues = data.result;      
-                                } 
-
-                                response($.map(selectValues, function(item){
-                                   item.label = addressParts[0] + ','  + addressParts[1] + ', ' + item.houseNumber;
-                                   item.value = item.label;
-
-                                   return item;
-                                }));
-                            });
-                            break;
-
-                        default:
-                            response();
-                            break;
-                    }
-                },
-                
-                select: function(event, selectedObject) {
-                    var clickedItem = selectedObject.item;
-                    
-                    /* Handling first step - load more cities pagination */
-                    if(clickedItem.isLoadMoreCities) {
-                        requestParams.cityOffset = clickedItem.cityOffset;
-                        editForm.find('[name="' + fieldName + '"]').autocomplete("search");
-                        
-                        /* Restore normal pagination */
-                        requestParams.cityOffset = 0;
-                    } else {
-                        localStorage.setItem(clickedItem.saveFieldName, clickedItem.saveFieldValue);
-                    } 
-                }
-            });
-        },
-        
-        /**
-         * Provides pagination cities loading
-         * 
-         * @param {Object} request
-         * @param {function} response
-         * @param {Object} requestParams
-         * @param {string} fieldName
-         * @returns {undefined}
-         */
-        loadCities : function(request, response, requestParams, fieldName) {
-            
-            /* Prepare special list value */
-            var item = {
-                isLoadMoreCities: true,
-                value : request.term,
-                cityOffset : requestParams.cityOffset,
-                cityRecordsLimit : requestParams.cityRecordsLimit
-            }; 
-            
-            /* Send request */
-            AppConnector.request(requestParams).then(function(data) {
-                var selectValues = [];
-                if(data !== null && data.success) {
-                    selectValues = data.result.selectedCities;      
-                } 
-
-                /* Format search result with delimiter */
-                selectValues = $.map(selectValues, function(item){
-                   item.value = item.citySocr + ' ' + item.cityName + ', ';
-                   item.label = item.citySocr + ' ' + item.cityName + '(' + 
-                                    item.stateSocr + ' ' + item.stateName;
-                   if(item.regionName !== '') {
-                       item.label += ', ' + item.regionSocr + ' ' + item.regionName;
-                   }         
-                   item.label += ')';
-
-                   /* Prepare to save item in storage on click */
-                   item.saveFieldName = fieldName + 'cityCode';
-                   item.saveFieldValue = item.cityCode;
-
-                   return item;
-                });
-                
-                /* Insert special more load item if loaded full limit cities */
-                if(selectValues.length === item.cityRecordsLimit) {
-                    
-                    /* Prepare pagination display */
-                    var startNextLoadNumber = item.cityOffset + selectValues.length;
-                    var endNextLoadNumber = startNextLoadNumber + item.cityRecordsLimit;
-                    if(endNextLoadNumber > data.result.totalCities) {
-                        endNextLoadNumber = data.result.totalCities;
-                    }
-                    
-                    /* Increase offset and add pagination info */
-                    item.cityOffset += selectValues.length;
-                    item.label = "*** " + 
-                        app.vtranslate("JS_LBL_LOAD_MORE_CITIES") + 
-                        "(" + startNextLoadNumber + "-" + endNextLoadNumber + " " + 
-                        app.vtranslate("JS_LBL_OF") +  " " + data.result.totalCities + ")" + 
-                        " ***";
-                    
-                    selectValues.push(item);
-                }
-
-                response(selectValues);
-            });
-        },
-        
-        /*
-         * Callback on street field edit - provides help to enter street, city, state and code by click mouse on needed element.
-         * @param {$} editForm - form on thich address fields are placed
-         * @param {Object} kladrState - address fields set of current helper by kladr 
-         * @returns {undefined}
-         */
-        addAddressCallback : function(editForm, kladrState) {
-            editForm.find('[name="' + kladrState.street + '"]').attr('placeholder', app.vtranslate('JS_LBL_HELP_ADDRESS_TYPE'));
-            editForm.find('[name="' + kladrState.street + '"]').autocomplete({
-                delay : 400,
-                minLength : 3,
-
-                source : function(request, response){ 
-                    if(localStorage.getItem(kladrState.city + 'cityCode') != '') {  
-                        
-                        /* Common request params */
-                        var requestParams = {
-                            module: 'SPKladr',
-                            action: 'EnterAddress',  
-                            mode: 'fullAddressTyped'
-                        };
-
-                        var addressParts = request.term.split(",");
-                        switch(addressParts.length) {
-                            
-                            /* Step 1 - get street in selected city */
-                            case 1:
-                                requestParams.requestStep = 2;
-                                requestParams.streetName = request.term;
-                                requestParams.cityCode = localStorage.getItem(kladrState.city + 'cityCode');
-                                AppConnector.request(requestParams).then(function(data) {
-                                    var selectValues = [];
-                                    if(data !== null && data.success) {
-                                        selectValues = data.result;      
-                                    } 
-
-                                    /* Format search result with delimiter */
-                                    response($.map(selectValues, function(item){
-                                       item.label = item.streetSocr + ' ' + item.streetName;
-                                       item.value = item.label + ', ';
-
-                                       /* Prepare to save item in storage on click */
-                                       item.saveStreetCode = true;
-
-                                       return item;
-                                    }));
-                                });
-                                break;
-                            
-                            /* Step 2 - get house number */
-                            case 2:
-                                requestParams.requestStep = 3;
-                                requestParams.houseNumber = addressParts[1];
-                                requestParams.streetCode = localStorage.getItem(kladrState.street + 'streetCode');
-
-                                /* Request for second param - street or another small location  */
-                                AppConnector.request(requestParams).then(function(data) {
-                                    var selectValues = [];
-                                    if(data !== null && data.success) {
-                                        selectValues = data.result;      
-                                    } 
-                                    
-                                    /* Format before display */
-                                    response($.map(selectValues, function(item){
-                                       item.label = addressParts[0] + ', ' + item.houseNumber;
-                                       item.value = item.label;
-                                       item.autofill = true;
-
-                                       return item;
-                                    }));
-                                });
-                                break;
-
-                            default:
-                                response();
-                                break;
-                        }
-                    } else {
-                        response();
-                    }
-                },
-
-                select: function(event, selectedObject) {
-                    
-                    /* Street was selected - need save it code */
-                    if(selectedObject.item.saveStreetCode) {
-                        localStorage.setItem(kladrState.street + 'streetCode', selectedObject.item.streetCode);
-                    }
-                    
-                    /* Adds info of clicked item in other address fields */
-                    if(selectedObject.item.autofill) {
-                        editForm.find('[name="' + kladrState.code + '"]').val(selectedObject.item.mailIndex);
-                        } 
-                    }
-            });
-        },
-        
-        /**
-         * Add helper callback on city field. Provides helped select on typing in city input field.
-         * @param {$} editForm - form on thich address fields are placed
-         * @param {Object} kladrState - address fields set of current helper by kladr
-         * @returns {undefined}
-         */
-        addCityCallback : function(editForm, kladrState) { 
-            var parentEntity = this;
-            var requestParams = {
-                module: 'SPKladr',
-                action: 'EnterAddress',  
-                mode: 'fullAddressTyped',
-                cityRecordsLimit : 10,
-                cityOffset : 0,
-                requestStep: 1
-            };
-            
-            editForm.find('[name="' + kladrState.city + '"]').autocomplete({
-                delay : 100,
-                minLength : 3,
-                
-                source : function(request, response){
-                    requestParams.cityName = request.term;
-                    parentEntity.loadCities(request, response, requestParams, kladrState.city);
-                },
-                
-                select : function(event, selectedObject) {
-                    var clickedItem = selectedObject.item;
-                    
-                    /* Handling first step - load more cities pagination */
-                    if(clickedItem.isLoadMoreCities) {   
-                        requestParams.cityOffset = clickedItem.cityOffset;
-                        editForm.find('[name="' + kladrState.city + '"]').autocomplete("search");
-                        requestParams.cityOffset = 0; 
-                    } else {
-                        selectedObject.item.value = clickedItem.citySocr + ' ' + clickedItem.cityName;
-                        localStorage.setItem(kladrState.city + 'cityCode', clickedItem.cityCode);
-                        editForm.find('[name="' + kladrState.state + '"]').val(clickedItem.stateSocr + ' ' + clickedItem.stateName);
-                        editForm.find('[name="' + kladrState.region + '"]').val(clickedItem.regionSocr + ' ' + clickedItem.regionName); 
-                    } 
-                }
-            });
-        },
-        
-        /**
-         * Add helper callback on state field. Provides helped select on typing in state input field.
-         * @param {$} editForm - form on thich address fields are placed
-         * @param {Object} kladrState - address fields set of current helper by kladr
-         * @returns {undefined}
-         */
-        addStateCallback : function(editForm, kladrState) {
-            editForm.find('[name="' + kladrState.state + '"]').autocomplete({
-                delay : 100,
-                minLength : 2,
-                
-                source : function(request, response){
-                    AppConnector.request({ 
-                        module: 'SPKladr',
-                        action: 'EnterAddress',
-                        mode: 'stateTyped',
-                        stateName: request.term
-                    }).then(function(data) {
-                            var selectValues = [];
-                            if(data !== null && data.success) {
-                                selectValues = data.result;      
-                            }
-                            
-                            response($.map(selectValues, function(item){
-                               item.value = item.stateSocr + ' ' + item.stateName;
-                               item.label = item.value; 
-
-                               return item;
-                            }));
-                    });
-                }
-            });
-        },
-        //SalesPlatform.ru end
-        
 	/**
 	 * Function to register event for image delete
 	 */
@@ -898,11 +472,6 @@ jQuery.Class("Vtiger_Edit_Js",{
 		var editViewForm = this.getForm();
 
 		editViewForm.submit(function(e){
-            
-            //SalesPlatform begin
-            var mode = jQuery(e.currentTarget).find('[name="mode"]').val();
-            //SalesPlatform.ru end
-            
 			//Form should submit only once for multiple clicks also
 			if(typeof editViewForm.data('submit') != "undefined") {
 				return false;
@@ -911,15 +480,8 @@ jQuery.Class("Vtiger_Edit_Js",{
 				if(editViewForm.validationEngine('validate')) {
 					//Once the form is submiting add data attribute to that form element
 					editViewForm.data('submit', 'true');
-                    
-                    //SalesPlatform begin
-                    if(!sp_js_editview_checkBeforeSave(module, editViewForm, mode)) {
-                        return false;
-                    }
-                    //SalesPlatform end
-                    
-						//on submit form trigger the recordPreSave event
-						var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
+					//on submit form trigger the recordPreSave event
+					var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
 						editViewForm.trigger(recordPreSaveEvent, {'value' : 'edit'});
 					if(recordPreSaveEvent.isDefaultPrevented()) {
 						//If duplicate record validation fails, form should submit again
@@ -990,216 +552,60 @@ jQuery.Class("Vtiger_Edit_Js",{
 
 		var sourcePickListNames = "";
 		for(var i=0;i<sourcePicklists.length;i++){
-            //SalesPlatform.ru begin
-			sourcePickListNames += 'select[name*="'+sourcePicklists[i]+'"],';
-            //sourcePickListNames += '[name="'+sourcePicklists[i]+'"],';
-            //SalesPlatform.ru end
+			sourcePickListNames += '[name="'+sourcePicklists[i]+'"],';
 		}
 		var sourcePickListElements = container.find(sourcePickListNames);
-        
-        //SalesPlatform.ru begin
-        var thisInstance = this;
-        //SalesPlatform.ru end
-		sourcePickListElements.on('change', function(e){
-            //SalesPlatform.ru begin
-            thisInstance.onPicklistChange(e, container);
-            
-            //var currentElement = jQuery(e.currentTarget);
-			//var sourcePicklistname = currentElement.attr('name');
-            //
-			//var configuredDependencyObject = picklistDependencyMapping[sourcePicklistname];
-			//var selectedValue = currentElement.val();
-			//var targetObjectForSelectedSourceValue = configuredDependencyObject[selectedValue];
-			//var picklistmap = configuredDependencyObject["__DEFAULT__"];
-            //
-			//if(typeof targetObjectForSelectedSourceValue == 'undefined'){
-			//	targetObjectForSelectedSourceValue = picklistmap;
-			//}
-			//jQuery.each(picklistmap,function(targetPickListName,targetPickListValues){
-			//	var targetPickListMap = targetObjectForSelectedSourceValue[targetPickListName];
-			//	if(typeof targetPickListMap == "undefined"){
-			//		targetPickListMap = targetPickListValues;
-			//	}
-			//	var targetPickList = jQuery('[name="'+targetPickListName+'"]',container);
-			//	if(targetPickList.length <= 0){
-			//		return;
-			//	}
-            //
-			//	var listOfAvailableOptions = targetPickList.data('availableOptions');
-			//	if(typeof listOfAvailableOptions == "undefined"){
-			//		listOfAvailableOptions = jQuery('option',targetPickList);
-			//		targetPickList.data('available-options', listOfAvailableOptions);
-			//	}
-            //
-			//	var targetOptions = new jQuery();
-			//	var optionSelector = [];
-			//	optionSelector.push('');
-			//	for(var i=0; i<targetPickListMap.length; i++){
-			//		optionSelector.push(targetPickListMap[i]);
-			//	}
-			//	
-			//	jQuery.each(listOfAvailableOptions, function(i,e) {
-			//		var picklistValue = jQuery(e).val();
-			//		if(jQuery.inArray(picklistValue, optionSelector) != -1) {
-			//			targetOptions = targetOptions.add(jQuery(e));
-			//		}
-			//	})
-			//	var targetPickListSelectedValue = '';
-			//	var targetPickListSelectedValue = targetOptions.filter('[selected]').val();
-			//	targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
-            //})
-            //SalesPlatform.ru end
+
+		sourcePickListElements.on('change',function(e){
+			var currentElement = jQuery(e.currentTarget);
+			var sourcePicklistname = currentElement.attr('name');
+
+			var configuredDependencyObject = picklistDependencyMapping[sourcePicklistname];
+			var selectedValue = currentElement.val();
+			var targetObjectForSelectedSourceValue = configuredDependencyObject[selectedValue];
+			var picklistmap = configuredDependencyObject["__DEFAULT__"];
+
+			if(typeof targetObjectForSelectedSourceValue == 'undefined'){
+				targetObjectForSelectedSourceValue = picklistmap;
+			}
+			jQuery.each(picklistmap,function(targetPickListName,targetPickListValues){
+				var targetPickListMap = targetObjectForSelectedSourceValue[targetPickListName];
+				if(typeof targetPickListMap == "undefined"){
+					targetPickListMap = targetPickListValues;
+				}
+				var targetPickList = jQuery('[name="'+targetPickListName+'"]',container);
+				if(targetPickList.length <= 0){
+					return;
+				}
+
+				var listOfAvailableOptions = targetPickList.data('availableOptions');
+				if(typeof listOfAvailableOptions == "undefined"){
+					listOfAvailableOptions = jQuery('option',targetPickList);
+					targetPickList.data('available-options', listOfAvailableOptions);
+				}
+
+				var targetOptions = new jQuery();
+				var optionSelector = [];
+				optionSelector.push('');
+				for(var i=0; i<targetPickListMap.length; i++){
+					optionSelector.push(targetPickListMap[i]);
+				}
+				
+				jQuery.each(listOfAvailableOptions, function(i,e) {
+					var picklistValue = jQuery(e).val();
+					if(jQuery.inArray(picklistValue, optionSelector) != -1) {
+						targetOptions = targetOptions.add(jQuery(e));
+					}
+				})
+				var targetPickListSelectedValue = '';
+				var targetPickListSelectedValue = targetOptions.filter('[selected]').val();
+				targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
+			})
 		});
 
 		//To Trigger the change on load
 		sourcePickListElements.trigger('change');
 	},
-    
-    //SalesPlatform.ru begin
-    onPicklistChange : function(e, container) {
-        
-        /* Prepare data of dependency and selected values of picklist */
-        var currentElement = $(e.currentTarget);
-        var sourcePicklistName = currentElement.attr('name').replace("[]", "");
-        var picklistDependencyElement = $('[name="picklistDependency"]', container);
-        var picklistDependencyMap = JSON.parse(picklistDependencyElement.val());
-        var configuredDependencyObject = picklistDependencyMap[sourcePicklistName];
-        var selectedValue = currentElement.val();
-        var dependencyForSelectedValues = {};
-        
-        /* Get selectable values for dependent picklist */
-        if($.isArray(selectedValue)) {
-            dependencyForSelectedValues = this.getDependentMultipicklistValues(selectedValue, configuredDependencyObject);
-        } else {
-            dependencyForSelectedValues = this.getDependentPicklistValues(selectedValue, configuredDependencyObject);
-        }
-        var picklistMap = configuredDependencyObject["__DEFAULT__"];
-        if(typeof dependencyForSelectedValues == 'undefined'){
-            dependencyForSelectedValues = picklistMap;
-        }
-        
-        /* Reconfigurate dependent picklists */
-        $.each(picklistMap, function(targetPickListName, targetPickListValues){
-            var targetPickListMap = dependencyForSelectedValues[targetPickListName];
-            if(typeof targetPickListMap == "undefined"){
-                targetPickListMap = targetPickListValues;
-            }
-            
-            /* Replace options with remember selected */
-            var targetPickList = $('select[name*="' + targetPickListName + '"]', container);
-            if(targetPickList.length <= 0){
-                return;
-            }
-            var listOfAvailableOptions = targetPickList.data('availableOptions');
-            if(typeof listOfAvailableOptions == "undefined"){
-                listOfAvailableOptions = $('option', targetPickList);
-                targetPickList.data('available-options', listOfAvailableOptions);
-            }
-            
-            var currentSelectedValues = $(targetPickList).val();
-            var optionSelector = [];
-            optionSelector.push('');
-            for(var i=0; i<targetPickListMap.length; i++){
-                optionSelector.push(targetPickListMap[i]);
-            }
-            
-            var targetOptions = new $();
-            $.each(listOfAvailableOptions, function(i,e) {
-                $(e).prop("selected", false);
-                var picklistValue = $(e).val();
-                if($.inArray(picklistValue, optionSelector) != -1) {
-                    targetOptions = targetOptions.add($(e));
-                }
-            });
-            targetPickList.html(targetOptions);
-            
-            /* Set selected options which include in dependency */
-            if(currentSelectedValues != null) {
-                if($.isArray(currentSelectedValues)) {
-                    for(var selectIndex = 0; selectIndex < currentSelectedValues.length; selectIndex++) {
-                        var selectedValue = currentSelectedValues[selectIndex];
-                        if($.inArray(selectedValue, targetPickListMap) !== -1) {
-                            $("option[value='" + selectedValue + "']", targetPickList).prop("selected", true);
-                        }
-                    }
-                } else {
-                    targetPickList.val(currentSelectedValues);
-                }
-            }
-            
-            /* Refresh select2 view */
-            if($(targetPickList).attr('name').indexOf("[]") !== -1) {
-                app.getSelect2ElementFromSelect(targetPickList).select2('destroy'); 
-                app.showSelect2ElementView(targetPickList);
-            } else {
-                targetPickList.trigger("liszt:updated");
-            }
-        })
-    },
-    
-    /**
-     * Return dependent picklist values for changend multipicklist
-     * 
-     * @param {type} selectedValues
-     * @param {type} configuredDependencyObject
-     * @returns {unresolved}
-     */
-    getDependentMultipicklistValues : function(selectedValues, configuredDependencyObject) {
-        var dependentPicklistValuesMap = {};
-        for(var selectedValueIndex = 0; selectedValueIndex < selectedValues.length; selectedValueIndex++) {
-            var currentValue = selectedValues[selectedValueIndex];
-            var targetPicklistValuesMap = configuredDependencyObject[currentValue];
-
-            /* Iterate all values in dependency */
-            for(var masterPicklistValue in targetPicklistValuesMap) {
-                this.mergeMultiPicklistDependencyValues(dependentPicklistValuesMap, masterPicklistValue,  targetPicklistValuesMap);
-            }
-        }
-        
-        return dependentPicklistValuesMap;
-    },
-    
-    /**
-     * Merges select values for dependent picklist
-     * @param {type} dependentPicklistValues
-     * @param {type} masterPicklistValue
-     * @param {type} targetPicklistValuesMap
-     * @returns {undefined}
-     */
-    mergeMultiPicklistDependencyValues : function(dependentPicklistValues, masterPicklistValue, targetPicklistValuesMap) {
-        if(masterPicklistValue in dependentPicklistValues) {
-            var mergeValues = dependentPicklistValues[masterPicklistValue];
-            var additionalSelectValues = [];
-            var maxMapIndex = 0;
-            var targetValues = targetPicklistValuesMap[masterPicklistValue];
-            for(var targetValueIndex = 0; targetValueIndex < targetValues.length; targetValueIndex++) {
-                var targetValue = targetValues[targetValueIndex];
-                var valueNotIncluded = true;
-                for(var finalTargetProp = 0; finalTargetProp < mergeValues.length; finalTargetProp++) {
-                    if(targetValue === mergeValues[finalTargetProp]) {
-                        valueNotIncluded = false;
-                    }
-                    maxMapIndex = finalTargetProp;
-                }
-
-                if(valueNotIncluded) {
-                    additionalSelectValues.push(targetValue);
-                }
-            }
-
-            for(var index = 0; index < additionalSelectValues.length; index++) {
-                mergeValues[maxMapIndex + index + 1] = additionalSelectValues[index];
-            }
-            dependentPicklistValues[masterPicklistValue] = mergeValues;
-        } else {
-            dependentPicklistValues[masterPicklistValue] = targetPicklistValuesMap[masterPicklistValue];
-        }
-    },
-    
-    getDependentPicklistValues : function(selectedValue, configuredDependencyObject) {
-        return configuredDependencyObject[selectedValue];
-    },
-    //SalesPlatform.ru end
     
 	 registerLeavePageWithoutSubmit : function(form){
         InitialFormData = form.serialize();
@@ -1209,13 +615,7 @@ jQuery.Class("Vtiger_Edit_Js",{
             }
         };
     },
-    
-    //SalesPlatform.ru begin
- 	registerSpMobilePhoneFields : function(container) { 
-        $('.spMobilePhone', container).inputmask("+9{11,15}"); 
-    }, 
-    //SalesPlatform.ru end
-    
+
 	registerEvents: function(){
 		var editViewForm = this.getForm();
 		var statusToProceed = this.proceedRegisterEvents();
@@ -1227,10 +627,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 		this.registerEventForImageDelete();
 		this.registerSubmitEvent();
 		this.registerLeavePageWithoutSubmit(editViewForm);
-        //SalesPlatform.ru begin
-        this.registerSpMobilePhoneFields(editViewForm);
-        //SalesPlatform.ru end
-        
+
 		app.registerEventForDatePickerFields('#EditView');
 		
 		var params = app.validationEngineOptions;
@@ -1262,339 +659,3 @@ jQuery.Class("Vtiger_Edit_Js",{
 	//this.triggerDisplayTypeEvent();
 	}
 });
-
-// SalesPlatform.ru begin
-var gValidationCall='';
-
-if (document.all)
-
-	var browser_ie=true
-
-else if (document.layers)
-
-	var browser_nn4=true
-
-else if (document.layers || (!document.all && document.getElementById))
-
-	var browser_nn6=true
-
-var gBrowserAgent = navigator.userAgent.toLowerCase();
-
-function getObj(n,d) {
-
-	var p,i,x;
-
-	if(!d) {
-		d=document;
-	}
-
-	if(n != undefined) {
-		if((p=n.indexOf("?"))>0&&parent.frames.length) {
-			d=parent.frames[n.substring(p+1)].document;
-			n=n.substring(0,p);
-		}
-	}
-
-	if(d.getElementById) {
-		x=d.getElementById(n);
-		// IE7 was returning form element with name = n (if there was multiple instance)
-		// But not firefox, so we are making a double check
-		if(x && x.id != n) x = false;
-	}
-
-	for(i=0;!x && i<d.forms.length;i++) {
-		x=d.forms[i][n];
-	}
-
-	for(i=0; !x && d.layers && i<d.layers.length;i++) {
-		x=getObj(n,d.layers[i].document);
-	}
-
-	if(!x && !(x=d[n]) && d.all) {
-		x=d.all[n];
-	}
-
-	if(typeof x == 'string') {
-		x=null;
-	}
-
-	return x;
-}
-
-/** Javascript dialog box utility functions **/
-VtigerJS_DialogBox = {
-	_olayer : function(toggle) {
-		var olayerid = "__vtigerjs_dialogbox_olayer__";
-		VtigerJS_DialogBox._removebyid(olayerid);
-
-		if(typeof(toggle) == 'undefined' || !toggle) return;
-
-		var olayer = document.getElementById(olayerid);
-		if(!olayer) {
-			olayer = document.createElement("div");
-			olayer.id = olayerid;
-			olayer.className = "small veil";
-			olayer.style.zIndex = (new Date()).getTime();
-
-			// Avoid zIndex going beyond integer max
-			// http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7146#comment:1
-			olayer.style.zIndex = parseInt((new Date()).getTime() / 1000);
-
-			// In case zIndex goes to negative side!
-			if(olayer.style.zIndex < 0) olayer.style.zIndex *= -1;
-			if (browser_ie) {
-				olayer.style.height = document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight) + "px";
-			} else if (browser_nn4 || browser_nn6) {
-				olayer.style.height = document.body.offsetHeight + "px";
-			}
-			olayer.style.width = "100%";
-			document.body.appendChild(olayer);
-
-			var closeimg = document.createElement("img");
-			closeimg.src = 'test/logo/popuplay_close.png';
-			closeimg.alt = 'X';
-			closeimg.style.right= '10px';
-			closeimg.style.top  = '5px';
-			closeimg.style.position = 'absolute';
-			closeimg.style.cursor = 'pointer';
-			closeimg.onclick = VtigerJS_DialogBox.unblock;
-			olayer.appendChild(closeimg);
-		}
-		if(olayer) {
-			if(toggle) olayer.style.display = "block";
-			else olayer.style.display = "none";
-		}
-		return olayer;
-	},
-	_removebyid : function(id) {
-		if($(id)) $(id).remove();
-	},
-	unblock : function() {
-		VtigerJS_DialogBox._olayer(false);
-	},
-	block : function(opacity) {
-		if(typeof(opactiy)=='undefined') opacity = '0.3';
-		var olayernode = VtigerJS_DialogBox._olayer(true);
-		olayernode.style.opacity = opacity;
-	},
-	hideprogress : function() {
-		VtigerJS_DialogBox._olayer(false);
-		VtigerJS_DialogBox._removebyid('__vtigerjs_dialogbox_progress_id__');
-	},
-	progress : function(imgurl) {
-		VtigerJS_DialogBox._olayer(true);
-		if(typeof(imgurl) == 'undefined') imgurl = 'themes/images/plsWaitAnimated.gif';
-
-		var prgbxid = "__vtigerjs_dialogbox_progress_id__";
-		var prgnode = document.getElementById(prgbxid);
-		if(!prgnode) {
-			prgnode = document.createElement("div");
-			prgnode.id = prgbxid;
-			prgnode.className = 'veil_new';
-			prgnode.style.position = 'absolute';
-			prgnode.style.width = '100%';
-			prgnode.style.top = '0';
-			prgnode.style.left = '0';
-			prgnode.style.display = 'block';
-
-			document.body.appendChild(prgnode);
-
-			prgnode.innerHTML =
-			'<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:100%;">' +
-			'<tr><td class="big" align="center"><img src="'+ imgurl + '"></td></tr></table>';
-
-		}
-		if(prgnode) prgnode.style.display = 'block';
-	},
-	hideconfirm : function() {
-		VtigerJS_DialogBox._olayer(false);
-		VtigerJS_DialogBox._removebyid('__vtigerjs_dialogbox_alert_boxid__');
-	},
-	confirm : function(msg, onyescode) {
-		VtigerJS_DialogBox._olayer(true);
-
-		var dlgbxid = "__vtigerjs_dialogbox_alert_boxid__";
-		var dlgbxnode = document.getElementById(dlgbxid);
-		if(!dlgbxnode) {
-			dlgbxnode = document.createElement("div");
-			dlgbxnode.style.display = 'none';
-			dlgbxnode.className = 'veil_new small';
-			dlgbxnode.id = dlgbxid;
-			dlgbxnode.innerHTML =
-			'<table cellspacing="0" cellpadding="18" border="0" class="options small">' +
-			'<tbody>' +
-			'<tr>' +
-			'<td nowrap="" align="center" style="color: rgb(255, 255, 255); font-size: 15px;">' +
-			'<b>'+ msg + '</b></td>' +
-			'</tr>' +
-			'<tr>' +
-			'<td align="center">' +
-			'<input type="button" style="text-transform: capitalize;" onclick="$(\''+ dlgbxid + '\').hide();VtigerJS_DialogBox._olayer(false);VtigerJS_DialogBox._confirm_handler();" value="'+ alert_arr.YES + '"/>' +
-			'<input type="button" style="text-transform: capitalize;" onclick="$(\''+ dlgbxid + '\').hide();VtigerJS_DialogBox._olayer(false)" value="' + alert_arr.NO + '"/>' +
-			'</td>'+
-			'</tr>' +
-			'</tbody>' +
-			'</table>';
-			document.body.appendChild(dlgbxnode);
-		}
-		if(typeof(onyescode) == 'undefined') onyescode = '';
-		dlgbxnode._onyescode = onyescode;
-		if(dlgbxnode) dlgbxnode.style.display = 'block';
-	},
-	_confirm_handler : function() {
-		var dlgbxid = "__vtigerjs_dialogbox_alert_boxid__";
-		var dlgbxnode = document.getElementById(dlgbxid);
-		if(dlgbxnode) {
-			if(typeof(dlgbxnode._onyescode) != 'undefined' && dlgbxnode._onyescode != '') {
-				eval(dlgbxnode._onyescode);
-			}
-		}
-	}
-};
-
-//Search element in array
-function in_array(what, where) {
-    for(var i=0; i < where.length; i++) {
-        if(what == where[i]) { 
-            return true;
-        }
-    }    
-    return false;
-}
-
-//Empty check
-function empty (mixed_var) {
-
-  var undef, key, i, len;
-  var emptyValues = [undef, null, false, 0, "", "0"];
-
-  for (i = 0, len = emptyValues.length; i < len; i++) {
-    if (mixed_var === emptyValues[i]) {
-      return true;
-    }
-  }
-
-  if (typeof mixed_var === "object") {
-    for (key in mixed_var) {
-      // TODO: should we check for own properties only?
-      //if (mixed_var.hasOwnProperty(key)) {
-      return false;
-      //}
-    }
-    return true;
-  }
-
-  return false;
-}
-
-//Json check
-function IsJsonString(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
-}
-
-//Check before save implementation
-function sp_js_editview_checkBeforeSave(module, thisForm, mode) {
-    var fldvalObjectArr = {};
-    var createMode;
-    if(mode == 'edit') {
-        createMode = 'edit';
-    } else {
-        createMode = 'create';
-    }
-    
-    for (var i = 0; i < fieldname.length; i++) {
-        var obj = getObj(fieldname[i]);
-        if (empty(obj)) {
-            obj = getObj(fieldname[i]+"[]");
-        }
-        
-        if(!empty(obj)) {
-            if(obj.tagName == 'SELECT' && obj.hasAttribute('multiple')) {
-                var selectValuesArr = {};
-                for (var j = 0; j < obj.options.length; j++) {
-                    if (obj.options[j].selected) {
-                        selectValuesArr[j] = obj.options[j].value;
-                    }
-                }
-                
-                fldvalObjectArr[fieldname[i]] = selectValuesArr;
-            } else if(obj[1] != null && obj[1].getAttribute('type') == 'checkbox') {
-                var fieldvalue;
-                if(obj[1].checked) {
-                    fieldvalue = 1;
-                } else {
-                    fieldvalue = 0;
-                }
-                
-                fldvalObjectArr[fieldname[i]] = fieldvalue;
-            } else {
-                var fieldvalue = getObj(fieldname[i]).value;
-                
-                fldvalObjectArr[fieldname[i]] = fieldvalue;
-            }
-        } 
-       
-    }            
-    
-    var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));               
-
-    var urlstring = "index.php?module="+module+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&EditViewAjaxMode=true&CreateMode="+createMode;
-    if(mode == 'edit') {
-        urlstring = urlstring + "&id=" + crmId;
-    }
-    
-    var params = {  
-        url : urlstring, 
-        async : false, 
-        data : {} 
-    }; 
-    
-    var continue_fl;    // true - continue, false - break  
-    AppConnector.request(params).then( function (responseObj) {
-	if(!empty(responseObj)) {                        
-            if(responseObj.response === undefined) {                                  
-                continue_fl = true;
-            }
-            if(responseObj.response === "OK") {
-                if (responseObj.message !== undefined && !empty(responseObj.message)) {
-                    alert(responseObj.message);
-                }
-                continue_fl = true;
-            } else if(responseObj.response === "ALERT") {
-                VtigerJS_DialogBox.unblock();
-                if (responseObj.message !== undefined) {
-                    alert(responseObj.message);
-                } else {
-                    alert('Alert');
-                }
-                thisForm.removeData('submit');
-                continue_fl = false;
-            } else if(responseObj.response === "CONFIRM") {
-                var confirmMessage;
-                if (responseObj.message !== undefined) {
-                    confirmMessage =responseObj.message;
-                } else {
-                    confirmMessage = 'Confirm';
-                }
-                if (confirm(confirmMessage)) {
-                    continue_fl = true;
-                } else {
-                    VtigerJS_DialogBox.unblock();
-                    thisForm.removeData('submit');
-                    continue_fl = false;
-                }
-            } else {
-                continue_fl = true;
-            }
-        } else {
-            continue_fl = true;
-        }
-    });
-    return continue_fl;
-}
-//SalesPlatform.ru end

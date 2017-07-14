@@ -103,7 +103,7 @@ $upload_dir = '_VT_UPLOADDIR_';
 
 // maximum file size for uploaded files in bytes also used when uploading import files
 // upload_maxsize default value = 3000000
-$upload_maxsize = 3000000;
+$upload_maxsize = 3145728;//3MB
 
 // flag to allow export functionality
 // 'all' to allow anyone to use exports 
@@ -195,19 +195,17 @@ $listview_max_textlength = 40;
 $php_max_execution_time = 0;
 
 // Set the default timezone as per your preference
+//SalesPlatform.ru begin
 $default_timezone = 'Europe/Moscow';
-
+//$default_timezone = 'UTC';
+//SalesPlatform.ru end
 /** If timezone is configured, try to set it */
 if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set($default_timezone);
 }
 
 //Set the default layout 
-$default_layout = 'vlayout';
-
-// SalesPlatform.ru begin Check referer setting
-$sp_check_site_url = 'false';
-// SalesPlatform.ru end
+$default_layout = 'v7';
 
 include_once 'config.security.php';
 ?>

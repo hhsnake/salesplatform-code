@@ -334,7 +334,7 @@ class PHPMailer {
 
   /**
    * If SingleTo is true, this provides the array to hold the email addresses
-   * @var bool
+   * @var array
    */
   public $SingleToArray = array();
 
@@ -702,7 +702,7 @@ class PHPMailer {
     $address = trim($address);
 	
     $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
-    if (!$this->ValidateAddress($address)) {
+    if (!$this->validateAddress($address)) {
       $this->SetError($this->Lang('invalid_address').': '. $address);
       if ($this->exceptions) {
         throw new phpmailerException($this->Lang('invalid_address').': '.$address);
@@ -738,7 +738,7 @@ class PHPMailer {
   public function SetFrom($address, $name = '', $auto = true) {
     $address = trim($address);
     $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
-    if (!$this->ValidateAddress($address)) {
+    if (!$this->validateAddress($address)) {
       $this->SetError($this->Lang('invalid_address').': '. $address);
       if ($this->exceptions) {
         throw new phpmailerException($this->Lang('invalid_address').': '.$address);
@@ -771,7 +771,7 @@ class PHPMailer {
    * @static
    * @access public
    */
-  public static function ValidateAddress($address) {
+  public static function validateAddress($address) {
       if (defined('PCRE_VERSION')) { //Check this instead of extension_loaded so it works when that function is disabled
           if (version_compare(PCRE_VERSION, '8.0') >= 0) {
               return (boolean)preg_match('/^(?!(?>(?1)"?(?>\\\[ -~]|[^"])"?(?1)){255,})(?!(?>(?1)"?(?>\\\[ -~]|[^"])"?(?1)){65,}@)((?>(?>(?>((?>(?>(?>\x0D\x0A)?[\t ])+|(?>[\t ]*\x0D\x0A)?[\t ]+)?)(\((?>(?2)(?>[\x01-\x08\x0B\x0C\x0E-\'*-\[\]-\x7F]|\\\[\x00-\x7F]|(?3)))*(?2)\)))+(?2))|(?2))?)([!#-\'*+\/-9=?^-~-]+|"(?>(?2)(?>[\x01-\x08\x0B\x0C\x0E-!#-\[\]-\x7F]|\\\[\x00-\x7F]))*(?2)")(?>(?1)\.(?1)(?4))*(?1)@(?!(?1)[a-z0-9-]{64,})(?1)(?>([a-z0-9](?>[a-z0-9-]*[a-z0-9])?)(?>(?1)\.(?!(?1)[a-z0-9-]{64,})(?1)(?5)){0,126}|\[(?:(?>IPv6:(?>([a-f0-9]{1,4})(?>:(?6)){7}|(?!(?:.*[a-f0-9][:\]]){8,})((?6)(?>:(?6)){0,6})?::(?7)?))|(?>(?>IPv6:(?>(?6)(?>:(?6)){5}:|(?!(?:.*[a-f0-9]:){6,})(?8)?::(?>((?6)(?>:(?6)){0,4}):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(?>\.(?9)){3}))\])(?1)$/isD', $address);
@@ -903,7 +903,13 @@ class PHPMailer {
    * @return bool
    */
   protected function SendmailSend($header, $body) {
-    if ($this->Sender != '') {
+    // SalesPlatform.ru begin Fix CVE-2016-10033
+    if (!(is_file($this->Sendmail) and is_executable($this->Sendmail))) {
+        throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+    	}
+    if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+    //if ($this->Sender != '') {
+    // SalesPlatform.ru end Fix CVE-2016-10033
       $sendmail = sprintf("%s -oi -f%s -t", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
     } else {
       $sendmail = sprintf("%s -oi -t", escapeshellcmd($this->Sendmail));
@@ -959,9 +965,17 @@ class PHPMailer {
     if (empty($this->Sender)) {
       $params = " ";
     } else {
-      $params = sprintf("-f%s", $this->Sender);
+      // SalesPlatform.ru begin Fix CVE-2016-10033
+      $params = sprintf('-f%s', escapeshellarg($this->Sender));
+      //$params = sprintf("-f%s", $this->Sender);
+      // SalesPlatform.ru end Fix CVE-2016-10033
     }
-    if ($this->Sender != '' and !ini_get('safe_mode')) {
+    
+    // SalesPlatform.ru begin Fix CVE-2016-10033
+    if ($this->Sender != '' and !ini_get('safe_mode') and $this->validateAddress($this->Sender)) {
+    //if ($this->Sender != '' and !ini_get('safe_mode')) {
+    // SalesPlatform.ru end Fix CVE-2016-10033
+        
       $old_from = ini_get('sendmail_from');
       ini_set('sendmail_from', $this->Sender);
     }
@@ -1005,7 +1019,16 @@ class PHPMailer {
     if(!$this->SmtpConnect()) {
       throw new phpmailerException($this->Lang('smtp_connect_failed'), self::STOP_CRITICAL);
     }
-    $smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
+    
+    // SalesPlatform.ru begin Fix CVE-2016-10033
+        if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+            $smtp_from = $this->Sender;
+        } else {
+            $smtp_from = $this->From;
+     }
+    //$smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
+    // SalesPlatform.ru end Fix CVE-2016-10033
+     
     if(!$this->smtp->Mail($smtp_from)) {
       $this->SetError($this->Lang('from_failed') . $smtp_from . ' : ' .implode(',', $this->smtp->getError()));
       throw new phpmailerException($this->ErrorInfo, self::STOP_CRITICAL);
@@ -1921,23 +1944,29 @@ class PHPMailer {
       if (!is_readable($path)) {
         throw new phpmailerException($this->Lang('file_open') . $path, self::STOP_CONTINUE);
       }
-      $magic_quotes = get_magic_quotes_runtime();
-      if ($magic_quotes) {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-          set_magic_quotes_runtime(0);
-        } else {
-          ini_set('magic_quotes_runtime', 0);
-        }
-      }
+      
+      //SalesPlatform.ru begin
+      //$magic_quotes = get_magic_quotes_runtime();
+      //if ($magic_quotes) {
+      //  if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+      //    set_magic_quotes_runtime(0);
+      //  } else {
+      //    ini_set('magic_quotes_runtime', 0);
+      //  }
+      //}
+      //SalesPlatform.ru end
       $file_buffer  = file_get_contents($path);
       $file_buffer  = $this->EncodeString($file_buffer, $encoding);
-      if ($magic_quotes) {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-          set_magic_quotes_runtime($magic_quotes);
-        } else {
-          ini_set('magic_quotes_runtime', $magic_quotes);
-        }
-      }
+      
+      //SalesPlatform.ru begin
+      //if ($magic_quotes) {
+      //  if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+      //    set_magic_quotes_runtime($magic_quotes);
+      //  } else {
+      //    ini_set('magic_quotes_runtime', $magic_quotes);
+      //  }
+      //}
+      //SalesPlatform.ru end
       return $file_buffer;
     } catch (Exception $e) {
       $this->SetError($e->getMessage());

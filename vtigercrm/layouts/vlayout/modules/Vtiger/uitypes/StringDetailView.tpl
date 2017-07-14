@@ -12,7 +12,4 @@
 
 {* TODO: Review the order of parameters - good to eliminate $RECORD->getId, $RECORD should be used *}
 
-{* SalesPlatform.ru begin *}
-{vtranslate($FIELD_MODEL->getDisplayValue($FIELD_MODEL->get('fieldvalue'), $RECORD->getId(), $RECORD), $MODULE_NAME)}
-{*$FIELD_MODEL->getDisplayValue($FIELD_MODEL->get('fieldvalue'), $RECORD->getId(), $RECORD)*}
-{* SalesPlatform.ru end *}
+{$FIELD_MODEL->getDisplayValue($FIELD_MODEL->get('fieldvalue'), $RECORD->getId(), $RECORD)}

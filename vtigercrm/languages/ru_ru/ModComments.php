@@ -21,7 +21,8 @@ $languageStrings = array(
 	'UserId' => 'Идентификатор пользователя',
     'Customer' => 'Клиент',
     //SalesPlatform.ru end
-);
+    'LBL_COMMENTED_AT'             => 'Прокомментировал на',
+    );
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/ModComments.php';

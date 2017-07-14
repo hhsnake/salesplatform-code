@@ -73,7 +73,7 @@ class Install_Utils_Model {
 			$directiveValues['register_globals'] = 'On';
 		if (ini_get(('output_buffering') < '4096' && ini_get('output_buffering') != '0') || stripos(ini_get('output_buffering'), 'Off') > -1)
 			$directiveValues['output_buffering'] = 'Off';
-		if (ini_get('max_execution_time') < 600)
+		if (ini_get('max_execution_time') != 0)
 			$directiveValues['max_execution_time'] = ini_get('max_execution_time');
 		if (ini_get('memory_limit') < 32)
 			$directiveValues['memory_limit'] = ini_get('memory_limit');
@@ -126,7 +126,7 @@ class Install_Utils_Model {
 		'file_uploads' => 'On',
 		'register_globals' => 'On',
 		'output_buffering' => 'On',
-		'max_execution_time' => '600',
+		'max_execution_time' => '0',
 		// SalesPlatform.ru begin
 		'memory_limit' => '128',
 		'error_reporting' => 'E_ALL & ~E_NOTICE',
@@ -142,8 +142,8 @@ class Install_Utils_Model {
 	 * Returns the recommended php settings for vtigerCRM
 	 * @return type
 	 */
-	function getRecommendedDirectives() {
-		if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
+	public static function getRecommendedDirectives(){
+		if(version_compare(PHP_VERSION, '5.5.0') >= 0){
                         // SalesPlatform.ru begin
 			self::$recommendedDirectives['error_reporting'] = 'E_ALL & ~E_NOTICE & ~E_DEPRECATED';
 			//self::$recommendedDirectives['error_reporting'] = 'E_WARNING & ~E_NOTICE & ~E_DEPRECATED';
@@ -167,6 +167,9 @@ class Install_Utils_Model {
 		$preInstallConfig['LBL_PHP_VERSION']	= array(phpversion(), '5.4.0', (version_compare(phpversion(), '5.4.0', '>=')));
 		$preInstallConfig['LBL_IMAP_SUPPORT']	= array(function_exists('imap_open'), true, (function_exists('imap_open') == true));
 		$preInstallConfig['LBL_ZLIB_SUPPORT']	= array(function_exists('gzinflate'), true, (function_exists('gzinflate') == true));
+        // SalesPlatform.ru begin
+        $preInstallConfig['LBL_EXIF_SUPPORT']	= array(function_exists('exif_read_data'), true, (function_exists('exif_read_data') == true));
+        // SalesPlatform.ru end
                 if ($preInstallConfig['LBL_PHP_VERSION'] >= '5.5.0') {
                     $preInstallConfig['LBL_MYSQLI_CONNECT_SUPPORT'] = array(extension_loaded('mysqli'), true, extension_loaded('mysqli'));
                 }
@@ -493,7 +496,7 @@ class Install_Utils_Model {
 		require_once('vtlib/Vtiger/Module.php');
 		require_once('include/utils/utils.php');
 
-		$moduleFolders = array('packages/vtiger/mandatory', 'packages/vtiger/optional');
+		$moduleFolders = array('packages/vtiger/mandatory', 'packages/vtiger/optional', 'packages/vtiger/marketplace');
 		foreach($moduleFolders as $moduleFolder) {
 			if ($handle = opendir($moduleFolder)) {
 				while (false !== ($file = readdir($handle))) {
@@ -521,4 +524,41 @@ class Install_Utils_Model {
 			}
 		}
 	}
+    
+    //SalesPlatform.ru begin
+    public static function getVTWSInventoryFieldTypeId() {
+        $db = PearDatabase::getInstance();
+        $result = $db->pquery("SELECT fieldtypeid FROM vtiger_ws_entity_fieldtype WHERE table_name=? AND field_name=? AND fieldtype=?",
+                array('vtiger_inventoryproductrel', 'id', 'reference'));
+        if ($result && $resultRow = $db->fetchByAssoc($result)) {
+            return $resultRow['fieldtypeid'];
+        }        
+        return false;
+    }
+    
+    public static function checkVTWSReferenceType($fieldTypeId, $moduleName){
+        $db = PearDatabase::getInstance();
+        
+        $result = $db->pquery("SELECT 1 FROM vtiger_ws_entity_referencetype WHERE fieldtypeid=? AND type=?", 
+                array($fieldTypeId, $moduleName));
+        if ($db->num_rows($result)) {
+            return true;
+        }
+        return false;
+    }
+    
+    public static function checkHeaderColumn() {
+        $db = PearDatabase::getInstance();
+        $result = $db->pquery("SHOW COLUMNS FROM vtiger_field LIKE 'headerfield'");
+        return ($db->num_rows($result) > 0);
+    }
+    
+    public static function isFieldExists($tabId, $fieldName) {
+        $db = PearDatabase::getInstance();
+        
+        $result = $db->pquery("SELECT fieldid FROM vtiger_field WHERE tabid=? AND fieldname=?",
+                array($tabId, $fieldName));
+        return $db->num_rows($result);
+    }
+    //SalesPlatform.ru end
 }

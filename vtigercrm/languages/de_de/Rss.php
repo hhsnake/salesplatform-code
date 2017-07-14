@@ -9,6 +9,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
+    'Rss'=>'Rss',
     'LBL_RSS_FEED_SOURCES' => 'Rss Feed-Quellen',
     'LBL_ADD_FEED_SOURCE' => 'Futtermittel Quelle hinzufügen',
     'LBL_FEEDS_LIST_FROM' => 'Liste der Feeds aus',
@@ -24,6 +25,9 @@ $jsLanguageStrings = array(
     'JS_INVALID_RSS_URL' => 'Ungültige Rss url',
     'JS_RSS_MADE_AS_DEFAULT' => 'Rss Gemacht als Standard',
     
+
+  'JS_NO_RECORDS' => 'Keine Datensätze',
+
 );
 
 

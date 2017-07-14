@@ -20,7 +20,6 @@
   `taxclass` varchar(200) DEFAULT NULL,
   `currency_id` int(19) NOT NULL DEFAULT '1',
   `commissionrate` decimal(7,3) DEFAULT NULL,
-  `one_s_id` varchar(255) DEFAULT NULL,
   `unit_code` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`serviceid`),
   CONSTRAINT `fk_1_vtiger_service` FOREIGN KEY (`serviceid`) REFERENCES `vtiger_crmentity` (`crmid`) ON DELETE CASCADE
@@ -30,6 +29,7 @@
 			<name>vtiger_servicecf</name>
 			<sql><![CDATA[CREATE TABLE `vtiger_servicecf` (
   `serviceid` int(19) NOT NULL DEFAULT '0',
+  `tags` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`serviceid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 		</table>

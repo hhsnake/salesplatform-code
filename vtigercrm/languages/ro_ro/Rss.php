@@ -9,6 +9,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
+    'Rss'=>'Rss',
     'LBL_RSS_FEED_SOURCES' => 'Surse RSS Feed',
     'LBL_ADD_FEED_SOURCE' => 'Adaugă alimentare Sursa',
     'LBL_FEEDS_LIST_FROM' => 'Fluxuri Lista Din',
@@ -24,6 +25,9 @@ $jsLanguageStrings = array(
     'JS_INVALID_RSS_URL' => 'Invalid Adresă URL RSS',
     'JS_RSS_MADE_AS_DEFAULT' => 'RSS Made ca implicit',
     
+
+  'JS_NO_RECORDS' => 'Nu Există Înregistrări',
+
 );
 
 

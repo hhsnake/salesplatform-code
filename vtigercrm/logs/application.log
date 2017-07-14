@@ -1,0 +1,34 @@
+[2017-07-14 15:45:49] Error on process request. Details: 
+Code - 1
+Message - Uncaught Error: Call to a member function FieldCount() on boolean in /u01/www/vt701/include/database/PearDatabase.php:523
+Stack trace:
+#0 /u01/www/vt701/modules/Vtiger/models/Record.php(1049): PearDatabase->num_fields(false)
+#1 /u01/www/vt701/modules/Vtiger/views/ModCommentsDetailAjax.php(42): Vtiger_Record_Model->getRollupCommentsForModule('')
+#2 /u01/www/vt701/modules/Vtiger/views/ModCommentsDetailAjax.php(28): Vtiger_ModCommentsDetailAjax_View->getRollupComments(Object(Vtiger_Request))
+#3 /u01/www/vt701/includes/main/WebUI.php(222): Vtiger_ModCommentsDetailAjax_View->process(Object(Vtiger_Request))
+#4 /u01/www/vt701/index.php(27): Vtiger_WebUI->process(Object(Vtiger_Request))
+#5 {main}
+  thrown
+File - /u01/www/vt701/include/database/PearDatabase.php
+Line - 523
+
+[2017-07-14 15:49:35] Error on process request. Details: 
+Code - 1
+Message - Uncaught Error: Call to a member function FieldCount() on boolean in /u01/www/vt701/include/database/PearDatabase.php:523
+Stack trace:
+#0 /u01/www/vt701/modules/Vtiger/models/Record.php(1049): PearDatabase->num_fields(false)
+#1 /u01/www/vt701/modules/Vtiger/views/ModCommentsDetailAjax.php(42): Vtiger_Record_Model->getRollupCommentsForModule('')
+#2 /u01/www/vt701/modules/Vtiger/views/ModCommentsDetailAjax.php(28): Vtiger_ModCommentsDetailAjax_View->getRollupComments(Object(Vtiger_Request))
+#3 /u01/www/vt701/includes/main/WebUI.php(222): Vtiger_ModCommentsDetailAjax_View->process(Object(Vtiger_Request))
+#4 /u01/www/vt701/index.php(27): Vtiger_WebUI->process(Object(Vtiger_Request))
+#5 {main}
+  thrown
+File - /u01/www/vt701/include/database/PearDatabase.php
+Line - 523
+
+[2017-07-14 16:00:57] Error on process request. Details: 
+Code - 4
+Message - syntax error, unexpected ';', expecting ',' or ')'
+File - /u01/www/vt701/modules/ModComments/models/Module.php
+Line - 85
+

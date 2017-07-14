@@ -9,6 +9,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
+    'Rss'=>'Rss',
     'LBL_RSS_FEED_SOURCES' => 'Rss Źródła RSS',
     'LBL_ADD_FEED_SOURCE' => 'Dodaj Kanał Źródło',
     'LBL_FEEDS_LIST_FROM' => 'Kanały listy Z',
@@ -24,6 +25,9 @@ $jsLanguageStrings = array(
     'JS_INVALID_RSS_URL' => 'Nieprawidłowy RSS url',
     'JS_RSS_MADE_AS_DEFAULT' => 'Rss Wykonane jako domyślne',
     
+
+  'JS_NO_RECORDS' => 'Brak Wpisów',
+
 );
 
 

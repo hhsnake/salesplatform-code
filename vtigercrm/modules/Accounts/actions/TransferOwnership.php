@@ -16,7 +16,7 @@ class Accounts_TransferOwnership_Action extends Vtiger_Action_Controller {
 		$currentUserPriviligesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 
 		if(!$currentUserPriviligesModel->hasModuleActionPermission($moduleModel->getId(), 'Save')) {
-			throw new AppException(vtranslate($moduleName).' '.vtranslate('LBL_NOT_ACCESSIBLE'));
+			throw new AppException(vtranslate($moduleName, $moduleName).' '.vtranslate('LBL_NOT_ACCESSIBLE'));
 		}
 	}
 
@@ -51,15 +51,25 @@ class Accounts_TransferOwnership_Action extends Vtiger_Action_Controller {
 				return $selectedIds;
 			}
 		}
+        
+        //SalesPlatform.ru begin
+        $customViewModel = CustomView_Record_Model::getInstanceById($cvId);
+        if ($customViewModel) {
+            $searchKey = $request->get('search_key');
+            $searchValue = $request->get('search_value');
+            $operator = $request->get('operator');
+            if (!empty($operator)) {
+                $customViewModel->set('operator', $operator);
+                $customViewModel->set('search_key', $searchKey);
+                $customViewModel->set('search_value', $searchValue);
+            }
 
-		if($selectedIds == 'all'){
-			$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
-			if($customViewModel) {
-				return $customViewModel->getRecordIds($excludedIds, $module);
-			}
-		}
+            $customViewModel->set('search_params', $request->get('search_params'));
+            return $customViewModel->getRecordIds($excludedIds, $module);            
+        }
         return array();
-	}
+        //SalesPlatform.ru end
+    }
     
     public function validateRequest(Vtiger_Request $request) {
         $request->validateWriteAccess();

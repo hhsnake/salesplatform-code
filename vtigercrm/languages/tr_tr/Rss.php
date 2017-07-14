@@ -9,6 +9,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
+    'Rss'=>'Rss',
     'LBL_RSS_FEED_SOURCES' => 'Rss Kaynakları',
     'LBL_ADD_FEED_SOURCE' => 'Besleme Kaynak Ekle',
     'LBL_FEEDS_LIST_FROM' => 'Gönderen Listesi Feeds',
@@ -24,6 +25,9 @@ $jsLanguageStrings = array(
     'JS_INVALID_RSS_URL' => 'Geçersiz Rss Url',
     'JS_RSS_MADE_AS_DEFAULT' => 'Varsayılan olarak yapılmıştır rss',
     
+
+  'JS_NO_RECORDS' => 'Kayıt',
+
 );
 
 

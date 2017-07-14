@@ -25,7 +25,7 @@ class Potentials_FunnelAmount_Dashboard extends Vtiger_IndexAjax_View {
     
     function getSearchParams($stage) {
         $listSearchParams = array();
-        $conditions = array(array("sales_stage","e",$stage));
+        $conditions = array(array("sales_stage","e",decode_html(urlencode(escapeSlashes($stage)))));
         $listSearchParams[] = $conditions;
         return '&search_params='. json_encode($listSearchParams);
     }
@@ -39,7 +39,7 @@ class Potentials_FunnelAmount_Dashboard extends Vtiger_IndexAjax_View {
 		
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$data = $moduleModel->getPotentialTotalAmountBySalesStage();
-        $listViewUrl = $moduleModel->getListViewUrl();
+        $listViewUrl = $moduleModel->getListViewUrlWithAllFilter();
         for($i = 0;$i<count($data);$i++){
             //SalesPlatform.ru begin fix filters
             $data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][2]);
@@ -52,6 +52,7 @@ class Potentials_FunnelAmount_Dashboard extends Vtiger_IndexAjax_View {
 		$viewer->assign('WIDGET', $widget);
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('DATA', $data);
+		$viewer->assign('YAXIS_FIELD_TYPE', 'currency');
 
 		$viewer->assign('STYLES',$this->getHeaderCss($request));
 		$viewer->assign('CURRENTUSER', $currentUser);

@@ -51,7 +51,10 @@ class Campaigns_Module_Model extends Vtiger_Module_Model {
 			$pos = stripos($listQuery, 'where');
 
 			if ($pos) {
-				$split = spliti('where', $listQuery);
+                //SalesPlatform.ru begin
+				//$split = spliti('where', $listQuery);
+                $split = preg_split('/where/i', $listQuery);
+                //SalesPlatform.ru end
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
 			} else {
 				$overRideQuery = $listQuery. ' WHERE ' . $condition;
@@ -59,4 +62,34 @@ class Campaigns_Module_Model extends Vtiger_Module_Model {
 			return $overRideQuery;
 		}
 	}
+
+	/**
+	 * Function is used to give links in the All menu bar
+	 */
+	public function getQuickMenuModels() {
+		if ($this->isEntityModule()) {
+			$moduleName = $this->getName();
+			$listViewModel = Vtiger_ListView_Model::getCleanInstance($moduleName);
+			$basicListViewLinks = $listViewModel->getBasicLinks();
+		}
+
+		if ($basicListViewLinks) {
+			foreach ($basicListViewLinks as $basicListViewLink) {
+				if (is_array($basicListViewLink)) {
+					$links[] = Vtiger_Link_Model::getInstanceFromValues($basicListViewLink);
+				} else if (is_a($basicListViewLink, 'Vtiger_Link_Model')) {
+					$links[] = $basicListViewLink;
+				}
+			}
+		}
+		return $links;
+	}
+
+	/*
+	 * Function to get supported utility actions for a module
+	 */
+	function getUtilityActionsNames() {
+		return array();
+	}
+
 }

@@ -75,10 +75,17 @@
 						<tbody>
 							<tr><td>{vtranslate('LBL_CURRENCIES','Install')}<span class="no">*</span></td>
 								<td><select name="currency_name" class="select2" style="width:220px;">
-										{foreach key=CURRENCY_NAME item=CURRENCY_INFO from=$CURRENCIES}Russia, Rubles
+										{*SalesPlatform.ru begin*}
+                                                                                {foreach key=CURRENCY_NAME item=CURRENCY_INFO from=$CURRENCIES}
+                                                                                {*vtiger commented code
+                                                                                {foreach key=CURRENCY_NAME item=CURRENCY_INFO from=$CURRENCIES}Russia, Rubles *}
+                                                                                {*SalesPlatform.ru end*}   
                                                                                         {*SalesPlatform.ru begin*}
-                                                                                        <option value="{$CURRENCY_NAME}" {if $CURRENCY_NAME eq 'Russia, Rubles'} selected {/if}>{$CURRENCY_NAME|@getTranslatedString:$MODULE} ({$CURRENCY_INFO.1})</option>
-                                                                                        {*vtiger commented code    
+                                                                                        <option value="{$CURRENCY_NAME}" {if $DEFAULT_LANGUAGE eq 'ru_ru' && $CURRENCY_NAME eq 'Russia, Rubles'} selected 
+                                                                                                {else if $DEFAULT_LANGUAGE neq 'ru_ru' && $CURRENCY_NAME eq 'USA, Dollars'}  selected
+                                                                                                    {/if}> {$CURRENCY_NAME|@getTranslatedString:$MODULE} ({$CURRENCY_INFO.1})</option>
+                                                                                        {*vtiger commented code
+                                                                                        <option value="{$CURRENCY_NAME}" {if $CURRENCY_NAME eq 'Russia, Rubles'} selected {/if}>{$CURRENCY_NAME|@getTranslatedString:$MODULE} ({$CURRENCY_INFO.1})</option>                                                                                           
 											<option value="{$CURRENCY_NAME}" {if $CURRENCY_NAME eq 'USA, Dollars'} selected {/if}>{$CURRENCY_NAME} ({$CURRENCY_INFO.1})</option>
 										        *}
                                                                                         {*SalesPlatform.ru end*}     

@@ -58,6 +58,7 @@ $languageStrings = array(
 
 $jsLanguageStrings = array(
     'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_ADD_THIS_FILTER' => 'Вы уверены, что хотите добавить записи из данного фильтра?',
+    'JS_APPENDED_TO_EXISTING_LIST' => '%s из выбранного списка будут добавлены с существующим списком.',    
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

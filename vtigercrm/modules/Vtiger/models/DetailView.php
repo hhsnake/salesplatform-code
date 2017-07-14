@@ -56,7 +56,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 	 *                   array('linktype'=>list of link models);
 	 */
 	public function getDetailViewLinks($linkParams) {
-		$linkTypes = array('DETAILVIEWBASIC','DETAILVIEW','DETAILVIEWTAB');
+		$linkTypes = array('DETAILVIEWBASIC','DETAILVIEW');
 		$moduleModel = $this->getModule();
 		$recordModel = $this->getRecord();
 
@@ -64,7 +64,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		$recordId = $recordModel->getId();
 
 		$detailViewLink = array();
-
+		$linkModelList = array();
 		if(Users_Privileges_Model::isPermitted($moduleName, 'EditView', $recordId)) {
 			$detailViewLinks[] = array(
 					'linktype' => 'DETAILVIEWBASIC',
@@ -78,12 +78,6 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 			}
 		}
 
-		$linkModelListDetails = Vtiger_Link_Model::getAllByType($moduleModel->getId(),$linkTypes,$linkParams);
-		//Mark all detail view basic links as detail view links.
-		//Since ui will be look ugly if you need many basic links
-		$detailViewBasiclinks = $linkModelListDetails['DETAILVIEWBASIC'];
-		unset($linkModelListDetails['DETAILVIEWBASIC']);
-
 		if(Users_Privileges_Model::isPermitted($moduleName, 'Delete', $recordId)) {
 			$deletelinkModel = array(
 					'linktype' => 'DETAILVIEW',
@@ -94,7 +88,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($deletelinkModel);
 		}
 
-		if(Users_Privileges_Model::isPermitted($moduleName, 'CreateView', $recordId)) {
+		if($moduleModel->isDuplicateOptionAllowed('CreateView', $recordId)) {
 			$duplicateLinkModel = array(
 						'linktype' => 'DETAILVIEWBASIC',
 						'linklabel' => 'LBL_DUPLICATE',
@@ -104,58 +98,64 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($duplicateLinkModel);
 		}
 
-		if(!empty($detailViewBasiclinks)) {
-			foreach($detailViewBasiclinks as $linkModel) {
-				// Remove view history, needed in vtiger5 to see history but not in vtiger6
-				if($linkModel->linklabel == 'View History') {
-					continue;
-				}
-				$linkModelList['DETAILVIEW'][] = $linkModel;
-			}
+		if($this->getModule()->isModuleRelated('Emails') && Vtiger_RecipientPreference_Model::getInstance($this->getModuleName())) {
+			$emailRecpLink = array('linktype' => 'DETAILVIEW',
+								'linklabel' => vtranslate('LBL_EMAIL_RECIPIENT_PREFS',  $this->getModuleName()),
+								'linkurl' => 'javascript:Vtiger_Index_Js.showRecipientPreferences("'.$this->getModuleName().'");',
+								'linkicon' => '');
+			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($emailRecpLink);
 		}
-                
-                //SalesPlatform.ru begin -  add PDF templates links to DetailView  from SPPDFTemplates
-                
-                /* Two cycles - to order */
-                $pdfTemplates = new SPPDFTemplates_Module_Model();
-                $availableTemplates = $pdfTemplates->getModuleTemplates($this->getModuleName(), $this->record->get('spcompany'));
-                
-                foreach($availableTemplates as $template) {
-                    
-                   /* Export PDF links */
-                   $pdfTemplateLink = array(
-                        'linklabel' => sprintf("%s %s", vtranslate('LBL_EXPORT_TO_PDF',$moduleName), $template->getName()),
-                        'linkurl' => $recordModel->getExportPDFURL($template),
-                   );
-                   $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($pdfTemplateLink);
-                }
-                
-                foreach($availableTemplates as $template) {
-                   
-                   /* Email link */
-                   $sendEmailLink = array(
-                        'linklabel' => sprintf("%s %s", vtranslate('LBL_SEND_MAIL_PDF', $moduleName), $template->getName()),
-                        'linkurl' => 'javascript:Vtiger_Detail_Js.sendEmailPDFClickHandler(\''
-                                            .$recordModel->getSendEmailPDFUrl($template).'\')',
-                   );
-                   $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($sendEmailLink);
-                } 
-                //SalesPlatform.ru end
 
-		$relatedLinks = $this->getDetailViewRelatedLinks();
+		$linkModelListDetails = Vtiger_Link_Model::getAllByType($moduleModel->getId(),$linkTypes,$linkParams);
+		foreach($linkTypes as $linkType) {
+			if(!empty($linkModelListDetails[$linkType])) {
+				foreach($linkModelListDetails[$linkType] as $linkModel) {
+					// Remove view history, needed in vtiger5 to see history but not in vtiger6
+					if($linkModel->linklabel == 'View History') {
+						continue;
+					}
+					$linkModelList[$linkType][] = $linkModel;
+				}
+			}
+			unset($linkModelListDetails[$linkType]);
+		}
+        
+        //SalesPlatform.ru begin -  add PDF templates links to DetailView  from SPPDFTemplates
+
+        /* Two cycles - to order */
+        $pdfTemplates = new SPPDFTemplates_Module_Model();
+        $availableTemplates = $pdfTemplates->getModuleTemplates($this->getModuleName(), $this->record->get('spcompany'));
+        foreach ($availableTemplates as $template) {
+
+            /* Export PDF links */
+            $pdfTemplateLink = array(
+                'linklabel' => sprintf("%s %s", vtranslate('LBL_EXPORT_TO_PDF', $moduleName), $template->getName()),
+                'linkurl' => $recordModel->getExportPDFURL($template),
+            );
+            $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($pdfTemplateLink);
+        }
+
+        foreach ($availableTemplates as $template) {
+
+            /* Email link */
+            $sendEmailLink = array(
+                'linklabel' => sprintf("%s %s", vtranslate('LBL_SEND_MAIL_PDF', $moduleName), $template->getName()),
+                'linkurl' => 'javascript:Vtiger_Detail_Js.triggerSendEmail(\''
+                //. $recordModel->getSendEmailPDFUrl($template) . '\')',
+                . $recordModel->getSendEmailPDFUrl($template) . '\', \'Emails\', true)',
+            );
+            $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($sendEmailLink);
+        }
+        //SalesPlatform.ru end
+
+
+        $relatedLinks = $this->getDetailViewRelatedLinks();
 
 		foreach($relatedLinks as $relatedLinkEntry) {
 			$relatedLink = Vtiger_Link_Model::getInstanceFromValues($relatedLinkEntry);
 			$linkModelList[$relatedLink->getType()][] = $relatedLink;
 		}
 
-                $detailViewBasicTablinks = $linkModelListDetails['DETAILVIEWTAB'];
-                if(!empty($detailViewBasicTablinks)) {
-                    foreach($detailViewBasicTablinks as $linkModel) {
-                        $linkModelList['DETAILVIEWTAB'][] = $linkModel;
-                    }
-                }
-                
 		$widgets = $this->getWidgets();
 		foreach($widgets as $widgetLinkModel) {
 			$linkModelList['DETAILVIEWWIDGET'][] = $widgetLinkModel;
@@ -194,7 +194,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		if($parentModuleModel->isSummaryViewSupported()) {
 			$relatedLinks = array(array(
 				'linktype' => 'DETAILVIEWTAB',
-				'linklabel' => vtranslate('SINGLE_' . $moduleName, $moduleName) . ' ' . vtranslate('LBL_SUMMARY', $moduleName),
+				'linklabel' => vtranslate('LBL_SUMMARY', $moduleName),
 				'linkKey' => 'LBL_RECORD_SUMMARY',
 				'linkurl' => $recordModel->getDetailViewUrl() . '&mode=showDetailViewByMode&requestMode=summary',
 				'linkicon' => ''
@@ -203,21 +203,11 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		//link which shows the summary information(generally detail of record)
 		$relatedLinks[] = array(
 				'linktype' => 'DETAILVIEWTAB',
-				'linklabel' => vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_DETAILS', $moduleName),
-                                'linkKey' => 'LBL_RECORD_DETAILS',
+				'linklabel' => vtranslate('LBL_DETAILS', $moduleName),
+				'linkKey' => 'LBL_RECORD_DETAILS',
 				'linkurl' => $recordModel->getDetailViewUrl().'&mode=showDetailViewByMode&requestMode=full',
 				'linkicon' => ''
 		);
-
-		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
-		if($parentModuleModel->isCommentEnabled() && $modCommentsModel->isPermitted('DetailView')) {
-			$relatedLinks[] = array(
-					'linktype' => 'DETAILVIEWTAB',
-					'linklabel' => 'ModComments',
-					'linkurl' => $recordModel->getDetailViewUrl().'&mode=showAllComments',
-					'linkicon' => ''
-			);
-		}
 
 		if($parentModuleModel->isTrackingEnabled()) {
 			$relatedLinks[] = array(
@@ -238,7 +228,8 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 					'linklabel' => $relation->get('label'),
 					'linkurl' => $relation->getListUrl($recordModel),
 					'linkicon' => '',
-					'relatedModuleName' => $relation->get('relatedModuleName') 
+					'relatedModuleName' => $relation->get('relatedModuleName'),
+					'linkid' => $relation->getId()
 			);
 			$relatedLinks[] = $link;
 		}
@@ -254,6 +245,15 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		$moduleModel = $this->getModule();
 		$widgets = array();
 
+		if($moduleModel->isTrackingEnabled()) {
+			$widgets[] = array(
+					'linktype' => 'DETAILVIEWWIDGET',
+					'linklabel' => 'LBL_UPDATES',
+					'linkurl' => 'module='.$this->getModuleName().'&view=Detail&record='.$this->getRecord()->getId().
+							'&mode=showRecentActivities&page=1&limit=5',
+			);
+		}
+
 		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
 		if($moduleModel->isCommentEnabled() && $modCommentsModel->isPermitted('DetailView')) {
 			$widgets[] = array(
@@ -264,12 +264,18 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 			);
 		}
 
-		if($moduleModel->isTrackingEnabled()) {
+		$userPrivilegesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+		$documentsInstance = Vtiger_Module_Model::getInstance('Documents');
+		if($userPrivilegesModel->hasModuleActionPermission($documentsInstance->getId(), 'DetailView') && $moduleModel->isModuleRelated('Documents')) {
+			$createPermission = $userPrivilegesModel->hasModuleActionPermission($documentsInstance->getId(), 'CreateView');
 			$widgets[] = array(
 					'linktype' => 'DETAILVIEWWIDGET',
-					'linklabel' => 'LBL_UPDATES',
+					'linklabel' => 'Documents',
+					'linkName'	=> $documentsInstance->getName(),
 					'linkurl' => 'module='.$this->getModuleName().'&view=Detail&record='.$this->getRecord()->getId().
-							'&mode=showRecentActivities&page=1&limit=5',
+							'&relatedModule=Documents&mode=showRelatedRecords&page=1&limit=5',
+					'action'	=>	($createPermission == true) ? array('Add') : array(),
+					'actionURL' =>	$documentsInstance->getQuickCreateUrl()
 			);
 		}
 
