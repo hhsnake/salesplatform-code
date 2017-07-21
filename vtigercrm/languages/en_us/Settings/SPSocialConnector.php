@@ -24,6 +24,16 @@ $languageStrings = array(
         'SPCMLConnector'            => 'CommerceML exchange',
         'from_1c'                   => 'From 1C',
         'from_site'                 => 'From site',
+        // SalesPlatform.ru begin
+        'LBL_SPSOCIALCONNECTOR_CONFIG' =>  'Social Connector',
+        'LBL_SPSOCIALCONNECTOR_SETTINGS' => 'Social Connector',
+        'LBL_DOCS'  =>  'documentation (click here)',
+        'vk_app_id'   => 'Vkontakte: App ID',
+        'vk_app_secret'   => 'Vkontakte: App secret',
+        'vk_access_token'   => 'Vkontakte: Access token',
+        'tw_app_key'   => 'Twitter: App key',
+        'tw_app_secret'   => 'Twitter: App secret',
+        // SalesPlatform.ru end    
 );
 
 $jsLanguageStrings = array(

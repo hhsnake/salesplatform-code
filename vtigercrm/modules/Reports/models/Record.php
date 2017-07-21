@@ -46,6 +46,11 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return Boolean
 	 */
 	function delete() {
+        //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            AbstractCustomReportModel::delete($this);
+        }
+        //SalesPlatform.ru end
 		return $this->getModule()->deleteRecord($this);
 	}
 
@@ -221,8 +226,21 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return boolean
 	 */
 	function isEditable() {
-		return ($this->report->isEditable());
+		return ($this->report->isEditable() && !AbstractCustomReportModel::isCustomReport($this));
 	}
+    
+    //SalesPlatform.ru begin
+    public function isDeletable() {
+        $isDeletable = parent::isDeletable();
+        if($isDeletable && AbstractCustomReportModel::isCustomReport($this)) {
+            $currentUser = Users_Record_Model::getCurrentUserModel();
+            $isDeletable = $currentUser->isAdminUser();
+        }
+        
+        return $isDeletable;
+    }
+    //SalesPlatform.ru end
+    
 
 	/**
 	 * Function returns Report enabled Modules
@@ -274,7 +292,10 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		$selectedColumns = array();
 		for($i=0; $i<$db->num_rows($result); $i++) {
 			$column = $db->query_result($result, $i, 'columnname');
-			list($tableName, $columnName, $moduleFieldLabel, $fieldName, $type) = split(':', $column);
+            //SalesPlatform.ru begin
+			//list($tableName, $columnName, $moduleFieldLabel, $fieldName, $type) = split(':', $column);
+            list($tableName, $columnName, $moduleFieldLabel, $fieldName, $type) = explode(':', $column);
+            //SalesPlatform.ru end
 			$fieldLabel  = explode('_', $moduleFieldLabel);
 			$module = $fieldLabel[0];
 			$dbFieldLabel = trim(str_replace(array($module, '_'), " ", $moduleFieldLabel));
@@ -706,9 +727,17 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <String>
 	 */
 	function getReportSQL($advancedFilterSQL=false, $format=false) {
-		$reportRun = ReportRun::getInstance($this->getId());
-		$sql = $reportRun->sGetSQLforReport($this->getId(), $advancedFilterSQL, $format);
-		return $sql;
+         //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            return '';
+        } else {
+        //SalesPlatform.ru end 
+            $reportRun = ReportRun::getInstance($this->getId());
+            $sql = $reportRun->sGetSQLforReport($this->getId(), $advancedFilterSQL, $format);
+            return $sql;
+        //SalesPlatform.ru begin
+        }
+        //SalesPlatform.ru end
 	}
 
     /**
@@ -717,11 +746,24 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <String> $query (by removing all columns)
 	 */
     function generateCountQuery($query){
-        $from = explode(' from ' , $query);
-        //If we select the same field in select and grouping/soring then it will include order by and query failure will happen
-        $fromAndWhereQuery = explode(' order by ', $from[1]);
-        $sql = "SELECT count(*) AS count FROM ".$fromAndWhereQuery[0];
-        return $sql;
+        //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            return '';
+        } else {
+        //SalesPlatform.ru end 
+            
+            //SalesPlatform.ru begin
+            //$from = explode(' from ' , $query);
+            $from = explode(' from ' , $query, 2);
+            //SalesPlatform.ru end
+            //If we select the same field in select and grouping/soring then it will include order by and query failure will happen
+            $fromAndWhereQuery = explode(' order by ', $from[1]);
+            $sql = "SELECT count(*) AS count FROM ".$fromAndWhereQuery[0];
+            return $sql;
+        //SalesPlatform.ru begin
+        }
+        //SalesPlatform.ru end
+        
     }
 	/**
 	 * Function returns report's data
@@ -730,27 +772,54 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <Array>
 	 */
 	function getReportData($pagingModel = false, $filterQuery = false) {
-		$reportRun = ReportRun::getInstance($this->getId());
-		$data = $reportRun->GenerateReport('PDF', $filterQuery, true, $pagingModel->getStartIndex(), $pagingModel->getPageLimit());
-		return $data;
+        //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($this);
+            return $customReportModel->getData('HTML');
+        } else {
+        //SalesPlatform.ru end 
+            $reportRun = ReportRun::getInstance($this->getId());
+            $data = $reportRun->GenerateReport('PDF', $filterQuery, true, $pagingModel->getStartIndex(), $pagingModel->getPageLimit());
+            return $data;
+        //SalesPlatform.ru begin
+        }
+        //SalesPlatform.ru end
 	}
 
     function getReportsCount($query = null){
-        if($query == null)
-            $query = $this->get('recordCountQuery');
-        global $adb;
-        $count = 0;
-        $result = $adb->query($query, array());
-        if($adb->num_rows($result) > 0 ){
-            $count = $adb->query_result($result, 0, 'count');
-        }
-        return $count;
+        //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($this);
+            return $customReportModel->getCount();
+        } else {
+        //SalesPlatform.ru end 
+            if($query == null)
+                $query = $this->get('recordCountQuery');
+            global $adb;
+            $count = 0;
+            $result = $adb->query($query, array());
+            if($adb->num_rows($result) > 0 ){
+                $count = $adb->query_result($result, 0, 'count');
+            }
+            return $count;
+        //SalesPlatform.ru begin
+        } 
+        //SalesPlatform.ru end
     }
 
 	function getReportCalulationData($filterQuery = false) {
-		$reportRun = ReportRun::getInstance($this->getId());
-		$data = $reportRun->GenerateReport('TOTALXLS', $filterQuery, true);
-		return $data;
+        //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($this);
+            return $customReportModel->getReportCalulationData();
+        } else {
+        //SalesPlatform.ru end 
+            $reportRun = ReportRun::getInstance($this->getId());
+            $data = $reportRun->GenerateReport('TOTALXLS', $filterQuery, true);
+            return $data;
+        //SalesPlatform.ru begin
+        }
+        //SalesPlatform.ru end
 	}
 	/**
 	 * Function exports reports data into a Excel file
@@ -813,8 +882,19 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		$reportRun = ReportRun::getInstance($this->getId());
         $advanceFilterSql = $this->getAdvancedFilterSQL();
 		$data = array();
-		$data['data'] = $reportRun->GenerateReport('PRINT', $advanceFilterSql);
-		$data['total'] = $reportRun->GenerateReport('PRINT_TOTAL', $advanceFilterSql);
+        //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($this);
+            $data['data'] = $customReportModel->getPrintData();
+            $data['total'] = $customReportModel->getTotalPrintData();
+        } else {
+        //SalesPlatform.ru end
+            $data['data'] = $reportRun->GenerateReport('PRINT', $advanceFilterSql);
+            $data['total'] = $reportRun->GenerateReport('PRINT_TOTAL', $advanceFilterSql);
+        //SalesPlatform.ru begin
+        }
+        //SalesPlatform.ru end
+		
 		return $data;
 	}
 
@@ -1030,14 +1110,9 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		}
 
 		$this->reportRun = ReportRun::getInstance($this->getId());
-
-        // SalesPlatform.ru begin
-        if(in_array($this->reportRun->reporttype, getCustomReportsList())) {
-            $filterQuery = $this->reportRun->generateAdvFilterArray($advancedFilterCriteria);
-        } else {
-            $filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria, $advancedFilterCriteriaGroup);
-        }
-        // SalesPlatform.ru end
+		// SalesPlatform.ru begin
+        $filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria, $advancedFilterCriteriaGroup);
+		// SalesPlatform.ru end
 
 		return $filterQuery;
 	}
@@ -1048,8 +1123,17 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <Array>
 	 */
 	public function generateData($pagingModel = false) {
-		$filterQuery = $this->getAdvancedFilterSQL();
-		return $this->getReportData($pagingModel, $filterQuery);
+        //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($this);
+            return $customReportModel->getData('HTML');
+        } else {
+        //SalesPlatform.ru end 
+            $filterQuery = $this->getAdvancedFilterSQL();
+            return $this->getReportData($pagingModel, $filterQuery);
+        //SalesPlatform.ru begin
+        }
+        //SalesPlatform.ru end
 	}
 
 	/**
@@ -1058,8 +1142,17 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <Array>
 	 */
 	public function generateCalculationData() {
-		$filterQuery = $this->getAdvancedFilterSQL();
-		return $this->getReportCalulationData($filterQuery);
+        //SalesPlatform.ru begin
+        if(AbstractCustomReportModel::isCustomReport($this)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($this);
+            return $customReportModel->getReportCalulationData();
+        } else {
+        //SalesPlatform.ru end 
+            $filterQuery = $this->getAdvancedFilterSQL();
+            return $this->getReportCalulationData($filterQuery);
+        //SalesPlatform.ru begin
+        }
+        //SalesPlatform.ru end
 	}
 	/**
 	 * Function to check duplicate exists or not

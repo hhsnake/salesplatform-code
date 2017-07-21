@@ -276,8 +276,11 @@ class HelpDesk extends CRMEntity {
 		$query="select title,update_log from vtiger_troubletickets where ticketid=?";
 		$result=$adb->pquery($query, array($ticketid));
 		$update_log = $adb->query_result($result,0,"update_log");
-
-		$splitval = split('--//--',trim($update_log,'--//--'));
+        
+        //SalesPlatform.ru begin
+		//$splitval = split('--//--',trim($update_log,'--//--'));
+        $splitval = explode('--//--', trim($update_log, '--//--'));
+        //SalesPlatform.ru end
 
 		$header[] = $adb->query_result($result,0,"title");
 

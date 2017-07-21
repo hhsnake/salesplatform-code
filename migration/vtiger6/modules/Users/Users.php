@@ -1755,6 +1755,85 @@ class Users_CRMSetup {
                 //SalesPlatform.ru begin
                 $packagesList = array(
 			'Tools' => array(
+				'label' => vtranslate('Contact Management'),
+				'imageName' => 'BasicPackage.png',
+				'description' => vtranslate('LBL_CONTACT_MANAGEMENT_DESC'),
+				'modules' => array(
+					'Contacts' => vtranslate('Contacts'),
+					'Accounts' => vtranslate('Accounts'),
+					'MailManager' => vtranslate('MailManager'),
+					'Reports' => vtranslate('Reports'),
+					'Access Control' => vtranslate('Access Control'),
+					'Workflows' => vtranslate('Workflows'),
+					'Mail Converter' => vtranslate('Mail Converter'),
+					'Web-to-lead forms' => vtranslate('Web-to-lead forms'),
+                                        'Documents' => vtranslate('Documents'),
+                                        'Calendar' => vtranslate('Calendar'),
+                                        'SPPDFTemplates' => vtranslate('SPPDFTemplates'),
+                                        'RecycleBin' => vtranslate('RecycleBin'),
+                                        'SMSNotifier' => vtranslate('SMSNotifier'),
+                                        'EmailTemplates' => vtranslate('EmailTemplates'),
+                                        'SPSocialConnector' => vtranslate('SPSocialConnector')
+				)),
+			'Sales' => array(
+				'label' => vtranslate('Sales Automation'),
+				'imageName' => 'SalesAutomation.png',
+				'description' => vtranslate('LBL_SALES_AUTOMATION_DESC'),
+				'modules' => array(
+					'Potentials' => vtranslate('Potentials'),
+                                        'Leads' => vtranslate('Leads'),
+                                        'Consignment' => vtranslate('Consignment'),
+                                        'SPPayments' => vtranslate('SPPayments'),
+                                        'Act' => vtranslate('Act')
+				)),
+			'Marketing' => array(
+				'label' => vtranslate('Marketing'),
+				'imageName' => 'Marketing.png',
+				'description' => vtranslate('LBL_MARKETING_DESC'),
+				'modules' => array(
+                                        'Campaigns' => vtranslate('Campaigns'),
+                                )),
+			
+			'Support' => array(
+				'label' => vtranslate('Support'),
+				'imageName' => 'Support.png',
+				'description' => vtranslate('LBL_SUPPORT_DESC'),
+				'modules' => array(
+					'HelpDesk' => vtranslate('HelpDesk'),
+					'ServiceContracts' => vtranslate('Service Contracts'),
+					'CustomerPortal' => vtranslate('CustomerPortal'),
+                                        'Faq' => vtranslate('Faq')
+				)),
+			'Inventory' => array(
+				'label' => vtranslate('Invoicing & Inventory Management'),
+				'imageName' => 'Inventory.png',
+				'description' => vtranslate('LBL_IIM_DESC'),
+				'modules' => array(
+					'Quotes' => vtranslate('Quotes'),
+					'Invoice' => vtranslate('Invoice'),
+					'SalesOrder' => vtranslate('Sales Order'),
+					'PurchaseOrder' => vtranslate('PurchaseOrder'),
+					'PriceBooks' => vtranslate('PriceBooks'),
+                                        'Products' => vtranslate('Products'),
+                                        'Vendors' => vtranslate('Vendors'),
+                                        'Services' => vtranslate('Services'),
+                                        'Assets' => vtranslate('Assets'),
+                                        'SPUnits' => vtranslate('SPUnits')
+				)),
+			'Project' => array(
+				'label' => vtranslate('Project Management'),
+				'imageName' => 'ProjectManagement.png',
+				'description' => vtranslate('LBL_PROJECT_MANAGEMENT_DESC'),
+				'modules' => array(
+					'Project' => vtranslate('Projects'),
+					'ProjectTask' => vtranslate('ProjectTask'),
+					'ProjectMilestone' => vtranslate('ProjectMilestone')
+				))
+		);
+
+                /*
+                $packagesList = array(
+			'Tools' => array(
 				'label' => 'Управление контактами',
 				'imageName' => 'BasicPackage.png',
 				'description' => 'Хранение ваших контактных данных, документов, писем, событий, задач и других данных. Кроме того, управление доступом пользователей к различным возможностям CRM, а также автоматизация бизнес-процессов.',
@@ -1802,7 +1881,7 @@ class Users_CRMSetup {
 					'HelpDesk' => 'Заявки',
 					'ServiceContracts' => 'Сервисные контракты',
 					'CustomerPortal' => 'Клиентский портал',
-                                        'Faq' => 'ЧаВо',
+                                        'Faq' => 'База знаний',
 				)),
 			'Inventory' => array(
 				'label' => 'Счета и управление складом',

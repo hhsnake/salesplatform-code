@@ -238,29 +238,6 @@ var Vtiger_PBXManager_Js = {
         });
     },
     
-    //SalesPlatform.ru begin
-    registerPollHooks : function() { 
-        var thisInstance = this; 
-        $(window).on('blur', function() { 
-            if(thisInstance.callsPollFunctionId !== false) {
-                console.log("On blur");
-                clearInterval(thisInstance.callsPollFunctionId); 
-                thisInstance.callsPollFunctionId = false;
-            }
-            
-        }); 
-
-         $(window).on('focus', function() {
-            console.log("On focus");
-            if(thisInstance.callsPollFunctionId === false) {
-                Vtiger_PBXManager_Js.registerPBXCall();
-                thisInstance.callsPollFunctionId = setInterval("Vtiger_PBXManager_Js.registerPBXCall()", 4000);
-            }
-            
-        }); 
-    }, 
-    //SalesPlatform.ru end
-    
      /**
         * Function to register required events
         */
@@ -271,12 +248,10 @@ var Vtiger_PBXManager_Js = {
         AppConnector.request(url).then(function(data){
             if(data.result) {
                 //SalesPlatform.ru begin
-                if(document.hasFocus()) { 
-                    console.log("First request popup start");
+                Vtiger_PBXManager_Js.registerPBXCall();
+                thisInstance.callFunctionIntervalId = Visibility.every(4000, function () {
                     Vtiger_PBXManager_Js.registerPBXCall();
-                    thisInstance.callFunctionIntervalId = setInterval("Vtiger_PBXManager_Js.registerPBXCall()", 4000);
-                } 
-                thisInstance.registerPollHooks(); 
+                });
                 //Vtiger_PBXManager_Js.registerPBXCall();
                 //setInterval("Vtiger_PBXManager_Js.registerPBXCall()", 3000);
                 //SalesPlatform.ru end

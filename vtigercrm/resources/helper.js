@@ -157,6 +157,16 @@ jQuery.Class("Vtiger_Helper_Js",{
         })
 		return aDeferred.promise();
 	},
+    
+    //SalesPlatform.ru begin 
+    showAlertBox : function(data) {
+        var aDeferred = jQuery.Deferred();
+        bootbox.alert(data['message'],app.vtranslate('LBL_YES'), function() {            
+            aDeferred.resolve();
+		});
+        return aDeferred.promise();
+    },
+    //SalesPlatform.ru end
 
 	/*
 	 * Function to check Duplication of Account Name

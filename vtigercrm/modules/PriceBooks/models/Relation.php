@@ -39,7 +39,10 @@ class PriceBooks_Relation_Model extends Vtiger_Relation_Model{
 			$queryGenerator = new QueryGenerator($relatedModuleName, $currentUser);
 			$queryGenerator->setFields($relatedListFields);
 			$selectColumnSql = $queryGenerator->getSelectClauseColumnSQL();
-			$newQuery = spliti('FROM', $query);
+            //SalesPlatform.ru begin
+			//$newQuery = spliti('FROM', $query);
+            $newQuery = preg_split('/FROM/i', $query);
+            //SalesPlatform.ru end
 			$selectColumnSql = 'SELECT DISTINCT vtiger_crmentity.crmid,'.$selectColumnSql;
 		}
 		if($functionName == ('get_pricebook_products' || 'get_pricebook_services')){

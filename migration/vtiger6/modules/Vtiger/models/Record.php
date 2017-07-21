@@ -872,5 +872,4 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
         return strtr($string, $converter);
     }
     //SalesPlatform.ru end
-
 }

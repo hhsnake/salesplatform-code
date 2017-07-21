@@ -170,7 +170,10 @@ class HelpDesk_Module_Model extends Vtiger_Module_Model {
 			$pos = stripos($listQuery, 'where');
 
 			if ($pos) {
-				$split = spliti('where', $listQuery);
+                //SalesPlatform.ru begin
+				//$split = spliti('where', $listQuery);
+                $split = preg_split('/where/i', $listQuery);
+                //SalesPlatform.ru end
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
 			} else {
 				$overRideQuery = $listQuery . ' WHERE ' . $condition;

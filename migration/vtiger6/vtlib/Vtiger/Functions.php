@@ -1,4 +1,4 @@
-<?php
+<?php 
 /*+**********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -582,7 +582,10 @@ class Vtiger_Functions {
 				if (!$ok) return false;
 			}
 		} else {
-			if (stripos($data, $short ? "<?" : "<?php") !== false) { // suspicious dynamic content 
+            //SalesPlatform.ru begin Fix image sending
+			//if (stripos($data, $short ? "<?" : "<?php") !== false) { // suspicious dynamic content 
+            if (stripos($data, "<? ") !== false || stripos($data, "<?php ") !== false) { // suspicious dynamic content
+            //SalesPlatform.ru end
 				return false;
 			}
 		}
@@ -624,7 +627,10 @@ class Vtiger_Functions {
 		// Check for php code injection
 		if ($saveimage == 'true') {
 			$imageContents = file_get_contents($file_details['tmp_name']);
-			if (stripos($imageContents, $shortTagSupported ? "<?" : "<?php") !== false) { // suspicious dynamic content.
+            //SalesPlatform.ru begin Fix image sending
+			if (stripos($imageContents, "<? ") !== false || stripos($imageContents, "<?php ") !== false) { // suspicious dynamic content.
+            //if (stripos($imageContents, $shortTagSupported ? "<?" : "<?php") !== false) { // suspicious dynamic content.
+            //SalesPlatform.ru end
 				$saveimage = 'false';
 			}
 		}
@@ -1005,11 +1011,15 @@ class Vtiger_Functions {
 
 		if ($mode == 'CRYPT') {
 			$salt = null;
-			if (function_exists('password_hash')) { // php 5.5+
-				$salt = password_hash();
-			} else {
+			// SalesPlatform.ru begin password_hash() expects at least 2 parameters
+			//if (function_exists('password_hash')) { // php 5.5+
+			//	$salt = password_hash();
+			//} else {
+			// SalesPlatform.ru end
 				$salt = '$2y$11$'.str_replace("+",".",substr(base64_encode(openssl_random_pseudo_bytes(17)),0,22));
-			}
+			// SalesPlatform.ru begin password_hash() expects at least 2 parameters
+			//}
+			// SalesPlatform.ru end
 			return crypt($password, $salt);
 		}
 

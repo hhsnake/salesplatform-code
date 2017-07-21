@@ -94,12 +94,24 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		
 	public function userExists(Vtiger_Request $request){
 		$module = $request->getModule();
-		$userName = $request->get('user_name');
-		$userModuleModel = Users_Module_Model::getCleanInstance($module);
-		$status = $userModuleModel->checkDuplicateUser($userName);
-		$response = new Vtiger_Response();
-		$response->setResult($status);
-		$response->emit();
+                //SalesPlatform.ru begin Fix duplicate user creation
+
+                $recordId = $request->get('recordId');
+                $userModel = Users_Record_Model::getCleanInstance($module);
+                if($recordId != null) {
+                    $userModel = Users_Record_Model::getInstanceById($recordId, 'Users');
+                }
+                $userModel->set('user_name', trim($request->get('user_name')));
+                $response = new Vtiger_Response();
+                $response->setResult($userModel->isDuplicates());
+                $response->emit();
+                //$userName = $request->get('user_name');
+                //$userModuleModel = Users_Module_Model::getCleanInstance($module);
+                //$status = $userModuleModel->checkDuplicateUser($userName);
+                //$response = new Vtiger_Response();
+                //$response->setResult($status);
+                //$response->emit();
+                //SalesPlatform.ru end 
 	}
 	
 	public function savePassword(Vtiger_Request $request) {

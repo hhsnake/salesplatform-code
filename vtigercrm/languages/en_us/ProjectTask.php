@@ -8,6 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+	'Project Task' => 'Project Task',
 	'LBL_ADD_RECORD' => 'Add Project Task',
 	'LBL_PROJECTS_LIST' => 'Projects List',
 	'LBL_PROJECT_TASK_INFORMATION' => 'Project Task Details',

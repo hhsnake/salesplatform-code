@@ -24,21 +24,16 @@ class SPRepackModules {
             if($this->isRepackableModule($module->getName())) {
                 SPRepackLogger::log("Start repack " . $module->getName() . " module");
                 $packagePath = $this->searchPackagePath($module->getName());
-                if($packagePath != null) {
-                    if(file_exists($packagePath)) {
-                        unset($packagePath);
-                    }
-                    
-                    $package->export(
-                        $module, 
-                        $packagePath,
-                        $this->getPackageName($module->getName())
-                    );
-                } else {
-                    SPRepackLogger::log("Not found zip package of module " . $module->getName() . ". No need repack");
+                if(file_exists($packagePath)) {
+                    unlink($packagePath);
+                    $packageName = $this->getPackageName($module->getName());
+                    $package->export($module, $packagePath, $packageName);
+
+                    SPRepackLogger::log("Repack of " . $module->getName() . " finished");
+                    continue;
                 }
-                
-                SPRepackLogger::log("Repack of " . $module->getName() . " finished");
+
+                SPRepackLogger::log("Not found zip package of module " . $module->getName() . ". No need repack");  
             }
         }
         

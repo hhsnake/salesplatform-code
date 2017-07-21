@@ -11,22 +11,17 @@
 
 return 
 	array(
-		"base_url" => "",
+		"base_url" => "", 
 
 		"providers" => array ( 
-			"Facebook" => array ( 
-				"enabled" => true,
-				"keys"    => array ( "id" => "", "secret" => "" )
-			),
-
 			"Twitter" => array ( 
 				"enabled" => true,
-				"keys"    => array ( "key" => "", "secret" => "" )
+				"keys"    => array ( "key" => "", "secret" => "" ) 
 			),
             
             "Vkontakte" => array (
 				"enabled" => true,
-				"keys"    => array ( "id" => "", "secret" => "" )
+				"keys"    => array ( "id" => "", "secret" => "" ) 
 			),
 		),
 

@@ -391,7 +391,10 @@ function csrf_get_secret() {
         include $file;
         return $secret;
     }
-    if (is_writable($dir)) {
+    // SalesPlatform.ru begin Fix dir checking
+    if (is_writable(dirname($file))) {
+    //if (is_writable($dir)) {
+    // SalesPlatform.ru end
         $secret = csrf_generate_secret();
         $fh = fopen($file, 'w');
         fwrite($fh, '<?php $secret = "'.$secret.'";' . PHP_EOL);

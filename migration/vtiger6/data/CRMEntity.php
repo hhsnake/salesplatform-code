@@ -78,6 +78,9 @@ class CRMEntity {
 		$this->db->println("TRANS saveentity starts $module");
 		$this->db->startTransaction();
 
+        //SalesPlatform.ru begin
+        $saveError = null; 
+        //SalesPlatform.ru end
 
 		foreach ($this->tab_name as $table_name) {
 
@@ -86,8 +89,21 @@ class CRMEntity {
 			} else {
 				$this->insertIntoEntityTable($table_name, $module, $fileid);
 			}
+            
+            //SalesPlatform.ru begin
+            if($this->db->database->ErrorMsg() != false && $saveError === null) {
+                $saveError = vtranslate('LBL_ERROR_CODE') . ": " . $this->db->database->ErrorNo() . " " . 
+                        vtranslate('LBL_ERROR_MESSAGE') . ": " . $this->db->database->ErrorMsg();
+            }
+            //SalesPlatform.ru end
 		}
 
+        //SalesPlatform.ru begin
+        if($this->db->hasFailedTransaction()) {
+            throw new Exception($saveError);
+        }
+        //SalesPlatform.ru end
+        
 		//Calling the Module specific save code
 		$this->save_module($module);
 
@@ -153,9 +169,11 @@ class CRMEntity {
 		// Check 2
 		$save_file = 'true';
 		//only images are allowed for these modules
-		if ($module == 'Contacts' || $module == 'Products') {
-			$save_file = validateImageFile($file_details);
-		}
+        //SalesPlatform.ru begin
+		//if ($module == 'Contacts' || $module == 'Products') {
+		//	$save_file = validateImageFile($file_details);
+		//}
+        //SalesPlatform.ru end
 
 		$binFile = sanitizeUploadFileName($file_name, $upload_badext);
 

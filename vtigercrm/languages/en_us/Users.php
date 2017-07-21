@@ -247,10 +247,26 @@ $languageStrings = array(
     'Asia/Kamchatka'  =>  '(UTC+12:00) Kamchatka',
     'Pacific/Auckland'  =>  '(UTC+12:00) Auckland',
     'Asia/Magadan'  =>  '(UTC+12:00) Magadan',
-    'Pacific/Tongatapu'  =>  '(UTC+13:00) Nukualofa',
-    
+    'Pacific/Tongatapu'  =>  '(UTC+13:00) Nukualofa',  
     // currency separator in user preferance
       'LBL_Space' => 'Space',
+    //SalesPlatform.ru begin   
+    'LBL_INVALID_PASSWORD'=>'Invalid Username or Password',
+    'LBL_INVALID_EMAIL'=>'Invalid Username or Email address',
+    'LBL_EMAIL_SEND_MESSAGE'=>'Mail has been sent to your inbox, please check your e-mail',    
+    'LBL_OUTGOING_SERVER_UNCONFIGURED'=>'Outgoing mail server was not configured.', 
+    'LBL_LOGIN_IN_SYSTEM'=>'Login', 
+    'LBL_USER_NAME'=>'User name',
+    'LBL_SING_IN'=>'Sign in',
+    'LBL_FOGGOT_PASSWORD'=>'Forgot Password ?',
+    'LBL_SUBMIT'=>'Submit',    
+    'LBL_BACK'=>'Back',
+    'LBL_FOGGOT_PASSWORD_TITLE'=>'Forgot Password',
+    'LBL_COMMUNITY'=>'Community',
+    'LBL_FORUMS'=>'Forums',
+    'LBL_WIKI'=>'Wiki',
+    'LBL_BLOGS'=>'Blogs',
+    //SalesPlatform.ru end    
 );
 
 $jsLanguageStrings = array(

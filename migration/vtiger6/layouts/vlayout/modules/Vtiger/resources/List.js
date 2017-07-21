@@ -159,6 +159,18 @@ jQuery.Class("Vtiger_List_Js",{
 			'transferOwnerId' : transferOwner,
 			'related_modules' : relatedModules
 		}
+        
+        //SalesPaltform.ru begin
+        var searchValue = listInstance.getAlphabetSearchValue();
+        if ((typeof searchValue != "undefined") && (searchValue.length > 0)) {
+            params['search_key'] = listInstance.getAlphabetSearchField();
+            params['search_value'] = searchValue;
+            params['operator'] = "s";
+        }
+
+        params.search_params = JSON.stringify(listInstance.getListSearchParams());
+        //SalesPlatform.ru end
+        
 		AppConnector.request(params).then(
 			function(data) {
 				if(data.success){

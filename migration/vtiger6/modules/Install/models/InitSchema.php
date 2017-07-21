@@ -97,11 +97,11 @@ class Install_InitSchema_Model {
 		$profileId4 = $adb->getUniqueID("vtiger_profile");
 
 		// SalesPlatform.ru begin
-		$adb->pquery("INSERT INTO vtiger_role VALUES('H".$roleId1."','Организация','H".$roleId1."',0)", array());
-        $adb->pquery("INSERT INTO vtiger_role VALUES('H".$roleId2."','Директор','H".$roleId1."::H".$roleId2."',1)", array());
-        $adb->pquery("INSERT INTO vtiger_role VALUES('H".$roleId3."','Заместитель Директора','H".$roleId1."::H".$roleId2."::H".$roleId3."',2)", array());
-        $adb->pquery("INSERT INTO vtiger_role VALUES('H".$roleId4."','Менеджер по Продажам','H".$roleId1."::H".$roleId2."::H".$roleId3."::H".$roleId4."',3)", array());
-        $adb->pquery("INSERT INTO vtiger_role VALUES('H".$roleId5."','Продавец','H".$roleId1."::H".$roleId2."::H".$roleId3."::H".$roleId4."::H".$roleId5."',4)", array());
+		$adb->pquery("INSERT INTO vtiger_role VALUES(?,?,?,0)", array('H'.$roleId1,vtranslate('LBL_ORGANISATION','Install'),'H'.$roleId1));
+        $adb->pquery("INSERT INTO vtiger_role VALUES(?,?,?,1)", array('H'.$roleId2,vtranslate('LBL_CEO','Install'),'H'.$roleId1.'::H'.$roleId2));
+        $adb->pquery("INSERT INTO vtiger_role VALUES(?,?,?,2)", array('H'.$roleId3,vtranslate('LBL_VICE_PRESIDENT','Install'),'H'.$roleId1.'::H'.$roleId2.'::H'.$roleId3));
+        $adb->pquery("INSERT INTO vtiger_role VALUES(?,?,?,3)", array('H'.$roleId4,vtranslate('LBL_SALES_MANAGER','Install'),'H'.$roleId1.'::H'.$roleId2.'::H'.$roleId3.'::H'.$roleId4));
+        $adb->pquery("INSERT INTO vtiger_role VALUES(?,?,?,,4)", array('H'.$roleId5,vtranslate('LBL_SALES_PERSON','Install'),'H'.$roleId1.'::H'.$roleId2.'::H'.$roleId3.'::H'.$roleId4.'::H'.$roleId5));
 //		$adb->pquery("INSERT INTO vtiger_role VALUES('H".$roleId1."','Organisation','H".$roleId1."',0)", array());
 //        $adb->pquery("INSERT INTO vtiger_role VALUES('H".$roleId2."','CEO','H".$roleId1."::H".$roleId2."',1)", array());
 //        $adb->pquery("INSERT INTO vtiger_role VALUES('H".$roleId3."','Vice President','H".$roleId1."::H".$roleId2."::H".$roleId3."',2)", array());
@@ -110,18 +110,18 @@ class Install_InitSchema_Model {
 		// SalesPlatform.ru end
 
 		//INSERT INTO vtiger_role2profile
-		$adb->pquery("INSERT INTO vtiger_role2profile VALUES ('H".$roleId2."',".$profileId1.")", array());
-		$adb->pquery("INSERT INTO vtiger_role2profile VALUES ('H".$roleId3."',".$profileId2.")", array());
-	  	$adb->pquery("INSERT INTO vtiger_role2profile VALUES ('H".$roleId4."',".$profileId2.")", array());
-		$adb->pquery("INSERT INTO vtiger_role2profile VALUES ('H".$roleId5."',".$profileId2.")", array());
+		$adb->pquery("INSERT INTO vtiger_role2profile VALUES (?,?)", array('H'.$roleId2,$profileId1));
+		$adb->pquery("INSERT INTO vtiger_role2profile VALUES (?,?)", array('H'.$roleId3,$profileId2));
+	  	$adb->pquery("INSERT INTO vtiger_role2profile VALUES (?,?)", array('H'.$roleId4,$profileId2));
+		$adb->pquery("INSERT INTO vtiger_role2profile VALUES (?,?)", array('H'.$roleId5,$profileId2));
 
 		//New Security Start
 		//Inserting into vtiger_profile vtiger_table
 		// SalesPlatform.ru begin
-		$adb->pquery("INSERT INTO vtiger_profile VALUES ('".$profileId1."','Администратор','Профиль Администратора Системы')", array());
-		$adb->pquery("INSERT INTO vtiger_profile VALUES ('".$profileId2."','Продажи','Профиль относящийся к Продажам')", array());
-		$adb->pquery("INSERT INTO vtiger_profile VALUES ('".$profileId3."','Поддержка','Профиль относящийся к Поддержке')", array());
-		$adb->pquery("INSERT INTO vtiger_profile VALUES ('".$profileId4."','Гости','Гостевой профиль для Тестирования')", array());
+                $adb->pquery("INSERT INTO vtiger_profile VALUES (?,?,?)", array($profileId1,vtranslate('LBL_ADMINISTRATOR','Install'),vtranslate('LBL_ADMIN_PROFILE','Install')));
+		$adb->pquery("INSERT INTO vtiger_profile VALUES (?,?,?)", array($profileId2,vtranslate('LBL_SALES_PROFILE','Install'),vtranslate('LBL_PROFILE_RELATED_TO_SALE','Install')));
+		$adb->pquery("INSERT INTO vtiger_profile VALUES (?,?,?)", array($profileId3,vtranslate('LBL_SUPPORT_PROFILE','Install'),vtranslate('LBL_PROFILE_RELATED_TO_SUPPORT','Install')));
+		$adb->pquery("INSERT INTO vtiger_profile VALUES (?,?,?)", array($profileId4,vtranslate('LBL_GUEST_PROFILE','Install'),vtranslate('LBL_GUEST_PROFILE_FOR_TEST_USERS','Install')));
 //		$adb->pquery("INSERT INTO vtiger_profile VALUES ('".$profileId1."','Administrator','Admin Profile')", array());
 //		$adb->pquery("INSERT INTO vtiger_profile VALUES ('".$profileId2."','Sales Profile','Profile Related to Sales')", array());
 //		$adb->pquery("INSERT INTO vtiger_profile VALUES ('".$profileId3."','Support Profile','Profile Related to Support')", array());
@@ -822,8 +822,8 @@ class Install_InitSchema_Model {
         $user->column_fields["time_zone"] = $userTimeZone;
 		$user->column_fields["language"] = $userLanguage;
 		// SalesPlatform.ru begin
-        $user->column_fields["holidays"] = 'ru,';
-        $user->column_fields["workdays"] = '1,2,3,4,5,6,0,';
+        $user->column_fields["holidays"] = vtranslate('holidays_setting','Install');
+        $user->column_fields["workdays"] = vtranslate('workdays_setting','Install');   
         //$user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
         //$user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
 		// SalesPlatform.ru end
@@ -833,8 +833,8 @@ class Install_InitSchema_Model {
         $user->column_fields["reminder_interval"] = '1 Minute';
         $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
 		$user->column_fields["date_format"] = $userDateFormat;
-		// SalesPlatform.ru begin
-		$user->column_fields["hour_format"] = '24';
+		// SalesPlatform.ru begin	
+                $user->column_fields["hour_format"] = vtranslate('hour_format_setting','Install');
 		//$user->column_fields["hour_format"] = 'am/pm';
 		// SalesPlatform.ru end
 		$user->column_fields["start_hour"] = '08:00';
@@ -848,7 +848,7 @@ class Install_InitSchema_Model {
 		if($adminEmail == '') $adminEmail ="admin@vtigeruser.com";
 		$user->column_fields["email1"] = $adminEmail;
 		// SalesPlatform.ru begin
-		$roleQuery = "SELECT roleid FROM vtiger_role WHERE rolename='Директор'";
+		$roleQuery = "SELECT roleid FROM vtiger_role WHERE rolename='".vtranslate('LBL_CEO','Install')."'";
 		//$roleQuery = "SELECT roleid FROM vtiger_role WHERE rolename='CEO'";
 		// SalesPlatform.ru end
 		$adb->checkConnection();
@@ -872,23 +872,23 @@ class Install_InitSchema_Model {
 		$groupId1 = $adb->getUniqueID("vtiger_users");
 		$groupId2 = $adb->getUniqueID("vtiger_users");
 		$groupId3 = $adb->getUniqueID("vtiger_users");
-
+                
 		// SalesPlatform.ru begin
-		$adb->pquery("INSERT INTO vtiger_groups VALUES ('".$groupId1."','Отдел Продаж','Группа менеджеров по Продажам')", array());
-		//$adb->pquery("INSERT INTO vtiger_groups VALUES ('".$groupId1."','Team Selling','Group Related to Sales')", array());
+		$adb->pquery("INSERT INTO vtiger_groups VALUES (?,?,?)", array($groupId1,vtranslate('LBL_TEAM_SELLING','Install'),vtranslate('LBL_GROUP_RELATED_TO_SALES','Install')));
+                //$adb->pquery("INSERT INTO vtiger_groups VALUES ('".$groupId1."','Team Selling','Group Related to Sales')", array());
 		// SalesPlatform.ru end
 		$adb->pquery("INSERT INTO vtiger_group2role VALUES ('".$groupId1."','H".$roleId4."')", array());
 		$adb->pquery("INSERT INTO vtiger_group2rs VALUES ('".$groupId1."','H".$roleId5."')", array());
 
 		// SalesPlatform.ru begin
-		$adb->pquery("INSERT INTO vtiger_groups VALUES ('".$groupId2."','Отдел Маркетинга','Группа менеджеров по Маркетингу')", array());
+		$adb->pquery("INSERT INTO vtiger_groups VALUES (?,?,?)", array($groupId2,vtranslate('LBL_MARKETING_GROUP','Install'),vtranslate('LBL_GROUP_RELATED_TO_MARKETING_ACTIVITIES','Install')));
 		//$adb->pquery("INSERT INTO vtiger_groups VALUES ('".$groupId2."','Marketing Group','Group Related to Marketing Activities')", array());
 		// SalesPlatform.ru end
 		$adb->pquery("INSERT INTO vtiger_group2role VALUES ('".$groupId2."','H".$roleId2."')", array());
 		$adb->pquery("INSERT INTO vtiger_group2rs VALUES ('".$groupId2."','H".$roleId3."')", array());
 
 		// SalesPlatform.ru begin
-		$adb->pquery("INSERT INTO vtiger_groups VALUES ('".$groupId3."','Отдел Поддержки','Группа сервисной поддержки Клиентов')", array());
+		$adb->pquery("INSERT INTO vtiger_groups VALUES (?,?,?)", array($groupId3,vtranslate('LBL_SUPPORT_GROUP','Install'),vtranslate('LBL_GROUP_RELATED_TO_PROVIDING_SUPPORT','Install')));
 		//$adb->pquery("INSERT INTO vtiger_groups VALUES ('".$groupId3."','Support Group','Group Related to providing Support to Customers')", array());
 		// SalesPlatform.ru end
 		$adb->pquery("INSERT INTO vtiger_group2role VALUES ('".$groupId3."','H".$roleId3."')", array());
@@ -941,11 +941,11 @@ class Install_InitSchema_Model {
 	public static function registerCronTasks() {
 		vimport('~~vtlib/Vtiger/Cron.php');
         // SalesPlatform.ru begin localization
-        Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', 1, 1, 'Рекомендуемая частота обновления для Обработчиков - 15 минут.');
-	    Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', 1, 2, 'Рекомендуемая частота обновления для RecurringInvoice - 12 часов.');
-	    Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calendar', 1, 3, 'Рекомендуемая частота обновления для SendReminder - 15 минут.');
-	    Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', 1, 4, 'Рекомендуемая частота обновления для ScheduleReports - 15 минут.');
-	    Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings', 1, 5, 'Рекомендуемая частота обновления для MailScanner - 15 минут.');
+        Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', 1, 1, vtranslate('LBL_FREQUENCY_WORKFLOW','Install'));      
+	    Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', 1, 2, vtranslate('LBL_FREQUENCY_RECURRING_INVOICE','Install'));
+	    Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calendar', 1, 3, vtranslate('LBL_FREQUENCY_SEND_REMINDER','Install'));
+	    Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', 1, 4, vtranslate('LBL_FREQUENCY_SCHEDULE_REPORTS','Install'));
+	    Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings', 1, 5, vtranslate('LBL_FREQUENCY_MAIL_SCANNER','Install'));
 		//Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', 1, 1, 'Recommended frequency for Workflow is 15 mins');
 		//Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', 1, 2, 'Recommended frequency for RecurringInvoice is 12 hours');
 		//Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calendar', 1, 3, 'Recommended frequency for SendReminder is 15 mins');
@@ -1043,7 +1043,10 @@ class Install_InitSchema_Model {
 		$vtWorkFlow = new VTWorkflowManager($adb);
 		$invWorkFlow = $vtWorkFlow->newWorkFlow("Invoice");
 		$invWorkFlow->test = '[{"fieldname":"subject","operation":"does not contain","value":"`!`"}]';
-		$invWorkFlow->description = "UpdateInventoryProducts On Every Save";
+                //Salesplatform.ru begin
+		$invWorkFlow->description = vtranslate('LBL_UPDATE_INVENTORY_PRODUCTS','Install');
+                //$invWorkFlow->description = "UpdateInventoryProducts On Every Save";
+                //Salesplatform.ru end
 		$invWorkFlow->defaultworkflow = 1;
 		$vtWorkFlow->save($invWorkFlow);
 
@@ -1058,7 +1061,7 @@ class Install_InitSchema_Model {
 		$accWorkFlow = $vtaWorkFlow->newWorkFlow("Accounts");
 		$accWorkFlow->test = '[{"fieldname":"notify_owner","operation":"is","value":"true:boolean"}]';
 		// SalesPlatform.ru begin
-	    $accWorkFlow->description = "Отправить Email пользователю, если указано Уведомлять ответственного";
+                $accWorkFlow->description = vtranslate('LBL_NOTIFYOWNER_FLAG','Install');
 		//$accWorkFlow->description = "Send Email to user when Notifyowner is True";
 		// SalesPlatform.ru end
 		$accWorkFlow->executionCondition=2;
@@ -1071,13 +1074,10 @@ class Install_InitSchema_Model {
 		$task->active=true;
 		$task->methodName = "NotifyOwner";
 		$task->recepient = "\$(assigned_user_id : (Users) email1)";
-		// SalesPlatform.ru begin
-	    $task->subject = "Уведомление о назначении Контрагента";
-	    $task->content = "В системе vtigerCRM Вам был назначен контрагент<br>Информация о контрагенте :<br><br>".
-			"Контрагент №:".'<b>$account_no</b><br>'."Контрагент:".'<b>$accountname</b><br>'."Рейтинг:".'<b>$rating</b><br>'.
-			"Отрасль:".'<b>$industry</b><br>'."Тип:".'<b>$accounttype</b><br>'.
-			"Описание:".'<b>$description</b><br><br><br>'."Спасибо,<br>Admin";
-	    $task->summary="Создан Контрагент ";
+                // SalesPlatform.ru begin
+                $task->subject = vtranslate('LBL_REGARDING_ACCOUNT_CREATION_SUBJECT','Install');
+		$task->content = vtranslate('LBL_REGARDING_ACCOUNT_CREATION_CONTENT','Install');
+                $task->summary = vtranslate('LBL_REGARDING_ACCOUNT_CREATION_SUMMARY','Install');
 		//$task->subject = "Regarding Account Creation";
 		//$task->content = "An Account has been assigned to you on vtigerCRM<br>Details of account are :<br><br>".
 		//		"AccountId:".'<b>$account_no</b><br>'."AccountName:".'<b>$accountname</b><br>'."Rating:".'<b>$rating</b><br>'.
@@ -1093,13 +1093,13 @@ class Install_InitSchema_Model {
 		$vtcWorkFlow = new VTWorkflowManager($adb);
 		$conWorkFlow = 	$vtcWorkFlow->newWorkFlow("Contacts");
 		// SalesPlatform.ru begin
-	    $conWorkFlow->summary="Создан Контакт ";
+                $conWorkFlow->summary = vtranslate('LBL_REGARDING_CONTACT_CREATION_SUMMARY','Install');                
 		//$conWorkFlow->summary="A contact has been created ";
 		// SalesPlatform.ru end
 		$conWorkFlow->executionCondition=2;
 		$conWorkFlow->test = '[{"fieldname":"notify_owner","operation":"is","value":"true:boolean"}]';
-		// SalesPlatform.ru begin
-	    $conWorkFlow->description = "Отправить Email пользователю, если указано Уведомлять ответственного";
+		// SalesPlatform.ru begin             
+                $conWorkFlow->description = vtranslate('LBL_NOTIFYOWNER_FLAG','Install');
 		//$conWorkFlow->description = "Send Email to user when Notifyowner is True";
 		// SalesPlatform.ru end
 		$conWorkFlow->defaultworkflow = 1;
@@ -1111,13 +1111,9 @@ class Install_InitSchema_Model {
 		$task->methodName = "NotifyOwner";
 		$task->recepient = "\$(assigned_user_id : (Users) email1)";
 		// SalesPlatform.ru begin
-	    $task->subject = "Уведомление о назначении Контакта";
-	    $task->content = "В системе vtigerCRM Вам был назначен контакт<br>Информация о контакте :<br><br>".
-			"Контакт №:".'<b>$contact_no</b><br>'."Фамилия:".'<b>$lastname</b><br>'."Имя:".'<b>$firstname</b><br>'.
-			"Источник:".'<b>$leadsource</b><br>'.
-			"Отдел:".'<b>$department</b><br>'.
-			"Описание:".'<b>$description</b><br><br><br>'."Спасибо,<br>Admin";
-	    $task->summary="Создан Контакт ";
+                $task->subject = vtranslate('LBL_REGARDING_CONTACT_CREATION_SUBJECT','Install');
+		$task->content = vtranslate('LBL_REGARDING_CONTACT_CREATION_CONTENT','Install');
+                $task->summary = vtranslate('LBL_REGARDING_CONTACT_CREATION_SUMMARY','Install');
 		//$task->subject = "Regarding Contact Creation";
 		//$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
 		//		"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
@@ -1136,7 +1132,7 @@ class Install_InitSchema_Model {
 		$conpuWorkFlow = $vtcWorkFlow->newWorkFlow("Contacts");
 		$conpuWorkFlow->test = '[{"fieldname":"portal","operation":"is","value":"true:boolean"}]';
 		// SalesPlatform.ru begin
-	    $conpuWorkFlow->description = "Отправить Email пользователю, если контакт стал пользователем портала";
+                $conpuWorkFlow->description = vtranslate('LBL_PORTALUSER_FLAG','Install');
 		//$conpuWorkFlow->description = "Send Email to user when Portal User is True";
 		// SalesPlatform.ru end
 		$conpuWorkFlow->executionCondition=2;
@@ -1151,15 +1147,9 @@ class Install_InitSchema_Model {
 		$task->methodName = "NotifyOwner";
 		$task->recepient = "\$(assigned_user_id : (Users) email1)";
 		// SalesPlatform.ru begin
-	    $task->subject = "Уведомление о назначении Контакта";
-	    $task->content = "В системе vtigerCRM Вам был назначен контакт<br>Информация о контакте :<br><br>".
-			"Контакт №:".'<b>$contact_no</b><br>'."Фамилия:".'<b>$lastname</b><br>'."Имя:".'<b>$firstname</b><br>'.
-			"Источник:".'<b>$leadsource</b><br>'.
-			"Отдел:".'<b>$department</b><br>'.
-			"Описание:".'<b>$description</b><br><br><br>'."А также <b>детали логина на CustomerPortal</b> были отправлены " .
-			"Email :-".'$email<br>'."<br>Спасибо,<br>Admin";
-		
-	    $task->summary="Создан Контакт ";
+                $task->subject = vtranslate('LBL_REGARDING_CONTACT_ASSIGNED_SUBJECT','Install');
+		$task->content = vtranslate('LBL_REGARDING_CONTACT_ASSIGNED_CONTENT','Install');
+                $task->summary = vtranslate('LBL_REGARDING_CONTACT_ASSIGNED_SUMMARY','Install');    
 		//$task->subject = "Regarding Contact Assignment";
 		//$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
 		//		"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
@@ -1167,7 +1157,6 @@ class Install_InitSchema_Model {
 		//		"Department:".'<b>$department</b><br>'.
 		//		"Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " .
 		//		"EmailID :-".'$email<br>'."<br>Thank You<br>Admin";
-
 		//$task->summary="An contact has been created ";
 		// SalesPlatform.ru end
 		$tm->saveTask($task);
@@ -1178,7 +1167,7 @@ class Install_InitSchema_Model {
 		$vtcWorkFlow = new VTWorkflowManager($adb);
 		$potentialWorkFlow = $vtcWorkFlow->newWorkFlow("Potentials");
 		// SalesPlatform.ru begin
-	    $potentialWorkFlow->description = "Отправить Email пользователю при создании Сделки";
+                $potentialWorkFlow->description = vtranslate('LBL_POTENTIAL_FLAG','Install');
 		//$potentialWorkFlow->description = "Send Email to users on Potential creation";
 		// SalesPlatform.ru end
 		$potentialWorkFlow->executionCondition=1;
@@ -1192,15 +1181,9 @@ class Install_InitSchema_Model {
 		$task->active=true;
 		$task->recepient = "\$(assigned_user_id : (Users) email1)";
 		// SalesPlatform.ru begin
-	    $task->subject = "Уведомление о назначении Сделки";
-	    $task->content = "В системе vtigerCRM Вам была назначена сделка<br>Информация о сделке :<br><br>".
-			"Сделка №:".'<b>$potential_no</b><br>'."Название Сделки:".'<b>$potentialname</b><br>'.
-			"Сумма (руб):".'<b>$amount</b><br>'.
-			"Ожидаемая Дата Закрытия:".'<b>$closingdate</b><br>'.
-			"Тип:".'<b>$opportunity_type</b><br><br><br>'.
-			"Описание:".'$description<br>'."<br>Спасибо,<br>Admin";
-
-	    $task->summary="Создана сделка ";
+                $task->subject = vtranslate('LBL_REGARDING_POTENTIAL_ASSIGNED_SUBJECT','Install');
+		$task->content = vtranslate('LBL_REGARDING_POTENTIAL_ASSIGNED_CONTENT','Install');
+                $task->summary = vtranslate('LBL_REGARDING_POTENTIAL_ASSIGNED_SUMMARY','Install');  
 		//$task->subject = "Regarding Potential Assignment";
 		//$task->content = "An Potential has been assigned to you on vtigerCRM<br>Details of Potential are :<br><br>".
 		//		"Potential No:".'<b>$potential_no</b><br>'."Potential Name:".'<b>$potentialname</b><br>'.
@@ -1219,84 +1202,78 @@ class Install_InitSchema_Model {
 		// Contact workflow on creation/modification
 		$contactWorkFlow = $workflowManager->newWorkFlow("Contacts");
 		$contactWorkFlow->test = '';
-	//SalesPlatform.ru begin
-        $contactWorkFlow->description = "Автоматические обработчики для создания и модификации контактов";
-        //$contactWorkFlow->description = "Workflow for Contact Creation or Modification";
-	//SalesPlatform.ru end
+                //SalesPlatform.ru begin
+                $contactWorkFlow->description = vtranslate('LBL_WORKFLOW_FOR_CONTACT_CREATION_AND_MODIFICATION','Install');
+                //$contactWorkFlow->description = "Workflow for Contact Creation or Modification";
+                //SalesPlatform.ru end
 		$contactWorkFlow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 		$contactWorkFlow->defaultworkflow = 1;
 		$workflowManager->save($contactWorkFlow);
 
 		$task = $taskManager->createTask('VTEntityMethodTask', $contactWorkFlow->id);
 		$task->active = true;
-        //SalesPlatform.ru begin
-        $task->summary = 'Сообщение с регистрационными данными клиентского портала';
-	//$task->summary = 'Email Customer Portal Login Details';
-        //SalesPlatform.ru end
+                //SalesPlatform.ru begin
+                $task->description = vtranslate('LBL_CUSTOMER_PORTAL_LOGIN_DETAILS','Install');
+                //$task->summary = 'Email Customer Portal Login Details';
+                //SalesPlatform.ru end
 		$task->methodName = "SendPortalLoginDetails";
 		$taskManager->saveTask($task);
 
 		$task->active=true;
 		$task->recepient = "\$(assigned_user_id : (Users) email1)";
-		$task->subject = "Regarding Contact Assignment";
-		$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
-				"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
-				"Lead Source:".'<b>$leadsource</b><br>'.
-				"Department:".'<b>$department</b><br>'.
-				"Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " .
-				"EmailID :-".'$email<br>'."<br>Thank You<br>Admin";
-
-		$task->summary="An contact has been created ";
+                $task->subject = vtranslate('LBL_REGARDING_CONTACT_ASSIGNED_SUBJECT','Install');
+		$task->content = vtranslate('LBL_REGARDING_CONTACT_ASSIGNED_CONTENT','Install');
+                $task->summary = vtranslate('LBL_REGARDING_CONTACT_ASSIGNED_SUMMARY','Install');   
 		$tm->saveTask($task);
 		$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
                 
 		// Trouble Tickets workflow on creation from Customer Portal
 		$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 		$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';
-	//SalesPlatform.ru begin
-        $helpDeskWorkflow->description = "Автоматический обработчик для создаваемой заявки из портала";
-        //$helpDeskWorkflow->description = "Workflow for Ticket Created from Portal";
-	//SalesPlatform.ru end
+                //SalesPlatform.ru begin
+                $helpDeskWorkflow->description = vtranslate('LBL_WORKFLOW_FOR_TICKET_CREATION','Install');
+                //$helpDeskWorkflow->description = "Workflow for Ticket Created from Portal";
+                //SalesPlatform.ru end
 		$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_FIRST_SAVE;
 		$helpDeskWorkflow->defaultworkflow = 1;
 		$workflowManager->save($helpDeskWorkflow);
 
 		$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 		$task->active = true;
-	//SalesPlatform.ru begin
-        $task->summary = 'Уведомляет ответственного за заявку и связанный контакт при создании заявки из портала';
-        //$task->summary = 'Notify Record Owner and the Related Contact when Ticket is created from Portal';
-	//SalesPlatform.ru end
+                //SalesPlatform.ru begin
+                $task->summary = vtranslate('LBL_NOTIFYOWNER_TICKET_CREATION','Install');
+                //$task->summary = 'Notify Record Owner and the Related Contact when Ticket is created from Portal';
+                //SalesPlatform.ru end
 		$task->methodName = "NotifyOnPortalTicketCreation";
 		$taskManager->saveTask($task);
 
 		// Trouble Tickets workflow on ticket update from Customer Portal
 		$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 		$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';
-	//SalesPlatform.ru begin
-        $helpDeskWorkflow->description = "Автоматические обработчики для обновляемых заявок из портала";
-        //$helpDeskWorkflow->description = "Workflow for Ticket Updated from Portal";
-	//SalesPlatform.ru end
+                //SalesPlatform.ru begin
+                $helpDeskWorkflow->description = vtranslate('LBL_WORKFLOW_FOR_TICKET_UPDATE','Install');
+                //$helpDeskWorkflow->description = "Workflow for Ticket Updated from Portal";
+                //SalesPlatform.ru end
 		$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_MODIFY;
 		$helpDeskWorkflow->defaultworkflow = 1;
 		$workflowManager->save($helpDeskWorkflow);
 
 		$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
-		$task->active = true;
-	//SalesPlatform.ru begin
-        $task->summary = 'Уведомляет ответственного за заявку при добавлении комментариев к заявке через Клиентский портал';
-        //$task->summary = 'Notify Record Owner when Comment is added to a Ticket from Customer Portal';
-        //SalesPlatform.ru end
+                $task->active = true;
+                //SalesPlatform.ru begin
+                $task->summary = vtranslate('LBL_NOTIFYOWNER_COMMENT_ADDITION','Install');
+                //$task->summary = 'Notify Record Owner when Comment is added to a Ticket from Customer Portal';
+                //SalesPlatform.ru end
 		$task->methodName = "NotifyOnPortalTicketComment";
 		$taskManager->saveTask($task);
 
 		// Trouble Tickets workflow on ticket change, which is not from Customer Portal - Both Record Owner and Related Customer
 		$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 		$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"false:boolean"}]';
-	//SalesPlatform.ru begin
-        $helpDeskWorkflow->description = "Обработчик для изменяемых заявок, не из портала";
-        //$helpDeskWorkflow->description = "Workflow for Ticket Change, not from the Portal";
-	//SalesPlatform.ru end
+                //SalesPlatform.ru begin
+                $helpDeskWorkflow->description = vtranslate('LBL_WORKFLOW_FOR_TICKET_CHANGE','Install');
+                //$helpDeskWorkflow->description = "Workflow for Ticket Change, not from the Portal";
+                //SalesPlatform.ru end
 		$helpDeskWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 		$helpDeskWorkflow->defaultworkflow = 1;
 		$workflowManager->save($helpDeskWorkflow);
@@ -1304,7 +1281,7 @@ class Install_InitSchema_Model {
 		$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 		$task->active = true;
         //SalesPlatform.ru begin
-        $task->summary = 'Уведомляет ответственного за заявку, созданную не из портала, при ее изменении';
+        $task->summary = vtranslate('LBL_NOTIFYOWNER_TICKET_CHANGE','Install');
 	//$task->summary = 'Notify Record Owner on Ticket Change, which is not done from Portal';
 	//SalesPlatform.ru end
 		$task->methodName = "NotifyOwnerOnTicketChange";
@@ -1313,7 +1290,7 @@ class Install_InitSchema_Model {
 		$task = $taskManager->createTask('VTEntityMethodTask', $helpDeskWorkflow->id);
 		$task->active = true;
 	//SalesPlatform.ru begin
-        $task->summary = 'Уведомляет связанного клиента при изменении заявки, которая создана не из портала';
+        $task->summary = vtranslate('LBL_NOTIFYCUSTOMER_TICKET_CHANGE','Install');
         //$task->summary = 'Notify Related Customer on Ticket Change, which is not done from Portal';
 	//SalesPlatform.ru end
 		$task->methodName = "NotifyParentOnTicketChange";
@@ -1323,7 +1300,7 @@ class Install_InitSchema_Model {
 		$eventsWorkflow = $workflowManager->newWorkFlow("Events");
 		$eventsWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
 	//SalesPlatform.ru begin
-        $eventsWorkflow->description = "Автоматические обработчики для событий при выбранной опции Отправить уведомление";
+        $eventsWorkflow->description = vtranslate('LBL_WORKFLOW_FOR_ACTIVITY','Install');
         //$eventsWorkflow->description = "Workflow for Events when Send Notification is True";
 	//SalesPlatform.ru end
 		$eventsWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
@@ -1333,40 +1310,26 @@ class Install_InitSchema_Model {
 		$task = $taskManager->createTask('VTEmailTask', $eventsWorkflow->id);
 		$task->active = true;
 	//SalesPlatform.ru begin
-        $task->summary = 'Отправляет письмо с уведомлением приглашенным пользователям';
+        $task->summary = vtranslate('LBL_NOTIFICATION_EMAIL_ACTIVITY_SUMMARY','Install');
         //$task->summary = 'Send Notification Email to Record Owner';
         //SalesPlatform.ru end
 		$task->recepient = "\$(assigned_user_id : (Users) email1)";
 	//SalesPlatform.ru begin
-        $task->subject = "Событие :  \$subject";
-	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
-					.'<b>Детали события:</b><br/>'
-					.'Название события       : $subject<br/>'
-					.'Дата и Время Начала    : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-					.'Дата и Время Окончания : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-					.'Статус                 : $eventstatus <br/>'
-					.'Приоритет              : $taskpriority <br/>'
-					.'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
-					.'$(parent_id            : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
-					.'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
-					.'Место проведения       : $location <br/>'
-					.'Описание               : $description';
-        //vtiger commented code 
-        /*
-		$task->subject = "Event :  \$subject";
-		$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
-						.'<b>Activity Notification Details:</b><br/>'
-						.'Subject             : $subject<br/>'
-						.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-						.'End date and time   : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-						.'Status              : $eventstatus <br/>'
-						.'Priority            : $taskpriority <br/>'
-						.'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
-												.'$(parent_id : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
-						.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
-						.'Location            : $location <br/>'
-						.'Description         : $description';
-         */
+        $task->subject = vtranslate('LBL_NOTIFICATION_EMAIL_ACTIVITY_SUBJECT','Install');
+        $task->content = vtranslate('LBL_NOTIFICATION_EMAIL_ACTIVITY_CONTENT','Install');
+        //$task->subject = "Event :  \$subject";
+        //$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
+        //				.'<b>Activity Notification Details:</b><br/>'
+        //				.'Subject             : $subject<br/>'
+        //				.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+        //				.'End date and time   : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+        //				.'Status              : $eventstatus <br/>'
+        //				.'Priority            : $taskpriority <br/>'
+        //				.'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+        //				.'$(parent_id         : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+        //				.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+        //				.'Location            : $location <br/>'
+        //				.'Description         : $description';
 	//SalesPlatform.ru end
 		$taskManager->saveTask($task);
 
@@ -1374,7 +1337,7 @@ class Install_InitSchema_Model {
 		$calendarWorkflow = $workflowManager->newWorkFlow("Calendar");
 		$calendarWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
         //SalesPlatform.ru begin
-        $calendarWorkflow->description = "Автоматические обработчики для задач Календаря при выбранной опции Отправить уведомление";
+        $calendarWorkflow->description = vtranslate('LBL_WORKFLOW_FOR_TASK','Install');
         //$calendarWorkflow->description = "Workflow for Calendar Todos when Send Notification is True";
 	//SalesPlatform.ru end
 		$calendarWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
@@ -1384,40 +1347,26 @@ class Install_InitSchema_Model {
 		$task = $taskManager->createTask('VTEmailTask', $calendarWorkflow->id);
 		$task->active = true;
         //SalesPlatform.ru begin
-        $task->summary = 'Отправляет письмо с уведомлением ответственному за задачу';
+        $task->summary = vtranslate('LBL_NOTIFICATION_EMAIL_TASK_SUMMARY','Install');
         //$task->summary = 'Send Notification Email to Record Owner';
         //SalesPlatform.ru end
 		$task->recepient = "\$(assigned_user_id : (Users) email1)";
 	//SalesPlatform.ru begin
-        $task->subject = "Задача :  \$subject";
-	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
-					.'<b>Детали задачи:</b><br/>'
-					.'Название задачи        : $subject<br/>'
-					.'Дата и Время Начала    : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-					.'Дата и Время Окончания : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-					.'Статус                 : $taskstatus <br/>'
-					.'Приоритет              : $taskpriority <br/>'
-					.'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
-					.'$(parent_id : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
-					.'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
-					.'Место проведения       : $location <br/>'
-					.'Описание               : $description';
-        //vtiger commented code
-        /*
-		$task->subject = "Task :  \$subject";
-		$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
-						.'<b>Task Notification Details:</b><br/>'
-						.'Subject : $subject<br/>'
-						.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-						.'End date and time   : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-						.'Status              : $taskstatus <br/>'
-						.'Priority            : $taskpriority <br/>'
-						.'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
-						.'$(parent_id         : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
-						.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
-						.'Location            : $location <br/>'
-						.'Description         : $description';
-         */
+        $task->subject = vtranslate('LBL_NOTIFICATION_EMAIL_TASK_SUBJECT','Install');
+        $task->content = vtranslate('LBL_NOTIFICATION_EMAIL_TASK_CONTENT','Install');
+        //$task->subject = "Task :  \$subject";
+        //$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
+        //				.'<b>Task Notification Details:</b><br/>'
+        //				.'Subject : $subject<br/>'
+        //				.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+        //				.'End date and time   : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+        //				.'Status              : $taskstatus <br/>'
+        //				.'Priority            : $taskpriority <br/>'
+        //				.'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+        //				.'$(parent_id         : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+        //				.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+        //				.'Location            : $location <br/>'
+        //				.'Description         : $description';
 	//SalesPlatform.ru end
 		$taskManager->saveTask($task);
 	}
@@ -1487,17 +1436,8 @@ class Install_InitSchema_Model {
 		$field2 = Vtiger_Field::getInstance('days',$helpDeskModule);
 
         // SalesPlatform.ru begin
-	$field1->setHelpInfo('Это оценка трудоемкости заявки в часах.'.
-				'<br>При добавлении заявки к Сервисному Контракту '. 
-				'число использованных единиц обслуживания автоматически увеличивается при закрытии заявки '.
-				'на величину, указанную в заявке. '.
-				'При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.');
-
-	$field2->setHelpInfo('Это оценка трудоемкости заявки в днях.'.
-				'<br>При добавлении заявки к Сервисному Контракту '. 
-				'число использованных единиц обслуживания автоматически увеличивается при закрытии заявки '.
-				'на величину, указанную в заявке. '.
-				'При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.');
+	$field1->setHelpInfo(vtranslate('LBL_HELP_INFO1'));
+	$field2->setHelpInfo(vtranslate('LBL_HELP_INFO2'));
 		//$field1->setHelpInfo('This gives the estimated hours for the Ticket.'.
 		//			'<br>When the same ticket is added to a Service Contract,'.
 		//			'based on the Tracking Unit of the Service Contract,'.

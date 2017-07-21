@@ -33,6 +33,7 @@ class Install_Utils_Model {
 		'Contact Image Directory' => './test/contact/',
 		'Logo Directory' => './test/logo/',
 		'Logs Directory' => './logs/',
+		'Vtiger Root Directory' => './',
 	);
 
 	/**
@@ -167,6 +168,9 @@ class Install_Utils_Model {
 		$preInstallConfig['LBL_PHP_VERSION']	= array(phpversion(), '5.4.0', (version_compare(phpversion(), '5.4.0', '>=')));
 		$preInstallConfig['LBL_IMAP_SUPPORT']	= array(function_exists('imap_open'), true, (function_exists('imap_open') == true));
 		$preInstallConfig['LBL_ZLIB_SUPPORT']	= array(function_exists('gzinflate'), true, (function_exists('gzinflate') == true));
+                // SalesPlatform.ru begin
+                $preInstallConfig['LBL_EXIF_SUPPORT']	= array(function_exists('exif_read_data'), true, (function_exists('exif_read_data') == true));
+                // SalesPlatform.ru end
                 if ($preInstallConfig['LBL_PHP_VERSION'] >= '5.5.0') {
                     $preInstallConfig['LBL_MYSQLI_CONNECT_SUPPORT'] = array(extension_loaded('mysqli'), true, extension_loaded('mysqli'));
                 }

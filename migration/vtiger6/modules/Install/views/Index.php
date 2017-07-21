@@ -99,11 +99,13 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$viewer->view('Step3.tpl', $moduleName);
 	}
 
-	public function Step4(Vtiger_Request $request) {
+	public function Step4(Vtiger_Request $request) {        
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$viewer->assign('CURRENCIES', Install_Utils_Model::getCurrencyList());
-
+                // SalesPlatform.ru begin
+                $viewer->assign('DEFAULT_LANGUAGE', vglobal('default_language'));
+                // SalesPlatform.ru end
 		require_once 'modules/Users/UserTimeZonesArray.php';
 		$timeZone = new UserTimeZones();
 		$viewer->assign('TIMEZONES', $timeZone->userTimeZones());
@@ -118,7 +120,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$viewer->assign('ADMIN_PASSWORD', $defaultParameters['admin_password']);	
 		$viewer->assign('ADMIN_EMAIL', $defaultParameters['admin_email']);		
 						
-		$viewer->view('Step4.tpl', $moduleName);
+		$viewer->view('Step4.tpl', $moduleName);                
 	}
 
 	public function Step5(Vtiger_Request $request) {

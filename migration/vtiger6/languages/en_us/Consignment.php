@@ -182,4 +182,12 @@ $languageStrings = Array(
 'Documents'=>'Documents',
 
 'SINGLE_Consignment'=>'Consignment',
+    
+//SalesPaltform.ru begin
+'LBL_GOODS_CONSIGNMENT' => 'Goods consigment',    
+'Has Goods Consignment' => 'Has Goods Consignment',
+'Invoice Name' => 'Invoice Name', 
+'Goods Consignment No' => 'Goods Consignment No',
+'Self Company' => 'Self Company',
+//SalesPlatform.ru end   
 );

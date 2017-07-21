@@ -110,6 +110,18 @@ class ModTracker_Record_Model extends Vtiger_Record_Model {
 				if($row['fieldname'] == 'record_id' || $row['fieldname'] == 'record_module') continue;
 
 				$fieldModel = Vtiger_Field_Model::getInstance($row['fieldname'], $this->getParent()->getModule());
+	                //SalesPlatform.ru begin History of products changes
+	                if(!$fieldModel && in_array($this->getParent()->getModuleName(), getInventoryModules()) &&  
+	                    strpos($row['fieldname'], 'productid') === 0) { 
+	                     
+	                    $fieldModel = new InventoryModTracker_Field_Model($row, $this->getParent()->getModule()); 
+	                     
+	                    $fieldInstance = new ExtendentModTracker_Field_Model(); 
+	                    $fieldInstance->setData($row)->setParent($this)->setFieldInstance($fieldModel); 
+	                    $fieldInstances[] = $fieldInstance; 
+	                    continue; 
+	                } 
+	                //SalesPlatform.ru end History of products changes
 				if(!$fieldModel) continue;
 				
 				$fieldInstance = new ModTracker_Field_Model();
@@ -139,3 +151,190 @@ class ModTracker_Record_Model extends Vtiger_Record_Model {
         return $db->query_result($result, 0, 'count');
 	}
 }
+
+	 
+	//SalesPlatform.ru begin History of products changes
+	class ExtendentModTracker_Field_Model extends ModTracker_Field_Model { 
+	     
+	    public function get($key) { 
+	        if($key === 'prevalue') { 
+	            return $this->getFieldInstance()->get($key); 
+	        } 
+	         
+	        if($key === 'postvalue') { 
+	            return $this->getFieldInstance()->get($key); 
+	        } 
+	         
+	        return parent::get($key); 
+	    } 
+	     
+	} 
+	 
+	class InventoryModTracker_Field_Model extends Vtiger_Field_Model { 
+	     
+	    private $productId; 
+	    private $fieldType; 
+	    private $moduleModel; 
+	     
+	    private $postValue; 
+	    private $preValue; 
+	     
+	    public function __construct($row, $moduleModel) { 
+	        parent::__construct(); 
+	         
+	        list($this->fieldType, $this->productId) = explode("_", $row['fieldname'], 2); 
+	        $this->moduleModel = $moduleModel; 
+	        $this->preValue = $row['prevalue']; 
+	        $this->postValue = $row['postvalue']; 
+	        $this->prepareDisplayCompare(); 
+	    } 
+	     
+	    public function isViewable() { 
+	        return true; 
+	    } 
+	     
+	    public function getDisplayType() { 
+	        return '1'; 
+	    } 
+	     
+	    public function get($propertyName) { 
+	        if($propertyName == 'label') { 
+	            return $this->getName(); 
+	        } 
+	         
+	        if($propertyName === 'prevalue') { 
+	            return $this->getPreValue(); 
+	        } 
+	         
+	        if($propertyName === 'postvalue') { 
+	            return $this->getPostValue(); 
+	        } 
+	         
+	        return parent::get($propertyName); 
+	    } 
+	     
+	    public function getName() { 
+	        $db = PearDatabase::getInstance(); 
+	         
+	        /* Get type */ 
+	        $result = $db->pquery("SELECT label FROM vtiger_crmentity WHERE crmid=?", array($this->productId)); 
+	        if($result && $resultRow = $db->fetchByAssoc($result)) { 
+	            return $resultRow['label']; 
+	        } 
+	         
+	        return ''; 
+	    } 
+	     
+	    private function prepareDisplayCompare() { 
+	        if($this->preValue != null && $this->postValue != null) { 
+	            $this->initDiffDisplayContent( 
+	                ModTrackerInventory::fromTracker($this->preValue, $this->moduleModel),  
+	                ModTrackerInventory::fromTracker($this->postValue, $this->moduleModel) 
+	            ); 
+	            return; 
+	        } 
+	         
+	        if($this->preValue != null) { 
+	            $this->preValue = $this->getDispayContent( 
+	                ModTrackerInventory::fromTracker($this->preValue, $this->moduleModel) 
+	            ); 
+	        } 
+	         
+	        if($this->postValue != null) { 
+	            $this->postValue = $this->getDispayContent( 
+	                ModTrackerInventory::fromTracker($this->postValue, $this->moduleModel) 
+	            ); 
+	        } 
+	    } 
+	     
+	    private function initDiffDisplayContent($beforeInventory, $afterInventory) { 
+	        $beforeDisplayFields = $beforeInventory->getDisplayFields(); 
+	        $afterDisplayFields = $afterInventory->getDisplayFields(); 
+	         
+	        /* Get only diff fields names */ 
+	        $fieldsNames = array(); 
+	        foreach($beforeDisplayFields as $fieldName => $beforeFieldModel) { 
+	            if(array_key_exists($fieldName, $afterDisplayFields)) { 
+	                $afterFieldModel = $afterDisplayFields[$fieldName]; 
+	                 
+	                if($afterFieldModel->get('value') != $beforeFieldModel->get('value')) { 
+	                    $fieldsNames[] = $fieldName; 
+	                } 
+	            } 
+	        } 
+	         
+	        $this->preValue = $this->getDispayContent($beforeInventory, $fieldsNames); 
+	        $this->postValue = $this->getDispayContent($afterInventory, $fieldsNames); 
+	    } 
+	     
+	    private function getDispayContent($inventory, $onlyFieldsNames = array()) { 
+	        $displayParts = array(); 
+	        foreach($inventory->getDisplayFields() as $fieldName => $fieldModel) { 
+	            if(!empty($onlyFieldsNames) && !in_array($fieldName, $onlyFieldsNames)) { 
+	                continue; 
+	            } 
+	             
+	            $fieldValue = $fieldModel->getDisplayValue($fieldModel->get('value')); 
+	            if($fieldValue != null) { 
+	               $displayParts[] = vtranslate($fieldModel->get('label'), $this->moduleModel->getName())  .  
+	                    " : «" .  $fieldValue . "»";  
+	            } 
+	             
+	             
+	        } 
+	         
+	        return join(", ", $displayParts); 
+	    } 
+	     
+	    private function getPreValue() { 
+	        return $this->preValue; 
+	    } 
+	     
+	    private function getPostValue() { 
+	        return $this->postValue; 
+	    } 
+	} 
+	 
+	 
+	class ModTrackerInventory { 
+	     
+	    private $fields; 
+	     
+	    private $displayFieldsNames = array( 
+	        'quantity', 'listprice', 'discount_percent', 'discount_amount', 
+	        'comment', 'description', 'tax1' 
+	    ); 
+	     
+	    protected function __construct($serialized, $moduleModel) { 
+	        $this->fields = array(); 
+	        $jsonFields = json_decode(decode_html($serialized)); 
+	         
+	        foreach($this->displayFieldsNames as $fieldName) { 
+	            if(property_exists($jsonFields, $fieldName)) { 
+	                $fieldModel = Vtiger_Field_Model::getInstance($fieldName, $moduleModel); 
+	                if(!$fieldModel) { 
+	                    $fieldModel = new Vtiger_Field_Model(); 
+	                    $fieldModel->set('label', $fieldName); 
+	                    $fieldModel->set('name', $fieldName); 
+	                } 
+	                $fieldModel->set('value', (string) $jsonFields->{$fieldName}); 
+	                 
+	                $this->fields[$fieldModel->getName()] = $fieldModel; 
+	            } 
+	        } 
+	    } 
+	     
+	    /** 
+	     *  
+	     * @param type $serialized 
+	     * @return ModTrackerInventory Description 
+	     */ 
+	    public static function fromTracker($serialized, $moduleModel) { 
+	        return new ModTrackerInventory($serialized, $moduleModel); 
+	    } 
+	     
+	    public function getDisplayFields() { 
+	        return $this->fields; 
+	    } 
+	} 
+	//SalesPlatform.ru end History of products changes

@@ -104,6 +104,10 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 		$currentUser = $this->getLogin();
 		vglobal('current_user', $currentUser);
 		
+		// SalesPlatform.ru begin Check referer setting
+		global $sp_check_site_url;
+		if ($sp_check_site_url == 'true') {
+		// SalesPlatform.ru end
 		// Check we are being connected to on the right host and protocol
 		global $site_URL;
 		$request_URL = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==='on')? 'https': 'http')."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -111,6 +115,9 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
             header("Location: $site_URL",TRUE,301);
             exit;
         }
+		// SalesPlatform.ru begin Check referer setting
+		}
+		// SalesPlatform.ru end
 
 		global $default_language;
 		vglobal('default_language', $default_language);

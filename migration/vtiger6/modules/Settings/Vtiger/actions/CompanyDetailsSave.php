@@ -45,11 +45,9 @@ class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Ac
 						$fieldValue = $moduleModel->get($fieldName);
 					}
 				}
-				// SalesPlatform.ru begin
                 if ($fieldName === 'company') {
                     $fieldValue = htmlspecialchars($request->get('company'), ENT_QUOTES);
                 }
-				// SalesPlatform.ru end
 				$moduleModel->set($fieldName, $fieldValue);
 			}
 			$moduleModel->save();

@@ -30,10 +30,15 @@ class SMSNotifier_DetailView_Model extends Vtiger_DetailView_Model {
 				$linkModelList['DETAILVIEW'][$i]->set('linklabel', vtranslate('LBL_CHECK_STATUS', 'SMSNotifier'));
                 //SalesPlatform.ru begin
 				//$linkModelList['DETAILVIEW'][$i]->set('linkurl', $recordModel->getCheckStatusUrl());
+                //break;
                 $linkModelList['DETAILVIEW'][$i]->set('linkurl', 'javascript:SMSNotifier_Detail_Js.checkStatus("'.$recordModel->getCheckStatusUrl().'",this);');
-                //SalesPlatform.ru end
-				break;
+                //SalesPlatform.ru end				
 			}
+            //SalesPlatform.ru begin
+            if ($linkModel->get('linklabel') == 'LBL_DUPLICATE') {
+                unset($linkModelList['DETAILVIEW'][$i]);
+            }
+            //SalesPlatform.ru end
 		}
 		
 		return $linkModelList;

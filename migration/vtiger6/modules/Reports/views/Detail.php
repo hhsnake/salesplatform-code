@@ -44,11 +44,20 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		$pagingModel = new Vtiger_Paging_Model();
 		$pagingModel->set('page', $page);
 		$pagingModel->set('limit', self::REPORT_LIMIT);
-
+        
+        //SalesPlatform.ru begin
+        $reportData = array();
+        try {
+        //SalesPlatform.ru end
         $reportData = $reportModel->getReportData($pagingModel);
-		$this->reportData = $reportData['data'];
-		$this->calculationFields = $reportModel->getReportCalulationData();
-
+        $this->reportData = $reportData['data'];
+        $this->calculationFields = $reportModel->getReportCalulationData();
+        //SalesPlatform.ru begin
+        } catch(Exception $e) {
+            /* Custom reports mys throws exceptions. So no need stop before filters process */
+        }
+        //SalesPlatform.ru end
+        
         $count = $reportData['count'];
         if($count < 1000){
             $this->count = $count;
@@ -137,52 +146,16 @@ class Reports_Detail_View extends Vtiger_Index_View {
 
         // SalesPlatform.ru begin
 
-        // If it is a custom report
-        if(in_array($reportModel->getReportType(), getCustomReportsList())) {
-
-            // Only equals filter
-            $customAdvanceFilterOpsByFieldType = array(
-                'V' => array('e'),
-                'N' => array('e'),
-                'T' => array('e'),
-                'I' => array('e'),
-                'C' => array('e'),
-                'D' => array('e'),
-                'DT' => array('e'),
-                'I' => array('e'),
-                'NN' => array('e'),
-                'E' => array('e'),
-            );
-
-            $spPaymentsRecordStructure = $recordStructureInstance->getStructure('SPPayments');
-            foreach($spPaymentsRecordStructure as $blockLabel => $blockFields){
-                foreach($blockFields as $field => $object){
-                    if($field != 'pay_date' && $field != 'assigned_user_id' && $field != 'payer'){
-                        unset($spPaymentsRecordStructure[$blockLabel][$field]);
-                    }
-                }
-            }
-            $customBlockName = 'CUSTOM_BLOCK';
-            $customRecordStructure[$customBlockName] = $spPaymentsRecordStructure['LBL_PAYMENT_DETAILS'];
-
-            // Check date filter for custom report
-            if(!in_array($reportModel->getReportType(), getCustomReportsListWithDateFilter())) {
-                unset($customRecordStructure[$customBlockName]['pay_date']);
-            }
-
-            // Check owner filter for custom report
-            if(!in_array($reportModel->getReportType(), getCustomReportsListWithOwnerFilter())) {
-                unset($customRecordStructure[$customBlockName]['assigned_user_id']);
-            }
-
-            // Check account filter for custom report
-            if(!in_array($reportModel->getReportType(), getCustomReportsListWithAccountFilter())) {
-                unset($customRecordStructure[$customBlockName]['payer']);
-            }
-
-            $viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $customRecordStructure);
-            $viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $customAdvanceFilterOpsByFieldType);
-            $viewer->view('SPReportHeader.tpl', $moduleName);
+        /* Custom report */
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($reportModel);
+            $viewer->assign('CUSTOM_REPORT', $customReportModel);
+            $viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $customReportModel->getPrimaryModuleRecordStructure());
+            $viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $customReportModel->getFiltersComparatorsRules());
+            $viewer->assign('CUSTOM_REPORT_DATA', $customReportModel->getCustomReportControlData());
+            $viewer->assign('BLOCKED_FILTERS_NAMES', $customReportModel->getBlockedFiltersNames());
+            $viewer->assign('CAN_ADD_FILTERS', $customReportModel->canAddFilters());
+            $viewer->view($customReportModel->getHeaderTpl(), $moduleName);
         } else {
             $viewer->view('ReportHeader.tpl', $moduleName);
         }
@@ -238,8 +211,22 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		if (count($data) > self::REPORT_LIMIT) {
 			$viewer->assign('LIMIT_EXCEEDED', true);
 		}
-
-		$viewer->view('ReportContents.tpl', $moduleName);
+        
+        //SalesPlatform.ru begin
+        $reportModel = Reports_Record_Model::getInstanceById($record);
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($reportModel);
+            $viewer->assign('DATA', $reportModel->getReportData($pagingModel));
+            $viewer->assign('CUSTOM_REPORT', $customReportModel);
+            $viewer->view($customReportModel->getContentsTpl(), $moduleName);
+        } else {
+        //SalesPlatform.ru end
+        
+            $viewer->view('ReportContents.tpl', $moduleName);
+        
+        //SalesPlatform.ru begin 
+        }
+        //SalesPlatfor.ru end
 	}
 
 	/**
@@ -255,10 +242,33 @@ class Reports_Detail_View extends Vtiger_Index_View {
 			'modules.Vtiger.resources.Detail',
 			"modules.$moduleName.resources.Detail"
 		);
-
+                
+                //SalesPlatform.ru begin
+                $record = $request->get('record');
+                $reportModel = Reports_Record_Model::getInstanceById($record);
+                if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+                    $customReport = AbstractCustomReportModel::getInstance($reportModel);
+                    $jsFileNames = array_merge($jsFileNames, $customReport->getJsScripts());
+                }
+                //SalesPlatform.ru end
+                
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
 		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
 		return $headerScriptInstances;
 	}
+    
+    //SalesPlatform.ru begin
+    public function getHeaderCss(\Vtiger_Request $request) {
+        $record = $request->get('record');
+        $reportModel = Reports_Record_Model::getInstanceById($record);
+        $cssFiles = array();
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReport = AbstractCustomReportModel::getInstance($reportModel);
+            $cssFiles = $this->checkAndConvertCssStyles($customReport->getCssScripts());
+        }
+        
+        return array_merge(parent::getHeaderCss($request), $cssFiles);
+    }
+    //SalesPlatform.ru end
 
 }

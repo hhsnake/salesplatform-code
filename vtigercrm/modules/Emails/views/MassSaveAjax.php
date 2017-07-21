@@ -42,6 +42,11 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$recordIds = $this->getRecordsListFromRequest($request);
 		$documentIds = $request->get('documentids');
+        //SalesPlatform.ru begin
+        if(!is_array($documentIds)) {
+            $documentIds = [];
+        }
+        //SalesPlatform.ru end
 
 		// This is either SENT or SAVED
 		$flag = $request->get('flag');

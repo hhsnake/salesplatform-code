@@ -10,6 +10,7 @@
 
 $languageStrings  = Array(
 	'RecycleBin' => 'Recycle Bin',
+	'Recycle Bin' => 'Recycle Bin',
 	'LBL_SELECT_MODULE' => 'Select Module',
 	'LBL_EMPTY_RECYCLEBIN' => 'Empty Recycle Bin',
 	'LBL_RESTORE' => 'Restore',

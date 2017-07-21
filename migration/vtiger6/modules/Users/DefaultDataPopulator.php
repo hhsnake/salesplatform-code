@@ -935,7 +935,13 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (23," . $this->db->getUniqueID("vtiger_field") . ",'invoice_no','vtiger_invoice',1,'4','invoice_no','Invoice No',1,0,'',100,3,$invoicebasicblock,1,'V~O',3,null,'BAS',0)");
 
 		// SalesPlatform.ru begin
-        $this->db->query('INSERT INTO `sp_templates` VALUES ('.$this->db->getUniqueID('sp_templates').',\'Счет\',\'Invoice\',\'{header}\n\n<p style="font-weight: bold; text-decoration: underline">{$orgName}</p>\n\n<p style="font-weight: bold">Адрес: {$orgBillingAddress}, тел.: {$orgPhone}</p>\n\n<div style="font-weight: bold; text-align: center">Образец заполнения платежного поручения</div>\n\n<table border="1" cellpadding="2">\n<tr>\n  <td width="140">ИНН {$orgInn}</td><td width="140">КПП {$orgKpp}</td><td rowspan="2" width="50"><br/><br/>Сч. №</td><td rowspan="2" width="200"><br/><br/>{$orgBankAccount}</td>\n</tr>\n<tr>\n<td colspan="2" width="280"><span style="font-size: 8pt">Получатель</span><br/>{$orgName}</td>\n</tr>\n<tr>\n<td colspan="2" rowspan="2" width="280"><span style="font-size: 8pt">Банк получателя</span><br/>{$orgBankName}</td>\n<td width="50">БИК</td>\n<td rowspan="2" width="200">{$orgBankId}<br/>{$orgCorrAccount}</td>\n</tr>\n<tr>\n<td width="50">Сч. №</td>\n</tr>\n</table>\n<br/>\n<h1 style="text-align: center">СЧЕТ № {$invoice_no} от {$invoice_invoicedate}</h1>\n<br/><br/>\n<table border="0">\n<tr>\n<td width="100">Плательщик:</td><td width="450"><span style="font-weight: bold">{$account_accountname}</span></td>\n</tr>\n<tr>\n<td width="100">Грузополучатель:</td><td width="450"><span style="font-weight: bold">{$account_accountname}</span></td>\n</tr>\n</table>\n\n{/header}\n\n{table_head}\n<table border="1" style="font-size: 8pt" cellpadding="2">\n    <tr style="text-align: center; font-weight: bold">\n	<td width="30">№</td>\n      <td width="260">Наименование<br/>товара</td>\n      <td width="65">Единица<br/>изме-<br/>рения</td>\n      <td width="35">Коли-<br/>чество</td>\n	<td width="70">Цена</td>\n	<td width="70">Сумма</td>\n	</tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width="30">{$productNumber}</td>\n      <td width="260">{$productName} {$productComment}</td>\n	<td width="65" style="text-align: center">{$productUnits}</td>\n	<td width="35" style="text-align: right">{$productQuantityInt}</td>\n	<td width="70" style="text-align: right">{$productPriceWithTax}</td>\n	<td width="70" style="text-align: right">{$productTotal}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<table border="0" style="font-size: 8pt;font-weight: bold">\n    <tr>\n      <td width="460">\n        <table border="0" cellpadding="2">\n          <tr><td width="460" style="text-align: right">Итого:</td></tr>\n          <tr><td width="460" style="text-align: right">В т.ч. НДС:</td></tr>\n          <tr><td width="460" style="text-align: right">Всего к оплате:</td></tr>\n        </table>\n      </td>\n      <td width="70">\n        <table border="1" cellpadding="2">\n          <tr><td width="70" style="text-align: right">{$summaryGrandTotal}</td></tr>\n          <tr><td width="70" style="text-align: right">{$summaryTax}</td></tr>\n          <tr><td width="70" style="text-align: right">{$summaryGrandTotal}</td></tr>\n        </table>\n      </td>\n  </tr>\n</table>\n\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style="font-weight: bold">{$summaryGrandTotalLiteral}</span>\n</p>\n\n{/summary}\n\n{ending}\n<br/>\n    <p>Руководитель предприятия  __________________ ( {$orgDirector} ) <br/>\n    <br/>\n    Главный бухгалтер  __________________ ( {$orgBookkeeper} )\n    </p>\n{/ending}\',110,50,\'P\'),('.$this->db->getUniqueID('sp_templates').',\'Накладная\',\'SalesOrder\',\'{header}\n<h1 style=\"font-size: 14pt\">Расходная накладная № {$salesorder_no}</h1>\n<hr>\n<table border=\"0\" style=\"font-size: 9pt\">\n<tr>\n<td width=\"80\">Поставщик:</td><td width=\"450\"><span style=\"font-weight: bold\">{$orgName}</span></td>\n</tr>\n<tr>\n<td width=\"80\">Покупатель:</td><td width=\"450\"><span style=\"font-weight: bold\">{$account_accountname}</span></td>\n</tr>\n</table>\n{/header}\n\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"30\" rowspan=\"2\">№</td>\n	<td width=\"200\" rowspan=\"2\">Товар</td>\n	<td width=\"50\" rowspan=\"2\" colspan=\"2\">Мест</td>\n	<td width=\"60\" rowspan=\"2\" colspan=\"2\">Количество</td>\n	<td width=\"60\" rowspan=\"2\">Цена</td>\n	<td width=\"60\" rowspan=\"2\">Сумма</td>\n	<td width=\"70\">Номер ГТД</td>\n    </tr>\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"70\">Страна<br/>происхождения</td>\n    </tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width=\"30\" rowspan=\"2\">{$productNumber}</td>\n	<td width=\"200\" rowspan=\"2\">{$productName}</td>\n	<td width=\"25\" rowspan=\"2\"></td>\n	<td width=\"25\" rowspan=\"2\">шт.</td>\n	<td width=\"30\" rowspan=\"2\" style=\"text-align: right\">{$productQuantityInt}</td>\n	<td width=\"30\" rowspan=\"2\">{$productUnits}</td>\n	<td width=\"60\" rowspan=\"2\" style=\"text-align: right\">{$productPrice}</td>\n	<td width=\"60\" rowspan=\"2\" style=\"text-align: right\">{$productNetTotal}</td>\n	<td width=\"70\">{$customsId}</td>\n    </tr>\n    <tr>\n	<td width=\"70\">{$manufCountry}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<p></p>\n<table border=\"0\" style=\"font-weight: bold\">\n    <tr>\n	<td width=\"400\" style=\"text-align: right\">Итого:</td>\n	<td width=\"60\" style=\"text-align: right\">{$summaryNetTotal}</td>\n    </tr>\n    <tr>\n	<td width=\"400\" style=\"text-align: right\">Сумма НДС:</td>\n	<td width=\"60\" style=\"text-align: right\">{$summaryTax}</td>\n    </tr>\n</table>\n\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style=\"font-weight: bold\">{$summaryGrandTotalLiteral}</span>\n</p>\n\n{/summary}\n\n{ending}\n    <hr size=\"2\">\n    <table border=\"0\">\n    <tr>\n	<td>Отпустил  __________ </td><td>Получил  __________ </td>\n    </tr>\n    </table>\n{/ending}\n\',50,0,\'P\'),('.$this->db->getUniqueID('sp_templates').',\'Предложение\',\'Quotes\',\'\n{header}\n\n<p align="right">{$orgLogo}</p>\n<p style=\"font-weight: bold\">\n{$orgName}<br/>\nИНН {$orgInn}<br/>\nКПП {$orgKpp}<br/>\n{$orgBillingAddress}<br/>\nТел.: {$orgPhone}<br/>\nФакс: {$orgFax}<br/>\n{$orgWebsite}\n</p>\n\n<h1>Коммерческое предложение № {$quote_no}</h1>\n<p>Действительно до: {$quote_validtill}</p>\n<hr size=\"2\">\n\n<p style=\"font-weight: bold\">\n{$account_accountname}<br/>\n{$billingAddress}\n</p>\n{/header}\n\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n    <tr style=\"text-align: center; font-weight: bold\">\n	<td width=\"30\">№</td>\n	<td width=\"260\">Товары (работы, услуги)</td>\n	<td width=\"70\">Ед.</td>\n	<td width=\"30\">Кол-во</td>\n	<td width=\"70\">Цена</td>\n	<td width=\"70\">Сумма</td>\n	</tr>\n{/table_head}\n\n{table_row}\n    <tr>\n	<td width=\"30\">{$productNumber}</td>\n	<td width=\"260\">{$productName}</td>\n	<td width=\"70\">{$productUnits}</td>\n	<td width=\"30\" style=\"text-align: right\">{$productQuantity}</td>\n	<td width=\"70\" style=\"text-align: right\">{$productPrice}</td>\n	<td width=\"70\" style=\"text-align: right\">{$productNetTotal}</td>\n    </tr>\n{/table_row}\n\n{summary}\n</table>\n<p></p>\n<table border=\"0\">\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Итого:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryNetTotal}</td>\n    </tr>\n    <tr>\n	<td width=\"460\" style=\"text-align: right\">Сумма НДС:</td>\n	<td width=\"70\" style=\"text-align: right\">{$summaryTax}</td>\n    </tr>\n</table>\n\n<p style=\"font-weight: bold\">\nВсего: {$summaryGrandTotal} руб. ( {$summaryGrandTotalLiteral} )\n</p>\n\n{/summary}\n\n{ending}\n    <hr size=\"2\">\n    <p>Руководитель предприятия  __________ ( {$orgDirector} ) <br/>\n    </p>\n{/ending}\n\',100,0,\'P\'),('.$this->db->getUniqueID('sp_templates').',\'Заказ на закупку\',\'PurchaseOrder\',\'{header}\n<h1 style=\"font-size: 14pt\">Заказ на закупку № {$purchaseorder_no}</h1>\n<hr>\n<table border=\"0\" style=\"font-size: 9pt\">\n<tr>\n<td width=\"80\">Поставщик:</td><td width=\"450\"><span style=\"font-weight: bold\">{$vendor_vendorname}</span></td>\n</tr>\n<tr>\n<td width=\"80\">Покупатель:</td><td width=\"450\"><span style=\"font-weight: bold\">{$orgName}</span></td>\n</tr>\n</table>\n{/header}\n{table_head}\n<table border=\"1\" style=\"font-size: 8pt\" cellpadding=\"2\">\n<tr style=\"text-align: center; font-weight: bold\">\n<td width=\"30\">№</td>\n<td width=\"200\">Товар</td>\n<td width=\"60\" colspan=\"2\">Количество</td>\n<td width=\"60\">Цена</td>\n<td width=\"60\">Сумма</td>\n</tr>\n{/table_head}\n{table_row}\n<tr>\n<td width=\"30\">{$productNumber}</td>\n<td width=\"200\">{$productName}</td>\n<td width=\"30\" style=\"text-align: right\">{$productQuantityInt}</td>\n<td width=\"30\">{$productUnits}</td>\n<td width=\"60\" style=\"text-align: right\">{$productPrice}</td>\n<td width=\"60\" style=\"text-align: right\">{$productNetTotal}</td>\n</tr>\n{/table_row}\n{summary}\n</table>\n<p></p>\n<table border=\"0\" style=\"font-weight: bold\">\n<tr>\n<td width=\"350\" style=\"text-align: right\">Итого:</td>\n<td width=\"60\" style=\"text-align: right\">{$summaryNetTotal}</td>\n</tr>\n<tr>\n<td width=\"350\" style=\"text-align: right\">Сумма НДС:</td>\n<td width=\"60\" style=\"text-align: right\">{$summaryTax}</td>\n</tr>\n</table>\n<p>\nВсего наименований {$summaryTotalItems}, на сумму {$summaryGrandTotal} руб.<br/>\n<span style=\"font-weight: bold\">{$summaryGrandTotalLiteral}</span>\n</p>\n{/summary}\n{ending}\n{/ending}\',50,0,\'P\')', array());
+                $this->db->query('INSERT INTO `sp_templates` VALUES ('.$this->db->getUniqueID('sp_templates').vtranslate('LBL_PDF_INVOICE_BODY','Install').')', array());
+                if (vglobal('default_language') == 'ru_ru') {
+                        $this->db->query('INSERT INTO `sp_templates` VALUES ('.$this->db->getUniqueID('sp_templates').vtranslate('LBL_PDF_WAYBILL_BODY','Install').')', array());
+                        $this->db->query('INSERT INTO `sp_templates` VALUES ('.$this->db->getUniqueID('sp_templates').vtranslate('LBL_PDF_QUOTE_BODY','Install').')', array());
+                        $this->db->query('INSERT INTO `sp_templates` VALUES ('.$this->db->getUniqueID('sp_templates').vtranslate('LBL_PDF_PURCHASE_ORDER_BODY','Install').')', array());
+                }
+                
 		// SalesPlatform.ru end		
 		//Invoice Details -- END
 		//users Details Starts Block 79,80,81
@@ -1330,7 +1336,7 @@ class DefaultDataPopulator extends CRMEntity {
 		//inserting actions for get_attachments
 		$folderid = $this->db->getUniqueID("vtiger_attachmentsfolder");
                 // SalesPlatform.ru begin localization for 5.4.0 
-                $this->db->query("insert into vtiger_attachmentsfolder values(".$folderid.",'По умолчанию','Это папка по умолчанию',1,1)");
+                $this->db->query("insert into vtiger_attachmentsfolder values(".$folderid.",'".vtranslate('Default')."','".vtranslate('This is a Default Folder')."',1,1)");
 		//$this->db->query("insert into vtiger_attachmentsfolder values(" . $folderid . ",'Default','This is a Default Folder',1,1)");
                 // SalesPlatform.ru end
 
@@ -1379,8 +1385,7 @@ Thanks,
 //insert into inventory terms and conditions table
 
 // SalesPlatform begin Localizaton
-                $inv_tandc_text = '
- - Счет действителен на протяжении 14 календарных дней с даты его выставления, если другое не оговорено в письменной форме. Оплата счета Покупателем означает согласие с условиями поставки.';
+                $inv_tandc_text = vtranslate('LBL_INV_TANDC_TEXT');
 		/*$inv_tandc_text = '
  - Unless otherwise agreed in writing by the supplier all invoices are payable within thirty (30) days of the date of invoice, in the currency of the invoice, drawn on a bank based in India or by such other method as is agreed in advance by the Supplier.
 
@@ -1561,135 +1566,8 @@ Should any need arise,please do give us a call.';
 //Added for HTML Eemail templates..
 //for Customer Portal Login details
 //SalesPlatform.ru begin
-		$body = '<table width="700" cellspacing="0" cellpadding="0" border="0" align="center" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; text-decoration: none; background-color: rgb(122, 122, 254);">
-        <tr>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-        </tr>
-        <tr>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-        </tr>
-        <tr>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-        </tr>
-        <tr>
-            <td width="50"> </td>
-            <td>
-            <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                    <tr>
-                        <td>
-                        <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(255, 255, 255); font-weight: normal; line-height: 25px;">
-                                <tr>
-                                    <td align="center" rowspan="4">$logo$</td>
-                                    <td align="center"> </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 24px; color: rgb(255, 255, 255); font-weight: bolder; line-height: 35px;">vtiger CRM<br /> </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" style="padding-right: 100px;">The honest Open Source CRM </td>
-                                </tr>
-                                <tr>
-                                    <td> </td>
-                                </tr>
-                        </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
-                                <tr>
-                                    <td valign="top">
-                                    <table width="100%" cellspacing="0" cellpadding="5" border="0">
-                                            <tr>
-                                                <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);"> </td>
-                                            </tr>
-                                            <tr>
-                                                <td> </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(22, 72, 134); font-weight: bolder; line-height: 15px;">Уважаемый(ая) $contact_name$, </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"> Выражаем вам благодарность за подключение услуги ежегодного сервисного обслуживания Vtiger CRM.<br />Далее приведена информация для регистрации на портале самообслуживания:</td>                                            
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                <table width="75%" cellspacing="0" cellpadding="10" border="0" style="border: 2px solid rgb(180, 180, 179); background-color: rgb(226, 226, 225); font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal;">
-                                                        <tr>
-                                                            <td><br />ID Пользователя     : <font color="#990000"><strong> $login_name$</strong></font> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Пароль: <font color="#990000"><strong> $password$</strong></font> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center"> <strong>  $URL$<br /> </strong> </td>
-                                                        </tr>
-                                                </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"><strong>Примечание:</strong> Мы предлагаем вам изменить пароль после первой авторизации. <br /><br /> <strong><u>Справочная информация</u></strong><br />  <br /> После первой авторизации на портале самообслуживания вы можете воспользоваться документацией Vtiger CRM, расположенной во вкладке <strong>Документация(Documents)</strong>. Для ознакомления доступны следующие документы:<br />
-                                                <ul>
-                                                    <li>Руководство по установке (Windows и Linux ОС)<br /> </li>
-                                                    <li>Руководство пользователя и администратора<br /> </li>
-                                                    <li>Клиентский портал Vtiger CRM - Руководство пользователя<br /> </li>
-                                                    <li>Vtiger CRM плагин для Outlook - Руководство пользователя<br /> </li>
-                                                    <li>Vtiger CRM Office плагин - Руководство пользователя<br /> </li>
-                                                    <li>Vtiger CRM дополнение Thunderbird - Руководство пользователя<br /> </li>
-                                                    <li>Vtiger CRM Веб формы - Руководство пользователя<br /> </li>
-                                                    <li>Vtiger CRM панель инструментов Firefox - Руководство пользователя<br /> </li>
-                                                </ul>
-                                                <br />  <br /> <strong><u>Базовые знания</u></strong><br /> <br /> Мы периодически обновляем часто задаваемые вопросы, основываясь на опыте наших клиентов. Вы можете получить доступ к последним статьям через вкладку <strong>ЧаВо(FAQ)</strong>.<br /> <br /> <strong><u>Vtiger CRM - Информация</u></strong><br /> <br /> Пожалуйста, предоставьте информацию о вашей текущей версии vtiger CRM и о особенностях вашей системы, чтобы мы могли дать вам рекомендации по увеличению производительности работы Vtiger CRM. Основываясь на особенностях вашей системы, мы сообщим вам о последних обновлениях Vtiger CRM.<br />  <br />			 Еще раз благодарим вас и желаем приятной работы с системой Vtiger CRM.<br /> </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right"><strong style="padding: 2px; font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: bold;"><br /><br />С уважением,</strong></td>                               
-                                            </tr>
-                                            <tr>
-                                                <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; line-height: 20px;">$support_team$ </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right"><a style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);" href="http://www.salesplatform.ru">www.salesplatform.ru</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td> </td>
-                                            </tr>
-                                    </table>
-                                    </td>
-                                    <td width="1%" valign="top"> </td>
-                                </tr>
-                        </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="left" style="background-color: rgb(27, 77, 140);"><br /> </td>
-                    </tr>
-            </table>
-            </td>
-            <td width="50"> </td>
-        </tr>
-        <tr>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-        </tr>
-        <tr>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-        </tr>
-        <tr>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-        </tr>
-</table>';
-		$this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Регистрационная информация клиента','Регистрационная информация клиентского портала','Посылает регистрационную информацию портала клиенту','" . $body . "',0," . $this->db->getUniqueID('vtiger_emailtemplates') . ")");
+		$body = vtranslate('LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL');
+		$this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','".vtranslate('LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_NAME')."','".vtranslate('LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_DESC')."','".vtranslate('LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_SUBJECT')."','" . $body . "',0," . $this->db->getUniqueID('vtiger_emailtemplates') .")");
 		//$this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Customer Login Details','Customer Portal Login Details','Send Portal login details to customer','" . $body . "',0," . $this->db->getUniqueID('vtiger_emailtemplates') . ")");
 //SalesPlatform.ru end
 
@@ -2025,8 +1903,11 @@ Should any need arise,please do give us a call.';
 		$salesid = $this->db->getUniqueID("vtiger_inventorytaxinfo");
 		$serviceid = $this->db->getUniqueID("vtiger_inventorytaxinfo");
 	    //vtiger-ru-fork 27.10.2010 Eugene Babiy
-	    $this->db->query("insert into vtiger_inventorytaxinfo values($vatid,'tax".$vatid."','НДС','18','0')");
-	    //$this->db->query("insert into vtiger_inventorytaxinfo values($salesid,'tax".$salesid."','Sales','10.00','0')");
+            //Salesplatform.ru begin Locale fix    
+	    $this->db->query("insert into vtiger_inventorytaxinfo values($vatid,'tax".$vatid."','".vtranslate('LBL_VAT')."','".vtranslate('LBL_VAT_VALUE')."','0')");
+            //$this->db->query("insert into vtiger_inventorytaxinfo values($vatid,'tax".$vatid."','НДС','18','0')");            
+            //Salesplatform.ru end Locale fix
+            //$this->db->query("insert into vtiger_inventorytaxinfo values($salesid,'tax".$salesid."','Sales','10.00','0')");
 	    //$this->db->query("insert into vtiger_inventorytaxinfo values($serviceid,'tax".$serviceid."','Service','12.50','0')");
 		//After added these taxes we should add these taxes as columns in vtiger_inventoryproductrel table
 		$this->db->query("alter table vtiger_inventoryproductrel add column tax$vatid decimal(7,3) default NULL");
@@ -2041,8 +1922,11 @@ Should any need arise,please do give us a call.';
 		$shserviceid = $this->db->getUniqueID("vtiger_shippingtaxinfo");
 	
 	    //vtiger-ru-fork 27.10.2010 Eugene Babiy
-	    $this->db->query("insert into vtiger_shippingtaxinfo values($shvatid,'shtax".$shvatid."','НДС','18','0')");
-	    //$this->db->query("insert into vtiger_shippingtaxinfo values($shsalesid,'shtax".$shsalesid."','Sales','10.00','0')");
+            //Salesplatform.ru begin Locale fix
+	    $this->db->query("insert into vtiger_shippingtaxinfo values($shvatid,'shtax".$shvatid."','".vtranslate('LBL_VAT')."','".vtranslate('LBL_VAT_VALUE')."','0')");
+            //$this->db->query("insert into vtiger_shippingtaxinfo values($shvatid,'shtax".$shvatid."','НДС','18','0')");	    
+            //Salesplatform.ru end Locale fix
+            //$this->db->query("insert into vtiger_shippingtaxinfo values($shsalesid,'shtax".$shsalesid."','Sales','10.00','0')");
 	    //$this->db->query("insert into vtiger_shippingtaxinfo values($shserviceid,'shtax".$shserviceid."','Service','12.50','0')");
 		//After added these taxes we should add these taxes as columns in vtiger_inventoryshippingrel table
 		$this->db->query("alter table vtiger_inventoryshippingrel add column shtax$shvatid decimal(7,3) default NULL");
@@ -2066,21 +1950,21 @@ Should any need arise,please do give us a call.';
 		 * Setup module sequence numbering.
 		 */
 		$modseq = array(
-		'Leads'     =>'ОБР_',
-		'Accounts'  =>'КОНТР_',
-		'Campaigns' =>'КАМП_',	
-		'Contacts'  =>'КОНТАКТ_',
-		'Potentials'=>'СДЕЛКА_',
-		'HelpDesk'  =>'ЗАЯВКА_',
-		'Quotes'    =>'ПР_',
-		'SalesOrder'=>'',
-		'PurchaseOrder'=>'ЗАК_',
-		'Invoice'   =>'',
-		'Products'  =>'ТОВ_',
-		'Vendors'   =>'ПОСТ_',
-		'PriceBooks'=>'КАТ_',
-		'Faq'       =>'ЧаВо_',
-		'Documents' =>'ДОК_'
+		'Leads'     => vtranslate('LBL_LEADS_PREFIX'),
+		'Accounts'  => vtranslate('LBL_ACCOUNTS_PREFIX'),
+		'Campaigns' => vtranslate('LBL_CAMPAIGNS_PREFIX'),	
+		'Contacts'  => vtranslate('LBL_CONTACTS_PREFIX'),
+		'Potentials'=> vtranslate('LBL_POTENTIALS_PREFIX'),
+		'HelpDesk'  => vtranslate('LBL_HELPDESK_PREFIX'),
+		'Quotes'    => vtranslate('LBL_QUOTES_PREFIX'),
+		'SalesOrder'=> vtranslate('LBL_SALESORDER_PREFIX'),
+		'PurchaseOrder'=> vtranslate('LBL_PURCHASEORDER_PREFIX'),
+		'Invoice'   => vtranslate('LBL_INVOICE_PREFIX'),
+		'Products'  => vtranslate('LBL_PRODUCTS_PREFIX'),
+		'Vendors'   => vtranslate('LBL_VENDORS_PREFIX'),
+		'PriceBooks'=> vtranslate('LBL_PRICEBOOKS_PREFIX'),
+		'Faq'       => vtranslate('LBL_FAQ_PREFIX'),
+		'Documents' => vtranslate('LBL_DOCUMENTS_PREFIX')
 		);
 		foreach ($modseq as $modname => $prefix) {
 			$this->addInventoryRows(

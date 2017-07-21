@@ -48,7 +48,7 @@ class InvoiceHandler extends VTEventHandler {
             $wsrecord['balance'] = floatval($wsrecord['hdnGrandTotal'] - $wsrecord['received']);
             if ($wsrecord['balance'] == 0) {
                 $wsrecord['invoicestatus'] = 'Paid';
-            //SalesPlatform.ru begin #3960
+            //SalesPlatform.ru begin
                 $query = "UPDATE vtiger_invoice SET balance=?,received=?,invoicestatus=? WHERE invoiceid=?";
                 $db->pquery($query, array($wsrecord['balance'], $wsrecord['received'], $wsrecord['invoicestatus'], $entityData->getId()));
             } else{

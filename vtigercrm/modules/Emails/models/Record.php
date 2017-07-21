@@ -220,6 +220,9 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 				$status = $mailer->getError();
 			} else {
                 $mailString=$mailer->getMailString();
+                //SalesPlatform.ru begin Add Cyrus IMAP support
+                $mailString = str_replace("\n", "\r\n", $mailString);
+                //SalesPlatform.ru end
                 $mailBoxModel = MailManager_Mailbox_Model::activeInstance();
                 $folderName = $mailBoxModel->folder();
                 if(!empty($folderName) && !empty($mailString)) {

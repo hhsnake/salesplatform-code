@@ -369,6 +369,7 @@ $languageStrings = array(
 	'LBL_NO_PENDING_ACTIVITIES' => 'No pending activities',
 	'LBL_NO_RECENT_UPDATES' => 'No recent updates',
 	'LBL_NO_RECORDS' => 'No Records',
+	'LBL_NOT_FOUND' => 'No records found:',
 	'LBL_NO_RECORDS_FOUND' => 'No records found',
 	'LBL_NO_RECORD_SELECTED' => 'No record selected.',
 	'LBL_NO_RELATED' => 'No Related',
@@ -650,6 +651,10 @@ $languageStrings = array(
        'LBL_CURRENT_TIME' => 'Current Time',
     
     //SalesPLatform.ru begin
+    'LayoutEditor'       => 'Layout Editor',
+    'MenuEditor'         => 'Menu Editor',
+    'PickListDependency' => 'Picklist Dependency',
+    'ModuleManager'      => 'Module Manager',
     'LBL_LEFT_PANEL_SHOW_HIDE' => 'Left panel show/hide',
     'LBL_EVENT_INFORMATION' => 'Event Details',
     'LBL_CREATE_FOLLOWUP_EVENT' => 'Create follow-up event',
@@ -660,7 +665,224 @@ $languageStrings = array(
     'Emails_Block3' => 'Description',
     'LBL_ERROR' => 'Error',
     'LBL_BE_CAREFUL_WITH_EMAIL_TEMPLATES' => 'Be careful with email templates. Field search will be done by every record',
-    'Global Search' => 'Глобальный поиск',
+    'Global Search' => 'Global Search',
+    'Created By' => 'Created By',
+    'Last SMS Date' => 'Last SMS Date',
+    'LBL_COMPANY'                  => 'Company',
+    'LBL_NEW_COMPANY'              => 'New company', 
+    'LBL_GROUP_TAX_INC'            => 'Including tax', 
+    'group_tax_inc'                => 'Including tax', 
+    'LBL_INC_TAX'                  => 'Including',
+    "LBL_PLS_SELECT"=>"Please select ...",
+    'LBL_INV_TANDC_TEXT' =>  '- Unless otherwise agreed in writing by the supplier all invoices are payable within thirty (30) days of the date of invoice, in the currency of the invoice, drawn on a bank based in India or by such other method as is agreed in advance by the Supplier. \n
+ - All prices are not inclusive of VAT which shall be payable in addition by the Customer at the applicable rate.',
+    'LBL_HELP_INFO1' =>   'This gives the estimated hours for the Ticket.<br>When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.',
+    'LBL_HELP_INFO2' =>   'This gives the estimated days for the Ticket.<br>When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.',
+    'Webforms' => 'Webforms',
+    'CustomerPortal' => 'Customer Portal',
+    'Scheduler'     => 'Scheduler',
+    'CronTasks'     => 'Scheduler',
+    'LBL_CONTACT_MANAGEMENT_DESC'    => 'Unify and store your contacts alongside detailed notes, documents, emails, calendar events, and more. Additionally, configure what information each CRM user can see and update, and automate business activities such as email responses and contact information updates.',
+    'LBL_SALES_AUTOMATION_DESC'      => 'Capture Leads from your website, or import lists of them, then develop a process for qualifying and turning them into potential sales opportunities, and another for winning those potential opportunities. Additionally, track and segment your sales funnel, individual, and team, performance areas.',
+    'LBL_MARKETING_DESC'             => 'Send individual, targeted, or bulk emails to your contacts, leads, and customers, and see how they engage with each communication, with tools to analyze and improve campaign performance.',
+    'LBL_SUPPORT_DESC'               => 'Create and track customer requests/tasks via tickets, and even allow your customers to create and monitor their own tickets and details through a professional customer portal.',
+    'LBL_IIM_DESC'                   => 'Build a database of your products and services, maintain inventories, standard prices and prices books, and use these to create quotes, invoices, and sales orders.',
+    'LBL_PROJECT_MANAGEMENT_DESC'    => 'Build and manage customer-associated projects, with detailed tasks that can be assigned to CRM users and placed on their calendars.',
+    
+    'LBL_LEADS_PREFIX'      =>    'LEA_',
+    'LBL_ACCOUNTS_PREFIX'   =>    'ACC_',
+    'LBL_CAMPAIGNS_PREFIX'  =>    'CAM_',	
+    'LBL_CONTACTS_PREFIX'   =>    'CON_',
+    'LBL_POTENTIALS_PREFIX' =>    'POT_',
+    'LBL_HELPDESK_PREFIX'   =>    'TT_',
+    'LBL_QUOTES_PREFIX'     =>    'QUO_',
+    'LBL_SALESORDER_PREFIX' =>    'SO_',
+    'LBL_PURCHASEORDER_PREFIX'  =>    'PO_',
+    'LBL_INVOICE_PREFIX'    =>    'INV_',
+    'LBL_PRODUCTS_PREFIX'   =>    'PRO_',
+    'LBL_VENDORS_PREFIX'    =>    'VEN_',
+    'LBL_PRICEBOOKS_PREFIX' =>    'PB_',
+    'LBL_FAQ_PREFIX'        =>    'FAQ_',
+    'LBL_DOCUMENTS_PREFIX'  =>    'DOC_',
+    'LBL_SERVICE_CONTRACTS_PREFIX'  =>  'SERCON_',
+    
+    'LBL_VAT'               =>    'VAT',
+    'LBL_VAT_VALUE'         =>    '18',
+    
+    'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL' =>    '<table width="700" cellspacing="0" cellpadding="0" border="0" align="center" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; text-decoration: none; background-color: rgb(122, 122, 254);">
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td width="50"> </td>
+                        <td>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                    <td>
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(255, 255, 255); font-weight: normal; line-height: 25px;">
+                                            <tr>
+                                                <td align="center" rowspan="4">$logo$</td>
+                                                <td align="center"> </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 24px; color: rgb(255, 255, 255); font-weight: bolder; line-height: 35px;">vtiger CRM<br /> </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" style="padding-right: 100px;">The honest Open Source CRM </td>
+                                            </tr>
+                                            <tr>
+                                                <td> </td>
+                                            </tr>
+                                    </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+                                            <tr>
+                                                <td valign="top">
+                                                <table width="100%" cellspacing="0" cellpadding="5" border="0">
+                                                        <tr>
+                                                            <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);"> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(22, 72, 134); font-weight: bolder; line-height: 15px;">Dear $contact_name$, </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"> Thank you very much for subscribing to the vtiger CRM - annual support service.<br />Here is your self service portal login details:</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center">
+                                                            <table width="75%" cellspacing="0" cellpadding="10" border="0" style="border: 2px solid rgb(180, 180, 179); background-color: rgb(226, 226, 225); font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal;">
+                                                                    <tr>
+                                                                        <td><br />User ID     : <font color="#990000"><strong> $login_name$</strong></font> </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Password: <font color="#990000"><strong> $password$</strong></font> </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="center"> <strong>  $URL$<br /> </strong> </td>
+                                                                    </tr>
+                                                            </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"><strong>NOTE:</strong> We suggest you to change your password after logging in first time. <br /><br /> <strong><u>Help Documentation</u></strong><br />  <br /> After logging in to vtiger Self-service Portal first time, you can access the vtiger CRM documents from the <strong>Documents</strong> tab. Following documents are available for your reference:<br />
+                                                            <ul>
+                                                                <li>Installation Manual (Windows &amp; Linux OS)<br /> </li>
+                                                                <li>User &amp; Administrator Manual<br /> </li>
+                                                                <li>vtiger Customer Portal - User Manual<br /> </li>
+                                                                <li>vtiger Outlook Plugin - User Manual<br /> </li>
+                                                                <li>vtiger Office Plug-in - User Manual<br /> </li>
+                                                                <li>vtiger Thunderbird Extension - User Manual<br /> </li>
+                                                                <li>vtiger Web Forms - User Manual<br /> </li>
+                                                                <li>vtiger Firefox Tool bar - User Manual<br /> </li>
+                                                            </ul>
+                                                            <br />  <br /> <strong><u>Knowledge Base</u></strong><br /> <br /> Periodically we update frequently asked question based on our customer experiences. You can access the latest articles from the <strong>FAQ</strong> tab.<br /> <br /> <strong><u>vtiger CRM - Details</u></strong><br /> <br /> Kindly let us know your current vtiger CRM version and system specification so that we can provide you necessary guidelines to enhance your vtiger CRM system performance. Based on your system specification we alert you about the latest security &amp; upgrade patches.<br />  <br />			 Thank you once again and wish you a wonderful experience with vtiger CRM.<br /> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right"><strong style="padding: 2px; font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: bold;"><br /><br />Best Regards</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; line-height: 20px;">$support_team$ </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right"><a style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);" href="http://www.salesplatform.ru">www.salesplatform.ru</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> </td>
+                                                        </tr>
+                                                </table>
+                                                </td>
+                                                <td width="1%" valign="top"> </td>
+                                            </tr>
+                                    </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" style="background-color: rgb(27, 77, 140);"><br /> </td>
+                                </tr>
+                        </table>
+                        </td>
+                        <td width="50"> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+            </table>',
+    
+    'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_NAME' => 'Customer Login Details',
+    'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_DESC' => 'Customer Portal Login Details',
+    'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_SUBJECT' => 'Send Portal login details to customer',
+    'LBL_CARD_WIDGETS' => 'Card Widgets',
+    'SPPayments' => 'Payments',
+    'SPPDFTemplates' => 'PDF Templates',
+    'SPUnits' => 'Units',
+    'SPSocialConnector' => 'Social Connector',
+    'LBL_SP_ADD_SPPAYMENTS' => 'Add Payment',
+    'LBL_HAS_CHANGED_TO' => 'has changed to',
+    'LBL_IS_ADDED' => 'is added',
+    'LBL_IS_TODAY' => 'is today',
+    'LBL_LESS_THAN_DAYS_AGO' => 'less than days ago',
+    'LBL_MORE_THAN_DAYS_AGO' => 'more than days ago',
+    'LBL_LESS_THAN_HOURS_BEFORE' => 'less than hours before',
+    'LBL_LESS_THAN_HOURS_LATER' => 'less than hours later',
+    'LBL_MORE_THAN_HOURS_BEFORE' => 'more than hours before',
+    'LBL_MORE_THAN_HOURS_LATER' => 'more than hours later',
+    'LBL_DAYS_AGO' => 'days ago',
+    'LBL_DAYS_LATER' => 'days later',
+    'LBL_DETAIL_VIEW_LINK' => 'Detail view link',
+    'LBL_WRITE_YOUR_MESSAGE_HERE' => 'Write your message',
+    'LBL_STEP_1' => 'Step 1',
+    'LBL_STEP_2' => 'Step 2',
+    'LBL_CHARACTER_ENCODING' => 'Character Encoding',
+    'LBL_DELIMITER' => 'Delimiter',
+    'LBL_IMPORT_STEP_1_DESCRIPTION' => 'Select File',
+    'LBL_SECOND_CORRECT_SINGLE' => 'Second', 
+    'LBL_MINUTE_CORRECT_SINGLE' => 'Minute', 
+    'LBL_HOUR_CORRECT_SINGLE' => 'Hour', 
+    'LBL_DAY_SINGLE' => 'DAY', 
+    'LBL_MONTH_CORRECT_SINGLE' => 'Month', 
+    'LBL_YEAR_CORRECT_SINGLE' => 'Year', 
+    'LBL_SECOND_CORRECT_PLURAL_ONE' => 'Seconds', 
+    'LBL_MINUTE_CORRECT_PLURAL_ONE' => 'Minutes', 
+    'LBL_HOUR_CORRECT_PLURAL_ONE' => 'Hours', 
+    'LBL_DAY_CORRECT_PLURAL_ONE' => 'Days', 
+    'LBL_MONTH_CORRECT_PLURAL_ONE' => 'Months', 
+    'LBL_YEAR_CORRECT_PLURAL_ONE' => 'Years', 
+    'LBL_SECOND_CORRECT_PLURAL_TWO' => 'Seconds', 
+    'LBL_MINUTE_CORRECT_PLURAL_TWO' => 'Minutes', 
+    'LBL_HOUR_CORRECT_PLURAL_TWO' => 'Hours', 
+    'LBL_DAY_CORRECT_PLURAL_TWO' => 'Days', 
+    'LBL_MONTH_CORRECT_PLURAL_TWO' => 'Months', 
+    'LBL_YEAR_CORRECT_PLURAL_TWO' => 'Years', 
     //SalesPlatform.ru end
 );
 
@@ -723,7 +945,10 @@ $jsLanguageStrings = array(
 	'JS_PBX_INCOMING_CALL' => 'Incoming Call',
 	'JS_PBX_OUTGOING_CALL' => 'Outgoing Call',
 	'JS_PBX_OUTGOING_FAILURE'=>'Call Failed',
-	'JS_PBX_OUTGOING_SUCCESS'=>'Pick up the extension receiver to dial the number',
+    //SalesPlatform.ru begin
+	'JS_PBX_OUTGOING_SUCCESS'=>'Waiting for answer',
+    //'JS_PBX_OUTGOING_SUCCESS'=>'Pick up the extension receiver to dial the number',
+    //SalesPlatform.ru end
 	'JS_PERCENTAGE_VALUE_SHOULD_BE_LESS_THAN_100' => 'Percentage value should be less than 100',
 	'JS_PHONE_NUMBER_LENGTH_EXCEEDED' => 'phone number length exceeded limit',
 	'JS_PLEASE_ENABLE_BASE_CURRENCY_FOR_PRODUCT' => 'Please enable base currency for product',
@@ -809,7 +1034,9 @@ $jsLanguageStrings = array(
     
     //Edit view mode Translations
         'JS_CHANGES_WILL_BE_LOST' => 'Your Changes Will Be Lost!',
-    
+    //SalesPlatform.ru begin
+    'JS_LBL_ASSIGNED_TO' => 'Assigned To',
+    //SalesPlatform.ru end
     //Mass edit failure
     'JS_MASS_EDIT_NOT_SUCCESSFULL' => 'Mass edit of some record is not successfull',
     //SalesPlatform.ru begin 
@@ -817,5 +1044,15 @@ $jsLanguageStrings = array(
     'JS_NO_EDIT_PERMISSION' => 'You do not have permission to modify calendar entries.', 
     'JS_PERMISSION_DENIED' => 'Permission denied',
     'JS_ERROR_SEND_REQUEST' => 'Error on send request, please, try again',
- 	//SalesPlatform.ru end 
+    'JS_LBL_HELP_ADDRESS_TYPE' => 'To enable autocompletion you should enter the city',
+    'JS_SAVE' => 'Saving',
+    'JS_SAVE_ERROR' => 'Saving error',
+    'JS_CHOOSE_VALUES' => 'Choose values',
+    'JS_CHOOSE_VALUE' => 'Choose value',
+    'JS_CONFIRM_MARK_AS_HELD' => 'Mark Event/To Do as Held?',
+    'JS_FUTURE_EVENT_CANNOT_BE_MARKED_AS_HELD' => 'Future event cannot be marked as held',
+    'JS_EVENT_MARKED_AS_HELD' => 'Event marked as held',
+    'JS_TODO_MARKED_AS_COMPLETED' => 'To Do marked as completed',
+    'JS_PASSWORD_MISMATCH'       => 'Please re-enter passwords.  The "Password" and "Re-type password" values do not match.',
+    //SalesPlatform.ru end
 );

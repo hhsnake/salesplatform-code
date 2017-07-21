@@ -355,8 +355,8 @@ class SPUnits extends CRMEntity {
 		require_once('include/utils/utils.php');
 		include_once('vtlib/Vtiger/Module.php');
                 global $adb;
-                $wf_task = array('Изменение Единицы Измерения', 'Изменение Кода Единицы Измерения для Товаров',
-                                    'Изменение Кода Единицы Измерения для Услуг');
+                $wf_task = array(vtranslate('LBL_WF1_TASK_SUMMARY', 'SPUnits'), vtranslate('LBL_WF2_TASK_SUMMARY', 'SPUnits'),
+                    vtranslate('LBL_WF3_TASK_SUMMARY', 'SPUnits'));
 		if($event_type == 'module.postinstall') {		
             $projectmilestoneTabid = getTabid($modulename);
 			// Mark the module as Standard module
@@ -390,27 +390,27 @@ class SPUnits extends CRMEntity {
         
     function process_Workflows() {
         $workflow_data = array(
-            "wf1" => array("summary" => "Автоматический обработчик для модификации Товаров/Услуг",
+            "wf1" => array("summary" => vtranslate('LBL_WF1_SUMMARY','SPUnits'),
                         "func_name" => 'processUsageUnit', "path" => "modules/SPUnits/workflow/processUsageUnit.php",
-                        "task_summary" => "Изменение Единицы Измерения",
+                        "task_summary" => vtranslate('LBL_WF1_TASK_SUMMARY','SPUnits'),
                         "modulename" => "SPUnits",
                         "execution_condition" => 3,
                         "type" => "basic",
-                        "task_object" => 'O:18:"VTEntityMethodTask":7:{s:18:"executeImmediately";b:1;s:10:"workflowId";i:#workflowId#;s:7:"summary";s:52:"Изменение Единицы Измерения";s:6:"active";b:1;s:7:"trigger";N;s:10:"methodName";s:16:"processUsageUnit";s:2:"id";i:#taskId#;}'),
-            "wf2" => array("summary" => "Автоматический обработчик для модификации Кода Единицы Измерения",
+                        "task_object" => 'O:18:"VTEntityMethodTask":7:{s:18:"executeImmediately";b:1;s:10:"workflowId";i:#workflowId#;s:7:"summary";'. serialize(vtranslate('LBL_WF1_TASK_SUMMARY', 'SPUnits')) .'s:6:"active";b:1;s:7:"trigger";N;s:10:"methodName";s:16:"processUsageUnit";s:2:"id";i:#taskId#;}'),
+            "wf2" => array("summary" => vtranslate('LBL_WF2_SUMMARY','SPUnits'),
                         "func_name" => 'processCodeUnit', "path" => "modules/SPUnits/workflow/processCodeUnit.php",
-                        "task_summary" => "Изменение Кода Единицы Измерения для Товаров",
+                        "task_summary" => vtranslate('LBL_WF2_TASK_SUMMARY','SPUnits'),
                         "modulename" => "Products",
                         "execution_condition" => 3,
                         "type" => "basic",
-                        "task_object" => 'O:18:"VTEntityMethodTask":7:{s:18:"executeImmediately";b:1;s:10:"workflowId";i:#workflowId#;s:7:"summary";s:83:"Изменение Кода Единицы Измерения для Товаров";s:6:"active";b:1;s:7:"trigger";N;s:10:"methodName";s:15:"processCodeUnit";s:2:"id";i:#taskId#;}'),
-            "wf3" => array("summary" => "Автоматический обработчик для модификации Кода Единицы Измерения",
+                        "task_object" => 'O:18:"VTEntityMethodTask":7:{s:18:"executeImmediately";b:1;s:10:"workflowId";i:#workflowId#;s:7:"summary";'. serialize(vtranslate('LBL_WF2_TASK_SUMMARY', 'SPUnits')) .'s:6:"active";b:1;s:7:"trigger";N;s:10:"methodName";s:15:"processCodeUnit";s:2:"id";i:#taskId#;}'),
+            "wf3" => array("summary" => vtranslate('LBL_WF3_SUMMARY','SPUnits'),
                         "func_name" => 'processCodeUnit', "path" => "modules/SPUnits/workflow/processCodeUnit.php",
-                        "task_summary" => "Изменение Кода Единицы Измерения для Услуг",
+                        "task_summary" => vtranslate('LBL_WF3_TASK_SUMMARY','SPUnits'),
                         "modulename" => "Services",
                         "execution_condition" => 3,
                         "type" => "basic",
-                        "task_object" => 'O:18:"VTEntityMethodTask":7:{s:18:"executeImmediately";b:1;s:10:"workflowId";i:#workflowId#;s:7:"summary";s:79:"Изменение Кода Единицы Измерения для Услуг";s:6:"active";b:1;s:7:"trigger";N;s:10:"methodName";s:15:"processCodeUnit";s:2:"id";i:#taskId#;}'));
+                        "task_object" => 'O:18:"VTEntityMethodTask":7:{s:18:"executeImmediately";b:1;s:10:"workflowId";i:#workflowId#;s:7:"summary";'. serialize(vtranslate('LBL_WF3_TASK_SUMMARY', 'SPUnits')) .'s:6:"active";b:1;s:7:"trigger";N;s:10:"methodName";s:15:"processCodeUnit";s:2:"id";i:#taskId#;}'));
         foreach ($workflow_data as $data) {
                 $this->create_Workflow($data);             
         }

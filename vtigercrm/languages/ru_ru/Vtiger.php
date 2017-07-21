@@ -265,7 +265,10 @@ $languageStrings = array(
 	'LBL_CLOSE'                    => 'Закрыть'              ,
 	'LBL_ALL'                      => 'Все'                      ,
 	'LBL_UPDATED'                  => 'обновил'          ,
-	'LBL_FROM'                     => 'для'                        , // TODO: Review
+        //SalesPlatform.ru begin History of products changes 
+        'LBL_FROM'                     => 'с', 
+        //'LBL_FROM'                     => 'для'                        , // TODO: Review 
+        //SalesPlatform.ru end History of products changes 
 	'LBL_TO'                       => 'на'                        , // TODO: Review
 	'LBL_to'                       => '-', 
         'LBL_ON'                       => 'на'                          , // TODO: Review
@@ -502,8 +505,12 @@ $languageStrings = array(
 	'Tax2'                         => 'Налог 2'                        , // TODO: Review
 	'Tax3'                         => 'Налог 3'                        , // TODO: Review
 	'Excise Duty'                  => 'Акцизный сбор'   ,
-	'Total'                        => 'Общий',
-	'Sub Total'                    => 'Итог'                    , // KEY 5.x: LBL_SUB_TOTAL
+	//SalesPlatform.ru begin History of products changes 
+	//'Total'                        => 'Общий', 
+	//'Sub Total'                    => 'Итог'                    , // KEY 5.x: LBL_SUB_TOTAL 
+	'Total'                        => 'Общая сумма', 
+	'Sub Total'                    => 'Общий итог', 
+	//SalesPlatform.ru end History of products changes 
 	'Tax Type'                     => 'Тип налога',
 	'S&H Amount'                   => 'Стоимость доставки и хранения',
 	'Status'                       => 'Статус'                ,
@@ -728,6 +735,7 @@ $languageStrings = array(
     '1 Day'=>'1 день',
     'yes' => 'Да',
     'no' => 'Нет',
+    'LBL_EQ_ZERO' => 'Нет',
     'Transfer records to user' => 'Прикрепить все записи к пользователю',
     'User to be deleted' => 'Удаляемый пользователь',
     'Roles' => 'Роли',
@@ -747,7 +755,7 @@ $languageStrings = array(
     'Scheduler'     => 'Планировщик',
     'CronTasks'     => 'Планировщик',
     'CustomerPortal'  => 'Клиентский портал',  
-    'Faq' => 'Чаво',
+    'Faq' => 'База знаний',
     'Events' => 'События',
     'SPSocialConnector' => 'Сообщения',
     'System Timezone' => 'Системная временная зона',
@@ -786,7 +794,10 @@ $languageStrings = array(
     'Sub Products' => 'Составной',
     'LBL_BACK_TO_PRODUCTS' => 'Назад',
     'Cancel' => 'Отменить',
-    'Pre Tax Total' => 'Индивидуальный налог',
+    //SalesPlatform.ru begin History of products changes
+    //'Pre Tax Total' => 'Индивидуальный налог', 
+    'Pre Tax Total' => 'Итого', 
+    //SalesPlatform.ru end History of products changes
     'Received' => 'Получен',
     'Balance' => 'Баланс',
     'S&H Percent' => 'S&H процент',
@@ -883,6 +894,229 @@ $languageStrings = array(
     'Emails_Block3' => 'Описание',
     'LBL_ERROR' => 'Ошибка',
     'LBL_BE_CAREFUL_WITH_EMAIL_TEMPLATES' => 'Поиск переменных шаблона происходит отдельно для каждой сущности, указанной в поле "Кому"',
+    'LBL_ERROR_CODE' => 'Код ошибки',
+    'LBL_ERROR_MESSAGE' => 'Детали ошибки',
+    'LBL_PASSWORD' => 'Пароль',
+    'LBL_INV_TANDC_TEXT' =>  '- Счет действителен на протяжении 14 календарных дней с даты его выставления, если другое не оговорено в письменной форме. Оплата счета Покупателем означает согласие с условиями поставки.',
+    'LBL_HELP_INFO1' =>   'Это оценка трудоемкости заявки в часах.<br>При добавлении заявки к Сервисному Контракту число использованных единиц обслуживания автоматически увеличивается при закрытии заявки на величину, указанную в заявке. При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.',
+    'LBL_HELP_INFO2' =>   'Это оценка трудоемкости заявки в днях.<br>При добавлении заявки к Сервисному Контракту число использованных единиц обслуживания автоматически увеличивается при закрытии заявки на величину, указанную в заявке. При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.',
+    'LBL_CONTACT_MANAGEMENT_DESC'    => 'Хранение ваших контактных данных, документов, писем, событий, задач и других данных. Кроме того, управление доступом пользователей к различным возможностям CRM, а также автоматизация бизнес-процессов.',
+    'LBL_SALES_AUTOMATION_DESC'      => 'Выявление потенциальных клиентов с вашего сайта и импорт в CRM. Анализ собранных данных и создание потенциальных возможностей для продаж.',
+    'LBL_MARKETING_DESC'             => 'Рассылка сообщений по вашему списку контактов, привлечение потенциальных покупателей и клиентов, инструменты для анализа и повышения эффективности работы кампании.',
+    'LBL_SUPPORT_DESC'               => 'Создание и отслеживание клиентских заявок. Также позволяет содавать и просматривать клиентам свои заявки через клиентский портал.',
+    'LBL_IIM_DESC'                   => 'Создание базы данных продуктов, услуг, товаров, создание каталогов, использование этих данных для создания предложений, счетов и заказов.',
+    'LBL_PROJECT_MANAGEMENT_DESC'    => 'Создание и управление проектами и проектными задачами заказчика, которые могут быть назначены пользователю CRM и отмечены в его календаре.',
+    
+    'Contact Management'    => 'Управление контактами',
+    'Access Control'        => 'Контроль доступа',
+    'Web-to-lead forms'     => 'Веб формы',
+    'Sales Automation'      => 'Автоматизация продаж',
+    'Marketing'             => 'Маркетинг',
+    'Support'               => 'Поддержка',
+    'Invoicing & Inventory Management'     => 'Счета и управление складом',
+    'Project Management'    => 'Управление проектами',   
+    
+    'LBL_LEADS_PREFIX'      =>    'ОБР_',
+    'LBL_ACCOUNTS_PREFIX'   =>    'КОНТР_',
+    'LBL_CAMPAIGNS_PREFIX'  =>    'КАМП_',	
+    'LBL_CONTACTS_PREFIX'   =>    'КОНТАКТ_',
+    'LBL_POTENTIALS_PREFIX' =>    'СДЕЛКА_',
+    'LBL_HELPDESK_PREFIX'   =>    'ЗАЯВКА_',
+    'LBL_QUOTES_PREFIX'     =>    'ПР_',
+    'LBL_SALESORDER_PREFIX' =>    '',
+    'LBL_PURCHASEORDER_PREFIX'  =>    'ЗАК_',
+    'LBL_INVOICE_PREFIX'    =>    '',
+    'LBL_PRODUCTS_PREFIX'   =>    'ТОВ_',
+    'LBL_VENDORS_PREFIX'    =>    'ПОСТ_',
+    'LBL_PRICEBOOKS_PREFIX' =>    'КАТ_',
+    'LBL_FAQ_PREFIX'        =>    'БЗ_',
+    'LBL_DOCUMENTS_PREFIX'  =>    'ДОК_',
+    'LBL_SERVICE_CONTRACTS_PREFIX'  =>  'СЕРКОН_',
+    
+    'LBL_VAT'               =>    'НДС',
+    'LBL_VAT_VALUE'         =>    '18',
+    
+    'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL' =>    '<table width="700" cellspacing="0" cellpadding="0" border="0" align="center" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; text-decoration: none; background-color: rgb(122, 122, 254);">
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td width="50"> </td>
+                        <td>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                    <td>
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(255, 255, 255); font-weight: normal; line-height: 25px;">
+                                            <tr>
+                                                <td align="center" rowspan="4">$logo$</td>
+                                                <td align="center"> </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 24px; color: rgb(255, 255, 255); font-weight: bolder; line-height: 35px;">vtiger CRM<br /> </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" style="padding-right: 100px;">The honest Open Source CRM </td>
+                                            </tr>
+                                            <tr>
+                                                <td> </td>
+                                            </tr>
+                                    </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+                                            <tr>
+                                                <td valign="top">
+                                                <table width="100%" cellspacing="0" cellpadding="5" border="0">
+                                                        <tr>
+                                                            <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);"> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(22, 72, 134); font-weight: bolder; line-height: 15px;">Уважаемый(ая) $contact_name$, </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"> Выражаем вам благодарность за подключение услуги ежегодного сервисного обслуживания Vtiger CRM.<br />Далее приведена информация для регистрации на портале самообслуживания:</td>                                            
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center">
+                                                            <table width="75%" cellspacing="0" cellpadding="10" border="0" style="border: 2px solid rgb(180, 180, 179); background-color: rgb(226, 226, 225); font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal;">
+                                                                    <tr>
+                                                                        <td><br />ID Пользователя     : <font color="#990000"><strong> $login_name$</strong></font> </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Пароль: <font color="#990000"><strong> $password$</strong></font> </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="center"> <strong>  $URL$<br /> </strong> </td>
+                                                                    </tr>
+                                                            </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; text-align: justify; line-height: 20px;"><strong>Примечание:</strong> Мы предлагаем вам изменить пароль после первой авторизации. <br /><br /> <strong><u>Справочная информация</u></strong><br />  <br /> После первой авторизации на портале самообслуживания вы можете воспользоваться документацией Vtiger CRM, расположенной во вкладке <strong>Документация(Documents)</strong>. Для ознакомления доступны следующие документы:<br />
+                                                            <ul>
+                                                                <li>Руководство по установке (Windows и Linux ОС)<br /> </li>
+                                                                <li>Руководство пользователя и администратора<br /> </li>
+                                                                <li>Клиентский портал Vtiger CRM - Руководство пользователя<br /> </li>
+                                                                <li>Vtiger CRM плагин для Outlook - Руководство пользователя<br /> </li>
+                                                                <li>Vtiger CRM Office плагин - Руководство пользователя<br /> </li>
+                                                                <li>Vtiger CRM дополнение Thunderbird - Руководство пользователя<br /> </li>
+                                                                <li>Vtiger CRM Веб формы - Руководство пользователя<br /> </li>
+                                                                <li>Vtiger CRM панель инструментов Firefox - Руководство пользователя<br /> </li>
+                                                            </ul>
+                                                            <br />  <br /> <strong><u>Базовые знания</u></strong><br /> <br /> Мы периодически обновляем часто задаваемые вопросы, основываясь на опыте наших клиентов. Вы можете получить доступ к последним статьям через вкладку <strong>База знаний(FAQ)</strong>.<br /> <br /> <strong><u>Vtiger CRM - Информация</u></strong><br /> <br /> Пожалуйста, предоставьте информацию о вашей текущей версии vtiger CRM и о особенностях вашей системы, чтобы мы могли дать вам рекомендации по увеличению производительности работы Vtiger CRM. Основываясь на особенностях вашей системы, мы сообщим вам о последних обновлениях Vtiger CRM.<br />  <br />			 Еще раз благодарим вас и желаем приятной работы с системой Vtiger CRM.<br /> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right"><strong style="padding: 2px; font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: bold;"><br /><br />С уважением,</strong></td>                               
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal; line-height: 20px;">$support_team$ </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right"><a style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);" href="http://www.salesplatform.ru">www.salesplatform.ru</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> </td>
+                                                        </tr>
+                                                </table>
+                                                </td>
+                                                <td width="1%" valign="top"> </td>
+                                            </tr>
+                                    </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" style="background-color: rgb(27, 77, 140);"><br /> </td>
+                                </tr>
+                        </table>
+                        </td>
+                        <td width="50"> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>
+            </table>',
+    'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_NAME' => 'Регистрационная информация клиента',
+    'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_DESC' => 'Регистрационная информация клиентского портала',
+    'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_SUBJECT' => 'Посылает регистрационную информацию портала клиенту',
+    'Hot Leads'         =>    'Горячие Обращения',
+    'This Month Leads'  =>    'Обращения этого месяца',
+    'Prospect Accounts' =>    'Перспективные Контрагенты',
+    'New This Week'     =>    'Новые за неделю',
+    'Contacts Address'  =>    'Показать адреса',
+    'Todays Birthday'   =>    'Сегодня день рождения',
+    'Potentials Won'    =>    'Удачные Сделки',
+    'Prospecting'       =>    'Перспективные',
+    'Open Tickets'      =>    'Открытые заявки',
+    'High Priority Tickets'  =>    'Приоритетные Заявки',
+    'Open Quotes'       =>    'Открытые Предложения',
+    'Rejected Quotes'   =>    'Отклоненные Предложения',
+    'Drafted FAQ'       =>    'Черновики БЗ',
+    'Published FAQ'     =>    'Опубликованные БЗ',
+    'Open Purchase Orders'   =>    'Открытые Закупки',
+    'Received Purchase Orders'    =>    'Полученные Закупки',
+    'Open Invoices'     =>    'Открытые Счета',
+    'Paid Invoices'     =>    'Оплаченные Счета',
+    'Pending Sales Orders'   =>    'Текущие Заказы на Продажу',
+    'This is a Default Folder'  =>  'Это папка по умолчанию',
+    'LBL_HAS_CHANGED_TO' => 'изменено на',
+    'LBL_IS_ADDED' => 'добавлено',
+    'LBL_IS_TODAY' => 'сегодня',
+    'LBL_LESS_THAN_DAYS_AGO' => 'менее дней назад',
+    'LBL_MORE_THAN_DAYS_AGO' => 'более дней назад',
+    'LBL_LESS_THAN_HOURS_BEFORE' => 'менее чем за (часов) до',
+    'LBL_LESS_THAN_HOURS_LATER' => 'менее чем через (часов) после',
+    'LBL_MORE_THAN_HOURS_BEFORE' => 'более чем за (часов) до',
+    'LBL_MORE_THAN_HOURS_LATER' => 'более чем через (часов) после',
+    'LBL_DAYS_AGO' => 'дней назад',
+    'LBL_DAYS_LATER' => 'дней позже',
+    
+    'LBL_SECOND_CORRECT_SINGLE' => 'Секунду', 
+    'LBL_MINUTE_CORRECT_SINGLE' => 'Минуту', 
+    'LBL_HOUR_CORRECT_SINGLE' => 'Час', 
+    'LBL_DAY_SINGLE' => 'День', 
+    'LBL_MONTH_CORRECT_SINGLE' => 'Месяц', 
+    'LBL_YEAR_CORRECT_SINGLE' => 'Год', 
+    'LBL_SECOND_CORRECT_PLURAL_ONE' => 'Секунды', 
+    'LBL_MINUTE_CORRECT_PLURAL_ONE' => 'Минуты', 
+    'LBL_HOUR_CORRECT_PLURAL_ONE' => 'Часа', 
+    'LBL_DAY_CORRECT_PLURAL_ONE' => 'Дня', 
+    'LBL_MONTH_CORRECT_PLURAL_ONE' => 'Месяца', 
+    'LBL_YEAR_CORRECT_PLURAL_ONE' => 'Года', 
+    'LBL_SECOND_CORRECT_PLURAL_TWO' => 'Секунд', 
+    'LBL_MINUTE_CORRECT_PLURAL_TWO' => 'Минут', 
+    'LBL_HOUR_CORRECT_PLURAL_TWO' => 'Часов', 
+    'LBL_DAY_CORRECT_PLURAL_TWO' => 'Дней', 
+    'LBL_MONTH_CORRECT_PLURAL_TWO' => 'Месяцев', 
+    'LBL_YEAR_CORRECT_PLURAL_TWO' => 'Лет', 
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
@@ -1065,6 +1299,10 @@ $jsLanguageStrings = array(
     'JS_LBL_NO_TAXES'   =>    'В карточке данного Товара (Услуги) налог не задан',
     'LBL_SET_TAX_FOR'              => '% налога для', 
     'JS_CURRENT_DATE' => 'текущей даты',
+    'JS_SAVE' => 'Сохранение',
+    'JS_SAVE_ERROR' => 'Ошибка сохранения',
+    'JS_CHOOSE_VALUES' => 'Выберите значения',
+    'JS_CHOOSE_VALUE' => 'Выберите значение',
     //SalesPlatform.ru end
 );
 

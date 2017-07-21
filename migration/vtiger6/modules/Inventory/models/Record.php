@@ -65,31 +65,43 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 		$taxMode = ($this->getId()) ? 'available_associated' : 'all';
 
 		$subTotal = 0;
-		for ($i=1;$i<=$productsCount; $i++) {
-			$product = $relatedProducts[$i];
-			$productId = $product['hdnProductId'.$i];
-			$totalAfterDiscount = $product['totalAfterDiscount'.$i];
+        //SalesPlatform.ru begin
+        if ($taxtype == 'individual') {
+        //SalesPlatform.ru end
+            for ($i=1;$i<=$productsCount; $i++) {
+                $product = $relatedProducts[$i];
+                $productId = $product['hdnProductId'.$i];
+                $totalAfterDiscount = $product['totalAfterDiscount'.$i];
+                
+                //SalesPlatform.ru begin
+                //if ($taxtype == 'individual') {
+                //SalesPlatform.ru end
+                    $taxDetails = getTaxDetailsForProduct($productId, $taxMode);
+                    $taxCount = count($taxDetails);
+                    $taxTotal = '0';
 
-			if ($taxtype == 'individual') {
-				$taxDetails = getTaxDetailsForProduct($productId, $taxMode);
-				$taxCount = count($taxDetails);
-				$taxTotal = '0';
+                    for($j=0; $j<$taxCount; $j++) {
+                        $taxValue = $product['taxes'][$j]['percentage'];
 
-				for($j=0; $j<$taxCount; $j++) {
-					$taxValue = $product['taxes'][$j]['percentage'];
+                        $taxAmount = $totalAfterDiscount * $taxValue / 100;
+                        $taxTotal = $taxTotal + $taxAmount;
 
-					$taxAmount = $totalAfterDiscount * $taxValue / 100;
-					$taxTotal = $taxTotal + $taxAmount;
-
-					$relatedProducts[$i]['taxes'][$j]['amount'] = $taxAmount;
-					$relatedProducts[$i]['taxTotal'.$i] = $taxTotal;
-				}
-				$netPrice = $totalAfterDiscount + $taxTotal;
-				$relatedProducts[$i]['netPrice'.$i] = $netPrice;
-				$subTotal = $subTotal+$netPrice;
-			}
-		}
-
+                        $relatedProducts[$i]['taxes'][$j]['amount'] = $taxAmount;
+                        $relatedProducts[$i]['taxTotal'.$i] = $taxTotal;
+                    }
+                    $netPrice = $totalAfterDiscount + $taxTotal;
+                    $relatedProducts[$i]['netPrice'.$i] = $netPrice;
+                    $subTotal = $subTotal+$netPrice;
+                //SalesPlatform.ru begin
+                //}
+                //SalesPlatform.ru end
+            }
+        //SalesPlatform.ru begin
+        } else {
+            $subTotal = $relatedProducts[1]['final_details']['hdnSubTotal'];
+        }
+        //SalesPlatform.ru end
+            
 		//Updating sub total
 		$relatedProducts[1]['final_details']['hdnSubTotal'] = $subTotal;
 

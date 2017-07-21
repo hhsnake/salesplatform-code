@@ -83,6 +83,9 @@
 	
 							</li>
 						{/if}
+	                        {* SalesPlatform.ru begin History of products changes *} 
+	                        <br> 
+	                        {* SalesPlatform.ru end History of products changes *} 
 					{/if}
 				{/foreach}
 			</ul>

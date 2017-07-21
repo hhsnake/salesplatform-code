@@ -41,9 +41,9 @@ class Vtiger_Language_Handler {
             if (!empty($defaultLanguage) && strcasecmp($defaultLanguage, $currentLanguage) !== 0) {
                 $translatedString = self::getLanguageTranslatedString($defaultLanguage, $key, $module);
             }
-            // SalesPlatform.ru begin Localize Install tittle
+            // SalesPlatform.ru begin Localize Install title
             if (empty($defaultLanguage) && $key == 'Install') {
-                $translatedString = self::getLanguageTranslatedString('ru_ru', $key, 'Install');
+                $translatedString = self::getLanguageTranslatedString($_SESSION['config_file_info']['default_language'], $key, 'Install');
             }
             // SalesPlatform.ru end
         }
@@ -180,6 +180,11 @@ class Vtiger_Language_Handler {
     public static function export($module, $type = 'languageStrings') {
         $userSelectedLanguage = self::getLanguage();
         $defaultLanguage = vglobal('default_language');
+        //Salesplatform.ru begin Preinstall default language fix 
+        if ($defaultLanguage == '') {
+            $defaultLanguage = $_SESSION['config_file_info']['default_language'];
+        }
+        //Salesplatform.ru end Preinstall default language fix 
         $languages = array($userSelectedLanguage);
         //To merge base language and user selected language translations
         if ($userSelectedLanguage != $defaultLanguage) {

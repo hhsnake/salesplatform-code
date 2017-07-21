@@ -432,18 +432,32 @@ jQuery.Class("Vtiger_Detail_Js",{
 		data['action'] = 'SaveAjax';
         
         //SalesPlatform begin
-        if(!sp_js_detailview_checkBeforeSave(data)) {
-            aDeferred.reject('CheckBeforeSave');
-            return aDeferred.promise();
-        }
-        //SalesPlatform end
-        
-		AppConnector.request(data).then(
-			function(reponseData){
-				aDeferred.resolve(reponseData);
-			}
-		);
+        sp_js_detailview_checkBeforeSave(data).then(
+                function () {
+                    AppConnector.request(data).then(
+                            function (reponseData) {
+                                aDeferred.resolve(reponseData);
+                            }
+                    );
+                },
+                function () {
+                    aDeferred.reject('CheckBeforeSave');
+                    return aDeferred.promise();
 
+            }
+        );
+        //if(!sp_js_detailview_checkBeforeSave(data)) {
+        //    aDeferred.reject('CheckBeforeSave');
+        //    return aDeferred.promise();
+        //}
+        
+        
+		//AppConnector.request(data).then(
+		//	function(reponseData){
+		//		aDeferred.resolve(reponseData);
+		//	}
+		//);
+        //SalesPlatform end
 		return aDeferred.promise();
 	},
 
@@ -1021,6 +1035,21 @@ jQuery.Class("Vtiger_Detail_Js",{
 					fieldNameValueMap["field"] = fieldName;
 					fieldNameValueMap = thisInstance.getCustomFieldNameValueMap(fieldNameValueMap);
                     thisInstance.saveFieldValues(fieldNameValueMap).then(function(response) {
+
+                        //SalesPlatform.ru begin
+                        if(!response.success) {
+                            currentTdElement.progressIndicator({'mode':'hide'});
+                            detailViewValue.removeClass('hide');
+                            actionElement.show();
+                            Vtiger_Helper_Js.showPnotify({
+                                type : 'error',
+                                title : app.vtranslate('JS_SAVE_ERROR'),
+                                text : response.error.message,
+                                delay : 20000
+                            });
+                            return;
+                        }
+                        //SalesPlatform.ru end
 						var postSaveRecordDetails = response.result;
 						currentTdElement.progressIndicator({'mode':'hide'});
                         detailViewValue.removeClass('hide');
@@ -2283,7 +2312,7 @@ function sp_js_detailview_checkBeforeSave(fieldData) {
 
         var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));      
 
-        var urlstring = "index.php?module="+fieldData['module']+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&DetailViewAjaxMode=true&id="+fieldData['record'];
+        var urlstring = "index.php?module="+fieldData['module']+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&DetailViewAjaxMode=true&record="+fieldData['record'];
         
         /* Need sync request with crf protect */ 
  	var params = {  
@@ -2292,46 +2321,62 @@ function sp_js_detailview_checkBeforeSave(fieldData) {
             data : {} 
  	}; 
         
-        var continue_fl;    // true - continue, false - break  
-        AppConnector.request(params).then( function (responseObj) { 
-            if(!empty(responseObj)) { 
-                if(responseObj.response === undefined) {
-
-                    continue_fl = true;
-                }
-                if(responseObj.response === "OK") {
-                    if (responseObj.message !== undefined && !empty(responseObj.message)) {
-                        alert(responseObj.message);
+    var checkResult = jQuery.Deferred();
+    AppConnector.request(params).then(
+            function (responseObj) {
+                if (!empty(responseObj)) {
+                    if (responseObj.response === undefined) {
+                        checkResult.resolve();
                     }
-                    continue_fl = true;
-                } else if(responseObj.response === "ALERT") {
-                    if (responseObj.message !== undefined) {
-                        alert(responseObj.message);
+                    if (responseObj.response === "OK") {
+                        if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                            Vtiger_Helper_Js.showAlertBox({'message': responseObj.message}).then(
+                                    function (e) {
+                                        checkResult.resolve();
+                                    });
+                        } else {
+                            checkResult.resolve();
+                        }
+                    } else if (responseObj.response === "ALERT") {
+                        var alertMessage;
+                        if (responseObj.message !== undefined) {
+                            alertMessage = responseObj.message;
+                        } else {
+                            alertMessage = 'Alert';
+                        }
+                        Vtiger_Helper_Js.showAlertBox({'message': alertMessage}).then(
+                                function (e) {
+                                    checkResult.reject();
+                                }
+                        );
+                        checkResult.reject();
+                    } else if (responseObj.response === "CONFIRM") {
+                        var confirmMessage;
+                        if (responseObj.message !== undefined) {
+                            confirmMessage = responseObj.message;
+                        } else {
+                            confirmMessage = 'Confirm';
+                        }
+                        Vtiger_Helper_Js.showConfirmationBox({'message': confirmMessage}).then(
+                                function (e) {
+                                    checkResult.resolve();
+                                },
+                                function (error) {
+                                    checkResult.reject();
+                                }
+                        );
                     } else {
-                        alert('Alert');
-                    }
-                    continue_fl = false;
-                } else if(responseObj.response === "CONFIRM") {
-                    var confirmMessage;
-                    if (responseObj.message !== undefined) {
-                        confirmMessage =responseObj.message;
-                    } else {
-                        confirmMessage = 'Confirm';
-                    }
-                    if (confirm(confirmMessage)) {
-
-                        continue_fl = true;
-                    } else {
-                        continue_fl = false;
+                        checkResult.resolve();
                     }
                 } else {
-
-                    continue_fl = true;
+                    checkResult.resolve();
                 }
-            } else {
-                continue_fl = true;
+            },
+            function (error) {
+                checkResult.resolve();
             }
-        });
-        return continue_fl;
+    );
+    
+    return checkResult.promise();
 }
 //SalesPlatform.ru end

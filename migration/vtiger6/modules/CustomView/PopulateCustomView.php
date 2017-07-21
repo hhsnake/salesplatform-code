@@ -9,155 +9,304 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-
-$customviews = Array(Array('viewname'=>'All',
+//Salesplatform.ru begin
+$customviews = Array(Array('viewname'=> 'All',
 			   'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
 			   'cvmodule'=>'Leads','stdfilterid'=>'','advfilterid'=>''),
 
-		     Array('viewname'=>'Горячие Обращения',
+		     Array('viewname'=>vtranslate('Hot Leads'),
 			   'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
 			   'cvmodule'=>'Leads','stdfilterid'=>'','advfilterid'=>'0'),
 
-		     Array('viewname'=>'Обращения этого месяца',
+		     Array('viewname'=>vtranslate('This Month Leads'),
 			   'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
 			   'cvmodule'=>'Leads','stdfilterid'=>'0','advfilterid'=>''),
 
-		     Array('viewname'=>'All',
+		     Array('viewname'=> 'All',
                            'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                            'cvmodule'=>'Accounts','stdfilterid'=>'','advfilterid'=>''),
 
-		     Array('viewname'=>'Перспективные Контрагенты',
+		     Array('viewname'=>vtranslate('Prospect Accounts'),
                            'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
                            'cvmodule'=>'Accounts','stdfilterid'=>'','advfilterid'=>'1'),
 
-		     Array('viewname'=>'Новые за неделю',
+		     Array('viewname'=>vtranslate('New This Week'),
                            'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                            'cvmodule'=>'Accounts','stdfilterid'=>'1','advfilterid'=>''),
 
-		     Array('viewname'=>'All',
+		     Array('viewname'=> 'All',
                            'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                            'cvmodule'=>'Contacts','stdfilterid'=>'','advfilterid'=>''),
 
-		     Array('viewname'=>'Показать адреса',
+		     Array('viewname'=>vtranslate('Contacts Address'),
                            'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                            'cvmodule'=>'Contacts','stdfilterid'=>'','advfilterid'=>''),
 
-		     Array('viewname'=>'Сегодня день рождения',
+		     Array('viewname'=>vtranslate('Todays Birthday'),
                            'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                            'cvmodule'=>'Contacts','stdfilterid'=>'2','advfilterid'=>''),
 
-		     Array('viewname'=>'All',
+		     Array('viewname'=> 'All',
                            'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                            'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>''),
 
-		     Array('viewname'=>'Удачные Сделки',
+		     Array('viewname'=>vtranslate('Potentials Won'),
                            'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
                            'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>'2'),
 
-		     Array('viewname'=>'Перспективные',
+		     Array('viewname'=>vtranslate('Prospecting'),
                            'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                            'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>'3'),
 
-		     Array('viewname'=>'All',
+		     Array('viewname'=> 'All',
                            'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                            'cvmodule'=>'HelpDesk','stdfilterid'=>'','advfilterid'=>''),
 
-	             Array('viewname'=>'Открытые заявки',
+	             Array('viewname'=>vtranslate('Open Tickets'),
                            'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
                            'cvmodule'=>'HelpDesk','stdfilterid'=>'','advfilterid'=>'4'),
 
-		     Array('viewname'=>'Приоритетные Заявки',
+		     Array('viewname'=>vtranslate('High Priority Tickets'),
                            'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                            'cvmodule'=>'HelpDesk','stdfilterid'=>'','advfilterid'=>'5'),
 
-		     Array('viewname'=>'All',
+		     Array('viewname'=> 'All',
                            'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                            'cvmodule'=>'Quotes','stdfilterid'=>'','advfilterid'=>''),
 
-		     Array('viewname'=>'Открытые Предложения',
+		     Array('viewname'=>vtranslate('Open Quotes'),
                            'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
                            'cvmodule'=>'Quotes','stdfilterid'=>'','advfilterid'=>'6'),
 
-		     Array('viewname'=>'Отклоненные Предложения',
+		     Array('viewname'=>vtranslate('Rejected Quotes'),
                            'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                            'cvmodule'=>'Quotes','stdfilterid'=>'','advfilterid'=>'7'),
 
-		    Array('viewname'=>'All',
+		    Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'Calendar','stdfilterid'=>'','advfilterid'=>''),
 
-		    Array('viewname'=>'All',
+		    Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'Emails','stdfilterid'=>'','advfilterid'=>''),
 
-		    Array('viewname'=>'All',
+		    Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'Invoice','stdfilterid'=>'','advfilterid'=>''),
 
-		    Array('viewname'=>'All',
+		    Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'Documents','stdfilterid'=>'','advfilterid'=>''),
 
-	            Array('viewname'=>'All',
+	            Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'PriceBooks','stdfilterid'=>'','advfilterid'=>''),
 
-	            Array('viewname'=>'All',
+	            Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'Products','stdfilterid'=>'','advfilterid'=>''),
 
-	            Array('viewname'=>'All',
+	            Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'PurchaseOrder','stdfilterid'=>'','advfilterid'=>''),
 
-	            Array('viewname'=>'All',
+	            Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'SalesOrder','stdfilterid'=>'','advfilterid'=>''),
 
-	            Array('viewname'=>'All',
+	            Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'Vendors','stdfilterid'=>'','advfilterid'=>''),
 
-		    Array('viewname'=>'All',
+		    Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>''),
 
-		    Array('viewname'=>'All',
+		    Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
                           'cvmodule'=>'Campaigns','stdfilterid'=>'','advfilterid'=>''),
 
-		    Array('viewname'=>'All',
+		    Array('viewname'=> 'All',
                           'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
 			  'cvmodule'=>'Webmails','stdfilterid'=>'','advfilterid'=>''),
 
-		    Array('viewname'=>'Черновики ЧаВо',
+		    Array('viewname'=>vtranslate('Drafted FAQ'),
                           'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                           'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>'8'),
 
-		    Array('viewname'=>'Опубликованные ЧаВо',
+		    Array('viewname'=>vtranslate('Published FAQ'),
                           'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
 			  'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>'9'),
 
-	            Array('viewname'=>'Открытые Закупки',
+	            Array('viewname'=>vtranslate('Open Purchase Orders'),
                           'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                           'cvmodule'=>'PurchaseOrder','stdfilterid'=>'','advfilterid'=>'10'),
 
-	            Array('viewname'=>'Полученные Закупки',
+	            Array('viewname'=>vtranslate('Received Purchase Orders'),
                           'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                           'cvmodule'=>'PurchaseOrder','stdfilterid'=>'','advfilterid'=>'11'),
 
-		    Array('viewname'=>'Открытые Счета',
+		    Array('viewname'=>vtranslate('Open Invoices'),
                           'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
 			  'cvmodule'=>'Invoice','stdfilterid'=>'','advfilterid'=>'12'),
 
-		    Array('viewname'=>'Оплаченные Счета',
+		    Array('viewname'=>vtranslate('Paid Invoices'),
                           'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
 			  'cvmodule'=>'Invoice','stdfilterid'=>'','advfilterid'=>'13'),
 
-	            Array('viewname'=>'Текущие Заказы на Продажу',
+	            Array('viewname'=>vtranslate('Pending Sales Orders'),
                           'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
                           'cvmodule'=>'SalesOrder','stdfilterid'=>'','advfilterid'=>'14'),
 		    );
+                    //     $customviews = Array(Array('viewname'=>'All',
+                    //       'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //       'cvmodule'=>'Leads','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'Hot Leads',
+                    //       'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Leads','stdfilterid'=>'','advfilterid'=>'0'),
+                    //
+                    // Array('viewname'=>'This Month Leads',
+                    //       'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Leads','stdfilterid'=>'0','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'All',
+                    //       'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //       'cvmodule'=>'Accounts','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'Prospect Accounts',
+                    //       'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Accounts','stdfilterid'=>'','advfilterid'=>'1'),
+                    //
+                    // Array('viewname'=>'New This Week',
+                    //       'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Accounts','stdfilterid'=>'1','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'All',
+                    //       'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //       'cvmodule'=>'Contacts','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'Contacts Address',
+                    //       'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Contacts','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'Todays Birthday',
+                    //       'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Contacts','stdfilterid'=>'2','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'All',
+                    //       'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //       'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'Potentials Won',
+                    //       'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>'2'),
+                    //
+                    // Array('viewname'=>'Prospecting',
+                    //       'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>'3'),
+                    //
+                    // Array('viewname'=>'All',
+                    //       'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //       'cvmodule'=>'HelpDesk','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'Open Tickets',
+                    //       'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'HelpDesk','stdfilterid'=>'','advfilterid'=>'4'),
+                    //
+                    // Array('viewname'=>'High Prioriy Tickets',
+                    //       'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'HelpDesk','stdfilterid'=>'','advfilterid'=>'5'),
+                    //
+                    // Array('viewname'=>'All',
+                    //       'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //       'cvmodule'=>'Quotes','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    // Array('viewname'=>'Open Quotes',
+                    //       'setdefault'=>'0','setmetrics'=>'1','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Quotes','stdfilterid'=>'','advfilterid'=>'6'),
+                    //
+                    // Array('viewname'=>'Rejected Quotes',
+                    //       'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //       'cvmodule'=>'Quotes','stdfilterid'=>'','advfilterid'=>'7'),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Calendar','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Emails','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Invoice','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Documents','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'PriceBooks','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Products','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'PurchaseOrder','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'SalesOrder','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Vendors','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Campaigns','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'All',
+                    //      'setdefault'=>'1','setmetrics'=>'0','status'=>'0','userid'=>'1',
+                    //      'cvmodule'=>'Webmails','stdfilterid'=>'','advfilterid'=>''),
+                    //
+                    //Array('viewname'=>'Drafted FAQ',
+                    //      'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //      'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>'8'),
+                    //
+                    //Array('viewname'=>'Published FAQ',
+                    //      'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //      'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>'9'),
+                    //
+                    //Array('viewname'=>'Open Purchase Orders',
+                    //      'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //      'cvmodule'=>'PurchaseOrder','stdfilterid'=>'','advfilterid'=>'10'),
+                    //
+                    //Array('viewname'=>'Received Purchase Orders',
+                    //      'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //      'cvmodule'=>'PurchaseOrder','stdfilterid'=>'','advfilterid'=>'11'),
+                    //
+                    //Array('viewname'=>'Open Invoices',
+                    //      'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //      'cvmodule'=>'Invoice','stdfilterid'=>'','advfilterid'=>'12'),
+                    //
+                    //Array('viewname'=>'Paid Invoices',
+                    //      'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //      'cvmodule'=>'Invoice','stdfilterid'=>'','advfilterid'=>'13'),
+                    //
+                    //Array('viewname'=>'Pending Sales Orders',
+                    //      'setdefault'=>'0','setmetrics'=>'0','status'=>'3','userid'=>'1',
+                    //      'cvmodule'=>'SalesOrder','stdfilterid'=>'','advfilterid'=>'14'),
+                    //	                    );
+//Salesplatform.ru end
 
 
 $cvcolumns = Array(Array('vtiger_leaddetails:lead_no:lead_no:Leads_Lead_No:V',

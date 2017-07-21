@@ -8,6 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+    'PBXManager' => 'Calls',
 	
     //Blocks
     'LBL_PBXMANAGER_INFORMATION' => 'Call Details',
@@ -30,4 +31,15 @@ $languageStrings = array(
     
     'SINGLE_PBXManager' => 'Call Record' ,
 
+    'Call Status' => 'Status',
+    'Customer Number' => 'Customer Number',
+    'Customer' => 'Customer',
+    'User' => 'User',
+    'Start Time' => 'Start Time',
+    'Direction' => 'Direction',
+    'Customer Type' => 'Customer Type',
+    'End Time' => 'End Time',
+    'Source UUID' => 'Source UUID',
+    'Gateway' => 'Gateway',
+    'Incoming Line Name' => 'Incoming Line Name',
 );

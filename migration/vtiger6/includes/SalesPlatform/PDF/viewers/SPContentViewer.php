@@ -33,7 +33,54 @@ class SalesPlatform_PDF_SPContentViewer extends Vtiger_PDF_ContentViewer {
 	function setDocumentModel($model) {
 	    $this->documentModel = $model;
 	}
-	
+        
+	//Barcodes insertion 
+        function setBarcodes($content, $model, $pdf) {
+                    $style1d = array( 
+                        'position' => 'S', 
+                        'align' => 'C', 
+                        'stretch' => false, 
+                        'fitwidth' => true, 
+                        'cellfitalign' => '', 
+                        'border' => true, 
+                        'hpadding' => 'auto', 
+                        'vpadding' => 'auto', 
+                        'fgcolor' => array(0,0,0), 
+                        'bgcolor' => array(255,255,255), 
+                        'text' => true, 
+                        'font' => 'helvetica', 
+                        'fontsize' => 8, 
+                        'stretchtext' => 4 
+                    ); 
+                    $style2d = array(
+                        'border' => 2,
+                        'vpadding' => 'auto',
+                        'hpadding' => 'auto',
+                        'fgcolor' => array(0,0,0),
+                        'bgcolor' => array(255,255,255),
+                        'module_width' => 1, 
+                        'module_height' => 1
+                    );
+                    
+                    preg_match_all('/{\S(?<tag>.+?)_barcode(?<demension>.+?):(?<standart>.+?)}/', $content, $matches); 
+                    $elements = $matches[tag]; 
+                    foreach($elements as $key => $tag2barcode) { 
+                        if (in_array($tag2barcode, $model->keys())) { 
+                            $info4barcode = $model->get($tag2barcode); 
+                        } 
+
+                        if ($matches[demension][$key] == '1d'){
+                            $param = $pdf->serializeTCPDFtagParameters(array($info4barcode, $matches[standart][$key], '', '', '',  18, 0.4, $style1d, 'N')); 
+                        }
+                        elseif ($matches[demension][$key] == '2d') {
+                            $param = $pdf->serializeTCPDFtagParameters(array($info4barcode, $matches[standart][$key], '', '', '', 20, $style2d, 'N')); 
+                        }
+                        $content = str_replace($matches[0][$key], '<tcpdf method="write'.strtoupper($matches[demension][$key]).'Barcode" params="'.$param.'" />', $content); 
+                        
+                    } 
+            return $content;
+        }
+        
 	function display($parent) {
             $pdf = $parent->getPDF();
             $pdf->setPageOrientation($this->orientation);
@@ -52,6 +99,7 @@ class SalesPlatform_PDF_SPContentViewer extends Vtiger_PDF_ContentViewer {
                         }
 
                         $content = $header->fetch();
+                        $content = $this->setBarcodes($content, $this->documentModel, $pdf);
                         $pdf->writeHTMLCell($contentFrame->w, $contentFrame->h,$contentFrame->x, $contentFrame->y, $content);
                     } catch(Aste_Exception $e) {
                     }

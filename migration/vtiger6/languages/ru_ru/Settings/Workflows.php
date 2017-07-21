@@ -102,6 +102,7 @@ $languageStrings = array(
     'LBL_AT_TIME'                  => 'Время',
     'LBL_FROM'                     => 'Отправитель',
     'LBL_TO'                       => 'Получатель',
+    'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Максимальный предел превышен',
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(

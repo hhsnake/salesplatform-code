@@ -101,12 +101,8 @@ jQuery.Class("Vtiger_Header_Js", {
         var aDeferred = jQuery.Deferred();
         var quickCreateSaveUrl = form.serializeFormData();
         // SalesPlatform begin
-        if(!sp_js_quickcreate_checkBeforeSave(quickCreateSaveUrl)) {
-            aDeferred.reject('CheckBeforeSave');
-            return aDeferred.promise();
-        }
-        // SalesPlatform end
-        AppConnector.request(quickCreateSaveUrl).then(
+        sp_js_quickcreate_checkBeforeSave(quickCreateSaveUrl).then(function () {
+            AppConnector.request(quickCreateSaveUrl).then(
                 function(data) {
                     //TODO: App Message should be shown
                     aDeferred.resolve(data);
@@ -114,7 +110,27 @@ jQuery.Class("Vtiger_Header_Js", {
                 function(textStatus, errorThrown) {
                     aDeferred.reject(textStatus, errorThrown);
                 }
-        );
+            ); 
+        },
+        function (error) {
+            aDeferred.reject('CheckBeforeSave');
+            return aDeferred.promise();
+        });
+        //if(!sp_js_quickcreate_checkBeforeSave(quickCreateSaveUrl)) {
+        //    aDeferred.reject('CheckBeforeSave');
+        //    return aDeferred.promise();
+        //}
+        
+        //AppConnector.request(quickCreateSaveUrl).then(
+        //        function(data) {
+                    //TODO: App Message should be shown
+        //            aDeferred.resolve(data);
+        //        },
+        //        function(textStatus, errorThrown) {
+        //            aDeferred.reject(textStatus, errorThrown);
+        //        }
+        //);
+    // SalesPlatform end
         return aDeferred.promise();
     },
     /**
@@ -528,8 +544,11 @@ jQuery(document).ready(function() {
 function sp_js_quickcreate_checkBeforeSave(fieldData) {
 
     var data = encodeURIComponent(JSON.stringify(fieldData));
-    var urlstring = "index.php?module="+fieldData['module']+"&action=CheckBeforeSave&checkBeforeSaveData="+data+"&QuickCreateMode=true";
-
+    var urlstring = "index.php?module="+fieldData['module']+"&action=CheckBeforeSave&checkBeforeSaveData="
+            +data+"&QuickCreateMode=true";
+    if (typeof fieldData['record'] != 'undefined') {
+        urlstring += "&record="+fieldData['record'];
+    }
     /* Need sync request with crf protect */
     var params = {
         url : urlstring,
@@ -537,41 +556,61 @@ function sp_js_quickcreate_checkBeforeSave(fieldData) {
         data : {}
     };
 
-    var continue_fl;    // true - continue, false - break
-    AppConnector.request(params).then( function (responseObj) {
-        if(!empty(responseObj)) {
-            if(responseObj.response === undefined) {
-
-                continue_fl = true;
-            }
-            if(responseObj.response === "OK") {
-                if (responseObj.message !== undefined && !empty(responseObj.message)) {
-                    alert(responseObj.message);
+    var checkResult = jQuery.Deferred();
+    AppConnector.request(params).then(
+                function (responseObj) {
+                    if (!empty(responseObj)) {
+                        if (responseObj.response === undefined) {
+                            checkResult.resolve();
+                        }
+                        if (responseObj.response === "OK") {
+                            if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                                Vtiger_Helper_Js.showAlertBox({'message': responseObj.message}).then(
+                                        function (e) {
+                                            checkResult.resolve();
+                                        });
+                            } else {
+                                checkResult.resolve();
+                            }
+                        } else if (responseObj.response === "ALERT") {
+                            var alertMessage;
+                            if (responseObj.message !== undefined) {
+                                alertMessage = responseObj.message;
+                            } else {
+                                alertMessage = 'Alert';
+                            }
+                            Vtiger_Helper_Js.showAlertBox({'message': alertMessage}).then(
+                                    function (e) {
+                                        checkResult.reject();
+                                    }
+                            );
+                            checkResult.reject();
+                        } else if (responseObj.response === "CONFIRM") {
+                            var confirmMessage;
+                            if (responseObj.message !== undefined) {
+                                confirmMessage = responseObj.message;
+                            } else {
+                                confirmMessage = 'Confirm';
+                            }
+                            Vtiger_Helper_Js.showConfirmationBox({'message': confirmMessage}).then(
+                                    function (e) {
+                                        checkResult.resolve();
+                                    },
+                                    function (error) {
+                                        checkResult.reject();
+                                    }
+                            );
+                        } else {
+                            checkResult.resolve();
+                        }
+                    } else {
+                        checkResult.resolve();
+                    }
+                },
+                function (error) {
+                    checkResult.resolve();
                 }
-                continue_fl = true;
-            } else if(responseObj.response === "ALERT") {
-                if (responseObj.message !== undefined) {
-                    alert(responseObj.message);
-                } else {
-                    alert('Alert');
-                }
-                continue_fl = false;
-            } else if(responseObj.response === "CONFIRM") {
-                var confirmMessage;
-                if (responseObj.message !== undefined) {
-                    confirmMessage = responseObj.message;
-                } else {
-                    confirmMessage = 'Confirm';
-                }
-                continue_fl = !!confirm(confirmMessage);
-            } else {
-
-                continue_fl = true;
-            }
-        } else {
-            continue_fl = true;
-        }
-    });
-    return continue_fl;
+        );
+    return checkResult;
 }
 // SalesPlatform.ru end

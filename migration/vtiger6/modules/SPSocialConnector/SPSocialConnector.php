@@ -237,9 +237,7 @@ class SPSocialConnector extends CRMEntity {
                 ('vk_app_secret',''),
                 ('vk_access_token',''),
                 ('tw_app_key',''),
-                ('tw_app_secret',''),
-                ('fb_app_id',''),
-                ('fb_app_secret','');";
+                ('tw_app_secret','');";
             $adb->pquery($sql,array());
             
             /* Create field in module settings */
@@ -424,9 +422,6 @@ class SPSocialConnector extends CRMEntity {
         for($i = 0; $i < count($urlfieldList); $i++){
             if($status[$i] !== -1) {
                 switch ($provider[$i]->domen) {
-                    case 'facebook.com':
-                        $focus->column_fields['fb_status'] = 'Sent';
-                        break;
                     case 'twitter.com':
                         $focus->column_fields['tw_status'] = 'Sent';
                         $focus->column_fields['tw_message_id'] = $status[$i];
@@ -440,9 +435,6 @@ class SPSocialConnector extends CRMEntity {
                 }
             } else {
                 switch ($provider[$i]->domen) {
-                    case 'facebook.com':
-                        $focus->column_fields['fb_status'] = 'Not sent';
-                        break;
                     case 'twitter.com':
                         $focus->column_fields['tw_status'] = 'Not sent';
                         break;

@@ -63,7 +63,10 @@ function isReferenceUIType($uitype) {
 }
 
 function IsDateField($reportColDetails) {
-	list($tablename, $colname, $module_field, $fieldname, $typeOfData) = split(":", $reportColDetails);
+    //SalesPlatform.ru begin
+	//list($tablename, $colname, $module_field, $fieldname, $typeOfData) = split(":", $reportColDetails);
+    list($tablename, $colname, $module_field, $fieldname, $typeOfData) = explode(":", $reportColDetails);
+    //SalesPlatform.ru end
 	if ($typeOfData == "D") {
 		return true;
 	} else {

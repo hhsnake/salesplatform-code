@@ -16,7 +16,6 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 	
 	//This will store the editview form
 	editViewForm : false,
-   
 	//Address field mapping within module
 	addressFieldsMappingInModule : {
 										'bill_street':'ship_street',
@@ -88,6 +87,10 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
                 }).then(
                     function(data){
                         thisInstance.duplicateCheckCache[accountName] = data['success'];
+                        //SalesPlatform.ru begin
+                        form.data('isNeedCheckBeforeSave', false);
+                        form.removeData('submit');
+                        //SalesPlatform.ru end
                         form.submit();
                     },
                     function(data, err){
@@ -97,10 +100,16 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 						Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 							function(e) {
 								thisInstance.duplicateCheckCache[accountName] = false;
+                                //SalesPlatform.ru begin
+                                form.data('isNeedCheckBeforeSave', false);
+                                form.removeData('submit');
+                                //SalesPlatform.ru end
 								form.submit();
 							},
 							function(error, err) {
-								
+                                //SalesPlatform.ru begin
+								form.data('isNeedCheckBeforeSave', true);
+                                //SalesPlatform.ru end
 							}
 						);
                     }
@@ -113,10 +122,15 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 					Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 						function(e) {
 							thisInstance.duplicateCheckCache[accountName] = false;
+                            //SalesPlatform.ru begin
+                            form.data('isNeedCheckBeforeSave', false);
+                            //SalesPlatform.ru end
 							form.submit();
 						},
 						function(error, err) {
-							
+                            //SalesPlatform.ru begin
+							form.data('isNeedCheckBeforeSave', true);
+                            //SalesPlatform.ru end
 						}
 					);
 				} else {
@@ -126,8 +140,7 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 			}
             e.preventDefault();
 		})
-	},
-	
+	},   
 	/**
 	 * Function to swap array
 	 * @param Array that need to be swapped

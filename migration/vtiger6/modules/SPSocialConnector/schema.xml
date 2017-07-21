@@ -7,7 +7,6 @@
   `socialconnectorid` int(11) DEFAULT '0',
   `message` text,
   `type` varchar(255) DEFAULT NULL,
-  `fb_status` varchar(255) DEFAULT NULL,
   `vk_status` varchar(255) DEFAULT NULL,
   `tw_status` varchar(255) DEFAULT NULL,
   `vk_message_id` varchar(255) DEFAULT NULL,

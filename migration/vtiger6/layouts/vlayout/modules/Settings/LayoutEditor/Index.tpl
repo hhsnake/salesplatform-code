@@ -96,8 +96,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="blockFieldsList blockFieldsSortable row-fluid" style="padding:5px;min-height: 27px">
+                               {*SalesPlatform.ru begin Move buttons*}
+                                <div class="blockFieldsList {if $SELECTED_MODULE_MODEL->isFieldsSortableAllowed($BLOCK_LABEL_KEY)}blockFieldsSortable {/if} row-fluid" style="padding:5px;min-height: 27px">
+                                    <ul name="sortable1" class="connectedSortable span6" style="list-style-type: none; float: left;min-height: 1px;padding:2px;">        
+                              {*<div class="blockFieldsList blockFieldsSortable row-fluid" style="padding:5px;min-height: 27px">
                                     <ul name=" {if $SELECTED_MODULE_MODEL->isFieldsSortableAllowed($BLOCK_LABEL_KEY)}sortable1{/if}" class="connectedSortable span6" style="list-style-type: none; float: left;min-height: 1px;padding:2px;">
+                               *}{*SalesPlatform.ru end*}
                                         {foreach item=FIELD_MODEL from=$FIELDS_LIST name=fieldlist}
                                             {assign var=FIELD_INFO value=$FIELD_MODEL->getFieldInfo()}
                                             {if $smarty.foreach.fieldlist.index % 2 eq 0}

@@ -12,6 +12,7 @@
 $languageStrings = Array (
 'MyExtension' => 'My Extension',
 "LBL_MODULE_NAME"=>"PDF Templates",
+"PDF Templates"=>"PDF Templates",
 "LBL_TEMPLATE_GENERATOR"=>"PDF Templates",
 "LBL_TEMPLATE_GENERATOR_DESCRIPTION"=>"PDF templates editor.",
 "LBL_DELETE"=>"Delete",
@@ -44,6 +45,10 @@ $languageStrings = Array (
 "LBL_LOGGED_USER_INFO"=>"Logged in User",
 "LBL_PDF_TEMPLATE"=>"PDF Template",
 "LBL_DUPLICATE"=>"Duplicate",
+"LBL_CANCEL_BUTTON_LABEL"=>"Cancel",
+"LBL_SAVE_BUTTON_LABEL"=>"Save",
+"LBL_EDIT_BUTTON_LABEL"=>"Edit",
+"LBL_DUPLICATE_BUTTON"=>"Duplicate",
 
 //other
 "LBL_CHANGE_MODULE"=>"Change module",

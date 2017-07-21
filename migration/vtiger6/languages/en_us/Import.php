@@ -68,4 +68,10 @@ $languageStrings = array(
 	'LBL_UNDO_RESULT' => 'Undo Import Result',
 	'LBL_VIEW_LAST_IMPORTED_RECORDS' => 'Last Imported Records',
 	'skipped' => 'Skipped Records',
+    
+        // SalesPlatform.ru begin localization for Import   
+        'SCHEDULED_IMPORT_REPORT' => 'vtiger CRM - Scheduled Import Report for ',
+        'LBL_COMPLETED_ IMPORT_PROCESS' => 'vtiger CRM has just completed your import process.',
+        'LBL_CHECK_ IMPORT_SUCCESSFUL' => 'We recommend you to login to the CRM and check few records to confirm that the import has been successful.',
+        // SalesPlatform.ru end
 );

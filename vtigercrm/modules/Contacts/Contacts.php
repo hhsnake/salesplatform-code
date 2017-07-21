@@ -1204,6 +1204,9 @@ function get_contactsforol($user_name)
 		$file_saved = false;
 		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
 		$old_attachmentid = $adb->query_result($adb->pquery("select vtiger_crmentity.crmid from vtiger_seattachmentsrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seattachmentsrel.attachmentsid where  vtiger_seattachmentsrel.crmid=?", array($id)),0,'crmid');
+		// SalesPlatform.ru begin Check array
+		if(!empty($_FILES))
+		// SalesPlatform.ru end
 		foreach($_FILES as $fileindex => $files)
 		{
 			if($files['name'] != '' && $files['size'] > 0)

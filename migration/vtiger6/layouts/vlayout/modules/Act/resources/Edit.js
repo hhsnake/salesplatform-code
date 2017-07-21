@@ -30,6 +30,9 @@ Inventory_Edit_Js("Act_Edit_Js",{},{
 
 		if(sourceFieldElement.attr('name') == 'contact_id') {
 			var form = this.getForm();
+            if (form.length <= 0) {
+                form = this.getMassEditForm();
+            }
 			var parentIdElement  = form.find('[name="account_id"]');
 			if(parentIdElement.val().length > 0) {
 				var closestContainer = parentIdElement.closest('td');

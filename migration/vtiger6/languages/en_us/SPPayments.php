@@ -45,5 +45,11 @@ $languageStrings = Array(
     'Canceled' => 'Canceled',
     'Delayed' => 'Delayed',
     'Spstatus' => 'Status',
-    
+    'LBL_CASH_ORDER' => 'Cash order',
+    //SalesPlatform.ru begin
+    'Analytics Code' => 'Analytics Code',
+    'Corresponding Account, Subaccount' => 'Corresponding Account, Subaccount',
+    'Debit' => 'Debit',
+    'Target Code' => 'Target Code',
+    //SalesPlatform.ru end
 );

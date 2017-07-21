@@ -16,8 +16,6 @@ class Settings_SPSocialConnector_Module_Model extends Settings_Vtiger_Module_Mod
         'vk_access_token' => 'text',
         'tw_app_key' => 'text',
         'tw_app_secret' => 'text', 
-        'fb_app_id' => 'text' , 
-        'fb_app_secret' => 'text'
         );
     
     /**

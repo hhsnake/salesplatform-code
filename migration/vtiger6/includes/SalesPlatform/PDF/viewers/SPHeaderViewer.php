@@ -12,6 +12,7 @@ include_once 'includes/Aste/Template.php';
 include_once 'includes/Aste/Block.php';
 include_once 'includes/Aste/Block/Parser.php';
 include_once 'includes/Aste/Exception.php';
+include_once 'includes/SalesPlatform/PDF/viewers/SPContentViewer.php';
 
 class SalesPlatform_PDF_SPHeaderViewer extends Vtiger_PDF_HeaderViewer {
 
@@ -41,6 +42,7 @@ class SalesPlatform_PDF_SPHeaderViewer extends Vtiger_PDF_HeaderViewer {
     			    }
     			    
 			    $content = $header->fetch();
+                            $content = SalesPlatform_PDF_SPContentViewer::setBarcodes($content, $this->model, $pdf);
 			    $pdf->writeHTMLCell($headerFrame->w, $headerFrame->h,$headerFrame->x, $headerFrame->y, $content);
 			} catch(Aste_Exception $e) {
 			}

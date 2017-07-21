@@ -277,55 +277,55 @@ $taskManager = new VTTaskManager($adb);
 
 $eventsWorkflow = $workflowManager->newWorkFlow("Events");
 $eventsWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
-$eventsWorkflow->description = "Автоматические обработчики для событий при выбранной опции Отправить уведомление";
+$eventsWorkflow->description = vtranslate('LBL_WORKFLOW_FOR_ACTIVITY', 'Install');
 $eventsWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 $eventsWorkflow->defaultworkflow = 1;
 $workflowManager->save($eventsWorkflow);
 
 $task = $taskManager->createTask('VTEmailTask', $eventsWorkflow->id);
 $task->active = true;
-$task->summary = 'Отправляет письмо с уведомлением приглашенным пользователям';
+$task->summary = vtranslate('LBL_SEND_NOTIFICATION_TO_INVITED_USERS', 'Install');
 $task->recepient = "\$(assigned_user_id : (Users) email1)";
-$task->subject = "Событие :  \$subject";
+$task->subject = vtranslate('LBL_EVENT', 'Install')." :  \$subject";
 $task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
-                .'<b>Детали события:</b><br/>'
-                .'Название события       : $subject<br/>'
-                .'Дата и Время Начала    : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-                .'Дата и Время Окончания : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-                .'Статус                 : $eventstatus <br/>'
-                .'Приоритет              : $taskpriority <br/>'
-                .'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+                .'<b>'.vtranslate("LBL_EVENT_DETAILS", 'Install').':</b><br/>'
+                .vtranslate("LBL_EVENT_NAME", 'Install').'         : $subject<br/>'
+                .vtranslate("LBL_START_DATETIME", 'Install').'  : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+                .vtranslate("LBL_END_DATETIME", 'Install').'    : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+                .vtranslate("LBL_STATUS", 'Install').'             : $eventstatus <br/>'
+                .vtranslate("LBL_PRIORITY", 'Install').'           : $taskpriority <br/>'
+                .vtranslate("LBL_RELATED_WITH", 'Install').'       : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
                 .'$(parent_id            : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
-                .'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
-                .'Место проведения       : $location <br/>'
-                .'Описание               : $description';
+                .vtranslate("LBL_CONTACTS", 'Install').'           : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+                .vtranslate("LBL_LOCATION", 'Install').'           : $location <br/>'
+                .vtranslate("LBL_DESCRIPTION", 'Install').'        : $description';
 $taskManager->saveTask($task);
 
 /* Calendar workflow when Send Notification is checked */
 $calendarWorkflow = $workflowManager->newWorkFlow("Calendar");
 $calendarWorkflow->test = '[{"fieldname":"sendnotification","operation":"is","value":"true:boolean"}]';
-$calendarWorkflow->description = "Автоматические обработчики для задач Календаря при выбранной опции Отправить уведомление";
+$calendarWorkflow->description = vtranslate('LBL_WORKFLOW_FOR_TASK', 'Install');
 $calendarWorkflow->executionCondition = VTWorkflowManager::$ON_EVERY_SAVE;
 $calendarWorkflow->defaultworkflow = 1;
 $workflowManager->save($calendarWorkflow);
 
 $task = $taskManager->createTask('VTEmailTask', $calendarWorkflow->id);
 $task->active = true;
-$task->summary = 'Отправляет письмо с уведомлением ответственному за задачу';
+$task->summary = vtranslate('LBL_SEND_EMAIL_TO_ASSIGNED_USER', 'Install');
 $task->recepient = "\$(assigned_user_id : (Users) email1)";
-$task->subject = "Задача :  \$subject";
+$task->subject = vtranslate('LBL_TASK', 'Install')." :  \$subject";
 $task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
-            .'<b>Детали задачи:</b><br/>'
-            .'Название задачи        : $subject<br/>'
-            .'Дата и Время Начала    : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-            .'Дата и Время Окончания : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-            .'Статус                 : $taskstatus <br/>'
-            .'Приоритет              : $taskpriority <br/>'
-            .'Относится к            : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+            .'<b>'.vtranslate("LBL_TASK_DETAILS", 'Install').':</b><br/>'
+            .vtranslate("LBL_TASK_NAME", 'Install').'         : $subject<br/>'
+            .vtranslate("LBL_START_DATETIME", 'Install').' : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+            .vtranslate("LBL_END_DATETIME", 'Install').'   : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+            .vtranslate("LBL_STATUS", 'Install').'            : $taskstatus <br/>'
+            .vtranslate("LBL_PRIORITY", 'Install').'          : $taskpriority <br/>'
+            .vtranslate("LBL_RELATED_WITH", 'Install').'      : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
             .'$(parent_id : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
-            .'Контакты               : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
-            .'Место проведения       : $location <br/>'
-            .'Описание               : $description';
+            .vtranslate("LBL_CONTACTS", 'Install').'          : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+            .vtranslate("LBL_LOCATION", 'Install').'          : $location <br/>'
+            .vtranslate("LBL_DESCRIPTION", 'Install').'       : $description';
 $taskManager->saveTask($task);
 
 // Begin Fix Webforms tables

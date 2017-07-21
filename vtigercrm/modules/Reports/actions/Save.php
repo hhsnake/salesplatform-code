@@ -77,6 +77,11 @@ class Reports_Save_Action extends Vtiger_Save_Action {
 		//END
 
 		$loadUrl = $reportModel->getDetailViewUrl();
-		header("Location: $loadUrl");
+		//SalesPlatform.ru begin
+        //header("Location: $loadUrl");
+        $response = new Vtiger_Response();
+        $response->setResult(array('location' => $loadUrl));
+        $response->emit();
+        //SalesPlatform.ru end
 	}
 }

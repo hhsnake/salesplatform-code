@@ -335,7 +335,7 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 	public function processFormData($mail) {
 		$subject = $mail->subject();
 		$from = $mail->from();
-                $body= strip_tags($mail->body()); 
+                $body= strip_tags(str_replace('<br />', '&#13;&#10;', $mail->body())); 
 
 		if(!empty($from)) $mail_fromAddress = implode(',', $from);
 		if(!empty($mail_fromAddress)) $name = explode('@', $mail_fromAddress);

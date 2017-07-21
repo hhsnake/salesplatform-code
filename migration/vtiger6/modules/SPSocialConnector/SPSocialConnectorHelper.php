@@ -373,7 +373,6 @@ class SPSocialConnectorHelper {
 
         $map = array(
             'vk.com' => 'vk',
-            'facebook.com' => 'fb',
             'twitter.com' => 'tw'
         );
 
@@ -408,8 +407,6 @@ class SPSocialConnectorHelper {
         $url = $site_URL . 'modules/SPSocialConnector/hybridauth/';
         $content = file_get_contents("modules/SPSocialConnector/hybridauth/Hybrid/resources/config.php.tpl");
         $content = str_replace('#GLOBAL_HYBRID_AUTH_URL_BASE#', $url, $content );
-        $content = str_replace('#FACEBOOK_APPLICATION_APP_ID#', $parameters['fb_app_id'], $content );
-        $content = str_replace('#FACEBOOK_APPLICATION_SECRET#', $parameters['fb_app_secret'], $content );
         $content = str_replace('#TWITTER_APPLICATION_KEY#', $parameters['tw_app_key'], $content );
         $content = str_replace('#TWITTER_APPLICATION_SECRET#', $parameters['tw_app_secret'], $content );
         $content = str_replace('#VKONTAKTE_APPLICATION_APP_ID#', $parameters['vk_app_id'], $content );
@@ -419,10 +416,6 @@ class SPSocialConnectorHelper {
         $vk_content = file_get_contents("modules/SPSocialConnector/Vkontakte.php.tpl");
         $vk_content = str_replace('#VKONTAKTE_ACCESS_TOKEN#', $parameters['vk_access_token'], $vk_content );
         file_put_contents("modules/SPSocialConnector/providers/Vkontakte.php",  $vk_content);
-
-        $fb_content = file_get_contents("modules/SPSocialConnector/Facebook.php.tpl");
-        $fb_content = str_replace('#FACEBOOK_APPLICATION_APP_ID#', $parameters['fb_app_id'], $fb_content );
-        file_put_contents("modules/SPSocialConnector/providers/Facebook.php",  $fb_content);
     }
     
 }

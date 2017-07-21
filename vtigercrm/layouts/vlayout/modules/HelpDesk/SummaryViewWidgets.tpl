@@ -52,8 +52,11 @@
 		{/if}
 		{* Summary View Comments Widget Ends Here*}
 	</div>
-
-	<div class='span5' style="overflow: hidden">
+    
+    {* SalesPlatform.ru begin *}
+    <div class='span5'>
+	{* <div class='span5' style="overflow: hidden"> *}
+    {* SalesPlatform.ru end *}
 		{* Summary View Related Activities Widget*}
 			<div id="relatedActivities">
 				{$RELATED_ACTIVITIES}

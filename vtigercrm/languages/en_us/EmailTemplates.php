@@ -8,12 +8,15 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+	'Email Templates' => 'Email Templates',
 	'LBL_ADD_RECORD' => 'Add Email Template',
 	'SINGLE_EmailTemplates' => 'Email Template',
 	'LBL_EMAIL_TEMPLATES'=> 'Email Templates',
 	'LBL_EMAIL_TEMPLATE' => 'Email Template',
 	
 	'LBL_TEMPLATE_NAME' => 'Template name',
+	'Templatename' => 'Template name',
+	'Template Name' => 'Template name',
 	'LBL_DESCRIPTION' => 'Description',
 	'LBL_SUBJECT' => 'Subject',
 	'LBL_GENERAL_FIELDS' => 'General Fields',

@@ -74,7 +74,10 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
                 //SalesPlatform.ru end
 
                 $callerid = $recordModel->get('customer');
-                if($callerid){
+                //SalesPlatform.ru begin
+                if($callerid && isRecordExists($callerid)){
+                //if($callerid){
+                //SalesPlatform.ru end
                     $moduleName = $recordModel->get('customertype');
 
                     // SalesPlatform.ru begin
@@ -92,6 +95,11 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
                         $recordModel->set('callername',$callerName);
                     }
                 }
+                //SalesPlatform.ru begin
+                  else {
+                  $recordModel->set('customer', null);    
+                }
+                //SalesPlatform.ru end
                 // End
                 $direction = $recordModel->get('direction');
                 if($direction == 'inbound'){

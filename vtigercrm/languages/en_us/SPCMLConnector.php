@@ -10,7 +10,7 @@
  * SalesPlatform vtiger CRM Russian Community: http://community.salesplatform.ru/
  * If you have any questions or comments, please email: devel@salesplatform.ru
  ************************************************************************************/
-$mod_strings = Array (
+$languageStrings = Array (
 'SPCMLConnector'                         => 'CommerceML excahge',
 );
 ?>

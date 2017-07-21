@@ -192,6 +192,17 @@ class VTJsonCondition {
                 $condition = ($condition == 'is') ? 'contains' : 'does not contain';
             } 
         }
+        
+        //SalesPlatform.ru begin #4740
+        if($fieldInstance && $fieldInstance->getFieldDataType() == 'multipicklist') {
+            $value = explode(',', $value);
+            asort($value);
+            $value = implode(' |##| ', $value);
+            $fieldValue = explode(' |##| ', $fieldValue);
+            asort($fieldValue);
+            $fieldValue = implode(' |##| ', $fieldValue);
+		}
+        //SalesPlatform.ru end
 
 		switch ($condition) {
 			case "equal to":

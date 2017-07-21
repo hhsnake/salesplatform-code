@@ -30,6 +30,10 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			$mail = $connector->openMail($request->get('_msgno'));
 			$connector->updateFolder($folder, SA_MESSAGES|SA_UNSEEN);
 
+            // SalesPlatform.ru begin
+            $this->replaceEmbeddedImageAttachments($mail);
+            // SalesPlatform.ru end
+
 			$viewer = $this->getViewer($request);
 			$viewer->assign('FOLDER', $folder);
 			$viewer->assign('MAIL', $mail);
@@ -327,7 +331,62 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 	}
         
         public function validateRequest(Vtiger_Request $request) { 
-            return $request->validateReadAccess(); 
-        } 
+            return $request->validateReadAccess();
+        }
+
+    // SalesPlatform.ru begin
+    private function replaceEmbeddedImageAttachments($mail) {
+
+        // Find CID in mail body
+        $pos = strpos($mail->_body, 'cid:');
+        if ($pos !== false) {
+
+            // Find image name
+            $finPos = strpos($mail->_body, '@', $pos);
+            if ($finPos !== false) {
+                $startPos = $pos + 4;
+                $imageName = substr($mail->_body, $startPos, $finPos - $startPos);
+                $imagePath = $this->getImagePath($mail->muid(), $imageName);
+
+                // Replace CID with image path
+                if($imagePath) {
+
+                    //Find replacement last pos
+                    $finReplacementPos = strpos($mail->_body, '"', $finPos);
+                    if ($finReplacementPos !== false) {
+
+                        $mail->_body = substr_replace($mail->_body , $imagePath, $pos , $finReplacementPos - $pos);
+
+                        // And go recursive
+                        $this->replaceEmbeddedImageAttachments($mail);
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    private function getImagePath($muId, $imageName) {
+        $db = PearDatabase::getInstance();
+        $q = 'SELECT path, attachid FROM vtiger_mailmanager_mailattachments WHERE muid = ? AND aname = ?';
+        $res = $db->pquery($q, array($muId, $imageName));
+        if ($db->num_rows($res)) {
+            return $db->query_result($res, 0, 'path').$db->query_result($res, 0, 'attachid').'_'.$imageName;
+        } else {
+
+            $q = "SELECT path, aname, attachid FROM vtiger_mailmanager_mailattachments WHERE muid = $muId AND cid like '$imageName%'";
+            $res = $db->pquery($q, array());
+            if ($db->num_rows($res)) {
+                return $db->query_result($res, 0, 'path').$db->query_result($res, 0, 'attachid').'_'.$db->query_result($res, 0, 'aname');
+            } else {
+                return false;
+            }
+
+        }
+    }
+    // SalesPlatform.ru end
 }
 ?>

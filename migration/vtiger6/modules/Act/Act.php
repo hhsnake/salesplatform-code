@@ -329,34 +329,6 @@ class Act extends CRMEntity {
 			$blockInstance->addField($fieldInstance);
 			$fieldInstance->setRelatedModules(Array('Act'));
 
-            $filename = "modules/Act/pdftemplates/act.htm";
-            $handle = fopen($filename, "r");
-            $body = fread($handle, filesize($filename));
-            fclose($handle);
-
-            $templatename = 'Акт';
-            $header_size = 50;
-            $footer_size = 50;
-            $page_orientation = 'P';
-            $templateid = $adb->getUniqueID('sp_templates');
-            $sql = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,templateid) values (?,?,?,?,?,?,?)";
-            $params = array($templatename, $moduleName, $body, $header_size, $footer_size, $page_orientation, $templateid);
-            $adb->pquery($sql, $params);
-
-            $filename = "modules/Act/pdftemplates/actwtax.htm";
-            $handle = fopen($filename, "r");
-            $body = fread($handle, filesize($filename));
-            fclose($handle);
-
-            $templatename = 'Акт с НДС';
-            $header_size = 50;
-            $footer_size = 50;
-            $page_orientation = 'P';
-            $templateid = $adb->getUniqueID('sp_templates');
-            $sql = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,templateid) values (?,?,?,?,?,?,?)";
-            $params = array($templatename, $moduleName, $body, $header_size, $footer_size, $page_orientation, $templateid);
-            $adb->pquery($sql, $params);
-
             // SalesPlatform.ru begin link Accounts
             $accountsInstance = Vtiger_Module::getInstance('Accounts');
             $actInstance = Vtiger_Module::getInstance('Act');

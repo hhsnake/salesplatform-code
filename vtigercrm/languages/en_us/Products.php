@@ -72,4 +72,9 @@ $languageStrings = array(
 	'Usage Unit'=>'Usage Unit',
 	'Vendor PartNo' => 'Vendor PartNo', //Duplicated key-value pairs
 	'Website' => 'Website',
+        // SalesPlatform.ru begin
+        'Manuf. Country' => 'Manuf. Country',
+        'Mf. Country Code' => 'Mf. Country Code',
+        'Customs ID' => 'Customs ID',
+        // SalesPlatform.ru end
 );

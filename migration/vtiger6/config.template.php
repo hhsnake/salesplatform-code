@@ -194,6 +194,9 @@ $listview_max_textlength = 40;
 // Maximum time limit for PHP script execution (in seconds)
 $php_max_execution_time = 0;
 
+// Maximum number of  Mailboxes in mail converter
+$max_mailboxes = 3;
+
 // Set the default timezone as per your preference
 $default_timezone = 'Europe/Moscow';
 

@@ -340,34 +340,6 @@ class Consignment extends CRMEntity {
 			$invoiceInstance = Vtiger_Module::getInstance('Invoice');
 			$invoiceInstance->setRelatedlist($consignmentInstance,'Consignment',array(ADD),'get_dependents_list');
 
-            $filename = "modules/Consignment/pdftemplates/factura.htm";
-            $handle = fopen($filename, "r");
-            $body = fread($handle, filesize($filename));
-            fclose($handle);
-
-            $templatename = 'Счет-фактура';
-            $header_size = 85;
-            $footer_size = 50;
-            $page_orientation = 'L';
-            $templateid = $adb->getUniqueID('sp_templates');
-            $sql = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,templateid) values (?,?,?,?,?,?,?)";
-            $params = array($templatename, $moduleName, $body, $header_size, $footer_size, $page_orientation, $templateid);
-            $adb->pquery($sql, $params);
-
-            $filename = "modules/Consignment/pdftemplates/torg12.htm";
-            $handle = fopen($filename, "r");
-            $body = fread($handle, filesize($filename));
-            fclose($handle);
-
-            $templatename = 'ТОРГ-12';
-            $header_size = 90;
-            $footer_size = 20;
-            $page_orientation = 'L';
-            $templateid = $adb->getUniqueID('sp_templates');
-            $sql = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,templateid) values (?,?,?,?,?,?,?)";
-            $params = array($templatename, $moduleName, $body, $header_size, $footer_size, $page_orientation, $templateid);
-            $adb->pquery($sql, $params);
-
             // SalesPlatform.ru begin link Accounts
             $accountsInstance = Vtiger_Module::getInstance('Accounts');
             $accountsInstance->addLink('DETAILVIEWBASIC', 'LBL_ACCOUNTS_ADD_CONSIGNMENT',

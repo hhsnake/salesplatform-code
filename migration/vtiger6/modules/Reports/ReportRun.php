@@ -80,7 +80,10 @@ class ReportRunQueryPlanner {
 	protected $tempTablesInitialized = false;
 
 	// Turn-off in case the query result turns-out to be wrong.
-	protected $allowTempTables = true;
+    //SalesPlatform.ru begin
+	//protected $allowTempTables = true;
+    protected $allowTempTables = false;
+    //SalesPlatform.ru end
 	protected $tempTablePrefix = 'vtiger_reptmptbl_';
 	protected static $tempTableCounter   = 0;
 	protected $registeredCleanup = false;
@@ -417,12 +420,18 @@ class ReportRun extends CRMEntity
 	function getColumnSQL($selectedfields) {
 		global $adb, $current_user;
 		$header_label = $selectedfields[2]; // Header label to be displayed in the reports table
-
-		list($module,$field) = split("_",$selectedfields[2]);
+        
+        //SalesPlatform.ru begin
+		//list($module,$field) = split("_",$selectedfields[2]);
+        list($module,$field) = explode("_",$selectedfields[2]);
+        //SalesPlatform.ru end
         $concatSql = getSqlForNameInDisplayFormat(array('first_name'=>$selectedfields[0].".first_name",'last_name'=>$selectedfields[0].".last_name"), 'Users');
 
         if ($selectedfields[4] == 'C') {
-            $field_label_data = split("_", $selectedfields[2]);
+            //SalesPlatform.ru begin
+            //$field_label_data = split("_", $selectedfields[2]);
+            $field_label_data = explode("_", $selectedfields[2]);
+            //SalesPlatform.ru end
             $module = $field_label_data[0];
             if ($module != $this->primarymodule) {
                 $columnSQL = "case when (" . $selectedfields[0] . "." . $selectedfields[1] . "='1')then 'yes' else case when (vtiger_crmentity$module.crmid !='') then 'no' else '-' end end AS '".decode_html($selectedfields[2])."'";
@@ -833,7 +842,10 @@ class ReportRun extends CRMEntity
 			$this->queryPlanner->addTable($secondary->table_name);
 		    }
 		}
-			$field = split('#',$field);
+            //SalesPlatform.ru begin
+			//$field = split('#',$field);
+            $field = explode('#',$field);
+            //SalesPlatform.ru end
 			$module = $field[0];
 			$fieldname = trim($field[1]);
 			$tabid = getTabId($module);
@@ -1923,7 +1935,10 @@ class ReportRun extends CRMEntity
 		while($reportsortrow = $adb->fetch_array($result))
 		{
 			$fieldcolname = $reportsortrow["columnname"];
-			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
+            //SalesPlatform.ru begin
+			//list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
+            list($tablename,$colname,$module_field,$fieldname,$single) = explode(":",$fieldcolname);
+            //SalesPlatform.ru end
 			$sortorder = $reportsortrow["sortorder"];
 
 			if($sortorder == "Ascending")
@@ -1960,7 +1975,10 @@ class ReportRun extends CRMEntity
 					$sqlvalue = implode(", ",$groupByCondition);
 				}
 				$grouplist[$fieldcolname] = $sqlvalue;
-				$temp = split("_",$selectedfields[2],2);
+                //SalesPlatform.ru begin
+				//$temp = split("_",$selectedfields[2],2);
+                $temp = explode("_", $selectedfields[2], 2);
+                //SalesPlatform.ru end
 				$module = $temp[0];
 				if (in_array($module, $inventoryModules) && $fieldname == 'serviceid') {
 					$grouplist[$fieldcolname] = $sqlvalue;
@@ -2888,13 +2906,6 @@ class ReportRun extends CRMEntity
 	{
 		global $log;
 
-        // SalesPlatform.ru begin
-        if(in_array($this->reporttype, getCustomReportsList())) {
-            $filterArray = $filtersql;
-            return $this->sSPGetSQLforReport($filterArray);
-        }
-        // SalesPlatform.ru end
-
 		$columnlist = $this->getQueryColumnsList($reportid,$type);
 		$groupslist = $this->getGroupingList($reportid);
 		$groupTimeList = $this->getGroupByTimeList($reportid);
@@ -3078,11 +3089,24 @@ class ReportRun extends CRMEntity
 		global $adb,$current_user,$php_max_execution_time;
 		global $modules,$app_strings;
 		global $mod_strings,$current_language;
+        
+        //SalesPlatform.ru begin
+        $reportModel = Reports_Record_Model::getInstanceById($this->reportid);
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReportModel = AbstractCustomReportModel::getInstance($reportModel);
+            $customReportModel->setRunTimeSqlFilter($filtersql);
+            return $customReportModel->getData();
+        }
+        //SalesPlatform.ru end
+        
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		$modules_selected = array();
 		$modules_selected[] = $this->primarymodule;
 		if(!empty($this->secondarymodule)){
-			$sec_modules = split(":",$this->secondarymodule);
+            //SalesPlatform.ru begin
+			//$sec_modules = split(":",$this->secondarymodule);
+            $sec_modules = explode(":", $this->secondarymodule);
+            //SalesPlatform.ru end
 			for($i=0;$i<count($sec_modules);$i++){
 				$modules_selected[] = $sec_modules[$i];
 			}
@@ -3148,7 +3172,10 @@ class ReportRun extends CRMEntity
 						$arrayHeaders[] = $headerLabel;
 					}
 					/*STRING TRANSLATION starts */
-					$mod_name = split(' ',$headerLabel,2);
+                    //SalesPlatform.ru begin
+					//$mod_name = split(' ',$headerLabel,2);
+                    $mod_name = explode(' ', $headerLabel, 2);
+                    //SalesPlatform.ru end
 					$moduleLabel ='';
 					if(in_array($mod_name[0],$modules_selected)){
 						$moduleLabel = getTranslatedString($mod_name[0],$mod_name[0]);
@@ -3706,7 +3733,10 @@ class ReportRun extends CRMEntity
 						$arrayHeaders[] = $headerLabel;
 					}
 					/*STRING TRANSLATION starts */
-					$mod_name = split(' ',$headerLabel,2);
+                    //SalesPlatform.ru begin
+					//$mod_name = split(' ',$headerLabel,2);
+                    $mod_name = explode(' ',$headerLabel,2);
+                    //SalesPlatform.ru end
 					$moduleLabel ='';
 					if(in_array($mod_name[0],$modules_selected)){
 						$moduleLabel = getTranslatedString($mod_name[0],$mod_name[0]);
@@ -4414,7 +4444,19 @@ class ReportRun extends CRMEntity
 			$rowcount = 1;
             //copy the first value details
             $arrayFirstRowValues = $arr_val[0];
-			array_pop($arrayFirstRowValues);			// removed action link in details
+            //SalesPlatform.ru begin #4308
+            //array_pop($arrayFirstRowValues);			// removed action link in details
+            $abstractReport = null;
+            $reportModel = Reports_Record_Model::getInstanceById($this->reportid);
+            if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+                $abstractReport = AbstractCustomReportModel::getInstance($reportModel);
+            }
+            
+            if($abstractReport == null || ($abstractReport != null && $abstractReport->hasLastLinkColumn()) ) {
+                array_pop($arrayFirstRowValues);			// removed action link in details
+            }
+            //SalesPlatform.ru end #4308
+			
 			foreach($arrayFirstRowValues as $key=>$value) {
 				$worksheet->setCellValueExplicitByColumnAndRow($count, $rowcount, $key, true);
 				$worksheet->getStyleByColumnAndRow($count, $rowcount)->applyFromArray($header_styles);
@@ -4428,7 +4470,14 @@ class ReportRun extends CRMEntity
 			$rowcount++;
 			foreach($arr_val as $key=>$array_value) {
 				$count = 0;
-				array_pop($array_value);	// removed action link in details
+                //SalesPlatform.ru begin #4308
+                //array_pop($array_value);	// removed action link in details
+                if($abstractReport == null || ($abstractReport != null && $abstractReport->hasLastLinkColumn()) ) {
+                    array_pop($array_value);	// removed action link in details
+                }
+                //SalesPlatform.ru end #4308
+				
+                
 				foreach($array_value as $hdr=>$value) {
 					if($hdr == 'ACTION') continue;
 					$value = decode_html($value);
@@ -4484,10 +4533,27 @@ class ReportRun extends CRMEntity
 			$csv_values = array();
 			// Header
 			$csv_values = array_keys($arr_val[0]);
-			array_pop($csv_values);			//removed header in csv file
+            //SalesPlatform.ru begin #4308
+            //array_pop($csv_values);			//removed header in csv file
+            $abstractReport = null;
+            $reportModel = Reports_Record_Model::getInstanceById($this->reportid);
+            if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+                $abstractReport = AbstractCustomReportModel::getInstance($reportModel);
+            }
+            
+            if($abstractReport == null || ($abstractReport != null && $abstractReport->hasLastLinkColumn()) ) {
+                array_pop($csv_values);			//removed header in csv file
+            }
+            //SalesPlatform.ru end #4308
+			
 			fputcsv($fp, $csv_values);
 			foreach($arr_val as $key=>$array_value) {
-				array_pop($array_value);	//removed action link
+                //SalesPlatform.ru begin #4308
+                //array_pop($array_value);	//removed action link
+                if($abstractReport == null || ($abstractReport != null && $abstractReport->hasLastLinkColumn()) ) {
+                    array_pop($array_value);	//removed action link
+                }
+                //SalesPlatform.ru end #4308
 				$csv_values = array_map('decode_html', array_values($array_value));
 				fputcsv($fp, $csv_values);
 			}
@@ -4502,7 +4568,10 @@ class ReportRun extends CRMEntity
         $num_rows = $adb->num_rows($groupByTimeRes);
         for($i=0;$i<$num_rows;$i++){
             $sortColName = $adb->query_result($groupByTimeRes, $i,'sortcolname');
-            list($tablename,$colname,$module_field,$fieldname,$single) = split(':',$sortColName);
+            //SalesPlatform.ru begin
+            //list($tablename,$colname,$module_field,$fieldname,$single) = split(':',$sortColName);
+            list($tablename,$colname,$module_field,$fieldname,$single) = explode(':', $sortColName);
+            //SalesPlatform.ru end
             $groupField = $module_field;
             $groupCriteria = $adb->query_result($groupByTimeRes, $i,'dategroupbycriteria');
             if(in_array($groupCriteria,array_keys($this->groupByTimeParent))){

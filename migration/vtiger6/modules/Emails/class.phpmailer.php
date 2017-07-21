@@ -903,7 +903,13 @@ class PHPMailer {
    * @return bool
    */
   protected function SendmailSend($header, $body) {
-    if ($this->Sender != '') {
+    // SalesPlatform.ru begin Fix CVE-2016-10033
+    if (!(is_file($this->Sendmail) and is_executable($this->Sendmail))) {
+        throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+    	}
+    if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+    //if ($this->Sender != '') {
+    // SalesPlatform.ru end Fix CVE-2016-10033
       $sendmail = sprintf("%s -oi -f%s -t", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
     } else {
       $sendmail = sprintf("%s -oi -t", escapeshellcmd($this->Sendmail));
@@ -959,9 +965,17 @@ class PHPMailer {
     if (empty($this->Sender)) {
       $params = " ";
     } else {
-      $params = sprintf("-f%s", $this->Sender);
+      // SalesPlatform.ru begin Fix CVE-2016-10033
+      $params = sprintf('-f%s', escapeshellarg($this->Sender));
+      //$params = sprintf("-f%s", $this->Sender);
+      // SalesPlatform.ru end Fix CVE-2016-10033
     }
-    if ($this->Sender != '' and !ini_get('safe_mode')) {
+    
+    // SalesPlatform.ru begin Fix CVE-2016-10033
+    if ($this->Sender != '' and !ini_get('safe_mode') and $this->validateAddress($this->Sender)) {
+    //if ($this->Sender != '' and !ini_get('safe_mode')) {
+    // SalesPlatform.ru end Fix CVE-2016-10033
+        
       $old_from = ini_get('sendmail_from');
       ini_set('sendmail_from', $this->Sender);
     }
@@ -1005,7 +1019,16 @@ class PHPMailer {
     if(!$this->SmtpConnect()) {
       throw new phpmailerException($this->Lang('smtp_connect_failed'), self::STOP_CRITICAL);
     }
-    $smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
+    
+    // SalesPlatform.ru begin Fix CVE-2016-10033
+        if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+            $smtp_from = $this->Sender;
+        } else {
+            $smtp_from = $this->From;
+     }
+    //$smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
+    // SalesPlatform.ru end Fix CVE-2016-10033
+     
     if(!$this->smtp->Mail($smtp_from)) {
       $this->SetError($this->Lang('from_failed') . $smtp_from . ' : ' .implode(',', $this->smtp->getError()));
       throw new phpmailerException($this->ErrorInfo, self::STOP_CRITICAL);
@@ -1921,23 +1944,29 @@ class PHPMailer {
       if (!is_readable($path)) {
         throw new phpmailerException($this->Lang('file_open') . $path, self::STOP_CONTINUE);
       }
-      $magic_quotes = get_magic_quotes_runtime();
-      if ($magic_quotes) {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-          set_magic_quotes_runtime(0);
-        } else {
-          ini_set('magic_quotes_runtime', 0);
-        }
-      }
+      
+      //SalesPlatform.ru begin
+      //$magic_quotes = get_magic_quotes_runtime();
+      //if ($magic_quotes) {
+      //  if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+      //    set_magic_quotes_runtime(0);
+      //  } else {
+      //    ini_set('magic_quotes_runtime', 0);
+      //  }
+      //}
+      //SalesPlatform.ru end
       $file_buffer  = file_get_contents($path);
       $file_buffer  = $this->EncodeString($file_buffer, $encoding);
-      if ($magic_quotes) {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-          set_magic_quotes_runtime($magic_quotes);
-        } else {
-          ini_set('magic_quotes_runtime', $magic_quotes);
-        }
-      }
+      
+      //SalesPlatform.ru begin
+      //if ($magic_quotes) {
+      //  if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+      //    set_magic_quotes_runtime($magic_quotes);
+      //  } else {
+      //    ini_set('magic_quotes_runtime', $magic_quotes);
+      //  }
+      //}
+      //SalesPlatform.ru end
       return $file_buffer;
     } catch (Exception $e) {
       $this->SetError($e->getMessage());

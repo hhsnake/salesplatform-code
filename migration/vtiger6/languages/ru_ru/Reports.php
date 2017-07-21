@@ -52,7 +52,7 @@ $languageStrings = array(
 	'LBL_SUM_VALUE'                => 'Сумма'                  , // KEY 5.x: LBL_COLUMNS_SUM
 	'LBL_AVERAGE'                  => 'Среднее'              , // KEY 5.x: LBL_COLUMNS_AVERAGE
 	'LBL_LOWEST_VALUE'             => 'Наименьшая величина', // KEY 5.x: LBL_COLUMNS_LOW_VALUE
-	'LBL_HIGHEST_VALUE'            => 'Наибольная величина'               , // TODO: Review
+	'LBL_HIGHEST_VALUE'            => 'Наибольшая величина'               , // TODO: Review
 	'LBL_GENERATE_REPORT'          => 'Сгенерировать Отчет'             , // TODO: Review
 	'LBL_SUM'                      => 'СУМ'                      , // KEY 5.x: SUM
 	'LBL_AVG'                      => 'СРЕДН'                  , // KEY 5.x: AVG
@@ -195,12 +195,22 @@ $languageStrings = array(
     'Templates' => 'Шаблоны',
     'Report templates for modules' => 'Шаблоны отчетов для модулей',
  	'LBL_NO_COLUMN_VALUE' => '--Пустое значение поля--', 
+    'LBL_VIEWTYPE' => 'Тип построения',
+    'LBL_AGREGATE_BY' => 'Рассчитать по',
+    'table' => 'Таблица',
+    'pie' => 'Круговая диаграмма',
+    'barchart' => 'Столбиковая диаграмма',
+    'linear' => 'График',
+    'custom' => 'Произвольный формат',
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
 	'JS_DUPLICATE_RECORD'          => 'Дубликат отчета'            , // TODO: Review
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Ограничение: Поля товарной части(Розничная цена, Скидка и Кол-во) могут использоваться только когда другие расчетные поля не выбраны.', // TODO: Review
     'JS_NO_CHART_DATA_AVAILABLE' => 'Нет данных',
+    //SalesPlatform.ru begin
+    'JS_LBL_NO_DATA_FOR_SELECTED_FILTERS' => 'Для выбранных фильров нет данных',
+    //SalesPlatform.ru end
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

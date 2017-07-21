@@ -14,8 +14,10 @@
 
 require "core/autoload.php";
 
-if (function_exists('set_magic_quotes_runtime'))
-    @set_magic_quotes_runtime(false);
+//SalesPlatform.ru begin
+//if (function_exists('set_magic_quotes_runtime'))
+//    @set_magic_quotes_runtime(false);
+//SalesPlatform.ru end
 
 $input = new input();
 if (!isset($input->get['lng']) || ($input->get['lng'] == 'en')) die;

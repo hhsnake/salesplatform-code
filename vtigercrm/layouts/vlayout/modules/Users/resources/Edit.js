@@ -81,7 +81,7 @@ Vtiger_Edit_Js("Users_Edit_Js",{},{
 				if(newPassword != confirmPassword){
 					Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_REENTER_PASSWORDS'));
 					e.preventDefault();
-				}
+				}     
 				if(!(userName in thisInstance.duplicateCheckCache)) {
 					thisInstance.checkDuplicateUser(userName).then(
 						function(data){
@@ -115,7 +115,11 @@ Vtiger_Edit_Js("Users_Edit_Js",{},{
 				'module': app.getModuleName(),
 				'action' : "SaveAjax",
 				'mode' : 'userExists',
-				'user_name' : userName
+                                //SalesPlatform.ru begin Fix duplicate user creation
+				'user_name' : userName,
+                                recordId : jQuery('input[name="record"]').val()
+                                //'user_name' : userName
+                                //SalesPlatform.ru end 
 			}
 			AppConnector.request(params).then(
 				function(data) {
@@ -129,6 +133,82 @@ Vtiger_Edit_Js("Users_Edit_Js",{},{
 		return aDeferred.promise();
 	},
 	
+    //SalesPlatform.ru begin Fix duplicate user creation
+    registerSubmitEvent: function() {
+		var editViewForm = this.getForm();
+        
+        var thisInstance = this;
+        
+		editViewForm.submit(function(e){
+			//Form should submit only once for multiple clicks also
+			if(typeof editViewForm.data('submit') != "undefined") {
+				return false;
+			} else {
+				var module = jQuery(e.currentTarget).find('[name="module"]').val();
+                
+                editViewForm.removeClass('validating');
+				if(editViewForm.validationEngine('validate')) {
+                    thisInstance.updateCKFieldsContents();
+					//Once the form is submiting add data attribute to that form element
+					editViewForm.data('submit', 'true');
+                    
+                    
+                    //on submit form trigger the recordPreSave event
+                    var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
+                    editViewForm.trigger(recordPreSaveEvent, {'value' : 'edit'});
+					if(recordPreSaveEvent.isDefaultPrevented()) {
+						//If duplicate record validation fails, form should submit again
+						editViewForm.removeData('submit');
+						e.preventDefault();
+                        
+                        //SalesPlatform.ru begin
+                        return false;
+                        //SalesPlatform.ru end
+					}
+                    
+                    //SalesPlatform.ru begin
+                    e.preventDefault();
+                    var progressIndicator = $.progressIndicator({message : app.vtranslate('JS_SAVE')});
+                    editViewForm.ajaxSubmit({
+                        dataType : 'json',
+                        success : function(response) {
+                            if(response.success) {
+                                location.href = response.result.location;
+                            } else {
+                                progressIndicator.hide();
+                                editViewForm.removeData('submit');
+                                Vtiger_Helper_Js.showPnotify({
+                                    type : 'error',
+                                    title : app.vtranslate('JS_SAVE_ERROR'),
+                                    text : response.error.message,
+                                    delay : 20000
+                                });
+                            }
+                        },
+                        
+                        error : function() {
+                            editViewForm.removeData('submit');
+                            progressIndicator.hide();
+                            Vtiger_Helper_Js.showPnotify({
+                                type : 'error',
+                                text : app.vtranslate('JS_ERROR_SEND_REQUEST'),
+                                delay : 10000
+                            });
+                        }
+                    });
+                    //SalesPlatform.ru end
+                    
+				} else {
+					//If validation fails, form should submit again
+					editViewForm.removeData('submit');
+					// to avoid hiding of error message under the fixed nav bar
+					app.formAlignmentAfterValidation(editViewForm);
+				}
+			}
+		});
+	},
+    //SalesPlatform.ru end #4464
+    
 	registerEvents : function() {
         this._super();
 		var form = this.getForm();

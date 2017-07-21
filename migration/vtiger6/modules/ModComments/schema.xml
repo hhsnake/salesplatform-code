@@ -6,12 +6,8 @@
 			<sql><![CDATA[CREATE TABLE `vtiger_modcomments` (
   `modcommentsid` int(11) DEFAULT NULL,
   `commentcontent` text,
-  `related_to` int(19) DEFAULT NULL,
-  `parent_comments` varchar(100) DEFAULT NULL,
-  `customer` varchar(100) DEFAULT NULL,
-  `userid` varchar(100) DEFAULT NULL,
-  `reasontoedit` varchar(100) DEFAULT NULL,
-  KEY `relatedto_idx` (`related_to`)
+  `related_to` varchar(100) NOT NULL,
+  `parent_comments` varchar(100) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 		</table>
 		<table>

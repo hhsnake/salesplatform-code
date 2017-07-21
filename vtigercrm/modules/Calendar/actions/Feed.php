@@ -257,8 +257,12 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 	protected  function pullContactsByBirthday($start, $end, &$result, $color = null,$textColor = 'white') {
 		$db = PearDatabase::getInstance();
 		$user = Users_Record_Model::getCurrentUserModel();
-		$startDateComponents = split('-', $start);
-		$endDateComponents = split('-', $end);
+        //SalesPlatform.ru begin
+		//$startDateComponents = split('-', $start);
+		//$endDateComponents = split('-', $end);
+        $startDateComponents = explode('-', $start);
+		$endDateComponents = explode('-', $end);
+        //SalesPlatform.ru end
         
         $userAndGroupIds = array_merge(array($user->getId()),$this->getGroupsIdsForUsers($user->getId()));
         $params = array($start,$end,$start,$end);

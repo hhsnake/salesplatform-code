@@ -158,7 +158,7 @@ class PBXManager_PBXManager_Connector {
         $params['callstatus'] = "in-progress";
         // SalesPlatform.ru begin
         $recordModel->updateCallDetails($params, $user);
-        $recordModel->updateAssignedUser($user['id']);
+        //$recordModel->updateAssignedUser($user['id']);
         //$recordModel->updateCallDetails($params);
         // SalesPlatform.ru end
     }
@@ -195,9 +195,6 @@ class PBXManager_PBXManager_Connector {
         // SalesPlatform.ru begin
         $userNumber = $details->get('callerIdNum');
         $user = PBXManager_Record_Model::getUserInfoWithNumber($userNumber);
-        if(!$user) {
-            return;
-        }
         $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid, $user);
         //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
         // SalesPlatform.ru end

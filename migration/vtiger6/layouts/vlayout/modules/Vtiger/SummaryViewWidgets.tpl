@@ -31,7 +31,10 @@
 				{/if}
 			{/foreach}
 		</div>
-		<div class="span5" style="overflow: hidden">
+		{* SalesPlatform.ru begin *}
+        <div class='span5'>
+        {* <div class='span5' style="overflow: hidden"> *}
+        {* SalesPlatform.ru end *}
 			<div id="relatedActivities">
 				{$RELATED_ACTIVITIES}
 			</div>

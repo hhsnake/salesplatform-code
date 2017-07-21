@@ -36,16 +36,6 @@ class VTSimpleTemplate{
 
                 $data = $this->parent->getData();
                 
-                //SalesPlatform.ru add direct link to entity field
-                if($fieldname === 'spDetailViewLink') {
-                    global $site_URL;
-                    $recordModel = Vtiger_Record_Model::getInstanceById(vtws_getCRMEntityId($data['id']), $this->parent->getModuleName());
-                    if($recordModel) {
-                       return $site_URL . $recordModel->getDetailViewUrl(); 
-                    }
-                    return '';
-                }
-                //SalesPlatform.ru end
                 
                 if(isset($data[$fieldname]) || $fieldname === '_DATE_FORMAT_') {
                     if($this->useValue($data, $fieldname)){
@@ -140,7 +130,11 @@ class VTSimpleTemplate{
 	}
 
 	function parseTemplate(){
-		return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))/', array($this,"matchHandler"), $this->template);
+        //SalesPlatform.ru begin DetailViewLink insertion
+ 	//return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))/', array($this,"matchHandler"), $this->template); 
+            $content = preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))/', array($this,"matchHandler"), $this->template); 
+            return preg_replace_callback('/\\$\w+(\((\w)*+\))?/', array($this,"spMatchHandler"), $content); 
+ 	//SalesPlatform.ru end DetailViewLink insertion
 	}
         
         function getCompanySetting($fieldname) { 
@@ -369,5 +363,80 @@ class VTSimpleTemplate{
 
 		return $commentsList;
 	}
+	    //SalesPlatform.ru begin DetailViewLink insertion
+	    private function spMatchHandler($match) { 
+	        $result = '';
+	        if(!empty($this->parent)){  
+	            $fieldname = $match[0]; 
+	            $data = $this->parent->getData(); 
+	            if(strpos($fieldname, 'spDetailViewLink') !== false) { 
+	                $result = $this->getRecordLink($data, $fieldname); 
+	            } 
+	        } 
+	         
+	        return $result; 
+	    } 
+	     
+	    private function getRecordLink($data, $parentFieldName) { 
+	        global $site_URL; 
+	        $recordModel = Vtiger_Record_Model::getInstanceById(vtws_getCRMEntityId($data['id']), $this->parent->getModuleName()); 
+	        $recordLink = ''; 
+	        if($recordModel) { 
+	            $moduleNameMatches = array(); 
+	            if(preg_match('/\((.*)\)/', $parentFieldName, $moduleNameMatches)) { 
+	                $moduleName = $moduleNameMatches[1]; 
+	                $recordLink = $this->getReferencedRecordLink($recordModel, $moduleName); 
+	            } else { 
+	                $recordDisplayName = $recordModel->getDisplayName(); 
+	                $recordLink = ($recordDisplayName != '') 
+	                    ? '<a href="' . $site_URL . $recordModel->getDetailViewUrl() . '" target="_blank">' .  
+	                      $recordDisplayName . 
+	                      '</a>' 
+	 
+	                    : $site_URL . $recordModel->getDetailViewUrl();  
+	            } 
+	        } 
+	 
+	        return $recordLink; 
+	    } 
+	     
+	    private function getReferencedRecordLink($recordModel, $moduleName) { 
+	        global $site_URL; 
+	        $recordLink = ''; 
+	        $referenceFields = $recordModel->getModule()->getFieldsByType(array('reference', 'owner', 'multireference')); 
+	        foreach($referenceFields as $referenceFieldName => $referenceField) { 
+	            $type = $referenceField->getFieldDataType(); 
+	            $referenceModules = $referenceField->getReferenceList(); 
+	            if($type == 'owner') { 
+	                $referenceModules = array('Users'); 
+	            } 
+	 
+	            /* If module matched - look for record */ 
+	            foreach($referenceModules as $referenceModuleName) { 
+	                if($referenceModuleName === $moduleName) { 
+	                    $referenceFieldValue = $recordModel->get($referenceFieldName); 
+	                    if(isRecordExists($referenceFieldValue)) { 
+	                        $referenceRecordModel = Vtiger_Record_Model::getInstanceById($referenceFieldValue); 
+	                         
+	                        /* For multireferene field need match modules names */ 
+	                        if($referenceRecordModel->getModuleName() === $moduleName) { 
+	                            $recordDisplayName = $referenceRecordModel->getDisplayName(); 
+	                            $recordLink = ($recordDisplayName != '') 
+	                                ? '<a href="' . $site_URL . $referenceRecordModel->getDetailViewUrl() . '" target="_blank">' .  
+	                                  $recordDisplayName . 
+	                                  '</a>' 
+	                                     
+	                                : $site_URL . $referenceRecordModel->getDetailViewUrl();  
+	                             
+	                            break; 
+	                        } 
+	                    } 
+	                } 
+	            } 
+	        } 
+	         
+	        return $recordLink; 
+	    } 
+	    //SalesPlatform.ru end DetailViewLink insertion
 }
 ?>

@@ -385,7 +385,7 @@ class ServiceContracts extends CRMEntity {
 
 			// Initialize module sequence for the module
             // SalesPlatform.ru begin: Added separate numbering for self organizations
-            $adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1,'')); 
+            $adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,vtranslate('LBL_SERVICE_CONTRACTS_PREFIX'),1,1,1,'')); 
 			//$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1));
             // SalesPlatform.ru end 
 

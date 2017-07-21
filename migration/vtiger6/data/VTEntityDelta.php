@@ -79,6 +79,18 @@ class VTEntityDelta extends VTEventHandler {
 										'currentValue' => $newData[$fieldName]);
 			}
 		}
+	        //SalesPlatform.ru begin History of products changes 
+	        if(in_array($moduleName, getInventoryModules())) { 
+	            $newInventoryData = $newEntity->getInventoryData(); 
+	            $oldInventoryData = null; 
+	            if($oldEntity != null) { 
+	                $oldInventoryData = $oldEntity->getInventoryData(); 
+	            } 
+	             
+	            $delta = array_merge($delta, $newInventoryData->getDelta($oldInventoryData)); 
+	        } 
+	        //SalesPlatform.ru end History of products changes
+                
 		self::$entityDelta[$moduleName][$recordId] = $delta;
 	}
 

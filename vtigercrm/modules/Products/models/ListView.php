@@ -151,7 +151,10 @@ class Products_ListView_Model extends Vtiger_ListView_Model {
 	}
 
 	public function addSubProductsQuery($listQuery){
-		$splitQuery = split('WHERE', $listQuery);
+        //SalesPlatform.ru begin
+		//$splitQuery = split('WHERE', $listQuery);
+        $splitQuery = explode('WHERE', $listQuery);
+        //SalesPlatform.ru end
 		$query = " LEFT JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid = vtiger_products.productid AND vtiger_seproductsrel.setype='Products'";
 		$splitQuery[0] .= $query;
 		$productId = $this->get('productId');
@@ -224,7 +227,10 @@ class Products_ListView_Model extends Vtiger_ListView_Model {
 		}
 		$position = stripos($listQuery, ' from ');
 		if ($position) {
-			$split = spliti(' from ', $listQuery);
+            //SalesPlatform.ru begin
+			//$split = spliti(' from ', $listQuery);
+            $split = preg_split('/ from /i', $listQuery);
+            //SalesPlatform.ru end
 			$splitCount = count($split);
 			$listQuery = 'SELECT count(*) AS count ';
 			for ($i=1; $i<$splitCount; $i++) {

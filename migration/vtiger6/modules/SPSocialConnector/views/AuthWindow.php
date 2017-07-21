@@ -9,6 +9,9 @@
  ************************************************************************************/
 require_once 'modules/SPSocialConnector/SPSocialConnectorHelper.php';
 require_once 'modules/SPSocialConnector/SPSocialConnector.php';
+require_once 'modules/Accounts/Accounts.php';
+require_once 'modules/Contacts/Contacts.php';
+require_once 'modules/Leads/Leads.php';
 
 class SPSocialConnector_AuthWindow_View extends Vtiger_Popup_View {
 

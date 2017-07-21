@@ -74,7 +74,7 @@ class PBXManager_PBXManager_Controller {
         }
         
         /* If not Originate event - prepare begin of call */
-        if($callerNumber != $destinationNumber) {
+        if($callerNumber != $destinationNumber && !empty($destinationNumber) && !empty($callerNumber)) {
             $callerUserInfo = PBXManager_Record_Model::getUserInfoWithNumber($callerNumber);
    
             /* If caller number binded with crm user - it outgoing number */

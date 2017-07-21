@@ -33,8 +33,9 @@
                  {/if}
                 </div>
                  {/foreach}
-                         
-			</div>
+            {*SalesPlatform begin*}                     
+			{*</div>*}
+            {*SalesPlatform end*}
 		</div>
 		{/foreach}
 	</div>

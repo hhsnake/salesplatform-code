@@ -88,7 +88,7 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
      * return true
      */
     // SalesPlatform.ru begin
-    public function updateCallDetails($details, $user){
+    public function updateCallDetails($details, $user = null){
     //public function updateCallDetails($details){
     // SalesPlatform.ru end
         $db = PearDatabase::getInstance();
@@ -99,16 +99,16 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
             $params[] = $value;
         }
         $query = substr_replace($query ,"",-1);
+        // SalesPlatform.ru begin
+        $query .= ' WHERE sourceuuid = ?'; 
+ 	$params[] = $sourceuuid; 
+       // SalesPlatform.ru end
 
         // SalesPlatform.ru begin
-        //$query .= ' WHERE sourceuuid = ?';
-        // SalesPlatform.ru end
-
-        $params[] = $sourceuuid;
-
-        // SalesPlatform.ru begin
-        $query .= ' WHERE sourceuuid = ? AND user = ?';
-        $params[] = $user['id'];
+        if($user) { 
+            $query .= ' AND user = ?'; 
+            $params[] = $user['id']; 
+        } 
         // SalesPlatform.ru end
         
         $db->pquery($query, $params);
@@ -142,15 +142,19 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
     }
 
     // SalesPlatform.ru begin
-    public static function getInstanceBySourceUUID($sourceuuid, $user){
+    public static function getInstanceBySourceUUID($sourceuuid, $user  = null){
     //public static function getInstanceBySourceUUID($sourceuuid){
     // SalesPlatform.ru end
         $db = PearDatabase::getInstance();
         $record = new self();
         
         // SalesPlatform.ru begin
-        $query = 'SELECT * FROM ' . self::moduletableName . ' WHERE sourceuuid=? AND user=?';
-        $params = array($sourceuuid, $user['id']);
+        $query = 'SELECT * FROM ' . self::moduletableName . ' WHERE sourceuuid=?'; 
+                $params = array($sourceuuid); 
+                if($user) { 
+                    $query .= ' AND user=?'; 
+                    $params[] = $user['id']; 
+                } 
         // SalesPlatform.ru end
         
         $result = $db->pquery($query, $params);

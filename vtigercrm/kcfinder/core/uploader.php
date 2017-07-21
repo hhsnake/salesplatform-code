@@ -40,8 +40,10 @@ class uploader {
     public function __construct() {
 
         // DISABLE MAGIC QUOTES
-        if (function_exists('set_magic_quotes_runtime'))
-            @set_magic_quotes_runtime(false);
+        //SalesPlatform.ru begin
+        //if (function_exists('set_magic_quotes_runtime'))
+        //    @set_magic_quotes_runtime(false);
+        //SalesPlatform.ru end
 
         // INPUT INIT
         $input = new input();

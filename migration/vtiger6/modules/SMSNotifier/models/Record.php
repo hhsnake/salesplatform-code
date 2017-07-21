@@ -23,7 +23,10 @@ class SMSNotifier_Record_Model extends Vtiger_Record_Model {
 		$data = array_merge($statusDetails[0], array('statuscolor' => $statusColor));
 		$this->setData($data);
 
-		return $this;
+        // SalesPlatform.ru begin
+        return $statusDetails;
+		//return $this;
+        // SalesPlatform.ru end
 	}
 
 	public function getCheckStatusUrl() {

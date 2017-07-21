@@ -120,12 +120,38 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 * Function to save the current Record Model
 	 */
 	public function save() {
+        //SalesPlatform.ru begin Fix duplicate user creation
+        if($this->isDuplicates()) {
+            throw new Exception(vtranslate('LBL_DUPLICATE_USER', $this->getModuleName()));
+        }
+        //SalesPlatform.ru end       
 		parent::save();
 
 		$this->saveTagCloud();
 	}
 
+        //SalesPlatform.ru begin Fix duplicate user creation
+        public function isDuplicates() {
+            $sql = "SELECT count(id) as duplicates_count FROM vtiger_users WHERE user_name=?";
+            $params = array($this->get('user_name'));
+            if($this->getId() != null) {
+                $sql .= " AND id!=?";
+                $params[] = $this->getId();
+            }
 
+            $db = PearDatabase::getInstance();
+            $result = $db->pquery($sql, $params);
+            
+            $isDuplicates = false;
+            if($result) {
+                $resultRow = $db->fetchByAssoc($result);
+                $isDuplicates = ($resultRow['duplicates_count'] > 0);
+            }
+            
+            return $isDuplicates;
+        }
+        //SalesPlatform.ru end
+        
 	/**
 	 * Function to get all the Home Page components list
 	 * @return <Array> List of the Home Page components

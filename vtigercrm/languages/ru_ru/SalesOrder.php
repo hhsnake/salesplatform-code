@@ -29,7 +29,9 @@ $languageStrings = array(
 	'End Period'                   => 'Конец'                  , 
 	'Payment Duration'             => 'Продолжительность оплаты', 
 	'Invoice Status'               => 'Статус Счета'     , 
-	'Sub Total'                    => 'Итого'                  , 
+ 	//SalesPlatform.ru begin History of products changes 
+ 	//'Sub Total'                    => 'Итого'                  ,  
+ 	//SalesPlatform.ru end History of products changes
 	'AutoCreated'                  => 'Автосоздан'        , 
 	'Sent'                         => 'Отправлен'          , 
 	'Credit Invoice'               => 'Кредит'                , 

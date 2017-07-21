@@ -214,7 +214,11 @@ class iCalendar_component {
     			}
     			$this->add_property($key,$component);
     		} else if(!empty($components['function'])){
-    			$this->$components['function']($activity);
+                //SalesPlatform.ru begin
+    			//$this->$components['function']($activity);
+                $functionName = $components['function'];
+                $this->$functionName($activity);
+                //SalesPlatform.ru end
     		}
     	}
         return true;

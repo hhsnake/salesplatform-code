@@ -33,6 +33,10 @@ $languageStrings = array(
 	'Sales Order' => 'Sales Order',
 	'Sent'=>'Sent',
 	'SINGLE_Invoice' => 'Invoice',
+        //SalesPlatform.ru begin
+        'Self Company'=> 'Self Company',
+        'Act'=> 'Act',
+        //SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

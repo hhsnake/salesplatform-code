@@ -660,28 +660,40 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 			$importDataController->batchImport = false;
 
 			if(!$importDataController->initializeImport()) { continue; }
-			$importDataController->importData();
+                        $importDataController->importData();
 
 			$importStatusCount = $importDataController->getImportStatusCount();
 
-			$emailSubject = 'vtiger CRM - Scheduled Import Report for '.$importDataController->module;
-            $viewer = new Vtiger_Viewer();
+			// SalesPlatform.ru begin
+                        $emailSubject = vtranslate('SCHEDULED_IMPORT_REPORT', 'Import').$importDataController->module;
+                        //$emailSubject = 'vtiger CRM - Scheduled Import Report for '.$importDataController->module;
+                        // SalesPlatform.ru end
+                        $viewer = new Vtiger_Viewer();
 			$viewer->assign('FOR_MODULE', $importDataController->module);
-            $viewer->assign('INVENTORY_MODULES', getInventoryModules());
+                        // SalesPlatform.ru begin
+                        $viewer->assign('MODULE', 'Import');
+                        // SalesPlatform.ru end
+                        $viewer->assign('INVENTORY_MODULES', getInventoryModules());
 			$viewer->assign('IMPORT_RESULT', $importStatusCount);
 			$importResult = $viewer->view('Import_Result_Details.tpl','Import',true);
 			$importResult = str_replace('align="center"', '', $importResult);
-			$emailData = 'vtiger CRM has just completed your import process. <br/><br/>' .
+                        // SalesPlatform.ru begin
+                        $emailData = vtranslate('LBL_COMPLETED_ IMPORT_PROCESS', 'Import') .'<br/><br/>'.
 							$importResult . '<br/><br/>'.
-							'We recommend you to login to the CRM and check few records to confirm that the import has been successful.';
-
-			$userName = getFullNameFromArray('Users', $importDataController->user->column_fields);
+							vtranslate('LBL_CHECK_ IMPORT_SUCCESSFUL', 'Import');                        
+                        //$emailData = 'vtiger CRM has just completed your import process. <br/><br/>' .
+			//				$importResult . '<br/><br/>'.
+			//				'We recommend you to login to the CRM and check few records to confirm that the import has been successful.';
+                        // SalesPlatform.ru end
+                        $userName = getFullNameFromArray('Users', $importDataController->user->column_fields);
 			$userEmail = $importDataController->user->email1;
 			$vtigerMailer->to = array( array($userEmail, $userName));
 			$vtigerMailer->Subject = $emailSubject;
 			$vtigerMailer->Body    = $emailData;
-			$vtigerMailer->Send();
-
+                        // SalesPlatform.ru begin
+                        $vtigerMailer->Send(true);
+                        //$vtigerMailer->Send();
+                        // SalesPlatform.ru end
 			$importDataController->finishImport();
 		}
 		Vtiger_Mailer::dispatchQueue(null);

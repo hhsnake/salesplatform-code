@@ -130,7 +130,20 @@ $languageStrings = array(
 	'LBL_PRODUCT_SERVICE_TAXES' => 'Product & Service Taxes',
 	'LBL_PROFILE_DESCRIPTION' => 'Manage user-specific modules access to different Roles',
 	'LBL_PROFILES' => 'Profiles',
-	'LBL_REQUIRES_AUTHENTICATION' => 'Requires Authentication',
+        //Salesplatoform.ru begin Fix en_us localisation
+        'LBL_SENDMAIL' => 'Use system sendmail',
+        'LBL_USE_MAIL_ACCOUNT' => 'Use account from Mail manager',
+        'LBL_SERVER_PORT' => 'Server port',
+        'LBL_FROM_NAME' => 'From name',
+        'LBL_CONNECTION_SECURITY' => 'Connection security',
+        'LBL_NO_TLS' => 'None',
+        'LBL_TLS' => 'TLS',
+        'LBL_SSL' => 'SSL',
+        'LBL_OUTGOING_SERVER_NOTE_2'   => 'Note: If you select the "Use account from Mail manager" checkbox, login and password for outgoing mail server will be taken from Mail Manager settings of current <br>
+                                        CRM User, provided that the user has configured his Mail Manager Account and username/password are suitable for SMTP outgoing mail server',
+        'Search'                       => 'Search Configuration' ,
+        //Salesplatoform.ru end Fix en_us localisation
+	'LBL_REQUIRES_AUTHENTICATION' => 'Requires Authentication',    
 	'LBL_RESET_TO_DEFAULT' => 'Reset to Default',
 	'LBL_ROLE_DESCRIPTION' => 'Set up hierarchy of roles and assign to the users',
 	'LBL_ROLES' => 'Roles',
@@ -198,6 +211,11 @@ $languageStrings = array(
      'LBL_EXCHANGE_CONNECTOR' => 'Exchange Connector',
    'LBL_DEFAULT_LAYOUT' => 'Default Layout',   
    'LBL_SP_CHECK_SITE_URL' => 'Check site URL',
+    //Salesplatform.ru begin Fix en_us localisation
+    'LBL_SOCIALCONNECTOR_SETTINGS' => 'Social Connector',
+    'LBL_CML_SETTINGS'          => 'CommerceML settings',
+    'LBL_SP_CONFIGURATION' =>  'Configuration Manager',
+    //Salesplatform.ru end Fix en_us localisation
 );
 
 $jsLanguageStrings = array(

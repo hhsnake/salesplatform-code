@@ -1163,7 +1163,11 @@ function send_mail_for_password($mailid)
 	$isactive = $adb->query_result($res,0,'isactive');
 
 	// We no longer have the original password!
-	if (!empty($adb->query_result($res, 0, 'cryptmode'))) {
+	// SalesPlatform.ru begin Fix empty(): Can't use method return value in write context
+	$spcryptmode = $adb->query_result($res, 0, 'cryptmode');
+	if (!empty($spcryptmode)) {
+	//if (!empty($adb->query_result($res, 0, 'cryptmode'))) {
+	// SalesPlatform.ru end
 		$password = '*****';
 		// TODO - we need to send link to reset the password
 		// For now CRM user can do the same.
@@ -4008,10 +4012,13 @@ function getDefaultAssigneeId() {
 }
 
 /* Begin the HTTP listener service and exit. */
-if (!isset($HTTP_RAW_POST_DATA)){
-	$HTTP_RAW_POST_DATA = file_get_contents('php://input');
-}
-$server->service($HTTP_RAW_POST_DATA);
+//SalesPlatform.ru begin
+//if (!isset($HTTP_RAW_POST_DATA)){
+//	$HTTP_RAW_POST_DATA = file_get_contents('php://input');
+//}
+//$server->service($HTTP_RAW_POST_DATA);
+$server->service(file_get_contents('php://input'));
+//SalesPlatform.ru end
 
 exit();
 

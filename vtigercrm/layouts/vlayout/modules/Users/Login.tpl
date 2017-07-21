@@ -51,11 +51,13 @@
 				</div>
 				<div class="span9">
 					<div class="helpLinks">
-						<a href="http://community.salesplatform.ru/">Сообщество</a> | 
-						<a href="http://community.salesplatform.ru/forums/">Форум</a> | 
-						<a href="http://salesplatform.ru/wiki/">Документация</a> | 
-						<a href="http://community.salesplatform.ru/blogs/">Блог</a> | 
+                                                {* SalesPlatform.ru begin Localization fix*}
+						<a href="http://community.salesplatform.ru/">{vtranslate('LBL_COMMUNITY','Users')}</a> | 
+						<a href="http://community.salesplatform.ru/forums/">{vtranslate('LBL_FORUMS','Users')}</a> | 
+						<a href="http://salesplatform.ru/wiki/">{vtranslate('LBL_WIKI','Users')}</a> | 
+						<a href="http://community.salesplatform.ru/blogs/">{vtranslate('LBL_BLOGS','Users')}</a> | 
 						<a href="http://salesplatform.ru/">SalesPlatform.ru</a>
+                                                {* SalesPlatform.ru end Localization fix*}
 					</div>
 				</div>
 			</div>
@@ -115,46 +117,61 @@
                                                                 <!-- SalesPlatform.ru end -->
 										<div class="login-box" id="loginDiv">
 											<div class="">
-												<h3 class="login-header">Вход</h3>
+                                                                                        {* SalesPlatform.ru begin Localication fix*} 
+												<h3 class="login-header">{vtranslate('LBL_LOGIN_IN_SYSTEM','Users')}</h3>
 											</div>
 											<form class="form-horizontal login-form" style="margin:0;" action="index.php?module=Users&action=Login" method="POST">
 												{if isset($smarty.request.error)}
 													<div class="alert alert-error">
-														<p>Неверное имя пользователя или пароль</p>
+                                                                                                            {* SalesPlatform.ru begin Localization fix*} 
+														<p>{vtranslate('LBL_INVALID_PASSWORD','Users')}</p>
+                                                                                                            {* SalesPlatform.ru end Localization fix*}
 													</div>
 												{/if}
 												{if isset($smarty.request.fpError)}
 													<div class="alert alert-error">
-														<p>Неверное имя пользователя или Email</p>
+                                                                                                            {* SalesPlatform.ru begin Localization fix*} 
+														<p>{vtranslate('LBL_INVALID_EMAIL','Users')}</p>
+                                                                                                            {* SalesPlatform.ru end Localization fix*}
 													</div>
 												{/if}
 												{if isset($smarty.request.status)}
 													<div class="alert alert-success">
-														<p>Письмо отправлено на Ваш почтовый ящик</p>
+                                                                                                            {* SalesPlatform.ru begin Localization fix*} 
+														<p>{vtranslate('LBL_EMAIL_SEND_MESSAGE','Users')}</p>
+                                                                                                            {* SalesPlatform.ru end Localization fix*}
 													</div>
 												{/if}
 												{if isset($smarty.request.statusError)}
 													<div class="alert alert-error">
-														<p>Сервер исходящей почты не настроен</p>
+                                                                                                            {* SalesPlatform.ru begin Localization fix*} 
+														<p>{vtranslate('LBL_OUTGOING_SERVER_UNCONFIGURED','Users')}</p>
+                                                                                                            {* SalesPlatform.ru end Localization fix*}
 													</div>
 												{/if}
 												<div class="control-group">
-													<label class="control-label" for="username"><b>Пользователь</b></label>
+                                                                                                    {* SalesPlatform.ru begin Localization fix*} 
+													<label class="control-label" for="username"><b>{vtranslate('LBL_USER_NAME','Users')}</b></label>
+                                                                                                    {* SalesPlatform.ru end Localization fix*}
 													<div class="controls">
 														<input type="text" id="username" name="username" placeholder="Username">
 													</div>
 												</div>
 
 												<div class="control-group">
-													<label class="control-label" for="password"><b>Пароль</b></label>
+                                                                                                    {* SalesPlatform.ru begin Localization fix*} 
+													<label class="control-label" for="password"><b>{vtranslate('LBL_PASSWORD')}</b></label>
+                                                                                                    {* SalesPlatform.ru end Localization fix*}
 													<div class="controls">
 														<input type="password" id="password" name="password" placeholder="Password">
 													</div>
 												</div>
 												<div class="control-group signin-button">
 													<div class="controls" id="forgotPassword">
-														<button type="submit" class="btn btn-primary sbutton">Вход</button>
-														&nbsp;&nbsp;&nbsp;<a>Забыли пароль ?</a>
+                                                                                                            {* SalesPlatform.ru begin Localization fix*} 
+														<button type="submit" class="btn btn-primary sbutton">{vtranslate('LBL_SING_IN','Users')}</button>
+														&nbsp;&nbsp;&nbsp;<a>{vtranslate('LBL_FOGGOT_PASSWORD','Users')}</a>
+                                                                                                            {* SalesPlatform.ru end Localization fix*}
 													</div>
 												</div>
 												{* Retain this tracker to help us get usage details *}
@@ -168,10 +185,14 @@
 										<div class="login-box hide" id="forgotPasswordDiv">
 											<form class="form-horizontal login-form" style="margin:0;" action="forgotPassword.php" method="POST">
 												<div class="">
-													<h3 class="login-header">Напоминание пароля</h3>
+                                                                                                    {* SalesPlatform.ru begin Localization fix*} 
+													<h3 class="login-header">{vtranslate('LBL_FOGGOT_PASSWORD_TITLE','Users')}</h3>
+                                                                                                    {* SalesPlatform.ru end Localization fix*}
 												</div>
 												<div class="control-group">
-													<label class="control-label" for="username"><b>Пользователь</b></label>
+                                                                                                    {* SalesPlatform.ru begin Localization fix*} 
+													<label class="control-label" for="username"><b>{vtranslate('LBL_USER_NAME','Users')}</b></label>
+                                                                                                    {* SalesPlatform.ru end Localization fix*}
 													<div class="controls">
 														<input type="text" id="username" name="username" placeholder="Username">
 													</div>
@@ -184,8 +205,10 @@
 												</div>
 												<div class="control-group signin-button">
 													<div class="controls" id="backButton">
-														<input type="submit" class="btn btn-primary sbutton" value="Отправить" name="retrievePassword">
-														&nbsp;&nbsp;&nbsp;<a>Назад</a>
+                                                                                                            {* SalesPlatform.ru begin Localization fix*} 
+														<input type="submit" class="btn btn-primary sbutton" value="{vtranslate('LBL_SUBMIT','Users')}" name="retrievePassword">
+														&nbsp;&nbsp;&nbsp;<a>{vtranslate('LBL_BACK','Users')}</a>
+                                                                                                            {* SalesPlatform.ru end Localization fix*}
 													</div>
 												</div>
 											</form>

@@ -370,19 +370,6 @@ class SPPayments extends CRMEntity {
           
                         $this->process_Payments($modulename);
                         
-                        // Added pdf-template
-                        $filename = "modules/SPPayments/pdftemplates/cashorder.htm";
-                        $handle = fopen($filename, "r");
-                        $body = fread($handle, filesize($filename));
-                        fclose($handle);
-                        $templatename = 'Приходный кассовый ордер';
-                        $header_size = 0;
-                        $footer_size = 50;
-                        $page_orientation = 'P';
-                        $templateid = $adb->getUniqueID('sp_templates');
-                        $sql = "insert into sp_templates (name,module,template,header_size,footer_size,page_orientation,templateid) values (?,?,?,?,?,?,?)";
-                        $params = array($templatename, $modulename, $body, $header_size, $footer_size, $page_orientation, $templateid);
-                        $adb->pquery($sql, $params);
 
             $modFocus = CRMEntity::getInstance('SPPayments');
             $modFocus->setModuleSeqNumber('configure', 'SPPayments', '', '1');

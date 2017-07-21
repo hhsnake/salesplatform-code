@@ -87,7 +87,18 @@ class Vtiger_Util_Helper {
 	 * @return <String>
 	 */
 	public static function pluralize($count, $text) {
-		return $count ." ". (($count == 1) ? vtranslate("$text") : vtranslate("${text}S"));
+	        //SalesPaltform.ru begin
+	        if ($count % 10 == 1 && $count != 11) { 
+	            return $count ." ". vtranslate("${text}_CORRECT_SINGLE"); 
+	        } else if ($count > 10 && $count < 20) { 
+	            return $count ." ". vtranslate("${text}_CORRECT_PLURAL_TWO"); 
+	        } else if ($count % 10 < 5 && $count % 10 != 0) { 
+	            return $count ." ". vtranslate("${text}_CORRECT_PLURAL_ONE"); 
+	        } else { 
+	            return $count ." ". vtranslate("${text}_CORRECT_PLURAL_TWO"); 
+	        } 
+	        //return $count ." ". (($count == 1) ? vtranslate("$text") : vtranslate("${text}S")); 
+	        //SalesPlatform.ru end 
 	}
 
 	/**

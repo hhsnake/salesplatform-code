@@ -70,6 +70,10 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 * @return <array> template fields
 	 */
 	public function getAllModuleEmailTemplateFields() {
+        //SalesPlatform.ru begin
+        $allFields = [];
+        //SalesPlatform.ru end
+        
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$allModuleList = $this->getAllModuleList();
 		$allRelFields = array();
@@ -91,10 +95,16 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 			}
 			if(is_array($allFields) && is_array($allRelFields)){
 				$allFields = array_merge($allFields, $allRelFields);
-				$allRelFields="";
+                //SalesPlatform.ru begin
+				//$allRelFields="";
+                $allRelFields = [];
+                //SalesPlatform.ru end
 			}
 			$allOptions[vtranslate($module, $module)] = $allFields;
-			$allFields = "";
+            //SalesPlatform.ru begin
+			//$allFields = "";
+            $allFields = [];
+            //SalesPlatform.ru end
 		}
 		
 		$option = array(vtranslate('LBL_CURRENT_DATE'), '$custom-currentdate$');

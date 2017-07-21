@@ -24,6 +24,7 @@ $languageStrings = array(
         'SPCMLConnector'            => 'CommerceML exchange',
         'from_1c'                   => 'From 1C',
         'from_site'                 => 'From site',
+    'SPCMLConnector'            => 'CommerceML excahge',
 );
 
 $jsLanguageStrings = array(

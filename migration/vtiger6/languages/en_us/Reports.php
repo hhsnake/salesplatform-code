@@ -166,6 +166,13 @@ $languageStrings = array(
     'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'This is an auto-generated email sent on behalf of a scheduled report.',
     //SalesPlatform.ru begin
     'LBL_NO_COLUMN_VALUE' => '--No field value--',
+    'LBL_VIEWTYPE' => 'Plot type',
+    'LBL_AGREGATE_BY' => 'Calculate by',
+    'table' => 'Table',
+    'pie' => 'Pie',
+    'barchart' => 'Bar chart',
+    'linear' => 'Graph',
+    'custom' => 'Custom format',
     //SalesPlatform.ru end
 );
 
@@ -173,4 +180,7 @@ $jsLanguageStrings = array(
 	'JS_DUPLICATE_RECORD' => 'Duplicate Report',
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitation: Line Item fields(List Price, Discount & Quantity) can only be used when other calculation fields are not selected.',
 	'JS_NO_CHART_DATA_AVAILABLE' => 'Data not available, please check the selected fields',
+    //SalesPlatform.ru begin
+    'JS_LBL_NO_DATA_FOR_SELECTED_FILTERS' => 'No data for selected filters',
+    //SalesPlatform.ru end
 );

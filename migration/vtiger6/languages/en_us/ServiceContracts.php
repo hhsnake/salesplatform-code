@@ -28,4 +28,7 @@ $languageStrings = array(
 	'Progress'=> 'Progress',
 	'Planned Duration' => 'Planned Duration (in Days)',
 	'Actual Duration' => 'Actual Duration (in Days)',
+        // SalesPlatform.ru begin
+        'Due date' => 'Due date',
+        // SalesPlatform.ru end
 );

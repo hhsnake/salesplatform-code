@@ -869,9 +869,12 @@ class PearDatabase{
     function disconnect() {
 		$this->println("ADODB disconnect");
 		if(isset($this->database)){
-	    	if($this->dbType == "mysql"){
-			mysql_close($this->database->_connectionID);
-	    }else if($this->dbType=="mysqli"){
+            //SalesPlatform.ru begin 
+	    	//if($this->dbType == "mysql"){
+			//mysql_close($this->database->_connectionID);
+            //}else if($this->dbType=="mysqli"){
+            if($this->dbType == "mysqli"){
+            //SalesPlatform.ru end
                 mysqli_close($this->database->_connectionID);
             } 
             else {
@@ -1006,8 +1009,11 @@ class PearDatabase{
 	function sql_escape_string($str)
 	{
 		if($this->isMySql()){
-			$result_data = ($this->dbType=='mysqli')?mysqli_real_escape_string($this->database->_connectionID,$str):mysql_real_escape_string($str);
-                }
+            //SalesPlatform.ru begin 
+			//$result_data = ($this->dbType=='mysqli')?mysqli_real_escape_string($this->database->_connectionID,$str):mysql_real_escape_string($str);
+            $result_data = mysqli_real_escape_string($this->database->_connectionID, $str);
+            //SalesPlatform.ru end
+        }
 		elseif($this->isPostgres())
 			$result_data = pg_escape_string($str);
 		return $result_data;

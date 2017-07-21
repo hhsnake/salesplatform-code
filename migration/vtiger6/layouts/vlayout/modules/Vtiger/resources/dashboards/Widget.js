@@ -911,13 +911,13 @@ Vtiger_Barchat_Widget_Js('Report_Verticalbarchart_Js', {},{
                 }
             }
         } else {
-            chartData[0] = [];
-            chartData[1] = [];
-            chartData[2] = [];
             for(var i in values) {
                 var multiValue = values[i];
                 var info = [];
                 for(var j in multiValue) {
+                    if(!$.isArray(chartData[j])) {
+                        chartData[j] = [];
+                    }
                     chartData[j].push(multiValue[j]);
                     if(multiValue[j] > yMaxValue) yMaxValue = multiValue[j];
                 }
@@ -960,12 +960,13 @@ Report_Verticalbarchart_Js('Report_Horizontalbarchart_Js', {},{
             chartData = [chartData];
         } else {
             chartData = [];
-            chartData[0] = [];
-            chartData[1] = [];
-            chartData[2] = [];
             for(var i in values) {
                 var multiValue = values[i];
                 for(var j in multiValue) {
+                    if(!$.isArray(chartData[j])) {
+                        chartData[j] = [];
+                    }
+                    
                     chartData[j][i] = [];
                     chartData[j][i].push(multiValue[j]);
                     chartData[j][i].push(parseInt(i)+1);
@@ -1051,19 +1052,26 @@ Report_Verticalbarchart_Js('Report_Linechart_Js', {},{
         var data = this.data = JSON.parse(jsonData);
         var values = data['values'];
 
-        var chartData = [];
+        
         var yMaxValue = 0;
-
-        chartData[1] = [];
-        chartData[2] = [];
-        chartData[0] = [];
+        var chartData = [];
+        var currentValue = 0;
         for(var i in values) {
-            var value =  values[i];
-            for(var j in value) {
-                    chartData[j].push(value[j]);
+            var multiValue = values[i];
+            for(var j in multiValue) {
+                if(!$.isArray(chartData[j])) {
+                    chartData[j] = [];
+                }
+
+                currentValue = parseFloat(multiValue[j]);
+                chartData[j].push(currentValue);
+                if(currentValue > yMaxValue) {
+                    yMaxValue = currentValue;
+                }
             }
         }
-        yMaxValue = yMaxValue + yMaxValue*0.15;
+            
+        yMaxValue = yMaxValue + yMaxValue * 0.15;
 
         return {
             'chartData':chartData,

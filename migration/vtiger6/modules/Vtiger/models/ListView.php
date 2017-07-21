@@ -335,7 +335,10 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		}
 		$position = stripos($listQuery, ' from ');
 		if ($position) {
-			$split = spliti(' from ', $listQuery);
+            //SalesPlatform.ru begin
+			//$split = spliti(' from ', $listQuery);
+            $split = preg_split('/ from /i', $listQuery);
+            //SalesPlatform.ru end
 			$splitCount = count($split);
 			$listQuery = 'SELECT count(*) AS count ';
 			for ($i=1; $i<$splitCount; $i++) {

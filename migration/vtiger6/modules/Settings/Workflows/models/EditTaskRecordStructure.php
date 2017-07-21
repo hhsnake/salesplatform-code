@@ -100,12 +100,24 @@ class Settings_Workflows_EditTaskRecordStructure_Model extends Settings_Workflow
 		}
 
 		//All the reference fields should also be sent
+	        //SalesPlatform.ru begin DetailViewLink insertion
+	        $referencedModules = array(); 
+	        //SalesPlatform.ru end  DetailViewLink insertion
 		$fields = $moduleModel->getFieldsByType(array('reference', 'owner', 'multireference'));
 		foreach($fields as $parentFieldName => $field) {
 			$type = $field->getFieldDataType();
 			$referenceModules = $field->getReferenceList();
 			if($type == 'owner') $referenceModules = array('Users');
 			foreach($referenceModules as $refModule) {
+	                //SalesPlatform.ru DetailViewLink insertion
+	                if(!in_array($refModule, $referencedModules)) { 
+	                    $referenceModules[] = $refModule; 
+	                    $additionalFieldModel = new Vtiger_Field_Model(); 
+	                    $additionalFieldModel->set('workflow_columnname', "spDetailViewLink($refModule)") 
+	                                         ->set('workflow_columnlabel', vtranslate('LBL_DETAIL_VIEW_LINK', $moduleModel->getName()) . " (" . vtranslate($refModule, $refModule) . ")"); 
+	                    $values['SP_LINKS_BLOCK'][] = $additionalFieldModel; 
+	                } 
+	                //SalesPlatform.ru end DetailViewLink insertion
 				$moduleModel = Vtiger_Module_Model::getInstance($refModule);
 				$blockModelList = $moduleModel->getBlocks();
 				foreach($blockModelList as $blockLabel=>$blockModel) {

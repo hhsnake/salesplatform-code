@@ -82,6 +82,10 @@ $languageStrings = array(
     'Skip' => 'Пропустить',
 	'Overwrite' => 'Перезаписать',
 	'Merge' => 'Совместить',
+    
+    'SCHEDULED_IMPORT_REPORT' => 'Vtiger CRM - Запланированный отчет об импорте для ',
+    'LBL_COMPLETED_ IMPORT_PROCESS' => 'Vtiger CRM только что завершила свой процесс импорта.',
+    'LBL_CHECK_ IMPORT_SUCCESSFUL' => 'Мы рекомендуем вам войти в CRM и проверить несколько записей, чтобы убедиться, что импорт был успешным.',
     // SalesPlatform.ru end
 );
 

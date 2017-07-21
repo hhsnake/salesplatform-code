@@ -13,7 +13,27 @@
 	 */
 	class VTEntityData{
 		private $isNew = false;
-		
+                
+	        //SalesPlatform.ru begin History of products changes
+	        /** 
+	         * 
+	         * @var InventoryData 
+	         */ 
+	        private $inventoryData; 
+	         
+	        private function loadInventoryData() { 
+	            $this->inventoryData = new InventoryData($this->getId()); 
+	        } 
+	         
+	        /** 
+	         *  
+	         * @return InventoryData 
+	         */ 
+	        public function getInventoryData() { 
+	            return $this->inventoryData; 
+	        } 
+	        //SalesPlatform.ru end History of products changes
+                
 		/**
 		 * Get an entity data object.
 		 *
@@ -45,6 +65,12 @@
 			$focus->id = $entityId;
 			$obj->isNew = false;
 			$obj->focus = $focus;
+	             
+	            //SalesPlatform.ru begin History of products changes 
+	            if(in_array($obj->moduleName, getInventoryModules())) { 
+	                $obj->loadInventoryData(); 
+	            } 
+	            //SalesPlatform.ru end History of products changes
 			return $obj;
 		}
 		
@@ -67,6 +93,11 @@
 			$focus->id = $userId;
 			$obj->isNew = false;
 			$obj->focus = $focus;
+                    //SalesPlatform.ru begin History of products changes 
+	            if(in_array($obj->moduleName, getInventoryModules())) { 
+	                $obj->loadInventoryData(); 
+	            } 
+	            //SalesPlatform.ru end History of products changes
 			return $obj;
 		}
 		
@@ -81,6 +112,11 @@
 			$obj = new VTEntityData();
 			$obj->focus = $crmEntity;
 			$obj->isNew = !(isset($crmEntity->id) && $crmEntity->id != null);
+                    //SalesPlatform.ru begin History of products changes 
+	            if(in_array($obj->moduleName, getInventoryModules())) { 
+	                $obj->loadInventoryData(); 
+	            } 
+	            //SalesPlatform.ru end History of products changes
 			return $obj;
 		}
 		
@@ -159,5 +195,169 @@
 			return $this->isNew;
 		}
 	}
-
+        
+	//SalesPlatform.ru begin History of products changes
+	class InventoryData { 
+	     
+	    private $entityId; 
+	     
+	    /** 
+	     * 
+	     * @var InventoryDataProductContainer  
+	     */ 
+	    private $inventoryDetails; 
+	     
+	    public function __construct($recordId) { 
+	        $this->entityId = $recordId; 
+	        $this->loadInventoryDetails(); 
+	    } 
+	     
+	    /** 
+	     *  
+	     * @param InventoryData $inventoryData 
+	     * @return type 
+	     */ 
+	    public function getDelta($inventoryData = null) { 
+	        if($inventoryData == null) { 
+	            return $this->getNewDelta(); 
+	        } 
+	         
+	        $compareDelta = array(); 
+	        foreach($this->inventoryDetails->getInventories() as $productId => $currentProduct) { 
+	            if(!$inventoryData->inventoryDetails->hasProduct($productId)) { 
+	                $compareDelta = array_merge($compareDelta, $currentProduct->getDelta()); 
+                    continue;
+	            } 
+	             
+	            $comparingProduct = $inventoryData->inventoryDetails->getProduct($productId); 
+	            $compareDelta = array_merge($compareDelta, $currentProduct->getDelta($comparingProduct)); 
+	        } 
+	         
+	        /* Search deleted products */ 
+	        foreach($inventoryData->inventoryDetails->getInventories() as $productId => $oldProduct) { 
+	            if(!$this->inventoryDetails->hasProduct($productId)) { 
+	                $compareDelta = array_merge($compareDelta, $oldProduct->getDeletedDelta()); 
+	            } 
+	        } 
+	         
+	        return $compareDelta; 
+	    } 
+	     
+	    private function getNewDelta() { 
+	        $compareDelta = array(); 
+	        foreach($this->productsList as $currentProduct) { 
+	            $compareDelta = array_merge($currentProduct->getDelta()); 
+	        } 
+	         
+	        return $compareDelta; 
+	    } 
+	     
+	    private function loadInventoryDetails() { 
+	        $this->inventoryDetails = new InventoryDataProductContainer(); 
+	         
+	        $db = PearDatabase::getInstance(); 
+	        $result = $db->pquery("SELECT * FROM vtiger_inventoryproductrel WHERE id=?", array($this->entityId)); 
+	        if($result) { 
+	            while($resultRow = $db->fetchByAssoc($result)) { 
+	                $this->inventoryDetails->addFromData($resultRow); 
+	            } 
+	        } 
+	    } 
+	} 
+	 
+	 
+	class InventoryDataProductContainer { 
+	     
+	    private $productsList; 
+	     
+	    public function __construct() { 
+	        $this->productsList = array(); 
+	    } 
+	     
+	    public function addFromData($productData) { 
+	        $product = new ProductData($productData); 
+	        $this->productsList[$product->getId()] = $product; 
+	    } 
+	     
+	    public function getInventories() { 
+	        return $this->productsList; 
+	    } 
+	     
+	    public function hasProduct($productId) { 
+	        return array_key_exists($productId, $this->productsList); 
+	    } 
+	     
+	    public function getProduct($productId) { 
+	        if(!$this->hasProduct($productId)) { 
+	            return null; 
+	        } 
+	         
+	        return $this->productsList[$productId]; 
+	    } 
+	     
+	} 
+	 
+	 
+	class ProductData { 
+	     
+	    private $productId; 
+	    private $data; 
+	     
+	    public function __construct($rawData) { 
+	        $this->productId = $rawData['productid']; 
+	        $this->data = $rawData; 
+	    } 
+	     
+	    public function getId() { 
+	        return $this->productId; 
+	    } 
+	     
+	    public function getDeletedDelta() { 
+	        return array( 
+	            'productid_' . $this->productId =>  array( 
+	                'oldValue' => json_encode($this->data), 
+	                'currentValue' => null 
+	            ) 
+	        ); 
+	    } 
+	     
+	    /** 
+	     *  
+	     * @param ProductData $compareProduct 
+	     */ 
+	    public function getDelta($compareProduct = null) { 
+	        if($compareProduct == null) { 
+	            return array( 
+	                'productid_' . $this->productId =>  array( 
+	                    'oldValue' => null, 
+	                    'currentValue' => json_encode($this->data) 
+	                ) 
+	            ); 
+	        } 
+	         
+	         
+	        $compareData = $compareProduct->data; 
+	        if( 
+	            $this->data['quantity'] != $compareData['quantity'] ||  
+	            $this->data['listprice'] != $compareData['listprice'] ||  
+	            $this->data['discount_percent'] != $compareData['discount_percent'] ||  
+	            $this->data['discount_amount'] != $compareData['discount_amount'] ||  
+	            $this->data['comment'] != $compareData['comment'] ||  
+	            $this->data['description'] != $compareData['description'] ||  
+	            $this->data['tax1'] != $compareData['tax1'] 
+	        ) { 
+	             
+	            return array( 
+	                'productid_' . $this->productId =>  array( 
+	                    'oldValue' => json_encode($compareData), 
+	                    'currentValue' => json_encode($this->data) 
+	                ) 
+	            ); 
+	             
+	        } 
+	         
+	        return array(); 
+	    } 
+	} 
+	//SalesPlatform.ru end History of products changes 
 ?>

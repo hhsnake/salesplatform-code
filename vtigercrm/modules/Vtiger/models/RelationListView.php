@@ -227,7 +227,10 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
             $orderByFieldModuleModel = $relationModule->getFieldByColumn($orderBy);
             if($orderByFieldModuleModel && $orderByFieldModuleModel->isReferenceField()) {
                 //If reference field then we need to perform a join with crmentity with the related to field
-                $queryComponents = $split = spliti(' where ', $query);
+                //SalesPlatform.ru begin
+                //$queryComponents = $split = spliti(' where ', $query);
+                $queryComponents = $split = preg_split('/ where /i', $query);
+                //SalesPlatform.ru end
                 $selectAndFromClause = $queryComponents[0];
                 $whereCondition = $queryComponents[1];
                 $qualifiedOrderBy = 'vtiger_crmentity'.$orderByFieldModuleModel->get('column');
@@ -384,11 +387,17 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$queryGenerator->setFields($relatedModuleFields);
 		
 		$query = $queryGenerator->getQuery();
-		
-		$queryComponents = spliti(' FROM ', $query);
+        
+		//SalesPlatform.ru begin
+		//$queryComponents = spliti(' FROM ', $query);
+        $queryComponents = preg_split('/ FROM /i', $query);
+        //SalesPlatform.ru end
 		$query = $queryComponents[0].' ,vtiger_crmentity.crmid FROM '.$queryComponents[1];
 		
-		$whereSplitQueryComponents = spliti(' WHERE ', $query);
+        //SalesPlatform.ru begin
+		//$whereSplitQueryComponents = spliti(' WHERE ', $query);
+        $whereSplitQueryComponents = preg_split('/ WHERE /i', $query);
+        //SalesPlatform.ru end
 		$joinQuery = ' INNER JOIN '.$parentModuleBaseTable.' ON '.$parentModuleBaseTable.'.'.$parentModuleDirectRelatedField." = ".$relatedModuleBaseTable.'.'.$relatedModuleEntityIdField;
 		
 		$query = "$whereSplitQueryComponents[0] $joinQuery WHERE $parentModuleBaseTable.$parentModuleEntityIdField = $parentRecordId AND $whereSplitQueryComponents[1]";
@@ -436,10 +445,16 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 	public function getRelatedEntriesCount() {
 		$db = PearDatabase::getInstance();
 		$relationQuery = $this->getRelationQuery();
-		$relationQuery = ereg_replace("[ \t\n\r]+", " ", $relationQuery);
+        //SalesPlatform.ru begin
+		//$relationQuery = ereg_replace("[ \t\n\r]+", " ", $relationQuery);
+        $relationQuery = preg_replace("/[ \t\n\r]+/", " ", $relationQuery);
+        //SalesPlatform.ru end
 		$position = stripos($relationQuery,' from ');
 		if ($position) {
-			$split = spliti(' FROM ', $relationQuery);
+            //SalesPlatform.ru begin
+			//$split = spliti(' FROM ', $relationQuery);
+            $split = preg_split('/ FROM /i', $relationQuery);
+            //SalesPlatform.ru end
 			$splitCount = count($split);
 			$relationQuery = 'SELECT COUNT(DISTINCT vtiger_crmentity.crmid) AS count'; 
 			for ($i=1; $i<$splitCount; $i++) {
@@ -478,7 +493,10 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 
 		$pos = stripos($relationQuery, 'where');
 		if ($pos) {
-			$split = spliti('where', $relationQuery);
+            //SalesPlatform.ru begin
+			//$split = spliti('where', $relationQuery);
+            $split = preg_split('/where/i', $relationQuery);
+            //SalesPlatform.ru end
 			$updatedQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
 		} else {
 			$updatedQuery = $relationQuery . ' WHERE ' . $condition;

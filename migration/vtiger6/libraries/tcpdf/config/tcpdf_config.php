@@ -211,8 +211,10 @@ define('K_THAI_TOPCHARS', true);
  * If true allows to call TCPDF methods using HTML syntax
  * IMPORTANT: For security reason, disable this feature if you are printing user HTML content.
  */
-define('K_TCPDF_CALLS_IN_HTML', false);
-
+//Salesplatform.ru begin Barcodes insertion
+define('K_TCPDF_CALLS_IN_HTML', true); 
+//define('K_TCPDF_CALLS_IN_HTML', false); 
+//Salesplatform.ru end Barcodes insertion
 /**
  * If true and PHP version is greater than 5, then the Error() method throw new exception instead of terminating the execution.
  */
