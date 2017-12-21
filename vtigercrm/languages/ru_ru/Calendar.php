@@ -161,6 +161,8 @@ $languageStrings = array(
     //SalesPlatform.ru begin
     'Agenda' => 'Повестка дня',
     'TASK MANAGEMENT' => 'УПРАВЛЕНИЕ ЗАДАЧАМИ',
+    'All' => 'Все',
+    'LBL_ADD_NEW_DASHBOARD' => 'Добавить новую панель', 
     //SalesPaltform.ru end
 );
 $jsLanguageStrings = array(

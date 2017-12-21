@@ -75,6 +75,11 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 		}
 	}
 	$mail = new PHPMailer();
+        
+        // SalesPlatform.ru begin Turn on SMTP error logging
+        $mail->SMTPDebug = true;
+        $mail->Debugoutput = 'error_log';
+        // SalesPlatform.ru end
 
 	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,trim($to_email,","),$attachment,$emailid,$module,$logo);
 	setCCAddress($mail,'cc',$cc);

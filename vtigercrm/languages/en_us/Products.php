@@ -94,6 +94,12 @@ $languageStrings = array(
 	'LBL_UPDATE_BUNDLE_PRICE' => 'Update Bundle Price',
 	'LBL_PRODUCT_NAME' => 'Product Name',
 	'LBL_PRICE_QUANTITY' => 'Price x Quantity',
+    //SalesPlatform.ru begin 
+    'International code' => 'Commodity Nomenclature for Foreign Economic Activities',
+    'Manuf. Country' => 'Manuf. Country',
+    'Mf. Country Code' => 'Mf. Country Code',
+    'Customs ID' => 'Customs ID',
+    //SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

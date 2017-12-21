@@ -114,6 +114,9 @@ $languageStrings = array(
     'LBL_REVIEWS' => 'отзывов',
     'LBL_EXPIRY_DATE'  => 'Срок действия',
     'LBL_LOGOUT'  => 'Выйти',
+    //SalesPlatform.ru begin localization fix
+    'LBL_FORGOT_PASSWORD' => 'Забыли пароль',
+    //SalesPlatform.ru end localization fix
     
     'firstname' => 'Имя',
     'lastname' => 'Фамилия',
@@ -146,5 +149,8 @@ $jsLanguageStrings = array(
   'JS_PLEASE_LOGIN_TO_MARKETPLACE_FOR_UNINSTALLING_EXTENSION' => 'Пожалуйста, зарегистрируйтесь на Marketplace для удаления расширения', 
   'JS_CARD_DETAILS_UPDATED'      => 'Информация о карте обновлена!', 
   'JS_PASSWORDS_MISMATCH'        => 'Пароли не совпадают!',   
+    // SalesPlatform.ru begin
+    'JS_ARE_YOU_SURE_INSTALL' => 'Вы уверены, что хотите установить данное расширение',
+    // SalesPlatform.ru end
 );
 

@@ -9,7 +9,7 @@
  ************************************************************************************/
 $languageStrings = array(
 	'LBL_ADD_RECORD'               => 'Новая конфигурация',
-	'SMSNotifier'                  => 'SMS-Уведомления', 
+	'SMSNotifier'                  => 'SMS-уведомления', 
 	'LBL_ADD_CONFIGURATION'        => 'Новая конфигурция',
 	'LBL_EDIT_CONFIGURATION'       => 'Изменить конфигурцию',
 	'LBL_SELECT_ONE'               => 'Выберите',

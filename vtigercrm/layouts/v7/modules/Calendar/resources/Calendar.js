@@ -1576,6 +1576,10 @@ Vtiger.Class("Calendar_Calendar_Js", {
 			fixedWeekCount: false,
 			firstDay: thisInstance.daysOfWeek[thisInstance.getUserPrefered('start_day')],
 			scrollTime: thisInstance.getUserPrefered('start_hour'),
+                        //SalesPlatform.ru begin
+                        slotDuration: '00:15:00',
+                        height: "parent",
+                        //SalesPlatform.ru end
 			editable: true,
 			eventLimit: true,
 			defaultView: userDefaultActivityView,

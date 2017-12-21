@@ -25,7 +25,10 @@ jQuery.Class('Settings_MailConverter_Index_Js', {
 	triggerDeleteRule: function (currentElement, url) {
 		var deleteElement = jQuery(currentElement);
 		app.helper.showConfirmationBox({'message': app.vtranslate('LBL_DELETE_CONFIRMATION')}).then(function () {
-			app.request.get({url:url}).then(function (err, data) {
+                        // SalesPlatform.ru begin #5459 Deleting rules fix
+			app.request.post({url:url}).then(function (err, data) {
+                        //app.request.get({url:url}).then(function (err, data) {
+                        // SalesPlatform.ru end
 				if (data) {
 					var closestBlock = deleteElement.closest('[data-blockid]');
 					var nextBlocks = closestBlock.nextAll('[data-blockid]');

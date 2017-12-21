@@ -28,6 +28,12 @@ $languageStrings = array(
 	'SINGLE_Groups' => 'Group',
 	'SINGLE_Roles' => 'Role',
 	'SINGLE_RoleAndSubordinates' => 'RoleAndSubordinate',
+    // SalesPlatform.ru begin
+    'Private' => 'Private',
+    'Public: Read Only' => 'Public: Read Only',
+    'Public: Read, Create/Edit' => 'Public: Read, Create/Edit',
+    'Public: Read, Create/Edit, Delete' => 'Public: Read, Create/Edit, Delete',	
+    // SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

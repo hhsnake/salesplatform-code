@@ -337,6 +337,9 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 		$fieldInfo['isSummaryField'] = $this->isSummaryField();
 		$fieldInfo['isSummaryFieldDisabled'] = $this->isSummaryFieldOptionDisabled();
 		$fieldInfo['isHeaderField'] = $this->isHeaderField();
+                //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+                $fieldInfo['isCKEditor'] = $this->isCKEEnabled();
+                //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
 		$fieldInfo['isHeaderFieldDisabled'] = $this->isHeaderFieldOptionDisabled();
 		$fieldInfo['isMassEditDisabled'] = $this->isMassEditOptionDisabled();
 		$fieldInfo['isDefaultValueDisabled'] = $this->isDefaultValueOptionDisabled();
@@ -390,9 +393,17 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 	 * @return string
 	 */
 	public function getFieldDataTypeLabel() {
-		$fieldDataType = $this->getFieldDataType();        
-		$fieldDataTypeLabelMapping = array('string'=>'Text','reference'=>'Relation','double'=>'Decimal','percentage'=>'Percent',
-											'boolean'=>'Checkbox','text'=>'TextArea','multipicklist'=>'MultiSelectCombo','salutation'=>'Text');
+		$fieldDataType = $this->getFieldDataType();
+        //SalesPlatform.ru begin        
+		//$fieldDataTypeLabelMapping = array('string'=>'Text','reference'=>'Relation','double'=>'Decimal','percentage'=>'Percent',
+		//									'boolean'=>'Checkbox','text'=>'TextArea','multipicklist'=>'MultiSelectCombo','salutation'=>'Text');
+        
+        $fieldDataTypeLabelMapping = array(
+            'string'=>'Text','reference'=>'Relation','double'=>'Decimal','percentage'=>'Percent',
+			'boolean'=>'Checkbox','text'=>'TextArea','multipicklist'=>'MultiSelectCombo','salutation'=>'Text',
+            'SPTextArea' => 'SPTextArea'
+        );
+        //SalesPlatform.ru end
 		if(array_key_exists($fieldDataType,$fieldDataTypeLabelMapping)) {
 			return $fieldDataTypeLabelMapping[$fieldDataType];
 		}

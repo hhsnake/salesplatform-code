@@ -405,6 +405,9 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 		if(!empty($mail_address)) $name = explode('@', $mail_address);
 		if(!empty($name[1])) $companyName = explode('.', $name[1]);
 
+		// SalesPlatform.ru begin #5333 Transferring data from email message to HelpDesk description
+                $body = $mail->body();
+                $description = strip_tags($body);
 		$defaultFieldValueMap =  array( 'lastname'	=>	$name[0],
 				'email'			=> $email[0],
 				'email1'		=> $email[0],
@@ -414,7 +417,19 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 				'potentialname' => $subject,
 				'subject'		=> $subject,
 				'title'			=> $subject,
+                                'description'                  => $description,
 		);
+//		$defaultFieldValueMap =  array( 'lastname'	=>	$name[0],
+//				'email'			=> $email[0],
+//				'email1'		=> $email[0],
+//				'accountname'	=> $companyName[0],
+//				'company'		=> $companyName[0],
+//				'ticket_title'	=> $subject,
+//				'potentialname' => $subject,
+//				'subject'		=> $subject,
+//				'title'			=> $subject,
+//		);
+// SalesPlatform.ru end
 		return $defaultFieldValueMap;
 	}
 

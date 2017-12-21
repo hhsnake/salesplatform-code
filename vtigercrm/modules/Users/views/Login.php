@@ -77,9 +77,14 @@ class Users_Login_View extends Vtiger_View_Controller {
 		$message = '';
 		if ($error) {
 			switch ($error) {
-				case 'login'		:	$message = 'Invalid credentials';						break;
-				case 'fpError'		:	$message = 'Invalid Username or Email address';			break;
-				case 'statusError'	:	$message = 'Outgoing mail server was not configured';	break;
+                                //Salesplatform.ru begin Localization fix
+                                case 'login'		:	$message = vtranslate('LBL_INVALID_CREDENTIALS', 'Users'); break;
+                                case 'fpError'		:	$message = vtranslate('LBL_INVALID_USERNAME_OR_EMAIL', 'Users'); break;
+                                case 'statusError'	:	$message = vtranslate('LBL_OUTGOING_SERVER_NOT_CONFIGURED', 'Users'); break;
+                                //case 'login'		:	$message = 'Invalid credentials';
+				//case 'fpError'		:	$message = 'Invalid Username or Email address';			break;
+				//case 'statusError'	:	$message = 'Outgoing mail server was not configured';	break;
+                                //Salesplatform.ru begin Localization fix
 			}
 		} else if ($mailStatus) {
 			$message = 'Mail has been sent to your inbox, please check your e-mail';

@@ -93,7 +93,11 @@ $languageStrings = array(
     'LBL_BUNDLE_TOTAL_COST' => 'Общая стоимость комплекта',
     'LBL_UPDATE_BUNDLE_PRICE' => 'Обновить стоимость пакета',
     'LBL_PRODUCT_NAME' => 'Наименование Товара',
-    'LBL_PRICE_QUANTITY' => 'Цена х Количество',   
+    'LBL_PRICE_QUANTITY' => 'Цена х Количество',
+    
+    //SalesPlatform.ru begin 
+    'International code' => 'ТН ВЭД ',
+    //SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

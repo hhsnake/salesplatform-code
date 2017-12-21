@@ -163,7 +163,20 @@
 																	data-enable-value="1" data-disable-value="0"
 																	{if $FIELD_MODEL->isSummaryFieldOptionDisabled()}readonly="readonly"{/if}
 																	title="{vtranslate('LBL_KEY_FIELD',$QUALIFIED_MODULE)}"></i>&nbsp;{vtranslate('LBL_KEY_FIELD',$QUALIFIED_MODULE)}
-															</span><br><br>
+															</span>
+                                                                                                                        {*SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor*}
+                                                                                                                        {if $FIELD_MODEL->uitype eq 19}
+                                                                                                                            {assign var=IS_UITYPE_19_ENABLED value=$FIELD_MODEL->isCKEEnabled()}
+                                                                                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                                                            <span class="uitype19 switch {if (!$IS_UITYPE_19_ENABLED)} disabled {/if} cursorPointer "
+                                                                                                                                data-toggle="tooltip" {if $IS_UITYPE_19_ENABLED} title="{$NOT_CKE_FIELD_TITLE}" {else} title="{$CKE_FIELD_TITLE}" {/if}>
+                                                                                                                                <i class="fa fa-pencil" data-name="uitype19field" 
+                                                                                                                                data-enable-value="1" data-disable-value="0"
+                                                                                                                                title="{vtranslate('LBL_CKE_FIELD',$QUALIFIED_MODULE)}"></i>&nbsp;{vtranslate('LBL_CKE_FIELD',$QUALIFIED_MODULE)}
+                                                                                                                            </span>
+                                                                                                                        {/if}
+                                                                                                                        {*SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor*}
+                                                                                                                        <br><br>
 															<div class="defaultValue col-sm-12 {if !$FIELD_MODEL->hasDefaultValue()}disabled{/if} 
 																 {if $FIELD_MODEL->isDefaultValueOptionDisabled()} cursorPointerNotAllowed {/if}">
 																{assign var=DEFAULT_VALUE value=$FIELD_MODEL->getDefaultFieldValueToViewInV7FieldsLayOut()}
@@ -337,7 +350,20 @@
 																	data-enable-value="1" data-disable-value="0"
 																	{if $FIELD_MODEL->isSummaryFieldOptionDisabled()}readonly="readonly"{/if}
 																	title="{vtranslate('LBL_KEY_FIELD',$QUALIFIED_MODULE)}"></i>&nbsp;{vtranslate('LBL_KEY_FIELD',$QUALIFIED_MODULE)}
-															</span><br><br>
+															</span>
+                                                                                                                        {*SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor*}
+                                                                                                                        {if $FIELD_MODEL->uitype eq 19}
+                                                                                                                            {assign var=IS_UITYPE_19_ENABLED value=$FIELD_MODEL->isCKEEnabled()}
+                                                                                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                                                            <span class="uitype19 switch {if (!$IS_UITYPE_19_ENABLED)} disabled {/if} cursorPointer "
+                                                                                                                                data-toggle="tooltip" {if $IS_UITYPE_19_ENABLED} title="{$NOT_CKE_FIELD_TITLE}" {else} title="{$CKE_FIELD_TITLE}" {/if}>
+                                                                                                                                <i class="fa fa-pencil" data-name="uitype19field" 
+                                                                                                                                data-enable-value="1" data-disable-value="0"
+                                                                                                                                title="{vtranslate('LBL_CKE_FIELD',$QUALIFIED_MODULE)}"></i>&nbsp;{vtranslate('LBL_CKE_FIELD',$QUALIFIED_MODULE)}
+                                                                                                                            </span>
+                                                                                                                        {/if}
+                                                                                                                        {*SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor*}
+                                                                                                                        <br><br>
 															<div class="defaultValue col-sm-12 {if !$FIELD_MODEL->hasDefaultValue()}disabled{/if} 
 																 {if $FIELD_MODEL->isDefaultValueOptionDisabled()} cursorPointerNotAllowed {/if}">
 																{assign var=DEFAULT_VALUE value=$FIELD_MODEL->getDefaultFieldValueToViewInV7FieldsLayOut()}
@@ -535,7 +561,17 @@
 								data-enable-value="1" data-disable-value="0" 
 								title="{vtranslate('LBL_KEY_FIELD',$QUALIFIED_MODULE)}"></i>
 							&nbsp;{vtranslate('LBL_KEY_FIELD',$QUALIFIED_MODULE)}
-						</span><br><br>
+                        {* SalesPlatform.ru begin *}
+						{* </span><br><br> *}
+                        </span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="uitype19 switch {if (!$IS_UITYPE_19_ENABLED)} disabled {/if} cursorPointer "
+                            data-toggle="tooltip" {if $IS_UITYPE_19_ENABLED} title="{$NOT_CKE_FIELD_TITLE}" {else} title="{$CKE_FIELD_TITLE}" {/if}>
+                            <i class="fa fa-pencil" data-name="uitype19field" 
+                            data-enable-value="1" data-disable-value="0"
+                            title="{vtranslate('LBL_CKE_FIELD',$QUALIFIED_MODULE)}"></i>&nbsp;{vtranslate('LBL_CKE_FIELD',$QUALIFIED_MODULE)}
+                        </span><br><br>
+                        {* SalesPlatform.ru end *}
 						<div class="defaultValue col-sm-12">
 						</div>
 					</div>
@@ -586,8 +622,10 @@
 		<img src="{vimage_path('DefaultValue.png')}" height=14 width=14>
 	</div>
 	{assign var=FIELD_INFO value=$CLEAN_FIELD_MODEL->getFieldInfo()}
+        {*SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor*}
 	{include file=vtemplate_path('FieldCreate.tpl','Settings:LayoutEditor') FIELD_MODEL=$CLEAN_FIELD_MODEL IS_FIELD_EDIT_MODE=false}
-	<div class="modal-dialog inactiveFieldsModal hide">
+        {*SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor*}
+        <div class="modal-dialog inactiveFieldsModal hide">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			<h3>{vtranslate('LBL_INACTIVE_FIELDS', $QUALIFIED_MODULE)}</h3>

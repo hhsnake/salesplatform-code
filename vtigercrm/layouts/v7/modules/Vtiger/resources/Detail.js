@@ -219,7 +219,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			validateAndSubmitForm(form,params);
 		 });
 	},
-
+    
 	/*
 	 * function to trigger send Email
 	 * @params: send email url , module name.
@@ -1087,7 +1087,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		data['record'] = recordId;
 		data['module'] = this.getModuleName();
 		data['action'] = 'SaveAjax';
-
+                
 		app.request.post({data:data}).then(
 			function(err, reponseData){
 				if(err === null){
@@ -1098,7 +1098,6 @@ Vtiger.Class("Vtiger_Detail_Js",{
 				}
 			}
 		);
-
 		return aDeferred.promise();
 	},
 
@@ -1175,6 +1174,9 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			ele.append(fieldModel.getUi()).append(inlineSaveWrap);
 			ele.find('.inputElement').addClass('form-control');
 			editElement.append(ele);
+            //SalesPlatform.ru begin
+            thisInstance.initSpMobilePhoneFields(currentTdElement);
+            //SalesPlatform.ru end
 		}
 
 		// for reference fields, actual value will be ID but we need to show related name of that ID
@@ -1305,98 +1307,212 @@ Vtiger.Class("Vtiger_Detail_Js",{
 				var fieldNameValueMap = {};
 				fieldNameValueMap['value'] = fieldValue;
 				fieldNameValueMap['field'] = fieldName;
-				var form = currentTarget.closest('form');
-				var params = {
-					'ignore' : 'span.hide .inputElement,input[type="hidden"]',
-					submitHandler : function(form){
-						var preAjaxSaveEvent = jQuery.Event(Vtiger_Detail_Js.PreAjaxSaveEvent);
-						app.event.trigger(preAjaxSaveEvent,{form:jQuery(form),triggeredFieldInfo:fieldNameValueMap});
-						if(preAjaxSaveEvent.isDefaultPrevented()) {
-							return false;
-						}
+                                
+                                //SalesPlatform.ru begin porting CheckBeforeSave
+                                var recordId = thisInstance.getRecordId();
 
-						jQuery(currentTdElement).find('.input-group-addon').addClass('disabled');
-						app.helper.showProgress();
-						thisInstance.saveFieldValues(fieldNameValueMap).then(function(response) {
-							app.helper.hideProgress();
-							var postSaveRecordDetails = response;
-							if(fieldBasicData.data('type') == 'picklist' && app.getModuleName() != 'Users') {
-								var color = postSaveRecordDetails[fieldName].colormap[postSaveRecordDetails[fieldName].value];
-								if(color) {
-									var contrast = app.helper.getColorContrast(color);
-									var textColor = (contrast === 'dark') ? 'white' : 'black';
-									var picklistHtml = '<span class="picklist-color" style="background-color: ' + color + '; color: '+ textColor + ';">' +
-															postSaveRecordDetails[fieldName].display_value + 
-														'</span>';
-								} else {
-									var picklistHtml = '<span class="picklist-color">' +
-															postSaveRecordDetails[fieldName].display_value + 
-														'</span>';
-								}
-								detailViewValue.html(picklistHtml);
-							} else if(fieldBasicData.data('type') == 'multipicklist' && app.getModuleName() != 'Users') {
-								var picklistHtml = '';
-								var rawPicklistValues = postSaveRecordDetails[fieldName].value;
-								rawPicklistValues = rawPicklistValues.split('|##|');
-								var picklistValues = postSaveRecordDetails[fieldName].display_value;
-									picklistValues = picklistValues.split(',');
-								for(var i=0; i< rawPicklistValues.length; i++) {
-									var color = postSaveRecordDetails[fieldName].colormap[rawPicklistValues[i].trim()];
-									if(color) {
-										var contrast = app.helper.getColorContrast(color);
-										var textColor = (contrast === 'dark') ? 'white' : 'black';
-										picklistHtml = picklistHtml +
-														'<span class="picklist-color" style="background-color: ' + color + '; color: '+ textColor + ';">' +
-															 picklistValues[i] + 
-														'</span>';
-									} else {
-										picklistHtml = picklistHtml +
-														'<span class="picklist-color">' + 
-															 picklistValues[i] + 
-														'</span>';
-									}
-									if(picklistValues[i+1]!==undefined)
-										picklistHtml+=' , ';
-								}
-								detailViewValue.html(picklistHtml);
-							} else if(fieldBasicData.data('type') == 'currency' && app.getModuleName() != 'Users') {
-								detailViewValue.find('.currencyValue').html(postSaveRecordDetails[fieldName].display_value);
-								contentHolder.closest('.detailViewContainer').find('.detailview-header-block').find('.'+fieldName).html(postSaveRecordDetails[fieldName].display_value);
-							}else {
-								detailViewValue.html(postSaveRecordDetails[fieldName].display_value);
-								//update namefields displayvalue in header
-								if(contentHolder.hasClass('overlayDetail')) {
-									contentHolder.find('.overlayDetailHeader').find('.'+fieldName)
-									.html(postSaveRecordDetails[fieldName].display_value);
-								} else {
-									contentHolder.closest('.detailViewContainer').find('.detailview-header-block')
-									.find('.'+fieldName).html(postSaveRecordDetails[fieldName].display_value);
-							}
-							}
-							fieldBasicData.data('displayvalue',postSaveRecordDetails[fieldName].display_value);
-							fieldBasicData.data('value',postSaveRecordDetails[fieldName].value);
-							jQuery(currentTdElement).find('.input-group-addon').removeClass("disabled");
+                                var data = {};
+                                if(typeof fieldNameValueMap != 'undefined'){
+                                        data = fieldNameValueMap;
+                                }
 
-							detailViewValue.css('display', 'inline-block');
-							editElement.addClass('hide');
-							editElement.removeClass('ajaxEdited');
-							jQuery('.editAction').removeClass('hide');
-							actionElement.show();
-							var postAjaxSaveEvent = jQuery.Event(Vtiger_Detail_Js.PostAjaxSaveEvent);
-							app.event.trigger(postAjaxSaveEvent, fieldBasicData, postSaveRecordDetails, contentHolder);
-							//After saving source field value, If Target field value need to change by user, show the edit view of target field.
-							if(thisInstance.targetPicklistChange) {
-								var sourcePicklistname = thisInstance.sourcePicklistname;
-								thisInstance.targetPicklist.find('.editAction').trigger('click');
-								thisInstance.targetPicklistChange = false;
-								thisInstance.targetPicklist = false;
-								thisInstance.handlePickListDependencyMap(sourcePicklistname);
-								thisInstance.sourcePicklistname = false;
-							}
-						});
-					}
-				};
-				validateAndSubmitForm(form,params);
+                                data['record'] = recordId;
+                                data['module'] = thisInstance.getModuleName();
+                                data['action'] = 'SaveAjax';
+                                
+                                sp_js_detailview_checkBeforeSave(data).then(
+                                        function () {
+                                                var form = currentTarget.closest('form');
+                                                var params = {
+                                                        'ignore' : 'span.hide .inputElement,input[type="hidden"]',
+                                                        submitHandler : function(form){
+                                                                var preAjaxSaveEvent = jQuery.Event(Vtiger_Detail_Js.PreAjaxSaveEvent);
+                                                                app.event.trigger(preAjaxSaveEvent,{form:jQuery(form),triggeredFieldInfo:fieldNameValueMap});
+                                                                if(preAjaxSaveEvent.isDefaultPrevented()) {
+                                                                        return false;
+                                                                }
+
+                                                                jQuery(currentTdElement).find('.input-group-addon').addClass('disabled');
+                                                                app.helper.showProgress();
+                                                                thisInstance.saveFieldValues(fieldNameValueMap).then(function(response) {
+                                                                        app.helper.hideProgress();
+                                                                        var postSaveRecordDetails = response;
+                                                                        if(fieldBasicData.data('type') == 'picklist' && app.getModuleName() != 'Users') {
+                                                                                var color = postSaveRecordDetails[fieldName].colormap[postSaveRecordDetails[fieldName].value];
+                                                                                if(color) {
+                                                                                        var contrast = app.helper.getColorContrast(color);
+                                                                                        var textColor = (contrast === 'dark') ? 'white' : 'black';
+                                                                                        var picklistHtml = '<span class="picklist-color" style="background-color: ' + color + '; color: '+ textColor + ';">' +
+                                                                                                                                        postSaveRecordDetails[fieldName].display_value + 
+                                                                                                                                '</span>';
+                                                                                } else {
+                                                                                        var picklistHtml = '<span class="picklist-color">' +
+                                                                                                                                        postSaveRecordDetails[fieldName].display_value + 
+                                                                                                                                '</span>';
+                                                                                }
+                                                                                detailViewValue.html(picklistHtml);
+                                                                        } else if(fieldBasicData.data('type') == 'multipicklist' && app.getModuleName() != 'Users') {
+                                                                                var picklistHtml = '';
+                                                                                var rawPicklistValues = postSaveRecordDetails[fieldName].value;
+                                                                                rawPicklistValues = rawPicklistValues.split('|##|');
+                                                                                var picklistValues = postSaveRecordDetails[fieldName].display_value;
+                                                                                        picklistValues = picklistValues.split(',');
+                                                                                for(var i=0; i< rawPicklistValues.length; i++) {
+                                                                                        var color = postSaveRecordDetails[fieldName].colormap[rawPicklistValues[i].trim()];
+                                                                                        if(color) {
+                                                                                                var contrast = app.helper.getColorContrast(color);
+                                                                                                var textColor = (contrast === 'dark') ? 'white' : 'black';
+                                                                                                picklistHtml = picklistHtml +
+                                                                                                                                '<span class="picklist-color" style="background-color: ' + color + '; color: '+ textColor + ';">' +
+                                                                                                                                         picklistValues[i] + 
+                                                                                                                                '</span>';
+                                                                                        } else {
+                                                                                                picklistHtml = picklistHtml +
+                                                                                                                                '<span class="picklist-color">' + 
+                                                                                                                                         picklistValues[i] + 
+                                                                                                                                '</span>';
+                                                                                        }
+                                                                                        if(picklistValues[i+1]!==undefined)
+                                                                                                picklistHtml+=' , ';
+                                                                                }
+                                                                                detailViewValue.html(picklistHtml);
+                                                                        } else if(fieldBasicData.data('type') == 'currency' && app.getModuleName() != 'Users') {
+                                                                                detailViewValue.find('.currencyValue').html(postSaveRecordDetails[fieldName].display_value);
+                                                                                contentHolder.closest('.detailViewContainer').find('.detailview-header-block').find('.'+fieldName).html(postSaveRecordDetails[fieldName].display_value);
+                                                                        }else {
+                                                                                detailViewValue.html(postSaveRecordDetails[fieldName].display_value);
+                                                                                //update namefields displayvalue in header
+                                                                                if(contentHolder.hasClass('overlayDetail')) {
+                                                                                        contentHolder.find('.overlayDetailHeader').find('.'+fieldName)
+                                                                                        .html(postSaveRecordDetails[fieldName].display_value);
+                                                                                } else {
+                                                                                        contentHolder.closest('.detailViewContainer').find('.detailview-header-block')
+                                                                                        .find('.'+fieldName).html(postSaveRecordDetails[fieldName].display_value);
+                                                                        }
+                                                                        }
+                                                                        fieldBasicData.data('displayvalue',postSaveRecordDetails[fieldName].display_value);
+                                                                        fieldBasicData.data('value',postSaveRecordDetails[fieldName].value);
+                                                                        jQuery(currentTdElement).find('.input-group-addon').removeClass("disabled");
+
+                                                                        detailViewValue.css('display', 'inline-block');
+                                                                        editElement.addClass('hide');
+                                                                        editElement.removeClass('ajaxEdited');
+                                                                        jQuery('.editAction').removeClass('hide');
+                                                                        actionElement.show();
+                                                                        var postAjaxSaveEvent = jQuery.Event(Vtiger_Detail_Js.PostAjaxSaveEvent);
+                                                                        app.event.trigger(postAjaxSaveEvent, fieldBasicData, postSaveRecordDetails, contentHolder);
+                                                                        //After saving source field value, If Target field value need to change by user, show the edit view of target field.
+                                                                        if(thisInstance.targetPicklistChange) {
+                                                                                var sourcePicklistname = thisInstance.sourcePicklistname;
+                                                                                thisInstance.targetPicklist.find('.editAction').trigger('click');
+                                                                                thisInstance.targetPicklistChange = false;
+                                                                                thisInstance.targetPicklist = false;
+                                                                                thisInstance.handlePickListDependencyMap(sourcePicklistname);
+                                                                                thisInstance.sourcePicklistname = false;
+                                                                        }
+                                                                });
+                                                        }
+                                                };
+                                                validateAndSubmitForm(form,params);
+                                        },
+                                        function (error) {
+                                            return;
+                                        }
+                                );
+                                
+//				var form = currentTarget.closest('form');
+//				var params = {
+//					'ignore' : 'span.hide .inputElement,input[type="hidden"]',
+//					submitHandler : function(form){
+//						var preAjaxSaveEvent = jQuery.Event(Vtiger_Detail_Js.PreAjaxSaveEvent);
+//						app.event.trigger(preAjaxSaveEvent,{form:jQuery(form),triggeredFieldInfo:fieldNameValueMap});
+//						if(preAjaxSaveEvent.isDefaultPrevented()) {
+//							return false;
+//						}
+//
+//						jQuery(currentTdElement).find('.input-group-addon').addClass('disabled');
+//						app.helper.showProgress();
+//						thisInstance.saveFieldValues(fieldNameValueMap).then(function(response) {
+//							app.helper.hideProgress();
+//							var postSaveRecordDetails = response;
+//							if(fieldBasicData.data('type') == 'picklist' && app.getModuleName() != 'Users') {
+//								var color = postSaveRecordDetails[fieldName].colormap[postSaveRecordDetails[fieldName].value];
+//								if(color) {
+//									var contrast = app.helper.getColorContrast(color);
+//									var textColor = (contrast === 'dark') ? 'white' : 'black';
+//									var picklistHtml = '<span class="picklist-color" style="background-color: ' + color + '; color: '+ textColor + ';">' +
+//															postSaveRecordDetails[fieldName].display_value + 
+//														'</span>';
+//								} else {
+//									var picklistHtml = '<span class="picklist-color">' +
+//															postSaveRecordDetails[fieldName].display_value + 
+//														'</span>';
+//								}
+//								detailViewValue.html(picklistHtml);
+//							} else if(fieldBasicData.data('type') == 'multipicklist' && app.getModuleName() != 'Users') {
+//								var picklistHtml = '';
+//								var rawPicklistValues = postSaveRecordDetails[fieldName].value;
+//								rawPicklistValues = rawPicklistValues.split('|##|');
+//								var picklistValues = postSaveRecordDetails[fieldName].display_value;
+//									picklistValues = picklistValues.split(',');
+//								for(var i=0; i< rawPicklistValues.length; i++) {
+//									var color = postSaveRecordDetails[fieldName].colormap[rawPicklistValues[i].trim()];
+//									if(color) {
+//										var contrast = app.helper.getColorContrast(color);
+//										var textColor = (contrast === 'dark') ? 'white' : 'black';
+//										picklistHtml = picklistHtml +
+//														'<span class="picklist-color" style="background-color: ' + color + '; color: '+ textColor + ';">' +
+//															 picklistValues[i] + 
+//														'</span>';
+//									} else {
+//										picklistHtml = picklistHtml +
+//														'<span class="picklist-color">' + 
+//															 picklistValues[i] + 
+//														'</span>';
+//									}
+//									if(picklistValues[i+1]!==undefined)
+//										picklistHtml+=' , ';
+//								}
+//								detailViewValue.html(picklistHtml);
+//							} else if(fieldBasicData.data('type') == 'currency' && app.getModuleName() != 'Users') {
+//								detailViewValue.find('.currencyValue').html(postSaveRecordDetails[fieldName].display_value);
+//								contentHolder.closest('.detailViewContainer').find('.detailview-header-block').find('.'+fieldName).html(postSaveRecordDetails[fieldName].display_value);
+//							}else {
+//								detailViewValue.html(postSaveRecordDetails[fieldName].display_value);
+//								//update namefields displayvalue in header
+//								if(contentHolder.hasClass('overlayDetail')) {
+//									contentHolder.find('.overlayDetailHeader').find('.'+fieldName)
+//									.html(postSaveRecordDetails[fieldName].display_value);
+//								} else {
+//									contentHolder.closest('.detailViewContainer').find('.detailview-header-block')
+//									.find('.'+fieldName).html(postSaveRecordDetails[fieldName].display_value);
+//							}
+//							}
+//							fieldBasicData.data('displayvalue',postSaveRecordDetails[fieldName].display_value);
+//							fieldBasicData.data('value',postSaveRecordDetails[fieldName].value);
+//							jQuery(currentTdElement).find('.input-group-addon').removeClass("disabled");
+//
+//							detailViewValue.css('display', 'inline-block');
+//							editElement.addClass('hide');
+//							editElement.removeClass('ajaxEdited');
+//							jQuery('.editAction').removeClass('hide');
+//							actionElement.show();
+//							var postAjaxSaveEvent = jQuery.Event(Vtiger_Detail_Js.PostAjaxSaveEvent);
+//							app.event.trigger(postAjaxSaveEvent, fieldBasicData, postSaveRecordDetails, contentHolder);
+//							//After saving source field value, If Target field value need to change by user, show the edit view of target field.
+//							if(thisInstance.targetPicklistChange) {
+//								var sourcePicklistname = thisInstance.sourcePicklistname;
+//								thisInstance.targetPicklist.find('.editAction').trigger('click');
+//								thisInstance.targetPicklistChange = false;
+//								thisInstance.targetPicklist = false;
+//								thisInstance.handlePickListDependencyMap(sourcePicklistname);
+//								thisInstance.sourcePicklistname = false;
+//							}
+//						});
+//					}
+//				};
+//				validateAndSubmitForm(form,params);
+ //SalesPlatform.ru end porting CheckBeforeSave
 			}
 		});
 	},
@@ -2998,7 +3114,16 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			});
 		}
 	},
-
+    
+    //SalesPlatform.ru begin
+ 	initSpMobilePhoneFields : function(container) { 
+        var wrapper = $(container);
+        if(wrapper.hasClass('spMobilePhone')) {
+            wrapper.find(".inputElement").inputmask("+9{11,15}");
+        }
+    }, 
+    //SalesPlatform.ru end
+    
 	/**
 	 * Function to register event for setting up picklistdependency
 	 * for a module if exist on change of picklist value
@@ -3128,3 +3253,102 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		vtUtils.enableTooltips();
 	},
 });
+
+//SalesPlatform.ru begin porting CheckBeforeSave
+//
+//Empty check
+function empty (mixed_var) {
+
+    var undef, key, i, len;
+    var emptyValues = [undef, null, false, 0, "", "0"];
+
+    for (i = 0, len = emptyValues.length; i < len; i++) {
+        if (mixed_var === emptyValues[i]) {
+            return true;
+        }
+  }
+
+  if (typeof mixed_var === "object") {
+        for (key in mixed_var) {
+        // TODO: should we check for own properties only?
+        //if (mixed_var.hasOwnProperty(key)) {
+        return false;
+        //}
+    }
+    return true;
+  }
+
+    return false;
+}
+
+function sp_js_detailview_checkBeforeSave(fieldData) {
+
+    var fldvalObjectArr = {};
+    fldvalObjectArr[fieldData['field']] = fieldData['value'];
+
+    var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));      
+    var urlstring = "index.php?module="+fieldData['module']+"&action=CheckBeforeSave&DetailViewAjaxMode=true&record="+fieldData['record'];
+        
+    var checkResult = jQuery.Deferred();
+    app.request.post({'data': data, 'url': urlstring}).then(
+            function (error, responseObj) {
+                if (!empty(responseObj)) {
+                    if (responseObj.response === undefined) {
+                        responseObj = JSON.parse(responseObj);
+                    }
+                    if (responseObj.response === "OK") {
+                        if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                            app.helper.showAlertBox({'message': responseObj.message}).then(
+                                    function (e) {
+                                    },
+                                    function (error) {
+                                        checkResult.resolve();
+                                    });
+                        } else {
+                            checkResult.resolve();
+                        }
+                    } else if (responseObj.response === "ALERT") {
+                        var alertMessage;
+                        if (responseObj.message !== undefined) {
+                            alertMessage = responseObj.message;
+                        } else {
+                            alertMessage = 'Alert';
+                        }
+                        app.helper.showAlertBox({'message': alertMessage}).then(
+                                function (e) {
+                                    },
+                                function (error) {
+                                    checkResult.reject();
+                                }
+                        );
+                        checkResult.reject();
+                    } else if (responseObj.response === "CONFIRM") {
+                        var confirmMessage;
+                        if (responseObj.message !== undefined) {
+                            confirmMessage = responseObj.message;
+                        } else {
+                            confirmMessage = 'Confirm';
+                        }
+                        app.helper.showConfirmationBox({'message': confirmMessage}).then(
+                                function (e) {
+                                    checkResult.resolve();
+                                },
+                                function (error) {
+                                    checkResult.reject();
+                                }
+                        );
+                    } else {
+                        checkResult.resolve();
+                    }
+                } else {
+                    checkResult.resolve();
+                }
+            },
+            function (error) {
+                checkResult.resolve();
+            }
+        );
+    
+    return checkResult.promise();
+}
+//SalesPlatform.ru end porting CheckBeforeSave

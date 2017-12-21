@@ -14,12 +14,15 @@
 {assign var="SPECIAL_VALIDATOR" value=$FIELD_MODEL->getValidator()}
 {assign var="FIELD_NAME" value=$FIELD_MODEL->get('name')}
 {if $FIELD_MODEL->get('uitype') eq '19' || $FIELD_MODEL->get('uitype') eq '20'}
-    <textarea rows="3" id="{$MODULE}_editView_fieldName_{$FIELD_NAME}" class="inputElement textAreaElement col-lg-12 {if $FIELD_MODEL->isNameField()}nameField{/if}" name="{$FIELD_MODEL->getFieldName()}" {if $FIELD_NAME eq "notecontent"}id="{$FIELD_NAME}"{/if} {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if} 
+    {* SalesPlatform.ru begin *}
+    {* <textarea rows="3" class="inputElement textAreaElement col-lg-12 {if $FIELD_MODEL->isNameField()}nameField{/if}" name="{$FIELD_NAME}" {if $FIELD_NAME eq "notecontent"}id="{$FIELD_NAME}"{/if} data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true}required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" data-fieldinfo='{$FIELD_INFO}' {if !empty($SPECIAL_VALIDATOR)}data-validator={Zend_Json::encode($SPECIAL_VALIDATOR)}{/if}> *}	
+	<textarea rows="3" id="{$MODULE}_editView_fieldName_{$FIELD_NAME}" class="row col-lg-12 {if $FIELD_MODEL->isNameField()}nameField{/if} {if $FIELD_MODEL->isCKEEnabled()}sp_cke_field{/if}" name="{$FIELD_MODEL->getFieldName()}" {if $FIELD_NAME eq "notecontent"}id="{$FIELD_NAME}"{/if} {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if} 
         {if $FIELD_INFO["mandatory"] eq true} data-rule-required="true" {/if}
         {if count($FIELD_INFO['validator'])} 
             data-specific-rules='{ZEND_JSON::encode($FIELD_INFO["validator"])}'
         {/if}
         >
+	{* SalesPlatform.ru end *}
     {$FIELD_MODEL->get('fieldvalue')}</textarea>
 {else}
     {if $smarty.request.view neq 'Detail'} 

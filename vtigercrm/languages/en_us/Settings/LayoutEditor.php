@@ -153,6 +153,10 @@ $languageStrings = array(
     'Picklist' => 'List',
     'Owner' => 'Owner',
     //SalesPlatform.ru end
+    //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+    'LBL_CKE_FIELD' => 'CKEditor',
+    'SPTextArea' => 'Text area'
+    //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
 );
 
 $jsLanguageStrings = array(
@@ -213,4 +217,8 @@ $jsLanguageStrings = array(
     'JS_MAXIMUM_HEADER_FIELDS_ALLOWED' => 'Maximum %s header fields allowed',
     'JS_NAME_FIELDS_APPEAR_IN_HEADER_BY_DEFAULT' => 'Name fields appear in Header by default',
     'JS_FIELD_IS_HEADER_ENABLED_FOR_VTIGER7' => 'This Field is Header enabled for Vtiger7, It will appear in Summary View',
+    //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+    'JS_CKE_FIELD' => 'CKEditor',
+    'JS_SPTextArea' => 'Text area',
+    //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
 );

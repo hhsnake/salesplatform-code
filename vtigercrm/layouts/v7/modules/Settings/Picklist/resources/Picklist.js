@@ -290,7 +290,10 @@ var Settings_Picklist_Js = {
 				view : 'IndexAjax',
 				mode : 'getPickListValueByRole',
 				rolesSelected : rolesList.val(),
-				pickListFieldId : jQuery('#modulePickList').val()
+				pickListFieldId : jQuery('#modulePickList').val(),
+                                // SalesPlatform.ru begin fix source_module localization
+                                source_module: jQuery('#pickListModules').val()
+                                // SalesPlatform.ru end fix source_module localization
 			}
 			app.request.post({data: params}).then(function(error, data) {
 				jQuery('#pickListValeByRoleContainer').html(data);

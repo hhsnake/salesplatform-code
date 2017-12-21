@@ -23,6 +23,12 @@
 			<script type="text/javascript" src="libraries/jquery/jquery.min.js"></script>
 			<script type="text/javascript" src="libraries/bootstrap/js/bootstrap-tooltip.js"></script>
 			<script type="text/javascript" src="libraries/jquery/select2/select2.min.js"></script>
+                        {* Salesplatform.ru begin *}
+                        {assign var=USER_MODEL value=Users_Record_Model::getCurrentUserModel()}
+                        {if $USER_MODEL->get('language') eq 'ru_ru'}
+                            <script type="text/javascript" src="layouts/v7/lib/jquery/select2/select2_locale_ru.js"></script>
+                        {/if}
+                        {* Salesplatform.ru end *}
 			<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine.js" ></script>
 			<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine-en.js" ></script>
 
@@ -275,7 +281,10 @@
 												<option value="Qatar">Qatar</option>
 												<option value="Reunion (FR)">Reunion (FR)</option>
 												<option value="Romania">Romania</option>
-												<option value="Russia (Russian Fed.)">Russia (Russian Fed.)</option>
+												{*SalesPlatform.ru begin*}
+                                                                                                <option value="Russia (Russian Fed.)">Россия (Российская Фед.)</option>
+                                                                                                {*<option value="Russia (Russian Fed.)">Russia (Russian Fed.)</option>*}
+                                                                                                {*SalesPlatform.ru end*}
 												<option value="Rwanda">Rwanda</option>
 												<option value="Sahara, Western">Sahara, Western</option>
 												<option value="Saint Barthelemy (FR)">Saint Barthelemy (FR)</option>

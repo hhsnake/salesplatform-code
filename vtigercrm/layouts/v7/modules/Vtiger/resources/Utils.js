@@ -116,16 +116,35 @@ var vtUtils = {
         if(element.length > 0){
             jQuery(element).each(function(index, Elem){
                 element = jQuery(Elem);
-                 if(calendarType == "range"){
+                
+                // SalesPlatform.ru begin #5116 fixed localization
+                var locale = jQuery("[name='locale']").val();
+                if (typeof locale === "undefined") {
+                    locale = "ru_ru";
+                }
+                
+                var allLangs = [
+                    "ar", "de", "en", "es", "fr", "hu", "it",
+                    "nl", "pl", "pt", "ro", "ru", "sv", "tr"
+                ];
+                locale = locale.replace(/"/g, "");
+                locale = locale.split("_");
+                
+                var language = (allLangs.indexOf(locale[0]) >= 0) ? locale[0] : "ru";
+                // SalesPlatform.ru end
+
+                if(calendarType == "range"){
                     //Default first day of the week
                     var defaultFirstDay = jQuery('#start_day').val();
+                    
                     element.dateRangePicker({
                         startOfWeek: defaultFirstDay.toLowerCase(),
                         format: userDateFormat.toUpperCase(),
                         separator: ',',
                         showShortcuts: true,
                         autoClose : false,
-                        duration : 500
+                        duration : 500,
+                        language : language
                     });
                 }else{
                     var elementDateFormat = element.data('dateFormat');
@@ -137,7 +156,8 @@ var vtUtils = {
                         todayBtn: "linked",
                         format: userDateFormat,
                         todayHighlight: true,
-						clearBtn : true
+                        clearBtn : true,
+                        language: language
                     };
 					jQuery.extend(defaultPickerParams, params);
                     element.datepicker(defaultPickerParams);

@@ -72,16 +72,16 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		}
 
 		$relation_id = $this->__getRelatedListUniqueId();
-                // SalesPlatform.ru begin added support presence/sequence
-                if ($sequence == '') {
-                    $sequence = $this->__getNextRelatedListSequence();
-                }
-                if ($presence == '') {
-                    $presence = 0; // 0 - Enabled, 1 - Disabled
-                }
-                //$sequence = $this->__getNextRelatedListSequence();
-                //$presence = 0; // 0 - Enabled, 1 - Disabled
-                // SalesPlatform.ru end
+        // SalesPlatform.ru begin added support presence/sequence
+        if ($sequence == '') {
+            $sequence = $this->__getNextRelatedListSequence();
+        }
+        if ($presence == '') {
+            $presence = 0; // 0 - Enabled, 1 - Disabled
+        }
+        //$sequence = $this->__getNextRelatedListSequence();
+        //$presence = 0; // 0 - Enabled, 1 - Disabled
+        // SalesPlatform.ru end
 
 		if(empty($label)) $label = $moduleInstance->name;
 
@@ -94,6 +94,16 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 
 		// Add column to vtiger_relatedlists to save extended actions
 		Vtiger_Utils::AddColumn('vtiger_relatedlists', 'actions', 'VARCHAR(50)');
+
+		//SalesPlatform.ru begin add relationfield in vtiger_relatedlists table
+        $fieldId = null;
+        if($function_name == 'get_dependent_list') {
+            $result = $adb->pquery("SELECT fieldid FROM vtiger_fieldmodulerel WHERE module=? and relmodule=?", array($moduleInstance->name, $this->name));
+            if($result && $resultRow = $adb->fetchByAssoc($result)){
+                $fieldId = $resultRow['fieldid'];
+            } 
+        }  
+        //SalesPlatform.ru end
 
 		$adb->pquery("INSERT INTO vtiger_relatedlists(relation_id,tabid,related_tabid,name,sequence,label,presence,actions,relationfieldid) VALUES(?,?,?,?,?,?,?,?,?)",
 			Array($relation_id,$this->id,$moduleInstance->id,$function_name,$sequence,$label,$presence,$useactions_text,$fieldId));

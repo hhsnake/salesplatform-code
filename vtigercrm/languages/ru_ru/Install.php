@@ -16,8 +16,8 @@ $languageStrings = array(
     'Vtiger CRM Setup' => 'Установка',
 	'LBL_INSTALLATION_WIZARD' => 'Мастер установки',
 	'LBL_WELCOME' => 'Добро пожаловать',
-	'LBL_WELCOME_TO_VTIGER6_SETUP_WIZARD' => 'Добро пожаловать в мастер установки Sales Platform Vtiger CRM 6',
-	'LBL_VTIGER6_SETUP_WIZARD_DESCRIPTION' => 'Данный мастер поможет вам установить Sales Platform Vtiger CRM 6',
+	'LBL_WELCOME_TO_VTIGER6_SETUP_WIZARD' => 'Добро пожаловать в мастер установки SalesPlatform Vtiger CRM 6',
+	'LBL_VTIGER6_SETUP_WIZARD_DESCRIPTION' => 'Данный мастер поможет вам установить SalesPlatform Vtiger CRM 6',
 	'LBL_INSTALL_BUTTON' => 'Установка',
 	'LBL_DISAGREE' => 'Не согласен',
 	'LBL_I_AGREE' => 'Согласен',
@@ -272,8 +272,8 @@ $languageStrings = array(
         'LBL_TICKET_CREATION_SEND_EMAIL_TO_CONTACT' => 'Создание заявки из CRM: Отправка Email контакту',
         'LBL_COMMENT_ADDED_FROM_CRM_SEND_EMAL_ORG' => 'Добавлен комментарий из CRM: Отправка Email Контрагенту',
         //SalesPlatform.ru begin
-        'LBL_WELCOME_TO_VTIGER7_SETUP_WIZARD' => 'Добро пожаловать в мастер установки Sales Platform Vtiger CRM 7',
-        'LBL_VTIGER7_SETUP_WIZARD_DESCRIPTION' => 'Данный мастер поможет вам установить Sales Platform Vtiger CRM 7',
+        'LBL_WELCOME_TO_VTIGER7_SETUP_WIZARD' => 'Добро пожаловать в мастер установки SalesPlatform Vtiger CRM 7',
+        'LBL_VTIGER7_SETUP_WIZARD_DESCRIPTION' => 'Данный мастер поможет вам установить SalesPlatform Vtiger CRM 7',
         //SalesPlatform.ru end
     );
 

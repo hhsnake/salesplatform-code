@@ -1348,7 +1348,11 @@ foreach ($summaryFields as $moduleName => $fieldsList) {
 }
 
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('Active', 'vtiger_users', 'status'));
-Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('12', 'vtiger_users', 'hour_format'));
+
+//Salesplatform.ru begin Update hour_format
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('24', 'vtiger_users', 'hour_format'));
+//Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('12', 'vtiger_users', 'hour_format'));
+//Salesplatform.ru end Update hour_format
 
 // Adding users field into all the available profiles, this is used in email templates
 // when non-admin sends an email with users field in the template
@@ -1891,7 +1895,12 @@ for($i=0; $i<$rows; $i++) {
 unset($filterResult);
 
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('Active', 'vtiger_users', 'status'));
-Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('12', 'vtiger_users', 'hour_format'));
+
+//Salesplatform.ru begin Update hour_format
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('24', 'vtiger_users', 'hour_format'));
+//Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('12', 'vtiger_users', 'hour_format'));
+//Salesplatform.ru end Update hour_format
+
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('softed', 'vtiger_users', 'theme'));
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('Monday', 'vtiger_users', 'dayoftheweek'));
 Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_shorturls ADD COLUMN onetime int(5)', array());

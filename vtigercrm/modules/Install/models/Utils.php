@@ -444,7 +444,7 @@ class Install_Utils_Model {
 						$db_utf8_support = Vtiger_Util_Helper::checkDbUTF8Support($conn);
                         
                         //SalesPlatform.ru begin
-                        if(!$db_utf8_support) {
+                        if(!$db_utf8_support || !Vtiger_Util_Helper::checkCollation($conn)) {
                             if(!$conn->Execute("ALTER DATABASE " . $db_name . " DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci")) {
                                 $dbCheckResult['flag'] = false;
                                 $dbCheckResult['error_msg'] = getTranslatedString('ERR_NO_UTF8_OR_NO_ALTER_RIGHTS', 'Install');
@@ -456,7 +456,7 @@ class Install_Utils_Model {
                             $db_utf8_support = true;
                         }
                         //SalesPlatform.ru end
-					}
+					}                    
 				}
 				$conn->Close();
 			}

@@ -37,14 +37,17 @@ class Calendar_FetchAgendaEvents_Action extends Vtiger_BasicAjax_Action {
 		if ($hideCompleted) {
 			$query.= "vtiger_activity.eventstatus != 'HELD' AND ";
 		}
-		$query.= " (concat(date_start,'',time_start)) >= '$dbStartDateTime' AND (concat(date_start,'',time_start)) < '$dbEndDateTime'";
+                // SalesPlatform.ru begin
+		//$query.= " (concat(date_start,'',time_start)) >= '$dbStartDateTime' AND (concat(date_start,'',time_start)) < '$dbEndDateTime'";
+		$query.= " (concat(date_start,' ',time_start)) >= '$dbStartDateTime' AND (concat(date_start,' ',time_start)) < '$dbEndDateTime'";
+                // SalesPlatform.ru end
 
 		$eventUserId = $currentUser->getId();
 		$params = array_merge(array($eventUserId), $this->getGroupsIdsForUsers($eventUserId));
 
 		$query.= " AND vtiger_crmentity.smownerid IN (".generateQuestionMarks($params).")";
 		$query.= ' ORDER BY time_start';
-
+                
 		$queryResult = $db->pquery($query, $params);
         //SalesPlatform.ru begin
         $moduleName = $request->getModule();

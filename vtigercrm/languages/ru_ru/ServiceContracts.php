@@ -41,7 +41,7 @@ $languageStrings = array(
     'High'                         => 'Высокий',
     'Services'                     => 'Сервисы',
     'In Progress'                  => 'В процессе',
-    'Service Contracts' => 'Сервисные Контракты',    
+    'Service Contracts' => 'Сервисные контракты',    
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

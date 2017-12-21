@@ -150,6 +150,9 @@ $languageStrings = array(
     'LBL_VTSMSTask' => 'SMS', 
     'LBL_VTPushNotificationTask' => 'Mobile Notification',
     'LBL_VTCreateEntityTask' => 'Create Record',
+    // SalesPlatform.ru begin
+    'Module' => 'Module',
+    // SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

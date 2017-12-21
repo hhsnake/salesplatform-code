@@ -193,6 +193,21 @@ $languageStrings = array(
     'servertype' => 'Server Type',
     'LBL_DUPLICATE_USERNAME_ERROR' => 'There is already a Mail Converter configured with this email address. You cannot create duplicate Mail Converter with same email address.',
     'LBL_DUPLICATE_SCANNERNAME_ERROR' => 'There is already a Mail Converter configured with this name. You cannot create Mail Converter with duplicate name.',
+    // SalesPlatform.ru begin
+    'Scanner Name' => 'Scanner Name',
+    'Server' => 'Server',
+    'User Name' => 'User Name',
+    'Password' => 'Password',
+    'Protocol' => 'Protocol',
+    'SSL Type' => 'SSL Type',
+    'SSL Method' => 'SSL Method',
+    'Look For' => 'Look For',
+    'After Scan' => 'After Scan',
+    'Time Zone' => 'Time Zone',
+    'Do Not Validate SSL Certificate' => 'Do Not Validate SSL Certificate',
+    'No TLS' => 'No TLS',
+    'Validate SSL Certificate' => 'Validate SSL Certificate',
+    // SalesPlatform.ru end
        
 );
 $jsLanguageStrings = array(

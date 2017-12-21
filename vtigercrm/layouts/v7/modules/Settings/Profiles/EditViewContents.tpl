@@ -30,8 +30,12 @@
 {/if}
 <input type="hidden" name="viewall" value="0" />
 <input type="hidden" name="editall" value="0" />
+{* SalesPlatform.ru begin *}
+{*
 {if $RECORD_MODEL && $RECORD_MODEL->getId() && empty($IS_DUPLICATE_RECORD)}
-	{if $RECORD_MODEL->hasGlobalReadPermission() || $RECORD_MODEL->hasGlobalWritePermission()}
+	{if $RECORD_MODEL->hasGlobalReadPermission() || $RECORD_MODEL->hasGlobalWritePermission()} 
+*}
+{* SalesPlatform.ru end *}
 		<div class="form-group row">
 			<div class="col-lg-3 col-md-3 col-sm-3 fieldLabel"></div>
 			<div class="col-lg-6 col-md-6 col-sm-6">
@@ -43,17 +47,26 @@
 					</label>
 					<span style="margin-left: 10px">
 						<i class="fa fa-info-circle" title="{vtranslate('LBL_VIEW_ALL_DESC',$QUALIFIED_MODULE)}"></i>
+                        {* SalesPlatform.ru begin *}
+                        &nbsp;<span>{vtranslate('LBL_VIEW_ALL_DESC',$QUALIFIED_MODULE)}</span>
+                        {* SalesPlatform.ru end *}
 					</span>
 				</label>
 				<br>
 				<label class="control-label">
 					<input type="hidden" name="editall" value="0" />
 					<label class="control-label">
-						<input class="listViewEntriesCheckBox" type="checkbox" name="editall" {if $RECORD_MODEL->hasGlobalReadPermission()}checked="true"{/if} style="top: -2px;"/>
+                        {* SalesPlatform.ru begin *}
+                        {* <input class="listViewEntriesCheckBox" type="checkbox" name="editall" {if $RECORD_MODEL->hasGlobalReadPermission()}checked="true"{/if} style="top: -2px;"/> *}
+						<input class="listViewEntriesCheckBox" type="checkbox" name="editall" {if $RECORD_MODEL->hasGlobalWritePermission()}checked="true"{/if} style="top: -2px;"/>
+                        {* SalesPlatform.ru end *}
 						&nbsp;{vtranslate('LBL_EDIT_ALL',$QUALIFIED_MODULE)}&nbsp;
 					</label>
 					<span style="margin-left: 15px">
 						<i class="fa fa-info-circle" title="{vtranslate('LBL_EDIT_ALL_DESC',$QUALIFIED_MODULE)}"></i>
+                        {* SalesPlatform.ru begin *}
+                        &nbsp;<span>{vtranslate('LBL_EDIT_ALL_DESC',$QUALIFIED_MODULE)}</span>
+                        {* SalesPlatform.ru end *}
 					</span>
 				</label>
 				<br><br>
@@ -66,8 +79,12 @@
 					{vtranslate('LBL_GLOBAL_PERMISSION_WARNING',$QUALIFIED_MODULE)}
 				</div>
 			</div>
+{* SalesPlatform.ru begin *}
+{*
 	{/if}
 {/if}
+*}
+{* SalesPlatform.ru end *}
 <div class="row col-lg-12 col-md-12 col-sm-12">
 	<div class=" col-lg-10 col-md-10 col-sm-10">
 		<h5>{vtranslate('LBL_EDIT_PRIVILEGES_OF_THIS_PROFILE',$QUALIFIED_MODULE)}</h5><br>

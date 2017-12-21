@@ -38,7 +38,10 @@
 					<div class="form-group">
 						<div class=" vt-default-callout vt-info-callout tagInfoblock">
 							<h5 class="vt-callout-header">
-							<span class="fa fa-info-circle"></span>&nbsp; Info </h5>
+                                                            {* SalesPlatform.ru begin localization fix *}
+							{*<span class="fa fa-info-circle"></span>&nbsp; Info </h5>*}
+							<span class="fa fa-info-circle"></span>&nbsp; {vtranslate('LBL_INFO', $QUALIFIED_MODULE)} </h5>
+                                                            {* SalesPlatform.ru end localization fix *}
 							<div>{vtranslate('LBL_TAG_SEPARATOR_DESC', $MODULE)}</div><br>
 							<div>{vtranslate('LBL_SHARED_TAGS_ACCESS',$QUALIFIED_MODULE)}</div>
 						</div>

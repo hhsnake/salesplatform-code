@@ -12,6 +12,12 @@
 {strip}
     <script type="text/javascript" src="layouts/v7/lib/jquery/purl.js"></script>
     <script type="text/javascript" src="layouts/v7/lib/jquery/select2/select2.min.js"></script>
+    {* Salesplatform.ru begin *}
+    {assign var=USER_MODEL value=Users_Record_Model::getCurrentUserModel()}
+    {if $USER_MODEL->get('language') eq 'ru_ru'}
+        <script type="text/javascript" src="layouts/v7/lib/jquery/select2/select2_locale_ru.js"></script>
+    {/if}
+    {* Salesplatform.ru end *}
     <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.class.min.js"></script>
     <script type="text/javascript" src="layouts/v7/lib/jquery/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
     <script type="text/javascript" src="layouts/v7/lib/todc/js/bootstrap.min.js"></script>

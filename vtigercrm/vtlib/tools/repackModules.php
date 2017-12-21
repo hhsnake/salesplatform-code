@@ -14,7 +14,7 @@ $repacker->repack();
 
 class SPRepackModules {
     
-    private $skipModules = ['Dashboard', 'Events', 'Webmails', 'Search'];
+    private $skipModules = ['Dashboard', 'Events', 'Webmails'];
     private $projectsBundle = ['Project', 'ProjectMilestone', 'ProjectTask'];
     private $dismissManifest = false;
     

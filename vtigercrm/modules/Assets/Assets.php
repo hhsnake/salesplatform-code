@@ -386,7 +386,7 @@ class Assets extends CRMEntity {
 			if (!($adb->num_rows($result))) {
 				//Initialize module sequence for the module
                 // SalesPlatform.ru begin: Added separate numbering for self organizations
-                $adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1, ''));
+                $adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, vtranslate('LBL_ASSET_PREFIX'), 1, 1, 1, ''));
 				//$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
                 // SalesPlatform.ru end
 			}
@@ -406,7 +406,7 @@ class Assets extends CRMEntity {
 			if (!($adb->num_rows($result))) {
 				//Initialize module sequence for the module
                 // SalesPlatform.ru begin: Added separate numbering for self organizations
-                $adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1, ''));
+                $adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, vtranslate('LBL_ASSET_PREFIX'), 1, 1, 1, ''));
 				//$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
                 // SalesPlatform.ru end
 			}

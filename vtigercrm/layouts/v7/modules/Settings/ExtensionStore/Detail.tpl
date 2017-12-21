@@ -125,11 +125,15 @@
 								{if ($REGISTRATION_STATUS) and ($PASSWORD_STATUS)}
 									<div class="col-sm-6 col-xs-6">
 										<div class="pull-right">
-											{if $EXTENSION_DETAIL->isInstalledByExtnStore()}
+                                                                                    {* SalesPlatform.ru begin *}
+											{*{if $EXTENSION_DETAIL->isInstalledByExtnStore()}*}
+                                                                                    {* SalesPlatform.ru end *}
 													<button type="button" class="writeReview margin0px pull-right {if $MODULE_ACTION neq 'Installed'} hide{/if}">{vtranslate('LBL_WRITE_A_REVIEW', $QUALIFIED_MODULE)}</button>
-												{else}
+										    {* SalesPlatform.ru begin *}	
+                                                                                        {*{else}
 													<span class="alert alert-error">{vtranslate('LBL_REVIEW_RESTRICTED', $QUALIFIED_MODULE)}</span>
-											{/if}
+											{/if}*}
+										    {* SalesPlatform.ru end *}	
 										</div>
 									</div>
 								{/if}

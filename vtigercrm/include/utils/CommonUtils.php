@@ -128,6 +128,12 @@ function getUserFullName($userid) {
 	return Vtiger_Functions::getUserRecordLabel($userid);
 }
 
+// SalesPlatform.ru begin
+function getGroupFullName($groupid) {
+    return Vtiger_Functions::getGroupRecordLabel($groupid);
+}
+// SalesPlatform.ru end
+
 function getParentName($parent_id) {
 	return Vtiger_Functions::getCRMRecordLabel($parent_id);
 	}

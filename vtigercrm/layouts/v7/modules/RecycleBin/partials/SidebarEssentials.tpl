@@ -12,7 +12,10 @@
             <h5 class="sidebar-header"> {vtranslate('LBL_MODULES', 'Settings:$MODULE')} </h5>
             <hr>
             <div>
-                <input class="search-list" type="text" placeholder="Search for Modules">
+                {* SalesPlatform.ru begin localization fix *}
+                {*<input class="search-list" type="text" placeholder="Search for Modules">*}
+                <input class="search-list" type="text" placeholder="{vtranslate('LBL_SEARCH_FOR_MODULES', $MODULE)}">
+                {* SalesPlatform.ru end localization fix *}
             </div>
             <div class="list-menu-content">
                 <div class="list-group">   

@@ -37,14 +37,23 @@
                 data-specific-rules='{ZEND_JSON::encode($FIELD_INFO["validator"])}'
             {/if}
         />
-        {if $smarty.request.view eq 'Edit'}
+        {* SalesPlatform.ru begin *}
+        {*{if $smarty.request.view eq 'Edit'}
               <a id="moreCurrencies" class="span cursorPointer">{vtranslate('LBL_MORE_CURRENCIES', $MODULE)}>></a>
               <span id="moreCurrenciesContainer" class="hide"></span>
-          {/if}
+          {/if}*}
+        {* SalesPlatform.ru end *}
           <input type="hidden" name="base_currency" value="{$BASE_CURRENCY_NAME}">
           <input type="hidden" name="cur_{$BASE_CURRENCY_ID}_check" value="on">
           <input type="hidden" id="requstedUnitPrice" name="{$BASE_CURRENCY_NAME}" value="">
 	</div>
+        {* SalesPlatform.ru begin *}
+        <br style="clear:both;">
+        {if $smarty.request.view eq 'Edit'}
+            <a id="moreCurrencies" class="span cursorPointer">{vtranslate('LBL_MORE_CURRENCIES', $MODULE)}>></a>
+            <span id="moreCurrenciesContainer" class="hide"></span>
+        {/if}
+        {* SalesPlatform.ru end *}
 {else}
 <div class="input-group">
     <span class="input-group-addon" id="basic-addon1">{$USER_MODEL->get('currency_symbol')}</span>

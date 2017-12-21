@@ -782,7 +782,10 @@ class ReportRun extends CRMEntity {
 				foreach ($fieldSqlColumns as $columnSql) {
 					$queryColumn .= " WHEN $columnSql NOT LIKE '' THEN $columnSql";
 				}
-				$queryColumn .= " ELSE '' END) ELSE '' END) AS '".decode_html($moduleFieldLabel)."'";
+                                // SalesPlatform.ru begin
+				//$queryColumn .= " ELSE '' END) ELSE '' END) AS '".decode_html($moduleFieldLabel)."'";
+				$queryColumn .= " ELSE '' END) ELSE '' END) AS ".decode_html($moduleFieldLabel);
+                                // SalesPlatform.ru end
 				$this->queryPlanner->addTable($tableName);
 			}
 		}

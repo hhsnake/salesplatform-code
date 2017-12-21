@@ -18,6 +18,9 @@ $languageStrings = array(
 	'Last Start' => 'Last scan started',
 	'Last End' => 'Last scan ended',
 	'Sequence' => 'Sequence',
+    // SalesPlatform.ru begin
+    'Frequency(H:M)' => 'Frequency(H:M)',
+    // SalesPlatform.ru end
 
 	//Actions
 	'LBL_COMPLETED' => 'Completed',

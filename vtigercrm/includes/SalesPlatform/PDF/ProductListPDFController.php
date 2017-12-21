@@ -174,6 +174,9 @@ class SalesPlatform_PDF_ProductListDocumentPDFController extends
 			$contentModel->set('manufCountry', $productLineItem["manufCountry{$productLineItemIndex}"]);
 			$contentModel->set('manufCountryCode', $productLineItem["manufCountryCode{$productLineItemIndex}"]);
 			$contentModel->set('customsId', $productLineItem["customsId{$productLineItemIndex}"]);
+            //SalesPlatform.ru begin
+            $contentModel->set('internatonalCode', $productLineItem["internatonalCode{$productLineItemIndex}"]);
+            //SalesPlatform.ru end
                         $productImagePath = $productLineItem["attachmentId{$productLineItemIndex}"] > 0 ? $productLineItem["attachmentPath{$productLineItemIndex}"].$productLineItem["attachmentId{$productLineItemIndex}"].'_'.$productLineItem["attachmentName{$productLineItemIndex}"] : false;
                         $contentModel->set('productImage', $productImagePath ? '<img src="'.$productImagePath.'" />' : '');
                         $contentModel->set('productImagePath', $productImagePath ? $productImagePath : 'themes/images/blank.gif');

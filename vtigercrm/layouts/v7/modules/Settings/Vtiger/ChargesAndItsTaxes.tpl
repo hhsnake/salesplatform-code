@@ -27,7 +27,7 @@
 			</tr>
 			{foreach item=CHARGE_MODEL from=$CHARGE_MODELS_LIST}
 				<tr class="opacity" data-charge-id="{$CHARGE_MODEL->getId()}">
-					<td class="{$WIDTHTYPE}" style="border-right:none;border-left:none"><span class="chargeName" style="width:100px;">{$CHARGE_MODEL->getName()}</span></td>
+					<td class="{$WIDTHTYPE}" style="border-right:none;border-left:none"><span class="chargeName" style="width:100px;">{vtranslate($CHARGE_MODEL->getName())}</span></td>
 					<td class="{$WIDTHTYPE}" style="border-right:none;border-left:none"><span class="chargeValue" style="width:105px;">{$CHARGE_MODEL->getDisplayValue()}</span></td>
 					<td class="{$WIDTHTYPE}" style="border-right:none;border-left:none"><span class="chargeIsTaxable">{if $CHARGE_MODEL->isTaxable()}{vtranslate('LBL_YES', $QUALIFIED_MODULE)}{else}{vtranslate('LBL_NO', $QUALIFIED_MODULE)}{/if}</span></td>
 					<td class="{$WIDTHTYPE}" style="border-right:none;border-left:none">

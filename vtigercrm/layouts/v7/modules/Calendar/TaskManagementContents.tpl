@@ -36,7 +36,11 @@
 					{foreach key=PICKLIST_KEY item=PICKLIST_VALUE from=$SELECTED_PICKLISTFIELD_ALL_VALUES}
 						{if $PICKLIST_VALUE == $RECORD_MODEL->get('status')}
 							<div class="more pull-right taskStatus picklist-{$SELECTED_PICKLIST_FIELDMODEL->getId()}-{$PICKLIST_KEY}">
-								{$RECORD_MODEL->get('status')}
+								{*Salesplatform.ru begin*}
+                                                                {vtranslate($RECORD_MODEL->get('status'),$MODULE)}
+                                  				{*{$RECORD_MODEL->get('status')}*}
+                                                                {*Salesplatform.ru end*}
+
 							</div>
 						{/if}
 					{/foreach}

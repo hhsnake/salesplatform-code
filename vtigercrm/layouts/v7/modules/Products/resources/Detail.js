@@ -26,7 +26,11 @@ PriceBooks_Detail_Js("Products_Detail_Js", {
     registerEventForImageGraphics: function() {
         if (jQuery('#imageContainer').find("img").length > 0) {
             jQuery('#imageContainer').bxSlider({
-                slideWidth: 400,
+                //SalesPlatform.ru begin
+                //slideWidth: 400,
+                slideWidth: 600,
+                adaptiveHeight: true,
+                //SalesPlatform.ru end
                 infiniteLoop: false,
                 minSlides: 1,
                 maxSlides: 1,

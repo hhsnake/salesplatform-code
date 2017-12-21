@@ -70,6 +70,7 @@ $languageStrings = array(
     'Medium'                       => 'Средний',    
     'Mobile Call'                  => 'Звонок с мобильного',
     'Busy'                         => 'Занят', 
+    'LBL_ADD_NEW_DASHBOARD'                         => 'Добавить новую панель', 
     // SalesPlatform.ru end
     'INVITATION'                    => ' Приглашение ',
     'LBL_INVITE_PEOPLE'              => 'Пригласить людей',

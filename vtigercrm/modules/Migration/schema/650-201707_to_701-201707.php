@@ -8,30 +8,33 @@
  * All Rights Reserved.
  * If you have any questions or comments, please email: devel@salesplatform.ru
  * ********************************************************************************** */
-
 if (defined('VTIGER_UPGRADE')) {
     global $adb, $current_user;
     $db = PearDatabase::getInstance();
 
     //TODO: check data structures edited in 540 to 600 migrate !!!!!!
     // Migration for - #141 - Separating Create/Edit into 2 separate Role/Profile permissions
-    $actionMappingResult = $adb->pquery('SELECT 1 FROM vtiger_actionmapping WHERE actionname=?', array('CreateView'));
+    $actionMappingResult = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_actionmapping WHERE actionname=?', array('CreateView'));
     if (!$adb->num_rows($actionMappingResult)) {
-            $adb->pquery('INSERT INTO vtiger_actionmapping VALUES(?, ?, ?)', array(7, 'CreateView', 0));
+            Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_actionmapping VALUES(?, ?, ?)', array(7, 'CreateView', 0));
     }
 
-    $createActionResult = $adb->pquery('SELECT * FROM vtiger_profile2standardpermissions WHERE operation=?', array(1));
+    $createActionResult = Migration_Index_View::ExecuteQuery('SELECT * FROM vtiger_profile2standardpermissions WHERE operation=?', array(1));
     $query = 'INSERT INTO vtiger_profile2standardpermissions VALUES';
+    $sql = 'SELECT * FROM vtiger_profile2standardpermissions WHERE profileid=? AND tabid=? AND operation=? AND permissions=?';
     while($rowData = $adb->fetch_array($createActionResult)) {
-            $tabId			= $rowData['tabid'];
-            $profileId		= $rowData['profileid'];
-            $permissions	= $rowData['permissions'];
-            $query .= "('$profileId', '$tabId', '7', '$permissions'),";
-    }
-    $adb->pquery(trim($query, ','), array());
+            $tabId          = $rowData['tabid'];
+            $profileId      = $rowData['profileid'];
+            $permissions    = $rowData['permissions'];
 
+            $result = Migration_Index_View::ExecuteQuery($sql, array($profileId, $tabId, '7', $permissions));
+            if (!$adb->num_rows($result)) {
+                Migration_Index_View::ExecuteQuery($query. "('$profileId', '$tabId', '7', '$permissions')", array());
+            }
+    }
+    
     require_once 'modules/Users/CreateUserPrivilegeFile.php';
-    $usersResult = $adb->pquery('SELECT id FROM vtiger_users', array());
+    $usersResult = Migration_Index_View::ExecuteQuery('SELECT id FROM vtiger_users', array());
     $numOfRows = $adb->num_rows($usersResult);
     $userIdsList = array();
     for($i=0; $i<$numOfRows; $i++) {
@@ -43,23 +46,23 @@ if (defined('VTIGER_UPGRADE')) {
 
     // Migration for - #117 - Convert lead field mapping NULL values and redundant rows
     $phoneFieldId = getFieldid(getTabid('Leads'), 'phone');
-    $adb->pquery('UPDATE vtiger_convertleadmapping SET editable=? WHERE leadfid=?', array(1, $phoneFieldId));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_convertleadmapping SET editable=? WHERE leadfid=?', array(1, $phoneFieldId));
 
     // Migration for #261 - vtiger_portalinfo doesn't update contact
     $columns = $adb->getColumnNames('com_vtiger_workflows');
     if (in_array('status', $columns)) {
-            $adb->pquery('ALTER TABLE com_vtiger_workflows MODIFY COLUMN status TINYINT(1) DEFAULT 1', array());
-            $adb->pquery('UPDATE com_vtiger_workflows SET status=? WHERE status IS NULL', array(1));
+            Migration_Index_View::ExecuteQuery('ALTER TABLE com_vtiger_workflows MODIFY COLUMN status TINYINT(1) DEFAULT 1', array());
+            Migration_Index_View::ExecuteQuery('UPDATE com_vtiger_workflows SET status=? WHERE status IS NULL', array(1));
     } else {
-            $adb->pquery('ALTER TABLE com_vtiger_workflows ADD COLUMN status TINYINT DEFAULT 1', array());
+            Migration_Index_View::ExecuteQuery('ALTER TABLE com_vtiger_workflows ADD COLUMN status TINYINT DEFAULT 1', array());
     }
 
     if (!in_array('workflowname', $columns)) {
-            $adb->pquery('ALTER TABLE com_vtiger_workflows ADD COLUMN workflowname VARCHAR(100)', array());
+            Migration_Index_View::ExecuteQuery('ALTER TABLE com_vtiger_workflows ADD COLUMN workflowname VARCHAR(100)', array());
     }
-    $adb->pquery('UPDATE com_vtiger_workflows SET workflowname = summary', array());
+    Migration_Index_View::ExecuteQuery('UPDATE com_vtiger_workflows SET workflowname = summary', array());
 
-    $result = $adb->pquery('SELECT workflow_id FROM com_vtiger_workflows WHERE test LIKE ? AND module_name=? AND defaultworkflow=?', array('%portal%', 'Contacts', 1));
+    $result = Migration_Index_View::ExecuteQuery('SELECT workflow_id FROM com_vtiger_workflows WHERE test LIKE ? AND module_name=? AND defaultworkflow=?', array('%portal%', 'Contacts', 1));
     if ($adb->num_rows($result) == 1) {
             $workflowId = $adb->query_result($result, 0, 'workflow_id');
             $workflowModel = Settings_Workflows_Record_Model::getInstance($workflowId);
@@ -92,34 +95,34 @@ if (defined('VTIGER_UPGRADE')) {
     }
     
     
-    $result = $db->pquery('SELECT 1 FROM vtiger_ws_fieldtype WHERE uitype=?', array('98'));
+    $result = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_ws_fieldtype WHERE uitype=?', array('98'));
     if (!$db->num_rows($result)) {
-        $db->pquery('INSERT INTO vtiger_ws_fieldtype(uitype,fieldtype) VALUES(?, ?)', array('98', 'reference'));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_ws_fieldtype(uitype,fieldtype) VALUES(?, ?)', array('98', 'reference'));
     }
 
-    $result = $db->pquery('SELECT fieldtypeid FROM vtiger_ws_fieldtype WHERE uitype=(SELECT DISTINCT uitype FROM vtiger_field WHERE fieldname=?)', array('modifiedby'));
+    $result = Migration_Index_View::ExecuteQuery('SELECT fieldtypeid FROM vtiger_ws_fieldtype WHERE uitype=(SELECT DISTINCT uitype FROM vtiger_field WHERE fieldname=?)', array('modifiedby'));
     if ($db->num_rows($result)) {
         $fieldTypeId = $db->query_result($result, 0, 'fieldtypeid');
-        $referenceResult = $db->pquery('SELECT * FROM vtiger_ws_referencetype WHERE fieldtypeid=?', array($fieldTypeId));
+        $referenceResult = Migration_Index_View::ExecuteQuery('SELECT * FROM vtiger_ws_referencetype WHERE fieldtypeid=?', array($fieldTypeId));
         while ($rowData = $db->fetch_row($referenceResult)) {
             $type = $rowData['type'];
             if ($type != 'Users') {
-                $db->pquery('DELETE FROM vtiger_ws_referencetype WHERE fieldtypeid=? AND type=?', array($fieldTypeId, $type));
+                Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_ws_referencetype WHERE fieldtypeid=? AND type=?', array($fieldTypeId, $type));
             }
         }
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_activity_recurring_info')) {
-        $db->pquery('CREATE TABLE IF NOT EXISTS vtiger_activity_recurring_info(activityid INT(19) NOT NULL, recurrenceid INT(19) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=UTF8;', array());
+        Migration_Index_View::ExecuteQuery('CREATE TABLE IF NOT EXISTS vtiger_activity_recurring_info(activityid INT(19) NOT NULL, recurrenceid INT(19) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=UTF8;', array());
     }
 
     $columns = $db->getColumnNames('vtiger_crmentity');
     if (!in_array('smgroupid', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_crmentity ADD COLUMN smgroupid INT(19)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_crmentity ADD COLUMN smgroupid INT(19)', array());
     }
 
     require_once 'modules/com_vtiger_workflow/VTWorkflowManager.inc';
-    $result = $db->pquery('SELECT DISTINCT workflow_id FROM com_vtiger_workflows WHERE summary=?', array('Ticket Creation From Portal : Send Email to Record Owner and Contact'));
+    $result = Migration_Index_View::ExecuteQuery('SELECT DISTINCT workflow_id FROM com_vtiger_workflows WHERE summary=?', array('Ticket Creation From Portal : Send Email to Record Owner and Contact'));
     if ($db->num_rows($result)) {
         $wfs = new VTWorkflowManager($db);
         $workflowModel = $wfs->retrieve($db->query_result($result, 0, 'workflow_id'));
@@ -143,15 +146,15 @@ if (defined('VTIGER_UPGRADE')) {
         }
     }
 
-    $db->pquery('UPDATE vtiger_ws_entity SET handler_path=?, handler_class=? WHERE name IN("Products","Services")', array('include/Webservices/VtigerProductOperation.php', 'VtigerProductOperation'));
-    $db->pquery('UPDATE vtiger_def_org_share SET editstatus=? WHERE tabid=?', array(0, getTabid('Contacts')));
-    $db->pquery('UPDATE vtiger_settings_field SET name=? WHERE name=?', array('Configuration Editor', 'LBL_CONFIG_EDITOR'));
-    $db->pquery('UPDATE vtiger_links SET linktype=? WHERE linklabel=?', array('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY'));
-    $db->pquery('UPDATE vtiger_field SET typeofdata=? WHERE fieldname IN (?, ?)', array('DT~O', 'createdtime', 'modifiedtime'));
-    $db->pquery('UPDATE vtiger_field SET presence=0 WHERE columnname=? AND fieldname=?', array('emailoptout', 'emailoptout'));
-    $db->pquery('UPDATE vtiger_field SET defaultvalue=? WHERE fieldname=?', array('1', 'discontinued'));
-    $db->pquery('UPDATE vtiger_field SET defaultvalue=? WHERE fieldname=?', array('.', 'currency_decimal_separator'));
-    $db->pquery('UPDATE vtiger_field SET defaultvalue=? WHERE fieldname=?', array(',', 'currency_grouping_separator'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_ws_entity SET handler_path=?, handler_class=? WHERE name IN("Products","Services")', array('include/Webservices/VtigerProductOperation.php', 'VtigerProductOperation'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_def_org_share SET editstatus=? WHERE tabid=?', array(0, getTabid('Contacts')));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_field SET name=? WHERE name=?', array('Configuration Editor', 'LBL_CONFIG_EDITOR'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_links SET linktype=? WHERE linklabel=?', array('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET typeofdata=? WHERE fieldname IN (?, ?)', array('DT~O', 'createdtime', 'modifiedtime'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET presence=0 WHERE columnname=? AND fieldname=?', array('emailoptout', 'emailoptout'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE fieldname=?', array('1', 'discontinued'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE fieldname=?', array('.', 'currency_decimal_separator'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE fieldname=?', array(',', 'currency_grouping_separator'));
 
     $lineItemModules = array('Products' => 'vtiger_products', 'Services' => 'vtiger_service');
     foreach ($lineItemModules as $moduleName => $tableName) {
@@ -177,19 +180,19 @@ if (defined('VTIGER_UPGRADE')) {
 
     $columns = $db->getColumnNames('vtiger_relatedlists');
     if (!in_array('relationfieldid', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_relatedlists ADD COLUMN relationfieldid INT(19)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_relatedlists ADD COLUMN relationfieldid INT(19)', array());
     }
     if (!in_array('source', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_relatedlists ADD COLUMN source VARCHAR(25)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_relatedlists ADD COLUMN source VARCHAR(25)', array());
     }
     if (!in_array('relationtype', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_relatedlists ADD COLUMN relationtype VARCHAR(10)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_relatedlists ADD COLUMN relationtype VARCHAR(10)', array());
     }
-    $result = $db->pquery('SELECT relation_id FROM vtiger_relatedlists ORDER BY relation_id DESC LIMIT 1', array());
-    $db->pquery('UPDATE vtiger_relatedlists_seq SET id=?', array($db->query_result($result, 0, 'relation_id')));
+    $result = Migration_Index_View::ExecuteQuery('SELECT relation_id FROM vtiger_relatedlists ORDER BY relation_id DESC LIMIT 1', array());
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_relatedlists_seq SET id=?', array($db->query_result($result, 0, 'relation_id')));
 
     $accountsTabId = getTabId('Accounts');
-    $db->pquery('UPDATE vtiger_relatedlists SET name=? WHERE name=? and tabid=?', array('get_merged_list', 'get_dependents_list', $accountsTabId));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_relatedlists SET name=? WHERE name=? and tabid=?', array('get_merged_list', 'get_dependents_list', $accountsTabId));
 
     $invoiceModuleInstance = Vtiger_Module::getInstance('Invoice');
     $blockInstance = Vtiger_Block::getInstance('LBL_INVOICE_INFORMATION', $invoiceModuleInstance);
@@ -222,14 +225,14 @@ if (defined('VTIGER_UPGRADE')) {
     if ($defaultActivityTypeFieldModel) {
         $defaultActivityTypeFieldModel->set('defaultvalue', 'Call');
         $defaultActivityTypeFieldModel->save();
-        $db->pquery('UPDATE vtiger_users SET defaultactivitytype=? WHERE defaultactivitytype=? OR defaultactivitytype IS NULL', array('Call', ''));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_users SET defaultactivitytype=? WHERE defaultactivitytype=? OR defaultactivitytype IS NULL', array('Call', ''));
     }
 
     $defaultEventStatusFieldModel = Vtiger_Field_Model::getInstance('defaulteventstatus', $userModuleModel);
     if ($defaultEventStatusFieldModel) {
         $defaultEventStatusFieldModel->set('defaultvalue', 'Planned');
         $defaultEventStatusFieldModel->save();
-        $db->pquery('UPDATE vtiger_users SET defaulteventstatus=? WHERE defaulteventstatus=? OR defaulteventstatus IS NULL', array('Planned', ''));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_users SET defaulteventstatus=? WHERE defaulteventstatus=? OR defaulteventstatus IS NULL', array('Planned', ''));
     }
 
     $moduleInstance = Vtiger_Module::getInstance('Users');
@@ -254,21 +257,23 @@ if (defined('VTIGER_UPGRADE')) {
         }
     }
 
-    $fieldInstance = Vtiger_Field_Model::getInstance('language', $moduleInstance);
-    if ($fieldInstance) {
-        $fieldInstance->set('defaultvalue', 'en_us');
-        $fieldInstance->save();
-    }
-
+    //Salesplatform.ru begin Fix dynamic localization
+    //$fieldInstance = Vtiger_Field_Model::getInstance('language', $moduleInstance);
+    //if ($fieldInstance) {
+    //    $fieldInstance->set('defaultvalue', 'en_us');
+    //    $fieldInstance->save();
+    //}
+    //Salesplatform.ru end Fix dynamic localization
+    
     $allUsers = Users_Record_Model::getAll(true);
     foreach ($allUsers as $userId => $userModel) {
-        $db->pquery('UPDATE vtiger_users SET defaultcalendarview=? WHERE id=?', array('MyCalendar', $userId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_users SET defaultcalendarview=? WHERE id=?', array('MyCalendar', $userId));
     }
     echo 'Default calendar view updated for all active users <br>';
 
     $fieldNamesList = array();
     $updateQuery = 'UPDATE vtiger_field SET fieldlabel = CASE fieldname';
-    $result = $db->pquery('SELECT taxname, taxlabel FROM vtiger_inventorytaxinfo', array());
+    $result = Migration_Index_View::ExecuteQuery('SELECT taxname, taxlabel FROM vtiger_inventorytaxinfo', array());
     while ($row = $db->fetch_array($result)) {
         $fieldName = $row['taxname'];
         $fieldLabel = $row['taxlabel'];
@@ -278,8 +283,8 @@ if (defined('VTIGER_UPGRADE')) {
     }
     $updateQuery .= 'END WHERE fieldname in (' . generateQuestionMarks($fieldNamesList) . ')';
 
-    $db->pquery($updateQuery, $fieldNamesList);
-    $db->pquery('UPDATE vtiger_field SET fieldlabel=? WHERE displaytype=? AND fieldname=?', array('Item Discount Amount', 5, 'discount_amount'));
+    Migration_Index_View::ExecuteQuery($updateQuery, $fieldNamesList);
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET fieldlabel=? WHERE displaytype=? AND fieldname=?', array('Item Discount Amount', 5, 'discount_amount'));
 
     $inventoryModules = getInventoryModules();
     $fieldTypeId = Install_Utils_Model::getVTWSInventoryFieldTypeId();
@@ -384,7 +389,7 @@ if (defined('VTIGER_UPGRADE')) {
 
         $tableId = $details[2];
 
-        $result = $adb->pquery("SELECT $tableId, subtotal, s_h_amount, discount_percent, discount_amount FROM $tableName", array());
+        $result = Migration_Index_View::ExecuteQuery("SELECT $tableId, subtotal, s_h_amount, discount_percent, discount_amount FROM $tableName", array());
         $numOfRows = $adb->num_rows($result);
 
         for ($i = 0; $i < $numOfRows; $i++) {
@@ -403,7 +408,7 @@ if (defined('VTIGER_UPGRADE')) {
         }
     }
     
-    $result = $adb->pquery('SELECT taxname FROM vtiger_shippingtaxinfo', array());
+    $result = Migration_Index_View::ExecuteQuery('SELECT taxname FROM vtiger_shippingtaxinfo', array());
     $numOfRows = $adb->num_rows($result);
     $shippingTaxes = array();
     $tabIds = array();
@@ -413,7 +418,7 @@ if (defined('VTIGER_UPGRADE')) {
     }
 
     $tabIdQuery = 'SELECT tabid FROM vtiger_tab where name IN ('.generateQuestionMarks($inventoryModules).')';
-    $tabIdRes = $adb->pquery($tabIdQuery,$inventoryModules);
+    $tabIdRes = Migration_Index_View::ExecuteQuery($tabIdQuery,$inventoryModules);
     $num_rows = $adb->num_rows($tabIdRes);
     for ($i = 0; $i < $num_rows; $i++) {
         $tabIds[] = $adb->query_result($tabIdRes,$i,'tabid');
@@ -425,7 +430,7 @@ if (defined('VTIGER_UPGRADE')) {
     foreach ($inventoryModules as $moduleName) {
         $tabId = getTabid($moduleName);
         $blockId = getBlockId($tabId, 'LBL_ITEM_DETAILS');
-        $db->pquery('UPDATE vtiger_field SET displaytype=?, block=? WHERE tabid=? AND fieldname IN (?, ?)', array(5, $blockId, $tabId, 'hdnDiscountAmount', 'hdnDiscountPercent'));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET displaytype=?, block=? WHERE tabid=? AND fieldname IN (?, ?)', array(5, $blockId, $tabId, 'hdnDiscountAmount', 'hdnDiscountPercent'));
     }
 
     $itemFieldsName = array('image', 'purchase_cost', 'margin');
@@ -470,23 +475,23 @@ if (defined('VTIGER_UPGRADE')) {
 
     $columns = $db->getColumnNames('vtiger_products');
     if (!in_array('is_subproducts_viewable', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_products ADD COLUMN is_subproducts_viewable INT(1) DEFAULT 1', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_products ADD COLUMN is_subproducts_viewable INT(1) DEFAULT 1', array());
     }
     $columns = $db->getColumnNames('vtiger_seproductsrel');
     if (!in_array('quantity', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_seproductsrel ADD COLUMN quantity INT(19) DEFAULT 1', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_seproductsrel ADD COLUMN quantity INT(19) DEFAULT 1', array());
     }
     $columns = $db->getColumnNames('vtiger_inventorysubproductrel');
     if (!in_array('quantity', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_inventorysubproductrel ADD COLUMN quantity INT(19) DEFAULT 1', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_inventorysubproductrel ADD COLUMN quantity INT(19) DEFAULT 1', array());
     }
 
     $columns = $db->getColumnNames('vtiger_calendar_default_activitytypes');
     if (!in_array('isdefault', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_calendar_default_activitytypes ADD COLUMN isdefault INT(11) DEFAULT 1', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_calendar_default_activitytypes ADD COLUMN isdefault INT(11) DEFAULT 1', array());
     }
     if (!in_array('conditions', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_calendar_default_activitytypes ADD COLUMN conditions VARCHAR(255) DEFAULT ""', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_calendar_default_activitytypes ADD COLUMN conditions VARCHAR(255) DEFAULT ""', array());
     }
 
     $updateList = array();
@@ -500,12 +505,12 @@ if (defined('VTIGER_UPGRADE')) {
     $updateList[] = array('module' => 'ProjectTask', 'fieldname' => 'Project Task', 'newfieldname' => array('startdate', 'enddate'));
 
     foreach ($updateList as $list) {
-        $db->pquery('UPDATE vtiger_calendar_default_activitytypes SET fieldname=? WHERE module=? AND fieldname=? AND isdefault=?', array(Zend_Json::encode($list['newfieldname']), $list['module'], $list['fieldname'], '1'));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_calendar_default_activitytypes SET fieldname=? WHERE module=? AND fieldname=? AND isdefault=?', array(Zend_Json::encode($list['newfieldname']), $list['module'], $list['fieldname'], '1'));
     }
 
     $model = Settings_Vtiger_TermsAndConditions_Model::getInstance('Inventory');
     $tAndC = $model->getText();
-    $db->pquery('DELETE FROM vtiger_inventory_tandc', array());
+    Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_inventory_tandc', array());
 
     $inventoryModules = getInventoryModules();
     foreach ($inventoryModules as $moduleName) {
@@ -517,10 +522,10 @@ if (defined('VTIGER_UPGRADE')) {
 
     $columns = $db->getColumnNames('vtiger_import_queue');
     if (!in_array('lineitem_currency_id', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_import_queue ADD COLUMN lineitem_currency_id INT(5)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_import_queue ADD COLUMN lineitem_currency_id INT(5)', array());
     }
     if (!in_array('paging', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_import_queue ADD COLUMN paging INT(1) DEFAULT 0', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_import_queue ADD COLUMN paging INT(1) DEFAULT 0', array());
     }
 
     $documentsInstance = Vtiger_Module::getInstance('Documents');
@@ -540,14 +545,14 @@ if (defined('VTIGER_UPGRADE')) {
         $documentsInstance->setRelatedList(Vtiger_Module::getInstance('PurchaseOrder'), 'PurchaseOrder', true);
         $documentsInstance->setRelatedList(Vtiger_Module::getInstance('HelpDesk'), 'HelpDesk', true);
         $documentsInstance->setRelatedList(Vtiger_Module::getInstance('Faq'), 'Faq', true);
-        $documentsInstance->setRelatedList(Vtiger_Module::getInstance('Act'), 'Faq', true);
-        $documentsInstance->setRelatedList(Vtiger_Module::getInstance('Consignment'), 'Faq', true);
+        $documentsInstance->setRelatedList(Vtiger_Module::getInstance('Act'), 'Act', true);
+        $documentsInstance->setRelatedList(Vtiger_Module::getInstance('Consignment'), 'Consignment', true);
     }
 
     //Update relation field for existing relation ships
     $ignoreRelationFieldMapping = array('Emails');
     $query = 'SELECT * FROM vtiger_relatedlists ORDER BY tabid ';
-    $result = $db->pquery($query, array());
+    $result = Migration_Index_View::ExecuteQuery($query, array());
     $num_rows = $db->num_rows($result);
     $relationShipMapping = array();
     for ($i = 0; $i < $num_rows; $i++) {
@@ -578,7 +583,7 @@ if (defined('VTIGER_UPGRADE')) {
             if (in_array($primaryModuleName, $referenceList)) {
                 $relationShipMapping[$primaryModuleName][$relatedModuleName] = $fieldModel->getName();
                 $updateQuery = 'UPDATE vtiger_relatedlists SET relationfieldid=? WHERE relation_id=?';
-                $db->pquery($updateQuery, array($fieldModel->getId(), $relationId));
+                Migration_Index_View::ExecuteQuery($updateQuery, array($fieldModel->getId(), $relationId));
                 break;
             }
         }
@@ -586,7 +591,7 @@ if (defined('VTIGER_UPGRADE')) {
 
     $columns = $db->getColumnNames('vtiger_links');
     if (!in_array('parent_link', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_links ADD COLUMN parent_link INT(19)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_links ADD COLUMN parent_link INT(19)', array());
     }
 
     $moduleName = 'Reports';
@@ -594,7 +599,7 @@ if (defined('VTIGER_UPGRADE')) {
     $reportTabId = $reportModel->getId();
     Vtiger_Link::addLink($reportTabId, 'LISTVIEWBASIC', 'LBL_ADD_RECORD', '', '', '0');
 
-    $reportAddRecordLink = $db->pquery('SELECT linkid FROM vtiger_links WHERE tabid=? AND linklabel=?', array($reportTabId, 'LBL_ADD_RECORD'));
+    $reportAddRecordLink = Migration_Index_View::ExecuteQuery('SELECT linkid FROM vtiger_links WHERE tabid=? AND linklabel=?', array($reportTabId, 'LBL_ADD_RECORD'));
     $parentLinkId = $db->query_result($reportAddRecordLink, 0, 'linkid');
 
     $reportModelHandler = array('path' => 'modules/Reports/models/Module.php', 'class' => 'Reports_Module_Model', 'method' => 'checkLinkAccess');
@@ -611,7 +616,7 @@ if (defined('VTIGER_UPGRADE')) {
 
     $columns = $db->getColumnNames('vtiger_schedulereports');
     if (!in_array('fileformat', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_schedulereports ADD COLUMN fileformat VARCHAR(10) DEFAULT "CSV"', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_schedulereports ADD COLUMN fileformat VARCHAR(10) DEFAULT "CSV"', array());
     }
 
     $modCommentsInstance = Vtiger_Module_Model::getInstance('ModComments');
@@ -624,52 +629,52 @@ if (defined('VTIGER_UPGRADE')) {
     foreach ($refModulesList as $refModuleName) {
         $refModuleModel = Vtiger_Module_Model::getInstance($refModuleName);
         $refModuleTabId = $refModuleModel->getId();
-        $db->pquery('UPDATE vtiger_relatedlists SET sequence=(sequence+1) WHERE tabid=?', array($refModuleTabId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_relatedlists SET sequence=(sequence+1) WHERE tabid=?', array($refModuleTabId));
 
         $query = 'SELECT 1 FROM vtiger_relatedlists WHERE tabid=? AND related_tabid =?';
-        $result = $db->pquery($query, array($refModuleTabId, $modCommentsTabId));
+        $result = Migration_Index_View::ExecuteQuery($query, array($refModuleTabId, $modCommentsTabId));
         if (!$db->num_rows($result)) {
-            $db->pquery('INSERT INTO vtiger_relatedlists VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($db->getUniqueID('vtiger_relatedlists'), $refModuleTabId, $modCommentsTabId, 'get_comments', '1', 'ModComments', '0', '', $fieldId, 'NULL', '1:N'));
+            Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_relatedlists VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($db->getUniqueID('vtiger_relatedlists'), $refModuleTabId, $modCommentsTabId, 'get_comments', '1', 'ModComments', '0', '', $fieldId, 'NULL', '1:N'));
         }
     }
 
     $columns = $db->getColumnNames('vtiger_modcomments');
     if (in_array('parent_comments', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_modcomments MODIFY parent_comments INT(19)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_modcomments MODIFY parent_comments INT(19)', array());
     }
     if (in_array('customer', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_modcomments MODIFY customer INT(19)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_modcomments MODIFY customer INT(19)', array());
     }
     if (in_array('userid', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_modcomments MODIFY userid INT(19)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_modcomments MODIFY userid INT(19)', array());
     }
 
     $columns = $db->getColumnNames('vtiger_emailtemplates');
     if (!in_array('systemtemplate', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_emailtemplates ADD COLUMN systemtemplate INT(1) NOT NULL DEFAULT 0', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_emailtemplates ADD COLUMN systemtemplate INT(1) NOT NULL DEFAULT 0', array());
     }
     if (!in_array('templatepath', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_emailtemplates ADD COLUMN templatepath VARCHAR(100) AFTER templatename', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_emailtemplates ADD COLUMN templatepath VARCHAR(100) AFTER templatename', array());
     }
     if (!in_array('module', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_emailtemplates ADD COLUMN module VARCHAR(100)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_emailtemplates ADD COLUMN module VARCHAR(100)', array());
     }
-    $db->pquery('UPDATE vtiger_emailtemplates SET module=? WHERE templatename IN (?,?,?) AND module IS NULL', array('Events', 'ToDo Reminder', 'Activity Reminder', 'Invite Users'));
-    $db->pquery('UPDATE vtiger_emailtemplates SET module=? WHERE module IS NULL', array('Contacts'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_emailtemplates SET module=? WHERE templatename IN (?,?,?) AND module IS NULL', array('Events', 'ToDo Reminder', 'Activity Reminder', 'Invite Users'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_emailtemplates SET module=? WHERE module IS NULL', array('Contacts'));
 
     $moduleName = 'Calendar';
-    $reminderTemplateResult = $db->pquery('SELECT 1 FROM vtiger_emailtemplates WHERE subject=? AND systemtemplate=?', array('Reminder', '1'));
+    $reminderTemplateResult = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_emailtemplates WHERE subject=? AND systemtemplate=?', array('Reminder', '1'));
     if (!$db->num_rows($reminderTemplateResult)) {
         $body = '<p>' . vtranslate('LBL_REMINDER_NOTIFICATION', $moduleName) . '<br/>' .
                 vtranslate('LBL_DETAILS_STRING', $moduleName) . ' :<br/> 
-							&nbsp; ' . vtranslate('Subject', $moduleName) . ' : $events-subject$<br/> 
-							&nbsp; ' . vtranslate('Start Date & Time', $moduleName) . ' : $events-date_start$<br/>
-							&nbsp; ' . vtranslate('End Date & Time', $moduleName) . ' : $events-due_date$<br/> 
-							&nbsp; ' . vtranslate('LBL_STATUS', $moduleName) . ' : $events-eventstatus$<br/> 
-							&nbsp; ' . vtranslate('Location', $moduleName) . ' : $events-location$<br/> 
-							&nbsp; ' . vtranslate('LBL_APP_DESCRIPTION', $moduleName) . ' : $events-description$<br/><br/> 
-							<p/>';
-        $db->pquery('INSERT INTO vtiger_emailtemplates(foldername,templatename,subject,description,body,systemtemplate,templateid) values(?,?,?,?,?,?,?)', array('Public', 'Activity Reminder', 'Reminder', 'Reminder', $body, '1', $db->getUniqueID('vtiger_emailtemplates')));
+                            &nbsp; ' . vtranslate('Subject', $moduleName) . ' : $events-subject$<br/> 
+                            &nbsp; ' . vtranslate('Start Date & Time', $moduleName) . ' : $events-date_start$<br/>
+                            &nbsp; ' . vtranslate('End Date & Time', $moduleName) . ' : $events-due_date$<br/> 
+                            &nbsp; ' . vtranslate('LBL_STATUS', $moduleName) . ' : $events-eventstatus$<br/> 
+                            &nbsp; ' . vtranslate('Location', $moduleName) . ' : $events-location$<br/> 
+                            &nbsp; ' . vtranslate('LBL_APP_DESCRIPTION', $moduleName) . ' : $events-description$<br/><br/> 
+                            <p/>';
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_emailtemplates(foldername,templatename,subject,description,body,systemtemplate,templateid) values(?,?,?,?,?,?,?)', array('Public', 'Activity Reminder', 'Reminder', 'Reminder', $body, '1', $db->getUniqueID('vtiger_emailtemplates')));
     }
 
     //Creating new reminder block in calendar todo
@@ -688,50 +693,50 @@ if (defined('VTIGER_UPGRADE')) {
 
     //updating block and displaytype for send reminder field
     $reminderBlockInstance = Vtiger_Block_Model::getInstance('LBL_REMINDER_INFORMATION', $calendarInstance);
-    $db->pquery('UPDATE vtiger_field SET block=?, displaytype=? WHERE tabid=? AND fieldname=?', array($reminderBlockInstance->id, '1', $tabId, 'reminder_time'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET block=?, displaytype=? WHERE tabid=? AND fieldname=?', array($reminderBlockInstance->id, '1', $tabId, 'reminder_time'));
 
     //adding new reminder template for todo
-    $reminderTemplate = $db->pquery('SELECT 1 FROM vtiger_emailtemplates WHERE subject=? AND systemtemplate=?', array('Activity Reminder', '1'));
+    $reminderTemplate = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_emailtemplates WHERE subject=? AND systemtemplate=?', array('Activity Reminder', '1'));
     if (!$db->num_rows($reminderTemplate)) {
         $body = '<p>' . vtranslate('LBL_REMINDER_NOTIFICATION', $moduleName) . '<br/>' .
                 vtranslate('LBL_DETAILS_STRING', $moduleName) . ' :<br/>
-								&nbsp; ' . vtranslate('Subject', $moduleName) . ' : $calendar-subject$<br/>
-								&nbsp; ' . vtranslate('Start Date & Time', $moduleName) . ' : $calendar-date_start$<br/>
-								&nbsp; ' . vtranslate('Due Date', $moduleName) . ' : $calendar-due_date$<br/>
-								&nbsp; ' . vtranslate('LBL_STATUS', $moduleName) . ' : $calendar-status$<br/>
-								&nbsp; ' . vtranslate('Location', $moduleName) . ' : $calendar-location$<br/>
-								&nbsp; ' . vtranslate('LBL_APP_DESCRIPTION', $moduleName) . ' : $calendar-description$<br/><br/>
-								<p/>';
-        $db->pquery('INSERT INTO vtiger_emailtemplates(foldername,templatename,subject,description,body,systemtemplate,templateid) values(?,?,?,?,?,?,?)', array('Public', 'ToDo Reminder', 'Activity Reminder', 'Reminder', $body, '1', $db->getUniqueID('vtiger_emailtemplates')));
+                                &nbsp; ' . vtranslate('Subject', $moduleName) . ' : $calendar-subject$<br/>
+                                &nbsp; ' . vtranslate('Start Date & Time', $moduleName) . ' : $calendar-date_start$<br/>
+                                &nbsp; ' . vtranslate('Due Date', $moduleName) . ' : $calendar-due_date$<br/>
+                                &nbsp; ' . vtranslate('LBL_STATUS', $moduleName) . ' : $calendar-status$<br/>
+                                &nbsp; ' . vtranslate('Location', $moduleName) . ' : $calendar-location$<br/>
+                                &nbsp; ' . vtranslate('LBL_APP_DESCRIPTION', $moduleName) . ' : $calendar-description$<br/><br/>
+                                <p/>';
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_emailtemplates(foldername,templatename,subject,description,body,systemtemplate,templateid) values(?,?,?,?,?,?,?)', array('Public', 'ToDo Reminder', 'Activity Reminder', 'Reminder', $body, '1', $db->getUniqueID('vtiger_emailtemplates')));
     }
 
-    $inviteUsersTemplate = $db->pquery('SELECT 1 FROM vtiger_emailtemplates WHERE subject=?', array('Invitation'));
+    $inviteUsersTemplate = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_emailtemplates WHERE subject=?', array('Invitation'));
     if (!$db->num_rows($inviteUsersTemplate)) {
         $body = '<p>$invitee_name$,<br/><br/>' .
                 vtranslate('LBL_ACTIVITY_INVITATION', $moduleName) . '<br/><br/>' .
                 vtranslate('LBL_DETAILS_STRING', $moduleName) . ' :<br/>
-								&nbsp; ' . vtranslate('Subject', $moduleName) . ' : $events-subject$<br/>
-								&nbsp; ' . vtranslate('Start Date & Time', $moduleName) . ' : $events-date_start$<br/> 
-								&nbsp; ' . vtranslate('End Date & Time', $moduleName) . ' : $events-due_date$<br/>
-								&nbsp; ' . vtranslate('LBL_STATUS', $moduleName) . ' : $events-eventstatus$<br/>
-								&nbsp; ' . vtranslate('Priority', $moduleName) . ' : $events-priority$<br/>
-								&nbsp; ' . vtranslate('Related To', $moduleName) . ' : $events-crmid$<br/>
-								&nbsp; ' . vtranslate('LBL_CONTACT_LIST', $moduleName) . ' : $events-contactid$<br/>
-								&nbsp; ' . vtranslate('Location', $moduleName) . ' : $events-location$<br/>
-								&nbsp; ' . vtranslate('LBL_APP_DESCRIPTION', $moduleName) . ' : $events-description$<br/><br/>
-								' . vtranslate('LBL_REGARDS_STRING', $moduleName) . ',<br/>
-								$current_user_name$
-								<p/>';
-        $db->pquery('INSERT INTO vtiger_emailtemplates(foldername,templatename,subject,description,body,systemtemplate,templateid) values(?,?,?,?,?,?,?)', array('Public', 'Invite Users', 'Invitation', 'Invite Users', $body, '1', $db->getUniqueID('vtiger_emailtemplates')));
+                                &nbsp; ' . vtranslate('Subject', $moduleName) . ' : $events-subject$<br/>
+                                &nbsp; ' . vtranslate('Start Date & Time', $moduleName) . ' : $events-date_start$<br/> 
+                                &nbsp; ' . vtranslate('End Date & Time', $moduleName) . ' : $events-due_date$<br/>
+                                &nbsp; ' . vtranslate('LBL_STATUS', $moduleName) . ' : $events-eventstatus$<br/>
+                                &nbsp; ' . vtranslate('Priority', $moduleName) . ' : $events-priority$<br/>
+                                &nbsp; ' . vtranslate('Related To', $moduleName) . ' : $events-crmid$<br/>
+                                &nbsp; ' . vtranslate('LBL_CONTACT_LIST', $moduleName) . ' : $events-contactid$<br/>
+                                &nbsp; ' . vtranslate('Location', $moduleName) . ' : $events-location$<br/>
+                                &nbsp; ' . vtranslate('LBL_APP_DESCRIPTION', $moduleName) . ' : $events-description$<br/><br/>
+                                ' . vtranslate('LBL_REGARDS_STRING', $moduleName) . ',<br/>
+                                $current_user_name$
+                                <p/>';
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_emailtemplates(foldername,templatename,subject,description,body,systemtemplate,templateid) values(?,?,?,?,?,?,?)', array('Public', 'Invite Users', 'Invitation', 'Invite Users', $body, '1', $db->getUniqueID('vtiger_emailtemplates')));
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_emailslookup')) {
         $query = 'CREATE TABLE vtiger_emailslookup(crmid int(20) DEFAULT NULL, 
-						setype varchar(30) DEFAULT NULL, value varchar(100) DEFAULT NULL, 
-						fieldid int(20) DEFAULT NULL, UNIQUE KEY emailslookup_crmid_setype_fieldname_uk (crmid,setype,fieldid),
-						KEY emailslookup_fieldid_setype_idx (fieldid, setype), 
-						CONSTRAINT emailslookup_crmid_fk FOREIGN KEY (crmid) REFERENCES vtiger_crmentity (crmid) ON DELETE CASCADE)';
-        $db->pquery($query, array());
+                        setype varchar(30) DEFAULT NULL, value varchar(100) DEFAULT NULL, 
+                        fieldid int(20) DEFAULT NULL, UNIQUE KEY emailslookup_crmid_setype_fieldname_uk (crmid,setype,fieldid),
+                        KEY emailslookup_fieldid_setype_idx (fieldid, setype), 
+                        CONSTRAINT emailslookup_crmid_fk FOREIGN KEY (crmid) REFERENCES vtiger_crmentity (crmid) ON DELETE CASCADE)';
+        Migration_Index_View::ExecuteQuery($query, array());
     }
 
     $EventManager = new VTEventsManager($db);
@@ -764,7 +769,7 @@ if (defined('VTIGER_UPGRADE')) {
             foreach ($emailFieldModels as $fieldName => $fieldModel) {
                 $emailFieldIds[$fieldModel->get('name')] = $fieldModel->get('id');
             }
-            $result = $db->pquery($query, array());
+            $result = Migration_Index_View::ExecuteQuery($query, array());
 
             $values['setype'] = $module;
             while ($row = $db->fetchByAssoc($result)) {
@@ -781,17 +786,17 @@ if (defined('VTIGER_UPGRADE')) {
     }
 
     $massEditSql = 'UPDATE vtiger_field SET masseditable=0 WHERE fieldname IN(?,?,?,?)';
-    $db->pquery($massEditSql, array('created_user_id', 'createdtime', 'modifiedtime', 'modifiedby'));
+    Migration_Index_View::ExecuteQuery($massEditSql, array('created_user_id', 'createdtime', 'modifiedtime', 'modifiedby'));
 
-    $db->pquery('UPDATE vtiger_eventhandlers SET is_active = 1 WHERE handler_class=?', array('ModTrackerHandler'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_eventhandlers SET is_active = 1 WHERE handler_class=?', array('ModTrackerHandler'));
     Vtiger_Link_Model::deleteLink('0', 'DETAILVIEWBASIC', 'Print');
 
-    $db->pquery('ALTER TABLE vtiger_emailtemplates MODIFY COLUMN subject VARCHAR(255)', array());
-    $db->pquery('ALTER TABLE vtiger_activity MODIFY COLUMN subject VARCHAR(255)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_emailtemplates MODIFY COLUMN subject VARCHAR(255)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_activity MODIFY COLUMN subject VARCHAR(255)', array());
 
     //Start: Update Currency symbol for Egypt
-    $db->pquery('UPDATE vtiger_currencies SET currency_symbol=? WHERE currency_name=?', array('E£', 'Egypt, Pounds'));
-    $db->pquery('UPDATE vtiger_currency_info SET currency_symbol=? WHERE currency_name=?', array('E£', 'Egypt, Pounds'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_currencies SET currency_symbol=? WHERE currency_name=?', array('E£', 'Egypt, Pounds'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_currency_info SET currency_symbol=? WHERE currency_name=?', array('E£', 'Egypt, Pounds'));
 
     //setting is_private value of comments to 0 if internal comments is not supported for that module
     $modCommentsInstance = Vtiger_Module::getInstance('ModComments');
@@ -843,11 +848,11 @@ if (defined('VTIGER_UPGRADE')) {
     $internalCommentModules = Vtiger_Functions::getPrivateCommentModules();
     $lastMaxCRMId = 0;
     do {
-        $commentsResult = $db->pquery('SELECT vtiger_modcomments.modcommentsid FROM vtiger_modcomments 
-												LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_modcomments.related_to 
-												WHERE vtiger_crmentity.setype NOT IN (' . generateQuestionMarks($internalCommentModules) . ') 
-												OR vtiger_crmentity.setype IS NULL AND modcommentsid > ? LIMIT 500', array_merge($internalCommentModules, array($lastMaxCRMId)));
-        if (!$db->num_rows($result)) {
+        $commentsResult = Migration_Index_View::ExecuteQuery('SELECT vtiger_modcomments.modcommentsid FROM vtiger_modcomments 
+                                                LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_modcomments.related_to 
+                                                WHERE vtiger_crmentity.setype NOT IN (' . generateQuestionMarks($internalCommentModules) . ') 
+                                                AND vtiger_crmentity.setype IS NULL AND modcommentsid > ? LIMIT 500', array_merge($internalCommentModules, array($lastMaxCRMId)));
+        if (!$db->num_rows($commentsResult)) {
             break;
         }
 
@@ -857,7 +862,7 @@ if (defined('VTIGER_UPGRADE')) {
         }
 
         if (count($commentIds) > 0) {
-            $db->pquery('UPDATE vtiger_modcomments SET is_private = 0 WHERE modcommentsid IN (' . generateQuestionMarks($commentIds) . ')', $commentIds);
+            Migration_Index_View::ExecuteQuery('UPDATE vtiger_modcomments SET is_private = 0 WHERE modcommentsid IN (' . generateQuestionMarks($commentIds) . ')', $commentIds);
         }
 
         $commentId = end($commentIds);
@@ -869,14 +874,14 @@ if (defined('VTIGER_UPGRADE')) {
     } while (true);
 
     //Start - Add Contact Name to Default filter of project
-    $cvidQuery = $db->pquery('SELECT cvid FROM vtiger_customview where viewname=? AND entitytype=?', array('All', 'Project'));
+    $cvidQuery = Migration_Index_View::ExecuteQuery('SELECT cvid FROM vtiger_customview where viewname=? AND entitytype=?', array('All', 'Project'));
     $row = $db->fetch_array($cvidQuery);
     if ($row['cvid']) {
-        $columnNameCount = $db->pquery('SELECT 1 FROM vtiger_cvcolumnlist WHERE cvid=? and columnname=?', array($row['cvid'], 'vtiger_project:contactid:contactid:Project_Contact_Name:V'));
+        $columnNameCount = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_cvcolumnlist WHERE cvid=? and columnname=?', array($row['cvid'], 'vtiger_project:contactid:contactid:Project_Contact_Name:V'));
         if (!$db->num_rows($columnNameCount)) {
-            $columnIndexQuery = $db->pquery('SELECT MAX(columnindex) AS columnindex FROM vtiger_cvcolumnlist WHERE cvid=?', array($row['cvid']));
+            $columnIndexQuery = Migration_Index_View::ExecuteQuery('SELECT MAX(columnindex) AS columnindex FROM vtiger_cvcolumnlist WHERE cvid=?', array($row['cvid']));
             $colIndex = $db->fetch_array($columnIndexQuery);
-            $db->pquery('INSERT INTO vtiger_cvcolumnlist(cvid,columnindex,columnname) VALUES(?,?,?)', array($row['cvid'], $colIndex['columnindex'] + 11, 'vtiger_project:contactid:contactid:Project_Contact_Name:V'));
+            Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_cvcolumnlist(cvid,columnindex,columnname) VALUES(?,?,?)', array($row['cvid'], $colIndex['columnindex'] + 11, 'vtiger_project:contactid:contactid:Project_Contact_Name:V'));
         }
     }
     //End
@@ -900,16 +905,16 @@ if (defined('VTIGER_UPGRADE')) {
         $tabid = getTabid($moduleName);
         if ($tabid) {
             $sql = 'UPDATE vtiger_field SET headerfield=?, summaryfield=? WHERE tabid=? AND fieldname IN (' . generateQuestionMarks($headerFields) . ')';
-            $db->pquery($sql, array_merge(array(1, 0, $tabid), $headerFields));
+            Migration_Index_View::ExecuteQuery($sql, array_merge(array(1, 0, $tabid), $headerFields));
         }
     }
 
     //Update Calendar time_start as mandatory.
     $updateQuery = 'UPDATE vtiger_field SET typeofdata=? WHERE fieldname=? AND tabid=?';
-    $db->pquery($updateQuery, array('T~M', 'time_start', getTabid('Calendar')));
+    Migration_Index_View::ExecuteQuery($updateQuery, array('T~M', 'time_start', getTabid('Calendar')));
 
     $ignoreModules = array('SMSNotifier', 'ModComments');
-    $result = $db->pquery('SELECT name FROM vtiger_tab WHERE isentitytype=? AND name NOT IN (' . generateQuestionMarks($ignoreModules) . ')', array(1, $ignoreModules));
+    $result = Migration_Index_View::ExecuteQuery('SELECT name FROM vtiger_tab WHERE isentitytype=? AND name NOT IN (' . generateQuestionMarks($ignoreModules) . ')', array(1, $ignoreModules));
     while ($row = $db->fetchByAssoc($result)) {
         $modules[] = $row['name'];
     }
@@ -922,7 +927,7 @@ if (defined('VTIGER_UPGRADE')) {
                 continue;
             }
             $blockQuery = 'SELECT blockid FROM vtiger_blocks WHERE tabid=? ORDER BY sequence LIMIT 1';
-            $result = $db->pquery($blockQuery, array($moduleInstance->id));
+            $result = Migration_Index_View::ExecuteQuery($blockQuery, array($moduleInstance->id));
             $block = $db->query_result($result, 0, 'blockid');
             if ($block) {
                 $blockInstance = Vtiger_Block::getInstance($block, $moduleInstance);
@@ -950,15 +955,15 @@ if (defined('VTIGER_UPGRADE')) {
     $projectTaskModule->setRelatedList($emailModule, 'Emails', 'ADD', 'get_emails');
 
     $sql = "CREATE TABLE IF NOT EXISTS vtiger_emails_recipientprefs(`id` INT(11) NOT NULL AUTO_INCREMENT,`tabid` INT(11) NOT NULL,
-				`prefs` VARCHAR(255) NULL DEFAULT NULL, `userid` INT(11), PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-    $db->pquery($sql, array());
+                `prefs` VARCHAR(255) NULL DEFAULT NULL, `userid` INT(11), PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+    Migration_Index_View::ExecuteQuery($sql, array());
 
     //To change the convert lead webserice operation parameters which was wrong earliear 
     require_once 'include/Webservices/Utils.php';
-    $convertLeadOperationQueryRes = $db->pquery('SELECT operationid FROM vtiger_ws_operation WHERE name=?', array('convertlead'));
+    $convertLeadOperationQueryRes = Migration_Index_View::ExecuteQuery('SELECT operationid FROM vtiger_ws_operation WHERE name=?', array('convertlead'));
     if (!$db->num_rows($convertLeadOperationQueryRes)) {
         $operationId = $db->query_result($convertLeadOperationQueryRes, '0', 'operationid');
-        $deleteParameterQuery = $db->pquery('DELETE FROM vtiger_ws_operation_parameters WHERE operationid=?', array($operationId));
+        $deleteParameterQuery = Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_ws_operation_parameters WHERE operationid=?', array($operationId));
         vtws_addWebserviceOperationParam($operationId, 'element', 'encoded', 1);
     }
 
@@ -968,7 +973,7 @@ if (defined('VTIGER_UPGRADE')) {
     $fieldModel->set('label', 'Description');
     $fieldModel->__update();
 
-    $db->pquery('ALTER TABLE vtiger_mail_accounts MODIFY mail_password TEXT', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mail_accounts MODIFY mail_password TEXT', array());
 
     //making priority as mandatory field in Tickets.
     $module = 'HelpDesk';
@@ -978,22 +983,22 @@ if (defined('VTIGER_UPGRADE')) {
     $fieldInstance->save();
 
     if (Vtiger_Utils::CheckTable('vtiger_customerportal_tabs')) {
-        $db->pquery('UPDATE vtiger_customerportal_tabs SET visible=? WHERE tabid IN(?,?)', array(0, getTabid('Contacts'), getTabid('Accounts')));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_customerportal_tabs SET visible=? WHERE tabid IN(?,?)', array(0, getTabid('Contacts'), getTabid('Accounts')));
         $moduleId = getTabid('ServiceContracts');
-        $db->pquery('DELETE FROM vtiger_customerportal_tabs WHERE tabid=?', array($moduleId));
+        Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_customerportal_tabs WHERE tabid=?', array($moduleId));
         $sequenceQuery = 'SELECT max(sequence) AS sequence FROM vtiger_customerportal_tabs';
-        $seqResult = $db->pquery($sequenceQuery, array());
+        $seqResult = Migration_Index_View::ExecuteQuery($sequenceQuery, array());
         $sequence = $db->query_result($seqResult, 0, 'sequence');
-        $db->pquery('INSERT INTO vtiger_customerportal_tabs(tabid,visible,sequence) VALUES (?,?,?)', array($moduleId, 1, $sequence + 11));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_customerportal_tabs(tabid,visible,sequence) VALUES (?,?,?)', array($moduleId, 1, $sequence + 11));
     }
 
     if (Vtiger_Utils::CheckTable('vtiger_customerportal_fields')) {
         $columns = $db->getColumnNames('vtiger_customerportal_fields');
         if (!in_array('fieldinfo', $columns)) {
-            $db->pquery('ALTER TABLE vtiger_customerportal_fields CHANGE fieldid fieldinfo TEXT', array());
+            Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_customerportal_fields CHANGE fieldid fieldinfo TEXT', array());
         }
         if (!in_array('records_visible', $columns)) {
-            $db->pquery('ALTER TABLE vtiger_customerportal_fields CHANGE visible records_visible INT(1)', array());
+            Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_customerportal_fields CHANGE visible records_visible INT(1)', array());
         }
 
         $moduleModel = Settings_Vtiger_Module_Model::getInstance('Settings:CustomerPortal');
@@ -1018,17 +1023,17 @@ if (defined('VTIGER_UPGRADE')) {
                 $mandatoryFields['filename'] = 0;
             }
             $recordVisibilityQuery = 'SELECT prefvalue from vtiger_customerportal_prefs WHERE tabid=? AND prefkey=?';
-            $recordVisibilityQueryResult = $db->pquery($recordVisibilityQuery, array($tabid, 'showrelatedinfo'));
+            $recordVisibilityQueryResult = Migration_Index_View::ExecuteQuery($recordVisibilityQuery, array($tabid, 'showrelatedinfo'));
             $visibilty = 1;
             if (!$db->num_rows($recordVisibilityQueryResult)) {
                 $visibilty = $db->query_result($recordVisibilityQueryResult, 0, 'prefvalue');
             }
-            $db->pquery('INSERT INTO vtiger_customerportal_fields(tabid,fieldinfo,records_visible) VALUES(?,?,?)', array($tabid, json_encode($mandatoryFields), $visibilty));
+            Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_customerportal_fields(tabid,fieldinfo,records_visible) VALUES(?,?,?)', array($tabid, json_encode($mandatoryFields), $visibilty));
         }
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_customerportal_relatedmoduleinfo')) {
-        $db->pquery('CREATE TABLE vtiger_customerportal_relatedmoduleinfo(module INT(11),relatedmodules TEXT) ', array());
+        Migration_Index_View::ExecuteQuery('CREATE TABLE vtiger_customerportal_relatedmoduleinfo(module INT(11),relatedmodules TEXT) ', array());
         $moduleModel = Settings_Vtiger_Module_Model::getInstance('Settings:CustomerPortal');
         $modules = $moduleModel->getModulesList();
         $oneOperation = array('Invoice', 'Quotes', 'Products', 'Services', 'Documents', 'Assets', 'ProjectMilestone', 'ServiceContracts');
@@ -1045,38 +1050,38 @@ if (defined('VTIGER_UPGRADE')) {
             $moduleName = $model->getName();
             $tabid = getTabid($moduleName);
             if (in_array($moduleName, $oneOperation)) {
-                $db->pquery('INSERT INTO vtiger_customerportal_relatedmoduleinfo(module,relatedmodules) VALUES(?,?)', array($tabid, json_encode($availableOneOperations)));
+                Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_customerportal_relatedmoduleinfo(module,relatedmodules) VALUES(?,?)', array($tabid, json_encode($availableOneOperations)));
             } else if (in_array($moduleName, $threeOperations)) {
-                $db->pquery('INSERT INTO vtiger_customerportal_relatedmoduleinfo(module,relatedmodules) VALUES(?,?)', array($tabid, json_encode($availableThreeOperations)));
+                Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_customerportal_relatedmoduleinfo(module,relatedmodules) VALUES(?,?)', array($tabid, json_encode($availableThreeOperations)));
             } else if (in_array($moduleName, $twoOperations)) {
-                $db->pquery('INSERT INTO vtiger_customerportal_relatedmoduleinfo(module,relatedmodules) VALUES(?,?)', array($tabid, json_encode($availableTwoOperations)));
+                Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_customerportal_relatedmoduleinfo(module,relatedmodules) VALUES(?,?)', array($tabid, json_encode($availableTwoOperations)));
             } else if (in_array($moduleName, $fiveOperations)) {
-                $db->pquery('INSERT INTO vtiger_customerportal_relatedmoduleinfo(module,relatedmodules) VALUES(?,?)', array($tabid, json_encode($availableFiveOperations)));
+                Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_customerportal_relatedmoduleinfo(module,relatedmodules) VALUES(?,?)', array($tabid, json_encode($availableFiveOperations)));
             }
         }
     }
 
     $columns = $db->getColumnNames('vtiger_customerportal_relatedmoduleinfo');
     if (in_array('module', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_customerportal_relatedmoduleinfo CHANGE module tabid INT(19)', array());
-        $db->pquery('ALTER TABLE vtiger_customerportal_relatedmoduleinfo ADD PRIMARY KEY(tabid)', array());
-        $db->pquery('ALTER TABLE vtiger_customerportal_fields ADD PRIMARY KEY(tabid)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_customerportal_relatedmoduleinfo CHANGE module tabid INT(19)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_customerportal_relatedmoduleinfo ADD PRIMARY KEY(tabid)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_customerportal_fields ADD PRIMARY KEY(tabid)', array());
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_customerportal_settings')) {
-        $db->pquery('CREATE TABLE vtiger_customerportal_settings(id int, url VARCHAR(250),default_assignee INT(11),
-							support_notification INT(11), announcement TEXT, shortcuts TEXT,widgets TEXT,charts TEXT)', array());
+        Migration_Index_View::ExecuteQuery('CREATE TABLE vtiger_customerportal_settings(id int, url VARCHAR(250),default_assignee INT(11),
+                            support_notification INT(11), announcement TEXT, shortcuts TEXT,widgets TEXT,charts TEXT)', array());
         $availableModules = array('Documents' => array('LBL_ADD_DOCUMENT' => 1), 'HelpDesk' => array('LBL_CREATE_TICKET' => 1, 'LBL_OPEN_TICKETS' => 1));
         $availableWidgets = array('widgets' => array('HelpDesk' => 1, 'Documents' => 1, 'Faq' => 1));
         $availableCharts = array('charts' => array('OpenTicketsByPriority' => 1, 'TicketsClosureTimeByPriority' => 1));
         $encodedShortcuts = json_encode($availableModules);
         $encodedWidgets = json_encode($availableWidgets);
         $encodedCharts = json_encode($availableCharts);
-        $db->pquery('INSERT INTO vtiger_customerportal_settings(id,default_assignee,shortcuts,widgets,charts) VALUES(?,?,?,?,?)', array(1, 1, $encodedShortcuts, $encodedWidgets, $encodedCharts));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_customerportal_settings(id,default_assignee,shortcuts,widgets,charts) VALUES(?,?,?,?,?)', array(1, 1, $encodedShortcuts, $encodedWidgets, $encodedCharts));
     }
 
     $query = 'ALTER TABLE vtiger_portalinfo MODIFY user_password VARCHAR(255)';
-    $db->pquery($query, array());
+    Migration_Index_View::ExecuteQuery($query, array());
 
     //Enable mass edit for portal field under Contacts
     $moduleContacts = 'Contacts';
@@ -1121,7 +1126,7 @@ if (defined('VTIGER_UPGRADE')) {
         )
     );
     foreach ($relatedWebservicesOperations as $operation) {
-        $rs = $db->pquery('SELECT 1 FROM vtiger_ws_operation WHERE name=?', array($operation['name']));
+        $rs = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_ws_operation WHERE name=?', array($operation['name']));
         if (!$db->num_rows($rs)) {
             $operationId = vtws_addWebserviceOperation($operation['name'], $operation['path'], $operation['method'], $operation['type']);
             $sequence = 1;
@@ -1131,14 +1136,14 @@ if (defined('VTIGER_UPGRADE')) {
         }
     }
     //Change to modify shipping tax percent column type
-    $db->pquery('ALTER TABLE vtiger_invoice MODIFY s_h_percent DECIMAL(25,8)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_invoice MODIFY s_h_percent DECIMAL(25,8)', array());
 
     if (!Vtiger_Utils::CheckTable('vtiger_projecttask_status_color')) {
-        $db->pquery('CREATE TABLE vtiger_projecttask_status_color (
-									status varchar(255),
-									defaultcolor varchar(50),
-									color varchar(50),
-									UNIQUE KEY status (status)) ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        Migration_Index_View::ExecuteQuery('CREATE TABLE vtiger_projecttask_status_color (
+                                    status varchar(255),
+                                    defaultcolor varchar(50),
+                                    color varchar(50),
+                                    UNIQUE KEY status (status)) ENGINE=InnoDB DEFAULT CHARSET=utf8', array());
     }
 
     $statusColorMap = array(
@@ -1149,15 +1154,15 @@ if (defined('VTIGER_UPGRADE')) {
         'Canceled' => '#660066');
 
     foreach ($statusColorMap as $status => $color) {
-        $db->pquery('INSERT INTO vtiger_projecttask_status_color(status,defaultcolor) VALUES(?,?) ON DUPLICATE KEY UPDATE defaultcolor=?', array($status, $color, $color));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_projecttask_status_color(status,defaultcolor) VALUES(?,?) ON DUPLICATE KEY UPDATE defaultcolor=?', array($status, $color, $color));
     }
 
     //Increasing Lead Status column size to 200 for Leads module
-    $db->pquery('ALTER TABLE vtiger_leaddetails MODIFY leadstatus VARCHAR(200)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_leaddetails MODIFY leadstatus VARCHAR(200)', array());
 
     //Start : Increase tablabel and setype size
-    $db->pquery('ALTER TABLE vtiger_tab MODIFY tablabel VARCHAR(100)', array());
-    $db->pquery('ALTER TABLE vtiger_crmentity MODIFY setype VARCHAR(100)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_tab MODIFY tablabel VARCHAR(100)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_crmentity MODIFY setype VARCHAR(100)', array());
 
     //Changing type of data for Used Units and Total Units fields of Service Contracts module to Decimal
     $fields = array('total_units', 'used_units');
@@ -1172,15 +1177,15 @@ if (defined('VTIGER_UPGRADE')) {
         $fieldInstance->save();
     }
 
-    $db->pquery('ALTER TABLE vtiger_webforms_field MODIFY COLUMN defaultvalue TEXT', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms_field MODIFY COLUMN defaultvalue TEXT', array());
 
     //Rollup Comments Settings table
     if (!Vtiger_Utils::CheckTable('vtiger_rollupcomments_settings')) {
         Vtiger_Utils::CreateTable('vtiger_rollupcomments_settings', "(`rollupid` INT(19) NOT NULL AUTO_INCREMENT,
-				`userid` INT(19) NOT NULL,
-				`tabid` INT(19) NOT NULL,
-				`rollup_status` INT(2) NOT NULL DEFAULT '0',
-				PRIMARY KEY (`rollupid`))", true);
+                `userid` INT(19) NOT NULL,
+                `tabid` INT(19) NOT NULL,
+                `rollup_status` INT(2) NOT NULL DEFAULT '0',
+                PRIMARY KEY (`rollupid`))", true);
     }
 
     $modulesList = array('Products', 'Services');
@@ -1194,14 +1199,14 @@ if (defined('VTIGER_UPGRADE')) {
 
     $columns = $db->getColumnNames('com_vtiger_workflowtask_queue');
     if (!in_array('relatedinfo', $columns)) {
-        $db->pquery('ALTER TABLE com_vtiger_workflowtask_queue ADD COLUMN relatedinfo VARCHAR(255)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE com_vtiger_workflowtask_queue ADD COLUMN relatedinfo VARCHAR(255)', array());
     }
 
-    $db->pquery('ALTER TABLE vtiger_freetagged_objects MODIFY module VARCHAR(100)', array());
-    $db->pquery('ALTER TABLE vtiger_emailslookup MODIFY setype VARCHAR(100)', array());
-    $db->pquery('ALTER TABLE vtiger_entityname MODIFY modulename VARCHAR(100)', array());
-    $db->pquery('ALTER TABLE vtiger_modentity_num MODIFY semodule VARCHAR(100)', array());
-    $db->pquery('ALTER TABLE vtiger_reportmodules MODIFY primarymodule VARCHAR(100)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_freetagged_objects MODIFY module VARCHAR(100)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_emailslookup MODIFY setype VARCHAR(100)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_entityname MODIFY modulename VARCHAR(100)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_modentity_num MODIFY semodule VARCHAR(100)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_reportmodules MODIFY primarymodule VARCHAR(100)', array());
 
     $calendarModuleModel = Vtiger_Module_Model::getInstance('Calendar');
     $ProjectModuleModel = Vtiger_Module_Model::getInstance('Project');
@@ -1213,38 +1218,38 @@ if (defined('VTIGER_UPGRADE')) {
 
         $projectTabId = getTabid('Project');
         $calendarTabId = getTabid('Calendar');
-        $result = $db->pquery('SELECT fieldtypeid FROM vtiger_ws_fieldtype WHERE uitype=?', array($fieldModel->get('uitype')));
+        $result = Migration_Index_View::ExecuteQuery('SELECT fieldtypeid FROM vtiger_ws_fieldtype WHERE uitype=?', array($fieldModel->get('uitype')));
         $fieldType = $db->query_result($result, 0, 'fieldtypeid');
 
-        $result = $db->pquery('SELECT 1 FROM vtiger_ws_referencetype WHERE fieldtypeid=? and type=?', array($fieldType, 'Project'));
+        $result = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_ws_referencetype WHERE fieldtypeid=? and type=?', array($fieldType, 'Project'));
         if (!$db->num_rows($result)) {
-            $db->pquery('INSERT INTO vtiger_ws_referencetype(fieldtypeid,type) VALUES(?, ?)', array($fieldType, 'Project'));
+            Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_ws_referencetype(fieldtypeid,type) VALUES(?, ?)', array($fieldType, 'Project'));
         }
 
         if (!$relationModel->get('relationfieldid')) {
             $query = 'UPDATE vtiger_relatedlists SET relationfieldid=? ,name=?, relationtype=? WHERE tabid=? AND related_tabid=?';
-            $db->pquery($query, array($fieldId, 'get_activities', '1:N', $projectTabId, $calendarTabId));
+            Migration_Index_View::ExecuteQuery($query, array($fieldId, 'get_activities', '1:N', $projectTabId, $calendarTabId));
         }
 
         //Migrate data from vtiger_crmentityrel to vtiger_seactivityrel
         $query = 'SELECT 1 FROM vtiger_crmentityrel WHERE module=? AND relmodule= ?';
-        $result = $db->pquery($query, array('Project', 'Calendar'));
+        $result = Migration_Index_View::ExecuteQuery($query, array('Project', 'Calendar'));
         if ($db->num_rows($result)) {
             $insertQuery = 'INSERT INTO vtiger_seactivityrel(crmid, activityid) values(?,?)';
             while ($data = $db->fetch_array($result)) {
-                $db->pquery($insertQuery, array($data['crmid'], $data['relcrmid']));
+                Migration_Index_View::ExecuteQuery($insertQuery, array($data['crmid'], $data['relcrmid']));
             }
-            $db->pquery('DELETE FROM vtiger_crmentityrel WHERE module=? AND relmodule= ?', array('Project', 'Calendar'));
+            Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_crmentityrel WHERE module=? AND relmodule= ?', array('Project', 'Calendar'));
         }
     }
 
-    $result = $db->pquery('SHOW INDEX FROM vtiger_crmentityrel WHERE key_name=?', array('crmid_idx'));
+    $result = Migration_Index_View::ExecuteQuery('SHOW INDEX FROM vtiger_crmentityrel WHERE key_name=?', array('crmid_idx'));
     if (!$db->num_rows($result)) {
-        $db->pquery('ALTER TABLE vtiger_crmentityrel ADD INDEX crmid_idx(crmid)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_crmentityrel ADD INDEX crmid_idx(crmid)', array());
     }
-    $result = $db->pquery('SHOW INDEX FROM vtiger_crmentityrel WHERE key_name=?', array('relcrmid_idx'));
+    $result = Migration_Index_View::ExecuteQuery('SHOW INDEX FROM vtiger_crmentityrel WHERE key_name=?', array('relcrmid_idx'));
     if (!$db->num_rows($result)) {
-        $db->pquery('ALTER TABLE vtiger_crmentityrel ADD INDEX relcrmid_idx(relcrmid)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_crmentityrel ADD INDEX relcrmid_idx(relcrmid)', array());
     }
 
     //Start : Inactivate update_log field from ticket module
@@ -1260,7 +1265,7 @@ if (defined('VTIGER_UPGRADE')) {
     $fieldModel = Vtiger_Field::getInstance('potentialid', $projectModuleModel);
     if ($fieldModel) {
         $fieldModel->setRelatedModules(array('Potentials'));
-        $result = $db->pquery('SELECT 1 FROM vtiger_relatedlists where tabid=? AND relationfieldid=? AND related_tabid=?', array(getTabid('Potentials'), $fieldModel->id, getTabid('Project')));
+        $result = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_relatedlists where tabid=? AND relationfieldid=? AND related_tabid=?', array(getTabid('Potentials'), $fieldModel->id, getTabid('Project')));
         if (!($db->num_rows($result))) {
             $potentialModuleModel = Vtiger_Module_Model::getInstance('Potentials');
             $potentialModuleModel->setRelatedList($projectModuleModel, 'Projects', array('ADD', 'SELECT'), 'get_dependents_list', $fieldModel->id);
@@ -1307,19 +1312,19 @@ if (defined('VTIGER_UPGRADE')) {
     //Add create and edit to field to vtiger_customerportal_tabs to track Create and Edit permission of a module.
     $columns = $db->getColumnNames('vtiger_customerportal_tabs');
     if (!in_array('createrecord', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_customerportal_tabs ADD createrecord BOOLEAN NOT NULL DEFAULT FALSE', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_customerportal_tabs ADD createrecord BOOLEAN NOT NULL DEFAULT FALSE', array());
     }
     if (!in_array('editrecord', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_customerportal_tabs ADD editrecord BOOLEAN NOT NULL DEFAULT FALSE', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_customerportal_tabs ADD editrecord BOOLEAN NOT NULL DEFAULT FALSE', array());
     }
 
     //Update create and edit status for HelpDesk and Assets.
     $updateCreateEditStatusQuery = 'UPDATE vtiger_customerportal_tabs SET createrecord=?,editrecord=? WHERE tabid IN (?)';
-    $db->pquery($updateCreateEditStatusQuery, array(1, 1, getTabid('HelpDesk')));
-    $db->pquery($updateCreateEditStatusQuery, array(0, 1, getTabid('Contacts')));
-    $db->pquery($updateCreateEditStatusQuery, array(0, 1, getTabid('Accounts')));
-    $db->pquery($updateCreateEditStatusQuery, array(1, 0, getTabid('Documents')));
-    $db->pquery($updateCreateEditStatusQuery, array(0, 1, getTabid('Assets')));
+    Migration_Index_View::ExecuteQuery($updateCreateEditStatusQuery, array(1, 1, getTabid('HelpDesk')));
+    Migration_Index_View::ExecuteQuery($updateCreateEditStatusQuery, array(0, 1, getTabid('Contacts')));
+    Migration_Index_View::ExecuteQuery($updateCreateEditStatusQuery, array(0, 1, getTabid('Accounts')));
+    Migration_Index_View::ExecuteQuery($updateCreateEditStatusQuery, array(1, 0, getTabid('Documents')));
+    Migration_Index_View::ExecuteQuery($updateCreateEditStatusQuery, array(0, 1, getTabid('Assets')));
 
     $accessCountFieldId = getFieldid(getTabid('Emails'), 'access_count');
     $accessCountFieldModel = Vtiger_Field_Model::getInstance($accessCountFieldId);
@@ -1330,113 +1335,113 @@ if (defined('VTIGER_UPGRADE')) {
     }
 
     //Adding Create Event and Create Todo workflow tasks for Project module.
-    $taskResult = $db->pquery('SELECT id, modules FROM com_vtiger_workflow_tasktypes WHERE tasktypename IN (?, ?)', array('VTCreateTodoTask', 'VTCreateEventTask'));
+    $taskResult = Migration_Index_View::ExecuteQuery('SELECT id, modules FROM com_vtiger_workflow_tasktypes WHERE tasktypename IN (?, ?)', array('VTCreateTodoTask', 'VTCreateEventTask'));
     $taskResultCount = $db->num_rows($taskResult);
     for ($i = 0; $i < $taskResultCount; $i++) {
         $taskId = $db->query_result($taskResult, $i, 'id');
         $modules = Zend_Json::decode(decode_html($db->query_result($taskResult, $i, 'modules')));
         $modules['include'][] = 'Project';
         $modulesJson = Zend_Json::encode($modules);
-        $db->pquery('UPDATE com_vtiger_workflow_tasktypes SET modules=? WHERE id=?', array($modulesJson, $taskId));
+        Migration_Index_View::ExecuteQuery('UPDATE com_vtiger_workflow_tasktypes SET modules=? WHERE id=?', array($modulesJson, $taskId));
     }
     //End
     //Multiple attachment support for comments
-    $db->pquery('ALTER TABLE vtiger_seattachmentsrel DROP PRIMARY KEY', array());
-    $db->pquery('ALTER TABLE vtiger_seattachmentsrel ADD CONSTRAINT PRIMARY KEY (crmid,attachmentsid)', array());
-    $db->pquery('ALTER TABLE vtiger_seattachmentsrel ADD CONSTRAINT fk_2_vtiger_seattachmentsrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE', array());
-    $db->pquery('ALTER TABLE vtiger_project MODIFY COLUMN projectid INT(19) PRIMARY KEY');
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_seattachmentsrel DROP PRIMARY KEY', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_seattachmentsrel ADD CONSTRAINT PRIMARY KEY (crmid,attachmentsid)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_seattachmentsrel ADD CONSTRAINT fk_2_vtiger_seattachmentsrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_project MODIFY COLUMN projectid INT(19) PRIMARY KEY', array());
 
     if (!Vtiger_Utils::CheckTable('vtiger_wsapp_logs_basic')) {
         Vtiger_Utils::CreateTable('vtiger_wsapp_logs_basic', '(`id` int(25) NOT NULL AUTO_INCREMENT,
-				`extensiontabid` int(19) DEFAULT NULL,
-				`module` varchar(50) NOT NULL,
-				`sync_datetime` datetime NOT NULL,
-				`app_create_count` int(11) DEFAULT NULL,
-				`app_update_count` int(11) DEFAULT NULL,
-				`app_delete_count` int(11) DEFAULT NULL,
-				`app_skip_count` int(11) DEFAULT NULL,
-				`vt_create_count` int(11) DEFAULT NULL,
-				`vt_update_count` int(11) DEFAULT NULL,
-				`vt_delete_count` int(11) DEFAULT NULL,
-				`vt_skip_count` int(11) DEFAULT NULL,
-				`userid` int(11) DEFAULT NULL,
-				PRIMARY KEY (`id`))', true);
+                `extensiontabid` int(19) DEFAULT NULL,
+                `module` varchar(50) NOT NULL,
+                `sync_datetime` datetime NOT NULL,
+                `app_create_count` int(11) DEFAULT NULL,
+                `app_update_count` int(11) DEFAULT NULL,
+                `app_delete_count` int(11) DEFAULT NULL,
+                `app_skip_count` int(11) DEFAULT NULL,
+                `vt_create_count` int(11) DEFAULT NULL,
+                `vt_update_count` int(11) DEFAULT NULL,
+                `vt_delete_count` int(11) DEFAULT NULL,
+                `vt_skip_count` int(11) DEFAULT NULL,
+                `userid` int(11) DEFAULT NULL,
+                PRIMARY KEY (`id`))', true);
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_wsapp_logs_details')) {
         Vtiger_Utils::CreateTable('vtiger_wsapp_logs_details', '(`id` int(25) NOT NULL,
-				`app_create_ids` mediumtext,
-				`app_update_ids` mediumtext,
-				`app_delete_ids` mediumtext,
-				`app_skip_info` mediumtext,
-				`vt_create_ids` mediumtext,
-				`vt_update_ids` mediumtext,
-				`vt_delete_ids` mediumtext,
-				`vt_skip_info` mediumtext,
-				KEY `vtiger_wsapp_logs_basic_ibfk_1` (`id`),
-				CONSTRAINT `vtiger_wsapp_logs_basic_ibfk_1` FOREIGN KEY (`id`) REFERENCES `vtiger_wsapp_logs_basic` (`id`) ON DELETE CASCADE)', true);
+                `app_create_ids` mediumtext,
+                `app_update_ids` mediumtext,
+                `app_delete_ids` mediumtext,
+                `app_skip_info` mediumtext,
+                `vt_create_ids` mediumtext,
+                `vt_update_ids` mediumtext,
+                `vt_delete_ids` mediumtext,
+                `vt_skip_info` mediumtext,
+                KEY `vtiger_wsapp_logs_basic_ibfk_1` (`id`),
+                CONSTRAINT `vtiger_wsapp_logs_basic_ibfk_1` FOREIGN KEY (`id`) REFERENCES `vtiger_wsapp_logs_basic` (`id`) ON DELETE CASCADE)', true);
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_cv2users')) {
         Vtiger_Utils::CreateTable('vtiger_cv2users', '(`cvid` int(25) NOT NULL,
-				`userid` int(25) NOT NULL,
-				KEY `vtiger_cv2users_ibfk_1` (`cvid`),
-				CONSTRAINT `vtiger_customview_ibfk_1` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE,
-				CONSTRAINT `vtiger_users_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `vtiger_users` (`id`) ON DELETE CASCADE)', true);
+                `userid` int(25) NOT NULL,
+                KEY `vtiger_cv2users_ibfk_1` (`cvid`),
+                CONSTRAINT `vtiger_customview_ibfk_1` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE,
+                CONSTRAINT `vtiger_users_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `vtiger_users` (`id`) ON DELETE CASCADE)', true);
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_cv2group')) {
         Vtiger_Utils::CreateTable('vtiger_cv2group', '(`cvid` int(25) NOT NULL,
-				`groupid` int(25) NOT NULL,
-				KEY `vtiger_cv2group_ibfk_1` (`cvid`),
-				CONSTRAINT `vtiger_customview_ibfk_2` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE,
-				CONSTRAINT `vtiger_groups_ibfk_1` FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE)', true);
+                `groupid` int(25) NOT NULL,
+                KEY `vtiger_cv2group_ibfk_1` (`cvid`),
+                CONSTRAINT `vtiger_customview_ibfk_2` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE,
+                CONSTRAINT `vtiger_groups_ibfk_1` FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE)', true);
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_cv2role')) {
         Vtiger_Utils::CreateTable('vtiger_cv2role', '(`cvid` int(25) NOT NULL,
-				`roleid` varchar(255) NOT NULL,
-				KEY `vtiger_cv2role_ibfk_1` (`cvid`),
-				CONSTRAINT `vtiger_customview_ibfk_3` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE,
-				CONSTRAINT `vtiger_role_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE)', true);
+                `roleid` varchar(255) NOT NULL,
+                KEY `vtiger_cv2role_ibfk_1` (`cvid`),
+                CONSTRAINT `vtiger_customview_ibfk_3` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE,
+                CONSTRAINT `vtiger_role_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE)', true);
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_cv2rs')) {
         Vtiger_Utils::CreateTable('vtiger_cv2rs', '(`cvid` int(25) NOT NULL,
-				`rsid` varchar(255) NOT NULL,
-				KEY `vtiger_cv2role_ibfk_1` (`cvid`),
-				CONSTRAINT `vtiger_customview_ibfk_4` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE,
-				CONSTRAINT `vtiger_rolesd_ibfk_1` FOREIGN KEY (`rsid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE)', true);
+                `rsid` varchar(255) NOT NULL,
+                KEY `vtiger_cv2role_ibfk_1` (`cvid`),
+                CONSTRAINT `vtiger_customview_ibfk_4` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE,
+                CONSTRAINT `vtiger_rolesd_ibfk_1` FOREIGN KEY (`rsid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE)', true);
     }
 
     //Rollup Comments Settings table
     if (!Vtiger_Utils::CheckTable('vtiger_rollupcomments_settings')) {
         Vtiger_Utils::CreateTable('vtiger_rollupcomments_settings', "(`rollupid` int(19) NOT NULL AUTO_INCREMENT,
-				`userid` int(19) NOT NULL,
-				`tabid` int(19) NOT NULL,
-				`rollup_status` int(2) NOT NULL DEFAULT '0',
-				PRIMARY KEY (`rollupid`))", true);
+                `userid` int(19) NOT NULL,
+                `tabid` int(19) NOT NULL,
+                `rollup_status` int(2) NOT NULL DEFAULT '0',
+                PRIMARY KEY (`rollupid`))", true);
     }
     //END
 
     $transition_table_name = 'vtiger_picklist_transitions';
     if (!Vtiger_Utils::CheckTable($transition_table_name)) {
         Vtiger_Utils::CreateTable($transition_table_name, '(fieldname VARCHAR(255) NOT NULL PRIMARY KEY,
-				module VARCHAR(100) NOT NULL,
-				transition_data VARCHAR(1000) NOT NULL)', true);
+                module VARCHAR(100) NOT NULL,
+                transition_data VARCHAR(1000) NOT NULL)', true);
     }
 
     //Adding user specific field to Calendar table instead of events table
-    $db->pquery('UPDATE vtiger_field SET tablename=? WHERE tablename=?', array('vtiger_calendar_user_field', 'vtiger_events_user_field'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET tablename=? WHERE tablename=?', array('vtiger_calendar_user_field', 'vtiger_events_user_field'));
 
     //Invite users table mod to support status tracking
     $columns = $db->getColumnNames('vtiger_invitees');
     if (!in_array('status', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_invitees ADD COLUMN status VARCHAR(50) DEFAULT NULL', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_invitees ADD COLUMN status VARCHAR(50) DEFAULT NULL', array());
     }
 
     $ignoreModules = array('SMSNotifier', 'ModComments');
-    $result = $db->pquery('SELECT name FROM vtiger_tab WHERE isentitytype=? AND name NOT IN (' . generateQuestionMarks($ignoreModules) . ')', array(1, $ignoreModules));
+    $result = Migration_Index_View::ExecuteQuery('SELECT name FROM vtiger_tab WHERE isentitytype=? AND name NOT IN (' . generateQuestionMarks($ignoreModules) . ')', array(1, $ignoreModules));
     $modules = array();
     while ($row = $db->fetchByAssoc($result)) {
         $modules[] = $row['name'];
@@ -1446,7 +1451,7 @@ if (defined('VTIGER_UPGRADE')) {
         $moduleUserSpecificTable = Vtiger_Functions::getUserSpecificTableName($module);
         if (!Vtiger_Utils::CheckTable($moduleUserSpecificTable)) {
             Vtiger_Utils::CreateTable($moduleUserSpecificTable, '(`recordid` INT(25) NOT NULL,
-					`userid` INT(25) NOT NULL)', true);
+                    `userid` INT(25) NOT NULL)', true);
         }
         $moduleInstance = Vtiger_Module::getInstance($module);
         if ($moduleInstance) {
@@ -1455,7 +1460,7 @@ if (defined('VTIGER_UPGRADE')) {
                 continue;
             }
             $blockQuery = 'SELECT blocklabel FROM vtiger_blocks WHERE tabid=? ORDER BY sequence LIMIT 1';
-            $result = $db->pquery($blockQuery, array($moduleInstance->id));
+            $result = Migration_Index_View::ExecuteQuery($blockQuery, array($moduleInstance->id));
             $block = $db->query_result($result, 0, 'blocklabel');
             if ($block) {
                 $blockInstance = Vtiger_Block::getInstance($block, $moduleInstance);
@@ -1493,7 +1498,7 @@ if (defined('VTIGER_UPGRADE')) {
             $tableName = $focus->table_name;
 
             $blockQuery = 'SELECT blocklabel FROM vtiger_blocks WHERE tabid=? ORDER BY sequence LIMIT 1';
-            $result = $db->pquery($blockQuery, array($moduleInstance->id));
+            $result = Migration_Index_View::ExecuteQuery($blockQuery, array($moduleInstance->id));
             $block = $db->query_result($result, 0, 'blocklabel');
             if ($block) {
                 $blockInstance = Vtiger_Block::getInstance($block, $moduleInstance);
@@ -1519,18 +1524,18 @@ if (defined('VTIGER_UPGRADE')) {
     //Add column to track public and private for tags
     $columns = $db->getColumnNames('vtiger_freetags');
     if (!in_array('visibility', $columns)) {
-        $db->pquery("ALTER TABLE vtiger_freetags ADD COLUMN visibility VARCHAR(100) NOT NULL DEFAULT 'PRIVATE'", array());
+        Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_freetags ADD COLUMN visibility VARCHAR(100) NOT NULL DEFAULT 'PRIVATE'", array());
     }
     if (!in_array('owner', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_freetags ADD COLUMN owner INT(19) NOT NULL', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_freetags ADD COLUMN owner INT(19) NOT NULL', array());
     }
 
     //remove ON update field property for tagged_on since below script will update details but we dont want to change time stamp 
     //and we did not find any test case where we will update tagged object
-    $db->pquery('ALTER TABLE vtiger_freetagged_objects MODIFY tagged_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_freetagged_objects MODIFY tagged_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP', array());
 
     $query = 'SELECT DISTINCT tagger_id,tag_id,tag FROM vtiger_freetagged_objects INNER JOIN vtiger_freetags ON vtiger_freetagged_objects.tag_id = vtiger_freetags.id';
-    $result = $db->pquery($query, array());
+    $result = Migration_Index_View::ExecuteQuery($query, array());
     $num_rows = $db->num_rows($result);
 
     if ($num_rows > 0) {
@@ -1550,20 +1555,20 @@ if (defined('VTIGER_UPGRADE')) {
                 if ($index != 0) {
                     //creating new Tag
                     $newTagId = $db->getUniqueId('vtiger_freetags');
-                    $db->pquery('INSERT INTO vtiger_freetags values(?,?,?,?,?)', array($newTagId, $tagName, $tagName, $visibility, $ownerId));
+                    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_freetags values(?,?,?,?,?)', array($newTagId, $tagName, $tagName, $visibility, $ownerId));
 
                     //update all existing record tags to new tags 
-                    $db->pquery('UPDATE vtiger_freetagged_objects SET tag_id=? WHERE tag_id=? and tagger_id=?', array($newTagId, $tagId, $ownerId));
+                    Migration_Index_View::ExecuteQuery('UPDATE vtiger_freetagged_objects SET tag_id=? WHERE tag_id=? and tagger_id=?', array($newTagId, $tagId, $ownerId));
                 } else {
                     //update owner column for tag 
-                    $db->pquery('UPDATE vtiger_freetags SET owner=? WHERE id=?', array($ownerId, $tagId));
+                    Migration_Index_View::ExecuteQuery('UPDATE vtiger_freetags SET owner=? WHERE id=?', array($ownerId, $tagId));
                 }
             }
         }
     }
 
     //Adding color column for picklists
-    $fieldResult = $db->pquery('SELECT fieldname FROM vtiger_field WHERE uitype IN (?,?,?,?) AND tabid NOT IN (?)', array('15', '16', '33', '114', getTabid('Users')));
+    $fieldResult = Migration_Index_View::ExecuteQuery('SELECT fieldname FROM vtiger_field WHERE uitype IN (?,?,?,?) AND tabid NOT IN (?)', array('15', '16', '33', '114', getTabid('Users')));
     $fieldRows = $db->num_rows($fieldResult);
     $ignorePickListFields = array('hdnTaxType', 'email_flag');
 
@@ -1575,12 +1580,12 @@ if (defined('VTIGER_UPGRADE')) {
         //Add column in vtiger_tab which will hold source 
         $columns = $db->getColumnNames("vtiger_$fieldName");
         if (!in_array('color', $columns)) {
-            $db->pquery("ALTER TABLE vtiger_$fieldName ADD COLUMN color VARCHAR(10)", array());
+            Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_$fieldName ADD COLUMN color VARCHAR(10)", array());
         }
     }
 
     //Removing color for users module
-    $fieldResult = $db->pquery('SELECT fieldname FROM vtiger_field WHERE uitype IN (?,?,?,?) AND tabid IN (?)', array('15', '16', '33', '114', getTabid('Users')));
+    $fieldResult = Migration_Index_View::ExecuteQuery('SELECT fieldname FROM vtiger_field WHERE uitype IN (?,?,?,?) AND tabid IN (?)', array('15', '16', '33', '114', getTabid('Users')));
     $fieldRows = $db->num_rows($fieldResult);
 
     for ($i = 0; $i < $fieldRows; $i++) {
@@ -1591,60 +1596,60 @@ if (defined('VTIGER_UPGRADE')) {
         //Drop color column
         $columns = $db->getColumnNames("vtiger_$fieldName");
         if (in_array('color', $columns)) {
-            $db->pquery("ALTER TABLE vtiger_$fieldName DROP COLUMN color", array());
+            Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_$fieldName DROP COLUMN color", array());
         }
     }
 
     //Dashboard Widgets
     if (!Vtiger_Utils::CheckTable('vtiger_dashboard_tabs')) {
         Vtiger_Utils::CreateTable('vtiger_dashboard_tabs', '(id int(19) primary key auto_increment,
-				tabname VARCHAR(50),
-				isdefault INT(1) DEFAULT 0,
-				sequence INT(5) DEFAULT 2,
-				appname VARCHAR(20),
-				modulename VARCHAR(50),
-				userid int(11),
-				UNIQUE KEY(tabname,userid),
-				FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE)', true);
+                tabname VARCHAR(50),
+                isdefault INT(1) DEFAULT 0,
+                sequence INT(5) DEFAULT 2,
+                appname VARCHAR(20),
+                modulename VARCHAR(50),
+                userid int(11),
+                UNIQUE KEY(tabname,userid),
+                FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE)', true);
     }
 
     $users = Users_Record_Model::getAll();
     $userIds = array_keys($users);
     $defaultTabQuery = 'INSERT INTO vtiger_dashboard_tabs(tabname,userid) VALUES(?,?) ON DUPLICATE KEY UPDATE tabname=?, userid=?';
     foreach ($userIds as $userId) {
-        $db->pquery($defaultTabQuery, array('Default', $userId, 'Default', $userId));
+        Migration_Index_View::ExecuteQuery($defaultTabQuery, array('Default', $userId, 'Default', $userId));
     }
 
     $columns = $db->getColumnNames('vtiger_module_dashboard_widgets');
     if (!in_array('reportid', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_module_dashboard_widgets ADD COLUMN reportid INT(19) DEFAULT NULL', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_module_dashboard_widgets ADD COLUMN reportid INT(19) DEFAULT NULL', array());
     }
     if (!in_array('dashboardtabid', $columns)) {
-        $result = $db->pquery('SELECT id FROM vtiger_dashboard_tabs WHERE userid=? AND tabname=?', array(1, 'Default'));
+        $result = Migration_Index_View::ExecuteQuery('SELECT id FROM vtiger_dashboard_tabs WHERE userid=? AND tabname=?', array(1, 'Default'));
         $defaultTabid = $db->query_result($result, 0, 'id');
         //Setting admin user default tabid to DEFAULT
-        $db->pquery("ALTER TABLE vtiger_module_dashboard_widgets ADD COLUMN dashboardtabid INT(11) DEFAULT $defaultTabid", array());
+        Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_module_dashboard_widgets ADD COLUMN dashboardtabid INT(11) DEFAULT $defaultTabid", array());
 
         //TODO : this will fail if there are any entries to vtiger_module_dashboard_widgets
-        $db->pquery('ALTER TABLE vtiger_module_dashboard_widgets ADD CONSTRAINT FOREIGN KEY (dashboardtabid) REFERENCES vtiger_dashboard_tabs(id) ON DELETE CASCADE', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_module_dashboard_widgets ADD CONSTRAINT FOREIGN KEY (dashboardtabid) REFERENCES vtiger_dashboard_tabs(id) ON DELETE CASCADE', array());
     }
     //End
 
-    $result = $db->pquery('SELECT * FROM vtiger_module_dashboard_widgets', array());
+    $result = Migration_Index_View::ExecuteQuery('SELECT * FROM vtiger_module_dashboard_widgets', array());
     $num_rows = $db->num_rows($result);
     for ($i = 0; $i < $num_rows; $i++) {
         $rowdata = $db->query_result_rowdata($result, $i);
         if ($rowdata['dashboardtabid'] == null) {
-            $result1 = $db->pquery('SELECT id FROM vtiger_dashboard_tabs WHERE userid=? AND tabname=?', array($rowdata['userid'], 'My Dashboard'));
+            $result1 = Migration_Index_View::ExecuteQuery('SELECT id FROM vtiger_dashboard_tabs WHERE userid=? AND tabname=?', array($rowdata['userid'], 'My Dashboard'));
             if ($db->num_rows($result1) > 0) {
                 $tabid = $db->query_result($result1, 0, 'id');
-                $db->pquery('UPDATE vtiger_module_dashboard_widgets SET dashboardtabid=? WHERE id=? AND userid=?', array($tabid, $rowdata['id'], $rowdata['userid']));
+                Migration_Index_View::ExecuteQuery('UPDATE vtiger_module_dashboard_widgets SET dashboardtabid=? WHERE id=? AND userid=?', array($tabid, $rowdata['id'], $rowdata['userid']));
             }
         }
     }
 
     //Adding color column for vtiger_salutationtype.
-    $fieldResult = $db->pquery('SELECT fieldname FROM vtiger_field WHERE fieldname=? AND tabid NOT IN (?)', array('salutationtype', getTabid('Users')));
+    $fieldResult = Migration_Index_View::ExecuteQuery('SELECT fieldname FROM vtiger_field WHERE fieldname=? AND tabid NOT IN (?)', array('salutationtype', getTabid('Users')));
     $fieldRows = $db->num_rows($fieldResult);
 
     for ($i = 0; $i < $fieldRows; $i++) {
@@ -1656,7 +1661,7 @@ if (defined('VTIGER_UPGRADE')) {
         //Add column in vtiger_tab which will hold source 
         $columns = $db->getColumnNames("vtiger_$fieldName");
         if (!in_array('color', $columns)) {
-            $db->pquery("ALTER TABLE vtiger_$fieldName ADD COLUMN color VARCHAR(10)", array());
+            Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_$fieldName ADD COLUMN color VARCHAR(10)", array());
         }
     }
 
@@ -1671,59 +1676,59 @@ if (defined('VTIGER_UPGRADE')) {
     }
 
     //deleting orphan picklist fields that were delete from vtiger_field table but not from vtiger_role2picklist table
-    $deletedPicklistResult = $db->pquery('SELECT DISTINCT(picklistid) AS picklistid FROM vtiger_role2picklist 
-								WHERE picklistid NOT IN (SELECT vtiger_picklist.picklistid FROM vtiger_picklist
-										INNER JOIN vtiger_role2picklist ON vtiger_role2picklist.picklistid = vtiger_picklist.picklistid)', array());
+    $deletedPicklistResult = Migration_Index_View::ExecuteQuery('SELECT DISTINCT(picklistid) AS picklistid FROM vtiger_role2picklist 
+                                WHERE picklistid NOT IN (SELECT vtiger_picklist.picklistid FROM vtiger_picklist
+                                        INNER JOIN vtiger_role2picklist ON vtiger_role2picklist.picklistid = vtiger_picklist.picklistid)', array());
     $rows = $db->num_rows($deletedPicklistResult);
     $deletablePicklists = array();
     for ($i = 0; $i < $rows; $i++) {
         $deletablePicklists[] = $db->query_result($deletedPicklistResult, $i, 'picklistid');
     }
     if (count($deletablePicklists)) {
-        $db->pquery('DELETE FROM vtiger_role2picklist WHERE picklistid IN (' . generateQuestionMarks($deletablePicklists) . ')', array($deletablePicklists));
+        Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_role2picklist WHERE picklistid IN (' . generateQuestionMarks($deletablePicklists) . ')', array($deletablePicklists));
     }
 
     //table name exceeds more than 50 characters.
-    $db->pquery('ALTER TABLE vtiger_field MODIFY COLUMN tablename VARCHAR(100)', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_field MODIFY COLUMN tablename VARCHAR(100)', array());
 
     if (!Vtiger_Utils::CheckTable('vtiger_report_shareusers')) {
         Vtiger_Utils::CreateTable('vtiger_report_shareusers', '(`reportid` int(25) NOT NULL,
-				`userid` int(25) NOT NULL,
-				KEY `vtiger_report_shareusers_ibfk_1` (`reportid`),
-				CONSTRAINT `vtiger_reports_reportid_ibfk_1` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE,
-				CONSTRAINT `vtiger_users_userid_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `vtiger_users` (`id`) ON DELETE CASCADE)', true);
+                `userid` int(25) NOT NULL,
+                KEY `vtiger_report_shareusers_ibfk_1` (`reportid`),
+                CONSTRAINT `vtiger_reports_reportid_ibfk_1` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE,
+                CONSTRAINT `vtiger_users_userid_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `vtiger_users` (`id`) ON DELETE CASCADE)', true);
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_report_sharegroups')) {
         Vtiger_Utils::CreateTable('vtiger_report_sharegroups', '(`reportid` int(25) NOT NULL,
-				`groupid` int(25) NOT NULL,
-				KEY `vtiger_report_sharegroups_ibfk_1` (`reportid`),
-				CONSTRAINT `vtiger_report_reportid_ibfk_2` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE,
-				CONSTRAINT `vtiger_groups_groupid_ibfk_1` FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE)', true);
+                `groupid` int(25) NOT NULL,
+                KEY `vtiger_report_sharegroups_ibfk_1` (`reportid`),
+                CONSTRAINT `vtiger_report_reportid_ibfk_2` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE,
+                CONSTRAINT `vtiger_groups_groupid_ibfk_1` FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE)', true);
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_report_sharerole')) {
         Vtiger_Utils::CreateTable('vtiger_report_sharerole', '(`reportid` int(25) NOT NULL,
-				`roleid` varchar(255) NOT NULL,
-				KEY `vtiger_report_sharerole_ibfk_1` (`reportid`),
-				CONSTRAINT `vtiger_report_reportid_ibfk_3` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE,
-				CONSTRAINT `vtiger_role_roleid_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE)', true);
+                `roleid` varchar(255) NOT NULL,
+                KEY `vtiger_report_sharerole_ibfk_1` (`reportid`),
+                CONSTRAINT `vtiger_report_reportid_ibfk_3` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE,
+                CONSTRAINT `vtiger_role_roleid_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE)', true);
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_report_sharers')) {
         Vtiger_Utils::CreateTable('vtiger_report_sharers', '(`reportid` int(25) NOT NULL,
-				`rsid` varchar(255) NOT NULL,
-				KEY `vtiger_report_sharers_ibfk_1` (`reportid`),
-				CONSTRAINT `vtiger_report_reportid_ibfk_4` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE,
-				CONSTRAINT `vtiger_rolesd_rsid_ibfk_1` FOREIGN KEY (`rsid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE)', true);
+                `rsid` varchar(255) NOT NULL,
+                KEY `vtiger_report_sharers_ibfk_1` (`reportid`),
+                CONSTRAINT `vtiger_report_reportid_ibfk_4` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE,
+                CONSTRAINT `vtiger_rolesd_rsid_ibfk_1` FOREIGN KEY (`rsid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE)', true);
     }
 
     //Migrating existing relations to N:N or 1:N based on relation fieldid
     $query = "UPDATE vtiger_relatedlists SET relationtype='N:N' WHERE relationfieldid IS NULL";
-    $result = $db->pquery($query, array());
+    $result = Migration_Index_View::ExecuteQuery($query, array());
 
     $query = "UPDATE vtiger_relatedlists SET relationtype='1:N' WHERE relationfieldid IS NOT NULL";
-    $result = $db->pquery($query, array());
+    $result = Migration_Index_View::ExecuteQuery($query, array());
 
     // For Google Synchronization
     Vtiger_Link::addLink(getTabid('Contacts'), 'EXTENSIONLINK', 'Google', 'index.php?module=Contacts&view=Extension&extensionModule=Google&extensionView=Index');
@@ -1733,47 +1738,47 @@ if (defined('VTIGER_UPGRADE')) {
     $colums = $db->getColumnNames('vtiger_google_sync_settings');
     if (!in_array('enabled', $colums)) {
         $query = 'ALTER TABLE vtiger_google_sync_settings ADD COLUMN enabled TINYINT(3) DEFAULT 1';
-        $db->pquery($query, array());
+        Migration_Index_View::ExecuteQuery($query, array());
     }
 
-    $result = $db->pquery('UPDATE vtiger_tab SET parent=NULL WHERE name=?', array('ExtensionStore'));
+    $result = Migration_Index_View::ExecuteQuery('UPDATE vtiger_tab SET parent=NULL WHERE name=?', array('ExtensionStore'));
 
     //Start: Tax Enhancements - Compound Taxes, Regional Taxes, Deducted Taxes, Other Charges
     //Creating regions table
     if (!Vtiger_Utils::checkTable('vtiger_taxregions')) {
-        $db->pquery('CREATE TABLE vtiger_taxregions(regionid INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL)', array());
+        Migration_Index_View::ExecuteQuery('CREATE TABLE vtiger_taxregions(regionid INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL)', array());
     }
 
     if (!Vtiger_Utils::checkTable('vtiger_inventorycharges')) {
         //Creating inventory charges table
         $sql = 'CREATE TABLE vtiger_inventorycharges(
-					chargeid INT(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-					name VARCHAR(100) NOT NULL,
-					format VARCHAR(10),
-					type VARCHAR(10),
-					value DECIMAL(12,5),
-					regions TEXT,
-					istaxable INT(1) NOT NULL DEFAULT 1,
-					taxes VARCHAR(1024),
-					deleted INT(1) NOT NULL DEFAULT 0
-				)';
-        $db->pquery($sql, array());
+                    chargeid INT(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(100) NOT NULL,
+                    format VARCHAR(10),
+                    type VARCHAR(10),
+                    value DECIMAL(12,5),
+                    regions TEXT,
+                    istaxable INT(1) NOT NULL DEFAULT 1,
+                    taxes VARCHAR(1024),
+                    deleted INT(1) NOT NULL DEFAULT 0
+                )';
+        Migration_Index_View::ExecuteQuery($sql, array());
 
         $taxIdsList = array();
-        $result = $db->pquery('SELECT taxid FROM vtiger_shippingtaxinfo', array());
+        $result = Migration_Index_View::ExecuteQuery('SELECT taxid FROM vtiger_shippingtaxinfo', array());
         while ($rowData = $db->fetch_array($result)) {
             $taxIdsList[] = $rowData['taxid'];
         }
 
-        $db->pquery('INSERT INTO vtiger_inventorycharges VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', array(1, 'Shipping & Handling', 'Flat', 'Fixed', '', '[]', 1, ZEND_JSON::encode($taxIdsList), 0));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_inventorycharges VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', array(1, 'Shipping & Handling', 'Flat', 'Fixed', '', '[]', 1, ZEND_JSON::encode($taxIdsList), 0));
     }
 
     if (!Vtiger_Utils::checkTable('vtiger_inventorychargesrel')) {
         //Creating inventory charges relation table
-        $db->pquery('CREATE TABLE vtiger_inventorychargesrel(recordid INT(19) NOT NULL, charges TEXT)', array());
+        Migration_Index_View::ExecuteQuery('CREATE TABLE vtiger_inventorychargesrel(recordid INT(19) NOT NULL, charges TEXT)', array());
 
         $shippingTaxNamesList = array();
-        $result = $db->pquery('SELECT taxid, taxname FROM vtiger_shippingtaxinfo', array());
+        $result = Migration_Index_View::ExecuteQuery('SELECT taxid, taxname FROM vtiger_shippingtaxinfo', array());
         while ($rowData = $db->fetch_array($result)) {
             $shippingTaxNamesList[$rowData['taxid']] = $rowData['taxname'];
         }
@@ -1793,9 +1798,9 @@ if (defined('VTIGER_UPGRADE')) {
         $query = 'INSERT INTO vtiger_inventorychargesrel VALUES';
         foreach ($tablesList as $index => $tableName) {
             $sql = "SELECT vtiger_inventoryshippingrel.*, s_h_amount FROM vtiger_inventoryshippingrel
-			INNER JOIN $tableName ON $tableName.$index = vtiger_inventoryshippingrel.id";
+            INNER JOIN $tableName ON $tableName.$index = vtiger_inventoryshippingrel.id";
 
-            $result = $db->pquery($sql, array());
+            $result = Migration_Index_View::ExecuteQuery($sql, array());
             while ($rowData = $db->fetch_array($result)) {
                 $isResultExists = true;
                 $recordId = $rowData['id'];
@@ -1809,7 +1814,7 @@ if (defined('VTIGER_UPGRADE')) {
             }
         }
         if ($isResultExists) {
-            $db->pquery(rtrim($query, ', '), array());
+            Migration_Index_View::ExecuteQuery(rtrim($query, ', '), array());
         }
     }
 
@@ -1818,27 +1823,27 @@ if (defined('VTIGER_UPGRADE')) {
     foreach ($taxTablesList as $taxTable) {
         $columns = $db->getColumnNames($taxTable);
         if (!in_array('method', $columns)) {
-            $db->pquery("ALTER TABLE $taxTable ADD COLUMN method VARCHAR(10)", array());
+            Migration_Index_View::ExecuteQuery("ALTER TABLE $taxTable ADD COLUMN method VARCHAR(10)", array());
         }
         if (!in_array('type', $columns)) {
-            $db->pquery("ALTER TABLE $taxTable ADD COLUMN type VARCHAR(10)", array());
+            Migration_Index_View::ExecuteQuery("ALTER TABLE $taxTable ADD COLUMN type VARCHAR(10)", array());
         }
         if (!in_array('compoundon', $columns)) {
-            $db->pquery("ALTER TABLE $taxTable ADD COLUMN compoundon VARCHAR(400)", array());
+            Migration_Index_View::ExecuteQuery("ALTER TABLE $taxTable ADD COLUMN compoundon VARCHAR(400)", array());
         }
         if (!in_array('regions', $columns)) {
-            $db->pquery("ALTER TABLE $taxTable ADD COLUMN regions TEXT", array());
+            Migration_Index_View::ExecuteQuery("ALTER TABLE $taxTable ADD COLUMN regions TEXT", array());
         }
 
-        $db->pquery("UPDATE $taxTable SET method =?, type=?, compoundon=?, regions=?", array('Simple', 'Fixed', '[]', '[]'));
+        Migration_Index_View::ExecuteQuery("UPDATE $taxTable SET method =?, type=?, compoundon=?, regions=?", array('Simple', 'Fixed', '[]', '[]'));
     }
 
     //Updating existing tax tables
     $columns = $db->getColumnNames('vtiger_producttaxrel');
     if (!in_array('regions', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_producttaxrel ADD COLUMN regions TEXT', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_producttaxrel ADD COLUMN regions TEXT', array());
     }
-    $db->pquery('UPDATE vtiger_producttaxrel SET regions=?', array('[]'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_producttaxrel SET regions=?', array('[]'));
 
     $modulesList = array(
         'Quotes' => 'vtiger_quotes',
@@ -1854,9 +1859,9 @@ if (defined('VTIGER_UPGRADE')) {
         //Updating existing inventory tax tables
         $columns = $db->getColumnNames($tableName);
         if (!in_array('compound_taxes_info', $columns)) {
-            $db->pquery("ALTER TABLE $tableName ADD COLUMN compound_taxes_info TEXT", array());
+            Migration_Index_View::ExecuteQuery("ALTER TABLE $tableName ADD COLUMN compound_taxes_info TEXT", array());
         }
-        $db->pquery('UPDATE ' . $tableName . ' SET compound_taxes_info=?', array('[]'));
+        Migration_Index_View::ExecuteQuery('UPDATE ' . $tableName . ' SET compound_taxes_info=?', array('[]'));
 
         //creating new field in entity tables
         $moduleInstance = Vtiger_Module::getInstance($moduleName);
@@ -1884,12 +1889,12 @@ if (defined('VTIGER_UPGRADE')) {
 
     if (!Vtiger_Utils::CheckTable('vtiger_app2tab')) {
         Vtiger_Utils::CreateTable('vtiger_app2tab', "(
-			`tabid` INT(11) DEFAULT NULL,
-			`appname` VARCHAR(20) DEFAULT NULL,
-			`sequence` INT(11) DEFAULT NULL,
-			`visible` TINYINT(3) DEFAULT '1',
-			CONSTRAINT `vtiger_app2tab_fk_tab` FOREIGN KEY (`tabid`) REFERENCES `vtiger_tab` (`tabid`) ON DELETE CASCADE
-			)", true);
+            `tabid` INT(11) DEFAULT NULL,
+            `appname` VARCHAR(20) DEFAULT NULL,
+            `sequence` INT(11) DEFAULT NULL,
+            `visible` TINYINT(3) DEFAULT '1',
+            CONSTRAINT `vtiger_app2tab_fk_tab` FOREIGN KEY (`tabid`) REFERENCES `vtiger_tab` (`tabid`) ON DELETE CASCADE
+            )", true);
     }
 
     $restrictedModules = array('ModComments');
@@ -1917,23 +1922,23 @@ if (defined('VTIGER_UPGRADE')) {
         }
     }
 
-    $tabIdResult = $db->pquery('SELECT tabid FROM vtiger_app2tab WHERE appname=? AND tabid=?', array('SALES', getTabid('SMSNotifier')));
+    $tabIdResult = Migration_Index_View::ExecuteQuery('SELECT tabid FROM vtiger_app2tab WHERE appname=? AND tabid=?', array('SALES', getTabid('SMSNotifier')));
     $existingTabId = $db->query_result($tabIdResult, 0, 'tabid');
     if (!$existingTabId) {
-        $seqResult = $db->pquery('SELECT max(sequence) as sequence FROM vtiger_app2tab WHERE appname=?', array('SALES'));
+        $seqResult = Migration_Index_View::ExecuteQuery('SELECT max(sequence) as sequence FROM vtiger_app2tab WHERE appname=?', array('SALES'));
         $sequence = $db->query_result($seqResult, 0, 'sequence');
-        $db->pquery('INSERT INTO vtiger_app2tab(tabid,appname,sequence,visible) values(?,?,?,?)', array(getTabid('SMSNotifier'), 'SALES', $sequence + 11, 1));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_app2tab(tabid,appname,sequence,visible) values(?,?,?,?)', array(getTabid('SMSNotifier'), 'SALES', $sequence + 11, 1));
     }
 
-    $tabIdResult = $db->pquery('SELECT tabid FROM vtiger_app2tab WHERE appname=? AND tabid=?', array('SUPPORT', getTabid('SMSNotifier')));
+    $tabIdResult = Migration_Index_View::ExecuteQuery('SELECT tabid FROM vtiger_app2tab WHERE appname=? AND tabid=?', array('SUPPORT', getTabid('SMSNotifier')));
     $existingTabId = $db->query_result($tabIdResult, 0, 'tabid');
     if (!$existingTabId) {
-        $seqResult = $db->pquery('SELECT max(sequence) as sequence FROM vtiger_app2tab WHERE appname=?', array('SUPPORT'));
+        $seqResult = Migration_Index_View::ExecuteQuery('SELECT max(sequence) as sequence FROM vtiger_app2tab WHERE appname=?', array('SUPPORT'));
         $sequence = $db->query_result($seqResult, 0, 'sequence');
-        $db->pquery('INSERT INTO vtiger_app2tab(tabid,appname,sequence,visible) values(?,?,?,?)', array(getTabid('SMSNotifier'), 'SUPPORT', $sequence + 11, 1));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_app2tab(tabid,appname,sequence,visible) values(?,?,?,?)', array(getTabid('SMSNotifier'), 'SUPPORT', $sequence + 11, 1));
     }
 
-    $result = $db->pquery('SELECT tabid,name FROM vtiger_tab', array());
+    $result = Migration_Index_View::ExecuteQuery('SELECT tabid,name FROM vtiger_tab', array());
     $moduleTabIds = array();
     while ($row = $db->fetchByAssoc($result)) {
         $moduleName = $row['name'];
@@ -1945,6 +1950,10 @@ if (defined('VTIGER_UPGRADE')) {
             $moduleTabIds['Leads'],
             $moduleTabIds['Contacts'],
             $moduleTabIds['Accounts'],
+            //Salesplatform.ru begin Menu app changing
+            $moduleTabIds['SMSNotifier'],
+            $moduleTabIds['PBXManager'],
+            //Salesplatform.ru end Menu app changing
         ),
         'SALES' => array($moduleTabIds['Potentials'],
             $moduleTabIds['Quotes'],
@@ -1953,14 +1962,26 @@ if (defined('VTIGER_UPGRADE')) {
             $moduleTabIds['Services'],
             $moduleTabIds['SMSNotifier'],
             $moduleTabIds['Contacts'],
-            $moduleTabIds['Accounts']
+            $moduleTabIds['Accounts'],
+            //Salesplatform.ru begin Menu app changing
+            $moduleTabIds['Act'],
+            $moduleTabIds['Consignment'],
+            $moduleTabIds['SPPayments'],
+            $moduleTabIds['Invoice'],
+            $moduleTabIds['SalesOrder'],
+            $moduleTabIds['PBXManager'],
+            //Salesplatform.ru end Menu app changing
         ),
         'SUPPORT' => array($moduleTabIds['Faq'],
             $moduleTabIds['ServiceContracts'],
             $moduleTabIds['Assets'],
             $moduleTabIds['SMSNotifier'],
             $moduleTabIds['Contacts'],
-            $moduleTabIds['Accounts']
+            $moduleTabIds['Accounts'],
+            //Salesplatform.ru begin Menu app changing
+            $moduleTabIds['SMSNotifier'],
+            $moduleTabIds['PBXManager'],
+            //Salesplatform.ru end Menu app changing
         ),
         'INVENTORY' => array($moduleTabIds['Products'],
             $moduleTabIds['Services'],
@@ -1972,23 +1993,72 @@ if (defined('VTIGER_UPGRADE')) {
             $moduleTabIds['Contacts'],
             $moduleTabIds['Accounts'],
             $moduleTabIds['Act'],
-            $moduleTabIds['Consignment']
+            $moduleTabIds['Consignment'],
+            //Salesplatform.ru begin Menu app changing
+            $moduleTabIds['SPUnits'],
+            $moduleTabIds['SPPayments'],
+            $moduleTabIds['SMSNotifier'],
+            $moduleTabIds['PBXManager'],
+            //Salesplatform.ru end Menu app changing
         ),
         'PROJECT' => array($moduleTabIds['Project'],
             $moduleTabIds['ProjectTask'],
             $moduleTabIds['ProjectMilestone'],
             $moduleTabIds['Contacts'],
-            $moduleTabIds['Accounts']
+            $moduleTabIds['Accounts'],
+            //Salesplatform.ru begin Menu app changing
+            $moduleTabIds['SMSNotifier'],
+            $moduleTabIds['PBXManager'],
+            //Salesplatform.ru end Menu app changing
         )
     );
 
     foreach ($defSequenceList as $app => $sequence) {
         foreach ($sequence as $seq => $moduleTabId) {
-            $params = array($moduleTabId, $app, $seq + 1);
-            $db->pquery('UPDATE vtiger_app2tab SET sequence=? WHERE appname =? AND tabid=?', $params);
+            //Salesplatform.ru begin Menu app changing
+            $params = array($seq + 1, $app, $moduleTabId);
+            //$params = array($moduleTabId, $app, $seq + 1);
+            //Salesplatform.ru end Menu app changing
+            Migration_Index_View::ExecuteQuery('UPDATE vtiger_app2tab SET sequence=? WHERE appname =? AND tabid=?', $params);
         }
     }
-
+    
+    
+    // Salesplatform.ru begin Menu app changing (Hide some modules)
+    $defHiddenList = array(
+        'MARKETING' => array(
+            $moduleTabIds['SMSNotifier'],
+            $moduleTabIds['PBXManager']
+            ),
+        'SALES' => array(
+            $moduleTabIds['Act'],
+            $moduleTabIds['Consignment'],
+            $moduleTabIds['SPPayments']
+            ),
+        'SUPPORT' => array(
+            $moduleTabIds['SMSNotifier'], 
+            $moduleTabIds['PBXManager']
+            ),
+        'INVENTORY' => array(
+            $moduleTabIds['Invoice'], 
+            $moduleTabIds['SalesOrder'], 
+            $moduleTabIds['SMSNotifier'], 
+            $moduleTabIds['PBXManager']
+            ),
+        'PROJECT' => array(
+            $moduleTabIds['SMSNotifier'], 
+            $moduleTabIds['PBXManager']
+            )
+    );
+    
+    foreach ($defHiddenList as $app => $hideModules) {
+        foreach ($hideModules as $seq => $moduleTabId) {
+            $params = array(0, $app, $moduleTabId);
+            Migration_Index_View::ExecuteQuery('UPDATE vtiger_app2tab SET visible=? WHERE appname =? AND tabid=?', $params);
+        }
+    }
+    //Salesplatform.ru end Menu app changing
+    
     $leadsModuleInstance = Vtiger_Module::getInstance('Leads');
     $quotesModuleInstance = Vtiger_Module::getInstance('Quotes');
     $leadsModuleInstance->unsetRelatedList($quotesModuleInstance, 'Quotes', 'get_quotes');
@@ -1997,33 +2067,33 @@ if (defined('VTIGER_UPGRADE')) {
     $quotesTabId = getTabid('Quotes');
     $query = 'SELECT 1 FROM vtiger_relatedlists WHERE tabid=? AND related_tabid =? AND name=? AND label=?';
     $params = array($leadsTabId, $quotesTabId, 'get_quotes', 'Quotes');
-    $result = $db->pquery($query, $params);
+    $result = Migration_Index_View::ExecuteQuery($query, $params);
     if ($db->num_rows($result)) {
         $menuEditorModuleModel = new Settings_MenuEditor_Module_Model();
         $menuEditorModuleModel->addModuleToApp('Quotes', 'MARKETING');
     }
 
-    $db->pquery('ALTER TABLE vtiger_cvstdfilter DROP PRIMARY KEY', array());
-    $db->pquery('ALTER TABLE vtiger_cvstdfilter DROP KEY cvstdfilter_cvid_idx', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_cvstdfilter DROP PRIMARY KEY', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_cvstdfilter DROP KEY cvstdfilter_cvid_idx', array());
 
-    $keyResult = $db->pquery("SHOW INDEX FROM vtiger_cvstdfilter WHERE key_name='fk_1_vtiger_cvstdfilter'", array());
+    $keyResult = Migration_Index_View::ExecuteQuery("SHOW INDEX FROM vtiger_cvstdfilter WHERE key_name='fk_1_vtiger_cvstdfilter'", array());
     if ($db->num_rows($keyResult)) {
-        $db->pquery('ALTER TABLE vtiger_cvstdfilter DROP FOREIGN KEY fk_1_vtiger_cvstdfilter', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_cvstdfilter DROP FOREIGN KEY fk_1_vtiger_cvstdfilter', array());
     }
-    $db->pquery('ALTER TABLE vtiger_cvstdfilter ADD CONSTRAINT fk_1_vtiger_cvstdfilter FOREIGN KEY (cvid) REFERENCES vtiger_customview(cvid) ON DELETE CASCADE', array());
+    Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_cvstdfilter ADD CONSTRAINT fk_1_vtiger_cvstdfilter FOREIGN KEY (cvid) REFERENCES vtiger_customview(cvid) ON DELETE CASCADE', array());
 
-    $keyResult = $db->pquery("SHOW INDEX FROM vtiger_app2tab WHERE key_name='vtiger_app2tab_fk_tab'", array());
+    $keyResult = Migration_Index_View::ExecuteQuery("SHOW INDEX FROM vtiger_app2tab WHERE key_name='vtiger_app2tab_fk_tab'", array());
     if (!$db->num_rows($keyResult)) {
-        $db->pquery('ALTER TABLE vtiger_app2tab ADD CONSTRAINT vtiger_app2tab_fk_tab FOREIGN KEY(tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_app2tab ADD CONSTRAINT vtiger_app2tab_fk_tab FOREIGN KEY(tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE', array());
     }
 
     if (!Vtiger_Utils::CheckTable('vtiger_convertpotentialmapping')) {
         Vtiger_Utils::CreateTable('vtiger_convertpotentialmapping', "(`cfmid` int(19) NOT NULL AUTO_INCREMENT,
-				`potentialfid` int(19) NOT NULL,
-				`projectfid` int(19) DEFAULT NULL,
-				`editable` int(11) DEFAULT '1',
-				PRIMARY KEY (`cfmid`)
-				)", true);
+                `potentialfid` int(19) NOT NULL,
+                `projectfid` int(19) DEFAULT NULL,
+                `editable` int(11) DEFAULT '1',
+                PRIMARY KEY (`cfmid`)
+                )", true);
         $fieldMap = array(
             array('potentialname', 'projectname', 0),
             array('description', 'description', 1),
@@ -2037,13 +2107,13 @@ if (defined('VTIGER_UPGRADE')) {
             $potentialfid = getFieldid($potentialTab, $values[0]);
             $projectfid = getFieldid($projectTab, $values[1]);
             $editable = $values[4];
-            $db->pquery($mapSql, array($potentialfid, $projectfid, $editable));
+            Migration_Index_View::ExecuteQuery($mapSql, array($potentialfid, $projectfid, $editable));
         }
     }
 
     $columns = $db->getColumnNames('vtiger_potential');
     if (!in_array('converted', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_potential ADD converted INT(1) NOT NULL DEFAULT 0', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_potential ADD converted INT(1) NOT NULL DEFAULT 0', array());
     }
 
     $Vtiger_Utils_Log = true;
@@ -2093,55 +2163,55 @@ if (defined('VTIGER_UPGRADE')) {
     foreach ($modules as $moduleName) {
         $tabId = getTabid($moduleName);
         if ($moduleName == 'Project') {
-            $db->pquery('UPDATE vtiger_field SET displaytype=? WHERE fieldname=? AND tabid=?', array(1, 'isconvertedfrompotential', $tabId));
+            Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET displaytype=? WHERE fieldname=? AND tabid=?', array(1, 'isconvertedfrompotential', $tabId));
         } else {
-            $db->pquery('UPDATE vtiger_field SET displaytype=? WHERE fieldname=? AND tabid=?', array(1, 'isconvertedfromlead', $tabId));
+            Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET displaytype=? WHERE fieldname=? AND tabid=?', array(1, 'isconvertedfromlead', $tabId));
         }
         Vtiger_Cache::flushModuleCache($moduleName);
     }
 
-    $db->pquery('DELETE FROM vtiger_links WHERE linktype=? AND handler_class=?', array('DETAILVIEWBASIC', 'Documents'));
+    Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_links WHERE linktype=? AND handler_class=?', array('DETAILVIEWBASIC', 'Documents'));
 
     $columns = $db->getColumnNames('vtiger_mailmanager_mailrecord');
     if (!in_array('mfolder', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_mailmanager_mailrecord ADD COLUMN mfolder VARCHAR(250)', array());
-        $duplicateResult = $db->pquery('SELECT muid FROM vtiger_mailmanager_mailrecord GROUP BY muid HAVING COUNT(muid) > ?', array('1'));
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mailmanager_mailrecord ADD COLUMN mfolder VARCHAR(250)', array());
+        $duplicateResult = Migration_Index_View::ExecuteQuery('SELECT muid FROM vtiger_mailmanager_mailrecord GROUP BY muid HAVING COUNT(muid) > ?', array('1'));
         $noOfDuplicate = $db->num_rows($duplicateResult);
         if ($noOfDuplicate) {
             $duplicateMuid = array();
             for ($i = 0; $i < $noOfDuplicate; $i++) {
                 $duplicateMuid[] = $db->query_result($duplicateResult, $i, 'muid');
             }
-            $db->pquery('DELETE FROM vtiger_mailmanager_mailrecord WHERE muid IN (' . generateQuestionMarks($duplicateMuid) . ')', $duplicateMuid);
-            $db->pquery('DELETE FROM vtiger_mailmanager_mailattachments WHERE muid IN (' . generateQuestionMarks($duplicateMuid) . ')', $duplicateMuid);
+            Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_mailmanager_mailrecord WHERE muid IN (' . generateQuestionMarks($duplicateMuid) . ')', $duplicateMuid);
+            Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_mailmanager_mailattachments WHERE muid IN (' . generateQuestionMarks($duplicateMuid) . ')', $duplicateMuid);
         }
     }
 
     $columns = $db->getColumnNames('vtiger_mailscanner');
     if (!in_array('scanfrom', $columns)) {
-        $db->pquery('ALTER TABLE vtiger_mailscanner ADD COLUMN scanfrom VARCHAR(10) DEFAULT "ALL"', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mailscanner ADD COLUMN scanfrom VARCHAR(10) DEFAULT "ALL"', array());
     }
 
     if (Vtiger_Utils::CheckTable('vtiger_mailscanner_ids')) {
         $columns = $db->getColumnNames('vtiger_mailscanner_ids');
         if (!in_array('refids', $columns)) {
-            $db->pquery('ALTER TABLE vtiger_mailscanner_ids ADD COLUMN refids MEDIUMTEXT', array());
+            Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mailscanner_ids ADD COLUMN refids MEDIUMTEXT', array());
         }
-        $db->pquery('ALTER TABLE vtiger_mailscanner_ids ADD INDEX messageids_crmid_idx(crmid)', array());
+        Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mailscanner_ids ADD INDEX messageids_crmid_idx(crmid)', array());
     }
 
-    $result = $db->pquery('SELECT templateid FROM vtiger_emailtemplates ORDER BY templateid DESC LIMIT 1', array());
-    $db->pquery('UPDATE vtiger_emailtemplates_seq SET id=?', array($db->query_result($result, 0, 'templateid')));
+    $result = Migration_Index_View::ExecuteQuery('SELECT templateid FROM vtiger_emailtemplates ORDER BY templateid DESC LIMIT 1', array());
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_emailtemplates_seq SET id=?', array($db->query_result($result, 0, 'templateid')));
 
     //Migrating data missed in vtiger_settings_field from file to database.
     //Start:: user management block
-    $userResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_USER_MANAGEMENT'));
+    $userResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_USER_MANAGEMENT'));
     if ($db->num_rows($userResult)) {
         $userManagementBlockId = $db->query_result($userResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(1, $userManagementBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(1, $userManagementBlockId));
     } else {
         $userManagementBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($userManagementBlockId, 'LBL_USER_MANAGEMENT', 1));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($userManagementBlockId, 'LBL_USER_MANAGEMENT', 1));
     }
 
     $userManagementFields = array('LBL_USERS' => 'index.php?module=Users&parent=Settings&view=List',
@@ -2153,17 +2223,17 @@ if (defined('VTIGER_UPGRADE')) {
 
     $userManagementSequence = 1;
     foreach ($userManagementFields as $fieldName => $linkTo) {
-        $db->pquery('UPDATE vtiger_settings_field SET sequence=?, linkto=? WHERE name=? AND blockid=?', array($userManagementSequence++, $linkTo, $fieldName, $userManagementBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_field SET sequence=?, linkto=? WHERE name=? AND blockid=?', array($userManagementSequence++, $linkTo, $fieldName, $userManagementBlockId));
     }
     //End:: user management block
     //Start:: module manager block
-    $moduleManagerResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_MODULE_MANAGER'));
+    $moduleManagerResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_MODULE_MANAGER'));
     if ($db->num_rows($moduleManagerResult)) {
         $moduleManagerBlockId = $db->query_result($moduleManagerResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(2, $moduleManagerBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(2, $moduleManagerBlockId));
     } else {
         $moduleManagerBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($moduleManagerBlockId, 'LBL_MODULE_MANAGER', 2));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($moduleManagerBlockId, 'LBL_MODULE_MANAGER', 2));
     }
 
     $moduleManagerFields = array('VTLIB_LBL_MODULE_MANAGER' => 'index.php?module=ModuleManager&parent=Settings&view=List',
@@ -2172,17 +2242,17 @@ if (defined('VTIGER_UPGRADE')) {
         'LBL_CUSTOMIZE_MODENT_NUMBER' => 'index.php?module=Vtiger&parent=Settings&view=CustomRecordNumbering');
     $moduleManagerSequence = 1;
     foreach ($moduleManagerFields as $fieldName => $linkTo) {
-        $db->pquery('UPDATE vtiger_settings_field SET sequence=?, linkto=?, blockid=? WHERE name=?', array($moduleManagerSequence++, $linkTo, $moduleManagerBlockId, $fieldName));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_field SET sequence=?, linkto=?, blockid=? WHERE name=?', array($moduleManagerSequence++, $linkTo, $moduleManagerBlockId, $fieldName));
     }
     //End:: module manager block
     //Start:: automation block
-    $automationResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_AUTOMATION'));
+    $automationResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_AUTOMATION'));
     if ($db->num_rows($automationResult)) {
         $automationBlockId = $db->query_result($automationResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(3, $automationBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(3, $automationBlockId));
     } else {
         $automationBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($automationBlockId, 'LBL_AUTOMATION', 3));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($automationBlockId, 'LBL_AUTOMATION', 3));
     }
 
     $automationFields = array('Webforms' => 'index.php?module=Webforms&parent=Settings&view=List',
@@ -2191,17 +2261,17 @@ if (defined('VTIGER_UPGRADE')) {
 
     $automationSequence = 1;
     foreach ($automationFields as $fieldName => $linkTo) {
-        $db->pquery('UPDATE vtiger_settings_field SET sequence=?, linkto=?, blockid=? WHERE name=?', array($automationSequence++, $linkTo, $automationBlockId, $fieldName));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_field SET sequence=?, linkto=?, blockid=? WHERE name=?', array($automationSequence++, $linkTo, $automationBlockId, $fieldName));
     }
     //End:: automation block
     //Start:: configuration block
-    $configurationResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_CONFIGURATION'));
+    $configurationResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_CONFIGURATION'));
     if ($db->num_rows($configurationResult)) {
         $configurationBlockId = $db->query_result($configurationResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(4, $configurationBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(4, $configurationBlockId));
     } else {
         $configurationBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($configurationBlockId, 'LBL_CONFIGURATION', 4));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($configurationBlockId, 'LBL_CONFIGURATION', 4));
     }
 
     $configurationFields = array('LBL_COMPANY_DETAILS' => 'index.php?parent=Settings&module=Vtiger&view=CompanyDetails',
@@ -2213,20 +2283,20 @@ if (defined('VTIGER_UPGRADE')) {
         'LBL_PICKLIST_DEPENDENCY' => 'index.php?parent=Settings&module=PickListDependency&view=List',
         'LBL_MENU_EDITOR' => 'index.php?module=MenuEditor&parent=Settings&view=Index');
 
-    $db->pquery('UPDATE vtiger_settings_field SET name=? WHERE name=?', array('LBL_PICKLIST_DEPENDENCY', 'LBL_PICKLIST_DEPENDENCY_SETUP'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_field SET name=? WHERE name=?', array('LBL_PICKLIST_DEPENDENCY', 'LBL_PICKLIST_DEPENDENCY_SETUP'));
     $configurationSequence = 1;
     foreach ($configurationFields as $fieldName => $linkTo) {
-        $db->pquery('UPDATE vtiger_settings_field SET sequence=?, linkto=?, blockid=? WHERE name=?', array($configurationSequence++, $linkTo, $configurationBlockId, $fieldName));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_field SET sequence=?, linkto=?, blockid=? WHERE name=?', array($configurationSequence++, $linkTo, $configurationBlockId, $fieldName));
     }
     //End:: configuration block
     //Start:: marketing sales block
-    $marketingSalesResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_MARKETING_SALES'));
+    $marketingSalesResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_MARKETING_SALES'));
     if ($db->num_rows($marketingSalesResult)) {
         $marketingSalesBlockId = $db->query_result($marketingSalesResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(5, $marketingSalesBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(5, $marketingSalesBlockId));
     } else {
         $marketingSalesBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($marketingSalesBlockId, 'LBL_MARKETING_SALES', 5));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($marketingSalesBlockId, 'LBL_MARKETING_SALES', 5));
     }
 
     $marketingSalesFields = array('LBL_LEAD_MAPPING' => 'index.php?parent=Settings&module=Leads&view=MappingDetail',
@@ -2234,22 +2304,22 @@ if (defined('VTIGER_UPGRADE')) {
 
     $marketingSequence = 1;
     foreach ($marketingSalesFields as $fieldName => $linkTo) {
-        $marketingFieldResult = $db->pquery('SELECT 1 FROM vtiger_settings_field WHERE name=?', array($fieldName));
+        $marketingFieldResult = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_settings_field WHERE name=?', array($fieldName));
         if (!$db->num_rows($marketingFieldResult)) {
             $updateQuery = 'INSERT INTO vtiger_settings_field(fieldid,blockid,name,iconpath,description,linkto,sequence,active,pinned) VALUES(?,?,?,?,?,?,?,?,?)';
             $params = array($db->getUniqueID('vtiger_settings_field'), $marketingSalesBlockId, $fieldName, 'NULL', 'NULL', $linkTo, $marketingSequence++, 0, 1);
-            $db->pquery($updateQuery, $params);
+            Migration_Index_View::ExecuteQuery($updateQuery, $params);
         }
     }
     //End:: marketing sales block
     //Start:: inventory block
-    $inventoryResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_INVENTORY'));
+    $inventoryResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_INVENTORY'));
     if ($db->num_rows($inventoryResult)) {
         $inventoryBlockId = $db->query_result($inventoryResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(6, $inventoryBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(6, $inventoryBlockId));
     } else {
         $inventoryBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($inventoryBlockId, 'LBL_INVENTORY', 6));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($inventoryBlockId, 'LBL_INVENTORY', 6));
     }
 
     $inventoryFields = array('LBL_TAX_SETTINGS' => 'index.php?module=Vtiger&parent=Settings&view=TaxIndex',
@@ -2257,17 +2327,17 @@ if (defined('VTIGER_UPGRADE')) {
 
     $inventorySequence = 1;
     foreach ($inventoryFields as $fieldName => $linkTo) {
-        $db->pquery('UPDATE vtiger_settings_field SET sequence=?, linkto=?, blockid=? WHERE name=?', array($inventorySequence++, $linkTo, $inventoryBlockId, $fieldName));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_field SET sequence=?, linkto=?, blockid=? WHERE name=?', array($inventorySequence++, $linkTo, $inventoryBlockId, $fieldName));
     }
     //End:: inventory block
     //Start:: mypreference block
-    $myPreferenceResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_MY_PREFERENCES'));
+    $myPreferenceResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_MY_PREFERENCES'));
     if ($db->num_rows($myPreferenceResult)) {
         $myPreferenceBlockId = $db->query_result($myPreferenceResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(7, $myPreferenceBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(7, $myPreferenceBlockId));
     } else {
         $myPreferenceBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid,label,sequence) VALUES(?,?,?)', array($myPreferenceBlockId, 'LBL_MY_PREFERENCES', 7));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid,label,sequence) VALUES(?,?,?)', array($myPreferenceBlockId, 'LBL_MY_PREFERENCES', 7));
     }
 
     $myPreferenceFields = array('My Preferences' => 'index.php?module=Users&view=PreferenceDetail&parent=Settings&record=1',
@@ -2276,32 +2346,32 @@ if (defined('VTIGER_UPGRADE')) {
 
     $myPreferenceSequence = 1;
     foreach ($myPreferenceFields as $fieldName => $linkTo) {
-        $myPrefFieldResult = $db->pquery('SELECT 1 FROM vtiger_settings_field WHERE name=?', array($fieldName));
+        $myPrefFieldResult = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_settings_field WHERE name=?', array($fieldName));
         if (!$db->num_rows($myPrefFieldResult)) {
             $fieldQuery = 'INSERT INTO vtiger_settings_field(fieldid,blockid,name,iconpath,description,linkto,sequence,active,pinned) VALUES(?,?,?,?,?,?,?,?,?)';
             $params = array($db->getUniqueID('vtiger_settings_field'), $myPreferenceBlockId, $fieldName, 'NULL', 'NULL', $linkTo, $myPreferenceSequence++, 0, 1);
-            $db->pquery($fieldQuery, $params);
+            Migration_Index_View::ExecuteQuery($fieldQuery, $params);
         }
     }
     //End:: mypreference block
     //Start:: integrations block
-    $integrationBlockResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_INTEGRATION'));
+    $integrationBlockResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_INTEGRATION'));
     if ($db->num_rows($integrationBlockResult)) {
         $integrationBlockId = $db->query_result($integrationBlockResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(8, $integrationBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(8, $integrationBlockId));
     } else {
         $integrationBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($integrationBlockId, 'LBL_INTEGRATION', 8));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($integrationBlockId, 'LBL_INTEGRATION', 8));
     }
     //End:: integrations block
     //Start:: extensions block
-    $extensionResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_EXTENSIONS'));
+    $extensionResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_EXTENSIONS'));
     if ($db->num_rows($extensionResult)) {
         $extensionsBlockId = $db->query_result($extensionResult, 0, 'blockid');
-        $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(9, $extensionsBlockId));
+        Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE blockid=?', array(9, $extensionsBlockId));
     } else {
         $extensionsBlockId = $db->getUniqueID('vtiger_settings_blocks');
-        $db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($extensionsBlockId, 'LBL_EXTENSIONS', 9));
+        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?, ?, ?)', array($extensionsBlockId, 'LBL_EXTENSIONS', 9));
     }
 
     $extensionFields = array('LBL_EXTENSION_STORE' => 'index.php?module=ExtensionStore&parent=Settings&view=ExtensionStore',
@@ -2309,11 +2379,11 @@ if (defined('VTIGER_UPGRADE')) {
 
     $extSequence = 1;
     foreach ($extensionFields as $fieldName => $linkTo) {
-        $extFieldResult = $db->pquery('SELECT 1 FROM vtiger_settings_field WHERE name=?', array($fieldName));
+        $extFieldResult = Migration_Index_View::ExecuteQuery('SELECT 1 FROM vtiger_settings_field WHERE name=?', array($fieldName));
         if (!$db->num_rows($extFieldResult)) {
             $fieldQuery = 'INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence, active, pinned) VALUES(?,?,?,?,?,?,?,?,?)';
             $params = array($db->getUniqueID('vtiger_settings_field'), $extensionsBlockId, $fieldName, 'NULL', 'NULL', $linkTo, $extSequence++, 0, 1);
-            $db->pquery($fieldQuery, $params);
+            Migration_Index_View::ExecuteQuery($fieldQuery, $params);
         }
     }
     //End:: extensions block
@@ -2326,29 +2396,29 @@ if (defined('VTIGER_UPGRADE')) {
 
     foreach ($blocksAndNameFields as $blockId => $blockFields) {
         //Delete duplicate entries of block fields in other blocks.
-        $db->pquery('DELETE FROM vtiger_settings_field WHERE name IN (' . generateQuestionMarks($blockFields) . ') AND blockid != ?', array($blockFields, $blockId));
+        Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_settings_field WHERE name IN (' . generateQuestionMarks($blockFields) . ') AND blockid != ?', array($blockFields, $blockId));
 
         //Delete non block fields in specific blocks
-        $db->pquery('DELETE FROM vtiger_settings_field WHERE name NOT IN (' . generateQuestionMarks($blockFields) . ') AND blockid=?', array($blockFields, $blockId));
+        Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_settings_field WHERE name NOT IN (' . generateQuestionMarks($blockFields) . ') AND blockid=?', array($blockFields, $blockId));
     }
 
     //Deleting unused blocks from Settings page
     $unusedSettingsBlocks = array('LBL_STUDIO', 'LBL_COMMUNICATION_TEMPLATES');
-    $db->pquery('DELETE FROM vtiger_settings_blocks WHERE label IN (' . generateQuestionMarks($unusedSettingsBlocks) . ')', array($unusedSettingsBlocks));
+    Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_settings_blocks WHERE label IN (' . generateQuestionMarks($unusedSettingsBlocks) . ')', array($unusedSettingsBlocks));
     echo 'Deleted unused blocks from settings page';
 
     //Update other settings block sequence to last
-    $db->pquery('UPDATE vtiger_settings_blocks SET sequence=? WHERE label=?', array('10', 'LBL_OTHER_SETTINGS'));
-    $otheBlockResult = $db->pquery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_OTHER_SETTINGS'));
+    Migration_Index_View::ExecuteQuery('UPDATE vtiger_settings_blocks SET sequence=? WHERE label=?', array('10', 'LBL_OTHER_SETTINGS'));
+    $otheBlockResult = Migration_Index_View::ExecuteQuery('SELECT blockid FROM vtiger_settings_blocks WHERE label=?', array('LBL_OTHER_SETTINGS'));
     if ($db->num_rows($otheBlockResult) > 0) {
         $otherBlockId = $db->query_result($otheBlockResult, 0, 'blockid');
     }
 
     $duplicateOtherBlockFields = array('LBL_ANNOUNCEMENT');
-    $db->pquery('DELETE FROM vtiger_settings_field WHERE name IN (' . generateQuestionMarks($duplicateOtherBlockFields) . ') AND blockid=?', array($duplicateOtherBlockFields, $otherBlockId));
+    Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_settings_field WHERE name IN (' . generateQuestionMarks($duplicateOtherBlockFields) . ') AND blockid=?', array($duplicateOtherBlockFields, $otherBlockId));
     //Migration of data to vtiger_settings blocks and fields ends
 
-    $result = $db->pquery('SELECT cvid, entitytype FROM vtiger_customview WHERE viewname=?', array('All'));
+    $result = Migration_Index_View::ExecuteQuery('SELECT cvid, entitytype FROM vtiger_customview WHERE viewname=?', array('All'));
     if ($result && $db->num_rows($result) > 0) {
         while ($row = $db->fetch_array($result)) {
             $cvId = $row['cvid'];
@@ -2371,7 +2441,7 @@ if (defined('VTIGER_UPGRADE')) {
                         $fieldInstance = Vtiger_Field_Model::getInstance($fieldName, $moduleModel);
                         if ($fieldInstance) {
                             $columnname = decode_html($fieldInstance->getCustomViewColumnName());
-                            $db->pquery('UPDATE vtiger_cvcolumnlist SET columnname=? WHERE cvid=? AND columnname=?', array($columnname, $cvId, $cvSelectedField));
+                            Migration_Index_View::ExecuteQuery('UPDATE vtiger_cvcolumnlist SET columnname=? WHERE cvid=? AND columnname=?', array($columnname, $cvId, $cvSelectedField));
                         }
                     }
                 }
@@ -2390,12 +2460,12 @@ if (defined('VTIGER_UPGRADE')) {
         if ($baseTableName) {
             //Checking foriegn key with vtiger_crmenity
             $query = 'SELECT 1 FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-							WHERE CONSTRAINT_SCHEMA=? AND CONSTRAINT_NAME LIKE ?
-								AND TABLE_NAME=? AND COLUMN_NAME=?
-								AND REFERENCED_TABLE_NAME=? AND REFERENCED_COLUMN_NAME=?';
-            $checkIfConstraintExists = $db->pquery($query, array($dbName, '%fk%', $baseTableName, $baseTableIndex, 'vtiger_crmentity', 'crmid'));
+                            WHERE CONSTRAINT_SCHEMA=? AND CONSTRAINT_NAME LIKE ?
+                                AND TABLE_NAME=? AND COLUMN_NAME=?
+                                AND REFERENCED_TABLE_NAME=? AND REFERENCED_COLUMN_NAME=?';
+            $checkIfConstraintExists = Migration_Index_View::ExecuteQuery($query, array($dbName, '%fk%', $baseTableName, $baseTableIndex, 'vtiger_crmentity', 'crmid'));
             if ($db->num_rows($checkIfConstraintExists) < 1) {
-                $db->pquery("ALTER TABLE $baseTableName ADD CONSTRAINT fk_crmid_$baseTableName FOREIGN KEY ($baseTableIndex) REFERENCES vtiger_crmentity (crmid) ON DELETE CASCADE", array());
+                Migration_Index_View::ExecuteQuery("ALTER TABLE $baseTableName ADD CONSTRAINT fk_crmid_$baseTableName FOREIGN KEY ($baseTableIndex) REFERENCES vtiger_crmentity (crmid) ON DELETE CASCADE", array());
             }
 
             $focus = CRMEntity::getInstance($moduleName);
@@ -2418,14 +2488,14 @@ if (defined('VTIGER_UPGRADE')) {
                         $referenceColumn = 'crmid';
                     }
 
-                    $checkIfRelConstraintExists = $db->pquery($query, array($dbName, '%fk%', $tableName, $index, $referenceTable, $referenceColumn));
+                    $checkIfRelConstraintExists = Migration_Index_View::ExecuteQuery($query, array($dbName, '%fk%', $tableName, $index, $referenceTable, $referenceColumn));
                     if ($db->num_rows($checkIfRelConstraintExists) < 1) {
                         $newForiegnKey = "fk_$referenceColumn" . "_$tableName";
-                        $db->pquery("ALTER TABLE $tableName ADD CONSTRAINT $newForiegnKey FOREIGN KEY ($index) REFERENCES $referenceTable ($referenceColumn) ON DELETE CASCADE", array());
+                        Migration_Index_View::ExecuteQuery("ALTER TABLE $tableName ADD CONSTRAINT $newForiegnKey FOREIGN KEY ($index) REFERENCES $referenceTable ($referenceColumn) ON DELETE CASCADE", array());
                     }
                 }
             }
-            $db->pquery("DELETE FROM $baseTableName WHERE $baseTableIndex NOT IN (SELECT crmid FROM vtiger_crmentity WHERE setype=?)", array($moduleName));
+            Migration_Index_View::ExecuteQuery("DELETE FROM $baseTableName WHERE $baseTableIndex NOT IN (SELECT crmid FROM vtiger_crmentity WHERE setype=?)", array($moduleName));
         }
     }
 
@@ -2442,44 +2512,44 @@ if (defined('VTIGER_UPGRADE')) {
     echo '<br>Successfully updated : <b>Vtiger7</b><br>';
     
     if (!Vtiger_Utils::CheckTable('vtiger_mailscanner')) {
-		Vtiger_Utils::CreateTable('vtiger_mailscanner', 
-				"(`scannerid` INT(11) NOT NULL AUTO_INCREMENT,
-				`scannername` VARCHAR(30) DEFAULT NULL,
-				`server` VARCHAR(100) DEFAULT NULL,
-				`protocol` VARCHAR(10) DEFAULT NULL,
-				`username` VARCHAR(255) DEFAULT NULL,
-				`password` VARCHAR(255) DEFAULT NULL,
-				`ssltype` VARCHAR(10) DEFAULT NULL,
-				`sslmethod` VARCHAR(30) DEFAULT NULL,
-				`connecturl` VARCHAR(255) DEFAULT NULL,
-				`searchfor` VARCHAR(10) DEFAULT NULL,
-				`markas` VARCHAR(10) DEFAULT NULL,
-				`isvalid` INT(1) DEFAULT NULL,
-				`scanfrom` VARCHAR(10) DEFAULT 'ALL',
-				`time_zone` VARCHAR(10) DEFAULT NULL,
-				PRIMARY KEY (`scannerid`)
-			  ) ENGINE=InnoDB DEFAULT CHARSET=utf8", true);
-	}
+        Vtiger_Utils::CreateTable('vtiger_mailscanner', 
+                "(`scannerid` INT(11) NOT NULL AUTO_INCREMENT,
+                `scannername` VARCHAR(30) DEFAULT NULL,
+                `server` VARCHAR(100) DEFAULT NULL,
+                `protocol` VARCHAR(10) DEFAULT NULL,
+                `username` VARCHAR(255) DEFAULT NULL,
+                `password` VARCHAR(255) DEFAULT NULL,
+                `ssltype` VARCHAR(10) DEFAULT NULL,
+                `sslmethod` VARCHAR(30) DEFAULT NULL,
+                `connecturl` VARCHAR(255) DEFAULT NULL,
+                `searchfor` VARCHAR(10) DEFAULT NULL,
+                `markas` VARCHAR(10) DEFAULT NULL,
+                `isvalid` INT(1) DEFAULT NULL,
+                `scanfrom` VARCHAR(10) DEFAULT 'ALL',
+                `time_zone` VARCHAR(10) DEFAULT NULL,
+                PRIMARY KEY (`scannerid`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8", true);
+    }
 
-	$updateModulesList = array(	'Project'		=> 'packages/vtiger/optional/Projects.zip',
-								'Google'		=> 'packages/vtiger/optional/Google.zip',
-								'ExtensionStore'=> 'packages/vtiger/marketplace/ExtensionStore.zip');
-	foreach ($updateModulesList as $moduleName => $packagePath) {
-		$moduleInstance = Vtiger_Module::getInstance($moduleName);
-		if($moduleInstance) {
-			updateVtlibModule($moduleName, $packagepath);
-		}
-	}
+    $updateModulesList = array( 'Project'       => 'packages/vtiger/optional/Projects.zip',
+                                'Google'        => 'packages/vtiger/optional/Google.zip',
+                                'ExtensionStore'=> 'packages/vtiger/marketplace/ExtensionStore.zip');
+    foreach ($updateModulesList as $moduleName => $packagePath) {
+        $moduleInstance = Vtiger_Module::getInstance($moduleName);
+        if($moduleInstance) {
+            updateVtlibModule($moduleName, $packagepath);
+        }
+    }
     
     $relationId = $adb->getUniqueID('vtiger_relatedlists');
     $contactTabId = getTabid('Contacts');
     $smsNotifierTabId = getTabId('SMSNotifier');
 
     $query = 'SELECT max(sequence) as maxsequence FROM vtiger_relatedlists where tabid = ?';
-    $result = $adb->pquery($query, array($contactTabId));
+    $result = Migration_Index_View::ExecuteQuery($query, array($contactTabId));
     $sequence = $adb->query_result($result, 0 ,'maxsequence');
     $query = 'SELECT 1 FROM vtiger_relatedlists WHERE tabid=? AND related_tabid =?';
-    $result = $adb->pquery($query, array($contactTabId, $smsNotifierTabId));
+    $result = Migration_Index_View::ExecuteQuery($query, array($contactTabId, $smsNotifierTabId));
     if (!$adb->num_rows($result)) {
         $query = 'INSERT INTO vtiger_relatedlists (relation_id,tabid,related_tabid,name,sequence,label,presence) VALUES(?,?,?,?,?,?,?)';
         Migration_Index_View::ExecuteQuery($query, array($relationId, $contactTabId,$smsNotifierTabId,'get_related_list',($sequence+1),'SMSNotifier',0));
@@ -2489,10 +2559,10 @@ if (defined('VTIGER_UPGRADE')) {
     $smsNotifierTabId = getTabId('SMSNotifier');
 
     $query = 'SELECT max(sequence) as maxsequence FROM vtiger_relatedlists where tabid = ?';
-    $result = $adb->pquery($query, array($accountTabId));
+    $result = Migration_Index_View::ExecuteQuery($query, array($accountTabId));
     $sequence = $adb->query_result($result, 0 ,'maxsequence');
     $query = 'SELECT 1 FROM vtiger_relatedlists WHERE tabid=? AND related_tabid =?';
-    $result = $adb->pquery($query, array($accountTabId, $smsNotifierTabId));
+    $result = Migration_Index_View::ExecuteQuery($query, array($accountTabId, $smsNotifierTabId));
     if (!$adb->num_rows($result)) {
         $query = 'INSERT INTO vtiger_relatedlists (relation_id,tabid,related_tabid,name,sequence,label,presence) VALUES(?,?,?,?,?,?,?)';
         Migration_Index_View::ExecuteQuery($query, array($relationId, $accountTabId,$smsNotifierTabId,'get_related_list',($sequence+1),'SMSNotifier',0));
@@ -2502,12 +2572,13 @@ if (defined('VTIGER_UPGRADE')) {
     $smsNotifierTabId = getTabId('SMSNotifier');
 
     $query = 'SELECT max(sequence) as maxsequence FROM vtiger_relatedlists where tabid = ?';
-    $result = $adb->pquery($query, array($leadsTabId));
+    $result = Migration_Index_View::ExecuteQuery($query, array($leadsTabId));
     $sequence = $adb->query_result($result, 0 ,'maxsequence');
     $query = 'SELECT 1 FROM vtiger_relatedlists WHERE tabid=? AND related_tabid =?';
-    $result = $adb->pquery($query, array($leadsTabId, $smsNotifierTabId));
+    $result = Migration_Index_View::ExecuteQuery($query, array($leadsTabId, $smsNotifierTabId));
     if (!$adb->num_rows($result)) {
         $query = 'INSERT INTO vtiger_relatedlists (relation_id,tabid,related_tabid,name,sequence,label,presence) VALUES(?,?,?,?,?,?,?)';
         Migration_Index_View::ExecuteQuery($query, array($relationId, $leadsTabId,$smsNotifierTabId,'get_related_list',($sequence+1),'SMSNotifier',0));
     }
+    
 }

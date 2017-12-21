@@ -83,7 +83,8 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
                     // SalesPlatform.ru begin
                     $callerRecordModel = Vtiger_Record_Model::getInstanceById($callerid, $moduleName);
                     $ownerId = $callerRecordModel->get('assigned_user_id');
-                    $recordModel->set('ownername',getUserFullName($ownerId));
+                    $ownername = (getUserFullName($ownerId) != "") ? getUserFullName($ownerId) : getGroupFullName($ownerId);
+                    $recordModel->set('ownername', $ownername);
                     // SalesPlatform.ru end
 
                     if(!Users_Privileges_Model::isPermitted($moduleName, 'DetailView', $callerid)){

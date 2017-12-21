@@ -46,7 +46,7 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 			$viewer->assign('RECORD_ID', $record);
 			$viewer->assign('MODE', 'edit');
         // SalesPlatform.ru begin Relation between Invoice & Consignment    
-		} elseif ($request->get('salesorder_id') || $request->get('quote_id') || $request->get('invoice_id')) {
+		} elseif (($request->get('salesorder_id') || $request->get('quote_id') || $request->get('invoice_id')) && ($moduleName == 'PurchaseOrder')) {
         //} elseif ($request->get('salesorder_id') || $request->get('quote_id') || $request->get('invoice_id')) {
 		// SalesPlatform.ru end	
             if ($request->get('salesorder_id')) {
@@ -67,12 +67,21 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 
 			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
 			$recordModel->setRecordFieldValues($parentRecordModel);
-		} elseif ($request->get('salesorder_id') || $request->get('quote_id')) {
+        //SalesPaltform.ru begin
+		} elseif ($request->get('salesorder_id') || $request->get('quote_id') || $request->get('invoice_id')) {
+        //} elseif ($request->get('salesorder_id') || $request->get('quote_id')) {    
+        //SalesPaltform.ru end
 			if ($request->get('salesorder_id')) {
 				$referenceId = $request->get('salesorder_id');
-			} else {
-				$referenceId = $request->get('quote_id');
 			}
+            //SalesPlatform.ru begin
+            else if ($request->get('invoice_id')){
+                $referenceId = $request->get('invoice_id');
+            }
+            //SalesPlatform.ru end
+            else {
+				$referenceId = $request->get('quote_id');
+			}            
 
 			$parentRecordModel = Inventory_Record_Model::getInstanceById($referenceId);
 			$currencyInfo = $parentRecordModel->getCurrencyInfo();

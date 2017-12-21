@@ -1053,15 +1053,36 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 			array_push($parentRolelist, $userRole);
 
 			$userParentRoleSeq = $userPrivilegeModel->get('parent_role_seq');
-			$sql .= " AND ( vtiger_customview.userid = ? OR vtiger_customview.status = 0 OR vtiger_customview.status = 3
-							OR vtiger_customview.userid IN (
-								SELECT vtiger_user2role.userid FROM vtiger_user2role
-									INNER JOIN vtiger_users ON vtiger_users.id = vtiger_user2role.userid
-									INNER JOIN vtiger_role ON vtiger_role.roleid = vtiger_user2role.roleid
-								WHERE vtiger_role.parentrole LIKE '".$userParentRoleSeq."::%') 
-							OR vtiger_customview.cvid IN (SELECT vtiger_cv2users.cvid FROM vtiger_cv2users WHERE vtiger_cv2users.userid=?)";
+                        //SalesPlatform.ru begin fixind shared CustomViews
+//			$sql .= " AND ( vtiger_customview.userid = ? OR vtiger_customview.status = 0 OR vtiger_customview.status = 3
+//							OR vtiger_customview.userid IN (
+//								SELECT vtiger_user2role.userid FROM vtiger_user2role
+//									INNER JOIN vtiger_users ON vtiger_users.id = vtiger_user2role.userid
+//									INNER JOIN vtiger_role ON vtiger_role.roleid = vtiger_user2role.roleid
+//								WHERE vtiger_role.parentrole LIKE '".$userParentRoleSeq."::%') 
+//							OR vtiger_customview.cvid IN (SELECT vtiger_cv2users.cvid FROM vtiger_cv2users WHERE vtiger_cv2users.userid=?)";
+                        $sqlUserIdsParentRoleHigher = "SELECT vtiger_user2role.userid FROM vtiger_user2role ";
+                        $sqlUserIdsParentRoleHigher .= "INNER JOIN vtiger_users ON vtiger_users.id = vtiger_user2role.userid ";
+                        $sqlUserIdsParentRoleHigher .= "INNER JOIN vtiger_role ON vtiger_role.roleid = vtiger_user2role.roleid ";
+                        $sqlUserIdsParentRoleHigher .= "WHERE vtiger_role.parentrole LIKE '" . $userParentRoleSeq . "%'";
+                        
+                        $result = $db->pquery($sqlUserIdsParentRoleHigher, array());
+                        $userIdsParentRoleHigher = array();
+                        while ($row = $db->fetchByAssoc($result)) {
+                            $userIdsParentRoleHigher[] = $row['userid'];
+                        }
+                        
+			$sql .= " AND ( vtiger_customview.userid = ? OR vtiger_customview.status = 0 OR vtiger_customview.status = 3 ";
 			$params[] = $currentUser->getId();
-			$params[] = $currentUser->getId();
+                        
+                        //filters shared to another user which role is lower than current user
+                        if (!empty($userIdsParentRoleHigher)) {                             
+                            $sql .= "OR vtiger_customview.cvid IN (SELECT vtiger_cv2users.cvid FROM vtiger_cv2users WHERE vtiger_cv2users.userid IN (". generateQuestionMarks($userIdsParentRoleHigher) ."))";
+                            $params = array_merge($params, $userIdsParentRoleHigher);
+                        }
+			//$params[] = $currentUser->getId();
+			//$params[] = $currentUser->getId();
+                        //SalesPlatform.ru end fixind shared CustomViews
 			if(!empty($groups)){
 				$sql .= "OR vtiger_customview.cvid IN (SELECT vtiger_cv2group.cvid FROM vtiger_cv2group WHERE vtiger_cv2group.groupid IN (".  generateQuestionMarks($groups)."))";
 				$params = array_merge($params,$groups);

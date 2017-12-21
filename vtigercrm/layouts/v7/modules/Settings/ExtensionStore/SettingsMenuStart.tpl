@@ -7,8 +7,8 @@
  * All Rights Reserved.
  ************************************************************************************}
 {* modules/Settings/Vtiger/views/Index.php *}
-
-{include file="modules/Vtiger/partials/Topbar.tpl"}
+{* SalesPlatform.ru begin *}
+{*{include file="modules/Vtiger/partials/Topbar.tpl"}
 
 <div class="container-fluid app-nav">
 	<div class="row">
@@ -19,4 +19,5 @@
 </nav>    
 
 <div class="main-container clearfix">
-	<div class=" ExtensionscontentsDiv contentsDiv">
+	<div class=" ExtensionscontentsDiv contentsDiv">*}
+{* SalesPlatform.ru end *}

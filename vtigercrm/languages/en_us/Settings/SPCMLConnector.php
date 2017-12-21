@@ -25,6 +25,13 @@ $languageStrings = array(
         'from_1c'                   => 'From 1C',
         'from_site'                 => 'From site',
     'SPCMLConnector'            => 'CommerceML excahge',
+    // SalesPlatform.ru localization fix begin
+    'Site Status' => 'Site Status',
+    'Crm Status' => 'Crm Status',
+    'Direction'  => 'Direction',
+    'Error' => 'Error',
+    'Date' => 'Date',
+    // SalesPlatform.ru localization fix end
 );
 
 $jsLanguageStrings = array(

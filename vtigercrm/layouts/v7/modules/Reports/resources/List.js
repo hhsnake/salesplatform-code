@@ -311,6 +311,11 @@ Vtiger_List_Js("Reports_List_Js",{
         app.request.get({data: params}).then(function(err, response) {
             app.helper.hideProgress();
             jQuery('#helpPageOverlay').css({"width":"550px","box-shadow":"-8px 0 5px -5px lightgrey",'height':'100vh','background':'white'});
+            //SalesPlatform.ru begin
+            if (!jQuery('#helpPageOverlay').is(':visible')) {
+                jQuery('#helpPageOverlay').show();
+            }
+            //SalesPlatform.ru end
             app.helper.loadHelpPageOverlay(response);
             var params = {
                 setHeight: "100%",

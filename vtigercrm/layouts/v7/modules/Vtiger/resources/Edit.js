@@ -13,7 +13,7 @@ Vtiger_Index_Js("Vtiger_Edit_Js",{
     
     editInstance : false,
     
-    recordPresaveEvent : "Pre.Record.Save",
+    recordPresaveEvent : "Pre.Record.Save", 
     
     preReferencePopUpOpenEvent : "Vtiger.Referece.Popup.Pre",
     
@@ -130,26 +130,69 @@ Vtiger_Index_Js("Vtiger_Edit_Js",{
 		return aDeferred.promise();
 	},
     
+    //SalesPlatform.ru begin
+ 	registerSpMobilePhoneFields : function(container) { 
+        $('.spMobilePhone', container).inputmask("+9{11,15}"); 
+    }, 
+    //SalesPlatform.ru end
+    
     /**
      * Function to Validate and Save Event 
      * @returns {undefined}
      */
-    registerValidation : function () {
+    //SalesPlatform.ru begin porting CheckBeforeSave
+    registerCheckBeforeSaveAndValidation : function () {
         var editViewForm = this.getForm();
+        var spFlagCheckBeforeSave = false;
         this.formValidatorInstance = editViewForm.vtValidate({
             submitHandler : function() {
+                if (spFlagCheckBeforeSave)
+                    return true;
+                
                 var e = jQuery.Event(Vtiger_Edit_Js.recordPresaveEvent);
                 app.event.trigger(e);
+                // JS validation
                 if(e.isDefaultPrevented()) {
                     return false;
                 }
-				window.onbeforeunload = null;
-                editViewForm.find('.saveButton').attr('disabled',true);
-                return true;
+                var mode = jQuery(editViewForm).find('[name="mode"]').val();
+                //Form should submit only once for multiple clicks also
+                if(typeof editViewForm.data('submit') != "undefined") {
+                    return false;
+                }
+                //CheckBeforeSave
+                else {
+                    var module = jQuery(editViewForm).find('[name="module"]').val();
+                    //Once the form is submiting add data attribute to that form element
+                    editViewForm.data('submit', 'true');
+                    e.preventDefault();
+                    sp_js_editview_checkBeforeSave(module, editViewForm, mode).then(function () {
+                        spFlagCheckBeforeSave = true;
+                        
+                        //on submit form trigger the recordPreSave event
+                        var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPresaveEvent);
+                        editViewForm.trigger(recordPreSaveEvent, {'value': 'edit'});
+
+                        if (recordPreSaveEvent.isDefaultPrevented()) {
+                            //If duplicate record validation fails, form should submit again
+                            editViewForm.removeData('submit');
+                            e.preventDefault();
+                            return false;
+                        }
+                        var progressIndicator = $.progressIndicator({message: app.vtranslate('JS_SAVE')});
+                        
+                        editViewForm.submit();
+                    },
+                    function (error) {
+                        editViewForm.removeData('submit');
+                        return false;
+                    });
+                    }            
             }
         });
     },
-    
+    //SalesPlatform.ru end porting CheckBeforeSave
+
     /**
     * Function which will register event to prevent form submission on pressing on enter
     * @params - container <jQuery> - element in which auto complete fields needs to be searched
@@ -316,6 +359,21 @@ Vtiger_Index_Js("Vtiger_Edit_Js",{
 				jQuery(e.currentTarget).addClass('ignore-validation');
             });
 	},
+    
+        //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+        registerEventForCkEditor : function(container){
+            var form = this.getForm();
+            if(typeof container != 'undefined'){
+                form = container;
+            }
+            var noteContentElement = form.find('.sp_cke_field');
+            jQuery(noteContentElement).each(function(index, element){
+                jQuery(element).removeAttr('data-validation-engine').addClass('ckEditorSource');
+                var ckEditorInstance = new Vtiger_CkEditor_Js();
+                ckEditorInstance.loadCkEditor(jQuery(element));
+            });
+	},
+        //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
         
     /** 
      * Function to register Basic Events
@@ -355,8 +413,255 @@ Vtiger_Index_Js("Vtiger_Edit_Js",{
         this.registerBasicEvents(this.getForm());
         this.registerEventForImageDelete();
         this.registerImageChangeEvent();
-        this.registerValidation();
+        //SalesPlatform.ru begin porting CheckBeforeSave
+        this.registerCheckBeforeSaveAndValidation();
+        //SalesPlatform.ru end porting CheckBeforeSave
+        //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+        this.registerEventForCkEditor(editViewContainer);
+        this.registerSpMobilePhoneFields(editViewContainer);
+        //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
         app.event.trigger('post.editView.load', editViewContainer);
 		this.registerPageLeaveEvents();
     }
 });
+
+// SalesPlatform.ru begin porting CheckBeforeSave
+VtigerJS_DialogBox = {
+	_olayer : function(toggle) {
+		var olayerid = "__vtigerjs_dialogbox_olayer__";
+		VtigerJS_DialogBox._removebyid(olayerid);
+
+		if(typeof(toggle) == 'undefined' || !toggle) return;
+
+		var olayer = document.getElementById(olayerid);
+		if(!olayer) {
+			olayer = document.createElement("div");
+			olayer.id = olayerid;
+			olayer.className = "small veil";
+			olayer.style.zIndex = (new Date()).getTime();
+
+			// Avoid zIndex going beyond integer max
+			// http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7146#comment:1
+			olayer.style.zIndex = parseInt((new Date()).getTime() / 1000);
+
+			// In case zIndex goes to negative side!
+			if(olayer.style.zIndex < 0) olayer.style.zIndex *= -1;
+			if (browser_ie) {
+				olayer.style.height = document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight) + "px";
+			} else if (browser_nn4 || browser_nn6) {
+				olayer.style.height = document.body.offsetHeight + "px";
+			}
+			olayer.style.width = "100%";
+			document.body.appendChild(olayer);
+
+			var closeimg = document.createElement("img");
+			closeimg.src = 'test/logo/popuplay_close.png';
+			closeimg.alt = 'X';
+			closeimg.style.right= '10px';
+			closeimg.style.top  = '5px';
+			closeimg.style.position = 'absolute';
+			closeimg.style.cursor = 'pointer';
+			closeimg.onclick = VtigerJS_DialogBox.unblock;
+			olayer.appendChild(closeimg);
+		}
+		if(olayer) {
+			if(toggle) olayer.style.display = "block";
+			else olayer.style.display = "none";
+		}
+		return olayer;
+	},
+	_removebyid : function(id) {
+		if($(id)) $(id).remove();
+	},
+	unblock : function() {
+		VtigerJS_DialogBox._olayer(false);
+	},
+	block : function(opacity) {
+		if(typeof(opactiy)=='undefined') opacity = '0.3';
+		var olayernode = VtigerJS_DialogBox._olayer(true);
+		olayernode.style.opacity = opacity;
+	},
+	hideprogress : function() {
+		VtigerJS_DialogBox._olayer(false);
+		VtigerJS_DialogBox._removebyid('__vtigerjs_dialogbox_progress_id__');
+	},
+	progress : function(imgurl) {
+		VtigerJS_DialogBox._olayer(true);
+		if(typeof(imgurl) == 'undefined') imgurl = 'themes/images/plsWaitAnimated.gif';
+
+		var prgbxid = "__vtigerjs_dialogbox_progress_id__";
+		var prgnode = document.getElementById(prgbxid);
+		if(!prgnode) {
+			prgnode = document.createElement("div");
+			prgnode.id = prgbxid;
+			prgnode.className = 'veil_new';
+			prgnode.style.position = 'absolute';
+			prgnode.style.width = '100%';
+			prgnode.style.top = '0';
+			prgnode.style.left = '0';
+			prgnode.style.display = 'block';
+
+			document.body.appendChild(prgnode);
+
+			prgnode.innerHTML =
+			'<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:100%;">' +
+			'<tr><td class="big" align="center"><img src="'+ imgurl + '"></td></tr></table>';
+
+		}
+		if(prgnode) prgnode.style.display = 'block';
+	},
+	hideconfirm : function() {
+		VtigerJS_DialogBox._olayer(false);
+		VtigerJS_DialogBox._removebyid('__vtigerjs_dialogbox_alert_boxid__');
+	},
+	confirm : function(msg, onyescode) {
+		VtigerJS_DialogBox._olayer(true);
+                
+		var dlgbxid = "__vtigerjs_dialogbox_alert_boxid__";
+		var dlgbxnode = document.getElementById(dlgbxid);
+		if(!dlgbxnode) {
+			dlgbxnode = document.createElement("div");
+			dlgbxnode.style.display = 'none';
+			dlgbxnode.className = 'veil_new small';
+			dlgbxnode.id = dlgbxid;
+			dlgbxnode.innerHTML =
+			'<table cellspacing="0" cellpadding="18" border="0" class="options small">' +
+			'<tbody>' +
+			'<tr>' +
+			'<td nowrap="" align="center" style="color: rgb(255, 255, 255); font-size: 15px;">' +
+			'<b>'+ msg + '</b></td>' +
+			'</tr>' +
+			'<tr>' +
+			'<td align="center">' +
+			'<input type="button" style="text-transform: capitalize;" onclick="$(\''+ dlgbxid + '\').hide();VtigerJS_DialogBox._olayer(false);VtigerJS_DialogBox._confirm_handler();" value="'+ alert_arr.YES + '"/>' +
+			'<input type="button" style="text-transform: capitalize;" onclick="$(\''+ dlgbxid + '\').hide();VtigerJS_DialogBox._olayer(false)" value="' + alert_arr.NO + '"/>' +
+			'</td>'+
+			'</tr>' +
+			'</tbody>' +
+			'</table>';
+			document.body.appendChild(dlgbxnode);
+		}
+		if(typeof(onyescode) == 'undefined') onyescode = '';
+		dlgbxnode._onyescode = onyescode;
+		if(dlgbxnode) dlgbxnode.style.display = 'block';
+	},
+	_confirm_handler : function() {
+		var dlgbxid = "__vtigerjs_dialogbox_alert_boxid__";
+		var dlgbxnode = document.getElementById(dlgbxid);
+		if(dlgbxnode) {
+			if(typeof(dlgbxnode._onyescode) != 'undefined' && dlgbxnode._onyescode != '') {
+				eval(dlgbxnode._onyescode);
+			}
+		}
+	}
+};
+
+//Empty check
+function empty (mixed_var) {
+
+    var undef, key, i, len;
+    var emptyValues = [undef, null, false, 0, "", "0"];
+
+    for (i = 0, len = emptyValues.length; i < len; i++) {
+        if (mixed_var === emptyValues[i]) {
+            return true;
+        }
+  }
+
+  if (typeof mixed_var === "object") {
+        for (key in mixed_var) {
+        // TODO: should we check for own properties only?
+        //if (mixed_var.hasOwnProperty(key)) {
+        return false;
+        //}
+    }
+    return true;
+  }
+
+    return false;
+}
+
+function sp_js_editview_checkBeforeSave(module, thisForm, mode) {    
+    var values = thisForm.serializeFormData();
+    var data = encodeURIComponent(JSON.stringify(values));
+    var createMode;
+    if(mode == 'edit') {
+        createMode = 'edit';
+    } else {
+        createMode = 'create';
+    }
+    
+    var urlstring = "index.php?module="+module+"&action=CheckBeforeSave&EditViewAjaxMode=true&CreateMode="+createMode;
+    if (typeof values['record'] != 'undefined') {
+        urlstring += "&record="+values['record'];
+    }
+    
+    var checkResult = jQuery.Deferred();
+    //Disable twice check before save
+    if (typeof thisForm.data('isNeedCheckBeforeSave') != 'undefined' && !thisForm.data('isNeedCheckBeforeSave')) {
+        checkResult.resolve();
+    } else {
+        app.request.post({'data': data, 'url': urlstring}).then(
+                function (error, responseObj) {
+                    if (!empty(responseObj)) {
+                        if (responseObj.response === undefined) {
+                            responseObj = JSON.parse(responseObj);
+                        }
+                        if (responseObj.response === "OK") {
+                            if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                                app.helper.showAlertBox({'message': responseObj.message}).then(
+                                        function (e) {
+                                            
+                                        },
+                                        function (error) {
+                                            checkResult.resolve();
+                                        });
+                            } else {
+                                checkResult.resolve();
+                            }
+                        } else if (responseObj.response === "ALERT") {
+                            var alertMessage;
+                            if (responseObj.message !== undefined) {
+                                alertMessage = responseObj.message;
+                            } else {
+                                alertMessage = 'Alert';
+                            }
+                            app.helper.showAlertBox({'message': alertMessage}).then(
+                                    function (e) {
+                                            
+                                    },
+                                    function (error) {
+                                        checkResult.reject();
+                                    }
+                            );
+                            checkResult.reject();
+                        } else if (responseObj.response === "CONFIRM") {
+                            var confirmMessage;
+                            if (responseObj.message !== undefined) {
+                                confirmMessage = responseObj.message;
+                            } else {
+                                confirmMessage = 'Confirm';
+                            }
+                            app.helper.showConfirmationBox({'message': confirmMessage}).then(
+                                    function (e) {
+                                        checkResult.resolve();
+                                    },
+                                    function (error) {
+                                        checkResult.reject();
+                                    }
+                            );
+                        } else {
+                            checkResult.resolve();
+                        }
+                    } else {
+                        checkResult.resolve();
+                    }
+                },
+                function (error) {
+                    checkResult.resolve();
+                }
+        );
+    }
+    return checkResult.promise();
+}
+//SalesPlatform.ru end porting CheckBeforeSave

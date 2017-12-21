@@ -55,7 +55,10 @@
                                 {else}
                                     <i class="fa fa-sort customsort"></i>
                                 {/if}
-                                &nbsp;{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}&nbsp;
+                                {* SalesPlatform.ru begin localizaton fix *}
+                                {*&nbsp;{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}&nbsp;*}
+                                &nbsp;{vtranslate($LISTVIEW_HEADER->get('label'), $LISTVIEW_HEADER->getModuleName())}&nbsp;
+                                {* SalesPlatform.ru end localizaton fix *}
                             </a>
                             {if $COLUMN_NAME eq $LISTVIEW_HEADER->get('name')}
                                 <a href="#" class="removeSorting"><i class="fa fa-remove"></i></a>

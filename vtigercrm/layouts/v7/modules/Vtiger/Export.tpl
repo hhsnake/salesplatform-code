@@ -71,7 +71,7 @@
 								<div>
 									<input type="radio" name="mode" value="ExportAllData" id="group3" {if empty($SELECTED_IDS)} checked="checked" {/if} style="margin:2px 0 -4px" />
 									<label style="font-weight:normal" for="group3">&nbsp;&nbsp;{vtranslate('LBL_EXPORT_ALL_DATA',$MODULE)}</label>
-								</div>
+								</div>                                                               
 								{if $MULTI_CURRENCY}
 									<br>
 									<div class="row"> 
@@ -91,6 +91,16 @@
 									</div>
 								{/if}
 							</div>
+                                                        {* SalesPlatform.ru begin custom delimiter *}
+                                                        <br><div><b>{vtranslate('LBL_DELIMITER',$MODULE)}</b></div><br>
+                                                        <div style="margin-left: 50px;">
+                                                            <div>
+                                                                {foreach key=_DELIMITER item=_DELIMITER_LABEL from=$SUPPORTED_DELIMITERS name=delimiters}
+                                                                    &nbsp;&nbsp;<label style="font-weight:normal" class="radio-group"><input type="radio" name="delimiter" value="{$_DELIMITER}" {if $smarty.foreach.delimiters.index eq 0} checked="true" {/if} style="margin-bottom: -2px;">&nbsp;&nbsp;{$_DELIMITER_LABEL|@vtranslate:$MODULE}</label>                                                                               
+                                                                {/foreach}
+                                                            </div>                                                            
+                                                        </div>
+                                                        {* SalesPlatform.ru end *}
 							<br>
 						</div>
 					</div>

@@ -510,7 +510,10 @@ class Users extends CRMEntity {
 		}
 
 		if (!is_admin($current_user)) {
-			$this->db->startTransaction();
+                    //SalesPlatform.ru begin
+                    // commenting this as the the transaction is already started in vtws_changepassword
+			//$this->db->startTransaction();
+                    //SalesPlatform.ru end
 			if(!$this->verifyPassword($user_password)) {
 				$this->log->warn("Incorrect old password for $usr_name");
 				$this->error_string = $mod_strings['ERR_PASSWORD_INCORRECT_OLD'];
@@ -715,7 +718,10 @@ class Users extends CRMEntity {
 			$this->column_fields['currency_id'] = CurrencyField::getDBCurrencyId();
 		}
 		if(empty($this->column_fields['date_format'])) {
-			$this->column_fields['date_format'] = 'yyyy-mm-dd';
+                        // Salesplatform.ru begin Update date_format 
+			$this->column_fields['date_format'] = 'dd-mm-yyyy';
+			//$this->column_fields['date_format'] = 'yyyy-mm-dd';
+                        // Salesplatform.ru begin Update date_format 
 		}
 
 		if(empty($this->column_fields['start_hour'])) {
@@ -740,7 +746,10 @@ class Users extends CRMEntity {
 		}
 
 		if(empty($this->column_fields['hour_format'])) {
-			$this->column_fields['hour_format'] = 12;
+			// Salesplatform.ru begin Update hour_format
+                        $this->column_fields['hour_format'] = 24;
+			//$this->column_fields['hour_format'] = 12;
+                        // Salesplatform.ru end Update hour_format
 		}
 
 		if(empty($this->column_fields['activity_view'])) {
@@ -1869,7 +1878,11 @@ class Users extends CRMEntity {
 							}
 						}
 							if(empty($lang)) {
-								$lang = 'en_us';
+                                                                //Salesplatform.ru begin
+                                                                global $default_language;
+								$lang = $default_language;
+								//$lang = 'en_us';
+                                                                //Salesplatform.ru end 
 							}
 							$fieldValue = $lang;
 							unset($lang);

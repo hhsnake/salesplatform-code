@@ -234,6 +234,15 @@ class Home_Module_Model extends Vtiger_Module_Model {
 			} else if($ownerId == $currentUser->getId()){
 				$visibility = false;
 			}
+            
+            //SalesPlatform.ru begin
+            require('user_privileges/user_privileges_'.$currentUser->id.'.php');
+            require('user_privileges/sharing_privileges_'.$currentUser->id.'.php');
+            if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
+				$visibility = false;
+			}
+            //SalesPlatform.ru end
+            
 			if(!$currentUser->isAdminUser() && $newRow['activitytype'] != 'Task' && $newRow['visibility'] == 'Private' && $ownerId && $visibility) {
 				foreach($newRow as $data => $value) {
 					if(in_array($data, $visibleFields) != -1) {

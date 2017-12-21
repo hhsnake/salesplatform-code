@@ -232,7 +232,10 @@ Vtiger.Class('Vtiger_Index_Js', {
 		var activityReminderInterval = app.getActivityReminderInterval();
 		if(activityReminderInterval != '') {
 			var cacheActivityReminder = app.storage.get('activityReminder', 0);
-			var currentTime = new Date().getTime()/1000;
+                        // SalesPlatform.ru start #5464
+			//var currentTime = new Date().getTime()/1000;
+                        var currentTime = new Date().getTime();
+                        // SalesPlatform.ru end
 			var nextActivityReminderCheck = app.storage.get('nextActivityReminderCheckTime', 0);
 			//If activity Reminder Changed, nextActivityReminderCheck should reset
 			if(activityReminderInterval != cacheActivityReminder) {
@@ -242,7 +245,10 @@ Vtiger.Class('Vtiger_Index_Js', {
 				Vtiger_Index_Js.requestReminder();
 			} else {
 				var nextInterval = nextActivityReminderCheck - currentTime;
-				setTimeout(function() {Vtiger_Index_Js.requestReminder()}, nextInterval*1000);
+                                // SalesPlatform.ru start #5464
+				//setTimeout(function() {Vtiger_Index_Js.requestReminder()}, nextInterval*1000);
+                                setTimeout(function() {Vtiger_Index_Js.requestReminder()}, nextInterval);
+                                // SalesPlatform.ru end
 			}
 		}
 	},
@@ -252,13 +258,20 @@ Vtiger.Class('Vtiger_Index_Js', {
 	 */
 	requestReminder : function() {
 		var activityReminder = app.getActivityReminderInterval();
-		if(!activityReminder);return;
-		var currentTime = new Date().getTime()/1000;
+                // SalesPlatform.ru begin #5464    
+		//if(!activityReminder);return;
+		//var currentTime = new Date().getTime()/1000;
+                if(!activityReminder) return;
+                var currentTime = new Date().getTime();
+                // SalesPlatform.ru end
 		//requestReminder function should call after activityreminder popup interval
 		setTimeout(function() {Vtiger_Index_Js.requestReminder()}, activityReminder*1000);
 		app.storage.set('activityReminder', activityReminder);
 		//setting next activity reminder check time
-		app.storage.set('nextActivityReminderCheckTime', currentTime + parseInt(activityReminder));
+                // SalesPlatform.ru start #5464
+		//app.storage.set('nextActivityReminderCheckTime', currentTime + parseInt(activityReminder));
+                app.storage.set('nextActivityReminderCheckTime', currentTime + parseInt(activityReminder*1000));
+                // SalesPlatform.ru end
 
 		app.request.post({
 			'data' : {
@@ -272,6 +285,9 @@ Vtiger.Class('Vtiger_Index_Js', {
 					var record = res[i];
 					if(typeof record == 'object') {
 						Vtiger_Index_Js.showReminderPopup(record);
+                                                // SalesPlatform.ru begin #5464
+                                                localStorage.setItem("record", JSON.stringify(record));
+                                                // SalesPlatform.ru end
 					}
 				}
 			}
@@ -282,6 +298,9 @@ Vtiger.Class('Vtiger_Index_Js', {
 	 * Function display the Reminder popup
 	 */
 	showReminderPopup : function(record) {
+            // SalesPlatform.ru begin #5464
+            record = (typeof record === "object") ? record : JSON.parse(record);
+            // SalesPlatform.ru end
 		var notifyParams = {
 			'title' : record.activitytype + ' - ' +
 					'<a target="_blank" href="index.php?module=Calendar&view=Detail&record='+record.id+'">'+record.subject+'</a>&nbsp;&nbsp;'+
@@ -434,8 +453,12 @@ Vtiger.Class('Vtiger_Index_Js', {
 						$('#overlayPage').find(".arrow").css("left",taskManagementPageOffset.left+13);
 						$('#overlayPage').find(".arrow").addClass("show");
 
-						vtUtils.showSelect2ElementView($('#overlayPage .data-header').find('select[name="assigned_user_id"]'),{placeholder:"User : All"});
-						vtUtils.showSelect2ElementView($('#overlayPage .data-header').find('select[name="taskstatus"]'),{placeholder:"Status : All"});
+                                                //Salesplatform.ru begin
+						vtUtils.showSelect2ElementView($('#overlayPage .data-header').find('select[name="assigned_user_id"]'),{placeholder: app.vtranslate('JS_USER_ALL')});
+						vtUtils.showSelect2ElementView($('#overlayPage .data-header').find('select[name="taskstatus"]'),{placeholder: app.vtranslate('JS_STATUS_ALL')});
+                                                //vtUtils.showSelect2ElementView($('#overlayPage .data-header').find('select[name="assigned_user_id"]'),{placeholder:"User : All"});
+                                                //vtUtils.showSelect2ElementView($('#overlayPage .data-header').find('select[name="taskstatus"]'),{placeholder:"Status : All"});
+                                                //Salesplatform.ru end
 						var js = new Vtiger_TaskManagement_Js();
 						js.registerEvents();
 					});
@@ -885,8 +908,11 @@ Vtiger.Class('Vtiger_Index_Js', {
 	 * @param <jQUery> container
 	 */
 	registerClearReferenceSelectionEvent : function(container) {
-		container.off('click', 'clearReferenceSelection');
-		container.on('click', 'clearReferenceSelection',function(e){
+            //SalesPlatform.ru begin
+		//container.off('click', 'clearReferenceSelection');
+		//container.on('click', 'clearReferenceSelection',function(e){
+            container.find('.clearReferenceSelection').on('click', function(e){
+            //SalesPlatform.ru end
 			e.preventDefault();
 			var element = jQuery(e.currentTarget);
 			var parentTdElement = element.closest('td');
@@ -1673,4 +1699,4 @@ Vtiger.Class('Vtiger_Index_Js', {
 			}
 		});
 	}
-});
+});        

@@ -124,7 +124,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 	function getHeaderScripts(Vtiger_Request $request) {
 		$headerScriptInstances = parent::getHeaderScripts($request);
 		$moduleName = $request->getModule();
-
+                
 		$jsFileNames = array(
 			'libraries.bootstrap.js.eternicode-bootstrap-datepicker.js.bootstrap-datepicker',
 			'~libraries/bootstrap/js/eternicode-bootstrap-datepicker/js/locales/bootstrap-datepicker.'.Vtiger_Language_Handler::getShortLanguageName().'.js',
@@ -161,8 +161,8 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 			'modules.Vtiger.resources.EmailsRelatedPopup',
 			"~layouts/v7/lib/jquery/sadropdown.js",
             //SalesPlatform.ru begin
-            '~libraries/inputmask/inputmask.js', 
-            '~libraries/inputmask/jquery.inputmask.js', 
+            '~layouts/v7/lib/inputmask/inputmask.js', 
+            '~layouts/v7/lib/inputmask/jquery.inputmask.js', 
             //SalesPlatform.ru end 
 		);
 

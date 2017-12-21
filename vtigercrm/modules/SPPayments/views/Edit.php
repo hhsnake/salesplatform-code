@@ -22,7 +22,10 @@ class SPPayments_Edit_View extends Vtiger_Edit_View {
             $recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
             // Include related module main class
             require_once ("modules/$return_module/$return_module.php");
-            $return_focus = new $return_module();
+            //SalesPlatform.ru begin
+            //$return_focus = new $return_module();
+            $return_focus = CRMEntity::getInstance($return_module);
+            //SalesPlatform.ru end
             $return_focus->id = $request->get('sourceRecord');
             $return_focus->retrieve_entity_info($request->get('sourceRecord'), $return_module);
             

@@ -7,6 +7,9 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
+// SalesPlatform begin
+require_once 'modules/MailManager/MailManager.php';
+// SalesPlatform end
 
 vimport ('~modules/MailManager/models/Message.php');
 
@@ -298,10 +301,14 @@ class MailManager_Connector_Connector {
 	 */
 	public function deleteMail($msgno) {
 		$msgno = trim($msgno,',');
+                // SalesPlatform begin
+                $trashFolder = MailManager_Mailbox_Model::activeInstance()->trash();
+                $folder = $this->convertCharacterEncoding(html_entity_decode($trashFolder),'UTF7-IMAP','UTF-8'); 
 		$msgno = explode(',',$msgno);
-		for($i = 0;$i<count($msgno);$i++) {
-			@imap_delete($this->mBox, $msgno[$i]);
+		for($i = 0;$i<count($msgno);$i++) { 
+			@imap_mail_move($this->mBox, $msgno[$i], $folder);
 		}
+                // SalesPlatform end
 		imap_expunge($this->mBox);
 	}
 

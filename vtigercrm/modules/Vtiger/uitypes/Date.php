@@ -32,7 +32,14 @@ class Vtiger_Date_UIType extends Vtiger_Base_UIType {
 
 		if($dateValue == '--') {
 			return "";
-		} else {
+                //SalesPaltform.ru begin fixed localization
+		} elseif ($substr = strstr($dateValue, '--')) {
+                    if ($substr == '--') {
+                        return vtranslate($substr . $dateValue);
+                    }
+                    return vtranslate(str_replace('--', '', $dateValue));
+                //SalesPaltform.ru end
+                } else {
 			return $dateValue;
 		}
 	}

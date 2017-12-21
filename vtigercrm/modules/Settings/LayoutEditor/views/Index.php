@@ -165,7 +165,9 @@ class Settings_LayoutEditor_Index_View extends Settings_Vtiger_Index_View {
 		$cleanFieldModel->setModule($moduleModel);
 		$sourceModuleModel = Vtiger_Module_Model::getInstance($sourceModule);
 		$this->setModuleInfo($request, $sourceModuleModel, $cleanFieldModel);
-
+                //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+                $viewer->assign('PARENT_UI_TYPE', $fieldInstance->get('uitype'));
+                //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
 		$viewer->view('FieldCreate.tpl', $qualifiedModule);
 	}
 

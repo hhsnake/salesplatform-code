@@ -941,9 +941,11 @@ class CRMEntity {
                                 if ($fieldinfo['tablename'] == 'vtiger_contacts_user_field') {
                                     continue;
                                 }
-                                if ($fieldinfo['tablename'] == 'vtiger_invoice_user_field') {
-                                    $required_tables[$fieldinfo['tablename']] = 'recordid';
-                                }
+                                // SalesPlatform.ru begin #5342
+//                                if ($fieldinfo['tablename'] == 'vtiger_invoice_user_field') {
+//                                    $required_tables[$fieldinfo['tablename']] = 'recordid';
+//                                }
+                                // SalesPlatform.ru end #5342
 				if(($module == 'Invoice' || $module == 'Quotes' || $module == 'SalesOrder' || $module == 'PurchaseOrder' || $module == 'Act' || $module == 'Consignment')
                 //if(($module == 'Invoice' || $module == 'Quotes' || $module == 'SalesOrder' || $module == 'PurchaseOrder')
 				// SalesPlatform.ru end		
@@ -973,7 +975,7 @@ class CRMEntity {
 						$tablename, $joinCondition);
 				}
 			}
-
+                        
 			$where_clause .= ' vtiger_crmentity.crmid=?';
 			$params[] = $record;
 

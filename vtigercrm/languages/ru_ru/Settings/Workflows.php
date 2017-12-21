@@ -144,7 +144,10 @@ $languageStrings = array(
     'LBL_SELECT_FIELDS' => 'Выберите поля',
     'LBL_INCLUDES_CREATION' => 'Включает создание',
     'LBL_ACTION_FOR_WORKFLOW' => 'Действия для Обработчика',
-    'LBL_WORKFLOW_SEARCH' => 'Поиск по фамилии',    
+    'LBL_WORKFLOW_SEARCH' => 'Поиск по фамилии',  
+    //SalesPlatform.ru begin fixed localization	
+    'LBL_UPDATED' => 'При изменении',
+    //SalesPlatform.ru end
     );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Статус успешно изменен', 

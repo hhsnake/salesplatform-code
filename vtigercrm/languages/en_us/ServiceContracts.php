@@ -45,4 +45,7 @@ $languageStrings = array(
 	'High' => 'High',
 	'Services' => 'Services',
 	'In Progress' => 'In Progress',
+    // SalesPlatform.ru begin
+    'Due date' => 'Due date',
+    // SalesPlatform.ru end
 );

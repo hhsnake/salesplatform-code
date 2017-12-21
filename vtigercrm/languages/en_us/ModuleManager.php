@@ -57,6 +57,9 @@ $languageStrings = array(
 	'LBL_DISCLAIMER_FOR_IMPORT_FROM_ZIP' => '<b>Disclaimer - Custom Files could put your CRM at risk</b> <br>  
 												 This functionality has been made available for Developers to test new modules.
 													If you are installing from a file provided 3rd party, please proceed only if you trust the publisher. Custom Modules could include security vulnerabilities and overwrite system files putting your CRM at risk. The module you are about to install has not been reviewed by Vtiger.',
+        //SalesPlatform begin localization fix
+        'LBL_SELECT_FROM_MY_PC' => 'Choose from PC',
+        //SalesPlatform end localization fix
 );
 $jsLanguageStrings = array(
 	'JS_ON' => 'on',

@@ -48,6 +48,9 @@ class MailManager_Settings_View extends MailManager_MainUI_View {
 			$connector = $this->getConnector();
             $sentFolder = $request->get('_mbox_sent_folder');
             //SalesPlatform.ru begin
+            $trashFolder = $request->get('_mbox_trash_folder');
+            //SalesPlatform.ru end
+            //SalesPlatform.ru begin
             if($connector->isConnected()) {
                 $folderInstaces = $connector->folders();
                 
@@ -55,13 +58,20 @@ class MailManager_Settings_View extends MailManager_MainUI_View {
                 $firstFolderInstance = current($folderInstaces);
                 $sentFolder = $firstFolderInstance->name();
                 
+                
                 /* Lookup folder which match to name */
                 $mboxFolder = strtolower($request->get('_mbox_sent_folder'));
+                $tboxFolder = strtolower($request->get('_mbox_trash_folder'));
                 foreach($folderInstaces as $folder) {
                     if(strtolower($folder->name()) == $mboxFolder) {
                         $sentFolder = $folder->name();
                     }
+                    if(strtolower($folder->name()) == $tboxFolder) {
+                        $trashFolder = $folder->name();
+                    }
                 }
+ 
+                
             }
             
             //if($connector->isConnected() && empty($sentFolder)) {
@@ -74,6 +84,9 @@ class MailManager_Settings_View extends MailManager_MainUI_View {
             //}
             //SalesPlatform.ru end
             $model->setFolder($sentFolder);
+            //SalesPlatform.ru begin
+            $model->setTrash($trashFolder);
+            //SalesPlatform.ru end
 			if ($connector->isConnected()) {
 				$model->save();
 

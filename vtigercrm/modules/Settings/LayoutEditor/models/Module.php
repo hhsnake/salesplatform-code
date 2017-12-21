@@ -96,7 +96,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
         //);
         return array(
             'Text','Decimal','Integer','Percent','Currency','Date','Email','Phone','Picklist',
-            'URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time', 'SPMobilePhone'
+            'URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time', 'SPMobilePhone', 'SPTextArea'
         );
 		//SalesPlatform.ru end
     }
@@ -314,6 +314,16 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
                   $type = "VARCHAR(63)";
                   $uichekdata='V~O';
                   break;
+                case 'SPTextArea':  
+                    $uitype = 19;
+                    $type = "TEXT";
+                    $isEnableCKEditorField = $params['uitype19field'];
+                    if ($isEnableCKEditorField) {
+                        $uichekdata = 'V~O~CKE';
+                    } else {
+                        $uichekdata = 'V~O';
+                    }
+                    break; 
               //SalesPlatform.ru end
 		}
 		return array(

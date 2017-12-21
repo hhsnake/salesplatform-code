@@ -151,7 +151,7 @@ if (!$errorMessage) {
 								</div>
                         <!-- SalesPlatform.ru begin -->
                         <?php /* } else if($currentVersion[0] >= 6 && $currentVersion[1] >= 0) { */ ?>
-						<?php } else if($currentVersion[0] >= 6 && $currentVersion[1] >= 0 && $vtiger_current_version != '7.0.1-201707') { ?>
+						<?php } else if($currentVersion[0] >= 6 && $currentVersion[1] >= 0 && $vtiger_current_version != '7.0.1-201711') { ?>
                         <!-- SalesPlatform.ru end -->
 							<div class="col-lg-8" style="padding-left: 30px;">
 								<!-- SalesPlatform.ru begin -->

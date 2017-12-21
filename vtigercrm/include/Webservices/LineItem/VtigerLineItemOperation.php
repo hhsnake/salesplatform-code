@@ -79,9 +79,9 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 	public function getAllLineItemForParent($parentId){
 		if (is_array($parentId)) {
 			$result = null;
-			if (!is_array($parentId)) {
-				$parentId = array($parentId);
-			}
+                        if (!is_array($parentId)) {
+                                $parentId = array($parentId);
+                        }
 			$query = "SELECT vtiger_crmentity.label AS productname,vtiger_crmentity.setype as entitytype, {$this->entityTableName}.* FROM {$this->entityTableName}
 							LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_inventoryproductrel.productid
 							WHERE id IN (". generateQuestionMarks($parentId) .")";
@@ -105,6 +105,27 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 			}
 			return $lineItemList;
 		}
+                //SalesPlatform.ru begin
+                else {
+                    $result = null;
+                    $query = "select * from {$this->entityTableName} where id=?";
+                    $transactionSuccessful = vtws_runQueryAsTransaction($query,array($parentId),$result);
+                    if(!$transactionSuccessful){
+                        throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
+                            "Database error while performing required operation");
+                    }
+                    $lineItemList = array();
+                    if($result){
+                        $rowCount = $this->pearDB->num_rows($result);
+                        for ($i = 0 ; $i < $rowCount ; ++$i) {
+                            $element = $this->pearDB->query_result_rowdata($result,$i);
+                            $element['parent_id'] = $parentId;
+                            $lineItemList[] = DataTransform::filterAndSanitize($element,$this->meta);
+                        }
+                    }
+                    return $lineItemList;
+                }
+                //SalesPlatform.ru end
 	}
 
 	public function _create($elementType, $element){

@@ -233,6 +233,20 @@
 										</label>
 									</div>
 								</div>
+                                                                {*SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor*}
+                                                                {assign var=IS_UITYPE_19_ENABLED value=$FIELD_MODEL->isCKEEnabled()}
+                                                                <div class="form-group uitype19 col-sm-6 hide">
+                                                                        <label class="control-label fieldLabel col-sm-7">
+                                                                                <i class="fa fa-pencil"></i> &nbsp; <span>{vtranslate('LBL_CKE_FIELD',$QUALIFIED_MODULE)}</span>
+                                                                        </label>
+                                                                        <div class="controls col-sm-5">
+                                                                                <input type="hidden" name="uitype19field" value="0"/>
+                                                                                <label class="checkbox" style="margin-left: 9%;">
+                                                                                        <input type="checkbox" class="cursorPointer" name="uitype19field" value="1" {if $FIELD_MODEL->isCKEEnabled() eq '1'}checked="checked"{/if}/>
+                                                                                </label>
+                                                                        </div>
+                                                                </div>
+                                                                {*SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor*}
 							</div>
 						</div>
 					</div>

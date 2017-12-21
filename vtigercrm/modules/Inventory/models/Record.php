@@ -454,8 +454,10 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 		if ($deductTaxes) {
 			return $deductTaxes;
 		}
-
-		$deductTaxes = Inventory_TaxRecord_Model::getDeductTaxesList($active = false);
+                // SalesPlatform.ru begin
+		//$deductTaxes = Inventory_TaxRecord_Model::getDeductTaxesList($active = false);
+		$deductTaxes = Inventory_TaxRecord_Model::getDeductTaxesList(true);
+                // SalesPlatform.ru end
 		$record = $this->getId();
 		if ($record && $deductTaxes) {
 			$db = PearDatabase::getInstance();
@@ -487,7 +489,10 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 			$relatedProducts[$i]['discount_percent'.$i] = 0;
 			$relatedProducts[$i]['discount_amount'.$i]=0;
 			$relatedProducts[$i]['checked_discount_zero'.$i] = 'checked';
-			$relatedProducts[$i]['listPrice'.$i] = $relatedProducts[$i]['purchaseCost'.$i] / $relatedProducts[$i]['qty'.$i];
+                        // SalesPlatform.ru begin
+			//$relatedProducts[$i]['listPrice'.$i] = $relatedProducts[$i]['purchaseCost'.$i] / $relatedProducts[$i]['qty'.$i];
+			$relatedProducts[$i]['listPrice'.$i] = $relatedProducts[$i]['purchaseCost'.$i];
+                        // SalesPlatform.ru end
 		}
 		$relatedProducts[1]['final_details']['discount_percentage_final'] = 0;
 		$relatedProducts[1]['final_details']['discount_amount_final'] = 0;

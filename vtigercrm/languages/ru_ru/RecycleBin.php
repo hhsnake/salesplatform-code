@@ -15,7 +15,10 @@ $languageStrings = array(
 	'LBL_NO_PERMITTED_MODULES'     => 'Нет доступных модулей', 
 	'LBL_RECORDS_LIST'             => 'Список'            , // TODO: Review
 	'LBL_NO_RECORDS_FOUND'         => 'Не найдено записей для востановления в модуле', // KEY 5.x: LBL_EMPTY_MODULE
-        'Recycle Bin' => 'Корзина',         
+        'Recycle Bin' => 'Корзина',   
+        //SalesPlatform.ru begin localization fix
+        'LBL_SEARCH_FOR_MODULES' => 'Поиск для модулей',
+        //SalesPlatform.ru end localization fix
 );
 $jsLanguageStrings = array(
 	'JS_MSG_EMPTY_RB_CONFIRMATION' => 'Вы уверены, что хотите навсегда удалить из базы данных все удаленные записи?', 

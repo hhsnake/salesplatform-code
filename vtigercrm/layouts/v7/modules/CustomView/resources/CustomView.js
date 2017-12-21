@@ -237,7 +237,10 @@ jQuery.Class("Vtiger_CustomView_Js",{
 						} 
 					} 
 						  if(mandatoryFieldsMissing){ 
-						app.helper.showErrorNotification({message:"Select atleast one mandatory value."}); 
+                                                //SalesPlatform.ru begin localization fix
+//						app.helper.showErrorNotification({message:"Select atleast one mandatory value."}); 
+						app.helper.showErrorNotification({message:app.vtranslate('JS_PLEASE_SELECT_ATLEAST_ONE_MANDATORY_FIELD')}); 
+                                                //SalesPlatform.ru end localization fix
 							  return false; 
 					} 
 					//handled advanced filters saved values.

@@ -514,8 +514,11 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (8," . $this->db->getUniqueID("vtiger_field") . ",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,'',100,6,17,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (8," . $this->db->getUniqueID("vtiger_field") . ",'filename','vtiger_notes',1,'28','filename','File Name',1,2,'',100,3," . $fileblockid . ",1,'V~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (8," . $this->db->getUniqueID("vtiger_field") . ",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,'',100,4,17,1,'V~M',0,3,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (8," . $this->db->getUniqueID("vtiger_field") . ",'notecontent','vtiger_notes',1,'19','notecontent','Note',1,2,'',100,1,$desc_blockid,1,'V~O',1,null,'BAS',0)");
-		$this->db->query("insert into vtiger_field values(8," . $this->db->getUniqueID("vtiger_field") . ",'filetype','vtiger_notes',1,1,'filetype','File Type',1,2,'',100,5," . $fileblockid . ",2,'V~O',3,'','BAS',0)");
+		//SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+                //$this->db->query("insert into vtiger_field values (8," . $this->db->getUniqueID("vtiger_field") . ",'notecontent','vtiger_notes',1,'19','notecontent','Note',1,2,'',100,1,$desc_blockid,1,'V~O',1,null,'BAS',0)");
+                $this->db->query("insert into vtiger_field values (8," . $this->db->getUniqueID("vtiger_field") . ",'notecontent','vtiger_notes',1,'19','notecontent','Note',1,2,'',100,1,$desc_blockid,1,'V~O~CKE',1,null,'BAS',0)");
+		//SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
+                $this->db->query("insert into vtiger_field values(8," . $this->db->getUniqueID("vtiger_field") . ",'filetype','vtiger_notes',1,1,'filetype','File Type',1,2,'',100,5," . $fileblockid . ",2,'V~O',3,'','BAS',0)");
 		$this->db->query("insert into vtiger_field values(8," . $this->db->getUniqueID("vtiger_field") . ",'filesize','vtiger_notes',1,1,'filesize','File Size',1,2,'',100,4," . $fileblockid . ",2,'I~O',3,'','BAS',0)");
 		$this->db->query("insert into vtiger_field values(8," . $this->db->getUniqueID("vtiger_field") . ",'filelocationtype','vtiger_notes',1,27,'filelocationtype','Download Type',1,0,'',100,1," . $fileblockid . ",1,'V~O',3,'','BAS',0)");
 		$this->db->query("insert into vtiger_field values(8," . $this->db->getUniqueID("vtiger_field") . ",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,2,'',100,6,$fileblockid,1,'V~O',1,'','BAS',1)");
@@ -992,10 +995,11 @@ class DefaultDataPopulator extends CRMEntity {
                 
                 $this->db->query("insert into vtiger_field values (29," . $this->db->getUniqueID("vtiger_field") . ",'currency_grouping_separator','vtiger_users',1,'16','currency_grouping_separator','Digit Grouping Separator',1,0,'\'',2,4,$usercurrencyinfoblock,1,'V~O',1,null,'BAS',1)");
                 //$this->db->query("insert into vtiger_field values (29," . $this->db->getUniqueID("vtiger_field") . ",'currency_grouping_separator','vtiger_users',1,'16','currency_grouping_separator','Digit Grouping Separator',1,0,'',2,4,$usercurrencyinfoblock,1,'V~O',1,null,'BAS',1)");                
-        //SalesPlatform.ru end
+        
                 
-		$this->db->query("insert into vtiger_field values (29," . $this->db->getUniqueID("vtiger_field") . ",'currency_symbol_placement','vtiger_users',1,'16','currency_symbol_placement','Symbol Placement',1,0,'',20,5,$usercurrencyinfoblock,1,'V~O',1,null,'BAS',1)");
-
+		$this->db->query("insert into vtiger_field values (29," . $this->db->getUniqueID("vtiger_field") . ",'currency_symbol_placement','vtiger_users',1,'16','currency_symbol_placement','Symbol Placement',1,0,'1.0$',20,5,$usercurrencyinfoblock,1,'V~O',1,null,'BAS',1)");
+		//$this->db->query("insert into vtiger_field values (29," . $this->db->getUniqueID("vtiger_field") . ",'currency_symbol_placement','vtiger_users',1,'16','currency_symbol_placement','Symbol Placement',1,0,'',20,5,$usercurrencyinfoblock,1,'V~O',1,null,'BAS',1)");
+                //SalesPlatform.ru end
 		//User Image Information
 		$this->db->query("insert into vtiger_field values (29," . $this->db->getUniqueID("vtiger_field") . ",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,'',250,10,$userblockid,1,'V~O',1,null,'BAS',1)");
 		//added for internl_mailer
@@ -1895,21 +1899,21 @@ Should any need arise,please do give us a call.';
 		 * Setup module sequence numbering.
 		 */
 		$modseq = array(
-			'Leads' => 'LEA',
-			'Accounts' => 'ACC',
-			'Campaigns' => 'CAM',
-			'Contacts' => 'CON',
-			'Potentials' => 'POT',
-			'HelpDesk' => 'TT',
-			'Quotes' => 'QUO',
-			'SalesOrder' => 'SO',
-			'PurchaseOrder' => 'PO',
-			'Invoice' => 'INV',
-			'Products' => 'PRO',
-			'Vendors' => 'VEN',
-			'PriceBooks' => 'PB',
-			'Faq' => 'FAQ',
-			'Documents' => 'DOC'
+		'Leads'     => vtranslate('LBL_LEADS_PREFIX'),
+		'Accounts'  => vtranslate('LBL_ACCOUNTS_PREFIX'),
+		'Campaigns' => vtranslate('LBL_CAMPAIGNS_PREFIX'),	
+		'Contacts'  => vtranslate('LBL_CONTACTS_PREFIX'),
+		'Potentials'=> vtranslate('LBL_POTENTIALS_PREFIX'),
+		'HelpDesk'  => vtranslate('LBL_HELPDESK_PREFIX'),
+		'Quotes'    => vtranslate('LBL_QUOTES_PREFIX'),
+		'SalesOrder'=> vtranslate('LBL_SALESORDER_PREFIX'),
+		'PurchaseOrder'=> vtranslate('LBL_PURCHASEORDER_PREFIX'),
+		'Invoice'   => vtranslate('LBL_INVOICE_PREFIX'),
+		'Products'  => vtranslate('LBL_PRODUCTS_PREFIX'),
+		'Vendors'   => vtranslate('LBL_VENDORS_PREFIX'),
+		'PriceBooks'=> vtranslate('LBL_PRICEBOOKS_PREFIX'),
+		'Faq'       => vtranslate('LBL_FAQ_PREFIX'),
+		'Documents' => vtranslate('LBL_DOCUMENTS_PREFIX'),
 		);
 		foreach ($modseq as $modname => $prefix) {
 			$this->addInventoryRows(

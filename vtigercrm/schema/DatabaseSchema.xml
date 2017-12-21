@@ -1992,12 +1992,8 @@
 		<field name="user_ip" type="C" size="25">
 			<notnull />
 		</field>
-		<field name="logout_time" type="T">
-			<deftimestamp />
-		</field>
-		<field name="login_time" type="T">
-			<deftimestamp />
-		</field>
+		<field name="logout_time" type="T" />
+		<field name="login_time" type="T" />
 		<field name="status" type="C" size="25" />
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>

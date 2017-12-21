@@ -40,7 +40,9 @@
                                 {$MODULE_PACKAGE->update($TARGET_MODULE_INSTANCE, $MODULE_FILE_NAME)}
                         {else}
                                 {$MODULE_PACKAGE->import($MODULE_FILE_NAME, 'false')}
-                                {assign var=TRACKER_UPDATED value={Settings_ExtensionStore_ODExtension_Model::updateTrackDetails($EXTENSION_NAME)}}
+                                {* SalesPlatform.ru begin *}
+                                {*{assign var=TRACKER_UPDATED value={Settings_ExtensionStore_ODExtension_Model::updateTrackDetails($EXTENSION_NAME)}}*}
+                                {* SalesPlatform.ru end *}
                         {/if}
                         {assign var=UNLINK_RESULT value={unlink($MODULE_FILE_NAME)}}
                 </div>

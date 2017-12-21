@@ -358,7 +358,10 @@
  */
 .select2-results .select2-highlighted {
   color: white;
-  background-color: #337ab7;
+  /* SalesPlatform.ru begin */
+  /* background-color: #337ab7; */
+  background-color: #337ab7 !important;
+  /* SalesPlatfirm.ru end */
 }
 
 /**

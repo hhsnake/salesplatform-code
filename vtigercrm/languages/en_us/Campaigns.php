@@ -64,6 +64,10 @@ $languageStrings = array(
 	'Contacted - Successful' => 'Contacted - Successful',
 	'Contacted - Unsuccessful' => 'Contacted - Unsuccessful',
 	'Contacted - Never Contact Again' => 'Contacted - Never Contact Again',
+    // SalesPlatform.ru begin
+    'Completed' => 'Completed',
+    'Partners' => 'Partners', 
+    // SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

@@ -61,8 +61,7 @@ Vtiger_Edit_Js("SPPayments_Edit_Js",{},{
      * @param form - element in which auto complete fields needs to be searched
 	 */
     addAmount : function(data, form) {
-        var thisInstance = this;
-        var response = data['result']['data'];
+        var response = data['data'];
         form.find('[name=amount]').val(response['hdnGrandTotal']);
         form.find('[name=amount]').trigger('change');
     },

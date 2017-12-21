@@ -21,6 +21,7 @@ abstract class AbstractProduct {
     protected $oneEsIdentifier;
     protected $NDS;
     protected $currency;
+    protected $currencyId;
     protected $conversionRate;
 
 
@@ -124,6 +125,10 @@ abstract class AbstractProduct {
     
     public function setCurrency($currency) {
         $this->currency = $currency;
+    }
+    
+    public function setCurrencyId($currencyId) {
+        $this->currencyId = $currencyId;
     }
     
     /**

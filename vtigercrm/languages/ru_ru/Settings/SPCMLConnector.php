@@ -39,6 +39,10 @@ $languageStrings = array(
         'from_1c'                   => 'Из 1С',
         'from_site'                 => 'С Сайта',
         'to_site'                   => 'На сайт',
+    // SalesPlatform.ru localization fix begin
+    'Site Status' => 'Статус на сайте',
+    'Crm Status' => 'Статус в CRM',
+    // SalesPlatform.ru localization fix end
 );
 
 $jsLanguageStrings = array(

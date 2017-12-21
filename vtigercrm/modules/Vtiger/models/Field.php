@@ -146,6 +146,7 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	public function getFieldDataType() {
 		if(!$this->fieldDataType) {
 			$uiType = $this->get('uitype');
+                        
 			if($uiType == '69') {
 				$fieldDataType = 'image';
 			} else if($uiType == '26') {
@@ -168,7 +169,9 @@ class Vtiger_Field_Model extends Vtiger_Field {
                 $fieldDataType = 'multiowner';
             //SalesPlatform.ru begin 
             } else if ($uiType == '512') { 
-                $fieldDataType = 'SPMobilePhone'; 
+                $fieldDataType = 'SPMobilePhone';
+            } else if ($uiType == '19') {
+                $fieldDataType = 'SPTextArea';
             //SalesPlatform.ru end
 			} else {
 				$webserviceField = $this->getWebserviceFieldObject();
@@ -408,6 +411,13 @@ class Vtiger_Field_Model extends Vtiger_Field {
 		if(!$this->isEditable() || in_array($this->get('uitype'), $ajaxRestrictedFields)) {
 			return false;
 		}
+        
+        //SalesPlatform.ru begin
+        if($this->isCKEEnabled()) {
+            return false;
+        }
+        //SalesPlatform.ru end
+        
 		return true;
 	}
 
@@ -1164,6 +1174,17 @@ class Vtiger_Field_Model extends Vtiger_Field {
 
 	public function __update() {
 		$db = PearDatabase::getInstance();
+                //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+                if (!$this->uitype19field){
+                    if (strpos($this->typeofdata,'CKE')>0){
+                        $this->typeofdata = str_replace("~CKE", "", $this->typeofdata);
+                    }
+                }elseif ($this->uitype19field == 1  ){
+                    if (strpos($this->typeofdata,'CKE')<=0){
+                        $this->typeofdata = $this->typeofdata."~CKE";
+                    }
+                }
+                //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
 		$query = 'UPDATE vtiger_field SET typeofdata=?,presence=?,quickcreate=?,masseditable=?,defaultvalue=?,summaryfield=?,headerfield=?';
 		$params = array($this->get('typeofdata'), $this->get('presence'), $this->get('quickcreate'),
 						$this->get('masseditable'), $this->get('defaultvalue'), $this->get('summaryfield'), $this->get('headerfield'));
@@ -1321,7 +1342,19 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	public function isHeaderField() {
 		return ($this->get('headerfield')) ? true : false;
 	}
-
+        
+    //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+    public function isCKEEnabled(){
+        return (strpos($this->get('typeofdata'),'CKE')>0);
+    }
+    //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
+    
+    //SalesPlatform.ru begin
+    public function isMobilePhoneField() {
+        return $this->getFieldDataType() === 'SPMobilePhone';
+    }
+    //SalesPlatform.ru end
+    
 	public function getPicklistColors() {
 		$picklistColors = array();
 		$fieldDataType = $this->getFieldDataType();
@@ -1339,7 +1372,10 @@ class Vtiger_Field_Model extends Vtiger_Field {
 				$picklistValues = $this->getPicklistValues();
 				$tableName = "vtiger_$fieldName";
 				if (Vtiger_Utils::CheckTable($tableName)) {
-					if (is_array($picklistValues)) {
+                                        //SalesPlatform.ru begin
+                                        //if (is_array($picklistValues)) {
+					if (is_array($picklistValues) && !empty($picklistValues)) {
+                                        //SalesPlatform.ru end
 						$result = $db->pquery("SELECT $fieldName, color FROM $tableName WHERE $fieldName IN (".generateQuestionMarks($picklistValues).")", array_keys($picklistValues));
 						while ($row = $db->fetch_row($result)) {
 							$picklistColors[$row[$fieldName]] = $row['color'];

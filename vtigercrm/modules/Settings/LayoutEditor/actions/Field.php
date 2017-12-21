@@ -66,7 +66,16 @@ class Settings_LayoutEditor_Field_Action extends Settings_Vtiger_Index_Action {
         $summaryField = $request->get('summaryfield',null);
         $massEditable = $request->get('masseditable',null);
         $headerField = $request->get('headerfield',null);
-
+        //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+        $uitype19field = $request->get('uitype19field',null);
+        
+        if(isset($uitype19field) && $uitype19field != null){
+            $fieldInstance->set('uitype19field', $uitype19field);
+        }else{
+            $fieldInstance->set('uitype19field', 2);
+        }
+        //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+        
 		if (!$fieldLabel) {
 			$fieldInstance->set('label', $fieldLabel);
 		}

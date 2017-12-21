@@ -20,10 +20,16 @@
 					<ul class="nav navbar-nav">
 						<li>
 							{if !($PASSWORD_STATUS)}
-								<button class="btn btn-default module-buttons" type="button" id="logintoMarketPlace">
+                                                                {* SalesPlatform.ru begin localization fix *}
+								{*<button class="btn btn-default module-buttons" type="button" id="logintoMarketPlace">
 									<div class="fa fa-sign-in" aria-hidden="true"></div>
 									&nbsp;&nbsp;Login to marketplace
+								</button>*}
+								<button class="btn btn-default module-buttons" type="button" id="logintoMarketPlace">
+									<div class="fa fa-sign-in" aria-hidden="true"></div>
+									&nbsp;&nbsp;{vtranslate('LBL_LOGIN_TO_MARKET_PLACE', $QUALIFIED_MODULE)}
 								</button>
+                                                                {* SalesPlatform.ru end localization fix *}
 							{else}
 								<button class="btn btn-default module-buttons" type="button" id="{if !empty($CUSTOMER_PROFILE['CustomerCardId'])}updateCardDetails{else}setUpCardDetails{/if}">
 									<div class="fa fa-credit-card" aria-hidden="true"></div>&nbsp;&nbsp;

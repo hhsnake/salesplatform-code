@@ -183,7 +183,7 @@ abstract class Base_Chart extends Vtiger_Base_Model{
 		if(is_array($columns)) {
 			foreach($columns as $column) {
 				$fieldModel = $this->getFieldModelByReportColumnName($column);
-
+                                
 				if($fieldModel) {
 					$columnInfo = explode(':', $column);
 
@@ -318,7 +318,7 @@ abstract class Base_Chart extends Vtiger_Base_Model{
 		}
 
 		$groupByColumnsByFieldModel = $this->getGroupbyColumnsByFieldModel();
-
+                
 		if(is_array($groupByColumnsByFieldModel)) {
 			foreach($groupByColumnsByFieldModel as $groupField) {
 				/**
@@ -491,11 +491,11 @@ class PieChart extends Base_Chart {
 	function generateData(){
 		$db = PearDatabase::getInstance();
 		$values = array();
-
+                
 		$chartSQL = $this->getQuery();
 		$result = $db->pquery($chartSQL, array());
 		$rows = $db->num_rows($result);
-
+                
 		$queryColumnsByFieldModel = $this->getQueryColumnsByFieldModel();
 		if(is_array($queryColumnsByFieldModel)) {
 			foreach($queryColumnsByFieldModel as $field) {
@@ -783,7 +783,11 @@ class VerticalbarChart extends Base_Chart {
 			foreach ($years as $indexes) {
 				ksort($indexes); // to sort according to the index
 				foreach($indexes as $index) {
-					$sortedLabels[] = $data['labels'][$index];
+                                        // SalesPlatform.ru begin localization fix
+                                        list($month, $year) = explode(' ', $data['labels'][$index]);                                       
+                                        $sortedLabels[] = vtranslate($month).' '.$year;
+					//$sortedLabels[] = $data['labels'][$index];
+                                        // SalesPlatform.ru end localization fix
 					$sortedValues[] = $data['values'][$index];
 					$sortedLinks[] = $data['links'][$index];
 				}

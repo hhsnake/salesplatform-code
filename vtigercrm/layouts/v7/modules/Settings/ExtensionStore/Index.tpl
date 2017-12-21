@@ -10,12 +10,29 @@
 ********************************************************************************/
 -->*}
 {strip}
-	<div class="col-sm-12 col-xs-12 content-area" id="importModules">
+    {* SalesPlatform.ru begin *}
+    {include file="modules/Vtiger/partials/Topbar.tpl"}
+
+    <div class="container-fluid app-nav">
+            <div class="row">
+                {include file="partials/SidebarHeader.tpl"|vtemplate_path:$QUALIFIED_MODULE}
+                {include file="ModuleHeader.tpl"|vtemplate_path:$QUALIFIED_MODULE}
+            </div>
+    </div>
+    </nav>    
+
+    <div class="main-container clearfix">
+	<div class=" ExtensionscontentsDiv contentsDiv">
+    {* SalesPlatform.ru end *}
+            <div class="col-sm-12 col-xs-12 content-area" id="importModules">
 		<div class="row">
 			<div class="col-sm-4 col-xs-4">
 				<div class="row">
 					<div class="col-sm-8 col-xs-8">
-						<input type="text" id="searchExtension" class="extensionSearch form-control" placeholder="{vtranslate('Search for an extension..', $QUALIFIED_MODULE)}"/>
+                                                {* SalesPlatform.ru begin localization fix *}
+						{*<input type="text" id="searchExtension" class="extensionSearch form-control" placeholder="{vtranslate('Search for an extension..', $QUALIFIED_MODULE)}"/>*}
+						<input type="text" id="searchExtension" class="extensionSearch form-control" placeholder="{vtranslate('LBL_SEARCH_FOR_AN_EXTENSION', $QUALIFIED_MODULE)}"/>
+                                                {* SalesPlatform.ru end localization fix *}
 					</div>
 				</div>
 			</div>

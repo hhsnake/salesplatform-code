@@ -265,9 +265,8 @@ $languageStrings = array(
 	'LBL_CLOSE'                    => 'Закрыть'              ,
 	'LBL_ALL'                      => 'Все'                      ,
         //SalesPlatform.ru begin	
-        'LBL_UPDATED'                  => 'При изменении'          ,
         'LBL_CONNECT_WITH_US'          => 'Присоединяйтесь к нам',
-        //'LBL_UPDATED'                  => 'обновил'          ,
+        'LBL_UPDATED'                  => 'обновил'          ,
         //SalesPlatform.ru end        
         //SalesPlatform.ru begin History of products changes 
         'LBL_FROM'                     => 'с', 
@@ -487,7 +486,8 @@ $languageStrings = array(
 	'LBL_BASE_CURRENCY'            => 'Базовая валюта',
 	'Discount Percent'             => 'Процент скидки', 
 	'Discount Amount'              => 'Сумма скидки',
-	'Item Discount Amount'         => 'Item Discount Amount'        , // TODO: Review
+	'Item Discount Amount'         => 'Сумма скидки',
+        //'Item Discount Amount'         => 'Item Discount Amount'        , // TODO: Review
 	'Item Discount Percent'        => 'Процент скидки',
 	'Due Date'                     => 'Срок оплаты'       ,
 	'Due Date & Time'              => 'Due Date & Time'             , // TODO: Review
@@ -502,6 +502,13 @@ $languageStrings = array(
 	'High'                         => 'Высокий'                        , // TODO: Review
         //SalesPlatform.ru begin
 	'Medium'                       => 'Средний'                        , // TODO: Review
+        'Planned'                      => 'Запланировано'  , 
+        'Held'                         => 'Проведено', 
+	'Not Held'                     => 'Не проведено' ,
+	'Completed'                    => 'Завершено'          , 
+	'Pending Input'                => 'В ожидании'         , 
+	'Not Started'                  => 'Не начато'           , 
+	'Deferred'                     => 'Отсрочено'          , 
         'Tasks'                        => 'Задачи',
         //SalesPlatform.ru end
 	'Low'                          => 'Низкий'                         , // TODO: Review
@@ -536,6 +543,12 @@ $languageStrings = array(
 	'LBL_FOLDER_SAVED'             => 'Директория сохранена'                , // TODO: Review
 	'LBL_FOLDER_EXISTS'            => 'Директория уже существует'       , // TODO: Review
 	'LBL_FOLDER_DELETED'           => 'Директория удалена'              , // TODO: Review
+    
+        //SalesPlatfrom.ru begin
+        'LBL_NO_FOLDERS_FOUND'         => 'Не найдено папок',
+        'Shipping & Handling'          => 'Доставка и хранение',
+        //SalesPlatfrom.ru end
+    
 	'Lead Source'                  => 'Источник Обращения',
 	'Mobile'                       => 'Моб.'                     ,
 	'Notify Owner'                 => 'Уведомить ответственного',
@@ -711,7 +724,7 @@ $languageStrings = array(
     'entrepreneurreg' => 'Св-во о регистрации ИП',
     'okpo' => 'ОКПО',
     'LBL_LAST_SAVED_ON' => 'Сохранено',
-    'SMSNotifier' => 'SMS-Уведомления',
+    'SMSNotifier' => 'SMS-уведомления',
     'Export' => 'Экспорт',
     'LBL_NO_RECORD_SELECTED' => 'Нет выбранных записей',
     'LBL_NOT_FOUND' => 'Не найдено записей типа:',
@@ -756,10 +769,10 @@ $languageStrings = array(
     'Import' => 'Импорт',
     'Merge' => 'Слияние',
     'DuplicatesHandling' => 'Дублирование обработчика',
-    'RoleAndSubordinates'          => 'Роль и подчиненные'       ,
-    'SharingAccess' => 'Совместый Доступ',
-    'LoginHistory' => 'Журнал регистрации в системе',
-    'Login History' => 'Журнал регистрации в системе',
+    'RoleAndSubordinates'          => 'Роли и подчиненные'       ,
+    'SharingAccess' => 'Совместный доступ',
+    'LoginHistory' => 'Журнал регистраций в системе',
+    'Login History' => 'Журнал регистраций в системе',
     'ModuleManager' => 'Менеджер модулей',
     'Dashboard' => 'Главная',
     'Webforms' => 'Вебформы',
@@ -812,7 +825,8 @@ $languageStrings = array(
     //SalesPlatform.ru end History of products changes
     'Received' => 'Получен',
     'Balance' => 'Баланс',
-    'S&H Percent' => 'S&H процент',
+    'S&H Percent' => 'Процент доставки и хранения',
+    //'S&H Percent' => 'S&H процент',
     'Act Status History' => 'История статуса Акта',
     'Consignment Status History' => 'История статуса Реализации',
     'Project Milestone Name' => 'Наименование',
@@ -910,8 +924,8 @@ $languageStrings = array(
     'LBL_ERROR_MESSAGE' => 'Детали ошибки',
     'LBL_PASSWORD' => 'Пароль',
     'LBL_INV_TANDC_TEXT' =>  '- Счет действителен на протяжении 14 календарных дней с даты его выставления, если другое не оговорено в письменной форме. Оплата счета Покупателем означает согласие с условиями поставки.',
-    'LBL_HELP_INFO1' =>   'Это оценка трудоемкости заявки в часах.<br>При добавлении заявки к Сервисному Контракту число использованных единиц обслуживания автоматически увеличивается при закрытии заявки на величину, указанную в заявке. При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.',
-    'LBL_HELP_INFO2' =>   'Это оценка трудоемкости заявки в днях.<br>При добавлении заявки к Сервисному Контракту число использованных единиц обслуживания автоматически увеличивается при закрытии заявки на величину, указанную в заявке. При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.',
+    'LBL_HELP_INFO1' =>   'Это оценка трудоемкости заявки в часах.<br>При добавлении заявки к Сервисному контракту число использованных единиц обслуживания автоматически увеличивается при закрытии заявки на величину, указанную в заявке. При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.',
+    'LBL_HELP_INFO2' =>   'Это оценка трудоемкости заявки в днях.<br>При добавлении заявки к Сервисному контракту число использованных единиц обслуживания автоматически увеличивается при закрытии заявки на величину, указанную в заявке. При этом выбирается оценка в зависимости от значения поля Отслеживаемая Единица.',
     'LBL_CONTACT_MANAGEMENT_DESC'    => 'Хранение ваших контактных данных, документов, писем, событий, задач и других данных. Кроме того, управление доступом пользователей к различным возможностям CRM, а также автоматизация бизнес-процессов.',
     'LBL_SALES_AUTOMATION_DESC'      => 'Выявление потенциальных клиентов с вашего сайта и импорт в CRM. Анализ собранных данных и создание потенциальных возможностей для продаж.',
     'LBL_MARKETING_DESC'             => 'Рассылка сообщений по вашему списку контактов, привлечение потенциальных покупателей и клиентов, инструменты для анализа и повышения эффективности работы кампании.',
@@ -934,16 +948,21 @@ $languageStrings = array(
     'LBL_CONTACTS_PREFIX'   =>    'КОНТАКТ_',
     'LBL_POTENTIALS_PREFIX' =>    'СДЕЛКА_',
     'LBL_HELPDESK_PREFIX'   =>    'ЗАЯВКА_',
-    'LBL_QUOTES_PREFIX'     =>    'ПР_',
-    'LBL_SALESORDER_PREFIX' =>    '',
-    'LBL_PURCHASEORDER_PREFIX'  =>    'ЗАК_',
-    'LBL_INVOICE_PREFIX'    =>    '',
+    'LBL_QUOTES_PREFIX'     =>    'ПРЕД_',
+    'LBL_SALESORDER_PREFIX' =>    'ЗАКАЗ_',
+    'LBL_PURCHASEORDER_PREFIX'  =>    'ЗАКУПКА_',
+    'LBL_INVOICE_PREFIX'    =>    'СЧЕТ_',
     'LBL_PRODUCTS_PREFIX'   =>    'ТОВ_',
     'LBL_VENDORS_PREFIX'    =>    'ПОСТ_',
     'LBL_PRICEBOOKS_PREFIX' =>    'КАТ_',
     'LBL_FAQ_PREFIX'        =>    'БЗ_',
     'LBL_DOCUMENTS_PREFIX'  =>    'ДОК_',
     'LBL_SERVICE_CONTRACTS_PREFIX'  =>  'СЕРКОН_',
+    'LBL_SERVICE_PREFIX'  =>  'СЕР_',
+    'LBL_PROJECT_MILESTONE_PREFIX'  =>  'КТ_',
+    'LBL_PROJECT_TASK_PREFIX'  =>  'КЗ_',
+    'LBL_PROJECT_PREFIX'  =>  'ПРОЕКТ_',
+    'LBL_ASSET_PREFIX'  =>  'АКТИВ_',
     
     'LBL_VAT'               =>    'НДС',
     'LBL_VAT_VALUE'         =>    '18',
@@ -1097,7 +1116,7 @@ $languageStrings = array(
     'Received Purchase Orders'    =>    'Полученные Закупки',
     'Open Invoices'     =>    'Открытые Счета',
     'Paid Invoices'     =>    'Оплаченные Счета',
-    'Pending Sales Orders'   =>    'Текущие Заказы на Продажу',
+    'Pending Sales Orders'   =>    'Текущие Заказы',
     'This is a Default Folder'  =>  'Это папка по умолчанию',
     'LBL_HAS_CHANGED_TO' => 'изменено на',
     'LBL_IS_ADDED' => 'добавлено',
@@ -1286,7 +1305,10 @@ $languageStrings = array(
     'LBL_CONFIGURE' => 'Конфигурировать',
     'LBL_VIEW' => 'Вид',
     'LBL_CHANGE_USER' => 'Сменить пользователя',
-    'LBL_SELECT_COLOR' => 'выберите цвет',
+    //Salesplatform.ru begin
+    'LBL_SELECT_COLOR' => 'Выберите цвет',
+    //'LBL_SELECT_COLOR' => 'выберите цвет',
+    //Salesplatform.ru end
     'LBL_SHOW_MAP' => 'Показать на карте',
     'LBL_GOOGLE_MAP' => 'Google Map',
     'LBL_CREATION' => 'При создании',
@@ -1295,19 +1317,31 @@ $languageStrings = array(
     'LBL_EDIT_EMAIL_PREFERENCE_TOOLTIP' => 'Измените эти настройки из раскрывающегося списка «Параметры» в деталях модулей или в виде списка',
     'LBL_SYSTEM' =>'Система',
     'LBL_PREVIEW' => 'Предварительный просмотр',
-    'LBL_UNLINKED' => 'Несвязанное',
+    //SalesPaltform.ru begin fixed localization
+    'Daily' => 'Ежедневно',
+    'Weekly' => 'Каждую неделю',
+    'Monthly' => 'Каждый месяц',
+    'Yearly' => 'Каждый год',
+    //SalesPaltform.ru end
+    //SalesPaltform.ru begin fixed localization
+    'LBL_UNLINKED' => 'удалена связь',
+    //'LBL_UNLINKED' => 'Несвязанное',
+    //SalesPaltform.ru end
     'Any' => 'Любой',
     //SalesPaltform.ru begin
     'LBL_NA' => 'Не заданы',
     //SalesPaltform.ru end
     'LBL_DISABLED' => 'Отключено',
-    'LBL_LINKED' => 'Связанный',
+    //SalesPaltform.ru begin fixed localization
+    'LBL_LINKED' => 'добавлена связь',
+    //'LBL_LINKED' => 'Связанный',
+    //SalesPaltform.ru end
     'LBL_ADDING_NEW' => 'Добавление новых',
     'LBL_LESS' => 'Меньше',
     'LBL_COMMENT' => 'Комментарий',
     'LBL_NOT_STARRED' => 'Следуйте',
     'LBL_QUICK_VIEW' => 'Быстрый Просмотр',
-    'LBL_NOTIFICATION_CENTER' => 'Центр Уведомлений',
+    'LBL_NOTIFICATION_CENTER' => 'Центр уведомлений',
     'LBL_CONTACT' => 'УПРАВЛЕНИЕ КОНТАКТАМИ',
     'LBL_NO_ATTACHMENTS' => 'Никаких Вложений',
     'LBL_REARRANGE_DASHBOARD_TABS' => 'Упорядочивать вкладки',
@@ -1416,6 +1450,9 @@ $languageStrings = array(
     'LBL_TAB_NAME' => 'Название панели',
     'LBL_SHARED_TAGS_ACCESS' => 'Общие теги доступны всем пользователям в Vtiger',
     'LBL_GOTO_TAGS' => 'Перейдите в меню Настройки > Мои настройки > Мои Теги редактировать или удалять Ваши личные теги',
+    //SalesPlatform.ru begin licalization fix
+    'LBL_INFO' => 'Информация',
+    //SalesPlatform.ru end licalization fix
     'LBL_UNLINK' => 'Отвязать',
     'LBL_SWITCH_TO_OLD' => 'Переключиться на старую версию',
     'LBL_CONFIG_COLUMNS' => 'Настроить Столбцы',
@@ -1475,10 +1512,10 @@ $languageStrings = array(
     'LBL_HELP_BROWSE_ALL' => 'Просмотреть все',
     'LBL_EXPORT_FILE_NAME' => 'Экспорт именем',
     'LBL_EXTENSION_NOT_ALLOWED_FOR_NONADMIN' => '%синхронизации допускается только для пользователей с правами администратора',
-    'SINGLE_Invoice' => 'Накладной',
-    'SINGLE_SalesOrder' => 'Заказ на продажу',
-    'SINGLE_PurchaseOrder' => 'Заказ на поставку',
-    'SINGLE_Quotes' => 'Цитата',
+    'SINGLE_Invoice' => 'Счет',
+    'SINGLE_SalesOrder' => 'Заказ',
+    'SINGLE_PurchaseOrder' => 'Закупка',
+    'SINGLE_Quotes' => 'Предложение',
     'LBL_POST_YOUR_COMMENT_HERE' => 'Оставить свой комментарий здесь',
     'LBL_CLICK_TO_CALL' => 'Нажмите для вызова',
     'LBL_SHOW_TOTAL_NUMBER_OF_RECORDS' => 'Нажмите, чтобы получить общее количество записей графы',
@@ -1556,6 +1593,25 @@ $languageStrings = array(
     'Simple' => 'Простой',
     'Compound' => 'Соединение',
     'Deducted' => 'Вычтено',
+    'Paid' => 'Оплачено',
+    'January' => 'Январь',
+    'February' => 'Февраль',
+    'March' => 'Март',
+    'April' => 'Апрель',
+    'May' => 'Май',
+    'June' => 'Июнь',
+    'July' => 'Июль',
+    'August' => 'Август',
+    'September' => 'Сентябрь',
+    'October' => 'Октябрь',
+    'November' => 'Ноябрь',
+    'December' => 'Декабрь',
+    'LBL_DAY_CORRECT_SINGLE' => 'День',
+    'LBL_MANUAL' => 'Руководство',
+    'semicolon' => '; (точка с запятой)',
+    'comma' => ', (запятая)',
+    'Pipe' => '|',
+    'Caret' => '^',
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
@@ -1564,7 +1620,7 @@ $jsLanguageStrings = array(
     'REMOVE_SYNCHRONIZATION_MESSAGE' => 'Удаление синхронизации',
     'SYNC_REMOVED_SUCCESSFULLY'    => 'Синхронизация успешно удалена',
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Пожалуйста, настройте сервер исходящей почты в настройках CRM', // TODO: Review
-	'JS_SMS_SERVER_CONFIGURATION'  => 'Пожалуйста, настройте SMS-Уведомления в настройках CRM', // TODO: Review
+	'JS_SMS_SERVER_CONFIGURATION'  => 'Пожалуйста, настройте SMS-уведомления в настройках CRM', // TODO: Review
 	'JS_PLEASE_SELECT_ONE_RECORD'  => 'Пожалуйста, выберите хотя бы одну запись', // TODO: Review
 	'JS_PLEASE_ENTER_VALID_EMAIL_ADDRESS' => 'Пожалуйста, введите валидный E-mail', // TODO: Review
 	'JS_CONTAINS_ILLEGAL_CHARACTERS' => 'Содержит недопустимые символы' , // TODO: Review
@@ -1959,6 +2015,17 @@ $jsLanguageStrings = array(
     'JS_LOADING' => 'Загрузка...',
     'JS_UPLOAD_SUCCESSFUL' => 'Файл успешно Добавленоy',
     'JS_UPLOAD_FAILED' => 'Загрузка файла Ошибка',
+    'JS_USER_ALL' => 'Пользователь : Все',
+    'JS_STATUS_ALL' => 'Статус : Все',
+            'Planned'                      => 'Запланировано'  , 
+        'Held'                         => 'Проведено', 
+	'Not Held'                     => 'Не проведено' ,
+	'Completed'                    => 'Завершено'          , 
+	'Pending Input'                => 'В ожидании'         , 
+	'Not Started'                  => 'Не начато'           , 
+	'Deferred'                     => 'Отсрочено'          ,
+    'JS_LIST_SAVED' => 'Список сохранен',
+    'JS_EMPTY_SERVER_NAME_FIELD' => 'Поле Имя сервера обязательно к заполнению',
     //SalesPlatform.ru end
 );
 

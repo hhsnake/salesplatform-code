@@ -665,7 +665,9 @@ function getEntityId($module, $entityName) {
 
 function decode_emptyspace_html($str){
 	$str = str_replace("&nbsp;", "*#chr*#",$str); // (*#chr*#) used as jargan to replace it back with &nbsp;
-	$str = str_replace("\xc2", "*#chr*#",$str); // Ã (for special chrtr)
+        // SalesPlatform.ru begin #5262
+	//$str = str_replace("\xc2", "*#chr*#",$str); // Ã (for special chrtr)
+        // SalesPlatform.ru end
 	$str = decode_html($str);
 	return str_replace("*#chr*#", "&nbsp;", $str);
 	

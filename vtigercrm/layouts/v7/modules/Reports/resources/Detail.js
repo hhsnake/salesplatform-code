@@ -162,7 +162,18 @@ Vtiger_Detail_Js("Reports_Detail_Js",{},{
 		});
 	},
 	
-	registerEvents : function(){
+        //SalesPlatform.ru begin
+        registerEvents : function(skipDetect) {
+            if(typeof skipDetect === 'undefined' || !skipDetect) {
+                var controllerClassName = $("#customJsController").val();
+                if(typeof window[controllerClassName] !== 'undefined') {
+                    var controllerInstance = new window[controllerClassName]();
+                    controllerInstance.registerEvents(true);
+                    return;
+                } 
+            }
+        //registerEvents : function(){
+        //SalesPlatform.ru end
 		this.registerSaveOrGenerateReportEvent();
         this.registerEventsForActions();
 		var container = this.getContentHolder();

@@ -503,4 +503,29 @@ jQuery(function () {
 		var value = this.valueOf();
 		return value.charAt(0).toUpperCase()+value.slice(1).toLowerCase()
 	}
+
+        // SalesPlatform.ru begin #5464
+        window.addEventListener("storage", function (event) {
+            var state;
+
+            if (typeof document.hidden !== "undefined") {
+                state = "visibilityState";
+            } else if (typeof document.mozHidden !== "undefined") {
+                state = "mozVisibilityState";
+            } else if (typeof document.msHidden !== "undefined") {
+                state = "msVisibilityState";
+            } else if (typeof document.webkitHidden !== "undefined") {
+                state = "webkitVisibilityState";
+            }
+
+            if (document[state] != "hidden") {
+                if (event["key"] == "record") {
+                    if ((event["oldValue"] == "") && (event["newValue"] != "")) {
+                        Vtiger_Index_Js.showReminderPopup(localStorage.getItem("record"));
+                        localStorage.setItem("record", "");
+                    }
+                }
+            }
+        }, false);
+        // SalesPlatform.ru end
 });

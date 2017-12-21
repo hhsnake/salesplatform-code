@@ -54,6 +54,13 @@ class Events_Field_Model extends Calendar_Field_Model {
 		if(!$this->isEditable() || $this->get('uitype') == 30) {
 			return false;
 		}
+        
+        //SalesPlatform.ru begin
+        if($this->isCKEEnabled()) {
+            return false;
+        }
+        //SalesPlatform.ru end
+        
 		return true;
 	}
 

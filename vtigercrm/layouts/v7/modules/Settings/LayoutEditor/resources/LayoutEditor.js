@@ -842,12 +842,19 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		//special validators while adding new field
 		var maxLengthValidator = 'maximumlength';
 		var decimalValidator = 'range';
-
+                
 		//register the change event for field types
 		form.find('[name="fieldType"]').on('change', function (e) {
 			var currentTarget = jQuery(e.currentTarget);
 			var lengthInput = form.find('[name="fieldLength"]');
 			var selectedOption = currentTarget.find('option:selected');
+                        
+                        // SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor
+                        jQuery("div.uitype19").each(function (index, domElement) {
+                            jQuery(domElement).addClass('hide'); 
+                        });
+                        // SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor
+                        
 			var maxlengthValue = selectedOption.data('maxlength');
 			form.find('[name="fieldLabel"]').attr('data-rule-illegal', "true");
 
@@ -857,6 +864,14 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			//hide all the elements like length, decimal,picklist
 			form.find('.supportedType').addClass('hide');
 			form.find('[name="defaultvalue"]').removeAttr('readonly');
+                        
+                        // SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor
+                        if (selectedOption.val() === 'SPTextArea') {
+                            jQuery("div.uitype19").each(function (index, domElement) {
+                               jQuery(domElement).removeClass('hide'); 
+                            });
+                        }
+                        // SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor
 
 			if (selectedOption.data('lengthsupported')) {
 				form.find('.lengthsupported').removeClass('hide');
@@ -959,7 +974,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 					case 'MultiSelectCombo':type = 'Multipicklist';break;
 				}
 				data.type = type;
-
+                                
 				if (typeof data.picklistvalues == "undefined")
 					data.picklistvalues = {};
 
@@ -1030,6 +1045,13 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		if (!result['customField']) {
 			fieldCopy.find('.deleteCustomField').remove();
 		}
+        
+        //SalesPlatform.ru begin
+        if(result['type'] !== 'SPTextArea') {
+            fieldCopy.find(".uitype19").remove();
+        }
+        //SalesPlatform.ru end
+        
 		var block = relatedBlock.find('.blockFieldsList');
 		var sortable1 = block.find('ul[name=sortable1]');
 		var sortable2 = block.find('ul[name=sortable2]');
@@ -1105,6 +1127,16 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			form.find('[data-name="quickcreate"]').removeAttr('readonly');
 		}
 
+                //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+                if (!result['isCKEditor']) {
+			form.find('.uitype19').addClass('disabled');
+			sTitle = app.vtranslate('JS_SHOW_THIS_FIELD_IN', app.vtranslate('JS_CKE_FIELD'));
+		} else {
+			form.find('.uitype19').removeClass('disabled');
+			sTitle = app.vtranslate('JS_HIDE_THIS_FIELD_IN', app.vtranslate('JS_CKE_FIELD'));
+		}
+                //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
+                
 		if (!result['isSummaryField']) {
 			form.find('.summary').addClass('disabled');
 			sTitle = app.vtranslate('JS_SHOW_THIS_FIELD_IN', app.vtranslate('JS_KEY_FIELD'));

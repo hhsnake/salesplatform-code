@@ -184,6 +184,8 @@ $languageStrings = Array(
 'SINGLE_Consignment'=>'Consignment',
     
 //SalesPaltform.ru begin
-'LBL_GOODS_CONSIGNMENT' => 'Goods consigment',    
+'LBL_GOODS_CONSIGNMENT' => 'Goods consignment', 
+'Has Goods Consignment' => 'Has Goods Consignment',
+'Goods Consignment No' => 'Goods Consignment No',
 //SalesPlatform.ru end   
 );

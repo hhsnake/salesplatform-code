@@ -109,7 +109,80 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 
 	if (in_array($module, $inventoryModules))
 	{
-		$query="SELECT
+        // SalesPlatform.ru begin
+//        $query="SELECT 
+//					case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname,
+//                    case when vtiger_products.productid != '' then vtiger_products.product_no else vtiger_service.service_no end as productcode,
+// 		            case when vtiger_products.productid != '' then vtiger_products.productcode else vtiger_service.service_no end as productcode, 
+//					case when vtiger_products.productid != '' then vtiger_products.usageunit else vtiger_service.service_usageunit end as usageunit,									
+//					case when vtiger_products.productid != '' then vtiger_products.unit_code else vtiger_service.unit_code end as unit_code,
+//					case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price,									
+//					case when vtiger_products.productid != '' then vtiger_products.manuf_country else '--' end as manuf_country,									
+//					case when vtiger_products.productid != '' then vtiger_products.manuf_country_code else '--' end as manuf_country_code,
+//					case when vtiger_products.productid != '' then vtiger_products.customs_id else '--' end as customs_id,
+//                    case when (vtiger_products.productid != '' AND vtiger_products.sp_product_international_code != '') then vtiger_products.sp_product_international_code else '--' end as international_code,
+// 		            case when vtiger_products.productid != '' then vtiger_products.qtyinstock else 'NA' end as qtyinstock,
+// 		            case when vtiger_products.productid != '' then 'Products' else 'Services' end as entitytype,
+// 		                        vtiger_inventoryproductrel.listprice, vtiger_products.is_subproducts_viewable, 
+// 		                        vtiger_crmentity.description AS product_description, 
+// 		                        vtiger_inventoryproductrel.* , vtiger_crmentity.deleted
+//                                    , attachments.attachment_id, attachments.attachment_name, attachments.attachment_path
+// 	                            FROM vtiger_inventoryproductrel 
+//                                LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_inventoryproductrel.productid
+// 		                        LEFT JOIN vtiger_products 
+// 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+// 		                        LEFT JOIN vtiger_service 
+// 		                                ON vtiger_service.serviceid=vtiger_inventoryproductrel.productid 
+//                                        LEFT JOIN (
+//                                                    SELECT vtiger_attachments.attachmentsid AS attachment_id,
+//                                                        vtiger_seattachmentsrel.crmid AS attachment_crmid, 
+//                                                        vtiger_attachments.name AS attachment_name, 
+//                                                        vtiger_attachments.path AS attachment_path 
+//                                                    FROM vtiger_seattachmentsrel, vtiger_attachments, vtiger_inventoryproductrel 
+//                                                    WHERE vtiger_seattachmentsrel.crmid=vtiger_inventoryproductrel.productid AND 
+//                                                        vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid 
+//                                                    GROUP BY attachment_crmid DESC
+//                                                  ) attachments
+//                                                ON attachments.attachment_crmid=vtiger_inventoryproductrel.productid                                                
+// 		                        WHERE id=?
+// 		                        ORDER BY sequence_no"; 
+        $query="SELECT 
+					case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname,
+ 		            case when vtiger_products.productid != '' then vtiger_products.productcode else vtiger_service.service_no end as productcode, 
+					case when vtiger_products.productid != '' then vtiger_products.usageunit else vtiger_service.service_usageunit end as usageunit,									
+					case when vtiger_products.productid != '' then vtiger_products.unit_code else vtiger_service.unit_code end as unit_code,
+					case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price,
+                                        case when vtiger_products.productid != '' then vtiger_products.purchase_cost else vtiger_service.purchase_cost end as purchasecost,
+					case when vtiger_products.productid != '' then vtiger_products.manuf_country else '--' end as manuf_country,									
+					case when vtiger_products.productid != '' then vtiger_products.manuf_country_code else '--' end as manuf_country_code,
+					case when vtiger_products.productid != '' then vtiger_products.customs_id else '--' end as customs_id,
+                    case when (vtiger_products.productid != '' AND vtiger_products.sp_product_international_code != '') then vtiger_products.sp_product_international_code else '--' end as international_code,
+ 		            case when vtiger_products.productid != '' then vtiger_products.qtyinstock else 'NA' end as qtyinstock,
+ 		            case when vtiger_products.productid != '' then 'Products' else 'Services' end as entitytype,
+ 		                        vtiger_products.is_subproducts_viewable, 
+ 		                        vtiger_crmentity.description AS product_description, 
+ 		                        vtiger_inventoryproductrel.* , vtiger_crmentity.deleted
+                                    , attachments.attachment_id, attachments.attachment_name, attachments.attachment_path
+ 	                            FROM vtiger_inventoryproductrel 
+                                LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_inventoryproductrel.productid
+ 		                        LEFT JOIN vtiger_products 
+ 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+ 		                        LEFT JOIN vtiger_service 
+ 		                                ON vtiger_service.serviceid=vtiger_inventoryproductrel.productid 
+                                        LEFT JOIN (
+                                                    SELECT vtiger_attachments.attachmentsid AS attachment_id,
+                                                        vtiger_seattachmentsrel.crmid AS attachment_crmid, 
+                                                        vtiger_attachments.name AS attachment_name, 
+                                                        vtiger_attachments.path AS attachment_path 
+                                                    FROM vtiger_seattachmentsrel, vtiger_attachments, vtiger_inventoryproductrel 
+                                                    WHERE vtiger_seattachmentsrel.crmid=vtiger_inventoryproductrel.productid AND 
+                                                        vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid 
+                                                    GROUP BY attachment_crmid DESC
+                                                  ) attachments
+                                                ON attachments.attachment_crmid=vtiger_inventoryproductrel.productid                                                
+ 		                        WHERE id=?
+ 		                        ORDER BY sequence_no"; 
+		/*$query="SELECT
 					case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname,
 					case when vtiger_products.productid != '' then vtiger_products.product_no else vtiger_service.service_no end as productcode,
 					case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price,
@@ -121,8 +194,9 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 					LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_inventoryproductrel.productid
 					LEFT JOIN vtiger_products ON vtiger_products.productid=vtiger_inventoryproductrel.productid
 					LEFT JOIN vtiger_service ON vtiger_service.serviceid=vtiger_inventoryproductrel.productid
-					WHERE id=? ORDER BY sequence_no";
+					WHERE id=? ORDER BY sequence_no";*/
 			$params = array($focus->id);
+        // SalesPlatform.ru end    
 	}
 	elseif(in_array($module, $lineItemSupportedModules))
 	{
@@ -199,9 +273,26 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 		$unitprice=$adb->query_result($result,$i-1,'unit_price');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 		$entitytype=$adb->query_result($result,$i-1,'entitytype');
-		$purchaseCost = $adb->query_result($result,$i-1,'purchase_cost');
+                // SalesPlatform.ru begin
+//		$purchaseCost = $adb->query_result($result,$i-1,'purchase_cost');
+		$purchaseCost = $adb->query_result($result,$i-1,'purchasecost');
+                // SalesPlatform.ru end
 		$margin = $adb->query_result($result,$i-1,'margin');
 		$isSubProductsViewable = $adb->query_result($result, $i-1, 'is_subproducts_viewable');
+        
+        // SalesPlatform.ru begin
+		if (in_array($module, $inventoryModules)) {
+		    $manuf_country=$adb->query_result($result,$i-1,'manuf_country');
+		    $customs_id=$adb->query_result($result,$i-1,'customs_id');
+            $internationalCode=$adb->query_result($result, $i-1, 'international_code');
+		    $manuf_country_code=$adb->query_result($result,$i-1,'manuf_country_code');
+		    $unit_code=$adb->query_result($result,$i-1,'unit_code');
+            $usageunit=$adb->query_result($result,$i-1,'usageunit');
+		    $attachment_id=$adb->query_result($result,$i-1,'attachment_id');
+		    $attachment_name=$adb->query_result($result,$i-1,'attachment_name');
+		    $attachment_path=$adb->query_result($result,$i-1,'attachment_path');
+		}
+        // SalesPlatform.ru end
 
 		if ($purchaseCost) {
 			$product_Detail[$i]['purchaseCost'.$i] = number_format($purchaseCost, $no_of_decimal_places, '.', '');
@@ -333,6 +424,20 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 		$discountTotal = number_format($discountTotal, $no_of_decimal_places,'.','');
 		$product_Detail[$i]['discountTotal'.$i] = $discountTotal;
 		$product_Detail[$i]['totalAfterDiscount'.$i] = $totalAfterDiscount;
+        
+        // SalesPlatform.ru begin
+		if (in_array($module, $inventoryModules)) {
+		    $product_Detail[$i]['manufCountry'.$i] = $manuf_country;
+		    $product_Detail[$i]['customsId'.$i] = $customs_id;
+            $product_Detail[$i]['internatonalCode'.$i] = $internationalCode;
+		    $product_Detail[$i]['manufCountryCode'.$i] = $manuf_country_code;
+		    $product_Detail[$i]['unitCode'.$i] = $unit_code;
+            $product_Detail[$i]['usageunit'.$i] = $usageunit;
+		    $product_Detail[$i]['attachmentId'.$i] = $attachment_id;
+		    $product_Detail[$i]['attachmentName'.$i] = $attachment_name;
+		    $product_Detail[$i]['attachmentPath'.$i] = $attachment_path;
+		}
+        // SalesPlatform.ru end
 
 		$taxTotal = 0;
 		$taxTotal = number_format($taxTotal, $no_of_decimal_places,'.','');
@@ -367,6 +472,11 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 		//Now retrieve the tax values from the current query with the name
 		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 		{
+                    // SalesPlatform.ru begin
+                    if ($tax_details[$tax_count]['deleted'] == 1) {
+                        continue;
+                    }
+                    // SalesPlatform.ru end
 			$tax_name = $tax_details[$tax_count]['taxname'];
 			$tax_label = $tax_details[$tax_count]['taxlabel'];
 			$tax_value = 0;
@@ -393,7 +503,16 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 			$product_Detail[$i]['taxes'][$tax_count]['regions']		= $tax_details[$tax_count]['regions'];
 			$product_Detail[$i]['taxes'][$tax_count]['compoundon']	= $tax_details[$tax_count]['compoundon'];
 			$product_Detail[$i]['taxes'][$tax_count]['regionsList']	= $regionsList[$tax_details[$tax_count]['taxid']];
+                        
+                        // SalesPlatform.ru begin
+                        $taxAmount = $totalAfterDiscount * $tax_value / (100.0 + $tax_value);
+                        $taxAmount = number_format($taxAmount, $no_of_decimal_places,'.','');
+                        $taxTotal = $taxTotal + $taxAmount;
+                        // SalesPlatform.ru end
 		}
+                // SalesPlatform.ru begin
+                $product_Detail[$i]['taxTotal'.$i] = $taxTotal;
+                // SalesPlatform.ru end
 	}
 
 	//set the taxtype
@@ -460,14 +579,23 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 
 		//if taxtype is individual and want to change to group during edit time then we have to show the all available taxes and their default values
 		//Also taxtype is group and want to change to individual during edit time then we have to provide the asspciated taxes and their default tax values for individual products
-		if($taxtype == 'group')
-			$tax_percent = $adb->query_result($result,0,$tax_name);
+		// SalesPlatform.ru begin
+                //if($taxtype == 'group')
+                if($taxtype == 'group' || $taxtype == 'group_tax_inc')
+		// SalesPlatform.ru end
+                    $tax_percent = $adb->query_result($result,0,$tax_name);
 		else
-			$tax_percent = $tax_details[$tax_count]['percentage'];//$adb->query_result($result,0,$tax_name);
+                    $tax_percent = $tax_details[$tax_count]['percentage'];//$adb->query_result($result,0,$tax_name);
 
 		if($tax_percent == '' || $tax_percent == 'NULL')
 			$tax_percent = 0;
-		$taxamount = ($subTotal-$finalDiscount)*$tax_percent/100;
+                
+                // SalesPlatform.ru begin
+                if($taxtype != 'group_tax_inc') {
+                    $taxamount = ($subTotal - $finalDiscount) * $tax_percent / 100;
+                }
+                // SalesPlatform.ru end
+                //$taxamount = ($subTotal-$finalDiscount)*$tax_percent/100;
         list($before_dot, $after_dot) = explode('.', $taxamount);
         if($after_dot[$no_of_decimal_places] == 5) {
             $taxamount = round($taxamount, $no_of_decimal_places, PHP_ROUND_HALF_DOWN); 
@@ -518,7 +646,20 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 		$taxTotal = $taxTotal + $taxDetails[$taxId]['amount'];
 	}
 	$product_Detail[1]['final_details']['taxes'] = $taxDetails;
-	$product_Detail[1]['final_details']['tax_totalamount'] = number_format($taxTotal, $no_of_decimal_places, '.', '');
+        
+        
+        // SalesPlatform.ru begin
+        if($taxtype != 'group_tax_inc') {
+            $product_Detail[1]['final_details']['tax_totalamount'] = number_format($taxTotal, $no_of_decimal_places, '.', '');
+        }
+        else {
+            for($i = 1; $i <= $num_rows; $i++) {
+                $taxamount += $product_Detail[$i]['taxTotal'.$i];
+            }
+            $product_Detail[1]['final_details']['tax_totalamount'] = number_format($taxamount, $no_of_decimal_places, '.', '');
+            
+        }
+        // SalesPlatform.ru end
 
 	//To set the Shipping & Handling charge
 	$shCharge = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:0;
@@ -541,7 +682,13 @@ function getAssociatedProducts($module, $focus, $seid = '', $refModuleName = fal
 		if (in_array($module, $inventoryModules)) {
 			$shtax_percent = getInventorySHTaxPercent($focus->id,$shtax_name);
 		}
-		$shtaxamount = $shCharge*$shtax_percent/100;
+                // SalesPlatform.ru begin
+                if($taxtype == 'group_tax_inc')
+                    $shtaxamount = $shCharge * $shtax_percent / (100 + $shtax_percent);
+                else
+                    $shtaxamount = $shCharge*$shtax_percent / 100;
+		//$shtaxamount = $shCharge*$shtax_percent/100;
+                // SalesPlatform.ru end
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['taxname']	= $shtax_name;
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['taxlabel']	= $shtax_label;

@@ -163,6 +163,17 @@ $languageStrings = array(
 	'LBL_TOP' => 'Top',
 	'LBL_ALL_REPORTS' => 'All Reports',
 	'LBL_CALCULATION_CONVERSION_MESSAGE' => 'Calculation are based on the My Preferences currency of your CRM',
+    
+    //SalesPlatform.ru begin 
+        'LBL_NO_COLUMN_VALUE' => '--No field value--', 
+ 	'LBL_VIEWTYPE' => 'Plot type', 
+ 	'LBL_AGREGATE_BY' => 'Calculate by', 
+ 	'table' => 'Table', 
+ 	'pie' => 'Pie', 
+ 	'barchart' => 'Bar chart', 
+ 	'linear' => 'Graph', 
+ 	'custom' => 'Custom format', 
+    //SalesPlatform.ru end 
 
     //Summary/Pivot Reports
     'LBL_CREATING_PIVOT_REPORT' => 'Create Pivot Report',
@@ -230,6 +241,9 @@ $jsLanguageStrings = array(
 	'JS_DUPLICATE_RECORD' => 'Duplicate Report',
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitation: Line Item fields(List Price, Discount & Quantity) can only be used when other calculation fields are not selected.',
 	'JS_NO_CHART_DATA_AVAILABLE' => 'Data not available, please check the selected fields',
+    //SalesPlatform.ru begin 
+        'JS_LBL_NO_DATA_FOR_SELECTED_FILTERS' => 'No data for selected filters', 
+    //SalesPlatform.ru end 
     'JS_CHART_PINNED_TO_DASHBOARD' => 'Chart Pinned To DashBoard',
     'JS_CHART_ALREADY_PINNED_TO_DASHBOARD' => 'Chart Already Pinned To DashBoard',
 	'JS_MOVE_REPORTS'=>'Move Reports',

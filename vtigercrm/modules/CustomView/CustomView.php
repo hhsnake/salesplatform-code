@@ -2012,21 +2012,53 @@ class CustomView extends CRMEntity {
 							/* if($action == 'ListView' || $action == $module."Ajax" || $action == 'index')
 							  { */
 							$log->debug("Entering when status=1 or status=2 & action = ListView or $module.Ajax or index");
-							$sql = "select vtiger_users.id from vtiger_customview inner join vtiger_users where vtiger_customview.cvid = ? and vtiger_customview.userid in (select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '%" . $current_user_parent_role_seq . "::%')";
-							$result = $adb->pquery($sql, array($record_id));
-
-							while ($row = $adb->fetchByAssoc($result)) {
-								$temp_result[] = $row['id'];
-							}
-							$user_array = $temp_result;
-							if (sizeof($user_array) > 0) {
-								if (!in_array($current_user->id, $user_array))
-									$permission = "no";
-								else
-									$permission = "yes";
-							}
-							else
-								$permission = "no";
+                                                        //SalesPlatform.ru begin fixind shared CustomViews
+//							$sql = "select vtiger_users.id from vtiger_customview inner join vtiger_users where vtiger_customview.cvid = ? and vtiger_customview.userid in (select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '%" . $current_user_parent_role_seq . "::%')";
+//							$result = $adb->pquery($sql, array($record_id));
+//                                                        
+//							while ($row = $adb->fetchByAssoc($result)) {
+//								$temp_result[] = $row['id'];
+//							}
+//							$user_array = $temp_result;
+//							if (sizeof($user_array) > 0) {
+//								if (!in_array($current_user->id, $user_array))
+//									$permission = "no";
+//								else
+//                                                            $permission = "yes";
+//                                                        }
+//							else
+//                                                            $permission = "no";
+                                                        $sql = "SELECT * FROM vtiger_cv2users WHERE cvid=? AND userid=?";
+                                                        $result = $adb->pquery($sql, array($record_id, $current_user->id));
+                                                        
+                                                        $numberOfSharedFilters = $adb->num_rows($result);
+                                                        if ($numberOfSharedFilters) {
+                                                            $sharedUserId = $adb->query_result($result, 0, 'userid');
+                                                            
+                                                            $temp_result[] = $sharedUserId;
+                                                        }
+                                                            
+                                                        $sql = "SELECT vtiger_user2role.userid FROM vtiger_user2role ";
+                                                        $sql .= "INNER JOIN vtiger_users ON vtiger_users.id=vtiger_user2role.userid ";
+                                                        $sql .= "INNER JOIN vtiger_role ON vtiger_role.roleid=vtiger_user2role.roleid ";
+                                                            
+                                                        $parentRole = explode('::', $current_user_parent_role_seq);
+                                                        $sql .= "WHERE vtiger_role.roleid IN (" . generateQuestionMarks($parentRole) . ")";
+                                                            
+                                                        $parentIdsResult = $adb->pquery($sql, $parentRole);
+                                                            
+                                                        while ($row = $adb->fetchByAssoc($parentIdsResult)) {
+                                                            $temp_result[] = $row['userid'];
+                                                        }
+                                                        $user_array = $temp_result;
+                                                        if (sizeof($user_array) > 0) {
+                                                            if (!in_array($current_user->id, $user_array))
+                                                                $permission = "no";
+                                                            else
+                                                                $permission = "yes";
+                                                        }
+                                                        //SalesPlatform.ru end fixind shared CustomViews
+                                                        
 							/* }
 							  else
 							  {

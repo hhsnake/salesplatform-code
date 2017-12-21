@@ -275,7 +275,7 @@
 						<div class="group">
                                                         {*SalesPlatform.ru begin*}
 							{*<input id="username" type="text" name="username" placeholder="Username" value="admin">*}
-							<input id="username" type="text" name="username" value="admin">
+							<input id="username" type="text" name="username">
                                                         {*SalesPlatform.ru end*}
 							<span class="bar"></span>
                                                         {*SalesPlatform.ru begin*}
@@ -285,7 +285,7 @@
 						</div>
 						<div class="group">
                                                         {*SalesPlatform.ru begin*}
-							<input id="password" type="password" name="password" value="admin">
+							<input id="password" type="password" name="password">
 							{*<input id="password" type="password" name="password" placeholder="Password" value="admin">*}
                                                         {*SalesPlatform.ru end*}
 							<span class="bar"></span>
@@ -329,7 +329,10 @@
 						<div class="group">
                                                         {*SalesPlatform.ru begin*}
 							<button type="submit" class="button buttonBlue forgot-submit-btn">Отправить</button><br>
-							<span>Please enter details and submit<a class="forgotPasswordLink pull-right" style="color: #15c;">Назад</a></span>
+                                                        {* SalesPlatform.ru begin localization fix *}
+							{*<span>Please enter details and submit<a class="forgotPasswordLink pull-right" style="color: #15c;">Назад</a></span>*}
+                                                        <span>{vtranslate('LBL_ENTER_AND_SUBMIT_DETAILS',$MODULE)}<a class="forgotPasswordLink pull-right" style="color: #15c;">Назад</a></span>
+                                                        {* SalesPlatform.ru end localization fix *}
 							{*<button type="submit" class="button buttonBlue forgot-submit-btn">Submit</button><br>*}
 							{*<span>Please enter details and submit<a class="forgotPasswordLink pull-right" style="color: #15c;">Back</a></span>*}
                                                         {*SalesPlatform.ru end*}

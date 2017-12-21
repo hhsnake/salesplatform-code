@@ -19,7 +19,10 @@ class MailManager_Mailbox_Model {
 	protected $mRefreshTimeOut;
 	protected $mId;
 	protected $mServerName;
-    protected $mFolder;
+        protected $mFolder;
+        // SalesPlatform begin
+        protected $mTrash;
+        // SalesPlatform end
 
 	public function exists() {
 		return !empty($this->mId);
@@ -108,7 +111,16 @@ class MailManager_Mailbox_Model {
 	public function folder() {
 		return decode_html($this->mFolder);
 	}
+        // SalesPlatform begin
+        public function setTrash($value) {
+		$this->mTrash = $value;
+	}
 
+	public function trash() {
+		return decode_html($this->mTrash);
+	}
+        // SalesPlatform end
+        
 	public function delete() {
 		$db = PearDatabase::getInstance();
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
@@ -126,14 +138,19 @@ class MailManager_Mailbox_Model {
 		$isUpdate = !empty($this->mId);
 
 		$sql = "";
-		$parameters = array($this->username(), $this->server(), $this->username(), $this->password(false), $this->protocol(), $this->ssltype(), $this->certvalidate(), $this->refreshTimeOut(),$this->folder(), $currentUserModel->getId());
-
+                // SalesPlatform begin
+		$parameters = array($this->username(), $this->server(), $this->username(), $this->password(false), $this->protocol(), $this->ssltype(), $this->certvalidate(), $this->refreshTimeOut(), $this->folder(), $this->trash(), $currentUserModel->getId());
+                // SalesPlatform end
 		if ($isUpdate) {
-			$sql = "UPDATE vtiger_mail_accounts SET display_name=?, mail_servername=?, mail_username=?, mail_password=?, mail_protocol=?, ssltype=?, sslmeth=?, box_refresh=?, sent_folder=? WHERE user_id=? AND account_id=?";
-			$parameters[] = $this->mId;
+                        // SalesPlatform.ru begin
+			$sql = "UPDATE vtiger_mail_accounts SET display_name=?, mail_servername=?, mail_username=?, mail_password=?, mail_protocol=?, ssltype=?, sslmeth=?, box_refresh=?, sent_folder=?, trash_folder=? WHERE user_id=? AND account_id=?";
+			// SalesPlatform.ru end
+                        $parameters[] = $this->mId;
 		} else {
-			$sql = "INSERT INTO vtiger_mail_accounts(display_name, mail_servername, mail_username, mail_password, mail_protocol, ssltype, sslmeth, box_refresh,sent_folder, user_id, mails_per_page, account_name, status, set_default, account_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			$parameters[] = vglobal('list_max_entries_per_page'); // Number of emails per page
+                        // SalesPlatform.ru begin
+			$sql = "INSERT INTO vtiger_mail_accounts(display_name, mail_servername, mail_username, mail_password, mail_protocol, ssltype, sslmeth, box_refresh, sent_folder, trash_folder, user_id, mails_per_page, account_name, status, set_default, account_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			// SalesPlatform.ru end
+                        $parameters[] = vglobal('list_max_entries_per_page'); // Number of emails per page
 			$parameters[] = $this->username();
 			$parameters[] = 1; // Status
 			$parameters[] = '0'; // Set Default
@@ -161,7 +178,10 @@ class MailManager_Mailbox_Model {
 			$instance->mCertValidate = trim($db->query_result($result, 0, 'sslmeth'));
 			$instance->mId = trim($db->query_result($result, 0, 'account_id'));
 			$instance->mRefreshTimeOut = trim($db->query_result($result, 0, 'box_refresh'));
-            $instance->mFolder = trim($db->query_result($result, 0, 'sent_folder'));
+                        $instance->mFolder = trim($db->query_result($result, 0, 'sent_folder'));
+                        // SalesPlatform begin
+                        $instance->mTrash = trim($db->query_result($result, 0, 'trash_folder'));
+                        // SalesPlatform end
 			$instance->mServerName = self::setServerName($instance->mServer);
 		}
 		return $instance;

@@ -154,6 +154,9 @@ Vtiger_List_Js("MailManager_List_Js", {}, {
 			settingContainer.find('[name="_mbox_sent_folder"]').val('');
 			settingContainer.find('.selectFolderValue').addClass('hide');
 			settingContainer.find('.selectFolderDesc').removeClass('hide');
+            settingContainer.find('.selectTrashValue').addClass('hide');
+            settingContainer.find('.selectTrashDesc').removeClass('hide');
+            
 			if(useProtocol != '') {
 				settingContainer.find('#_mbox_server').val(useServer);
 				settingContainer.find('.mbox_protocol').each(function(node) {
@@ -1187,7 +1190,10 @@ Vtiger_List_Js("MailManager_List_Js", {}, {
 		if(typeof count == "number") {
 			newCount = parseInt(count);
 		} else {
-			var oldCount = parseInt(container.find('.mm_folder[data-foldername="'+folder+'"]').find('.mmUnreadCountBadge').text());
+                    // SalesPlatform.ru begin
+			//var oldCount = parseInt(container.find('.mm_folder[data-foldername="'+folder+'"]').find('.mmUnreadCountBadge').text());
+                    var oldCount = parseInt(container.find('.mm_folder[data-foldername="'+folder+'"].active').find('.mmUnreadCountBadge').text());
+                    // SalesPlatform.ru end
 			if(count.substr(0, 1) == "+") {
 				newCount = oldCount + (parseInt(count.substr(1, (count.length - 1))));
 			} else if(count.substr(0, 1) == "-") {

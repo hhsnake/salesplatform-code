@@ -56,7 +56,9 @@ jQuery.Class("Vtiger_CkEditor_Js",{},{
 		var instance = this.getCkEditorInstanceFromName();
 		var elementName = this.getElementId();
 		var config = {}
-        
+        //SalesPlatform.ru begin
+        config.resize_dir = 'both'; 
+        //SalesPlatform.ru end
 		if(typeof customConfig != 'undefined'){
 			var config = jQuery.extend(config,customConfig);
 		}

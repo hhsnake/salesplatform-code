@@ -23,7 +23,10 @@ $languageStrings = array(
 	'Role'                         => 'Роль'                    , 
 	'Admin'                        => 'Администратор'  , 
 	'User Name'                    => 'Пользователь'    , 
-	'Default Activity View'        => 'Вид Календаря по умолчанию', 
+    // SalesPlaftorm.ru begin
+	//'Default Activity View'        => 'Вид Календаря по умолчанию', 
+    'Default Activity View'        => 'Показывать по умолчанию', 
+    // SalesPlaftorm.ru end
 	'Default Lead View'            => 'Вид Обращения по умолчанию', 
 	'Title'                        => 'Должность'          , 
 	'Office Phone'                 => 'Тел.'                     , 
@@ -82,6 +85,7 @@ $languageStrings = array(
         'Day starts at'                => 'Начало дня',
     	'This Month' => 'Месяц',
 	'Today' => 'Сегодня',
+        'Agenda' => 'Повестка дня',
 	'This Year' => 'Год',
 	'This Week' => 'Неделя',
         'Other Email' => "Другой E-mail",
@@ -305,11 +309,23 @@ $languageStrings = array(
         'LBL_USER_TO_BE_DELETED' => 'Пользователь удален',
         'LBL_USERS_SETTINGS' => 'НАСТРОЙКИ ПОЛЬЗОВАТЕЛЕЙ',
         'LBL_TEMPLATES' => 'Шаблоны',
+        // Salesplatform.ru begin Localization fix
+        'LBL_INVALID_CREDENTIALS' => 'Неверные данные учетной записи',
+        'LBL_INVALID_USERNAME_OR_EMAIL' => 'Неверное имя пользователя или E-mail адрес',
+        'LBL_OUTGOING_SERVER_NOT_CONFIGURED' => 'Сервер исходящей почты не сконфигурирован',
+        // Salesplatform.ru end Localization fix
+        //SalesPlatform.ru begin localization fix
+        'LBL_ENTER_AND_SUBMIT_DETAILS' => 'Пожалуйста введите данные и нажмите кнопку Отправить',
+        //SalesPlatform.ru end localization fix
     );
 
 $jsLanguageStrings = array(
-	'JS_ENTER_OLD_PASSWORD'=>'Пожалуйста, веедите ваш старый пароль.',
-	'JS_ENTER_NEW_PASSWORD'=>'Пожалуйста, веедите ваш новый пароль.',
+        //Salesplatform.ru begin Localization fix
+	'JS_ENTER_OLD_PASSWORD'=>'Пожалуйста, введите ваш старый пароль.',
+	'JS_ENTER_NEW_PASSWORD'=>'Пожалуйста, введите ваш новый пароль.',
+	//'JS_ENTER_OLD_PASSWORD'=>'Пожалуйста, веедите ваш старый пароль.',
+	//'JS_ENTER_NEW_PASSWORD'=>'Пожалуйста, веедите ваш новый пароль.',
+        //Salesplatform.ru end Localization fix
 	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Пожалуйста, введите подтверждение пароля.',
 	'JS_REENTER_PASSWORDS'=>'Пожалуйста, введите пароли заново. Значения полей \"Новый пароль\" и \"Подтверждение пароля\" не совпадают.',
 	'JS_INVALID_PASSWORD'=>'Вы должны указать правильный логин и пароль.',

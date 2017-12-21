@@ -159,7 +159,10 @@
 				</div>
 			</div>
 			<div class="lineitemTableContainer">
-				<table class="table table-bordered" id="lineItemTab">
+                            {* SalesPlatform.ru begin *}
+				{*<table class="table table-bordered" id="lineItemTab">*}
+				<table class="table table-bordered lineItemTable" id="lineItemTab">
+                            {* SalesPlatform.ru end *}
 					<tr>
 						<td><strong>{vtranslate('LBL_TOOLS',$MODULE)}</strong></td>
 						{if $IMAGE_EDITABLE}
@@ -363,6 +366,9 @@
 						<input type="hidden" class="popover_title" value="{vtranslate('LBL_GROUP_TAX',$MODULE)}" />
 						<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable">
 							{foreach item=tax_detail name=group_tax_loop key=loop_count from=$TAXES}
+                                                            {* SalesPlatform.ru begin *}
+                                                            {if $tax_detail.deleted eq 0}
+                                                            {* SalesPlatform.ru end *}
 								<tr>
 									<td class="lineOnTop">{$tax_detail.taxlabel}</td>
 									<td class="lineOnTop">
@@ -374,6 +380,9 @@
 										<input type="text" size="6" name="{$tax_detail.taxname}_group_amount" id="group_tax_amount{$smarty.foreach.group_tax_loop.iteration}" style="cursor:pointer;" value="{$tax_detail.amount}" readonly class="cursorPointer span1 groupTaxTotal" />
 									</td>
 								</tr>
+                                                            {* SalesPlatform.ru begin *}
+                                                            {/if}
+                                                            {* SalesPlatform.ru end *}
 							{/foreach}
 							<input type="hidden" id="group_tax_count" value="{$smarty.foreach.group_tax_loop.iteration}" />
 						</table>
@@ -441,6 +450,20 @@
 						<div id="deductTaxesBlock" class="hide validCheck deductTaxesBlock">
 							<table class="table table-nobordered popupTable">
 								<tbody>
+                                                                    {* SalesPlatform.ru begin *}
+                                                                    {assign var=DEDUCTED_TAXES_COUNT value=COUNT($DEDUCTED_TAXES)}
+                                                                    {if {COUNT($DEDUCTED_TAXES) eq '0'}}
+                                                                        <tr>
+                                                                            <td class="lineOnTop">{$DEDUCTED_TAX_INFO['taxlabel']}</td>
+                                                                            <td class="lineOnTop">
+                                                                                    <input type="text" class="span1 deductTaxPercentage" name="" value="0"
+                                                                                               data-rule-positive=true data-rule-inventory_percentage=true />&nbsp;%
+                                                                            </td>
+                                                                            <td style="text-align: right;" class="lineOnTop">
+                                                                                    <input type="text" class="span1 deductTaxValue cursorPointer pull-right" name="" size="5" readonly value=""/>&nbsp;
+                                                                            </td>
+                                                                        </tr>
+                                                                    {else}
 									{foreach key=DEDUCTED_TAX_ID item=DEDUCTED_TAX_INFO from=$DEDUCTED_TAXES}
 										<tr>
 											<td class="lineOnTop">{$DEDUCTED_TAX_INFO['taxlabel']}</td>
@@ -453,6 +476,8 @@
 											</td>
 										</tr>
 									{/foreach}
+                                                                    {/if}
+                                                                    {* SalesPlatform.ru end *}
 								</tbody>
 							</table>
 						</div>

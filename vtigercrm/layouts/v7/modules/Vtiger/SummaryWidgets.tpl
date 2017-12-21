@@ -17,7 +17,10 @@
 		{include file=$FILENAME|vtemplate_path:$MODULE RELATED_RECORDS=$RELATED_RECORDS}
     {else}
 		<div class="summaryWidgetContainer noContent">
-			<p class="textAlignCenter">{vtranslate('LBL_NO_RELATED',$MODULE)} {$RELATED_MODULE}</p>
+                        {* SalesPlatform.ru begin *}
+			<p class="textAlignCenter">{vtranslate('LBL_NO_RELATED',$MODULE)} {vtranslate($RELATED_MODULE,$MODULE)}</p>
+			{*<p class="textAlignCenter">{vtranslate('LBL_NO_RELATED',$MODULE)} {$RELATED_MODULE}</p>*}
+                        {* SalesPlatform.ru end *}
 		</div>
 	{/if}
 {/strip}

@@ -37,6 +37,16 @@ class Events_SaveAjax_Action extends Events_Save_Action {
 		$user = Users_Record_Model::getCurrentUserModel();
 
 		vglobal('VTIGER_TIMESTAMP_NO_CHANGE_MODE', $request->get('_timeStampNoChangeMode', false));
+                
+                // SalesPlatform.ru begin
+                // recurringtype is empty when save record in quickCreate
+                $recurringType = $request->get('recurringtype');
+                $recordId = $request->get('record');
+                if (empty($recurringType) && empty($recordId)) {
+                    $request->set('recurringtype','--None--' );
+                }
+                // SalesPlatform.ru end
+                
 		$recordModel = $this->saveRecord($request);
 		vglobal('VTIGER_TIMESTAMP_NO_CHANGE_MODE', false);
 

@@ -807,6 +807,15 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 			lineItemRow.find('#'+actualElementId).attr('id',expectedElementId)
 					   .filter('[name="'+actualElementId+'"]').attr('name',expectedElementId);
 		}
+                
+        // SalesPlatform.ru begin
+        for(var nameIndex in nameFields) {
+            var elementName = nameFields[nameIndex];
+            var actualElementName = elementName + currentSequenceNumber;
+            var expectedElementName = elementName + expectedSequenceNumber;
+            lineItemRow.find('[name="'+actualElementName+'"]').attr('name',expectedElementName);
+        }
+        // SalesPlatform.ru end
 
 		lineItemRow.attr('id', expectedRowId).attr('data-row-num', expectedSequenceNumber);
         lineItemRow.find('input.rowNumber').val(expectedSequenceNumber);

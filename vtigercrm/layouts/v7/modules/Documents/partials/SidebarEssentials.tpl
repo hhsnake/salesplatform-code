@@ -10,14 +10,18 @@
     <div class="module-filters" id="module-filters">
         <div class="sidebar-container lists-menu-container">
             <div class="sidebar-header clearfix">
-                <h5 class="pull-left">Lists </h5>
+                {* SalesPlatform.ru begin localization fix *}
+                <h5 class="pull-left">{vtranslate('LBL_LISTS',$MODULE)}</h5>
+                {* SalesPlatform.ru end localization fix *}
                 <button id="createFilter" data-url="{CustomView_Record_Model::getCreateViewUrl($MODULE)}" class="btn btn-default pull-right sidebar-btn">
                     <span class="fa fa-plus" aria-hidden="true"></span>
                 </button> 
             </div>
             <hr>
             <div>
-                <input class="search-list" type="text" placeholder="Search for List">
+                {* SalesPlatform.ru begin localization fix *}
+                <input class="search-list" type="text" placeholder="{vtranslate('LBL_SEARCH_FOR_LIST',$MODULE)}">
+                {* SalesPlatform.ru end localization fix *}
             </div>
             <div class="menu-scroller mCustomScrollBox" data-mcs-theme="dark">
                 <div class="mCustomScrollBox mCS-light-2 mCSB_inside" tabindex="0">
@@ -138,7 +142,7 @@
                                 {/foreach}
                                 <li class="noFolderText" style="display: none;">
                                     <h6 class="lists-header"><center> 
-                                        {vtranslate('LBL_NO')} {vtranslate('LBL_FOLDERS', $MODULE)} {vtranslate('LBL_FOUND')} ... 
+                                        {vtranslate('LBL_NO_FOLDERS_FOUND')}... 
                                     </center></h6>    
                                 </li>
                                 </ul>

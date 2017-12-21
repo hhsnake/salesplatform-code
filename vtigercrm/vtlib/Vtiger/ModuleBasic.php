@@ -299,6 +299,15 @@ class Vtiger_ModuleBasic {
 		if(Vtiger_Version::check('5.0.4', '<=')) {
 			Vtiger_Utils::CreateTable($this->grouptable, "($this->basetableid INT PRIMARY KEY, groupname varchar(100))",true);
 		}
+                
+                //SalesPlatform.ru begin #5318
+                $moduleUserSpecificTable = Vtiger_Functions::getUserSpecificTableName($this->name);
+                if (!Vtiger_Utils::CheckTable($moduleUserSpecificTable)) {
+                    Vtiger_Utils::CreateTable($moduleUserSpecificTable,
+                            '(`recordid` INT(19) NOT NULL, `userid` INT(19) NOT NULL, `starred` VARCHAR(100) DEFAULT NULL,
+                                Index `record_user_idx` (`recordid`, `userid`))', true);
+                }
+                //SalesPlatform.ru end #5318
 	}
 
 	/**

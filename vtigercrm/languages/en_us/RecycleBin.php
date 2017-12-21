@@ -17,6 +17,9 @@ $languageStrings = Array(
 	'LBL_NO_PERMITTED_MODULES' => 'No permitted modules available',
 	'LBL_RECORDS_LIST' => 'Recycle Bin List',
 	'LBL_NO_RECORDS_FOUND' => 'No records found to Restore in module',
+        //SalesPlatform.ru begin localization fix
+        'LBL_SEARCH_FOR_MODULES' => 'Search for Modules',
+        //SalesPlatform.ru end localization fix
 );
 
 $jsLanguageStrings = array(

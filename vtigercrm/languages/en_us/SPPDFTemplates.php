@@ -66,4 +66,7 @@ $languageStrings = Array (
 "LBL_HEADER_SIZE"=>"Header size",
 "LBL_FOOTER_SIZE"=>"Footer size",
 "LBL_PAGE_ORIENTATION"=>"Page orientation",
+    // SalesPlatform.ru begin
+    'SPPDFTemplates' => 'SPPDFTemplates',
+    // SalesPlatform.ru end
 );

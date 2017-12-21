@@ -102,13 +102,22 @@ $languageStrings = Array (
 	'LBL_ACCOUNT_TYPE' => 'Account Type',
 	'LBL_MODULE_DESCRIPTION' => "Mail Manager is an integrated email client that allows users to perform CRM related actions on incoming email. It helps you create Leads, Contacts, Organizations, Trouble Tickets and Tasks from the emails that you receive in your inbox. Should sender's email id match with a record in vtiger CRM, you can perform more actions like, Attaching email, Adding Task, Comment and Ticket. Additionally, you can manage composing, replying, forwarding emails etc.",
     'LBL_CHOOSE_EXISTING_FOLDER' => 'Choose an existing folder',
-    'LBL_CHOOSE_FOLDER_DESC' => 'Copies of the sent mails for this account will be saved in the default <b>Sent Mail</b> folder.<br><br>
-            If you want to change the default sent mail folder, after creating the mail box click on <b>Settings</b> icon and <b>Edit</b> the MailBox.',
+    //SalesPlatform.ru begin Notification: when creating a mailbox, you must select a folder for deleted mails
+    //'LBL_CHOOSE_FOLDER_DESC' => 'Copies of the sent mails for this account will be saved in the default <b>Sent Mail</b> folder.<br><br>
+    //      After creating the mail box click on <b>Settings</b> icon and <b>Edit</b> the MailBox.',
+    //'LBL_CHOOSE_TRASH_DESC' => 'Copies of the deleted mails for this account will be saved in this folder.',
+    'LBL_CHOOSE_FOLDER_DESC' => 'Will be available after connecting to the box.
+            After creating the mail box click on <b>Settings</b> icon and <b>Edit</b> the MailBox.',
+    'LBL_CHOOSE_TRASH_DESC' => 'Will be available after connecting to the box.
+            After creating the mail box click on <b>Settings</b> icon and <b>Edit</b> the MailBox.',
+    //SalesPlatform.ru end
     'LBL_CHOOSE_FOLDER' => 'Copies of the sent mails for this account will be saved in this folder.',
+    'LBL_CHOOSE_TRASH' => 'Copies of the deleted mails for this account will be saved in this folder.',
     'LBL_SELECTED_FOLDER' => 'Selected Folder',
 	'LBL_EDIT_MAILBOX' => 'Edit Mailbox',
 	'LBL_SELECT_ACCOUNT' => 'Select Account',
 	'LBL_SAVE_SENT_MAILS_IN' => 'Save sent mails in',
+        'LBL_SET_TRASH' => 'Save deleted mails in',
 	'LBL_CONFIGURE_MAILBOX' => 'Configure Mailbox',
 	'LBL_INBOX' => 'Inbox',
 	'LBL_SENT' => 'Sent',

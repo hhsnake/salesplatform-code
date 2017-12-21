@@ -269,12 +269,9 @@ class PBXManager_PBXManager_Connector {
         }
 
         // SalesPlatform.ru begin Set user timezone for starttime param
-        $date = new DateTimeField( null );      
-        //$params['starttime'] = $details->get('StartTime');
-        $params['starttime'] = DateTimeField::convertToDBFormat($date->getDisplayDate()).' '.$date->getDisplayTime();
+        $params['starttime'] = $details->get('StartTime');
         // SalesPlatform.ru end
         
-        $params['starttime'] = $details->get('StartTime');
         $params['callstatus'] = "ringing";
         $user = CRMEntity::getInstance('Users');
         // SalesPlatform.ru begin

@@ -1109,7 +1109,10 @@ class PHPMailer {
     }
 
     $this->smtp->Timeout = $this->Timeout;
-    $this->smtp->do_debug = $this->SMTPDebug;
+    // SalesPlatform.ru begin SMTP class support only echo mode now
+    $this->smtp->do_debug = $this->Debugoutput == 'echo' ? $this->SMTPDebug : 0;
+    //$this->smtp->do_debug = $this->SMTPDebug;
+    // SalesPlatform.ru end
     $this->smtp->Debugoutput = $this->Debugoutput;
     $this->smtp->do_verp = $this->do_verp;
     $index = 0;

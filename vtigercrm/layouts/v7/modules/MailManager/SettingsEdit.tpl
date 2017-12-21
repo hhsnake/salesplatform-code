@@ -116,6 +116,24 @@
                                     {vtranslate('LBL_CHOOSE_FOLDER_DESC',$MODULE)}
                                 </td>
                             </tr>
+                            {* SalesPlatform.ru begin *}
+                            <tr class="settings_details {if $SERVERNAME eq ''}hide{/if}">
+                                <td class="fieldLabel width40per">
+                                    <label class="pull-right detailViewButtoncontainer">{vtranslate('LBL_SET_TRASH',$MODULE)}</label>
+                                </td>
+                                <td class="fieldValue selectTrashValue {if !$MAILBOX->exists()}hide{/if}">
+                                    <select name="_mbox_trash_folder" class="select2 col-lg-9">
+                                        {foreach item=FOLDER from=$FOLDERS}
+                                            <option value="{$FOLDER->name()}" {if $FOLDER->name() eq $MAILBOX->folder()} selected {/if}>{$FOLDER->name()}</option>
+                                        {/foreach}
+                                    </select>
+                                        <i class="fa fa-info-circle cursorPointer" id="mmSettingInfo" title="{vtranslate('LBL_CHOOSE_TRASH',$MODULE)}"></i>
+                                </td>
+                                <td class="fieldValue selectTrashDesc alert alert-info {if $MAILBOX->exists()}hide{/if}">
+                                    {vtranslate('LBL_CHOOSE_TRASH_DESC',$MODULE)}
+                                </td>
+                            </tr>
+                            {* SalesPlatform.ru end *}
                         </tbody>
                     </table>
                 </div>

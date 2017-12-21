@@ -38,7 +38,10 @@ class Vtiger_DetailDashBoard_View extends Vtiger_DashBoard_View {
     }
     
     function preProcessTplName(Vtiger_Request $request) {
-        return 'dashboards/DetailDashBoardPreProcess.tpl';
+        //SalesPlatform.ru begin
+        //return 'dashboards/DetailDashBoardPreProcess.tpl';
+        return 'dashboards/DashBoardPreProcess.tpl';
+        //SalesPlatform.ru end
     }
     
     function process(Vtiger_Request $request) {

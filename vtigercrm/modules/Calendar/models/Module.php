@@ -46,7 +46,10 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	 * @return <String>
 	 */
 	public function getCalendarViewUrl() {
-		return 'index.php?module='.$this->get('name').'&view='.$this->getCalendarViewName();
+            // SalesPlatform.ru begin
+		//return 'index.php?module='.$this->get('name').'&view='.$this->getCalendarViewName();
+            return 'index.php?module='.$this->get('name').'&view=Calendar';
+            // SalesPlatform.ru end
 	}
 
 	/**
@@ -772,7 +775,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 
 		$moduleModel = Vtiger_Module_Model::getInstance("Calendar");
 		$quickCreateFields = $moduleModel->getQuickCreateFields();
-		$mandatoryFields = array("id","taskpriority","parent_id","contact_id");
+        $mandatoryFields = array("id","taskpriority","parent_id","contact_id");
 		$fields = array_unique(array_merge($mandatoryFields,array_keys($quickCreateFields)));
 		$queryGenerator->setFields($fields);
 		$queryGenerator->addCondition("activitytype","Task","e","AND");
@@ -796,8 +799,18 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 
 		$mandatoryReferenceFields = array("parent_id","contact_id");
 		$tasks = array();
+        //SalesPlatform.ru begin
+        $currentUser = Users_Record_Model::getCurrentUserModel();
+        //SalesPlatform.ru end
 		for($i=0;$i<$noOfRows;$i++){
 			$newRow = $db->query_result_rowdata($result, $i);
+            //SalesPlatform.ru begin
+            if(!$currentUser->isAdminUser() && isToDoPermittedBySharing($newRow['activityid']) == 'no') {
+				continue;
+			}
+            //SalesPlatform.ru end
+            
+            
 			$model = Vtiger_Record_Model::getCleanInstance('Calendar');
 			$model->setData($newRow);
 			$model->setId($newRow['activityid']);
@@ -866,15 +879,26 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 			$currentTime = time();
 			$date = date('Y-m-d', strtotime("+$activityReminder seconds", $currentTime));
 			$time = date('H:i',   strtotime("+$activityReminder seconds", $currentTime));
+                        // SalesPlatform.ru start #5464
+//			$reminderActivitiesResult = "SELECT reminderid, recordid FROM vtiger_activity_reminder_popup
+//								INNER JOIN vtiger_activity on vtiger_activity.activityid = vtiger_activity_reminder_popup.recordid
+//								INNER JOIN vtiger_crmentity ON vtiger_activity_reminder_popup.recordid = vtiger_crmentity.crmid
+//								WHERE vtiger_activity_reminder_popup.status = 0
+//								AND vtiger_crmentity.smownerid = ? AND vtiger_crmentity.deleted = 0
+//								AND ((DATE_FORMAT(vtiger_activity_reminder_popup.date_start,'%Y-%m-%d') <= ?)
+//								AND (TIME_FORMAT(vtiger_activity_reminder_popup.time_start,'%H:%i') <= ?))
+//								AND vtiger_activity.eventstatus <> 'Held' AND (vtiger_activity.status <> 'Completed' OR vtiger_activity.status IS NULL) LIMIT 20";
 			$reminderActivitiesResult = "SELECT reminderid, recordid FROM vtiger_activity_reminder_popup
 								INNER JOIN vtiger_activity on vtiger_activity.activityid = vtiger_activity_reminder_popup.recordid
+                                                                INNER JOIN vtiger_activity_reminder on vtiger_activity.activityid = vtiger_activity_reminder.activity_id
 								INNER JOIN vtiger_crmentity ON vtiger_activity_reminder_popup.recordid = vtiger_crmentity.crmid
 								WHERE vtiger_activity_reminder_popup.status = 0
 								AND vtiger_crmentity.smownerid = ? AND vtiger_crmentity.deleted = 0
 								AND ((DATE_FORMAT(vtiger_activity_reminder_popup.date_start,'%Y-%m-%d') <= ?)
-								AND (TIME_FORMAT(vtiger_activity_reminder_popup.time_start,'%H:%i') <= ?))
+								AND (TIME_FORMAT(SEC_TO_TIME(TIME_TO_SEC(vtiger_activity_reminder_popup.time_start)-vtiger_activity_reminder.reminder_time*60),'%H:%i') <= ?)) 
 								AND vtiger_activity.eventstatus <> 'Held' AND (vtiger_activity.status <> 'Completed' OR vtiger_activity.status IS NULL) LIMIT 20";
-			$result = $db->pquery($reminderActivitiesResult, array($currentUserModel->getId(), $date, $time));
+                        // SalesPlatform.ru end
+                        $result = $db->pquery($reminderActivitiesResult, array($currentUserModel->getId(), $date, $time));
 			$rows = $db->num_rows($result);
 			for($i=0; $i<$rows; $i++) {
 				$recordId = $db->query_result($result, $i, 'recordid');

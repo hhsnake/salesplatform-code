@@ -29,6 +29,7 @@ class ShutdownHandler {
                         || $type == E_USER_ERROR || $type == E_RECOVERABLE_ERROR || $type == E_PARSE) {
                     
                     $this->log("Error on process request. Details: ", $error);
+                    error_log("Error on process request. Details: " . $error);
                 }
             }
         });

@@ -135,21 +135,23 @@ Vtiger_Edit_Js("Documents_Edit_Js", {
 
 		});
 	},
-	/**
-	 * Function to register event for ckeditor for description field
-	 */
-	registerEventForCkEditor : function(container){
-		var form = this.getForm();
-        if(typeof container != 'undefined'){
-            form = container;
-        }
-		var noteContentElement = form.find('[name="notecontent"]');
-		if(noteContentElement.length > 0){
-			noteContentElement.removeAttr('data-validation-engine').addClass('ckEditorSource');
-			var ckEditorInstance = new Vtiger_CkEditor_Js();
-			ckEditorInstance.loadCkEditor(noteContentElement);
-		}
-	},
+        //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+//	/**
+//	 * Function to register event for ckeditor for description field
+//	 */
+//	registerEventForCkEditor : function(container){
+//		var form = this.getForm();
+//        if(typeof container != 'undefined'){
+//            form = container;
+//        }
+//		var noteContentElement = form.find('[name="notecontent"]');
+//		if(noteContentElement.length > 0){
+//			noteContentElement.removeAttr('data-validation-engine').addClass('ckEditorSource');
+//			var ckEditorInstance = new Vtiger_CkEditor_Js();
+//			ckEditorInstance.loadCkEditor(noteContentElement);
+//		}
+//	},
+        //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
     
     quickCreatePreSave : function(form) {
         var textAreaElement = form.find('textarea[name="notecontent"]');
@@ -350,7 +352,9 @@ Vtiger_Edit_Js("Documents_Edit_Js", {
         this._super(container);
         this.registerFileLocationTypeChangeEvent(container);
             this.registerFileElementChangeEvent(container);
-            this.registerEventForCkEditor(container);
+            //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+            // this.registerEventForCkEditor(container);
+            //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
             this.documentsQuickCreateConfig(container);
             this.handleDragDropEvents(container);
             this.registerCustomValidationForFileElement(container);

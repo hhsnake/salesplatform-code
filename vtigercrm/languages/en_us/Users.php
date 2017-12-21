@@ -262,8 +262,30 @@ $languageStrings = array(
 	/* For Vtiger7*/
 	'LBL_USERS_SETTINGS' => 'USERS SETTINGS',
 	'LBL_TEMPLATES' => 'Templates',
-    //SalesPlatform.ru begin
+    //SalesPlatform.ru begin 
     'SINGLE_Users' => 'User',
+    'LBL_INVALID_CREDENTIALS' => 'Invalid credentials',
+    'LBL_INVALID_USERNAME_OR_EMAIL' => 'Invalid Username or Email address',
+    'LBL_OUTGOING_SERVER_NOT_CONFIGURED' => 'Outgoing mail server was not configured',
+    'LBL_ENTER_AND_SUBMIT_DETAILS' => 'Please enter details and submit it',
+    'Call' => 'Call',
+    'Meeting' => 'Meeting',
+    'Mobile Call' => 'Mobile Call',
+    'This Month' => 'This Month',
+    'Today' => 'Today',
+    'This Year' => 'This Year',
+    'This Week' => 'This Week',
+    'Sunday' => 'Sunday',
+    'Monday' => 'Monday',
+    'Tuesday' => 'Tuesday',
+    'Wednesday' => 'Wednesday',
+    'Thursday' => 'Thursday',
+    'Friday' => 'Friday',
+    'Saturday' => 'Saturday',
+    'Users' => 'Users',
+    'Last 2 Days' => 'Last 2 Days',
+    'Last Week' => 'Last Week',
+    'Agenda' => 'Agenda',
     //SalesPlatform.ru end
 );
 

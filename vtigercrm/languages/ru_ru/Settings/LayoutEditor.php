@@ -116,7 +116,7 @@ $languageStrings = array(
         'ONE_ONE_AND_MANY_ONE_RELATIONSHIP' => 'Отношения «один к одному» и «многие к одному»',
         'ONE_MANY_RELATIONSHIP' => 'Отношения «один ко многим» и «многие ко многим»',
         'LBL_NO_RELATED_INFO' => 'Никакой связи не существует',
-        'LBL_ADD_NEW_FIELD_HERE' => 'Добавить новое поле здесь',
+        'LBL_ADD_NEW_FIELD_HERE' => 'Добавить новое поле',
         'LBL_SAVE_LAYOUT' => 'Сохранить Макет',
         'LBL_SHOW_FIELD' => 'Показать поле',
         'LBL_ENABLE_OR_DISABLE_FIELD_PROP' => 'Включить / отключить свойства поля',
@@ -142,6 +142,10 @@ $languageStrings = array(
         'Relation' => 'Ссылка',
         'Datetime' => 'Дата и время',
         //SalesPaltform.ru end
+        //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+        'LBL_CKE_FIELD' => 'CKEditor',
+    'SPTextArea' => 'Текстовая область',
+        //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
     );
 $jsLanguageStrings = array(
 	'JS_BLOCK_VISIBILITY_SHOW'     => 'Отображение блока включено'          , 
@@ -199,5 +203,9 @@ $jsLanguageStrings = array(
         'JS_DETAIL_HEADER' => 'Запись заголовка',
         'JS_MAXIMUM_HEADER_FIELDS_ALLOWED' => 'Максимальный %ы поля заголовка размещение домашних животных',
         'JS_NAME_FIELDS_APPEAR_IN_HEADER_BY_DEFAULT' => 'Имя поля отображаются в заголовке по умолчанию',
-        'JS_FIELD_IS_HEADER_ENABLED_FOR_VTIGER7' => 'Это поле имеет заголовок для Vtiger7, он появится в сводном представлении',        
+        'JS_FIELD_IS_HEADER_ENABLED_FOR_VTIGER7' => 'Это поле имеет заголовок для Vtiger7, он появится в сводном представлении',   
+        //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+        'JS_CKE_FIELD' => 'CKEditor',
+    'JS_SPTextArea' => 'Текстовая область',
+        //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
 );

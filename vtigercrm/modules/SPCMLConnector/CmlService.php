@@ -25,7 +25,7 @@ class CmlService extends AbstractProduct {
         $restDescription['service_usageunit'] = $this->unitName;
         $restDescription['unit_price'] = $this->price;
         $restDescription['qty'] = $this->stockCount;
-        $restDescription['currency_id'] = $this->currency;
+        $restDescription['currency_id'] = $this->currencyId;
         $restDescription['conversion_rate'] = $this->conversionRate;
         $restDescription['one_s_id'] = $this->oneEsIdentifier;
         

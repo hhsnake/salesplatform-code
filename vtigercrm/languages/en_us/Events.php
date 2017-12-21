@@ -99,5 +99,8 @@ $languageStrings = array(
     'LBL_INVITE_PEOPLE' => 'Invite People',
 	'INVITATION'=>' Invitation ',
 	'Busy' => 'Busy',
+    // SalesPlaform localization fix begin
+    'LBL_ADD_NEW_DASHBOARD' => 'Add new dashboard',
+    // SalesPlaform localization fix end
 
 );

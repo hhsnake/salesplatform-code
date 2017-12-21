@@ -98,4 +98,9 @@ $languageStrings = array(
 	'LBL_UPLOAD_ICS'=>'Upload ICS File',
 	'LBL_IMPORT_FROM_ICS_FILE'=>'Import from ICS file',
 	'LBL_SELECT_ICS_FILE' => 'Select ICS file',
+    // SalesPlatform.ru begin
+    'Select from My Computer'=> 'Select from My Computer',
+    'comma' => ', (comma)',
+    'semicolon' => '; (semicolon)',
+    // SalesPlatform.ru end
 );

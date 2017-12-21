@@ -19,6 +19,9 @@
     {assign var="qtyInStock" value="qtyInStock"|cat:$row_no}
     {assign var="qty" value="qty"|cat:$row_no}
     {assign var="listPrice" value="listPrice"|cat:$row_no}
+    {* SalesPlatform.ru begin *}
+    {assign var="unitPrice" value="unitPrice"|cat:$row_no}
+    {* SalesPlatform.ru end *}
     {assign var="productTotal" value="productTotal"|cat:$row_no}
     {assign var="subproduct_ids" value="subproduct_ids"|cat:$row_no}
     {assign var="subprod_names" value="subprod_names"|cat:$row_no}
@@ -258,6 +261,9 @@
 							<!-- we will form the table with all taxes -->
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable" id="tax_table{$row_no}">
 								{foreach key=tax_row_no item=tax_data from=$data.taxes}
+                                                                    {* SalesPlatform.ru begin *}
+                                                                    {if $tax_data.deleted eq 0}
+                                                                    {* SalesPlatform.ru end *}
 									{assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
 									{assign var="tax_id_name" value="hidden_tax"|cat:$tax_row_no+1|cat:"_percentage"|cat:$row_no}
 									{assign var="taxlabel" value=$tax_data.taxlabel|cat:"_percentage"|cat:$row_no}
@@ -271,6 +277,9 @@
 											<input type="text" name="{$popup_tax_rowname}" class="cursorPointer span1 taxTotal taxTotal{$tax_data.taxid}" value="{$tax_data.amount}" readonly />
 										</td>
 									</tr>
+                                                                    {* SalesPlatform.ru begin *}
+                                                                    {/if}
+                                                                    {* SalesPlatform.ru end *}
 								{/foreach}
 							</table>
 						</div>
@@ -286,8 +295,11 @@
 			<div id="discountTotal{$row_no}" align="right" class="discountTotal">{if $data.$discountTotal}{$data.$discountTotal}{else}0{/if}</div>
 			<div id="totalAfterDiscount{$row_no}" align="right" class="totalAfterDiscount">{if $data.$totalAfterDiscount}{$data.$totalAfterDiscount}{else}0{/if}</div>
 		{/if}
-
-		<div id="taxTotal{$row_no}" align="right" class="productTaxTotal {if $IS_GROUP_TAX_TYPE}hide{/if}">{if $data.$taxTotal}{$data.$taxTotal}{else}0{/if}</div>
+                
+                {* SalesPlatform.ru begin *}
+		{* <div id="taxTotal{$row_no}" align="right" class="productTaxTotal foobar {if $IS_GROUP_TAX_TYPE}hide{/if}">{if $data.$taxTotal}{$data.$taxTotal}{else}0{/if}</div> *}
+		<div id="taxTotal{$row_no}" align="right" class="productTaxTotal foobar {if $IS_GROUP_TAX_TYPE || $IS_GROUP_TAX_INC_TYPE}hide{/if}">{if $data.$taxTotal}{$data.$taxTotal}{else}0{/if}</div>
+                {* SalesPlatform.ru end *}
 	</td>
 
 	{if $MARGIN_EDITABLE && $PURCHASE_COST_EDITABLE}

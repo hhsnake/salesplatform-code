@@ -769,6 +769,24 @@ class Vtiger_Util_Helper {
 		}
 		return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
 	}
+    
+    //SalesPlatform.ru begin
+    public static function checkCollation($conn) {
+        global $db_type;
+		if($db_type == 'pgsql')
+			return true;
+		$dbvarRS = $conn->Execute("show variables like 'collation_database' ");
+		$db_collation_type = null;
+		while(!$dbvarRS->EOF) {
+			$arr = $dbvarRS->FetchRow();
+			$arr = array_change_key_case($arr);
+			switch($arr['variable_name']) {
+				case 'collation_database'     : $db_collation_type = $arr['value']; break;
+			}						
+		}
+		return ($db_collation_type == 'utf8_general_ci');
+    }
+    //SalesPlatform.ru end
 
 	/**
 	 * Function to get both date string and date difference string

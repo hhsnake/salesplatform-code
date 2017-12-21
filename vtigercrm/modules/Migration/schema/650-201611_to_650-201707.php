@@ -34,7 +34,7 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET `masseditable`=1 WHE
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET `masseditable`=1 WHERE `tabid`=43 AND `fieldname` IN ('actdate', 'account_id','salesorder_id', 'contact_id', 'description')", array());
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET `masseditable`=1 WHERE `tabid`=46 AND `tablename`='vtiger_sp_consignmentbillads'", array());
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET `masseditable`=1 WHERE `tabid`=46 AND `tablename`='vtiger_sp_consignmentshipads'", array());
-Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET `masseditable`=1 WHERE `tabid`=46 AND `fieldname` IN ('salesorder_id', 'consigmentdate', 'account_id', 'contact_id', 'description', 'has_goods_consignment', 'goods_consignment_no')", array());
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET `masseditable`=1 WHERE `tabid`=46 AND `fieldname` IN ('salesorder_id', 'consignmentdate', 'account_id', 'contact_id', 'description', 'has_goods_consignment', 'goods_consignment_no')", array());
 
 if (defined('VTIGER_UPGRADE')) {
     

@@ -81,12 +81,18 @@ class CatalogController extends OperationController {
     private function updateCatalogInventories($catalogReference, $cmlCatalog) {
         $products = $cmlCatalog->getProducts();
         foreach($products as $cmlProduct) {
+            $currencyId = $this->getCurrencyReference($cmlProduct->getCurrency());
+            $cmlProduct->setCurrencyId($currencyId);
+            
             $inventoryReference = $this->productsController->save($cmlProduct);
             $this->addInventory($catalogReference, $inventoryReference, $cmlProduct);
         }
         
         $services = $cmlCatalog->getServices();
         foreach($services as $cmlService) {
+            $currencyId = $this->getCurrencyReference($cmlService->getCurrency());
+            $cmlService->setCurrencyId($currencyId);
+                    
             $inventoryReference = $this->servicesController->save($cmlService);
             $this->addInventory($catalogReference, $inventoryReference, $cmlService);
         }

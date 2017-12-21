@@ -91,6 +91,9 @@ $languageStrings = array(
         'Install' => 'Устанавливать',
         'Upgrade' => 'Модернизация',
         'LBL_RATE_IT' => 'Оценить',
+        //SalesPlatform begin localization fix
+        'LBL_SELECT_FROM_MY_PC' => 'Выбрать файл',
+        //SalesPlatform end localization fix
     );
 
 $jsLanguageStrings = array(

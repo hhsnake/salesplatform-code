@@ -96,14 +96,22 @@ Vtiger.Class("Settings_Vtiger_OutgoingServer_Js",{},{
 		var form = jQuery('#OutgoingServerForm');
 		var resetButton = jQuery('.resetButton', form);
 		var cancelLink = jQuery('.cancelLink', form);
-        
+                
 		//register validation engine
 		var params = {
-            submitHandler : function(form) {
-                  app.helper.showProgress();
-                var form = jQuery(form);
-				thisInstance.saveOutgoingDetails(form);
-            }
+                    submitHandler : function(form) {
+                        // SalesPlatform.ru begin
+                        if (jQuery("input[name='server']").val() === '') {
+                            app.helper.showErrorNotification({
+                                'message': app.vtranslate('JS_EMPTY_SERVER_NAME_FIELD')
+                            });
+                            return false;
+                        }
+                        // SalesPlatform.ru end
+                            app.helper.showProgress();
+                            var form = jQuery(form);
+                            thisInstance.saveOutgoingDetails(form);
+                        }
 		};
         form.vtValidate(params);
 		 form.on('submit', function(e){

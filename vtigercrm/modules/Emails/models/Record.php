@@ -45,6 +45,14 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 			$this->saveDocumentDetails();
 		}
 	}
+        
+        // SalesPlatform.ru begin
+        public static function convertMailBoxName($folderName) { 
+            return (function_exists('mb_convert_encoding')) ?
+                mb_convert_encoding($folderName, 'UTF7-IMAP', 'UTF-8') : 
+                iconv($folderName, 'UTF7-IMAP', 'UTF-8'); 
+        }
+        // SalesPlatform.ru end
 
 	/**
 	 * Function sends mail

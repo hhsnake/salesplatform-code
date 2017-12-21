@@ -161,7 +161,10 @@ class Vtiger_MenuStructure_Model extends Vtiger_Base_Model {
 	}
 
 	public static function getIgnoredModules() {
-		return array('Calendar', 'Documents', 'MailManager', 'Rss', 'Portal', 'RecycleBin', 'SMSNotifier', 'EmailTemplates', 'Reports');
+                // Salesplatform.ru begin Menu app changing
+		return array('Calendar', 'Documents', 'MailManager', 'Rss', 'Portal', 'RecycleBin', 'EmailTemplates', 'Reports');
+		//return array('Calendar', 'Documents', 'MailManager', 'Rss', 'Portal', 'RecycleBin', 'SMSNotifier', 'EmailTemplates', 'Reports');
+                // Salesplatform.ru end Menu app changing
 	}
 
 	function regroupMenuByParent($menuGroupedByParent) {
@@ -172,7 +175,10 @@ class Vtiger_MenuStructure_Model extends Vtiger_Base_Model {
 									'Leads'			=> array('MARKETING'),
 									'Potentials'	=> array('SALES'),
 									'Quotes'		=> array('SALES'),
-									'Invoice'		=> array('INVENTORY'),
+                                                                        //Salesplaform.ru begin Menu app changing
+									'Invoice'	=> array('SALES', 'INVENTORY'),
+									//'Invoice'	=> array('INVENTORY'),
+                                                                        //Salesplaform.ru end Menu app changing
 									'HelpDesk'		=> array('SUPPORT'),
 									'Faq'			=> array('SUPPORT'),
 									'Assets'		=> array('SUPPORT'),
@@ -181,11 +187,22 @@ class Vtiger_MenuStructure_Model extends Vtiger_Base_Model {
 									'Pricebooks'	=> array('INVENTORY'),
 									'Vendors'		=> array('INVENTORY'),
 									'PurchaseOrder'	=> array('INVENTORY'),
-									'SalesOrder'	=> array('INVENTORY'),
+                                                                        //Salesplaform.ru begin Menu app changing
+									'SalesOrder'	=> array('SALES', 'INVENTORY'),
+									//'SalesOrder'	=> array('INVENTORY'),
+                                                                        //Salesplaform.ru end Menu app changing
 									'Project'		=> array('PROJECT'),
 									'ProjectTask'	=> array('PROJECT'),
 									'ProjectMilestone'	=> array('PROJECT'),
 									'ServiceContracts'	=> array('SUPPORT'),
+                                                                        //Salesplatform.ru begin Menu app changing
+                                                                        'Act'           => array('SALES', 'INVENTORY'),
+                                                                        'Consignment'	=> array('SALES', 'INVENTORY'),
+                                                                        'SPPayments'	=> array('SALES', 'INVENTORY'),
+                                                                        'SPUnits'	=> array('INVENTORY'),
+                                                                        'PBXManager'    => array('MARKETING', 'SALES', 'INVENTORY', 'SUPPORT', 'PROJECT'),
+                                                                        'SMSNotifier'	=> array('MARKETING', 'SALES', 'INVENTORY', 'SUPPORT', 'PROJECT'),
+                                                                        //Salesplatform.ru end Menu app changing  
 							);
 
 		$oldToNewAppMap = Vtiger_MenuStructure_Model::getOldToNewAppMapping();

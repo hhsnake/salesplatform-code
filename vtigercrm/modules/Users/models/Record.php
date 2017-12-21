@@ -348,7 +348,16 @@ class Users_Record_Model extends Vtiger_Record_Model {
         return $roleName;
     }
     
-
+    // SalesPlatform.ru begin #5116 fixed localization
+    /**
+     * Function returns User Current Language
+     * @return <String>
+     */
+    function getUserLanguage(){
+        return $this->get('language');
+    }
+    // SalesPlatform.ru end
+    
 	/**
 	 * Function returns List of Accessible Users for a Module
 	 * @param <String> $module

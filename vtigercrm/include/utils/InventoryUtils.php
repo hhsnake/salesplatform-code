@@ -297,7 +297,10 @@ function getAllTaxes($available='all', $sh='',$mode='',$id='')
 				$taxname = $adb->query_result($result, $i, 'taxname');
 				$taxid = $adb->query_result($result, $i, 'taxid');
 				$tax_val = $adb->query_result($inventory_tax_val_result, 0, $taxname);
-				if ($tax_val != '') {
+                                // SalesPlaform.ru begin
+				//if ($tax_val != '') {
+				if ($tax_val != '' && $tax_val > 0.0000) {
+                                // SalesPlaform.ru end
 					array_push($result_ids, $taxid);
 				}
 			}

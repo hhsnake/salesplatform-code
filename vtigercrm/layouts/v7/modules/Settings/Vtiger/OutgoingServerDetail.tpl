@@ -66,8 +66,11 @@
 								<td class="{$WIDTHTYPE} fieldValue"><span>{$MODEL->get('from_email_field')}</span></td>
 							</tr>
 							<tr>
-								<td class="{$WIDTHTYPE} fieldLabel"><label>{vtranslate('LBL_REQUIRES_AUTHENTICATION', $QUALIFIED_MODULE)}</label></td>
-								<td class="{$WIDTHTYPE} fieldValue"><span>{if $MODEL->isSmtpAuthEnabled()}{vtranslate('LBL_YES', $QUALIFIED_MODULE)} {else}{vtranslate('LBL_NO', $QUALIFIED_MODULE)}{/if}</span></td>
+                                                                <td class="{$WIDTHTYPE} fieldLabel"><label>{vtranslate('LBL_REQUIRES_AUTHENTICATION', $QUALIFIED_MODULE)}</label></td>
+								{*Salesplatform.ru begin Checkbox fix*}
+                                                                <td class="{$WIDTHTYPE} fieldValue"><span>{if $MODEL->isSmtpAuthEnabled() neq 'false'}{vtranslate('LBL_YES', $QUALIFIED_MODULE)} {else}{vtranslate('LBL_NO', $QUALIFIED_MODULE)}{/if}</span></td>
+                                                                {*<td class="{$WIDTHTYPE} fieldValue"><span>{if $MODEL->isSmtpAuthEnabled()}{vtranslate('LBL_YES', $QUALIFIED_MODULE)} {else}{vtranslate('LBL_NO', $QUALIFIED_MODULE)}{/if}</span></td>*}
+                                                                {*Salesplatform.ru end Checkbox fix*}
 							</tr>
                             {* SalesPlatform.ru begin*}
                             <tr>

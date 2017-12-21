@@ -440,3 +440,20 @@
 .vicon-vtigeruser2:before {
 	content: "\e688";
 }
+/* SalesPlatform.ru begin */
+.vicon-sppayments:before {
+	content: "\e67a";
+}
+.vicon-consignment:before {
+	content: "\e683";
+}
+.vicon-act:before {
+	content: "\e61b";
+}
+.vicon-spunits:before {
+	content: "\e638";
+}
+.vicon-spsocialconnector:before {
+	content: "\e64b";
+}
+/* SalesPlatform.ru end */

@@ -39,7 +39,9 @@
 								</button>
 							</li>
 						{/if}
-						{if $MODULE_SETTING_ACTIONS|@count gt 0}
+                        {* SalesPlatform.ru begin *}
+						{* {if $MODULE_SETTING_ACTIONS|@count gt 0} *}
+                        {* SalesPlatform.ru end *}
 							<li>
 								<div class="settingsIcon">
 									<button type="button" class="btn btn-default module-buttons dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -67,7 +69,9 @@
 									</ul>
 								</div>
 							</li>
-						{/if}
+                        {* SalesPlatform.ru begin *}    
+						{* {/if} *}
+                        {* SalesPlatform.ru end *}
 					</ul>
 				</div>
 			</div>

@@ -38,7 +38,7 @@
 							{/if}
 						{/foreach}
 					{/foreach}
-					<p  class="current-filter-name filter-name pull-left cursorPointer" title="{$CVNAME}"><span class="fa fa-angle-right pull-left" aria-hidden="true"></span><a  href='{$MODULE_MODEL->getListViewUrl()}&viewname={$VIEWID}'>&nbsp;&nbsp;{$CVNAME}&nbsp;&nbsp;</a> </p>
+					<p  class="current-filter-name filter-name pull-left cursorPointer" title="{$CVNAME}"><span class="fa fa-angle-right pull-left" aria-hidden="true"></span><a  href='{$MODULE_MODEL->getListViewUrl()}&viewname={$VIEWID}'>&nbsp;&nbsp;{vtranslate($CVNAME, $MODULE)}&nbsp;&nbsp;</a> </p>
 				{/if}
 				{assign var=SINGLE_MODULE_NAME value='SINGLE_'|cat:$MODULE}
 				{if $RECORD and $smarty.request.view eq 'Edit'}

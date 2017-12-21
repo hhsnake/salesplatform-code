@@ -246,7 +246,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
                 
                 //SalesPlatform.ru begin support custom delimiter
                 $delimiter = $request->get('delimiter');
-                if (empty($request->get('delimiter'))) {
+                if (empty($delimiter)) {
                     $delimiter = ',';
                 }
                 $header = implode("\"" . $delimiter . "\"", $headers);

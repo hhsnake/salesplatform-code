@@ -41,7 +41,9 @@
 					<br>
 					{assign var="ENABLE_IMAGE_PATH" value="{vimage_path('Enable.png')}"}
 					{assign var="DISABLE_IMAGE_PATH" value="{vimage_path('Disable.png')}"}
-					{if $RECORD_MODEL->hasGlobalReadPermission()}
+                    {* SalesPlatform.ru begin *}
+					{* {if $RECORD_MODEL->hasGlobalReadPermission()} *}
+                    {* SalesPlatform.ru end *}
 						<div class="row">
 							<div class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-lg-10 col-md-10 col-sm-10">
 								<div>
@@ -62,7 +64,9 @@
 								</div>
 							</div>
 						</div>
-					{/if}
+                    {* SalesPlatform.ru begin *}
+					{* {/if} *}
+                    {* SalesPlatform.ru end *}
 					<br>
 					<div class="row">
 						<div class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-lg-10 col-md-10 col-sm-10">

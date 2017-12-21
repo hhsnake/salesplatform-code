@@ -42,10 +42,15 @@
 						{vtranslate('LBL_CRM_DOCUMENTATION', $MODULE)}<br>
 						{vtranslate('LBL_TALK_TO_US_AT_FORUMS', $MODULE)}<br>
 						{vtranslate('LBL_DISCUSS_WITH_US_AT_BLOGS', $MODULE)}<br><br>
-						Connect with us &nbsp;&nbsp;
-						<a href="https://www.facebook.com/vtiger" target="_blank"><img src="{vimage_path('facebook.png')}"></a>&nbsp;&nbsp;
-						<a href="https://twitter.com/vtigercrm" target="_blank"><img src="{vimage_path('twitter.png')}"></a>&nbsp;&nbsp;
-						<a href="//www.vtiger.com/products/crm/privacy_policy.html" target="_blank"><img src="{vimage_path('linkedin.png')}"></a>
+                                                {*SalesPlatform.ru begin*}
+						{vtranslate('LBL_CONNECT_WITH_US', 'Users')}&nbsp;&nbsp;
+                                                <a href="http://community.salesplatform.ru/" target="_blank"><img src="layouts/vlayout/skins/images/forum.png"></a>&nbsp;&nbsp;
+                                                <a href="https://twitter.com/salesplatformru" target="_blank"><img src="layouts/vlayout/skins/images/twitter.png"></a>
+						{*Connect with us &nbsp;&nbsp;*}
+						{*<a href="https://www.facebook.com/vtiger" target="_blank"><img src="{vimage_path('facebook.png')}"></a>&nbsp;&nbsp;*}
+						{*<a href="https://twitter.com/vtigercrm" target="_blank"><img src="{vimage_path('twitter.png')}"></a>&nbsp;&nbsp;*}
+						{*<a href="//www.vtiger.com/products/crm/privacy_policy.html" target="_blank"><img src="{vimage_path('linkedin.png')}"></a>*}
+                                                {*SalesPlatform.ru end*}
 					</div>
 				</div>
 				<div class="button-container col-lg-12">

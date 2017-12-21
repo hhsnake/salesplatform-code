@@ -116,11 +116,17 @@ class Activity extends CRMEntity {
 		//Handling module specific save
 		//Insert into seactivity rel
 		$insertion_mode = $this->mode;
-		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+        //SalesPlatform.ru begin
+		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '' && $this->column_fields['parent_id'] > 0)
+        //if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+        //SalesPlatform.ru end    
 		{
 			$this->insertIntoEntityTable("vtiger_seactivityrel", $module);
 		}
-		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+        //SalesPlatform.ru begin
+		elseif(($this->column_fields['parent_id']=='' || $this->column_fields['parent_id'] == 0) && $insertion_mode=="edit")
+        //elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+        //SalesPlatform.ru end
 		{
 			$this->deleteRelation("vtiger_seactivityrel");
 		}

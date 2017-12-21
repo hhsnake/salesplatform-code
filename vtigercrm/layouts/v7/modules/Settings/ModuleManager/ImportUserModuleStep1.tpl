@@ -30,7 +30,9 @@
 						</div>
 						<div style="margin-top: 15px;">
 							<span name="proceedInstallation" class="fileUploadBtn btn btn-primary">
-								<span><i class="fa fa-laptop"></i> {vtranslate('Select from My Computer', $MODULE)}</span>
+                                                                {* SalesPlatform begin localization fix *}
+								<span><i class="fa fa-laptop"></i> {vtranslate('LBL_SELECT_FROM_MY_PC', $QUALIFIED_MODULE)}</span>
+                                                                {* SalesPlatform end localization fix *}
 								<input type="file" name="moduleZip" id="moduleZip" size="80px" data-validation-engine="validate[required, funcCall[Vtiger_Base_Validator_Js.invokeValidation]]"
 										data-validator={Zend_Json::encode([['name'=>'UploadModuleZip']])} />
 							</span>

@@ -1592,7 +1592,10 @@
 		forceParse: true,
 		format: 'mm/dd/yyyy',
 		keyboardNavigation: true,
-		language: 'en',
+                //SalesPlatform.ru begin localization fix
+		//language: 'en',
+		language: 'ru',
+                //SalesPlatform.ru end localization fix
 		minViewMode: 0,
 		maxViewMode: 2,
 		multidate: false,
