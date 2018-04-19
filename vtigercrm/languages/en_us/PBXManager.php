@@ -36,5 +36,15 @@ $languageStrings = array(
     'Recording URL' => 'Recording',
     
     'SINGLE_PBXManager' => 'Call Record' ,
-
+    
+    
+    //SalesPlatform.ru begin
+    'Recording url' => 'Link to call record (VATS)',
+    'Is recorded' => 'Call record saved (VATS)',
+    'Recorder call id' => 'Record id (VATS)',
+    'Provider' => 'VATS',
+    'Status code' => 'Inner status (VATS)',
+    'From number' => 'Call from (VATS)',
+    'To number' => 'Call to (VATS)',
+    //SalesPlatform.ru end
 );

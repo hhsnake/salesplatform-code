@@ -1193,7 +1193,7 @@ foreach($modules as $module){
             $field->label = 'Created By';
             $field->table = 'vtiger_crmentity';
             $field->column = 'smcreatorid';
-            $field->uitype = 53;
+            $field->uitype = 52;
             $field->typeofdata = 'V~O';
             $field->displaytype= 2;
             $field->quickcreate = 3;
@@ -1301,7 +1301,7 @@ if(!defined('INSTALLATION_MODE')) {
     if(!$moduleInstance){ 
        echo '<br>Installing PBX Manager starts<br>'; 
        installVtlibModule('PBXManager', 'packages/vtiger/mandatory/PBXManager.zip'); 
-    }else{
+    }else{ 
         
         //SalesPlatform.ru begin
         

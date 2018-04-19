@@ -180,8 +180,10 @@ Vtiger_Index_Js("Vtiger_TaskManagement_Js",{},{
 			app.event.one("post.QuickCreateForm.show",function(event,form){
 				var basicInfo = target.closest(".task").data('basicinfo');
 				var recordId = target.closest(".task").data('recordid');
-
-				form.find('.modal-header h4').html(app.vtranslate('JS_CREATE_TASK'));
+                
+                //SalesPlatform.ru begin
+				//form.find('.modal-header h4').html(app.vtranslate('JS_CREATE_TASK'));
+                //SalesPlatform.ru end
 
 				if(typeof basicInfo != "undefined"){
 					// we should set field values when we edit any record
@@ -208,6 +210,18 @@ Vtiger_Index_Js("Vtiger_TaskManagement_Js",{},{
 
 			var QuickCreateParams = {};
 			QuickCreateParams['noCache'] = false;
+            //SalesPlatform.ru begin
+            var basicInfo = target.closest(".task").data('basicinfo');
+            var recordId = target.closest(".task").data('recordid');
+            if(typeof basicInfo != "undefined"){
+                QuickCreateParams['data'] = {
+                    view : "QuickCreateAjax",
+                    module : "Calendar",
+                    mode : "edit", 
+                    record : recordId
+                };
+            }
+            //SalesPlatform.ru end
 			quickCreateNode.trigger('click', QuickCreateParams);
 		});
 	},

@@ -89,11 +89,15 @@ body{
     height: 46px;
     width: 138px;
     margin: 2px 0;
+    /* SalesPlatform.ru begin */
     /*display: inline-block;*/
+    /* SalesPlatform.ru end */
 }
 .company-logo img{
+/* SalesPlatform.ru begin */
 /*    height: 100%;
     width: auto;*/
+/* SalesPlatform.ru end */
 max-width: 100%;
 }
 .navbar .glyphicon{

@@ -71,7 +71,7 @@
 								<div>
 									<input type="radio" name="mode" value="ExportAllData" id="group3" {if empty($SELECTED_IDS)} checked="checked" {/if} style="margin:2px 0 -4px" />
 									<label style="font-weight:normal" for="group3">&nbsp;&nbsp;{vtranslate('LBL_EXPORT_ALL_DATA',$MODULE)}</label>
-								</div>                                                               
+								</div>
 								{if $MULTI_CURRENCY}
 									<br>
 									<div class="row"> 

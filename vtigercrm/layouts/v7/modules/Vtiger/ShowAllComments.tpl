@@ -18,7 +18,7 @@
 			<div class="commentTitle row">
 				<div class="addCommentBlock">
 					<div class="commentTextArea">
-						<textarea name="commentcontent" class="commentcontent form-control mention_listener"  placeholder="{vtranslate('LBL_POST_YOUR_COMMENT_HERE', $MODULE_NAME)}" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}"></textarea>
+						<textarea name="commentcontent" class="commentcontent form-control"  placeholder="{vtranslate('LBL_POST_YOUR_COMMENT_HERE', $MODULE_NAME)}" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}"></textarea>
 					</div>
 					<div class="row">
 						<div class="col-xs-4 pull-right">
@@ -76,8 +76,11 @@
 
 			<div class="hide basicEditCommentBlock container-fluid">
 				<div class="row" style="padding-bottom: 10px;">
-					<input style="width:100%;height:30px;" type="text" name="reasonToEdit" placeholder="{vtranslate('LBL_REASON_FOR_CHANGING_COMMENT', $MODULE_NAME)}" class="input-block-level"/>
-				</div>
+                    {* SalesPlatform.ru begin *}
+					{* <input style="width:100%;height:30px;" type="text" name="reasonToEdit" placeholder="{vtranslate('LBL_REASON_FOR_CHANGING_COMMENT', $MODULE_NAME)}" class="input-block-level"/> *}
+                    <input style="width:100%;height:30px;" type="text" name="reasonToEdit" placeholder="{vtranslate('LBL_REASON_FOR_CHANGING_COMMENT', $MODULE_NAME)}" class="input-block-level inputElement smallInputBox"/>
+                    {* SalesPlatform.ru end *}
+                </div>
 				<div class="row">
 					<div class="commentTextArea">
 						<textarea name="commentcontent" class="commentcontenthidden"  placeholder="{vtranslate('LBL_ADD_YOUR_COMMENT_HERE', $MODULE_NAME)}" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}"></textarea>

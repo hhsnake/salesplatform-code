@@ -21,6 +21,20 @@ class PBXManager_ListenRecord_Action extends Vtiger_Action_Controller {
     public function process(Vtiger_Request $request) {
         $pbxRecordModel = PBXManager_Record_Model::getInstanceById($request->get('record'));
         if($pbxRecordModel->get('recordingurl') != null) {
+            if($pbxRecordModel->get('sp_is_local_cached')) {
+                $filePath = $pbxRecordModel->get('recordingurl');
+                $fileContent = file_get_contents($filePath);
+                if($fileContent === false) {
+                    return;
+                }
+                $contentType = mime_content_type($filePath);
+                header('Content-Type: ' . $contentType);
+                header('Content-Length: ' . filesize($filePath));
+                echo $fileContent;
+                
+                return;
+            }
+            
             $curl = $this->prepareCurl($pbxRecordModel);
             $response = curl_exec($curl);
             $requestInfo = curl_getinfo($curl);

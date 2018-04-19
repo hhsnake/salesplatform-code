@@ -89,6 +89,11 @@ class Act extends Vtiger_CRMEntity {
 	
 	// For Alphabetical search
 	var $def_basicsearch_col = 'act_no';
+    
+    //SalesPlatform.ru begin
+    // For workflows update field tasks is deleted all the lineitems.
+	var $isLineItemUpdate = true;
+    //SalesPlatform.ru end
 
 	/**	Constructor which will set the column_fields in this object
 	 */
@@ -116,9 +121,17 @@ class Act extends Vtiger_CRMEntity {
 	{
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if(isset($_REQUEST)) {
+            
+            //SalesPlatform.ru begin
+            if (isset($_REQUEST['REQUEST_FROM_WS']) && $_REQUEST['REQUEST_FROM_WS']) {
+                unset($_REQUEST['totalProductCount']);
+            }
+            //SalesPlatform.ru end
+            
             //SalesPlatform.ru begin
             if($_REQUEST['action'] != 'SaveAjax'&& $_REQUEST['action'] != 'ActAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
-					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates') {
+					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'   
+                    && $this->isLineItemUpdate != false && $_REQUEST['action'] != 'FROM_WS') {
             
 			//if($_REQUEST['action'] != 'ActAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
 			//		&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
@@ -235,7 +248,11 @@ class Act extends Vtiger_CRMEntity {
 			left join vtiger_users as vtiger_usersAct on vtiger_usersAct.id = vtiger_crmentityAct.smownerid
 			left join vtiger_contactdetails as vtiger_contactdetailsAct on vtiger_sp_act.contactid = vtiger_contactdetailsAct.contactid
 			left join vtiger_account as vtiger_accountAct on vtiger_accountAct.accountid = vtiger_sp_act.accountid ";
-
+        
+        //SalesPlatform.ru begin
+        $query .= $this->getReportsUiType10Query($secmodule, $queryplanner);
+        //SalesPlatform.ru end
+        
 		return $query;
 	}
 
@@ -498,7 +515,71 @@ class Act extends Vtiger_CRMEntity {
             
 		}
  	}
+    
+    //SalesPlatform.ru begin
+    /*Function to create records in current module.
+	**This function called while importing records to this module*/
+	function createRecords($obj) {
+		$createRecords = createRecords($obj);
+		return $createRecords;
+	}
 
+	/*Function returns the record information which means whether the record is imported or not
+	**This function called while importing records to this module*/
+	function importRecord($obj, $inventoryFieldData, $lineItemDetails) {
+		$entityInfo = importRecord($obj, $inventoryFieldData, $lineItemDetails);
+		return $entityInfo;
+	}
+
+	/*Function to return the status count of imported records in current module.
+	**This function called while importing records to this module*/
+	function getImportStatusCount($obj) {
+		$statusCount = getImportStatusCount($obj);
+		return $statusCount;
+	}
+    
+    /** 
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Export PurchaseOrder Query.
+	*/
+	function create_export_query($where) {
+		global $current_user;
+
+		include("include/utils/ExportUtils.php");
+
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Act", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+		$fields_list .= getInventoryFieldsForExport($this->table_name);
+
+		$query = 
+            "SELECT $fields_list FROM " . $this->entity_table . "
+            INNER JOIN vtiger_sp_act ON vtiger_sp_act.actid = vtiger_crmentity.crmid
+            INNER JOIN vtiger_sp_actcf ON vtiger_sp_actcf.actid = vtiger_sp_act.actid
+            INNER JOIN vtiger_sp_actbillads ON vtiger_sp_actbillads.actbilladdressid = vtiger_sp_act.actid
+            INNER JOIN vtiger_sp_actshipads ON vtiger_sp_actshipads.actshipaddressid = vtiger_sp_act.actid
+            LEFT JOIN vtiger_inventoryproductrel ON vtiger_inventoryproductrel.id = vtiger_sp_act.actid
+            LEFT JOIN vtiger_products ON vtiger_products.productid = vtiger_inventoryproductrel.productid
+            LEFT JOIN vtiger_service ON vtiger_service.serviceid = vtiger_inventoryproductrel.productid
+            LEFT JOIN vtiger_contactdetails ON vtiger_contactdetails.contactid = vtiger_sp_act.contactid
+            LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_sp_act.accountid
+            LEFT JOIN vtiger_salesorder ON vtiger_salesorder.salesorderid = vtiger_sp_act.salesorderid
+            LEFT JOIN vtiger_currency_info ON vtiger_currency_info.id = vtiger_sp_act.currency_id
+            LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+            LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
+
+		$query .= $this->getNonAdminAccessControlQuery('Act', $current_user);
+		$whereAuto = " vtiger_crmentity.deleted=0";
+
+		if($where != "") {
+			$query .= " where ($where) AND ".$whereAuto;
+		} else {
+			$query .= " where ".$whereAuto;
+		}
+
+		return $query;
+	}
+    //SalesPlatform.ru end
 }
 
 ?>

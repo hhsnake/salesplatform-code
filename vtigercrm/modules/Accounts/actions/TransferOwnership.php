@@ -34,10 +34,14 @@ class Accounts_TransferOwnership_Action extends Vtiger_Action_Controller {
 			array_push($relatedModuleRecordIds, $recordId);
 		}
 		array_merge($relatedModuleRecordIds, $recordIds);
-		$moduleModel->transferRecordsOwnership($transferOwnerId, $relatedModuleRecordIds);
-		
+
+		$result = $moduleModel->transferRecordsOwnership($transferOwnerId, $relatedModuleRecordIds);
 		$response = new Vtiger_Response();
-		$response->setResult(true);
+		if ($result === true) {
+			$response->setResult(true);
+		} else {
+			$response->setError($result);
+		}
 		$response->emit();
 	}
 	
@@ -51,25 +55,25 @@ class Accounts_TransferOwnership_Action extends Vtiger_Action_Controller {
 				return $selectedIds;
 			}
 		}
-        
-        //SalesPlatform.ru begin
-        $customViewModel = CustomView_Record_Model::getInstanceById($cvId);
-        if ($customViewModel) {
-            $searchKey = $request->get('search_key');
-            $searchValue = $request->get('search_value');
-            $operator = $request->get('operator');
-            if (!empty($operator)) {
-                $customViewModel->set('operator', $operator);
-                $customViewModel->set('search_key', $searchKey);
-                $customViewModel->set('search_value', $searchValue);
-            }
 
-            $customViewModel->set('search_params', $request->get('search_params'));
-            return $customViewModel->getRecordIds($excludedIds, $module);            
-        }
+		if($selectedIds == 'all'){
+			$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
+			if($customViewModel) {
+				$operator = $request->get('operator');
+				$searchParams = $request->get('search_params');
+				if (!empty($operator)) {
+					$customViewModel->set('operator', $operator);
+					$customViewModel->set('search_key', $request->get('search_key'));
+					$customViewModel->set('search_value', $request->get('search_value'));
+				}
+				if (!empty($searchParams)) {
+					$customViewModel->set('search_params', $searchParams);
+				}
+				return $customViewModel->getRecordIds($excludedIds, $module);
+			}
+		}
         return array();
-        //SalesPlatform.ru end
-    }
+	}
     
     public function validateRequest(Vtiger_Request $request) {
         $request->validateWriteAccess();

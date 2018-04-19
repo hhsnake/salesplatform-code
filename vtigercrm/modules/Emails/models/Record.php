@@ -157,7 +157,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 				$plainBody = decode_emptyspace_html($description);
 				$plainBody = preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$plainBody);
 				$plainBody .= "\n\n".$currentUserModel->get('signature');
-				$plainBody = strip_tags($plainBody);
+				$plainBody = utf8_encode(strip_tags($plainBody));
 				$plainBody = Emails_Mailer_Model::convertToAscii($plainBody);
 				$plainBody = $this->convertUrlsToTrackUrls($plainBody, $id,'plain');
 				$mailer->AltBody = $plainBody;
@@ -197,6 +197,24 @@ class Emails_Record_Model extends Vtiger_Record_Model {
                     // SalesPlatform.ru end
 				}
 			}
+                        
+                        //SalesPlatform.ru Begin fix "from" field in mail manager
+                        $query = "select use_mail_account from vtiger_systems where server_type=?";
+                        $params = array('email');
+                        $adb = PearDatabase::getInstance();
+                        $result = $adb->pquery($query, $params);
+                        
+                        $use_mail_account = $adb->query_result($result, 0, 'use_mail_account');
+                        if($use_mail_account == "on") {
+                            $mailBoxModel = MailManager_Mailbox_Model::activeInstance();
+                            if($mailBoxModel->exists()) {
+                                $mailer->Username = $mailBoxModel->username();
+                                $mailer->Password = $mailBoxModel->password();
+                                $mailer->ConfigSenderInfo($fromEmail, $userName, $replyTo);
+                            }
+                        }
+                        //SalesPlatform.End
+                        
 			// to convert external css to inline css
 			$mailer->Body = Emails_Mailer_Model::convertCssToInline($mailer->Body);	
 			//To convert image url to valid
@@ -242,12 +260,26 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		$db = PearDatabase::getInstance();
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 
-		$fromEmail = false;
-		$result = $db->pquery('SELECT from_email_field FROM vtiger_systems WHERE server_type=?', array('email'));
+		//SalesPlatform.ru Begin fix "from" field in mail manager
+		//$result = $db->pquery('SELECT from_email_field FROM vtiger_systems WHERE server_type=?', array('email'));
+                //if ($db->num_rows($result)) {
+		//	$fromEmail = decode_html($db->query_result($result, 0, 'from_email_field'));
+		//}
+                //if (empty($fromEmail)) $fromEmail = $currentUserModel->get('email1');
+                $fromEmail = false;
+                $result = $db->pquery('SELECT from_email_field, use_mail_account FROM vtiger_systems WHERE server_type=?', array('email'));
 		if ($db->num_rows($result)) {
 			$fromEmail = decode_html($db->query_result($result, 0, 'from_email_field'));
 		}
-		if (empty($fromEmail)) $fromEmail = $currentUserModel->get('email1');
+                if (empty($fromEmail)) $fromEmail = $currentUserModel->get('email1');
+		$useMailAccount = decode_html($db->query_result($result, 0, 'use_mail_account'));
+                if ($useMailAccount == 'on' || $useMailAccount == 1){
+                    $mailBoxModel = MailManager_Mailbox_Model::activeInstance();
+                    if($mailBoxModel->exists()) {
+                        $fromEmail = $mailBoxModel->username();
+                    }
+                }
+                //SalesPlatform.ru End
 		return $fromEmail;
 	}
 

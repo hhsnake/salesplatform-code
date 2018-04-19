@@ -25,7 +25,8 @@ class PriceBooks_ProductListPrice_Action extends Vtiger_Action_Controller {
 		$moduleModel = $request->getModule();
 		$priceBookModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleModel);
 		$listPrice = $priceBookModel->getProductsListPrice($request->get('itemId'));
-
+        if (empty($listPrice)) $listPrice = 0; /* Selected product not in pricebook */
+        
 		$response = new Vtiger_Response();
 		$response->setResult(array($listPrice));
 		$response->emit();

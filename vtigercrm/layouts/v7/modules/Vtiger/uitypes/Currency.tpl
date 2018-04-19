@@ -27,7 +27,7 @@
     />
 </div>
 {else if ($FIELD_MODEL->get('uitype') eq '72') && ($FIELD_NAME eq 'unit_price')}
-	<div class="input-group">
+	<div class="input-group" style="float:none;">
         <span class="input-group-addon" id="baseCurrencySymbol">{$BASE_CURRENCY_SYMBOL}</span>
         <input id="{$MODULE}-editview-fieldname-{$FIELD_NAME}"  type="text" class="inputElement unitPrice currencyField" name="{$FIELD_NAME}"
             value="{$FIELD_MODEL->getDisplayValue($FIELD_MODEL->get('fieldvalue'))}" {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if}
@@ -37,23 +37,16 @@
                 data-specific-rules='{ZEND_JSON::encode($FIELD_INFO["validator"])}'
             {/if}
         />
-        {* SalesPlatform.ru begin *}
-        {*{if $smarty.request.view eq 'Edit'}
-              <a id="moreCurrencies" class="span cursorPointer">{vtranslate('LBL_MORE_CURRENCIES', $MODULE)}>></a>
-              <span id="moreCurrenciesContainer" class="hide"></span>
-          {/if}*}
-        {* SalesPlatform.ru end *}
           <input type="hidden" name="base_currency" value="{$BASE_CURRENCY_NAME}">
           <input type="hidden" name="cur_{$BASE_CURRENCY_ID}_check" value="on">
           <input type="hidden" id="requstedUnitPrice" name="{$BASE_CURRENCY_NAME}" value="">
 	</div>
-        {* SalesPlatform.ru begin *}
-        <br style="clear:both;">
-        {if $smarty.request.view eq 'Edit'}
-            <a id="moreCurrencies" class="span cursorPointer">{vtranslate('LBL_MORE_CURRENCIES', $MODULE)}>></a>
-            <span id="moreCurrenciesContainer" class="hide"></span>
-        {/if}
-        {* SalesPlatform.ru end *}
+    {if $smarty.request.view eq 'Edit'}
+    <div class="clearfix">
+        <a id="moreCurrencies" class="span cursorPointer">{vtranslate('LBL_MORE_CURRENCIES', $MODULE)}>></a>
+        <span id="moreCurrenciesContainer" class="hide"></span>
+    </div>
+    {/if}
 {else}
 <div class="input-group">
     <span class="input-group-addon" id="basic-addon1">{$USER_MODEL->get('currency_symbol')}</span>

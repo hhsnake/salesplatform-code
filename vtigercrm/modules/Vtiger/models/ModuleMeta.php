@@ -145,6 +145,12 @@ class Vtiger_ModuleMeta_Model extends Vtiger_Base_Model {
 						) || ($fieldInstance->getUIType() == '70' && $fieldName != 'modifiedtime')) {
 					$importableFields[$fieldName] = $fieldInstance;
 				}
+                
+                //SalesPlatform.ru begin
+                if($fieldInstance->getUIType() == 4) {
+                    $importableFields[$fieldName] = $fieldInstance;
+                }
+                //SalesPlatform.ru end
 			}
 		}
 

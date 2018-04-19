@@ -12,66 +12,95 @@ chdir (dirname(__FILE__) . '/..');
 include_once 'vtigerversion.php';
 include_once 'data/CRMEntity.php';
 include_once 'includes/main/WebUI.php';
+/* SalesPlatform.ru begin */
+include_once 'Version.php';
 
+$currentVersion = new Version($vtiger_current_version);
+/* SalesPlatform.ru end */
 $errorMessage = $_REQUEST['error'];
 if (!$errorMessage) {
-	$extensionStoreInstance = Settings_ExtensionStore_Extension_Model::getInstance();
-	$vtigerStandardModules = array( 'Accounts', 'Assets', 'Calendar', 'Campaigns', 'Contacts', 'CustomerPortal', 'Dashboard', 'Emails', 'EmailTemplates', 'Events', 'ExtensionStore',
-									'Faq', 'Google', 'HelpDesk', 'Home', 'Import', 'Invoice', 'Leads', 'MailManager', 'Mobile', 'ModComments', 'ModTracker',
-									'PBXManager', 'Portal', 'Potentials', 'PriceBooks', 'Products', 'Project', 'ProjectMilestone', 'ProjectTask', 'PurchaseOrder',
-									'Quotes', 'RecycleBin', 'Reports', 'Rss', 'SalesOrder', 'ServiceContracts', 'Services', 'SMSNotifier', 'Users', 'Vendors',
-									'Webforms', 'Webmails', 'WSAPP');
-	$nonPortedExtns = array();
-	$moduleModelsList = array();
-	$db = PearDatabase::getInstance();
-	$result = $db->pquery('SELECT name FROM vtiger_tab WHERE isentitytype != ? AND presence != ? AND trim(name) NOT IN ('.generateQuestionMarks($vtigerStandardModules).')', array(1, 1, $vtigerStandardModules));
-	if ($db->num_rows($result)) {
-		$moduleModelsList = $extensionStoreInstance->getListings();
-	}
+	/* 7.x module compatability check when coming from earlier version */
+	if ($currentVersion->compare(new Version("7.0.0")) < 0) {
+		/* NOTE: Add list-of modules that you own / sure to upgrade later */
+		$skipCheckForModules = array();
 
-	$moduleModelsListByName = array();
-	$moduleModelsListByLabel = array();
-	foreach ($moduleModelsList as $moduleId => $moduleModel) {
-		if ($moduleModel->get('name') != $moduleModel->get('label')) {
-			$moduleModelsListByName[$moduleModel->get('name')] = $moduleModel;
-		} else {
-			$moduleModelsListByLabel[$moduleModel->get('label')] = $moduleModel;
+		$extensionStoreInstance = Settings_ExtensionStore_Extension_Model::getInstance();
+        //SalesPlatform.ru begin
+		//$vtigerStandardModules = array('Accounts', 'Assets', 'Calendar', 'Campaigns', 'Contacts', 'CustomerPortal',
+		//	'Dashboard', 'Emails', 'EmailTemplates', 'Events', 'ExtensionStore',
+		//	'Faq', 'Google', 'HelpDesk', 'Home', 'Import', 'Invoice', 'Leads',
+		//	'MailManager', 'Mobile', 'ModComments', 'ModTracker',
+		//	'PBXManager', 'Portal', 'Potentials', 'PriceBooks', 'Products', 'Project', 'ProjectMilestone',
+		//	'ProjectTask', 'PurchaseOrder', 'Quotes', 'RecycleBin', 'Reports', 'Rss', 'SalesOrder',
+		//	'ServiceContracts', 'Services', 'SMSNotifier', 'Users', 'Vendors',
+		//	'Webforms', 'Webmails', 'WSAPP');
+
+        $vtigerStandardModules = array('Accounts', 'Assets', 'Calendar', 'Campaigns', 'Contacts', 'CustomerPortal',
+			'Dashboard', 'Emails', 'EmailTemplates', 'Events', 'ExtensionStore',
+			'Faq', 'Google', 'HelpDesk', 'Home', 'Import', 'Invoice', 'Leads',
+			'MailManager', 'Mobile', 'ModComments', 'ModTracker',
+			'PBXManager', 'Portal', 'Potentials', 'PriceBooks', 'Products', 'Project', 'ProjectMilestone',
+			'ProjectTask', 'PurchaseOrder', 'Quotes', 'RecycleBin', 'Reports', 'Rss', 'SalesOrder',
+			'ServiceContracts', 'Services', 'SMSNotifier', 'Users', 'Vendors',
+			'Webforms', 'Webmails', 'WSAPP', 'Act', 'Documents', 'SPKladr', 'SPPDFTemplates',
+            'SPPayments', 'SPSocialConnector', 'SPUnits', 'Search',
+        );
+        //SalesPlatform.ru end
+
+		$skipCheckForModules = array_merge($skipCheckForModules, $vtigerStandardModules);
+
+		$nonPortedExtns = array();
+		$moduleModelsList = array();
+		$db = PearDatabase::getInstance();
+		$result = $db->pquery('SELECT name FROM vtiger_tab WHERE isentitytype != ? AND presence != ? AND trim(name) NOT IN ('.generateQuestionMarks($skipCheckForModules).')', array(1, 1, $skipCheckForModules));
+		if ($db->num_rows($result)) {
+			$moduleModelsList = $extensionStoreInstance->getListings();
 		}
-	}
 
-	if ($moduleModelsList) {
-		while($row = $db->fetch_row($result)) {
-			$moduleName = $row['name'];//label
-			if ($moduleName) {
-				unset($moduleModel);
-				if (array_key_exists($moduleName, $moduleModelsListByName)) {
-					$moduleModel = $moduleModelsListByName[$moduleName];
-				} else if (array_key_exists($moduleName, $moduleModelsListByLabel)) {
-					$moduleModel = $moduleModelsListByLabel[$moduleName];
-				}
+		$moduleModelsListByName = array();
+		$moduleModelsListByLabel = array();
+		foreach ($moduleModelsList as $moduleId => $moduleModel) {
+			if ($moduleModel->get('name') != $moduleModel->get('label')) {
+				$moduleModelsListByName[$moduleModel->get('name')] = $moduleModel;
+			} else {
+				$moduleModelsListByLabel[$moduleModel->get('label')] = $moduleModel;
+			}
+		}
 
-				if ($moduleModel) {
-					$vtigerVersion = $moduleModel->get('vtigerVersion');
-					$vtigerMaxVersion = $moduleModel->get('vtigerMaxVersion');
-					if (($vtigerVersion && strpos($vtigerVersion, '7.') === false)
-							&& ($vtigerMaxVersion && strpos($vtigerMaxVersion, '7.') === false)) {
-						$nonPortedExtns[] = $moduleName;
+		if ($moduleModelsList) {
+			while($row = $db->fetch_row($result)) {
+				$moduleName = $row['name'];//label
+				if ($moduleName) {
+					unset($moduleModel);
+					if (array_key_exists($moduleName, $moduleModelsListByName)) {
+						$moduleModel = $moduleModelsListByName[$moduleName];
+					} else if (array_key_exists($moduleName, $moduleModelsListByLabel)) {
+						$moduleModel = $moduleModelsListByLabel[$moduleName];
+					}
+
+					if ($moduleModel) {
+						$vtigerVersion = $moduleModel->get('vtigerVersion');
+						$vtigerMaxVersion = $moduleModel->get('vtigerMaxVersion');
+						if (($vtigerVersion && strpos($vtigerVersion, '7.') === false)
+								&& ($vtigerMaxVersion && strpos($vtigerMaxVersion, '7.') === false)) {
+							$nonPortedExtns[] = $moduleName;
+						}
 					}
 				}
 			}
-		}
 
-		if ($nonPortedExtns) {
-			$portingMessage = 'Following custom modules are not compatible with Vtiger 7. Please disable these modules to proceed.';
-			foreach ($nonPortedExtns as $moduleName) {
-				$portingMessage .= "<li>$moduleName</li>";
+			if ($nonPortedExtns) {
+				$portingMessage = 'Following custom modules are not compatible with Vtiger 7. Please disable these modules to proceed.';
+				foreach ($nonPortedExtns as $moduleName) {
+					$portingMessage .= "<li>$moduleName</li>";
+				}
+				$portingMessage .= '</ul>';
 			}
-			$portingMessage .= '</ul>';
 		}
 	}
 }
 ?>
-
+<!doctype>
 <html>
 	<head>
         <!-- SalesPlatform.ru begin -->
@@ -82,7 +111,7 @@ if (!$errorMessage) {
         <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- SalesPlatform.ru end -->
-		
+
 		<script type="text/javascript" src="resources/js/jquery-min.js"></script>
 		<link href="resources/todc/css/bootstrap.min.css" rel="stylesheet">
 		<link href="resources/todc/css/todc-bootstrap.min.css" rel="stylesheet">
@@ -91,18 +120,26 @@ if (!$errorMessage) {
 	</head>
 	<body style="font-size: 14px !important;">
 		<div class="container-fluid page-container">
-			<div class="row">
+                        <!-- SalesPlatform.ru begin -->
+                        <!--<div class="row">-->
+                        <div class="row head">
+			<!-- SalesPlatform.ru end -->
 				<div class="col-lg-6">
 					<div class="logo">
                         <!-- SalesPlatform.ru begin -->
 						<!-- <img src="resources/images/vt1.png" alt="Vtiger Logo"/> -->
-                        <img src="test/logo/vtiger-crm-logo.png"/>
+                        <?php if ($currentVersion->compare(new Version("7.0.0")) < 0) { ?>
+                            <img src="../layouts/vlayout/skins/images/logo.png"/>
+                        <?php } else { ?>
+                            <img src="../layouts/v7/skins/images/logo.png"/>
+                        <?php } ?>
                         <!-- SalesPlatform.ru end -->
 					</div>
 				</div>
 				<div class="col-lg-6">
-					<div class="head pull-right">
-                        <!-- SalesPlatform.ru begin -->
+                                        <!-- SalesPlatform.ru begin -->
+					<!--<div class="head pull-right">-->
+                                        <div class="pull-right">
 						<!--  <h3>Migration Wizard</h3>  -->
                         <h3><?php echo vtranslate('Migration Wizard', 'Migration') ?></h3>
                         <!-- SalesPlatform.ru end -->
@@ -130,7 +167,9 @@ if (!$errorMessage) {
 							<img src="resources/images/migration_screen.png" alt="Vtiger Logo" style="width: 100%; margin-left: 15px;"/>
 						</div>
 						<?php
-							$currentVersion = explode('.', $vtiger_current_version);
+                                                        /* SalesPlatform.ru begin */
+							//$currentVersion = explode('.', $vtiger_current_version);
+                                                        /* SalesPlatform.ru end */
 							 if ($portingMessage) { ?>
 								<div class="col-lg-1"></div>
 								<div class="col-lg-7">
@@ -151,7 +190,8 @@ if (!$errorMessage) {
 								</div>
                         <!-- SalesPlatform.ru begin -->
                         <?php /* } else if($currentVersion[0] >= 6 && $currentVersion[1] >= 0) { */ ?>
-						<?php } else if($currentVersion[0] >= 6 && $currentVersion[1] >= 0 && $vtiger_current_version != '7.0.1-201711') { ?>
+			<?php // } else if($currentVersion[0] >= 6 && $currentVersion[1] >= 0 && $vtiger_current_version != '7.0.1-201711') { ?>
+                        <?php } else if(($currentVersion->compare(new Version("5.4.0")) >= 0) && !$currentVersion->isLastVersion()) { ?>
                         <!-- SalesPlatform.ru end -->
 							<div class="col-lg-8" style="padding-left: 30px;">
 								<!-- SalesPlatform.ru begin -->
@@ -163,20 +203,22 @@ if (!$errorMessage) {
 								} ?>
                                 <!-- SalesPlatform.ru begin -->
 								<!--<p>We have detected that you have <strong>Vtiger <?php /* echo $vtiger_current_version */ ?></strong> installation.<br><br></p>-->
-                                <p><?php echo vtranslate('We have detected that you have', 'Migration') ?> <strong><?php echo $vtiger_current_version ?></strong> <?php echo vtranslate('installation', 'Migration') ?><br><br></p>
+                                <p><?php echo vtranslate('We have detected that you have', 'Migration') ?> <strong><?php echo $currentVersion->asString() ?></strong> <?php echo vtranslate('installation', 'Migration') ?><br><br></p>
                                 <!-- SalesPlatform.ru end -->
 								<p>
                                     <!-- SalesPlatform.ru begin -->
 									<!--<strong>Warning: </strong>-->
                                     <strong><?php echo vtranslate('Warning', 'Migration') ?>: </strong>
                                     <!-- SalesPlatform.ru end -->
-                                    
+
                                     <!-- SalesPlatform.ru begin -->
 									<!--Please note that it is not possible to revert back to <?php /* echo $vtiger_current_version */ ?>&nbsp;after the upgrade to vtiger 7 <br>-->
 									<!--So, it is important to take a backup of the <?php /* echo $vtiger_current_version */ ?> installation, including the source files and database.-->
-								    <?php echo vtranslate('Please note that it is not possible to revert back to', 'Migration') . ' ' . $vtiger_current_version ?>&nbsp; <?php echo vtranslate('after the upgrade to vtiger 7', 'Migration') ?> <br>
-									<?php echo vtranslate('So, it is important to take a backup of the', 'Migration') . ' ' . $vtiger_current_version ?> <?php echo vtranslate('installation, including the source files and database', 'Migration') ?>
-                                    
+								    <?php 
+                                                                        $lastVersion = new Version();
+                                                                        echo vtranslate('Please note that it is not possible to revert back to', 'Migration') . ' ' . $currentVersion->asString() ?>&nbsp;<?php echo vtranslate('after the upgrade to vtiger 7', 'Migration') . " " . $lastVersion->asString() ?> <br>
+									<?php echo vtranslate('So, it is important to take a backup of the', 'Migration') . ' ' . $currentVersion->asString() ?> <?php echo vtranslate('installation, including the source files and database', 'Migration') ?>
+
                                     <!-- SalesPlatform.ru end -->
                                 </p><br>
 								<form action="../index.php?module=Migration&action=Extract&mode=fromMig" method="POST">
@@ -211,7 +253,8 @@ if (!$errorMessage) {
 							</div>
                         <!-- SalesPlatform.ru begin -->
 						<?php /* } else if($currentVersion[0] < 6) { */ ?>
-                        <?php } else if($currentVersion[0] == 5 && $currentVersion[1] < 4) { ?>
+                        <?php // } else if($currentVersion[0] == 5 && $currentVersion[1] < 4) { ?>
+                        <?php } else if(($currentVersion->compare(new Version("5.4.0")) < 0)) { ?>
                         <!-- SalesPlatform.ru end -->
 							<div class="col-lg-1"></div>
 							<div class="col-lg-7">
@@ -222,9 +265,13 @@ if (!$errorMessage) {
 								<p><?php echo vtranslate('We detected that this installation is running', 'Migration') ?>
                                 <!-- SalesPlatform.ru end -->
 										<?php
-											if($vtiger_current_version < 6 ) {
-												echo '<b>'.$vtiger_current_version.'</b>';
-											}
+                                                                                        /* SalesPlatform.ru begin */
+//											if($vtiger_current_version < 6 ) {
+                                                                                        /* SalesPlatform.ru end */
+												echo '<b>'.$currentVersion->asString().'</b>';
+                                                                                        /* SalesPlatform.ru begin */
+//											}
+                                                                                        /* SalesPlatform.ru end */
 										?>.
                                     <!-- SalesPlatform.ru begin -->
 									<!--Please upgrade to <strong>5.4.0</strong> first before continuing with this wizard.-->
@@ -233,7 +280,10 @@ if (!$errorMessage) {
 								</p>
 							</div>
 							<div class="button-container col-lg-12">
-								<input type="button" onclick="window.location.href='index.php'" class="btn btn-primary pull-right" value="Finish"/>
+                                                                <!-- SalesPlatform.ru begin -->
+								<!--<input type="button" onclick="window.location.href='index.php'" class="btn btn-primary pull-right" value="Finish"/>-->
+                                                                <input type="button" onclick="window.location.href='../index.php'" class="btn btn-primary pull-right" value="<?php echo vtranslate('Finish', 'Migration') ?>"/>
+                                                                <!-- SalesPlatform.ru end -->
 						<?php } else { ?>
 							<div class="col-lg-1"></div>
 							<div class="col-lg-7">
@@ -252,7 +302,7 @@ if (!$errorMessage) {
 							<div class="button-container col-lg-12">
                             <!-- SalesPlatform.ru begin -->
 						    <!--<input type="button" onclick="window.location.href='index.php'" class="btn btn-primary pull-right" value="Finish"/>-->
-                            <input type="button" onclick="window.location.href='index.php'" class="btn btn-primary pull-right" value="<?php echo vtranslate('Finish', 'Migration') ?>"/>
+                            <input type="button" onclick="window.location.href='../index.php'" class="btn btn-primary pull-right" value="<?php echo vtranslate('Finish', 'Migration') ?>"/>
                             <!-- SalesPlatform.ru end -->
 						<?php } ?>
 					</div>

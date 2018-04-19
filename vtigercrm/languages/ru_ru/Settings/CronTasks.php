@@ -35,5 +35,6 @@ $languageStrings = array(
 	'Products upload' => 'Загрузка Товаров',
 	'SalesOrder exchange' => 'Обмен Заказами',
 	'ScheduleReports' => 'Запланированные Отчеты',
+        'Recommended frequency for ScheduleReports is 15 mins' => 'Рекомендованная частота 15 минут'
 	//Salesplatform.ru end
 );

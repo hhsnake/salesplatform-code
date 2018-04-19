@@ -128,11 +128,10 @@ jQuery.Class("Vtiger_CustomView_Js",{
 
 	showCreateFilter : function(data){
 		var self = this;
-		var overlayParams = {'backdrop' : 'static', 'keyboard' : false};
 		self.reIntialize();
-		app.helper.loadPageContentOverlay(data,overlayParams).then(function(data){
+		app.helper.loadPageContentOverlay(data).then(function(data){
+			data.find('.data').css('height','100%');
 			var Options= {
-			setHeight: jQuery('.customview-content').height() - jQuery('.modal-footer-overwrite-style').height(),
 			autoExpandScrollbar: true,
 			scrollInertia: 200,
 			autoHideScrollbar: true,
@@ -238,7 +237,7 @@ jQuery.Class("Vtiger_CustomView_Js",{
 					} 
 						  if(mandatoryFieldsMissing){ 
                                                 //SalesPlatform.ru begin localization fix
-//						app.helper.showErrorNotification({message:"Select atleast one mandatory value."}); 
+						//app.helper.showErrorNotification({message:"Select atleast one mandatory value."}); 
 						app.helper.showErrorNotification({message:app.vtranslate('JS_PLEASE_SELECT_ATLEAST_ONE_MANDATORY_FIELD')}); 
                                                 //SalesPlatform.ru end localization fix
 							  return false; 
@@ -292,7 +291,10 @@ jQuery.Class("Vtiger_CustomView_Js",{
 
 		jQuery(document).on('post.DeleteFilter.click',function(e,params){
 			var target = jQuery(e.target);
-			app.helper.showConfirmationBox({'message': app.vtranslate('LBL_DELETE_CONFIRMATION')}).then(
+                        // SalesPlatform.ru begin
+			//app.helper.showConfirmationBox({'message': app.vtranslate('LBL_LIST_DELETE_CONFIRMATION')}).then(
+			app.helper.showConfirmationBox({'message': app.vtranslate('JS_LIST_DELETE_CONFIRMATION')}).then(
+                        // SalesPlatform.ru end
 				function(){
 					app.helper.showProgress();
 					app.request.post({'url':params.url}).then(function(){

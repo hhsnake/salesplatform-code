@@ -37,10 +37,7 @@ class Products_Module_Model extends Vtiger_Module_Model {
 
 			$pos = stripos($listQuery, 'where');
 			if ($pos) {
-                //SalesPlatform.ru begin
-				//$split = spliti('where', $listQuery);
-                $split = preg_split('/where/i', $listQuery);
-                //SalesPlatform.ru end
+				$split = preg_split('/where/i', $listQuery);
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
 			} else {
 				$overRideQuery = $listQuery. ' WHERE ' . $condition;
@@ -127,11 +124,11 @@ class Products_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getExportQuery($focus, $query) {
 		$baseTableName = $focus->table_name;
-		$splitQuery = spliti(' FROM ', $query);
+		$splitQuery = preg_split('/ FROM /i', $query);
 		$columnFields = explode(',', $splitQuery[0]);
         $columnFields[] = ' vtiger_currency_info.currency_name AS currency_id, crmid';
 
-		$joinSplit = spliti(' WHERE ',$splitQuery[1]);
+		$joinSplit = preg_split('/ WHERE /i',$splitQuery[1]);
 		$joinSplit[0] .= " LEFT JOIN vtiger_currency_info ON vtiger_currency_info.id = $baseTableName.currency_id";
 		$splitQuery[1] = $joinSplit[0].' WHERE ' .$joinSplit[1];
 

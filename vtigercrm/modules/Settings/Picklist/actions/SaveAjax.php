@@ -29,6 +29,12 @@ class Settings_Picklist_SaveAjax_Action extends Settings_Vtiger_Basic_Action {
      * @function updates user tables with new picklist value for default event and status fields
      */
     public function updateDefaultPicklistValues($pickListFieldName,$oldValue,$newValue) {
+        
+            // No change in value - likely a color change.
+            if ($oldValue == $newValue) {
+                return;
+            }
+            
 		$db = PearDatabase::getInstance();
             if($pickListFieldName == 'activitytype')
                 $defaultFieldName = 'defaultactivitytype';
@@ -61,6 +67,10 @@ class Settings_Picklist_SaveAjax_Action extends Settings_Vtiger_Basic_Action {
     
     public function add(Vtiger_Request $request) {
         $newValues = $request->getRaw('newValue');
+        // SalesPlatform.ru begin
+        $charsNeedToRemove = array('&lt;', '&gt;', '&LT;', '&GT;');
+        $newValues = str_replace($charsNeedToRemove, '', $newValues);
+        // SalesPlatform.ru end
         $pickListName = $request->get('picklistName');
         $moduleName = $request->get('source_module');
         $selectedColor = $request->get('selectedColor');

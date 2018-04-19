@@ -32,7 +32,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	* @param EmailtTemplates_Record_Model $recordModel
 	* @return <integer> template id
 	*/
-	public function saveRecord(EmailTemplates_Record_Model $recordModel) {
+	public function saveRecord(Vtiger_Record_Model $recordModel) {
 		$db = PearDatabase::getInstance();
 		$recordId = $templateid = $recordModel->getId();
 		$systemtemplate = $recordModel->get('systemtemplate');
@@ -65,7 +65,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 * Function to delete the email template
 	 * @param type $recordIds
 	 */
-	public function deleteRecord(EmailTemplates_Record_Model $recordModel) {
+	public function deleteRecord(Vtiger_Record_Model $recordModel) {
 		$recordId = $recordModel->getId();
 		$db = PearDatabase::getInstance();
 		$db->pquery('DELETE FROM vtiger_emailtemplates WHERE templateid = ? AND systemtemplate = ? ', array($recordId, '0'));
@@ -85,10 +85,6 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 * @return <array> template fields
 	 */
 	public function getAllModuleEmailTemplateFields() {
-        //SalesPlatform.ru begin
-        $allFields = [];
-        //SalesPlatform.ru end
-        
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$allModuleList = $this->getAllModuleList();
 		$allRelFields = array();
@@ -105,6 +101,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 			}else{
 				$fieldList = $this->getRelatedFields($module, $currentUserModel);
 			}
+			$allFields = array();
 			foreach ($fieldList as $key => $field) {
 				$option = array(vtranslate($field['module'], $field['module']) . ':' . vtranslate($field['fieldlabel'], $field['module']), "$" . strtolower($field['module']) . "-" . $field['columnname'] . "$");
 				$allFields[] = $option;
@@ -119,16 +116,10 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 			}
 			if(is_array($allFields) && is_array($allRelFields)){
 				$allFields = array_merge($allFields, $allRelFields);
-                //SalesPlatform.ru begin
-				//$allRelFields="";
-                $allRelFields = [];
-                //SalesPlatform.ru end
+				$allRelFields= array();
 			}
 			$allOptions[$module] = $allFields;
-			//SalesPlatform.ru begin
-			//$allFields = "";
-            $allFields = [];
-            //SalesPlatform.ru end
+			$allFields = array();
 		}
 		return $allOptions;
 	}

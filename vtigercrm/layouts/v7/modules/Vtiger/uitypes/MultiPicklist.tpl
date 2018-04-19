@@ -31,7 +31,10 @@
 		<style type="text/css">
 			{foreach item=PICKLIST_VALUE key=PICKLIST_NAME from=$PICKLIST_VALUES}
 			{assign var=CLASS_NAME value="{$FIELD_MODEL->getFieldName()}_{$PICKLIST_NAME|replace:' ':'_'}"}
-			.picklistColor_{$CLASS_NAME} {
+                        {* SalesPlatform.ru begin *}
+			{* .picklistColor_{$CLASS_NAME} { *}
+                        .picklistColor_{Vtiger_Util_Helper::escapeCssSpecialCharacters($CLASS_NAME)} {
+                        {* SalesPlatform.ru end *}
 				background-color: {$PICKLIST_COLORS[$PICKLIST_NAME]} !important;
 			}
 			{/foreach}

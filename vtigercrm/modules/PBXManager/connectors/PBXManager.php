@@ -180,7 +180,10 @@ class PBXManager_PBXManager_Connector {
         $params['billduration'] = $details->get('billableseconds');
         
         //SalesPlatform.ru begin
-        PBXManager_Record_Model::updateCallDetailsBySourceUUID($callid, $params);
+        $userNumber = $details->get('callerNumber');
+        $user = PBXManager_Record_Model::getUserInfoWithNumber($userNumber);
+        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid, $user);
+        $recordModel->updateCallDetails($params, $user);
         //$recordModel->updateCallDetails($params);
         //SalesPlatform.ru end     
     }
@@ -195,6 +198,9 @@ class PBXManager_PBXManager_Connector {
         // SalesPlatform.ru begin
         $userNumber = $details->get('callerIdNum');
         $user = PBXManager_Record_Model::getUserInfoWithNumber($userNumber);
+        if(!$user) {
+            return;
+        }
         $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid, $user);
         //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
         // SalesPlatform.ru end
@@ -220,6 +226,23 @@ class PBXManager_PBXManager_Connector {
                 break;
         }
         
+        //SalesPlatform.ru begin
+        $totalDuration = $recordModel->get('totalduration');
+        $endTime = $recordModel->get('endtime');
+        $startTime = $recordModel->get('starttime');
+        if(empty($totalDuration) && empty($endTime) && !empty($startTime)) {
+            $currentTime = time();
+            $params['endtime'] = date("Y-m-d H:i:s", $currentTime);
+            $startTime = strtotime($startTime);
+            if($startTime) {
+                $totalDuration = $currentTime - $startTime;
+                if($totalDuration > 0) {
+                    $params['totalduration'] = $totalDuration;
+                }
+            }
+        }
+        //SalesPlatform.ru end
+        
         if($details->get('EndTime') && $details->get('Duration')) {
             $params['endtime'] = $details->get('EndTime');
             $params['totalduration'] = $details->get('Duration');
@@ -239,7 +262,12 @@ class PBXManager_PBXManager_Connector {
         $callid = $details->get('callUUID');
 
         // SalesPlatform.ru begin
-        PBXManager_Record_Model::updateCallRecordBySourceUUID($callid, $details->get('recordinglink'));
+        $userNumber = $details->get('callerNumber');
+        $user = PBXManager_Record_Model::getUserInfoWithNumber($userNumber);
+        $recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid, $user);
+        $recordModel->updateCallDetails(array(
+            'recordingurl' => $details->get('recordinglink')
+        ), $user);
         //$recordModel = PBXManager_Record_Model::getInstanceBySourceUUID($callid);
         //$params['recordingurl'] = $details->get('recordinglink');
         //$recordModel->updateCallDetails($params);
@@ -253,9 +281,7 @@ class PBXManager_PBXManager_Connector {
     public function handleStartupCall($details, $userInfo, $customerInfo) {
         global $current_user;
         $params = $this->prepareParameters($details, self::RINGING_TYPE);
-        //SalesPlatform.ru begin
-        //$direction = $details->get('Direction');
-        //SalesPlatform.ru end
+        $direction = $details->get('Direction');
 
         // To add customer and user information in params
         $params['Customer'] = $customerInfo['id'];
@@ -267,11 +293,8 @@ class PBXManager_PBXManager_Connector {
         } else if ($details->get('to')) {
             $params['CustomerNumber'] = $details->get('to');
         }
-
-        // SalesPlatform.ru begin Set user timezone for starttime param
-        $params['starttime'] = $details->get('StartTime');
-        // SalesPlatform.ru end
         
+        $params['starttime'] = $details->get('StartTime');
         $params['callstatus'] = "ringing";
         $user = CRMEntity::getInstance('Users');
         // SalesPlatform.ru begin

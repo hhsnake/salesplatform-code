@@ -270,7 +270,7 @@ class SMTP {
    * @access public
    * @return bool
    */
-  public function connected() {
+  public function Connected() {
     if(!empty($this->smtp_conn)) {
       $sock_status = socket_get_status($this->smtp_conn);
       if($sock_status["eof"]) {

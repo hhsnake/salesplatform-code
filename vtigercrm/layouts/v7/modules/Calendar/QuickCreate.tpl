@@ -12,16 +12,32 @@
 		<script type="{$jsModel->getType()}" src="{$jsModel->getSrc()}"></script>
 	{/foreach}
 	<div class="modal-dialog modal-lg">
-		<div class="modal-content" style='width: 525px;left:23%;'>
+		<div class="modal-content" style='width: 525px; left:23%;'>
 			<form class="form-horizontal recordEditView" id="QuickCreate" name="QuickCreate" method="post" action="index.php">
-				{if $MODE eq 'edit' && !empty($RECORD_ID)}
-					{assign var=HEADER_TITLE value={vtranslate('LBL_EDITING', $MODULE)}|cat:" "|cat:{vtranslate('SINGLE_'|cat:$MODULE, $MODULE)}}
+				{* SalesPlatform.ru begin *}
+                {assign var=LABEL value={vtranslate('SINGLE_'|cat:$MODULE, $MODULE)}}
+                {if $MODULE == 'Calendar'}
+                    {assign var=LABEL value={vtranslate('LBL_TASK', $MODULE)}}
+                {/if}
+                {* SalesPlatform.ru end *}
+                
+                {if $MODE eq 'edit' && !empty($RECORD_ID)}
+                    {* SalesPlatform.ru begin *}
+					{* {assign var=HEADER_TITLE value={vtranslate('LBL_EDITING', $MODULE)}|cat:" "|cat:{vtranslate('SINGLE_'|cat:$MODULE, $MODULE)}} *}
+                    {assign var=HEADER_TITLE value={vtranslate('LBL_EDITING', $MODULE)}|cat:" "|cat:{$LABEL}}
+                    {* SalesPlatform.ru end *}
 				{else}
-					{assign var=HEADER_TITLE value={vtranslate('LBL_QUICK_CREATE', $MODULE)}|cat:" "|cat:{vtranslate('SINGLE_'|cat:$MODULE, $MODULE)}}
+                    {* SalesPlatform.ru begin *}
+					{* {assign var=HEADER_TITLE value={vtranslate('LBL_QUICK_CREATE', $MODULE)}|cat:" "|cat:{vtranslate('SINGLE_'|cat:$MODULE, $MODULE)}} *}
+                    {assign var=HEADER_TITLE value={vtranslate('LBL_QUICK_CREATE', $MODULE)}|cat:" "|cat:{$LABEL}}
+                    {* SalesPlatform.ru end *}
 				{/if}
 				{include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE=$HEADER_TITLE}
-
-				<div class="modal-body">
+                                
+                                {* SalesPlatform.ru begin *}
+				<div class="modal-body" style = 'float:left; width: 100%'>
+                                {* <div class="modal-body"> *}
+                                {* SalesPlatform.ru end *}
 					{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
 						<input type="hidden" name="picklistDependency" value='{Vtiger_Util_Helper::toSafeHTML($PICKIST_DEPENDENCY_DATASOURCE)}' />
 					{/if}
@@ -40,8 +56,11 @@
 					{assign var="RECORD_STRUCTURE_MODEL" value=$QUICK_CREATE_CONTENTS[$MODULE]['recordStructureModel']}
 					{assign var="RECORD_STRUCTURE" value=$QUICK_CREATE_CONTENTS[$MODULE]['recordStructure']}
 					{assign var="MODULE_MODEL" value=$QUICK_CREATE_CONTENTS[$MODULE]['moduleModel']}
-
-					<div class="quickCreateContent calendarQuickCreateContent" style="padding-top:2%;">
+                    
+                    {* SalesPlatform,ru begin *}
+					{* <div class="quickCreateContent calendarQuickCreateContent" style="padding-top:2%;margin-top:5px;"> *}
+                    <div class="quickCreateContent calendarQuickCreateContent" style="padding-top:2%;">
+                    {* SalesPlatform.ru end *}
 						{if $MODULE eq 'Calendar'}
 							{if !empty($PICKIST_DEPENDENCY_DATASOURCE_TODO)}
 								<input type="hidden" name="picklistDependency" value='{Vtiger_Util_Helper::toSafeHTML($PICKIST_DEPENDENCY_DATASOURCE_TODO)}' />
@@ -51,10 +70,9 @@
 								<input type="hidden" name="picklistDependency" value='{Vtiger_Util_Helper::toSafeHTML($PICKIST_DEPENDENCY_DATASOURCE_EVENT)}' />
 							{/if}
 						{/if}
-
 						<div>
 							{assign var="FIELD_MODEL" value=$RECORD_STRUCTURE['subject']}
-							<div style="margin-left: 14px;width: 95%;">
+                                                                <div style="margin-left: 14px;width: 95%;">
 								{assign var="FIELD_INFO" value=$FIELD_MODEL->getFieldInfo()}
 								{assign var="SPECIAL_VALIDATOR" value=$FIELD_MODEL->getValidator()}
 								<input id="{$MODULE}_editView_fieldName_{$FIELD_MODEL->get('name')}" type="text" class="inputElement {if $FIELD_MODEL->isNameField()}nameField{/if}" name="{$FIELD_MODEL->getFieldName()}" value="{$FIELD_MODEL->get('fieldvalue')}"
@@ -64,27 +82,36 @@
 										   {assign var=VALIDATOR_NAME value=$VALIDATOR["name"]}
 										   data-rule-{$VALIDATOR_NAME} = "true" 
 									   {/foreach}
-									   placeholder="{vtranslate($FIELD_MODEL->get('label'), $MODULE)}" style="width: 100%;"/>
-							</div>
+									   placeholder="{vtranslate($FIELD_MODEL->get('label'), $MODULE)} *" style="width: 100%;"/>
+                                                                </div>
+                                                                
 						</div>
-
+                                                
 						<div class="row" style="padding-top: 2%;">
-							<div class="col-sm-12">
-								<div class="col-sm-5">
+
+                            <div class="col-sm-12"> 
+                                <div class="col-sm-5"> 
 									{assign var="FIELD_MODEL" value=$RECORD_STRUCTURE['date_start']}
 									{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE)}
 								</div>
-								<div class="muted col-sm-1" style="line-height: 67px;left: 20px; padding-right: 7%;">
+                                {* SalesPlatform.ru begin *}
+								{* <div class="muted col-sm-1" style="line-height: 67px; margin-left: 7%;"> *}
+                                <div class="muted col-sm-1" style="line-height: 67px; margin-left: 4.5%; text-align: center;" >
+                                {* SalesPlatform.ru end *}
 									{vtranslate('LBL_TO',$MODULE)}
 								</div>
-								<div class="col-sm-5" {if $MODULE eq 'Calendar'}style="margin-top: 4%;"{/if}>
+                                {* SalesPlatform.ru begin *}
+								<div class="col-sm-5" {if $MODULE eq 'Calendar'}style="margin-top: 3%;"{/if}>
+                                {* <div class="col-sm-5" {if $MODULE eq 'Calendar'}style="margin-top: 4%;"{/if}> *}
+                                {* SalesPlatform.ru end *}
 									{assign var="FIELD_MODEL" value=$RECORD_STRUCTURE['due_date']}
 									{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE)}
 								</div>
-							</div>
-						</div>
-
-						<table class="massEditTable table no-border">
+							
+                            {* SalesPlatform.ru begin *}
+                            {* </div> *}
+                            {* SalesPlatform.ru end *}
+                                <table class="massEditTable table no-border">                      
 							<tr>
 								{foreach key=FIELD_NAME item=FIELD_MODEL from=$RECORD_STRUCTURE name=blockfields}
 									{if $FIELD_NAME eq 'subject' || $FIELD_NAME eq 'date_start' || $FIELD_NAME eq 'due_date'}
@@ -130,9 +157,16 @@
 								{/foreach}
 							</tr>
 						</table>
+                            {* SalesPlatform.ru begin *}
+                            </div>
+                            {* SalesPlatform.ru end *}
+                        </div>
 					</div>
 				</div>
-				<div class="modal-footer">
+                {* SalesPlatform.ru begin *}                
+                <div class="modal-footer" style = "overflow:hidden">
+                {*<div class="modal-footer">*}
+                {* SalesPlatform.ru end *}
 					<center>
 						{if $BUTTON_NAME neq null}
 							{assign var=BUTTON_LABEL value=$BUTTON_NAME}
@@ -144,7 +178,7 @@
 						{if $MODULE eq 'Events'}
 							{assign var="EDIT_VIEW_URL" value=$CALENDAR_MODULE_MODEL->getCreateEventRecordUrl()}
 						{/if}
-						<button class="btn" id="goToFullForm" data-edit-view-url="{$EDIT_VIEW_URL}" type="button"><strong>{vtranslate('LBL_GO_TO_FULL_FORM', $MODULE)}</strong></button>
+						<button class="btn btn-default" id="goToFullForm" data-edit-view-url="{$EDIT_VIEW_URL}" type="button"><strong>{vtranslate('LBL_GO_TO_FULL_FORM', $MODULE)}</strong></button>
 						<button {if $BUTTON_ID neq null} id="{$BUTTON_ID}" {/if} class="btn btn-success" type="submit" name="saveButton"><strong>{$BUTTON_LABEL}</strong></button>
 						<a href="#" class="cancelLink" type="reset" data-dismiss="modal">{vtranslate('LBL_CANCEL', $MODULE)}</a>
 					</center>

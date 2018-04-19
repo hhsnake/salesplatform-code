@@ -59,6 +59,13 @@ class SalesOrder_SaveAjax_Action extends Inventory_SaveAjax_Action {
 				if ($fieldDataType == 'time') {
 					$fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
 				}
+                
+                //SalesPlatform.ru begin
+                if($fieldModel->isCKEEnabled()) {
+                    $fieldValue = vtlib_purify(decode_html($fieldValue));
+                }
+                //SalesPlatform.ru end
+                
 				if ($fieldValue !== null) {
 					if (!is_array($fieldValue)) {
 						$fieldValue = trim($fieldValue);
@@ -84,6 +91,13 @@ class SalesOrder_SaveAjax_Action extends Inventory_SaveAjax_Action {
 				if ($fieldDataType == 'time') {
 					$fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
 				}
+                
+                //SalesPlatform.ru begin
+                if($fieldModel->isCKEEnabled()) {
+                    $fieldValue = vtlib_purify(decode_html($fieldValue));
+                }
+                //SalesPlatform.ru end
+                
 				if ($fieldValue !== null) {
 					if (!is_array($fieldValue)) {
 						$fieldValue = trim($fieldValue);

@@ -65,14 +65,26 @@ Inventory_Edit_Js("Consignment_Edit_Js",{},{
 				params.parent_module = closestContainer.find('[name="popupReferenceModule"]').val();
 			}
 		}
-		AppConnector.request(params).then(
-			function(data){
-				aDeferred.resolve(data);
+        
+        //SalesPlatform.ru begin
+		//AppConnector.request(params).then(
+		//	function(data){
+		//		aDeferred.resolve(data);
+		//	},
+		//	function(error){
+		//		aDeferred.reject();
+		//	}
+		//)
+        app.request.get({data:params}).then(
+			function(err, res){
+				aDeferred.resolve(res);
 			},
 			function(error){
+				//TODO : Handle error
 				aDeferred.reject();
 			}
-		)
+		);
+        //SalesPlatform.ru end
 		return aDeferred.promise();
 	},
 

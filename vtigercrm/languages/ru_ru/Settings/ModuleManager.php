@@ -68,7 +68,10 @@ $languageStrings = array(
         'LBL_EXP_YEAR' => 'Год опыта',
         'LBL_CVC_CODE' => 'Код CVC',
         'LBL_RESET' => 'Сброс',
-        'LBL_EXTENSION_STORE' => 'Расширение магазин',
+    // SalesPlatform.ru begin
+        //'LBL_EXTENSION_STORE' => 'Расширение магазин',
+    'LBL_EXTENSION_STORE' => 'Магазин расширений',
+    // SalesPlatform.ru end
         'LBL_INSTALLED' => 'Установленная',
         'LBL_UPDATE_CARD_DETAILS' => 'Обновить данные карты',
         'LBL_BY' => 'По',

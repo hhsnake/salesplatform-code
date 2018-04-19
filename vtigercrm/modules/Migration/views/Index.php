@@ -27,7 +27,9 @@ class Migration_Index_View extends Vtiger_View_Controller {
 
 	public function process(Vtiger_Request $request) {
 		// Override error reporting to production mode
-		version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT); 
+		version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+		// Migration could be heavy at-times.
+		set_time_limit(0);	
 
 		$mode = $request->getMode();
 		if(!empty($mode)) {
@@ -94,10 +96,6 @@ class Migration_Index_View extends Vtiger_View_Controller {
 	}
 
 	public function applyDBChanges(){
-        //SalesPlatform.ru begin: set infinity time limit to success update DB
-        set_time_limit(0);
-        //SalesPlatform.ru end
-            
 		$migrationModuleModel = Migration_Module_Model::getInstance();
 
 		$getAllowedMigrationVersions = $migrationModuleModel->getAllowedMigrationVersions();
@@ -153,8 +151,11 @@ class Migration_Index_View extends Vtiger_View_Controller {
 		// To carry out all the necessary actions after migration
 		$migrationModuleModel->postMigrateActivities();
 	}
-
-	public static function ExecuteQuery($query, $params){
+        
+        // SalesPlatform.ru begin
+	//public static function ExecuteQuery($query, $params){
+	public static function ExecuteQuery($query, $params = array()){
+        // SalesPlatform.ru end
 		$adb = PearDatabase::getInstance();
 		$status = $adb->pquery($query, $params);
 		if(!defined('INSTALLATION_MODE')) {

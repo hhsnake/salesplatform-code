@@ -17,13 +17,19 @@ $languageStrings = Array(
     'LBL_FEED_SOURCE' => 'RSS источник',
     'LBL_ENTER_FEED_SOURCE' => 'Введите источник',  
     'SINGLE_Rss' => 'RSS-лента',    
-    'Rss'=>'Rss',    
+    'Rss'=>'Rss',
+    // SalesPlatform.ru begin
+    'List' => 'Список',
+    // SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(
 	'JS_RSS_SUCCESSFULLY_SAVED' => 'RSS успешно сохранены',
     'JS_INVALID_RSS_URL' => 'Неверный RSS адрес',
-    'JS_RSS_MADE_AS_DEFAULT' => 'RSS Сделано Использовать по умолчанию',    
+    // SalesPlatform.ru begin fix localization
+    'JS_RSS_MADE_AS_DEFAULT' => 'RSS источник успешно установлен по умолчанию',
+    // 'JS_RSS_MADE_AS_DEFAULT' => 'RSS Сделано Использовать по умолчанию',
+    // SalesPlatform.ru end    
     'JS_NO_RECORDS' => 'Нет записей',    
     
 );

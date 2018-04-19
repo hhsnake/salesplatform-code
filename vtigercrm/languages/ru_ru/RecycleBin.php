@@ -18,6 +18,7 @@ $languageStrings = array(
         'Recycle Bin' => 'Корзина',   
         //SalesPlatform.ru begin localization fix
         'LBL_SEARCH_FOR_MODULES' => 'Поиск для модулей',
+        'List' => 'Список',
         //SalesPlatform.ru end localization fix
 );
 $jsLanguageStrings = array(

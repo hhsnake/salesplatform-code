@@ -394,7 +394,10 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		$tabid = $this->getTabId();
 		require('user_privileges/user_privileges_'.$this->user->id.'.php');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
-			$sql = "select *, '0' as readonly from vtiger_field where tabid =? and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4,5,6)";
+            //SalesPlatform.ru begin
+			$sql = "select *, '0' as readonly from vtiger_field where tabid =? and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4,5,6) and vtiger_field.presence in (0,2)";
+            //$sql = "select *, '0' as readonly from vtiger_field where tabid =? and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4,5,6)";
+            //SalesPlatform.ru end
 			$params = array($tabid, $block);	
 		}else{
 			$profileList = getCurrentUserProfileList();
@@ -551,6 +554,13 @@ class VtigerCRMObjectMeta extends EntityMeta {
 	
 	public function isModuleEntity() {
 		return true;
+	}
+
+	public function isDuplicatesAllowed() {
+		if (!isset($this->allowDuplicates)) {
+			$this->allowDuplicates = vtws_isDuplicatesAllowed($this->webserviceObject);
+		}
+		return $this->allowDuplicates;
 	}
 
 }

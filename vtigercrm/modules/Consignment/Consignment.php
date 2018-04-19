@@ -90,9 +90,9 @@ class Consignment extends Vtiger_CRMEntity {
 	// For Alphabetical search
 	var $def_basicsearch_col = 'consignment_no';
         
-        //SalesPlatform.ru begin fix empty updating line items from handlers 
-        var $isLineItemUpdate = true;
-        //SalesPlatform.ru end
+    //SalesPlatform.ru begin fix empty updating line items from handlers 
+    var $isLineItemUpdate = true;
+    //SalesPlatform.ru end
         
         
 	/**	Constructor which will set the column_fields in this object
@@ -121,10 +121,17 @@ class Consignment extends Vtiger_CRMEntity {
 	{
         //in ajax save we should not call this function, because this will delete all the existing product values
         if(isset($_REQUEST)) {
+            //SalesPlatform.ru begin
+            if (isset($_REQUEST['REQUEST_FROM_WS']) && $_REQUEST['REQUEST_FROM_WS']) {
+                unset($_REQUEST['totalProductCount']);
+            }
+            //SalesPlatform.ru end
+            
+            
             //SalesPlatform.ru begin fix empty updating line items from handlers
             if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
                 && $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
-                && $this->isLineItemUpdate != false)
+                && $this->isLineItemUpdate != false && $_REQUEST['action'] != 'FROM_WS')
             {
                 //if($_REQUEST['action'] != 'ConsignmentAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
                 //		&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
@@ -294,6 +301,11 @@ class Consignment extends Vtiger_CRMEntity {
 			left join vtiger_invoice as vtiger_invoiceConsignment on vtiger_invoiceConsignment.invoiceid = vtiger_sp_consignment.invoiceid ";
                  */
                 // SalesPlatform.ru end
+        
+        //SalesPlatform.ru begin
+        $query .= $this->getReportsUiType10Query($secmodule, $queryplanner);
+        //SalesPlatform.ru end
+        
 		return $query;
 	}
 
@@ -318,6 +330,10 @@ class Consignment extends Vtiger_CRMEntity {
 		
 		if($return_module == 'Accounts' || $return_module == 'Contacts') {
 			$this->trash('Consignment',$id);
+        //SalesPlatform.ru begin
+        } else if($return_module === 'Invoice') {
+            $this->db->pquery('UPDATE vtiger_sp_consignment set invoiceid=0 where consignmentid=?', array($id));
+        //SalesPlatform.ru end
 		} elseif($return_module=='SalesOrder') {
 			$relation_query = 'UPDATE vtiger_sp_consignment set salesorderid=0 where consignmentid=?';
 			$this->db->pquery($relation_query, array($id));
@@ -538,6 +554,29 @@ class Consignment extends Vtiger_CRMEntity {
                 return $query;
         }
         // SalesPlatform.ru end
+        
+        //SalesPlatform.ru begin
+        /*Function to create records in current module.
+        **This function called while importing records to this module*/
+        function createRecords($obj) {
+            $createRecords = createRecords($obj);
+            return $createRecords;
+        }
+
+        /*Function returns the record information which means whether the record is imported or not
+        **This function called while importing records to this module*/
+        function importRecord($obj, $inventoryFieldData, $lineItemDetails) {
+            $entityInfo = importRecord($obj, $inventoryFieldData, $lineItemDetails);
+            return $entityInfo;
+        }
+
+        /*Function to return the status count of imported records in current module.
+        **This function called while importing records to this module*/
+        function getImportStatusCount($obj) {
+            $statusCount = getImportStatusCount($obj);
+            return $statusCount;
+        }
+        //SalesPlatform.ru end
 }
 
 ?>

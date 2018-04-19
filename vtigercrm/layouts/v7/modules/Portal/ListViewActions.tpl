@@ -13,7 +13,10 @@
 
 
 {strip}
-    <div class="listViewActionsContainer" id="listview-actions">
+    {* SalesPlatform.ru begin *}
+    <div class="listViewActionsContainer marginTop10px" id="listview-actions">
+    {* <div class="listViewActionsContainer" id="listview-actions"> *}
+    {* SalesPlatform.ru end *}
         <div class="row">
             <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                 <div class="btn-group col-md-3" role="group" araia-label="Portal actions">

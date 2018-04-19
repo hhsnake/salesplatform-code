@@ -128,7 +128,7 @@ Vtiger.Class('Vtiger_Widget_Js',{
         widgetContent.css({height: widgetContent.height()-40});
 	},
     
-    postResizeWidget : function() {
+	postResizeWidget : function() {
 		if(!this.isEmptyData()) {
 			this.loadChart();
             this.postInitializeCalls();
@@ -279,7 +279,10 @@ Vtiger.Class('Vtiger_Widget_Js',{
 
 	registerWidgetPostRefreshEvent : function(container) {
 		var thisInstance = this;
-		container.on(Vtiger_Widget_Js.widgetPostRefereshEvent, function(e) {
+        //SalesPlatform.ru begin
+		container.off(Vtiger_Widget_Js.widgetPostRefereshEvent).on(Vtiger_Widget_Js.widgetPostRefereshEvent, function(e) {
+        //container.on(Vtiger_Widget_Js.widgetPostRefereshEvent, function(e) {
+        //SalesPlatform.ru end    
 			thisInstance.postRefreshWidget();
 		});
 	},
@@ -305,6 +308,14 @@ Vtiger_Widget_Js('Vtiger_KeyMetrics_Widget_Js', {}, {
         var adjustedHeight = this.getContainer().height()-50;
         app.helper.showVerticalScroll(widgetContent,{'setHeight' : adjustedHeight});
 		widgetContent.css({height: widgetContent.height()-40});
+	},
+
+	postResizeWidget: function () {
+		var widgetContent = jQuery('.dashboardWidgetContent', this.getContainer());
+		var slimScrollDiv = jQuery('.slimScrollDiv', this.getContainer());
+		var adjustedHeight = this.getContainer().height() - 20;
+		widgetContent.css({height: adjustedHeight});
+		slimScrollDiv.css({height: adjustedHeight});
 	}
 });
 
@@ -512,8 +523,12 @@ Vtiger_Widget_Js('Vtiger_Funnel_Widget_Js',{},{
             },
             legend: {
                 show: true,
-                location: 'en',
-                placement: 'outside',
+                //SalesPlatform.ru begin
+                location: 'e',
+                placement: 'outsideGrid',
+                //location: 'en',
+                //placement: 'outside',
+                //SalesPlatform.ru end
                 labels:labels,
                 xoffset:20
             }
@@ -522,6 +537,7 @@ Vtiger_Widget_Js('Vtiger_Funnel_Widget_Js',{},{
     //SalesPlatform.ru end
     
 });
+
 
 
 Vtiger_Widget_Js('Vtiger_Pie_Widget_Js',{},{
@@ -637,8 +653,22 @@ Vtiger_Widget_Js('Vtiger_Barchat_Widget_Js',{},{
     loadChart : function() {
         var data = this.generateChartData();
         //SalesPlatform.ru begin
+        var chartData = data['chartData'];
+        var yaxis = {
+            min:0,
+            max: data['yMaxValue'],
+            tickOptions: {
+                formatString: '%.2f'
+            },
+            pad : 1.2
+        };
+        
+        /* we using format string with %d, so if max value less than 5
+         * y-axis values will be duplicated (0,1,1,2,2,3,..) instead of (0,1,2,3,...)
+         */
+        yaxis['numberTicks'] = 5;
 
-        this.getPlotContainer(false).jqplot(data['chartData'] , {
+        this.getPlotContainer(false).jqplot(chartData , {
             title: data['title'],
             animate: !$.jqplot.use_excanvas,
             seriesDefaults:{
@@ -660,19 +690,15 @@ Vtiger_Widget_Js('Vtiger_Barchat_Widget_Js',{},{
                         angle: -45
                     }
                 },
-                yaxis: {
-                    min:0,
-                    max: data['yMaxValue'],
-                    tickOptions: {
-                        formatString: '%d'
-                    },
-                    pad : 1.2
-                }
+                yaxis: yaxis
             },
             legend: {
                 show            : (data['data_labels']) ? true:false,
                 location	: 'e',
-                placement	: 'outside',
+                //SalesPaltform.ru begin
+                placement	: (data['data_labels']) ? 'outsideGrid' : 'outside',
+                //placement	: 'outside',
+                //SalesPatlform.ru end
                 showLabels	: (data['data_labels']) ? true:false,
                 showSwatch	: (data['data_labels']) ? true:false,
                 labels		: data['data_labels']
@@ -867,6 +893,14 @@ Vtiger_Widget_Js('Vtiger_TagCloud_Widget_Js',{},{
 	postRefreshWidget : function() {
 		this._super();
 		this.registerTagCloud();
+	},
+
+	postResizeWidget: function () {
+		var widgetContent = jQuery('.dashboardWidgetContent', this.getContainer());
+		var slimScrollDiv = jQuery('.slimScrollDiv', this.getContainer());
+		var adjustedHeight = this.getContainer().height() - 20;
+		widgetContent.css({height: adjustedHeight});
+		slimScrollDiv.css({height: adjustedHeight});
 	}
 });
 

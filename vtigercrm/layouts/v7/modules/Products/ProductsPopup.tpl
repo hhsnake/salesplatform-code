@@ -12,7 +12,10 @@
 <div class = "productsBundlePopup">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            {include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE=$MODULE}
+            {*SalesPlatform.ru begin*}
+            {include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE={vtranslate($MODULE, $MODULE)}}
+            {*{include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE=$MODULE}*}
+            {*SalesPlatform.ru end*}
                 <form id="popupPage" action="javascript:void(0)">
                     <div class="modal-body">
                         <div id="popupPageContainer" class="contentsDiv paddingTop10 col-sm-12">
@@ -43,7 +46,7 @@
                             <center>
                                 <footer>
                                     <button class="btn btn-success addProducts" type="submit">
-                                        <i class="fa fa-plus"></i>&nbsp;
+                                        <i class="fa fa-plus"></i>&nbsp;&nbsp;
                                         <strong>{vtranslate('LBL_ADD_TO_PRODUCTS',$MODULE)}</strong>
                                     </button>
                                     <a class="cancelLink" data-dismiss="modal">{vtranslate('LBL_CANCEL', $MODULE)}</a>

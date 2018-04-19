@@ -107,6 +107,8 @@ $languageStrings = Array (
     'Comment'                                   =>  'Комментарий',
     'Field'                                     =>  'Поле',
     'New value'                                 =>  'Новое значение',
+    'Vkontakte Message ID' => 'ID сообщения Vkontakte',
+    'Twitter Message ID' => 'ID сообщения Twitter'
 );
 
 // SalesPlatform.ru begin SPConfiguration fix

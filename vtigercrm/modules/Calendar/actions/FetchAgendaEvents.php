@@ -47,7 +47,7 @@ class Calendar_FetchAgendaEvents_Action extends Vtiger_BasicAjax_Action {
 
 		$query.= " AND vtiger_crmentity.smownerid IN (".generateQuestionMarks($params).")";
 		$query.= ' ORDER BY time_start';
-                
+
 		$queryResult = $db->pquery($query, $params);
         //SalesPlatform.ru begin
         $moduleName = $request->getModule();

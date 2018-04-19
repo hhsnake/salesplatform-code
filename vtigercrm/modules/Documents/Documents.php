@@ -71,7 +71,7 @@ class Documents extends CRMEntity {
 	var $default_order_by = 'title';
 	var $default_sort_order = 'ASC';
 	function Documents() {
-		$this->log = LoggerManager::getlogger('notes');
+		$this->log = LoggerManager::getLogger('notes');
 		$this->log->debug("Entering Documents() method ...");
 		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Documents');
@@ -294,7 +294,7 @@ class Documents extends CRMEntity {
 	function del_create_def_folder($query)
 	{
 		global $adb;
-		$dbQuery = $query." and vtiger_attachmentsfolderfolderid.folderid = 0";
+		$dbQuery = $query." AND vtiger_attachmentsfolder.folderid = 0";
 		$dbresult = $adb->pquery($dbQuery,array());
 		$noofnotes = $adb->num_rows($dbresult);
 		if($noofnotes > 0)
@@ -351,6 +351,8 @@ class Documents extends CRMEntity {
 		if ($queryplanner->requireTable("vtiger_lastModifiedBy".$module)){
 			$query .= " left join vtiger_users as vtiger_lastModifiedBy".$module." on vtiger_lastModifiedBy".$module.".id = vtiger_crmentity.modifiedby ";
 		}
+		$relQuery = $this->getReportsUiType10Query($module,$queryplanner);
+		$query .= ' '.$relQuery;
 		return $query;
 
 	}
@@ -391,6 +393,10 @@ class Documents extends CRMEntity {
 		if ($queryplanner->requireTable("vtiger_createdbyDocuments")){
 			$query .= " left join vtiger_users as vtiger_createdbyDocuments on vtiger_createdbyDocuments.id = vtiger_crmentityDocuments.smcreatorid ";
 		}
+
+		//if secondary modules custom reference field is selected
+        $query .= parent::getReportsUiType10Query($secmodule, $queryplanner);
+        
 		return $query;
 	}
 

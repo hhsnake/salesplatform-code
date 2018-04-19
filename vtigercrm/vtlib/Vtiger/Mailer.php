@@ -26,6 +26,7 @@ class Vtiger_Mailer extends PHPMailer {
 	 * Constructor
 	 */
 	function __construct() {
+		parent::__construct();
 		$this->initialize();
 	}
 
@@ -43,6 +44,7 @@ class Vtiger_Mailer extends PHPMailer {
 	 * @access private
 	 */
 	function initialize() {
+		$this->Timeout = 30; /* Issue #155: to allow anti-spam tech be successful */
 		$this->IsSMTP();
 
 		global $adb;
@@ -53,23 +55,23 @@ class Vtiger_Mailer extends PHPMailer {
 			$this->Password = decode_html($adb->query_result($result, 0, 'server_password'));
 			$this->SMTPAuth = $adb->query_result($result, 0, 'smtp_auth');
 
-            // SalesPlatform.ru begin
-            $this->Port = $adb->query_result($result, 0, 'server_port');
-            $server_tls = $adb->query_result($result, 0, 'server_tls');
-            if ($server_tls != "no") {
-                $this->SMTPSecure = $server_tls;
-            }
-            // SalesPlatform.ru end
+			// SalesPlatform.ru begin
+			$this->Port = $adb->query_result($result, 0, 'server_port');
+			$server_tls = $adb->query_result($result, 0, 'server_tls');
+			if ($server_tls != "no") {
+			    $this->SMTPSecure = $server_tls;
+			}
+			// SalesPlatform.ru end
 
-            // To support TLS
-            $hostinfo = explode("://", $this->Host);
-            $smtpsecure = $hostinfo[0];
-            if($smtpsecure == 'tls'){
-                $this->SMTPSecure = $smtpsecure;
-                $this->Host = $hostinfo[1];
-            }
-            // End
-            
+			// To support TLS
+			$hostinfo = explode("://", $this->Host);
+			$smtpsecure = $hostinfo[0];
+			if($smtpsecure == 'tls'){
+				$this->SMTPSecure = $smtpsecure;
+				$this->Host = $hostinfo[1];
+			}
+			// End
+
 			if(empty($this->SMTPAuth)) $this->SMTPAuth = false;
 
 			$this->ConfigSenderInfo($adb->query_result($result, 0, 'from_email_field'));
@@ -86,9 +88,11 @@ class Vtiger_Mailer extends PHPMailer {
 	function reinitialize() {
 		$this->ClearAllRecipients();
 		$this->ClearReplyTos();
+		$this->ClearCustomHeaders();
 		$this->Body = '';
 		$this->Subject ='';
 		$this->ClearAttachments();
+		$this->ErrorInfo = '';
 	}
 
 	/**

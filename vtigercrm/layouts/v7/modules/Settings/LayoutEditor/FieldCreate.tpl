@@ -70,7 +70,7 @@
 							&nbsp;<span class="redColor">*</span>
 						</label>
 						<div class="controls col-sm-7">
-							<input type="text" class='inputElement col-sm-9' maxlength="50" name="fieldLabel" value="{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}" data-rule-required='true' style='width: 75%' />
+							<input type="text" class='inputElement col-sm-9' maxlength="50" {if $IS_FIELD_EDIT_MODE}disabled="disabled"{/if} name="fieldLabel" value="{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}" data-rule-required='true' style='width: 75%' />
 						</div>
 					</div>
 					{if !$IS_FIELD_EDIT_MODE}
@@ -142,7 +142,10 @@
 								<label class="checkbox">
 									<input type="checkbox" class ='cursorPointer bootstrap-switch' id="fieldPresence" name="presence" {if $FIELD_MODEL->isViewable()} checked {/if}
 										{if $FIELD_MODEL->isActiveOptionDisabled()} readonly="readonly" {/if} {if $FIELD_MODEL->isMandatory()} readonly="readonly" {/if}
-										data-on-text="Yes" data-off-text="No" value="{$FIELD_MODEL->get('presence')}"/>
+										{* SalesPlatform.ru begin *}
+                                        {* data-on-text="Yes" data-off-text="No" value="{$FIELD_MODEL->get('presence')}"/> *}
+                                        data-on-text="{vtranslate('LBL_YES')}" data-off-text="{vtranslate("LBL_NO")}" value="{$FIELD_MODEL->get('presence')}"/>
+                                        {* SalesPlatform.ru end *}
 								</label>
 							</div>
 						</div>
@@ -173,7 +176,7 @@
 								</div>
 								<div class="form-group col-sm-6">
 									<label class="control-label fieldLabel col-sm-7">
-										<i class="fa fa-plus"></i> &nbsp; {vtranslate('LBL_QUICK_CREATE',$QUALIFIED_MODULE)}
+										<i class="fa fa-plus"></i>&nbsp;&nbsp;{vtranslate('LBL_QUICK_CREATE',$QUALIFIED_MODULE)}
 									</label>
 									<div class="controls col-sm-5">
 										{if $FIELD_MODEL->isQuickCreateOptionDisabled()}
@@ -218,9 +221,9 @@
 							</div>
 							<div class="row">
 								<div class="form-group col-sm-7">
-									<span class="control-label fieldLabel col-sm-10">
+									<label class="control-label fieldLabel col-sm-10">
 										<img src="{vimage_path('MassEdit.png')}" height=14 width=14/> &nbsp; {vtranslate('LBL_MASS_EDIT',$QUALIFIED_MODULE)}
-									</span>
+									</label>
 									<div class="controls col-sm-2">
 										{if $FIELD_MODEL->isMassEditOptionDisabled()}
 											<input type="hidden" name="masseditable" value={$FIELD_MODEL->get('masseditable')} />

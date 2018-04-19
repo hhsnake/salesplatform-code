@@ -62,6 +62,16 @@ $languageStrings = array(
     'Circuit/channel congestion' => 'Линия занята',
     'Incoming Line Name' => 'Входящая линия',
     //SalesPlatform.ru end
+    
+    //SalesPlatform.ru begin
+    'Recording url' => 'Ссылка на запись разговора (ВАТС)',
+    'Is recorded' => 'Запись разговора сохранена (ВАТС)',
+    'Recorder call id' => 'Идентификатор записи (ВАТС)',
+    'Provider' => 'ВАТС',
+    'Status code' => 'Внутрениий статус (ВАТС)',
+    'From number' => 'Звонок от (ВАТС)',
+    'To number' => 'Номер, на который позвонили (ВАТС)',
+    //SalesPlatform.ru end
 );
 
 //SalesPlatform.ru begin

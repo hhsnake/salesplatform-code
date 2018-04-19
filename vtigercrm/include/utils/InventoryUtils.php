@@ -216,6 +216,10 @@ function addInventoryHistory($module, $id, $relatedname, $total, $history_fldval
 	$log->debug("Entering into function addInventoryHistory($module, $id, $relatedname, $total, $history_fieldvalue)");
 
 	$history_table_array = Array(
+                    // SalesPlatform.ru begin Added Acts and Consignments
+                    "Act" => "vtiger_sp_actstatushistory",
+                    "Consignment" => "vtiger_sp_consignmentstatushistory",
+                    // SalesPlatform.ru end
 					"PurchaseOrder"=>"vtiger_postatushistory",
 					"SalesOrder"=>"vtiger_sostatushistory",
 					"Quotes"=>"vtiger_quotestagehistory",

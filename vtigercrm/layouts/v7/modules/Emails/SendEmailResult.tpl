@@ -12,7 +12,10 @@
 
 <div class="modal-dialog">
 	<div class="modal-content">
-		{include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE=vtranslate('Result', 'Vtiger')} 
+            {* SalesPlatform.ru begin *}
+		{*{include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE="Result"}*}
+            {include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE={vtranslate("Result")}} 
+            {* SalesPlatform.ru end *}
 		<div class="modal-body">
 			{if $SUCCESS}
 				<div class="mailSentSuccessfully" data-relatedload="{$RELATED_LOAD}">

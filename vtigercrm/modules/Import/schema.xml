@@ -23,6 +23,8 @@
   `merge_type` int(11) DEFAULT NULL,
   `merge_fields` text,
   `status` int(11) DEFAULT '0',
+  `lineitem_currency_id` int(5) DEFAULT NULL,
+  `paging` int(1) DEFAULT '0',
   PRIMARY KEY (`importid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 		</table>

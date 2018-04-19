@@ -66,7 +66,10 @@ class Settings_Search_RecordSearchLabelUpdater_Handler extends VTEventHandler {
 				$otherquery ='';
 				foreach ($moduleothertables as $othertable => $otherindex) {
 					if (isset($moduleothertables)) {
-						$otherquery .= " LEFT JOIN $othertable ON $othertable.$otherindex=$table.$idcolumn";
+                                            // SalesPlatform.ru begin
+						//$otherquery .= " LEFT JOIN $othertable ON $othertable.$otherindex=$table.$idcolumn";
+                                            $otherquery .= " INNER JOIN $othertable ON $othertable.$otherindex=$table.$idcolumn";
+                                            // SalesPlatform.ru end
 					} 
 					else {
 						$otherquery .= '';

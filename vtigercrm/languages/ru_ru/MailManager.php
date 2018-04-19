@@ -146,8 +146,12 @@ $languageStrings = Array (
     'LBL_ADD_EVENTS' => 'Добавить Событие',
     'JSLBL_ENTER_VALID_EMAIL_ADDRESS' => 'Пожалуйста, введите действительный адрес электронной почты.',
     'JSLBL_MAILS_DELETED' => 'Почта(ы) успешно удалены.',
-    'JSLBL_MAILS_MARKED_UNREAD' => 'Почта(ы) помечены как непрочитанные.',
-    'JSLBL_MAILS_MARKED_READ' => 'Почта(ы) помечаются как прочитанные.',
+    /*
+    * SalesPlatform.ru begin fix notification
+    * 'JSLBL_MAILS_MARKED_UNREAD' => 'Почта(ы) помечены как непрочитанные.',
+    * 'JSLBL_MAILS_MARKED_READ' => 'Почта(ы) помечаются как прочитанные.',
+    * SalesPlatform.ru end fix notification
+    */
     'LBL_MAILMANAGER_ADD_Cases' => 'Добавить чехол',    
     'LBL_DELETE_CONFIRMATION' => 'Вы уверены, что хотите удалить письмо (ы) навсегда?',
     'JS_DELETE_MAILBOX_SETTINGS_CONFIRMATION' => 'Вы уверены, что хотите удалить?',
@@ -219,6 +223,10 @@ $jsLanguageStrings = Array (
 	'JSLBL_MOVING'=>'Перемещение писем(письма)',
 	'JSLBL_LOADING_FOLDERS' => 'Загрузка папок..',
 	'JSLBL_ADD_COMMENT'=>'Добавить комментарий',
+        //SalesPlatform.ru begin fix notification
+        'JSLBL_MAILS_MARKED_UNREAD' => 'Почта(ы) помечены как непрочитанные.',
+        'JSLBL_MAILS_MARKED_READ' => 'Почта(ы) помечаются как прочитанные.',
+        //SalesPlatform.ru end fix notification
     'JSLBL_Yahoo'=>'Yahoo',
     'JSLBL_CANNOT_ADD_EMPTY_COMMENT' => 'Комментарий не может быть пустым',
     'JSLBL_NO_EMAILS_SELECTED' => 'Письма не выбраны.',

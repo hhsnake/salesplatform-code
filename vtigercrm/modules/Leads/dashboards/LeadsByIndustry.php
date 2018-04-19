@@ -38,10 +38,7 @@ class Leads_LeadsByIndustry_Dashboard extends Vtiger_IndexAjax_View {
 		$data = $moduleModel->getLeadsByIndustry($request->get('smownerid'),$dates);
         $listViewUrl = $moduleModel->getListViewUrlWithAllFilter();
         for($i = 0;$i<count($data);$i++){
-            //SalesPlatform.ru begin fix filters
-            $data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][2],$request->get('smownerid'),$dates);
-            //$data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][1],$request->get('smownerid'),$dates);
-            //SalesPlatform.ru end
+            $data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][2],$request->get('smownerid'), $request->get('dateFilter')).'&nolistcache=1';
         }
 
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());

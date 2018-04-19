@@ -33,7 +33,7 @@ class SMSNotifier_Record_Model extends Vtiger_Record_Model {
 	}
 
 	public function getCheckStatusUrl() {
-		return "module=".$this->getModuleName()."&view=CheckStatus&record=".$this->getId();
+		return "index.php?module=".$this->getModuleName()."&view=CheckStatus&record=".$this->getId();
 	}
 
 	public function getColorForStatus($smsStatus) {

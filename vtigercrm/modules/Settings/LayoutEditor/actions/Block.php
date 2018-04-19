@@ -81,7 +81,10 @@ class Settings_LayoutEditor_Block_Action extends Settings_Vtiger_Index_Action {
         $blockId = $request->get('blockid');
         $checkIfFieldsExists = Vtiger_Block_Model::checkFieldsExists($blockId);
         if($checkIfFieldsExists) {
-            $response->setError('502','Fields exists for the block');
+            //SalesPlatform.ru begin
+            // $response->setError('502','Fields exists for the block');
+            $response->setError('502', vtranslate('LBL_FIELDS_EXIST_FOR_THE_BLOCK', $request->getModule(false)));
+            //SalesPlatform.ru end
             $response->emit();
             return;
         }
@@ -95,7 +98,9 @@ class Settings_LayoutEditor_Block_Action extends Settings_Vtiger_Index_Action {
             $sourceModule = $blockInstance->get('module')->name;
             $blockLabel = $blockInstance->get('label');
             $blockInstance->delete(false);
-            Settings_LayoutEditor_Module_Model::removeLabelFromLangFile($sourceModule, $blockLabel);
+            //SalesPlatform.ru begin
+            //Settings_LayoutEditor_Module_Model::removeLabelFromLangFile($sourceModule, $blockLabel);
+            //SalesPlatform.ru end
             $response->setResult(array('success'=>true));
         }catch(Exception $e) {
             $response->setError($e->getCode(),$e->getMessage());

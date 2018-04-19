@@ -19,7 +19,7 @@
 					<h4>{vtranslate('LBL_SYSTEM_CONFIGURATION', 'Install')} </h4>
 				</div>
 				<div class="col-sm-2">
-					<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">
+					<a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_7" target="_blank" class="pull-right">
 						<img src="{'help.png'|vimage_path}" alt="Help-Icon"/>
 					</a>
 				</div>
@@ -174,7 +174,7 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="button-container">
-						<input type="button" class="btn btn-large" value="{vtranslate('LBL_BACK','Install')}" name="back"/>
+						<input type="button" class="btn btn-default" value="{vtranslate('LBL_BACK','Install')}" name="back"/>
 						<input type="button" class="btn btn-large btn-primary" value="{vtranslate('LBL_NEXT','Install')}" name="step5"/>
 					</div>
 				</div>

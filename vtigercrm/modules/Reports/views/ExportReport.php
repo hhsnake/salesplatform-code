@@ -72,8 +72,8 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 	 * @param Vtiger_Request $request
 	 */
 	function GetCSV(Vtiger_Request $request) {
-        $recordId = $request->get('record');
-        $reportModel = Reports_Record_Model::getInstanceById($recordId);
+		$recordId = $request->get('record');
+		$reportModel = Reports_Record_Model::getInstanceById($recordId);
         //SalesPlatform.ru begin #4177
         if(AbstractCustomReportModel::isCustomReport($reportModel)) {
             $customReport = AbstractCustomReportModel::getInstance($reportModel);

@@ -56,10 +56,10 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	 */
         
 	// SalesPlatform.ru begin added support presence/sequence
-	function setRelatedList($moduleInstance, $label='', $actions=false, $function_name='get_related_list', $presence = '', $sequence = '') {
-        //function setRelatedList($moduleInstance, $label='', $actions=false, $function_name='get_related_list') {
+	function setRelatedList($moduleInstance, $label='', $actions=false, $function_name='get_related_list', $fieldId = null, $presence = '', $sequence = '') {
+        //function setRelatedList($moduleInstance, $label = '', $actions = false, $function_name = 'get_related_list', $fieldId = null) {
         // SalesPlatform.ru end
-                global $adb;
+		global $adb;
 
 		if(empty($moduleInstance)) return;
 
@@ -95,9 +95,9 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		// Add column to vtiger_relatedlists to save extended actions
 		Vtiger_Utils::AddColumn('vtiger_relatedlists', 'actions', 'VARCHAR(50)');
 
-		//SalesPlatform.ru begin add relationfield in vtiger_relatedlists table
+        //SalesPlatform.ru begin add relationfield in vtiger_relatedlists table
         $fieldId = null;
-        if($function_name == 'get_dependent_list') {
+        if($function_name == 'get_dependents_list') {
             $result = $adb->pquery("SELECT fieldid FROM vtiger_fieldmodulerel WHERE module=? and relmodule=?", array($moduleInstance->name, $this->name));
             if($result && $resultRow = $adb->fetchByAssoc($result)){
                 $fieldId = $resultRow['fieldid'];

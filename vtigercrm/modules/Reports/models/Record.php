@@ -789,9 +789,9 @@ class Reports_Record_Model extends Vtiger_Record_Model {
             return '';
         } else {
         //SalesPlatform.ru end 
-            $reportRun = ReportRun::getInstance($this->getId());
-            $sql = $reportRun->sGetSQLforReport($this->getId(), $advancedFilterSQL, $format);
-            return $sql;
+		$reportRun = ReportRun::getInstance($this->getId());
+		$sql = $reportRun->sGetSQLforReport($this->getId(), $advancedFilterSQL, $format);
+		return $sql;
         //SalesPlatform.ru begin
         }
         //SalesPlatform.ru end
@@ -835,34 +835,34 @@ class Reports_Record_Model extends Vtiger_Record_Model {
             return $customReportModel->getData('HTML');
         } else {
         //SalesPlatform.ru end 
-            $reportRun = ReportRun::getInstance($this->getId());
-            $data = $reportRun->GenerateReport('PDF', $filterQuery, true, $pagingModel->getStartIndex(), $pagingModel->getPageLimit());
-            return $data;
+		$reportRun = ReportRun::getInstance($this->getId());
+		$data = $reportRun->GenerateReport('PDF', $filterQuery, true, $pagingModel->getStartIndex(), $pagingModel->getPageLimit());
+		return $data;
         //SalesPlatform.ru begin
         }
         //SalesPlatform.ru end
 	}
 
-    function getReportsCount($query = null){
+	function getReportsCount($query = null){
         //SalesPlatform.ru begin
         if(AbstractCustomReportModel::isCustomReport($this)) {
             $customReportModel = AbstractCustomReportModel::getInstance($this);
             return $customReportModel->getCount();
         } else {
         //SalesPlatform.ru end 
-            if($query == null)
-                $query = $this->get('recordCountQuery');
-            global $adb;
-            $count = 0;
-            $result = $adb->query($query, array());
-            if($adb->num_rows($result) > 0 ){
-                $count = $adb->query_result($result, 0, 'count');
-            }
-            return $count;
+		if($query == null)
+			$query = $this->get('recordCountQuery');
+		global $adb;
+		$count = 0;
+		$result = $adb->query($query, array());
+		if($adb->num_rows($result) > 0 ){
+			$count = $adb->query_result($result, 0, 'count');
+		}
+		return $count;
         //SalesPlatform.ru begin
         } 
         //SalesPlatform.ru end
-    }
+	}
 
 	function getReportCalulationData($filterQuery = false) {
         //SalesPlatform.ru begin
@@ -871,9 +871,9 @@ class Reports_Record_Model extends Vtiger_Record_Model {
             return $customReportModel->getReportCalulationData();
         } else {
         //SalesPlatform.ru end 
-            $reportRun = ReportRun::getInstance($this->getId());
-            $data = $reportRun->GenerateReport('TOTALXLS', $filterQuery, true);
-            return $data;
+		$reportRun = ReportRun::getInstance($this->getId());
+		$data = $reportRun->GenerateReport('TOTALXLS', $filterQuery, true);
+		return $data;
         //SalesPlatform.ru begin
         }
         //SalesPlatform.ru end
@@ -954,8 +954,8 @@ class Reports_Record_Model extends Vtiger_Record_Model {
             $data['total'] = $customReportModel->getTotalPrintData();
         } else {
         //SalesPlatform.ru end
-            $data['data'] = $reportRun->GenerateReport('PRINT', $advanceFilterSql);
-            $data['total'] = $reportRun->GenerateReport('PRINT_TOTAL', $advanceFilterSql);
+		$data['data'] = $reportRun->GenerateReport('PRINT', $advanceFilterSql);
+		$data['total'] = $reportRun->GenerateReport('PRINT_TOTAL', $advanceFilterSql);
         //SalesPlatform.ru begin
         }
         //SalesPlatform.ru end
@@ -1191,8 +1191,11 @@ class Reports_Record_Model extends Vtiger_Record_Model {
             return $customReportModel->getData('HTML');
         } else {
         //SalesPlatform.ru end 
-            $filterQuery = $this->getAdvancedFilterSQL();
-            return $this->getReportData($pagingModel, $filterQuery);
+		$filterQuery = $this->getAdvancedFilterSQL();
+		if (!$filterQuery) {
+			$filterQuery = true;
+		}
+		return $this->getReportData($pagingModel, $filterQuery);
         //SalesPlatform.ru begin
         }
         //SalesPlatform.ru end
@@ -1210,8 +1213,8 @@ class Reports_Record_Model extends Vtiger_Record_Model {
             return $customReportModel->getReportCalulationData();
         } else {
         //SalesPlatform.ru end 
-            $filterQuery = $this->getAdvancedFilterSQL();
-            return $this->getReportCalulationData($filterQuery);
+		$filterQuery = $this->getAdvancedFilterSQL();
+		return $this->getReportCalulationData($filterQuery);
         //SalesPlatform.ru begin
         }
         //SalesPlatform.ru end

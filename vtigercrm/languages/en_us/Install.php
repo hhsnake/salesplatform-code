@@ -11,10 +11,14 @@
 $languageStrings = array(
 	'ERR_DATABASE_CONNECTION_FAILED' => 'Unable to connect to database Server',
 	'ERR_DB_NOT_FOUND' => 'This Database is not found.Try changing the Database settings',
+	'ERR_DB_NOT_UTF8'  => 'Database charset or collation not compatible with UTF8',
 	'ERR_INVALID_MYSQL_PARAMETERS' => 'Invalid mySQL Connection Parameters specified',
 	'ERR_INVALID_MYSQL_VERSION' => 'MySQL version is not supported, kindly connect to MySQL 5.1.x or above',
 	'ERR_UNABLE_CREATE_DATABASE' => 'Unable to Create database',
-	'LBL_ADMIN_INFORMATION'=>'Admin User Information',
+        // SalesPlatform.ru begin #5732
+	'ERR_DB_SQLMODE_NOTFRIENDLY' => 'MySQL Server should not be configured with:<br> sql_mode = ONLY_FULL_GROUP_BY, STRICT_TRANS_TABLES, NO_ZERO_IN_DATE, NO_ZERO_DATE',
+	// SalesPlatform.ru end
+        'LBL_ADMIN_INFORMATION'=>'Admin User Information',
 	'LBL_ADMIN_USER_INFORMATION' => 'Admin User Information',
 	'LBL_CHOOSE_LANGUAGE' => 'Choose the default language for this installation:',
 	'LBL_CONFIRM_CONFIGURATION_SETTINGS' => 'Confirm Configuration Settings',
@@ -61,6 +65,7 @@ $languageStrings = array(
 	'LBL_WELCOME_TO_VTIGER7_SETUP_WIZARD' => 'Welcome to Vtiger CRM 7 Setup Wizard',
 	'LBL_WELCOME' => 'Welcome',
 	'LBL_ZLIB_SUPPORT' => 'Zlib Support',
+	'LBL_SIMPLEXML' => 'SimpleXML Support',
 	'MSG_DB_PARAMETERS_INVALID' => 'specified database user, password, hostname, database type, or port is invalid',
 	'MSG_DB_ROOT_USER_NOT_AUTHORIZED' => 'Message: Specified database Root User doesn\'t have permission to Create database or the Database name has special characters. Try changing the Database settings',
 	'MSG_DB_USER_NOT_AUTHORIZED' => 'specified database user does not have access to connect to the database server from the host',
@@ -258,7 +263,12 @@ $languageStrings = array(
         'LBL_EMAIL_ORGANIZATION_ON_TICKET_CREATE' => 'Ticket Creation From CRM : Send Email to Organization',
         'LBL_TICKET_CREATION_SEND_EMAIL_TO_CONTACT' => 'Ticket Creation From CRM : Send Email to Contact',
         'LBL_COMMENT_ADDED_FROM_CRM_SEND_EMAL_ORG' => 'Comment Added From CRM : Send Email to Organization',
+        'LBL_BACK' => 'Back',
+        'NOT RECOMMENDED' => 'Not recommended parameters',
     //SalesPlatform.ru end
+        //SalesPlatform.ru begin compatibility with mysql 5.7.5+
+        'LBL_MYSQL_RECOMMENDED_SETTINGS' => 'Recommended MySQL Settings'
+        //SalesPlatform.ru end
 );
 //SalesPlatform.ru begin
 $jsLanguageStrings = array(
@@ -268,5 +278,8 @@ $jsLanguageStrings = array(
         'JS_EMPTY_MAJOR_FIELDS'      => 'Warning! Required fields missing values.',
         'JS_PLEASE_RESOLVE_ERROR'    => 'Please resolve the error before proceeding with the installation',
         'JS_YOUR_INDUSTRY'           => 'Please let us know your Industry',
+        //SalesPlatform.ru begin compatibility with mysql 5.7.5+
+        'JS_SQL_MODE_INCORRECT_VALUE'   => 'Disable strict mode controls( SET GLOBAL sql_mode = \'\' ). This might affect some of the features of vtiger CRM. Are you sure, you want to proceed? '
+        //SalesPlatform.ru end
 );
 //SalesPlatform.ru end

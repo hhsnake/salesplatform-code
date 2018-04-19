@@ -45,13 +45,23 @@ class Calendar_Field_Model extends Vtiger_Field_Model {
 	 * @return <String> Data type of the field
 	*/
 	public function getFieldDataType() {
+        //SalesPlatform.ru begin
+        $uiType = $this->get('uitype');
+        //SalesPlatform.ru end
 		if($this->getName() == 'date_start' || $this->getName() == 'due_date') {
 			return 'datetime';
 		} else if($this->get('uitype') == '30') {
 			return 'reminder';
 		} else if($this->getName() == 'recurringtype') {
 			return 'recurrence';
-		}
+        //SalesPlatform.ru begin 
+        //}
+        } else if ($uiType == '512') { 
+            return 'SPMobilePhone';
+        } else if ($uiType == '19') {
+            return 'SPTextArea';
+        }
+        //SalesPlatform.ru end
 		$webserviceField = $this->getWebserviceFieldObject();
 		return $webserviceField->getFieldDataType();
 	}

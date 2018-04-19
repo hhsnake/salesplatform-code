@@ -42,11 +42,11 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$recordIds = $this->getRecordsListFromRequest($request);
 		$documentIds = $request->get('documentids');
-        //SalesPlatform.ru begin
-        if(!is_array($documentIds)) {
-            $documentIds = [];
-        }
-        //SalesPlatform.ru end
+		//SalesPlatform.ru begin
+		if(!is_array($documentIds)) {
+		    $documentIds = [];
+		}
+		//SalesPlatform.ru end
 		$signature = $request->get('signature');
 		// This is either SENT or SAVED
 		$flag = $request->get('flag');
@@ -160,7 +160,13 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View {
 		$success = false;
 		$viewer = $this->getViewer($request);
 		if ($recordModel->checkUploadSize($documentIds)) {
+			// Fix content format acceptable to be preserved in table.
+			$decodedHtmlDescriptionToSend = $recordModel->get('description');
+			$recordModel->set('description', to_html($decodedHtmlDescriptionToSend));
 			$recordModel->save();
+
+			// Restore content to be dispatched through HTML mailer.
+			$recordModel->set('description', $decodedHtmlDescriptionToSend);
 
 			// To add entry in ModTracker for email relation
 			$emailRecordId = $recordModel->getId();

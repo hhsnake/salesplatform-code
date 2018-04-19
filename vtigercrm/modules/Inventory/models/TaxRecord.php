@@ -316,4 +316,10 @@ class Inventory_TaxRecord_Model extends Vtiger_Base_Model {
 		}
 		return $deductTaxesList;
 	}
+    
+    //SalesPlatform.ru begin
+    public static function getSelectedDefaultTaxMode() {
+        return 'individual';
+    }
+    //SalesPlatform.ru end
 }

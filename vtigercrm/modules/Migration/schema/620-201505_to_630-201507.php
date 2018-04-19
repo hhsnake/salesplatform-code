@@ -9,47 +9,46 @@
  ************************************************************************************/
 
 if(defined('VTIGER_UPGRADE')) {
+    
+	global $adb;
 
-    global $adb;
+	$query = 'SELECT DISTINCT profileid FROM vtiger_profile2utility';
+	$result = $adb->pquery($query, array());
 
-    $query = 'SELECT DISTINCT profileid FROM vtiger_profile2utility';
-    $result = $adb->pquery($query, array());
+	$tabIdsList = array(getTabid('ProjectMilestone'), getTabid('PriceBooks'));
+	$actionIdPerms = array(5 => 1, 6 => 1, 10 => 1);
 
-    $profileId = $adb->query_result($result,0,'profileid');
-    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',40,5,0)',array());
-    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',40,6,0)',array());
-    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',40,10,0)',array());
-    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',19,5,0)',array());
-    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',19,6,0)',array());
-    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',19,10,0)',array());
+	for ($i=0; $i<$adb->num_rows($result); $i++) {
+		$profileId = $adb->query_result($result, $i, 'profileid');
 
-    for($i=1; $i< $adb->num_rows($result); $i++){
-
-        $profileId = $adb->query_result($result,$i,'profileid');
-
-        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',40,5,1)',array());
-        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',40,6,1)',array());
-        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',40,10,0)',array());
-        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',19,5,1)',array());
-        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',19,6,1)',array());
-        Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',19,10,0)',array());
-
-    }
+		foreach ($tabIdsList as $tabId) {
+			foreach ($actionIdPerms as $actionId => $permission) {
+				$isExist = $adb->pquery('SELECT 1 FROM vtiger_profile2utility WHERE profileid=? AND tabid=? AND activityid=?', array($profileId, $tabId, $actionId));
+				if ($adb->num_rows($isExist)) {
+					$query = 'UPDATE vtiger_profile2utility SET permission=? WHERE profileid=? AND tabid=? AND activityid=?';
+				} else {
+					$query = 'INSERT INTO vtiger_profile2utility(permission, profileid, tabid, activityid) VALUES (?, ?, ?, ?)';
+				}
+				Migration_Index_View::ExecuteQuery($query, array($permission, $profileId, $tabId, $actionId));
+			}
+		}
+	}
 }
+
 chdir(dirname(__FILE__) . '/../../../');
 require_once 'includes/main/WebUI.php';
 
-$pickListFieldName = 'no_of_currency_decimals';
-$moduleModel = Settings_Picklist_Module_Model::getInstance('Users');
-$fieldModel = Vtiger_Field_Model::getInstance($pickListFieldName, $moduleModel);
+$pickListFieldName = 'no_of_currency_decimals'; 
+$moduleModel = Settings_Picklist_Module_Model::getInstance('Users'); 
+$fieldModel = Vtiger_Field_Model::getInstance($pickListFieldName, $moduleModel); 
 
-if ($fieldModel) {
-    $moduleModel->addPickListValues($fieldModel, 0);
-    $moduleModel->addPickListValues($fieldModel, 1);
-
-    $pickListValues = Vtiger_Util_Helper::getPickListValues($pickListFieldName);
-    $moduleModel->updateSequence($pickListFieldName, $pickListValues);
-}
+if ($fieldModel) { 
+    $moduleModel->addPickListValues($fieldModel, 0); 
+    $moduleModel->addPickListValues($fieldModel, 1); 
+    
+    $pickListValues = Vtiger_Util_Helper::getPickListValues($pickListFieldName); 
+    $moduleModel->updateSequence($pickListFieldName, $pickListValues); 
+} 
 
 // SalesPlatform.ru begin
 

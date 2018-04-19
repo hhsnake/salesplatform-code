@@ -31,10 +31,16 @@ $languageStrings = array(
 	'Public: Read Only'            => 'Публичный: Только чтение',
 	'Public: Read, Create/Edit'    => 'Публичный: Чтение, Создание/Редактирование',
 	'Public: Read, Create/Edit, Delete' => 'Публичный: Чтение, Создание/Редактирование, Удаление',	
-	'Private'                	   => 'Приватный'                
+	'Private'                	   => 'Приватный',
+    //SalesPlatform.ru begin
+    'LBL_EDIT_CUSTOM_RULE_TO' => 'Изменить правило',
+    //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
-	'JS_CUSTOM_RULE_SAVED_SUCCESSFULLY' => 'Пользовательские правила совместного доступа', // TODO: Review
+    // SalesPlatform.ru begin
+	//'JS_CUSTOM_RULE_SAVED_SUCCESSFULLY' => 'Пользовательские правила совместного доступа', // TODO: Review
+    'JS_CUSTOM_RULE_SAVED_SUCCESSFULLY' => 'Пользовательские правила совместного доступа изменены', // TODO: Review
+    // SalesPlatform.ru end
 	'JS_SELECT_ANY_OTHER_ACCESSING_USER' => 'Выбрать любого другого пользователя', // TODO: Review
 	'JS_NEW_SHARING_RULES_APPLIED_SUCCESSFULLY' => 'Новые правила применены успешно', // TODO: Review
 	'JS_DEPENDENT_PRIVILEGES_SHOULD_CHANGE' => 'Доступ у модулей Сделки, Заявки, Предложения, Заказы и Счета должен быть установлен в приватный когда доступ у модуля Контрагенты установлен в приватный', // TODO: Review

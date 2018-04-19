@@ -38,7 +38,10 @@ class PBXManager_PBXManager_Controller {
                 break;
             case "Hangup" :
                 $callCause = $request->get('causetxt');
-                if ($callCause == "null") {
+                //SalesPlatform.ru begin
+                if ($callCause == "null" || empty($callCause)) {
+                //if ($callCause == "null") {    
+                //SalesPlatform.ru end    
                     break;
                 }
                 $this->processHangupCall($request);

@@ -27,7 +27,16 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$this->exposeMethod('Step7');
 	}
 
+	protected function applyInstallFriendlyEnv() {
+		// config.inc.php - will not be ready to control this yet.
+		version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_ERROR & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ERROR & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+
+		set_time_limit(0); // override limits on execution time to allow install to finish
+	}
+
 	public function preProcess(Vtiger_Request $request, $display = true) {
+		$this->applyInstallFriendlyEnv();
+
 		date_default_timezone_set('Europe/London'); // to overcome the pre configuration settings
 		// Added to redirect to default module if already installed
 		$configFileName = 'config.inc.php';
@@ -55,7 +64,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 		define('INSTALLATION_MODE', true);
 		define('INSTALLATION_MODE_DEBUG', $this->debug);
 		// SalesPlatform.ru begin
-        $viewer->assign('MODULE_NAME', 'Install');
+                $viewer->assign('MODULE_NAME', 'Install');
 		// SalesPlatform.ru end
 		$viewer->view('InstallPreProcess.tpl', $moduleName);
 	}
@@ -103,9 +112,9 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$viewer->assign('CURRENCIES', Install_Utils_Model::getCurrencyList());
-        // SalesPlatform.ru begin
-        $viewer->assign('DEFAULT_LANGUAGE', vglobal('default_language'));
-        // SalesPlatform.ru end
+		// SalesPlatform.ru begin
+		$viewer->assign('DEFAULT_LANGUAGE', vglobal('default_language'));
+		// SalesPlatform.ru end
 		require_once 'modules/Users/UserTimeZonesArray.php';
 		$timeZone = new UserTimeZones();
 		$viewer->assign('TIMEZONES', $timeZone->userTimeZones());
@@ -136,12 +145,12 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$createDataBase = false;
 		$createDB = $request->get('create_db');
 		if($createDB == 'on') {
-            //SalesPlatform.ru begin
-            $rootUser = $request->get('db_root_username');
+		        //SalesPlatform.ru begin
+		        $rootUser = $request->get('db_root_username');
 			$rootPassword = $request->get('db_root_password');
 			//$rootUser = $request->get('db_username');
 			//$rootPassword = $request->get('db_password');
-            //SalesPlatform.ru end
+		        //SalesPlatform.ru end
 			$createDataBase = true;
 		}
 		$authKey = $_SESSION['config_file_info']['authentication_key'] = md5(microtime());
@@ -184,10 +193,10 @@ class Install_Index_view extends Vtiger_View_Controller {
 
 	public function Step7(Vtiger_Request $request) {
 		// Set favourable error reporting
-        // SalesPlatform.ru begin
+        	// SalesPlatform.ru begin
 		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
 		//error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-        // SalesPlatform.ru end
+        	// SalesPlatform.ru end
 
 		$moduleName = $request->getModule();
 		$webuiInstance = new Vtiger_WebUI();

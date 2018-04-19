@@ -40,7 +40,14 @@
 						{/if}
 					{/if}
 					{include file="BreadCrumbs.tpl"|vtemplate_path:$MODULE BREADCRUMB_ID='navigation_links' ACTIVESTEP=1 BREADCRUMB_LABELS=$LABELS MODULE=$MODULE}
-					{include file='ImportStepOne.tpl'|@vtemplate_path:'Import'}
+					{* SalesPlatform.ru begin *}
+                    {if $ERROR_MESSAGE != null}
+                        <div class="errorContainer alert-warning padding15px marginBottom10px">
+                            <i class="fa fa-lock"></i> &nbsp;{$ERROR_MESSAGE}
+                        </div>
+                    {/if}
+                    {* SalesPlatform.ru end *}
+                    {include file='ImportStepOne.tpl'|@vtemplate_path:'Import'}
 
 					{if $FORMAT neq 'ics'}
 						{include file='ImportStepTwo.tpl'|@vtemplate_path:'Import'}

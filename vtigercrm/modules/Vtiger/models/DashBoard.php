@@ -62,9 +62,7 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 			}
 		}
 
-		$sql = 'SELECT * FROM vtiger_links WHERE linktype = ?
-					AND tabid IN ('. generateQuestionMarks($moduleTabIdList) .') AND linkid NOT IN (SELECT linkid FROM vtiger_module_dashboard_widgets
-					WHERE userid = ? and dashboardtabid=? )';
+		$sql = 'SELECT * FROM vtiger_links WHERE linktype = ? AND tabid IN ('. generateQuestionMarks($moduleTabIdList) .') AND linkid NOT IN (SELECT linkid FROM vtiger_module_dashboard_widgets WHERE userid = ? and dashboardtabid=? )';
 		$params = array('DASHBOARDWIDGET');
 		$params = array_merge($params, $moduleTabIdList);
 		$params = array_merge($params, array($currentUser->getId(), $dashBoardTabId));
@@ -173,7 +171,7 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 		$currentUserPrivilegeModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$moduleModel = $this->getModule();
 
-		$sql = " SELECT vtiger_links.*, vtiger_module_dashboard_widgets.userid, vtiger_module_dashboard_widgets.filterid, vtiger_module_dashboard_widgets.data, vtiger_module_dashboard_widgets.id as widgetid, vtiger_module_dashboard_widgets.position as position, vtiger_links.linkid as id FROM vtiger_links ".
+		$sql = "SELECT vtiger_links.*, vtiger_module_dashboard_widgets.userid, vtiger_module_dashboard_widgets.filterid, vtiger_module_dashboard_widgets.data, vtiger_module_dashboard_widgets.id as widgetid, vtiger_module_dashboard_widgets.position as position, vtiger_module_dashboard_widgets.size as size, vtiger_links.linkid as id FROM vtiger_links ".
 				" INNER JOIN vtiger_module_dashboard_widgets ON vtiger_links.linkid=vtiger_module_dashboard_widgets.linkid".
 				" WHERE vtiger_module_dashboard_widgets.userid = ? AND linktype = ? AND tabid = ?";
 		$params = array($currentUser->getId(), 'DASHBOARDWIDGET', $moduleModel->getId());

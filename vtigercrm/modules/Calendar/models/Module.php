@@ -46,10 +46,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	 * @return <String>
 	 */
 	public function getCalendarViewUrl() {
-            // SalesPlatform.ru begin
-		//return 'index.php?module='.$this->get('name').'&view='.$this->getCalendarViewName();
-            return 'index.php?module='.$this->get('name').'&view=Calendar';
-            // SalesPlatform.ru end
+		return 'index.php?module='.$this->get('name').'&view=Calendar';
 	}
 
 	/**
@@ -207,7 +204,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	 * Function to get export query
 	 * @return <String> query;
 	 */
-	public function getExportQuery() {
+	public function getExportQuery($where) {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$userId = $currentUserModel->getId();
 		$userGroup = new GetUserGroups();
@@ -549,7 +546,10 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 						$fieldLabelsList = array();
 						break;
 					}
-					$fieldLabelsList[$fieldName] = $fieldInstance->label;
+                                        // SalesPlatform.ru begin
+					//$fieldLabelsList[$fieldName] = $fieldInstance->label;
+					$fieldLabelsList[$fieldName] = vtranslate($fieldInstance->label, $activityTypes['module']);
+                                        // SalesPlatform.ru end
 				}
 			}
 			if(!empty($fieldLabelsList)) {
@@ -775,7 +775,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 
 		$moduleModel = Vtiger_Module_Model::getInstance("Calendar");
 		$quickCreateFields = $moduleModel->getQuickCreateFields();
-        $mandatoryFields = array("id","taskpriority","parent_id","contact_id");
+		$mandatoryFields = array("id","taskpriority","parent_id","contact_id");
 		$fields = array_unique(array_merge($mandatoryFields,array_keys($quickCreateFields)));
 		$queryGenerator->setFields($fields);
 		$queryGenerator->addCondition("activitytype","Task","e","AND");
@@ -1010,5 +1010,24 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getRelationShipActions() {
 		return array('ADD');
+	}
+
+	public function getModuleIcon($activityType = null) {
+		$moduleName = $this->getName();
+		$title = vtranslate($moduleName, $moduleName);
+
+		if (!$activityType) {
+			if ($moduleName == 'Events') {
+				$activityType = 'calendar';
+			}
+		}
+
+		$activityType = strtolower($activityType);
+		$moduleIcon = "<i class='vicon-$activityType' title='$title' ></i>";
+
+		if (!in_array($activityType, array('task', 'calendar'))) {
+			$moduleIcon = parent::getModuleIcon();
+		}
+		return $moduleIcon;
 	}
 }

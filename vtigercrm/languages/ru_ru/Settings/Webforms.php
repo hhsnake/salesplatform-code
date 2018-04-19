@@ -39,6 +39,13 @@ $languageStrings = array(
     'LBL_SAVE_FIELDS_ORDER'        => 'Сохранить последовательность',
     'LBL_ENABLE_TARGET_MODULES_FOR_WEBFORM' => 'Включить целевые модули для веб-формы',
     'LBL_ADD_RECORD' => 'Добавить Веб-Форму',    
+    //SalesPlatform.ru Begin
+    'LBL_ADD_FILE_FIELD' => 'Добавление поля файла',
+    'LBL_UPLOAD_DOCUMENTS' => 'Загрузить документы',
+    'LBL_NO_FILE_FIELD' => 'Поля файлов не добавлены',
+    'LBL_FILE_FIELD_INFO' => 'Для каждого файла, загруженного из веб-формы, создается новый документ с прикрепленным файлом. Документ также связан с этим вновь созданным файлом %s.',
+    'LBL_COPY_TO_CLIPBOARD' => 'Скопировать в буфер обмена',
+    //SalesPlatform.ru End
 );
 $jsLanguageStrings = array(
 	'JS_WEBFORM_DELETED_SUCCESSFULLY' => 'Вебформа успешно удалена', 
@@ -51,4 +58,7 @@ $jsLanguageStrings = array(
 	'JS_WEBFORM_WITH_THIS_NAME_ALREADY_EXISTS' => 'Вебформа с данным именем уже существует',
     "JS_WEBFORM_WITH_THIS_NAME_ALREADY_EXISTS" => 'Вебформа с таким именем уже существует',
     'JS_SELECT_AN_OPTION' => 'Выберите вариант',   
+    //SalesPlatform.ru begin
+    'JS_COPIED_SUCCESSFULLY' => 'Скопировано',
+    //SalesPlatform.ru end
 );

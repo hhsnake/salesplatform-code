@@ -46,6 +46,7 @@ class WebserviceField{
 	private $genericUIType = 10;
 
 	private $readOnly = 0;
+	private $isunique = 0;
 
 	private function __construct($adb,$row){
 		$this->uitype = $row['uitype'];
@@ -57,8 +58,9 @@ class WebserviceField{
 		$this->fieldLabel = $row['fieldlabel'];
 		$this->displayType = $row['displaytype'];
 		$this->massEditable = ($row['masseditable'] === '1')? true: false;
-		$typeOfData = $row['typeofdata'];
 		$this->presence = $row['presence'];
+		$this->isunique = ($row['isunique']) ? true : false;
+		$typeOfData = $row['typeofdata'];
 		$this->typeOfData = $typeOfData;
 		$typeOfData = explode("~",$typeOfData);
 		$this->mandatory = ($typeOfData[1] == 'M')? true: false;
@@ -116,6 +118,10 @@ class WebserviceField{
 
 	public function getDisplayType(){
 		return $this->displayType;
+	}
+
+	public function isUnique(){
+		return $this->isunique;
 	}
 
 	public function getMassEditable(){
@@ -262,6 +268,18 @@ class WebserviceField{
 			for($i=0;$i<$numRows;++$i){
 				array_push($referenceTypes,$this->pearDB->query_result($result,$i,"type"));
 			}
+            
+            //SalesPlatform.ru begin
+            //Replace to database
+            if( ($this->tabid == getTabid('Calendar') || $this->tabid == getTabid('Events'))  && $this->fieldName === 'parent_id') {
+				$referenceTypes[] = 'Invoice';
+				$referenceTypes[] = 'Quotes';
+				$referenceTypes[] = 'PurchaseOrder';
+				$referenceTypes[] = 'SalesOrder';
+				$referenceTypes[] = 'Campaigns';
+			}
+            //SalesPlatform.ru end
+            
             if($hideDisabledModules) {
 				global $current_user;
 				$types = vtws_listtypes(null, $current_user);
@@ -343,7 +361,12 @@ class WebserviceField{
 			} else {
 				$hardCodedPickListNames = array('hdntaxtype','email_flag');
 				$hardCodedPickListValues = array('hdntaxtype'=> array(	array('label' => 'Individual',	'value' => 'individual'),
-																		array('label' => 'Group',		'value' => 'group')),
+																		array('label' => 'Group',		'value' => 'group'),
+                                                                        //SalesPlatform.ru begin
+                                                                        array('label' => 'LBL_GROUP_TAX_INC', 'value' => 'group_tax_inc')
+                                                                        //SalesPlatform.ru end
+                                                                ),
+                                                                        
 												 'email_flag'=> array(	array('label' => 'SAVED',		'value' => 'SAVED'),
 																		array('label' => 'SENT',		'value' => 'SENT'),
 																		array('label' => 'MAILSCANNER',	'value' => 'MAILSCANNER')));

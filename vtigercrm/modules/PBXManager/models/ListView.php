@@ -193,52 +193,44 @@ class PBXManager_ListView_Model extends Vtiger_ListView_Model {
             
             if ($listViewEntries[$recordId]['direction'] == 'outbound') {
                 if ($listViewEntries[$recordId]['callstatus'] == 'ringing' || $listViewEntries[$recordId]['callstatus'] == 'in-progress') {
-                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-info"><i class="icon-arrow-up icon-white">
-                        <!-- SalesPlatform.ru begin -->
+                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-info"><i class="fa fa-arrow-up">
                         </i>&nbsp;' . vtranslate($listViewEntries[$recordId]["callstatus"], $moduleName) . '</span>';
                         //</i>&nbsp;' . $listViewEntries[$recordId]["callstatus"] . '</span>';
                         // SalesPlatform.ru end
                 } else if ($listViewEntries[$recordId]['callstatus'] == 'completed') {
-                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-success"><i class="icon-arrow-up icon-white">
-                        <!-- SalesPlatform.ru begin -->
+                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-success"><i class="fa fa-arrow-up">
                         </i>&nbsp;' . vtranslate($listViewEntries[$recordId]["callstatus"], $moduleName) . '</span>';
                         //</i>&nbsp;' . $listViewEntries[$recordId]["callstatus"] . '</span>';
                         // SalesPlatform.ru end
                 } else if ($listViewEntries[$recordId]['callstatus'] == 'no-answer') {
-                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-important"><i class="icon-arrow-up icon-white">
-                        <!-- SalesPlatform.ru begin -->
+                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-danger"><i class="fa fa-arrow-up">
                         </i>&nbsp;' . vtranslate($listViewEntries[$recordId]["callstatus"], $moduleName) . '</span>';
                         //</i>&nbsp;' . $listViewEntries[$recordId]["callstatus"] . '</span>';
                         // SalesPlatform.ru end
                 } else {
-                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-warning"><i class="icon-arrow-up icon-white">
-                        <!-- SalesPlatform.ru begin -->
+                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-warning"><i class="fa fa-arrow-up">
                         </i>&nbsp;' . vtranslate($listViewEntries[$recordId]["callstatus"], $moduleName) . '</span>';
                         //</i>&nbsp;' . $listViewEntries[$recordId]["callstatus"] . '</span>';
                         // SalesPlatform.ru end
                 }
             } else if ($listViewEntries[$recordId]['direction'] == 'inbound') {
                 if ($listViewEntries[$recordId]['callstatus'] == 'ringing' || $listViewEntries[$recordId]['callstatus'] == 'in-progress') {
-                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-info"><i class="icon-arrow-down icon-white">
-                        <!-- SalesPlatform.ru begin -->
+                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-info"><i class="fa fa-arrow-down">
                         </i>&nbsp;' . vtranslate($listViewEntries[$recordId]["callstatus"], $moduleName) . '</span>';
                         //</i>&nbsp;' . $listViewEntries[$recordId]["callstatus"] . '</span>';
                         // SalesPlatform.ru end
                 } else if ($listViewEntries[$recordId]['callstatus'] == 'completed') {
-                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-success"><i class="icon-arrow-down icon-white">
-                        <!-- SalesPlatform.ru begin -->
+                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-success"><i class="fa fa-arrow-down">
                         </i>&nbsp;' . vtranslate($listViewEntries[$recordId]["callstatus"], $moduleName) . '</span>';
                         //</i>&nbsp;' . $listViewEntries[$recordId]["callstatus"] . '</span>';
                     // SalesPlatform.ru end
                 } else if ($listViewEntries[$recordId]['callstatus'] == 'no-answer') {
-                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-important"><i class="icon-arrow-down icon-white">
-                        <!-- SalesPlatform.ru begin -->
+                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-danger"><i class="fa fa-arrow-down">
                         </i>&nbsp;' . vtranslate($listViewEntries[$recordId]["callstatus"], $moduleName) . '</span>';
                         //</i>&nbsp;' . $listViewEntries[$recordId]["callstatus"] . '</span>';
                         // SalesPlatform.ru end
                 } else {
-                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-warning"><i class="icon-arrow-down icon-white">
-                        <!-- SalesPlatform.ru begin -->
+                    $listViewEntries[$recordId]['callstatus'] = '<span class="label label-warning"><i class="fa fa-arrow-down">
                         </i>&nbsp;' . vtranslate($listViewEntries[$recordId]["callstatus"], $moduleName) . '</span>';
                         //</i>&nbsp;' . $listViewEntries[$recordId]["callstatus"] . '</span>';
                         // SalesPlatform.ru end

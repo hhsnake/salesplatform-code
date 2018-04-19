@@ -48,7 +48,6 @@ class Calendar_TaskManagement_View extends Vtiger_Index_View {
 		$viewer->assign('PAGE', $page);
 		$viewer->assign('PRIORITIES', array_keys($priorities));
 		$viewer->assign('COLORS', $this->generateColors($request));
-                
 		$viewer->view('TaskManagement.tpl', $moduleName);
 	}
 

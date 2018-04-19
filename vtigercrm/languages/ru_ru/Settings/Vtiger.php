@@ -8,8 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-        'LBL_INTEGRATION' => 'Интеграция',
-        'LBL_PBXMANAGER' => 'Звонки',
+    'LBL_INTEGRATION' => 'Интеграция',
+    'LBL_PBXMANAGER' => 'Asterisk',
 	'Settings'                     => 'Настройки'          , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Поиск настроек'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Итог'                    , 
@@ -260,7 +260,9 @@ $languageStrings = array(
     'LBL_LABELS_EDITOR' => 'Редактор меток',
     'LBL_LABELS_EDITOR_DESCRIPTION' => 'Позволяет настраивать имена модулей, метки полей и другие строки в соответствии с вашими бизнес-требованиями',
     'LBL_TAXES' => 'Налоги',
-    'LBL_CHARGES_AND ITS_TAXES' => 'Сборы (и ее налоги)',
+    //SalesPlatform.ru begin
+    'LBL_CHARGES_AND ITS_TAXES' => 'Сборы (и налоги)',
+    //SalesPlatform.ru end
     'LBL_TAX_REGIONS' => 'Налоговые Регионы',
     'LBL_NO_REGION_EXISTS' => 'Регион не существует',
     'LBL_TYPE' => 'Тип',
@@ -280,10 +282,14 @@ $languageStrings = array(
     'LBL_DEDUCTED' => 'Вычтено',
     'LBL_TAX_TYPE' => 'Тип налога',
     'LBL_FIXED' => 'Фиксированный',
-    'LBL_VARIABLE' => 'Переменная',
+    //SalesPlatform.ru begin
+    'LBL_VARIABLE' => 'Переменный',
+    //SalesPlatform.ru end
     'LBL_COMPOUND_ON' => 'Соединение на',
     'LBL_DEFAULT_VALUE' => 'По умолчанию',
-    'LBL_ADD_TAX_BRACKET' => 'Добавить налоговой категории',
+    //SalesPlatform.ru begin
+    'LBL_ADD_TAX_BRACKET' => 'Добавить налоговый регион',
+    //SalesPlatform.ru end
     'LBL_TAX_BRACKETS_DESC' => 'Если вы не присвоили значение налога для региона, то будет использовано значение по умолчанию.',
     'LBL_SELECT_SIMPLE_TAXES' => 'Выберите простые Налоги',
     'LBL_REGION_NAME' => 'Регион',
@@ -385,7 +391,13 @@ $languageStrings = array(
     //SalesPlatform.ru begin
     'LBL_CREATE_NEW_COMPANY' => 'Создать Юр. Лицо',
     'company' => 'Юр. Лицо',
-    'Tags' => 'Метка', 
+    'Tags' => 'Тег',
+    'LBL_TIPS' => 'Подсказки',
+    'SPTips' => 'Подсказки',
+    'VoipIntegration' => 'Интеграция с облачными АТС',
+    'SPVoipIntegration' => 'Интеграция с облачными АТС',
+    'DynamicBlocks' => 'Динамические блоки',
+    'SPDynamicBlocks' => 'Динамические блоки',
     //SalesPlatform.ru end
     );
 $jsLanguageStrings = array(
@@ -410,6 +422,13 @@ $jsLanguageStrings = array(
 	'JS_CONFIGURATION_DETAILS_SAVED' => 'Конфигурация сохранена' , 
 	'JS_TERMS_AND_CONDITIONS_SAVED' => 'Сроки и условия сохранены',
     'LBL_PREFIX_IN_USE'            => 'префикс уже используется',
+    //SalesPlatform.ru begin localize tax details after saving
+    'Fixed' => 'Фиксированный',
+    'Simple' => 'Простой',
+    'Compound' => 'Соединение',
+    'Variable' => 'Переменный',
+    'Deducted' => 'Вычтено',
+    //SalesPlatform.ru end localize tax details after saving
         
         //SalesPlatform.ru begin
         'JS_LBL_CONFIRM_DELETE_COMPANY' => 'Вы действительно хотите удалить компанию?',    
@@ -451,5 +470,7 @@ $jsLanguageStrings = array(
     'JS_LOGO_IMAGE_DIMENSIONS_WRONG' => 'Размеры логотипа не соответствуют разрешенному размеру. Измените размер изображения и повторите попытку.',
     //SalesPlatform.ru begin
     'JS_COMPANY_EXISTS' => 'Такое Юр. лицо уже существует',
+    'Import Completed.' => 'Импорт завершен',
+    'JS_UPDATED' => 'Обновлено',
     //SalesPlatform.ru end
 );

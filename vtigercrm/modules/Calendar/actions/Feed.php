@@ -386,7 +386,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 		$moduleModel = Vtiger_Module_Model::getInstance('Calendar');
 		$userAndGroupIds = array_merge(array($user->getId()),$this->getGroupsIdsForUsers($user->getId()));
 		$queryGenerator = new QueryGenerator($moduleModel->get('name'), $user);
-
+                
 		$queryGenerator->setFields(array('activityid','subject', 'taskstatus','activitytype', 'date_start','time_start','due_date','time_end','id'));
 		$query = $queryGenerator->getQuery();
 

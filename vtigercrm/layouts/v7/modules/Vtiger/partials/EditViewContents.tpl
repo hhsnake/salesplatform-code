@@ -14,9 +14,15 @@
 	{/if}
 
 	<div name='editContent'>
+		{if $DUPLICATE_RECORDS}
+			<div class="fieldBlockContainer duplicationMessageContainer">
+				<div class="duplicationMessageHeader"><b>{vtranslate('LBL_DUPLICATES_DETECTED', $MODULE)}</b></div>
+				<div>{getDuplicatesPreventionMessage($MODULE, $DUPLICATE_RECORDS)}</div>
+			</div>
+		{/if}
 		{foreach key=BLOCK_LABEL item=BLOCK_FIELDS from=$RECORD_STRUCTURE name=blockIterator}
 			{if $BLOCK_FIELDS|@count gt 0}
-				<div class='fieldBlockContainer'>
+				<div class='fieldBlockContainer' data-block="{$BLOCK_LABEL}">
 					<h4 class='fieldBlockHeader'>{vtranslate($BLOCK_LABEL, $MODULE)}</h4>
 					<hr>
 					<table class="table table-borderless">

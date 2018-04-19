@@ -237,7 +237,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		// for content disposition header comma should not be there in filename 
 		$fileName = str_replace(',', '_', $fileName);
 		$exportType = $this->getExportContentType($request);
-                
+
 		header("Content-Disposition:attachment;filename=$fileName.csv");
 		header("Content-Type:$exportType;charset=UTF-8");
 		header("Expires: Mon, 31 Dec 2000 00:00:00 GMT" );
@@ -277,7 +277,6 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
                     //echo $line;
                     //SalesPlatform.ru end
 		}
-            die;
 	}
 
 	private $picklistValues;

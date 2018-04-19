@@ -10,7 +10,10 @@
 {strip}
 	<div class="col-sm-12 col-xs-12 module-action-bar clearfix coloredBorderTop">
 		<div class="module-action-content clearfix {$MODULE}-module-action-content">
-			<div class="col-lg-7 col-md-7 module-breadcrumb module-breadcrumb-{$smarty.request.view} transitionsAllHalfSecond">
+            {* SalesPlatform.ru begin *}
+			<div class="col-lg-4 col-md-4 module-breadcrumb module-breadcrumb-{$smarty.request.view} transitionsAllHalfSecond">
+            {* <div class="col-lg-7 col-md-7 module-breadcrumb module-breadcrumb-{$smarty.request.view} transitionsAllHalfSecond"> *}
+            {* SalesPlatform.ru end *}
 				{assign var=MODULE_MODEL value=Vtiger_Module_Model::getInstance($MODULE)}
 				{if $MODULE_MODEL->getDefaultViewName() neq 'List'}
 					{assign var=DEFAULT_FILTER_URL value=$MODULE_MODEL->getDefaultUrl()}
@@ -36,7 +39,10 @@
 							{/if}
 						{/foreach}
 					{/foreach}
-					<p class="current-filter-name filter-name pull-left cursorPointer" title="{$CVNAME}"><span class="fa fa-angle-right pull-left" aria-hidden="true"></span><a href='{$MODULE_MODEL->getListViewUrl()}&viewname={$VIEWID}&app={$SELECTED_MENU_CATEGORY}'>&nbsp;&nbsp;{vtranslate($CVNAME, $MODULE)}&nbsp;&nbsp;</a> </p>
+                                        {* SalesPlatform begin #5372 *}
+                                        {* <p class="current-filter-name filter-name pull-left cursorPointer" title="{$CVNAME}"><span class="fa fa-angle-right pull-left" aria-hidden="true"></span><a href='{$MODULE_MODEL->getListViewUrl()}&viewname={$VIEWID}&app={$SELECTED_MENU_CATEGORY}'>&nbsp;&nbsp;{$CVNAME}&nbsp;&nbsp;</a> </p> *}
+                                        <p class="current-filter-name filter-name pull-left cursorPointer" title="{$CVNAME}"><span class="fa fa-angle-right pull-left" aria-hidden="true"></span><a href='{$MODULE_MODEL->getListViewUrl()}&viewname={$VIEWID}&app={$SELECTED_MENU_CATEGORY}'>&nbsp;&nbsp;{vtranslate($CVNAME, $MODULE)}&nbsp;&nbsp;</a> </p>
+                                        {* SalesPlatform end *}
 				{/if}
 				{assign var=SINGLE_MODULE_NAME value='SINGLE_'|cat:$MODULE}
 				{if $RECORD and $smarty.request.view eq 'Edit'}
@@ -48,7 +54,10 @@
 					<p class="current-filter-name filter-name pull-left"><span class="fa fa-angle-right pull-left" aria-hidden="true"></span><a title="{$RECORD->get('label')}">&nbsp;&nbsp;{$RECORD->get('label')} &nbsp;&nbsp;</a></p>
 				{/if}
 			</div>
-			<div class="col-lg-5 col-md-5 pull-right">
+            {* SalesPlatform.ru begin *}
+            <div class="col-lg-8 col-md-8 pull-right">
+			{* <div class="col-lg-5 col-md-5 pull-right"> *}
+            {* SalesPlatform.ru end *}
 				<div id="appnav" class="navbar-right">
 					<ul class="nav navbar-nav">
 						{foreach item=BASIC_ACTION from=$MODULE_BASIC_ACTIONS}
@@ -81,8 +90,8 @@
 						{if $MODULE_SETTING_ACTIONS|@count gt 0}
 							<li>
 								<div class="settingsIcon">
-									<button type="button" class="btn btn-default module-buttons dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-										<span class="fa fa-wrench" aria-hidden="true" title="{vtranslate('LBL_SETTINGS', $MODULE)}"></span>&nbsp;{vtranslate('LBL_CUSTOMIZE', 'Reports')}&nbsp; <span class="caret"></span>
+									<button type="button" class="btn btn-default module-buttons dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="{vtranslate('LBL_SETTINGS', $MODULE)}">
+										<span class="fa fa-wrench" aria-hidden="true"></span>&nbsp;{vtranslate('LBL_CUSTOMIZE', 'Reports')}&nbsp; <span class="caret"></span>
 									</button>
 									<ul class="detailViewSetting dropdown-menu">
 										{foreach item=SETTING from=$MODULE_SETTING_ACTIONS}

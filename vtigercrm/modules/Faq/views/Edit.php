@@ -45,9 +45,9 @@ class Faq_Edit_View extends Vtiger_Edit_View {
 			}
 		}
         
-        // SalesPlatform.ru begin Unifying method for EditView preparing 
-        $recordModel = prepareEditView($recordModel, $_REQUEST, $viewer); 
-        // SalesPlatform.ru end 
+		// SalesPlatform.ru begin Unifying method for EditView preparing 
+		$recordModel = prepareEditView($recordModel, $_REQUEST, $viewer); 
+		// SalesPlatform.ru end 
         
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);
 

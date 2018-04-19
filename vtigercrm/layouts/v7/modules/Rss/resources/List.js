@@ -170,21 +170,31 @@ Vtiger_List_Js("Rss_List_Js",{},{
      */
     getFrameElement : function(url) {
         app.helper.showProgress();
+        //SalesPlatform.ru begin
+        //var frameElement = jQuery('<iframe>', {
+        //    id:  'feedFrame',
+        //    scrolling: 'auto',
+        //    width: '100%',
+        //    height: this.getDocumentHeight()/2
+        //});
+        //frameElement.addClass('table-bordered');
+        //this.getHtml(url).then(function(html) {
+        //    app.helper.hideProgress();
+        //    var frame = frameElement[0].contentDocument;
+        //    frame.open();
+        //    frame.write(html);
+        //    frame.close();
+        //});
         var frameElement = jQuery('<iframe>', {
             id:  'feedFrame',
             scrolling: 'auto',
             width: '100%',
-            height: this.getDocumentHeight()/2
+            height: this.getDocumentHeight(),
+            src: url
         });
         frameElement.addClass('table-bordered');
-        this.getHtml(url).then(function(html) {
-            app.helper.hideProgress();
-            var frame = frameElement[0].contentDocument;
-            frame.open();
-            frame.write(html);
-            frame.close();
-        });
-        
+        app.helper.hideProgress();
+        //SalesPlatform.ru end
         return frameElement;
     },
     
@@ -215,8 +225,11 @@ Vtiger_List_Js("Rss_List_Js",{},{
         var thisInstance = this;
         jQuery('#page').on('click', '#deleteButton', function(e){
             var elem = jQuery(e.currentTarget);
-            var originalDropDownMenu = elem.closest('.dropdown-menu').data('original-menu');
-            var parent = app.helper.getDropDownmenuParent(originalDropDownMenu);
+            // SalesPlatform.ru fix delete record
+            var parent = elem.closest('.feedContainer');
+            // var originalDropDownMenu = elem.closest('.dropdown-menu').data('original-menu');
+            // var parent = app.helper.getDropDownmenuParent(originalDropDownMenu);
+            // SalesPlatform.ru end
             thisInstance.deleteRecord(parent);
         })
     },
@@ -283,7 +296,10 @@ Vtiger_List_Js("Rss_List_Js",{},{
         app.request.post({'data' : postData}).then(function(error, data){
                 app.helper.hideProgress();
                 if(!error) {
-                    app.helper.showSuccessNotification({'message': 'set as default successfully' });
+                    // SalesPlatform.ru begin add localization
+                    app.helper.showSuccessNotification({'message': app.vtranslate('JS_RSS_MADE_AS_DEFAULT') });
+                    //  app.helper.showSuccessNotification({'message': 'set as default successfully' });
+                    // SalesPlatform.ru end
                 } else {
                     var params = {
                         text : app.vtranslate(data.error.message),

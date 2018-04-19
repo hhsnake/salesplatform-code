@@ -121,7 +121,10 @@ class VTWorkflowUtils {
 
 	function checkModuleWorkflow($modulename) {
 		$result = true;
-		if (in_array($modulename, array('Emails', 'Faq', 'PBXManager', 'Users')) || !getTabid($modulename)) {
+                //SalesPlatform.ru start workflow for PBXManager
+                //if (in_array($modulename, array('Emails', 'PBXManager', 'Faq', 'Users')) || !getTabid($modulename)) {
+		if (in_array($modulename, array('Emails', 'Faq', 'Users')) || !getTabid($modulename)) {
+                //SalesPlatform.ru end
 			$result = false;
 		}
 		return $result;

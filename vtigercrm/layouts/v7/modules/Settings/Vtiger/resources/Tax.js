@@ -295,10 +295,11 @@ Vtiger.Class("Settings_Vtiger_TaxIndex_Js",{
 		}
 
 		var trElementForTax =
+                                //SalesPlatform.ru begin localize tax details after saving
 				jQuery('<tr class="opacity" data-taxid="'+details.taxid+'" data-taxtype="'+details.type+'">\n\
 					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxLabel">'+details.taxlabel+'</span></td>\n\
-					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxType">'+details.taxType+'</span></td>\n\
-					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxMethod">'+details.method+'</span></td>\n\
+					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxType">'+app.vtranslate(details.taxType)+'</span></td>\n\
+					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxMethod">'+app.vtranslate(details.method)+'</span></td>\n\
 					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxPercentage">'+details.percentage+'%</span></td>\n\
 					<td style="border-left: none;border-right: none;" '+details.row_type+'"><input class="editTaxStatus" type="checkbox" '+isChecked+' >\n\
 					</td><td style="border-left: none;border-right: none;">\n\
@@ -306,7 +307,20 @@ Vtiger.Class("Settings_Vtiger_TaxIndex_Js",{
 							<a class="editTax cursorPointer" data-url="'+details._editurl+'">\n\
 								<i class="fa fa-pencil alignMiddle" title="'+app.vtranslate('JS_EDIT')+'"></i>\n\
 							</a>\n\
-						</div>\n\</td></tr>');
+						</div>\n\</td></tr>');                                
+//				jQuery('<tr class="opacity" data-taxid="'+details.taxid+'" data-taxtype="'+details.type+'">\n\
+//					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxLabel">'+details.taxlabel+'</span></td>\n\
+//					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxType">'+details.taxType+'</span></td>\n\
+//					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxMethod">'+details.method+'</span></td>\n\
+//					<td style="border-left: none;border-right: none;" '+details.row_type+'"><span class="taxPercentage">'+details.percentage+'%</span></td>\n\
+//					<td style="border-left: none;border-right: none;" '+details.row_type+'"><input class="editTaxStatus" type="checkbox" '+isChecked+' >\n\
+//					</td><td style="border-left: none;border-right: none;">\n\
+//						<div class="pull-right actions">\n\
+//							<a class="editTax cursorPointer" data-url="'+details._editurl+'">\n\
+//								<i class="fa fa-pencil alignMiddle" title="'+app.vtranslate('JS_EDIT')+'"></i>\n\
+//							</a>\n\
+//						</div>\n\</td></tr>');
+                                //SalesPlatform.ru end localize tax details after saving
 		taxTable.append(trElementForTax);
 	},
     
@@ -316,8 +330,12 @@ Vtiger.Class("Settings_Vtiger_TaxIndex_Js",{
 	updateTaxDetails : function(data, currentTrElement) {
 		currentTrElement.find('.taxLabel').text(data['taxlabel']);
 		currentTrElement.find('.taxPercentage').text(data['percentage']+'%');
-		currentTrElement.find('.taxType').text(data['taxType']);
-		currentTrElement.find('.taxMethod').text(data['method']);
+        //SalesPlatform.ru begin
+		//currentTrElement.find('.taxType').text(data['taxType']);
+		//currentTrElement.find('.taxMethod').text(data['method']);
+        currentTrElement.find('.taxType').text(app.vtranslate(data['taxType']));
+		currentTrElement.find('.taxMethod').text(app.vtranslate(data['method']));
+        //SalesPlatform.ru end
 		if(data['deleted'] == '0') {
 			currentTrElement.find('.editTaxStatus').attr('checked', 'true');
 		} else {

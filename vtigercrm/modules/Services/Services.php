@@ -1008,6 +1008,13 @@ class Services extends CRMEntity {
 					AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
 				) AS innerService ON innerService.serviceid = vtiger_service.serviceid";
 			}
+            
+            // SalesPlatform.ru begin
+            if ($queryPlanner->requireTable("vtiger_inventorytaxinfo_services")){
+                $query .= " left join vtiger_producttaxrel AS vtiger_producttaxrel_services on vtiger_producttaxrel_services.productid = vtiger_service.serviceid"; 
+                $query .= " left join vtiger_inventorytaxinfo AS vtiger_inventorytaxinfo_services on vtiger_inventorytaxinfo_services.taxid = vtiger_producttaxrel_services.taxid";
+            }
+            // SalesPlatform.ru end
 			return $query;
 	}
 
@@ -1057,6 +1064,15 @@ class Services extends CRMEntity {
 		if ($queryPlanner->requireTable("vtiger_createdbyServices")){
 			$query .= " left join vtiger_users as vtiger_createdbyServices on vtiger_createdbyServices.id = vtiger_crmentityServices.smcreatorid ";
 		}
+		// SalesPlatform.ru begin
+		if ($queryPlanner->requireTable("vtiger_inventorytaxinfo_services")){
+		    $query .= " left join vtiger_producttaxrel AS vtiger_producttaxrel_services on vtiger_producttaxrel_services.productid = vtiger_service.serviceid"; 
+		    $query .= " left join vtiger_inventorytaxinfo AS vtiger_inventorytaxinfo_services on vtiger_inventorytaxinfo_services.taxid = vtiger_producttaxrel_services.taxid";
+		}
+		// SalesPlatform.ru end
+		//if secondary modules custom reference field is selected
+        	$query .= parent::getReportsUiType10Query($secmodule, $queryPlanner);
+
 		return $query;
 	}
 

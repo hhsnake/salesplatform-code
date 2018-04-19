@@ -211,6 +211,9 @@
 		</field>
 		<field name="version" type="C" size="10" />
 		<field name="parent" type="C" size="30"/>
+		<field name="source" type="C" size="255">
+			<default value="custom" />
+		</field>
 
 		<index name="tab_name_idx">
 			<col>name</col>
@@ -283,10 +286,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="columnname" type="C" size="30">
+        <!-- SalesPlatform.ru begin -->
+        <!-- <field name="columnname" type="C" size="30"> -->
+		<field name="columnname" type="C" size="63">
+        <!-- SalesPlatform.ru end -->
 			<notnull />
 		</field>
-		<field name="tablename" type="C" size="50">
+        <!-- SalesPlatform.ru begin -->
+		<!-- <field name="tablename" type="C" size="50"> -->
+        <field name="tablename" type="C" size="100">
+        <!-- SalesPlatform.ru end -->
 			<notnull />
 		</field>
 		<field name="generatedtype" type="I" size="19">
@@ -390,6 +399,7 @@
 		<field name="notify_owner" type="C" size="3">
 			<default value="0" />
 		</field>
+		<!-- SalesPlatform.ru begin -->
 		<field name="inn" type="C" size="30">
 			<default value="" />
 		</field>
@@ -397,6 +407,7 @@
 			<default value="" />
 		</field>
 		<field name="splastsms" type="T" />
+		<!-- SalesPlatform.ru end -->
 
 		<index name="account_account_type_idx">
 			<col>account_type</col>
@@ -508,7 +519,9 @@
 		<field name="notify_owner" type="C" size="3">
 			<default value="0"/>
 		</field>
+		<!-- SalesPlatform.ru begin -->
 		<field name="splastsms" type="T" />
+		<!-- SalesPlatform.ru end -->
 
 		<index name="contactdetails_accountid_idx">
 			<col>accountid</col>
@@ -686,8 +699,10 @@
 		<field name="assignleadchk" type="I" size="1">
 			<default value="0" />
 		</field>
-        <field name="splastsms" type="T" />
-        
+		<!-- SalesPlatform.ru begin -->
+        	<field name="splastsms" type="T" />
+        	<!-- SalesPlatform.ru end -->
+
 		<index name="leaddetails_converted_leadstatus_idx">
 			<col>converted</col>
 			<col>leadstatus</col>
@@ -1164,9 +1179,11 @@
 		<field name="is_subproducts_viewable" type="I" size="1">
 			<default value="1" />
 		</field>
-        <field name="manuf_country" type="C" size="100">
-			<default value="" />
-        </field>
+		
+		<!-- SalesPlatform.ru begin -->
+		<field name="manuf_country" type="C" size="100">
+				<default value="" />
+		</field>
 		<field name="customs_id" type="C" size="100">
 			<default value="" />
 		</field>
@@ -1176,6 +1193,7 @@
 		<field name="unit_code" type="C" size="100">
 			<default value="" />
 		</field>
+		<!-- SalesPlatform.ru end -->
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
@@ -1847,9 +1865,11 @@
 		<field name="smtp_auth" type="C" size="5" />
 		<field name="server_path" type="C" size="256" />
 		<field name="from_email_field" type="C" size="50" />
-        <field name="server_tls" type="C" size="20" />
-        <field name="from_name" type="C" size="200" />
-        <field name="use_sendmail" type="C" size="5" />
+		<!-- SalesPlatform.ru begin -->
+		<field name="server_tls" type="C" size="20" />
+		<field name="from_name" type="C" size="200" />
+		<field name="use_sendmail" type="C" size="5" />
+		<!-- SalesPlatform.ru end -->
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -1992,8 +2012,15 @@
 		<field name="user_ip" type="C" size="25">
 			<notnull />
 		</field>
-		<field name="logout_time" type="T" />
-		<field name="login_time" type="T" />
+		<field name="logout_time" type="T">
+			<deftimestamp />
+		</field>
+		<field name="login_time" type="T">
+			<!-- Troublesome with STRICT_TRANS_TABLE mode depends on MySQL 5.5 or 5.6+ -->
+			<!--
+				<deftimestamp />
+			-->
+		</field>
 		<field name="status" type="C" size="25" />
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
@@ -4205,6 +4232,7 @@
 		<field name="logoname" type="C" size="50" />
 		<field name="logo" type="X" />
 		<field name="vatid" type="C" size="100" /> 
+		<!-- SalesPlatform.ru begin -->
 		<field name="inn" type="C" size="30">
 			<default value="" />
 		</field>
@@ -4238,6 +4266,7 @@
 		<field name="okpo" type="C" size="100">
 			<default value="" />
 		</field>
+		<!-- SalesPlatform.ru end -->
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
@@ -6422,7 +6451,6 @@
 		</field>
 		<field name="relcrmid" type="I" size="19">
 		</field>
-		<opt platform="mysql">ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci</opt>
 	</table>
 	<!--  asterisk integration ends -->
 
@@ -6801,6 +6829,7 @@
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
+	<!-- SalesPlatform.ru begin -->
 	<table name="sp_templates">
 	    <field name="templateid" type="I" size="11">
 			<key />
@@ -6820,6 +6849,7 @@
     	    </field>
     	    <opt platform="mysql">ENGINE=InnoDB</opt>
 	</table>
+	<!-- SalesPlatform.ru end -->
 
 	<table name="vtiger_scheduled_reports">
 		<field name="reportid" type="I">
@@ -7044,7 +7074,12 @@
 		<field name="isdefault" type="I" size="11" >
 			<default value="1" />
 		</field>
-		<field name="conditions" type="C" size="255" />
+                <!-- SalesPlatform.ru begin -->
+		<!--<field name="conditions" type="C" size="255" />-->
+		<field name="conditions" type="C" size="255" >
+                    <default value="" />
+                </field>
+                <!-- SalesPlatform.ru end -->
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
@@ -7072,4 +7107,51 @@
     </table>
     <!-- SalesPlatform.ru end -->
 
+	<table name="vtiger_dashboard_tabs">
+		<field name="id" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="tabname" type="C" size="50" >
+			<unique />
+		</field>
+		<field name="isdefault" type="I" size="1" >
+			<default value="0" />
+		</field>
+		<field name="sequence" type="I" size="5" >
+			<default value="2" />
+		</field>
+		<field name="appname" type="C" size="20" />
+		<field name="modulename" type="C" size="50" />
+		<field name="userid" type="I" size="11">
+			<unique />
+		</field>
+
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_dashboard_tabs" alter="true">
+		<constraint>ADD CONSTRAINT vtiger_dashboard_tabs_ibfk_1 FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+		<opt>Engine=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_dashboard_tabs" alter="true">
+		<constraint>ADD CONSTRAINT tabname UNIQUE(tabname, userid)</constraint>
+		<opt>Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_app2tab">
+		<field name="tabid" type="I" size="11" />
+		<field name="appname" type="C" size="20" />
+		<field name="sequence" type="I" size="19" />
+		<field name="visible" type="I" size="3" >
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_app2tab" alter="true">
+		<constraint>ADD CONSTRAINT vtiger_app2tab_fk_tab FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+		<opt>Engine=InnoDB</opt>
+	</table>
 </schema>

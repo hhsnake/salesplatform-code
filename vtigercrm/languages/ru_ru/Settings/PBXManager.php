@@ -10,7 +10,7 @@
  * *********************************************************************************** */
 $languageStrings = array(
     'LBL_SELECT_ONE' => 'Выберите',
-    'LBL_PBXMANAGER' => 'Звонки',
+    'LBL_PBXMANAGER' => 'Asterisk',
     'LBL_PBXMANAGER_CONFIG' => 'Подробные сведения о SalesPlatform Asterisk Connector',
     'LBL_NOTE' => 'Примечание:',
     'LBL_INFO_WEBAPP_URL' => 'Укажите URL адрес в формате', 

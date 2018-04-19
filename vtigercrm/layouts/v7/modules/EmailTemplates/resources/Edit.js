@@ -142,7 +142,9 @@ Vtiger_Edit_Js("EmailTemplates_Edit_Js",{},{
 	 * Registered the events for this page
 	 */
 	registerEvents : function() {
-		this.registerEventForCkEditor();
+            // SalesPlatform.ru begin
+		//this.registerEventForCkEditor();
+            // SalesPlatform.ru end
 		this.registerChangeEventForModule();
 		//To load default selected module fields in edit view
 		this.loadFields();

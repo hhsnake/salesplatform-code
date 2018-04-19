@@ -32,7 +32,10 @@
     <div class="viewAllTagsContainer hide">
         <div class="modal-dialog">
             <div class="modal-content" style="min-height:200px">
-                {assign var="TITLE" value="{vtranslate('LBL_TAG_FOR',$MODULE,$RECORD->getName())}"}
+                {* SalesPlatform.ru begin *}
+                {* {assign var="TITLE" value="{vtranslate('LBL_TAG_FOR',$MODULE,$RECORD->getName())}"} *}
+                {assign var="TITLE" value=vtranslate('LBL_TAG_FOR',$MODULE,$RECORD->getName())}
+                {* SalesPlatform.ru end *}
                 {include file="ModalHeader.tpl"|vtemplate_path:$MODULE}
                 <div class="modal-body detailShowAllModal">
                     <div class="form-group">

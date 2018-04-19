@@ -196,6 +196,11 @@ jQuery.Class("Vtiger_Popup_Js",{
 			params['multi_select'] = true;
 		}
         params['relationId'] = this.getRelationId();
+        
+        // Carry forward meta (LineItem Pricebook Popup > Search)
+        var getUrl = this.getPopupPageContainer().find('#getUrl');
+        if (getUrl.length) params['get_url'] = getUrl.val();
+        
 		return params;
 	},
     
@@ -332,10 +337,10 @@ jQuery.Class("Vtiger_Popup_Js",{
 		var aDeferred = jQuery.Deferred();
 		var completeParams = this.getCompleteParams();
 		completeParams['page'] = 1;
-		return this.getPageRecords(completeParams).then(
+		this.getPageRecords(completeParams).then(
 			function(data){
 				aDeferred.resolve(data);
-			});
+		});
 		return aDeferred.promise();
 	},
     
@@ -547,7 +552,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 		}
 		var completeParams = this.getCompleteParams();
 		jQuery.extend(completeParams,sortingParams);
-		return this.getPageRecords(completeParams).then(
+		this.getPageRecords(completeParams).then(
 			function(data){
 				aDeferred.resolve(data);
 			},

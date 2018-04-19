@@ -22,7 +22,7 @@ $languageStrings = array(
 	'LBL_IMPORT'                   => 'Импорт'                ,
 	'LBL_EXPORT'                   => 'Экспорт'              ,
 	'LBL_FIND_DUPLICATES'          => 'Найти дубликаты',
-	'LBL_MORE'                     => 'Другое'                ,
+	'LBL_MORE'                     => 'Еще'                ,
 	'LBL_ACTIONS'                  => 'Действия'            ,
 	'LBL_ADD'                      => 'Добавить'            , // KEY 5.x: LBL_ADD_ITEM
 	'LBL_EDIT'                     => 'Изменить'            ,
@@ -512,7 +512,10 @@ $languageStrings = array(
         'Tasks'                        => 'Задачи',
         //SalesPlatform.ru end
 	'Low'                          => 'Низкий'                         , // TODO: Review
-	'In Progress'                  => 'В процессе'         ,
+    //SalesPlatform.ru begin
+	//'In Progress'                  => 'В процессе'         ,
+    'In Progress'                  => 'В прогрессе',
+    //SalesPlatform.ru end
 	'Subject'                      => 'Тема'                    ,
 	'Terms & Conditions'           => 'Сроки и условия',
         'LBL_TERMS_AND_CONDITIONS'     => 'Сроки и условия',
@@ -768,7 +771,10 @@ $languageStrings = array(
     'Groups' => 'Группы',
     'Import' => 'Импорт',
     'Merge' => 'Слияние',
-    'DuplicatesHandling' => 'Дублирование обработчика',
+    //SalesPlatform.ru begin
+    //'DuplicatesHandling' => 'Дублирование обработчика',
+    'DuplicatesHandling' => 'Поиск дубликатов',
+    //SalesPlatform.ru end
     'RoleAndSubordinates'          => 'Роли и подчиненные'       ,
     'SharingAccess' => 'Совместный доступ',
     'LoginHistory' => 'Журнал регистраций в системе',
@@ -819,6 +825,9 @@ $languageStrings = array(
     'Sub Products' => 'Составной',
     'LBL_BACK_TO_PRODUCTS' => 'Назад',
     'Cancel' => 'Отменить',
+    // SalesPlatform.ru begin add localization for lists of contacts
+    'LBL_NO_LISTS_FOUND' => 'Списки не найдены',
+    //SalesPlatform.ru end 
     //SalesPlatform.ru begin History of products changes
     //'Pre Tax Total' => 'Индивидуальный налог', 
     'Pre Tax Total' => 'Итого', 
@@ -1147,7 +1156,7 @@ $languageStrings = array(
     'LBL_HOUR_CORRECT_PLURAL_TWO' => 'Часов', 
     'LBL_DAY_CORRECT_PLURAL_TWO' => 'Дней', 
     'LBL_MONTH_CORRECT_PLURAL_TWO' => 'Месяцев', 
-    'LBL_YEAR_CORRECT_PLURAL_TWO' => 'Лет', 
+    'LBL_YEAR_CORRECT_PLURAL_TWO' => 'Лет',
     //SalesPlatform.ru end
     
     //SalesPlatform.ru begin Vtiger 7
@@ -1220,7 +1229,11 @@ $languageStrings = array(
     'LBL_CLICK_HERE'=>'Кликните здесь',
     'LBL_TWEETS' => 'Твиты',
     'LBL_FAVOURITES' => 'Избранное',
-    'LBL_FOLLOWING' => 'После',
+    // SalesPlatform.ru begin
+    //'LBL_FOLLOWING' => 'После',
+    'LBL_FOLLOWING' => 'Вы подписаны',
+    'LBL_NOT_FOLLOWING' => 'Вы не подписаны',
+    // SalesPlatform.ru end
     'LBL_FOLLOWERS' => 'Аудитория',
     'LBL_VIEW_FULL_PROFILE' => 'Просмотреть полный профиль',
     'LBL_LOCATION' => 'Расположение',
@@ -1270,7 +1283,7 @@ $languageStrings = array(
     'LBL_DOWNLOAD_FILE' => 'Скачать файл',
     'LBL_VIEW_FILE' => 'Посмотреть файл',
     'LBL_PREVIEW_NOT_AVAILABLE' => 'Предварительный просмотр недоступен',
-    'LBL_PREVIEW_SUPPORTED_FILES' => '<b> <strong> Поддерживаемые типы файлов: </strong> </b> Математические инструменты <b> PDF-файлов </b> <br> <b> Текстовые файлы - </b> TXT, CSV, ИС<b> Открыть файлы документов - </b> открыты текстовый документ (ODT), открытый документ электронной таблицы (ODS) и открытая презентация документа (ОРС) <br> <b> Мультимедийные файлы - </b> изображение, аудио и видео файлы для',
+    'LBL_PREVIEW_SUPPORTED_FILES' => '<b> <strong> Поддерживаемые типы файлов: </strong> </b> <br/><br/> <b> PDF-файлы </b> <br/> <b> Текстовые файлы - </b> txt, csv, ics <br/> <b> Файлы документов - </b> открытый текстовый документ (ODT), открытый документ электронной таблицы (ODS) и открытая презентация документа (ОРС) <br/> <b> Мультимедийные файлы - </b> изображения, аудио и видео файлы',
     'LBL_PREVIOUS' => 'Предыдущий',
     'Primary Twitter' => 'Имя пользователя в Twitter',
     'Engagement Score'             => 'Оценка участия'     ,
@@ -1337,7 +1350,7 @@ $languageStrings = array(
     //'LBL_LINKED' => 'Связанный',
     //SalesPaltform.ru end
     'LBL_ADDING_NEW' => 'Добавление новых',
-    'LBL_LESS' => 'Меньше',
+    'LBL_LESS' => 'меньше',
     'LBL_COMMENT' => 'Комментарий',
     'LBL_NOT_STARRED' => 'Следуйте',
     'LBL_QUICK_VIEW' => 'Быстрый Просмотр',
@@ -1449,8 +1462,10 @@ $languageStrings = array(
     'LBL_ADD_TAB' => 'Добавить Закладку',
     'LBL_TAB_NAME' => 'Название панели',
     'LBL_SHARED_TAGS_ACCESS' => 'Общие теги доступны всем пользователям в Vtiger',
-    'LBL_GOTO_TAGS' => 'Перейдите в меню Настройки > Мои настройки > Мои Теги редактировать или удалять Ваши личные теги',
+    
     //SalesPlatform.ru begin licalization fix
+    //'LBL_GOTO_TAGS' => 'Перейдите в меню Настройки > Мои настройки > Мои Теги редактировать или удалять Ваши личные теги',
+    'LBL_GOTO_TAGS' => 'Перейдите в меню Настройки > Мои настройки > Мои Теги чтобы отредактировать или удалить Ваши личные теги',
     'LBL_INFO' => 'Информация',
     //SalesPlatform.ru end licalization fix
     'LBL_UNLINK' => 'Отвязать',
@@ -1470,15 +1485,21 @@ $languageStrings = array(
     'LBL_PROJECT' => 'Проекты',
     'LBL_TAGS' => 'Теги',
     'LBL_SHARE_TAGS' => 'Общие Теги',
-    'LBL_SHARE_TAG' => 'Поделиться Тег',
-    'LBL_TAG_FOR' => 'Бирка для %S',
-    'LBL_CURRENT_TAGS' => 'Текущая Теги',
+    //SalesPlatform.ru begin
+    //'LBL_SHARE_TAG' => 'Поделиться Тег',
+    'LBL_SHARE_TAG' => 'Сделать общим тэгом',
+    //SalesPlatform.ru end
+    'LBL_TAG_FOR' => 'Теги для %s',
+    //SalesPlatform.ru begin
+    //'LBL_CURRENT_TAGS' => 'Текущая Теги',
+    'LBL_CURRENT_TAGS' => 'Текущие Теги',
+    //SalesPlatform.ru end
     'LBL_CREATE_NEW_TAG' => 'Создать новый тег',
-    'LBL_ADD_TAG' => 'Добавить Метку',
+    'LBL_ADD_TAG' => 'Добавить Тег',
     'LBL_REMOVE_TAG' => 'Удалить Тег',
     'LBL_TAG_SEPARATOR_DESC' => 'Используйте запятую для разделения нескольких тегов',
     'LBL_ENTER_TAG_NAME' => 'Введите имя тега',
-    'LBL_ADD_NEW_TAG' => 'Добавить Метку',
+    'LBL_ADD_NEW_TAG' => 'Добавить Тег',
     'LBL_SELECT_EXISTING_TAG' => 'Введите здесь, чтобы выбрать существующую метку',
     'LBL_ADD_OR_SELECT_TAG' => 'Добавить/Выберите Тег',
     'LBL_SELECT_FROM_AVAIL_TAG' => 'Выберите из доступных тегов',
@@ -1502,7 +1523,10 @@ $languageStrings = array(
     'LBL_MODULE' => 'Модуль',
     'LBL_IS_DEFAULT' => 'Шаблон по умолчанию',
     'LBL_SELECT_RECORD_FIELD' => 'Выберите поле записи',
-    'LBL_FOLLOW' => 'Следуйте',
+    // SalesPlatform.ru begin
+    //'LBL_FOLLOW' => 'Следуйте',
+    'LBL_FOLLOW' => 'Подписаться',
+    // SalesPlatform.ru end
     'LBL_UNFOLLOW' => 'Отписаться',
     'LBL_HELP_ANSWERS' => 'Ответы',
     'LBL_HELP_ARTICLES' => 'Статьи',
@@ -1519,7 +1543,7 @@ $languageStrings = array(
     'LBL_POST_YOUR_COMMENT_HERE' => 'Оставить свой комментарий здесь',
     'LBL_CLICK_TO_CALL' => 'Нажмите для вызова',
     'LBL_SHOW_TOTAL_NUMBER_OF_RECORDS' => 'Нажмите, чтобы получить общее количество записей графы',
-    'LBL_ROLL_UP' => 'Свернуть',
+    'LBL_ROLL_UP' => 'Показать комментарии связанных карточек',
     'LBL_TOUCH_POINTS' => 'Точек соприкосновения',
     'LBL_EMAIL_SUPPORT'            => 'Поддержка по электронной почте', 
     'LBL_NO_ENTITIES_FOUND'        => 'Нет %S не найдена',
@@ -1570,7 +1594,7 @@ $languageStrings = array(
     'Workflow Name' => 'Название', 
     'Trigger' => 'Условие выполнения',  
     'Conditions' => 'Условия для фильтра',
-    'Tags' => 'Метка',  
+    'Tags' => 'Тег',
     'Private/Public' => 'Личный/Публичный',
     'LBL_INVITE_USERS'=> 'Пользователи',
     'public' => 'Публичное'          ,
@@ -1589,7 +1613,7 @@ $languageStrings = array(
     'My Preferences' => 'Данные о пользователе',
     'Mandatory Fields' => 'Обязательные поля',
     'Fixed' => 'Фиксированый',
-    'Variable' => 'Переменная',
+    'Variable' => 'Переменный',
     'Simple' => 'Простой',
     'Compound' => 'Соединение',
     'Deducted' => 'Вычтено',
@@ -1612,6 +1636,40 @@ $languageStrings = array(
     'comma' => ', (запятая)',
     'Pipe' => '|',
     'Caret' => '^',
+    'MARKETING' => 'Маркетинг',
+    'SALES' => 'Продажи',
+    'INVENTORY' => 'Склад',
+    'SUPPORT' => 'Поддержка',
+    'PROJECT' => 'Проекты',
+    'LBL_HAS_CHANGED_FROM' => 'изменено с',
+    'Taxes' => 'Налоги',
+    'starred' => 'Избранное',
+    'LBL_SHOW_LESS' => 'Показать меньше',
+    'The uploaded file exceeds the upload_max_filesize directive in php.ini' => 'Размер файла превышает указанный в конфигурационном файле php.ini. Сообщите об этом системному администратору, либо уменьшите размер файла импорта',
+    'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form' => 'Размер файла превышает максимально допустимый, указанный в настройках системы. Обратитесь к администратору системы или уменьшите размер файла импорта',
+    'The uploaded file was only partially uploaded' => 'Файл был загружен лишь частитчно. Попробуйте еще раз',
+    'No file was uploaded' => 'Ошибка при загрузке файла, попробуйте еще раз',
+    'Missing a temporary folder' => 'Отсутствует или не доступна на запись директория для загрузки файлов. Обратитесь к системному администратору',
+    'Failed to write file to disk' => 'Ошибка при сохранении файла импорта. Попробуйте еще раз',
+    'File upload stopped by extension' => 'Загрузка файла была остановлена из-за недопустимого расширения',
+    'Unknown upload error' => 'Ошибка при загрузке файла, попробуйте еще раз',
+    'Individual' => 'Индивидуально',
+    'Group' => 'Группа',
+    'tags' => 'Теги',
+    'LBL_STARRED_RECORD_TO' => '%s на %s',
+    'LBL_STARRED_RECORD_UPDATED' => '%s обновил %s',
+    'LBL_NOTIFICATION' => 'Уведомление',
+    'VoipIntegration' => 'Интеграция с облачными АТС',
+    'SPVoipIntegration' => 'Интеграция с облачными АТС',
+    'DynamicBlocks' => 'Динамические блоки',
+    'SPDynamicBlocks' => 'Динамические блоки',
+    'LBL_DUPLICATES_DETECTED' => 'Обнаружено дублирование!',
+    'LBL_DUPLICATES_FOUND_MESSAGE' => 'Не может быть сохранено, пока существует дубликат %s, с соответствующими значениями %s.',
+    'LBL_DUPLICATION_FAILURE_FOR_ADMIN' => '%s для изменения правил предотвращения дублирования.',
+    'LBL_DUPLICATE_RECORD_LISTS' =>'Дублирование %s(ы):',
+    'LBL_TIPS' => 'Подсказки',
+    'SPTips' => 'Подсказки',
+    'List columns saved successfully' => 'Список столбцов успешно сохранен'
     //SalesPlatform.ru end
 );
 $jsLanguageStrings = array(
@@ -1737,7 +1795,9 @@ $jsLanguageStrings = array(
     'JS_S' => '',
     'JS_LOADING_MORE_RESULTS' => 'Загрузка результатов...',
     'JS_SEARCHING' => 'Поиск...',
-    'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Ответственный изменен удачно.',
+    //SalesPlatform.ru begin
+    'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Ответственный успешно изменен',
+    //SalesPlatform.ru end
     'LBL_DELETE_USER_CONFIRMATION' => 'Вы уверены, что хотите удалить пользователя?',
     'Transfer records to user' => 'Прикрепить все записи к пользователю',
     'User to be deleted' => 'Удаляемый пользователь',
@@ -1875,8 +1935,11 @@ $jsLanguageStrings = array(
     'JS_INTERNAL_COMMENT_INFO' => 'Комментарий будет видно только пользователям CRM, если флажок внутреннего комментария включен. Для уведомления клиентов (через настраиваемые Обработчики или Клиентский портал), отключите этот флажок',
     'JS_NO_LINE_ITEM' =>'Позиции не могут быть пустыми.',
     'JS_BASE_CURRENCY_CHANGED_TO_DISABLE_CURRENCY' => 'Базовая валюта должна быть изменена, чтобы отключить ',
-    'JS_NO_TAXES_EXISTS' => 'Не существует никаких налогов',
-    'JS_CONFIRM_TAXES_AND_CHARGES_REPLACE' => 'Вы хотите обновить значения налога и заряда, соответствующие выбранному региону?',
+    'JS_NO_TAXES_EXISTS' => 'В карточке данного Товара (Услуги) налог не задан',
+    //SalesPlatform.ru begin
+    //'JS_CONFIRM_TAXES_AND_CHARGES_REPLACE' => 'Вы хотите обновить значения налога и заряда, соответствующие выбранному региону?',
+    'JS_CONFIRM_TAXES_AND_CHARGES_REPLACE' => 'Вы хотите обновить значение налога в соответствии с выбранным регионом?',
+    //SalesPlatform.ru end
     'JS_PRINTTEMPLATEMODULE_DISABLED' => 'Модуль PrintTemplates отключен. Невозможно выполнить операцию',
     'JS_SENT_FOR_SIGNATURE' => 'Направлено для подписания',
     'JS_FAILED_TO_SEND_FOR_SIGNATURE' => 'Не удалось отправить на подпись',
@@ -1976,8 +2039,12 @@ $jsLanguageStrings = array(
     'JS_INVALID_URL' => 'Недопустимый URL-адрес',
     'JS_ARE_YOU_SURE_YOU_WANT_TO_DELETE' => 'Вы уверены, что хотите удалить?',
     'JS_TAB_LABEL_EXCEEDS_CHARS' => 'Длина метки вкладки должна быть меньше чем %s символов',
-    'JS_STARRED' => 'Снялся',
-    'JS_NOT_STARRED' => 'Не снялся',
+    //SalesPlatform.ru begin
+    //'JS_STARRED' => 'Снялся',
+    //'JS_NOT_STARRED' => 'Не снялся',
+    'JS_STARRED' => 'Вы подписаны',
+    'JS_NOT_STARRED' => 'Вы не подписаны',
+    //SalesPlatform.ru end
     'JS_NO_TAG_EXISTS' => 'Тег отсутствует',
     'JS_HELP_AND_SUPPORT' => 'Помощь и Поддержка',
     'JS_WHAT_DO_YOU_NEED_HELP_WITH' => 'Какая тебе еще нужна помощь?',
@@ -2013,7 +2080,6 @@ $jsLanguageStrings = array(
     'JS_SUPPORTPREMIUM_ANNUAL_PLAN_TO_UPGRADE_CONFIRMATION' => 'Поддержка Премиум годовой план абонентская плата ($240 на одного пользователя. Ваш счет будет взиматься плата за разницу в цене за оставшуюся часть текущего расчетного периода. Пожалуйста, подтвердите, если вы хотите, чтобы перейти к поддержке Премиум годового плана.',
     'JS_MENTION_ATLEAST_ONE_USER' => 'Учтите хотя бы одну пользователем',
     'JS_LOADING' => 'Загрузка...',
-    'JS_UPLOAD_SUCCESSFUL' => 'Файл успешно Добавленоy',
     'JS_UPLOAD_FAILED' => 'Загрузка файла Ошибка',
     'JS_USER_ALL' => 'Пользователь : Все',
     'JS_STATUS_ALL' => 'Статус : Все',
@@ -2024,8 +2090,23 @@ $jsLanguageStrings = array(
 	'Pending Input'                => 'В ожидании'         , 
 	'Not Started'                  => 'Не начато'           , 
 	'Deferred'                     => 'Отсрочено'          ,
-    'JS_LIST_SAVED' => 'Список сохранен',
+    'JS_LIST_SAVED' => 'Фильтр сохранен',
     'JS_EMPTY_SERVER_NAME_FIELD' => 'Поле Имя сервера обязательно к заполнению',
+    'JS_NO' => 'Нет',
+    'JS_SET_TAX_FOR' => '% налога для',
+    'JS_EMPTY_RESPONSE' => 'Пустой ответ',
+    'JS_RECORD_CREATED' => 'Запись создана',
+    'JS_RECORD_UPDATED' => 'Запись обновлена',
+    'JS_WIDGET_RESIZING_WAIT_MSG' => 'Виджет будет загружен после изменения размеров',
+    'JS_FOLLOW_RECORD' => 'Подписка успешно оформлена',
+    'JS_UNFOLLOW_RECORD' => 'Подписка прекращена',
+    'JS_LIST_DELETE_CONFIRMATION' => 'Вы уверены, что хотите удалить?',
+    'JS_DOCUMENT_CREATED' => 'Документ создан',
+    'JS_UPLOAD_SUCCESSFUL' => 'Файл успешно добавлен',
+    'Import Completed.' => 'Импорт завершен',
+    'JS_UPDATED' => 'Обновлено',
+    'JS_THIS_FILE_HAS_ALREADY_BEEN_SELECTED' => 'Этот файл уже был выбран',
+    'No Results Found' => 'Не найдено'
     //SalesPlatform.ru end
 );
 

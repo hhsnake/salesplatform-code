@@ -47,6 +47,12 @@ class Vtiger_ModuleBasic {
 	var $basetableid=false;
 	var $customtable=false;
 	var $grouptable = false;
+	var $fieldtable = false;
+
+	var $allowDuplicates = false;
+	var $isSyncable = 0;
+	var $syncActionForDuplicate = 1;
+
 
 	const EVENT_MODULE_ENABLED     = 'module.enabled';
 	const EVENT_MODULE_DISABLED    = 'module.disabled';
@@ -77,13 +83,17 @@ class Vtiger_ModuleBasic {
 		$this->tabsequence = $valuemap['tabsequence'];
 		$this->parent = $valuemap['parent'];
 		$this->customized = $valuemap['customized'];
-		$this->trial = $valuemap['trial']; 
+		$this->trial = $valuemap['trial'];
 
 		$this->isentitytype = $valuemap['isentitytype'];
 		if($this->isentitytype || $this->name == 'Users') {
 			// Initialize other details too
 			$this->initialize2();
 		}
+		$this->source = $valuemap['source'];
+		$this->isSyncable = $valuemap['issyncable'];
+		$this->allowDuplicates = $valuemap['allowduplicates'];
+		$this->syncActionForDuplicate = $valuemap['sync_action_for_duplicates'];
 	}
 
 	/**
@@ -154,12 +164,12 @@ class Vtiger_ModuleBasic {
 		$useisentitytype = $this->isentitytype? 1 : 0;
 		$adb->pquery('UPDATE vtiger_tab set isentitytype=? WHERE tabid=?',Array($useisentitytype, $this->id));
 
-        // SalesPlatform.ru begin Enable history for new module
-        $adb->pquery("INSERT INTO vtiger_modtracker_tabs (tabid, visible) VALUES (?,?)",
-            Array($this->id, 1));
-        // SalesPlatform.ru end
+		// SalesPlatform.ru begin Enable history for new module
+		$adb->pquery("INSERT INTO vtiger_modtracker_tabs (tabid, visible) VALUES (?,?)",
+		    Array($this->id, 1));
+		// SalesPlatform.ru end
 
-        if(!Vtiger_Utils::CheckTable('vtiger_tab_info')) {
+		if(!Vtiger_Utils::CheckTable('vtiger_tab_info')) {
 			Vtiger_Utils::CreateTable(
 				'vtiger_tab_info',
 				'(tabid INT, prefname VARCHAR(256), prefvalue VARCHAR(256), FOREIGN KEY fk_1_vtiger_tab_info(tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE)',
@@ -293,21 +303,15 @@ class Vtiger_ModuleBasic {
 
 		if(!$this->customtable)$this->customtable = $this->basetable . "cf";
 		if(!$this->grouptable)$this->grouptable = $this->basetable."grouprel";
+		if(!$this->fieldtable)$this->fieldtable = $this->basetable."_user_field";
 
 		Vtiger_Utils::CreateTable($this->basetable,"($this->basetableid INT(19) PRIMARY KEY)",true);
 		Vtiger_Utils::CreateTable($this->customtable,"($this->basetableid INT(19) PRIMARY KEY)", true);
+		Vtiger_Utils::CreateTable($this->fieldtable,"(recordid INT(25) NOT NULL,userid INT(25) NOT NULL,starred VARCHAR(100) NULL DEFAULT NULL)",true);
+		
 		if(Vtiger_Version::check('5.0.4', '<=')) {
 			Vtiger_Utils::CreateTable($this->grouptable, "($this->basetableid INT PRIMARY KEY, groupname varchar(100))",true);
 		}
-                
-                //SalesPlatform.ru begin #5318
-                $moduleUserSpecificTable = Vtiger_Functions::getUserSpecificTableName($this->name);
-                if (!Vtiger_Utils::CheckTable($moduleUserSpecificTable)) {
-                    Vtiger_Utils::CreateTable($moduleUserSpecificTable,
-                            '(`recordid` INT(19) NOT NULL, `userid` INT(19) NOT NULL, `starred` VARCHAR(100) DEFAULT NULL,
-                                Index `record_user_idx` (`recordid`, `userid`))', true);
-                }
-                //SalesPlatform.ru end #5318
 	}
 
 	/**

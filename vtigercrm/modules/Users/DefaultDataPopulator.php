@@ -1193,7 +1193,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_relatedlists values(" . $this->db->getUniqueID('vtiger_relatedlists') . "," . getTabid("Products") . "," . getTabid("HelpDesk") . ",'get_tickets',1,'HelpDesk',0,'add','','','')");
 		$this->db->query("insert into vtiger_relatedlists values(" . $this->db->getUniqueID('vtiger_relatedlists') . "," . getTabid("Products") . "," . getTabid("Documents") . ",'get_attachments',3,'Documents',0,'add,select','','','')");
 		$this->db->query("insert into vtiger_relatedlists values(" . $this->db->getUniqueID('vtiger_relatedlists') . "," . getTabid("Products") . "," . getTabid("Quotes") . ",'get_quotes',4,'Quotes',0,'add','','','')");
-		$this->db->query("insert into vtiger_relatedlists values(" . $this->db->getUniqueID('vtiger_relatedlists') . "," . getTabid("Products") . "," . getTabid("PurchaseOrder") . ",'get_purchase_orders',5,'Purchase Order',0,'add')");
+		$this->db->query("insert into vtiger_relatedlists values(" . $this->db->getUniqueID('vtiger_relatedlists') . "," . getTabid("Products") . "," . getTabid("PurchaseOrder") . ",'get_purchase_orders',5,'Purchase Order',0,'add','','','')");
 		$this->db->query("insert into vtiger_relatedlists values(" . $this->db->getUniqueID('vtiger_relatedlists') . "," . getTabid("Products") . "," . getTabid("SalesOrder") . ",'get_salesorder',6,'Sales Order',0,'add','','','')");
 		$this->db->query("insert into vtiger_relatedlists values(" . $this->db->getUniqueID('vtiger_relatedlists') . "," . getTabid("Products") . "," . getTabid("Invoice") . ",'get_invoices',7,'Invoice',0,'add','','','')");
 		$this->db->query("insert into vtiger_relatedlists values(" . $this->db->getUniqueID('vtiger_relatedlists') . "," . getTabid("Products") . "," . getTabid("PriceBooks") . ",'get_product_pricebooks',8,'PriceBooks',0,'add','','','')");
@@ -1773,7 +1773,6 @@ Should any need arise,please do give us a call.';
 		$this->db->query("insert into vtiger_actionmapping values(4,'DetailView',0)");
 		$this->db->query("insert into vtiger_actionmapping values(5,'Import',0)");
 		$this->db->query("insert into vtiger_actionmapping values(6,'Export',0)");
-		$this->db->query("insert into vtiger_actionmapping values(7,'CreateView',0)");
 		//$this->db->query("insert into vtiger_actionmapping values(7,'AddBusinessCard',0)");
 		$this->db->query("insert into vtiger_actionmapping values(8,'Merge',0)");
 		$this->db->query("insert into vtiger_actionmapping values(1,'VendorEditView',1)");
@@ -1899,21 +1898,38 @@ Should any need arise,please do give us a call.';
 		 * Setup module sequence numbering.
 		 */
 		$modseq = array(
-		'Leads'     => vtranslate('LBL_LEADS_PREFIX'),
-		'Accounts'  => vtranslate('LBL_ACCOUNTS_PREFIX'),
-		'Campaigns' => vtranslate('LBL_CAMPAIGNS_PREFIX'),	
-		'Contacts'  => vtranslate('LBL_CONTACTS_PREFIX'),
-		'Potentials'=> vtranslate('LBL_POTENTIALS_PREFIX'),
-		'HelpDesk'  => vtranslate('LBL_HELPDESK_PREFIX'),
-		'Quotes'    => vtranslate('LBL_QUOTES_PREFIX'),
-		'SalesOrder'=> vtranslate('LBL_SALESORDER_PREFIX'),
-		'PurchaseOrder'=> vtranslate('LBL_PURCHASEORDER_PREFIX'),
-		'Invoice'   => vtranslate('LBL_INVOICE_PREFIX'),
-		'Products'  => vtranslate('LBL_PRODUCTS_PREFIX'),
-		'Vendors'   => vtranslate('LBL_VENDORS_PREFIX'),
-		'PriceBooks'=> vtranslate('LBL_PRICEBOOKS_PREFIX'),
-		'Faq'       => vtranslate('LBL_FAQ_PREFIX'),
-		'Documents' => vtranslate('LBL_DOCUMENTS_PREFIX'),
+		//SalesPlatform.ru begin
+			//'Leads' => 'LEA',
+			//'Accounts' => 'ACC',
+			//'Campaigns' => 'CAM',
+			//'Contacts' => 'CON',
+			//'Potentials' => 'POT',
+			//'HelpDesk' => 'TT',
+			//'Quotes' => 'QUO',
+			//'SalesOrder' => 'SO',
+			//'PurchaseOrder' => 'PO',
+			//'Invoice' => 'INV',
+			//'Products' => 'PRO',
+			//'Vendors' => 'VEN',
+			//'PriceBooks' => 'PB',
+			//'Faq' => 'FAQ',
+			//'Documents' => 'DOC'
+			'Leads'     => vtranslate('LBL_LEADS_PREFIX'),
+			'Accounts'  => vtranslate('LBL_ACCOUNTS_PREFIX'),
+			'Campaigns' => vtranslate('LBL_CAMPAIGNS_PREFIX'),	
+			'Contacts'  => vtranslate('LBL_CONTACTS_PREFIX'),
+			'Potentials'=> vtranslate('LBL_POTENTIALS_PREFIX'),
+			'HelpDesk'  => vtranslate('LBL_HELPDESK_PREFIX'),
+			'Quotes'    => vtranslate('LBL_QUOTES_PREFIX'),
+			'SalesOrder'=> vtranslate('LBL_SALESORDER_PREFIX'),
+			'PurchaseOrder'=> vtranslate('LBL_PURCHASEORDER_PREFIX'),
+			'Invoice'   => vtranslate('LBL_INVOICE_PREFIX'),
+			'Products'  => vtranslate('LBL_PRODUCTS_PREFIX'),
+			'Vendors'   => vtranslate('LBL_VENDORS_PREFIX'),
+			'PriceBooks'=> vtranslate('LBL_PRICEBOOKS_PREFIX'),
+			'Faq'       => vtranslate('LBL_FAQ_PREFIX'),
+			'Documents' => vtranslate('LBL_DOCUMENTS_PREFIX'),
+		//SalesPlatform.ru end
 		);
 		foreach ($modseq as $modname => $prefix) {
 			$this->addInventoryRows(
@@ -2343,7 +2359,8 @@ Should any need arise,please do give us a call.';
 			'LBL_USER_MANAGEMENT',
 			'LBL_STUDIO',
 			'LBL_COMMUNICATION_TEMPLATES',
-			'LBL_OTHER_SETTINGS'
+			'LBL_OTHER_SETTINGS',
+			'LBL_MODULE_MANAGER'
 			);
 
 		//field names

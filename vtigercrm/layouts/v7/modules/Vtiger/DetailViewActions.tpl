@@ -15,8 +15,14 @@
             <div class="btn-group">
             {assign var=STARRED value=$RECORD->get('starred')}
             {if $MODULE_MODEL->isStarredEnabled()}
-                <button class="btn btn-default markStar {if $STARRED} active {/if}" id="starToggle" style="width:100px;">
-                    <div class='starredStatus' title="{vtranslate('LBL_STARRED', $MODULE)}">
+                {* SalesPlatform.ru begin *}
+                {* <button class="btn btn-default markStar {if $STARRED} active {/if}" id="starToggle" style="width:100px;">*}
+                <button class="btn btn-default markStar {if $STARRED} active {/if}" id="starToggle" style="width:140px;">
+                {* SalesPlatform.ru end *}
+                    {* SalesPlatform.ru begin *}
+                    {* <div class='starredStatus' title="{vtranslate('LBL_STARRED', $MODULE)}"> *}
+                    <div class='starredStatus' title="{vtranslate('LBL_FOLLOWING', $MODULE)}">    
+                    {* SalesPlatform.ru end *}
                         <div class='unfollowMessage'>
                             <i class="fa fa-star-o"></i> &nbsp;{vtranslate('LBL_UNFOLLOW',$MODULE)}
                         </div>
@@ -24,7 +30,10 @@
                             <i class="fa fa-star active"></i> &nbsp;{vtranslate('LBL_FOLLOWING',$MODULE)}
                         </div>
                     </div>
-                    <div class='unstarredStatus' title="{vtranslate('LBL_NOT_STARRED', $MODULE)}">
+                    {* SalesPlatform.ru begin *}
+                    {* <div class='unstarredStatus' title="{vtranslate('LBL_NOT_STARRED', $MODULE)}"> *}
+                    <div class='unstarredStatus' title="{vtranslate('LBL_NOT_FOLLOWING', $MODULE)}">
+                    {* SalesPlatform.ru end *}
                         {vtranslate('LBL_FOLLOW',$MODULE)}
                     </div>
                 </button>

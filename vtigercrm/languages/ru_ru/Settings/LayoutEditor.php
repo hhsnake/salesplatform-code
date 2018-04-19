@@ -139,12 +139,24 @@ $languageStrings = array(
         'LBL_DETAIL_HEADER' => 'Запись заголовка',
         'LBL_HEADER_FIELD' => 'Заголовок',
         //SalesPaltform.ru begin
+        'LBL_FIELDS_EXIST_FOR_THE_BLOCK' => 'У этого блока существуют поля',
+        'LBL_DUPLICATE_HANDLING' => 'Обработка дубликатов',
+        'LBL_DUPLICATE_CHECK' => 'Проверка дублирования',
+        'LBL_DUPLICATION_INFO_MESSAGE' => 'Функция дублирования предотвращает создание новых дубликатов записей пользователями и внешними приложениями. Записи, созданные при Импорте и из Обработчиков, не будут проверяться на наличие дубликатов. <br> <br> Существующие дубликаты записей можно удалить с помощью функции «Найти дубликаты» на странице модуля',	
         'Relation' => 'Ссылка',
         'Datetime' => 'Дата и время',
+        'LBL_SELECT_FIELDS_FOR_DUPLICATION' => 'Выберите уникальные поля, по которым должны быть проверены повторяющиеся записи.',
+        'LBL_MAX_3_FIELDS' => 'Не более 3',   
+        'LBL_DUPLICATES_IN_SYNC_MESSAGE' => 'Если обнаружена дублирующаяся запись при синхронизации с внешним приложением.',
+        'LBL_SELECT_FIELDS' => 'Выберите поля',
+        'LBL_PREFER_LATEST_RECORD' => 'Предпочтительна последняя запись',
+	'LBL_PREFER_INTERNAL_RECORD' => 'Предпочтительна внутренняя запись',
+	'LBL_PREFER_EXTERNAL_RECORD' => 'Предпочтительна внешняя запись',
         //SalesPaltform.ru end
         //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
         'LBL_CKE_FIELD' => 'CKEditor',
-    'SPTextArea' => 'Текстовая область',
+        'SPTextArea' => 'Текстовая область',
+        'LBL_SYNC_TOOLTIP_MESSAGE' => 'Предпочтительна последняя запись - самая последняя измененная запись будет сохранена <br/> Предпочтительна внутренняя запись - текущая запись будет сохранена <br/> Предпочтительна внешняя запись - будут сохранены данные из внешнего приложения'
         //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
     );
 $jsLanguageStrings = array(
@@ -197,15 +209,22 @@ $jsLanguageStrings = array(
         Когда поле удаляется, значения, хранящиеся в этом поле, будут удалены, без возможности восстановления.
         Если Вы не уверены и хотите иметь возможность просматривать эти данные в будущем, вы можете пометить поле как неактивные, а не удалять его. Неактивные поля в дальнейшем могут быть активированы в любое время.
         Уверены что хотите удалить это поле?',
-        'JS_FIELD_DELETE_CONFIRMATION' => 'Удалить - мне не нужны данные в этом поле.',
+    // SalesPlatform.ru begin
+        //'JS_FIELD_DELETE_CONFIRMATION' => 'Удалить - мне не нужны данные в этом поле.',
+    'JS_FIELD_DELETE_CONFIRMATION' => 'Удалить - мне не нужны данные в этом поле',
+    // SalesPlatform.ru end
         'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Статус изменен успешно',
         'JS_FIELD_CAN_EITHER_BE_HEADER_OR_SUMMARY_ENABLED' => 'Поле может быть полем заголовка или ключевым полем',
         'JS_DETAIL_HEADER' => 'Запись заголовка',
         'JS_MAXIMUM_HEADER_FIELDS_ALLOWED' => 'Максимальный %ы поля заголовка размещение домашних животных',
         'JS_NAME_FIELDS_APPEAR_IN_HEADER_BY_DEFAULT' => 'Имя поля отображаются в заголовке по умолчанию',
-        'JS_FIELD_IS_HEADER_ENABLED_FOR_VTIGER7' => 'Это поле имеет заголовок для Vtiger7, он появится в сводном представлении',   
+        'JS_FIELD_IS_HEADER_ENABLED_FOR_VTIGER7' => 'Это поле имеет заголовок для Vtiger7, он появится в сводном представлении',
+        //SalesPlatform.ru begin
+        'JS_DUPLICATE_HANDLING_SUCCESS_MESSAGE' => 'Правила предотвращения дублирования, для соответствующих полей изменены',
+        //SalesPlatform.ru end
         //SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
         'JS_CKE_FIELD' => 'CKEditor',
-    'JS_SPTextArea' => 'Текстовая область',
+        'JS_SPTextArea' => 'Текстовая область',
+        'JS_DUPLICATE_CHECK_DISABLED' => 'Проверка дублирования выключена',
         //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
 );

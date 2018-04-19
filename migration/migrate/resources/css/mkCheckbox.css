@@ -89,4 +89,5 @@ input[type="text"], input[type="password"] {
     height: 30px !important;
     width: 180px;
     margin-bottom:0px;
+    padding: 0px 8px;
 }

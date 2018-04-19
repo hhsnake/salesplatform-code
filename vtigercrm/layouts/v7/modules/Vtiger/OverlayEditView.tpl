@@ -61,8 +61,12 @@
         <div class='modal-footer overlayFooter'>
             <center>
                 <footer>
-                    <button class="btn btn-success saveButton" type="submit">Save</button>
-                    <a class="cancelLink" data-dismiss="modal" type="reset">Cancel</a>
+                    {*SalesPlatform.ru begin*}
+                    <button class="btn btn-success saveButton" type="submit">{vtranslate('LBL_SAVE', $MODULE)}</button>
+                    <a class="cancelLink" data-dismiss="modal" type="reset">{vtranslate('LBL_CANCEL', $MODULE)}</a>                    
+                    {*<button class="btn btn-success saveButton" type="submit">Save</button>*}
+                    {*<a class="cancelLink" data-dismiss="modal" type="reset">Cancel</a>*}                    
+                    {*SalesPlatform.ru end*}
                 </footer>
             </center>
         </div>

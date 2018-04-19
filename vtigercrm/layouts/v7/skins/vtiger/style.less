@@ -73,7 +73,10 @@ body > .mCSB_inside > .mCSB_container{
     margin-right: 15px;
 }
 #page{
-    min-height:100%;
+    /*SalesPlatform.re begin*/ 
+    /*min-height: 100%;*/
+    min-height: calc(100% - 25px);
+    /*SalesPlatform.re end*/ 
     padding-top: 84px;
 }
 .select2-container .select2-choice{
@@ -82,10 +85,8 @@ body > .mCSB_inside > .mCSB_container{
 body{
     font-family: 'OpenSans-Regular', sans-serif; 
     font-size : 12px;
-    -webkit-font-smoothing: antialiased;
     font-weight: normal;
     font-style: normal;
-    letter-spacing:  0.008rem;
     font-kerning: normal;
 }
 .app-fixed-navbar{
@@ -229,17 +230,17 @@ body{
 /******** Navigation styles *******/
 /**********************************/
 
-.company-logo {
-  height: 40px;
-  width: 150px;
-  margin: 0 0;
-  /*display: inline-block;*/
-  margin-left: 1px;
+.company-logo{
+    height: 40px;
+    width: 150px;
+    margin: 0 0;
+    display: inline-block;
+    margin-left: 1px;
 }
+
 .company-logo img{
-/*    height: 100%;
-    width: auto;*/
-    max-width: 100%;
+	max-height: 100%;
+	max-width: 100%;
 }
 
 .navbar .fa{
@@ -453,6 +454,10 @@ body{
     background: @project_app !important;
 }
 
+.app-TOOLS {
+	background: @marketing_app !important;
+}
+
 .app-DEFAULT, .app-DASHBOARD {
     background: @default_app !important;
 }
@@ -525,7 +530,6 @@ body{
 
 .app-menu .app-name {
     padding-left: 2%;
-    font-weight: bold;
     max-width:75%;
     display:inline-block;
 }
@@ -604,6 +608,11 @@ a.menu-item:hover{
 .app-item-color-PROJECT {
     border-left: 4px solid @project_app;
 }
+
+.app-item-color-TOOLS {
+	border-left: 4px solid @marketing_app;
+}
+
 .app-item .fa{
     font-size: 1.5em;
     -webkit-transition: all 0.25s ease-in;
@@ -871,6 +880,12 @@ a.menu-item:hover{
     pointer-events: none;
 }
 
+.input-group.percentage-input-group {
+    .form-control {
+        width: 100% !important;
+    }
+}
+
 //Horizontal scroll
 .bottomscroll-div,.topscroll-div {
     display: table;
@@ -884,6 +899,10 @@ a.menu-item:hover{
 .fieldValue .value{
     max-width:85%; //for every field values
     display:inline-block;
+	word-break: break-word;
+	a {
+		color: #15c !important;
+	}
 }
 
 .modal-header button.close{
@@ -1017,7 +1036,7 @@ input[type="password"].inputElement{
     text-transform: uppercase;
     height: 42px;
     padding-top: 11px;
-    padding-left: 11px;
+    padding-left: 8px;
     &:before{
         content: "";
         display: block;
@@ -1032,6 +1051,7 @@ input[type="password"].inputElement{
         vertical-align: middle;
         float: left;
         font-size: 20px;
+		padding-left: 3px;
     }
     &>span{
         margin-left: 10px;
@@ -1224,7 +1244,6 @@ input[type="password"].inputElement{
     background-color: @white;
     border: 1px solid @lightColorBorder;
     margin:5px 0 10px;
-    color: #ccc;
     padding: 5px 10px;
 }
 .search-folders:focus,
@@ -1470,7 +1489,6 @@ ul.unstyled{
     margin: 4px 2px;
     border-radius: 2px;
     border: 1px solid #ddd;
-    text-transform: uppercase;
     color: #666;
     background: #fff;
 }
@@ -1622,8 +1640,8 @@ ul.unstyled{
 }
 .listViewEntries .relatedListEntryValues .value{
     vertical-align: middle;
-        width: 80%;
-        display: inline-block;
+	width: 80%;
+	display: inline-block;
 }
 
 .floatThead-table{
@@ -1632,7 +1650,7 @@ ul.unstyled{
 
 .listview-table-norecords .table-actions,
 .listview-table .table-actions{
-    width: 110px;
+	width: 120px;
     font-size: 15px;
     color: #555;
     margin-left: 7px;
@@ -1909,7 +1927,10 @@ input[type=checkbox]:checked{
 **********************************/
 
 .detailViewButtoncontainer{
-    padding-top:5px;   
+    padding-top:5px;
+}
+.detailViewButtoncontainer button.btn {
+	margin: 0px 1px !important;
 }
 .detailview-header .recordBasicInfo > .info-row{
     margin-bottom: 4px;
@@ -2006,6 +2027,9 @@ strong, b, th{
     width: 6%;
     margin-top: 3%;
     margin-right: 2%;
+}
+.overlayDetailHeader button.btn {
+	margin: 0px 1px !important;
 }
 
 //detail view header edit end
@@ -2617,6 +2641,25 @@ strong, b, th{
         width:208px;
         float:left;
     }
+	.fieldLabel {
+		min-width: 100px;
+		width: 20%;
+		word-break: break-all;
+	}
+	.fieldValue {
+		width:30%;
+	}
+	td.fieldValue[colspan="3"] {
+		width:80%;
+	}
+	textarea.textAreaElement {
+		width: 88%;
+	}
+	input[type="checkbox"],
+	input[type="radio"] {
+		width: 15px;
+		height: 15px;
+	}
 }
 .input-group.inputElement .input-group-addon{
     border:none;
@@ -3161,6 +3204,9 @@ strong, b, th{
 .active .stepText,
 .active .stepNum{
     color: @white;
+}
+.mailBoxEditDiv .crumbs li {
+	width: 22%;
 }
 .stepNum{
     display: inline-block;
@@ -3862,7 +3908,7 @@ strong, b, th{
 
 .ModulemanagerSettings:hover .actions{
     opacity: 1;
-    background:@ModulemanagerSettingshover;
+    /* background:@ModulemanagerSettingshover; */
 }
 
 #OutgoingMoretable td,th{
@@ -5109,7 +5155,25 @@ form[name="notification_settings"] .select2-choice {
             border : 1px solid #dcdcdc;
         }
     }
-} 
+}
+#tagCloud {
+	.tag {
+		padding: 0px;
+		background-color: @white;
+		border-color: @white;
+		border-radius: 0px;
+		color : #5ea9dd;
+		&[data-type="public"] {
+			color : #3cb878;
+		}
+		margin: 3px;
+		.tagName {
+			margin: 3px;
+			max-width: 80px;
+			vertical-align: bottom;
+		}
+	}
+}
 
 /******************************************* 
 ********** Groups view styles ********
@@ -5224,6 +5288,9 @@ form[name="notification_settings"] .select2-choice {
 /******************************************* 
 ************* Dashboard Styles *************
 ********************************************/
+li.dashboardWidget {
+	overflow: hidden;
+}
 
 .dashboardWidgetHeader .title{
     padding-bottom: 10px;
@@ -5239,7 +5306,7 @@ form[name="notification_settings"] .select2-choice {
 }
 
 .dashBoardContainer .tabContainer ul{
-    margin:0 auto;
+    margin:0 inherit;
 }
 
 .dashBoardContainer .tabContainer .nav{
@@ -5372,6 +5439,12 @@ form[name="notification_settings"] .select2-choice {
     resize: none;
     width:100%;
 }
+.dashboardWidget .wait_resizing_msg {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
 //rewriting css styles
 
 /******************************************* 
@@ -5417,7 +5490,7 @@ form[name="notification_settings"] .select2-choice {
     border-radius: 1px;
 }
 .modal {
-    z-index:1070;
+	z-index:1100;
 }
 .select2-container .select2-choice {
     height:28px;
@@ -5533,7 +5606,7 @@ hr{
      z-index:0;//TN-#35081
 }
 .settingsPageDiv .modal-overlay-footer{
-    margin-left:230px;
+    border-left:230px solid #2c3b49
 }
 .settingsOverlayContainer .modal-overlay-footer{
    margin:0;
@@ -5933,7 +6006,7 @@ hr{
 .timePicker{
     width: 9.5em !important;
     //layout editor drop down should show
-    z-index: 1070 !important;
+    z-index: 1100 !important;
 } 
 
 .weekDaySelect {
@@ -7029,7 +7102,9 @@ margin-right: 5px;
     min-height:100%;
     .dashBoardTabContents ul{
         position:relative;
-        height: 960px;
+        /*SalesPlatform.ru begin*/
+        /*height: 960px;*/
+        /*SalesPlatform.ru end*/
         width: 1260px;
     }
 }
@@ -7328,23 +7403,6 @@ a.cp-modules:hover{
     padding: 3px;
 }
 
-.main-container-Documents .module-nav,
-.main-container-RecycleBin .module-nav,
-.main-container-Reports .module-nav {
-    width: 0;
-}
-.main-container-Documents .sidebar-essentials,
-.main-container-RecycleBin .sidebar-essentials,
-.main-container-Reports .sidebar-essentials {
-    width: 283px;
-    left: 0;
-}
-.main-container-Documents .full-width,
-.main-container-RecycleBin .full-width,
-.main-container-Reports .full-width,
-.main-container-Portal .full-width {
-    padding-left: 0px !important;
-}
 .main-container-MailManager .module-nav {
     width: 230px;
 }
@@ -7462,25 +7520,20 @@ li.select2-search-choice div{
     border-left: 1px solid @lightColorBorder;
 }
 .main-container-Documents .module-nav,
-.main-container-RecycleBin .module-nav,
 .main-container-Reports .module-nav {
     width: 0;
 }
 .main-container-Documents .mod-switcher-container,
-.main-container-RecycleBin .mod-switcher-container,
 .main-container-Reports .mod-switcher-container {
     width: 0;
 }
 .main-container-Documents .sidebar-essentials,
-.main-container-RecycleBin .sidebar-essentials,
 .main-container-Reports .sidebar-essentials {
     width: 283px;
     left: 0;
 }
 .main-container-Documents .full-width,
-.main-container-RecycleBin .full-width,
-.main-container-Reports .full-width,
-.main-container-Portal .full-width {
+.main-container-Reports .full-width {
     padding-left: 0px !important;
 }
 
@@ -8305,4 +8358,106 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 }
 .importServiceSelectionContainer .app-item {
     text-align: center;
+}
+#composeEmailContainer .modal-body,
+#QuickCreate .modal-body,
+#create {
+	.quickCreateContent {
+		margin-top: 25px;
+	}
+}
+.settingsgroup-panel .widgetContainer .menuItemLabel .pinUnpinShortCut {
+	display: none;
+	margin-top: 2px;
+}
+.settingsgroup-panel .widgetContainer .menuItemLabel:hover .pinUnpinShortCut {
+	display: inline-block;
+}
+@-moz-document url-prefix() {
+	.duplicateHandlingContainer .tooltip-inner {
+		width: 550px;
+		max-width: 550px;
+	}
+}
+.duplicateHandlingContainer{
+	.tooltip-inner {
+		text-align: left !important;
+	}
+	.syncMessage {
+		margin-top: 5px !important;
+	}
+	.actionsList {
+		width: 230px !important;
+	}
+}
+.duplicationMessageContainer {
+	background-color: #f2dede !important;
+	color: #b94a48 !important;
+	.duplicationMessageHeader {
+		margin-bottom: 8px;
+	}
+}
+.listViewRecordActions .quickView, .listViewRecordActions .markStar,
+.listViewRecordActions .markAsHeld,.listViewRecordActions .holdFollowupOn {
+	margin-top: 4px;
+}
+.app-menu .module-icon .custom-module {
+	font-size: 14px;
+	border-radius: 4px;
+	color: #000;
+	background-color: @white;
+	padding: 4px 10px 4px 5px !important
+}
+.menu-item .custom-module {
+	font-family: 'OpenSans-Regular', sans-serif;
+	font-size: 12px;
+	border-radius: 4px;
+	padding: 2px;
+	color: #000;
+	background-color: @white;
+}
+.modules-menu .custom-module {
+	color: @white;
+	margin-left: 0px;
+	display: block;
+	border: 1px solid @white;
+	border-radius: 4px;
+	padding: 3px 4px 3px 2px !important;
+	font-size: 12px;
+	width: 26px;
+	height: 24px;
+}
+#quickCreateModules .custom-module,
+.workflowListContainer .custom-module,
+.dashBoardTabContents .custom-module {
+	border-radius: 4px;
+	padding: 3px 5px;
+	color: @white;
+	background-color: #777;
+}
+.menuEditorItem .custom-module {
+	border-radius: 4px;
+	padding: 3px 5px;
+	color: @black;
+	background-color: @white;
+}
+.task-details .custom-module {
+	border-radius: 4px;
+	padding: 1px 4px;
+	color: @white;
+	background-color: #777;
+}
+.related-tabs .custom-module,
+#relatedmenuList .custom-module {
+	border-radius: 4px;
+	color: @white;
+	background-color: #777;
+	padding: 5px 7px;
+	font-weight: bold;
+}
+.record-header .custom-module {
+	font-size: 30px;
+}
+.moduleIcon .custom-module {
+	font-weight: bold;
 }

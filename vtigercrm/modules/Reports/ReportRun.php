@@ -349,6 +349,7 @@ class ReportRun extends CRMEntity {
 		$this->reporttype = $oReport->reporttype;
 		$this->reportname = $oReport->reportname;
 		$this->queryPlanner = new ReportRunQueryPlanner();
+		$this->queryPlanner->reportRun = $this;
                 
         //SalesPlatform.ru begin
         $this->templateReportController = new SPReportTemplateController();
@@ -401,6 +402,15 @@ class ReportRun extends CRMEntity {
 		while ($columnslistrow = $adb->fetch_array($result)) {
 			$fieldname = "";
 			$fieldcolname = $columnslistrow["columnname"];
+            // SalesPlatform.ru begin
+            if (stripos($fieldcolname, 'vtiger_products:taxclass') !== false) { 
+                $fieldcolname = "vtiger_inventorytaxinfo_products:taxlabel:Products_Taxes:taxlabel:V"; 
+            }
+
+            if (stripos($fieldcolname, 'vtiger_service:taxclass') !== false) {
+                $fieldcolname = "vtiger_inventorytaxinfo_services:taxlabel:Services_Taxes:taxlabel:V"; 
+            }
+            // SalesPlatform.ru end
 			// SalesPlatform.ru begin PHP 5.4 migration
 			list($tablename,$colname,$module_field,$fieldname,$single) = explode(":",$fieldcolname);
 			list($module,$field) = explode("_",$module_field,2);
@@ -630,9 +640,25 @@ class ReportRun extends CRMEntity {
 						$columnSQL = "cast(concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as DATETIME) AS Calendar_Start_Date_and_Time";
 					}
 				} else if ($selectedfields[0] == "vtiger_crmentity" . $this->primarymodule) {
-					$columnSQL = "vtiger_crmentity." . $selectedfields[1] . " AS '" . decode_html($header_label) . "'";
+                                    // SalesPlatform.ru begin
+                                    if ($this->reporttype == 'chart' && $selectedfields[4] == 'DT') {
+                                        $columnSQL = "date(vtiger_crmentity." . $selectedfields[1] . ")" . " AS '" . decode_html($header_label) . "'";
+                                    }
+                                    else {
+                                        $columnSQL = "vtiger_crmentity." . $selectedfields[1] . " AS '" . decode_html($header_label) . "'";
+                                    }
+					//$columnSQL = "vtiger_crmentity." . $selectedfields[1] . " AS '" . decode_html($header_label) . "'";
+                                    // SalesPlatform.ru end
 				} else {
-					$columnSQL = $selectedfields[0] . "." . $selectedfields[1] . " AS '" . decode_html($header_label) . "'";
+                                    // SalesPlatform.ru begin
+                                    if ($this->reporttype == 'chart' && $selectedfields[4] == 'DT') {
+                                        $columnSQL = "date(" . $selectedfields[0] . "." . $selectedfields[1] . ")" . " AS '" . decode_html($header_label) . "'";
+                                    }
+                                    else {
+                                        $columnSQL = $selectedfields[0] . "." . $selectedfields[1] . " AS '" . decode_html($header_label) . "'";
+                                    }
+                                        //$columnSQL = $selectedfields[0] . "." . $selectedfields[1] . " AS '" . decode_html($header_label) . "'";
+                                    // SalesPlatform.ru end
 				}
 				$this->queryPlanner->addTable($selectedfields[0]);
 			}
@@ -1024,6 +1050,15 @@ class ReportRun extends CRMEntity {
 				$columnIndex = $relcriteriarow["columnindex"];
 				$criteria = array();
 				$criteria['columnname'] = html_entity_decode($relcriteriarow["columnname"]);
+                // SalesPlatform.ru begin
+                if (stripos($criteria['columnname'], 'vtiger_products:taxclass') !== false) { 
+                    $criteria['columnname'] = "vtiger_inventorytaxinfo_products:taxlabel:Products_Taxes:taxlabel:V"; 
+                }
+
+                if (stripos($criteria['columnname'], 'vtiger_service:taxclass') !== false) {
+                    $criteria['columnname'] = "vtiger_inventorytaxinfo_services:taxlabel:Services_Taxes:taxlabel:V"; 
+                }
+                // SalesPlatform.ru end
 				$criteria['comparator'] = $relcriteriarow["comparator"];
 				$advfilterval = $relcriteriarow["value"];
 				$col = explode(":",$relcriteriarow["columnname"]);
@@ -1656,6 +1691,18 @@ class ReportRun extends CRMEntity {
 					continue;
 
 				$adv_filter_column = $column_condition["columnname"];
+                //SalesPlatform.ru begin
+                if (stripos($adv_filter_column, 'vtiger_products:taxclass') !== false) {
+                    $adv_filter_column = "vtiger_inventorytaxinfo_products:taxlabel:Products_Taxes:taxlabel:V"; 
+                    $column_condition["columnname"] = "vtiger_inventorytaxinfo_products:taxlabel:Products_Taxes:taxlabel:V"; 
+                }  
+                
+                if (stripos($adv_filter_column, 'vtiger_service:taxclass') !== false) {
+                    $adv_filter_column = "vtiger_inventorytaxinfo_services:taxlabel:Services_Taxes:taxlabel:V"; 
+                    $column_condition["columnname"] = "vtiger_inventorytaxinfo_services:taxlabel:Services_Taxes:taxlabel:V"; 
+                }  
+                //SalesPlatform.ru end
+                
 				$adv_filter_comparator = $column_condition["comparator"];
 				$adv_filter_value = $column_condition["value"];
 				$adv_filter_column_condition = $column_condition["columncondition"];
@@ -2298,6 +2345,10 @@ class ReportRun extends CRMEntity {
 				$query .= " left join vtiger_users as vtiger_createdbyLeads on vtiger_createdbyLeads.id = vtiger_crmentity.smcreatorid";
 			}
 
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " " . $this->getRelatedModulesQuery($module,$this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
 					" where vtiger_crmentity.deleted=0 and vtiger_leaddetails.converted=0";
@@ -2333,6 +2384,10 @@ class ReportRun extends CRMEntity {
 			if ($this->queryPlanner->requireTable('vtiger_createdbyAccounts')) {
 				$query .= " left join vtiger_users as vtiger_createdbyAccounts on vtiger_createdbyAccounts.id = vtiger_crmentity.smcreatorid";
 			}
+
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
 
 			$query .= " ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
@@ -2376,6 +2431,10 @@ class ReportRun extends CRMEntity {
 				$query .= " left join vtiger_users as vtiger_createdbyContacts on vtiger_createdbyContacts.id = vtiger_crmentity.smcreatorid";
 			}
 
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
 					" where vtiger_crmentity.deleted=0";
@@ -2412,6 +2471,11 @@ class ReportRun extends CRMEntity {
 			if ($this->queryPlanner->requireTable('vtiger_createdbyPotentials')) {
 				$query .= " left join vtiger_users as vtiger_createdbyPotentials on vtiger_createdbyPotentials.id = vtiger_crmentity.smcreatorid";
 			}
+
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
 					" where vtiger_crmentity.deleted=0 ";
@@ -2451,6 +2515,16 @@ class ReportRun extends CRMEntity {
 						AND vtiger_productcurrencyrel.currencyid = " . $current_user->currency_id . "
 				) AS innerProduct ON innerProduct.productid = vtiger_products.productid";
 			}
+			// SalesPlatform.ru begin
+			if ($this->queryPlanner->requireTable("vtiger_inventorytaxinfo_products")) {
+			    $query .= " left join vtiger_producttaxrel AS vtiger_producttaxrel_products on vtiger_producttaxrel_products.productid = vtiger_products.productid";
+			    $query .= " left join vtiger_inventorytaxinfo AS vtiger_inventorytaxinfo_products on vtiger_inventorytaxinfo_products.taxid = vtiger_producttaxrel_products.taxid";
+			}
+			// SalesPlatform.ru end
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
@@ -2493,6 +2567,10 @@ class ReportRun extends CRMEntity {
 			if ($this->queryPlanner->requireTable('vtiger_createdbyHelpDesk')) {
 				$query .= " left join vtiger_users as vtiger_createdbyHelpDesk on vtiger_createdbyHelpDesk.id = vtiger_crmentity.smcreatorid";
 			}
+
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
 
 			$query .= " ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
@@ -2565,6 +2643,10 @@ class ReportRun extends CRMEntity {
 				$query .= " left join vtiger_users as vtiger_createdbyCalendar on vtiger_createdbyCalendar.id = vtiger_crmentity.smcreatorid";
 			}
 
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
 					" WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype != 'Emails')";
@@ -2634,6 +2716,11 @@ class ReportRun extends CRMEntity {
 			if ($this->queryPlanner->requireTable('vtiger_currency_info')) {
 				$query .= ' LEFT JOIN vtiger_currency_info ON vtiger_currency_info.id = vtiger_quotes.currency_id';
 			}
+
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$focus = CRMEntity::getInstance($module);
 			$query .= " " . $this->getRelatedModulesQuery($module, $this->secondarymodule) .
 					getNonAdminAccessControlQuery($this->primarymodule, $current_user) .
@@ -2699,6 +2786,11 @@ class ReportRun extends CRMEntity {
 			if ($this->queryPlanner->requireTable('vtiger_currency_info')) {
 				$query .= ' LEFT JOIN vtiger_currency_info ON vtiger_currency_info.id = vtiger_purchaseorder.currency_id';
 			}
+
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " " . $this->getRelatedModulesQuery($module, $this->secondarymodule) .
 					getNonAdminAccessControlQuery($this->primarymodule, $current_user) .
 					" where vtiger_crmentity.deleted=0";
@@ -2764,6 +2856,11 @@ class ReportRun extends CRMEntity {
 			if ($this->queryPlanner->requireTable('vtiger_currency_info')) {
 				$query .= ' LEFT JOIN vtiger_currency_info ON vtiger_currency_info.id = vtiger_invoice.currency_id';
 			}
+
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " " . $this->getRelatedModulesQuery($module, $this->secondarymodule) .
 					getNonAdminAccessControlQuery($this->primarymodule, $current_user) .
 					" where vtiger_crmentity.deleted=0";
@@ -2833,6 +2930,11 @@ class ReportRun extends CRMEntity {
 			if ($this->queryPlanner->requireTable('vtiger_currency_info')) {
 				$query .= ' LEFT JOIN vtiger_currency_info ON vtiger_currency_info.id = vtiger_salesorder.currency_id';
 			}
+
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " " . $this->getRelatedModulesQuery($module, $this->secondarymodule) .
 					getNonAdminAccessControlQuery($this->primarymodule, $current_user) .
 					" where vtiger_crmentity.deleted=0";
@@ -2858,8 +2960,13 @@ class ReportRun extends CRMEntity {
                             left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
                             left join vtiger_users as vtiger_lastModifiedByAct on vtiger_lastModifiedByAct.id = vtiger_crmentity.modifiedby
                             left join vtiger_account as vtiger_accountAct on vtiger_accountAct.accountid = vtiger_sp_act.accountid
-                            left join vtiger_contactdetails as vtiger_contactdetailsAct on vtiger_contactdetailsAct.contactid = vtiger_sp_act.contactid
-                            ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+                            left join vtiger_contactdetails as vtiger_contactdetailsAct on vtiger_contactdetailsAct.contactid = vtiger_sp_act.contactid ";
+                            
+            $focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . " ";
+            
+            $query .= " " . $this->getRelatedModulesQuery($module,$this->secondarymodule).
 				getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
                             where vtiger_crmentity.deleted=0";
 		}
@@ -2885,8 +2992,13 @@ class ReportRun extends CRMEntity {
                             left join vtiger_users as vtiger_lastModifiedByConsignment on vtiger_lastModifiedByConsignment.id = vtiger_crmentity.modifiedby
                             left join vtiger_account as vtiger_accountConsignment on vtiger_accountConsignment.accountid = vtiger_sp_consignment.accountid
                             left join vtiger_contactdetails as vtiger_contactdetailsConsignment on vtiger_contactdetailsConsignment.contactid = vtiger_sp_consignment.contactid
-                            left join vtiger_invoice as vtiger_invoiceConsignment on vtiger_invoiceConsignment.invoiceid = vtiger_sp_consignment.invoiceid
-                            ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+                            left join vtiger_invoice as vtiger_invoiceConsignment on vtiger_invoiceConsignment.invoiceid = vtiger_sp_consignment.invoiceid ";
+            
+            $focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . " ";
+            
+            $query .= " " . $this->getRelatedModulesQuery($module,$this->secondarymodule).
 				getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
                             where vtiger_crmentity.deleted=0";
 		}
@@ -2918,6 +3030,10 @@ class ReportRun extends CRMEntity {
 				$query .= " left join vtiger_users as vtiger_createdby$module on vtiger_createdby$module.id = vtiger_crmentity.smcreatorid";
 			}
 
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+
 			$query .= " ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
 					" where vtiger_crmentity.deleted=0";
@@ -2946,6 +3062,10 @@ class ReportRun extends CRMEntity {
 				$query .= " left join vtiger_users as vtiger_createdby$module on vtiger_createdby$module.id = vtiger_crmentity.smcreatorid";
 			}
 
+			$focus = CRMEntity::getInstance($module);
+			$relquery = $focus->getReportsUiType10Query($module, $this->queryPlanner);
+			$query .= $relquery . ' ';
+			
 			$query .= " ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
 					getNonAdminAccessControlQuery($this->primarymodule,$current_user).
 					" WHERE vtiger_crmentity.deleted = 0";
@@ -2953,12 +3073,34 @@ class ReportRun extends CRMEntity {
 			if ($module != '') {
 				$focus = CRMEntity::getInstance($module);
 				$query = $focus->generateReportsQuery($module, $this->queryPlanner) .
+                        //SalesPlatform.ru begin
+                        " " . $focus->getReportsUiType10Query($module, $this->queryPlanner) . " " .
+                        //SalesPlatform.ru end
 						$this->getRelatedModulesQuery($module, $this->secondarymodule) .
 						getNonAdminAccessControlQuery($this->primarymodule, $current_user) .
 						" WHERE vtiger_crmentity.deleted=0";
 			}
 		}
 		$log->info("ReportRun :: Successfully returned getReportsQuery" . $module);
+
+
+		$secondarymodule = explode(":", $this->secondarymodule);
+		if(in_array('Calendar', $secondarymodule) || $module == 'Calendar') {
+			$currentUserModel = Users_Record_Model::getCurrentUserModel();
+			$tabId = getTabid('Calendar');
+			$task_tableName = 'vt_tmp_u'.$currentUserModel->id.'_t'.$tabId.'_task';
+			$event_tableName = 'vt_tmp_u'.$currentUserModel->id.'_t'.$tabId.'_events';
+			if(!$currentUserModel->isAdminUser()
+				&& stripos($query, $event_tableName) && stripos($query, $task_tableName)) {
+				$moduleFocus = CRMEntity::getInstance('Calendar');
+				$scope = '';
+				if(in_array('Calendar', $secondarymodule)) $scope = 'Calendar';
+				$condition = $moduleFocus->buildWhereClauseConditionForCalendar($scope);
+				if($condition) {
+					$query .= ' AND '.$condition;
+				}
+			}
+		}
 
 		return $query;
 	}
@@ -4422,7 +4564,11 @@ class ReportRun extends CRMEntity {
             //SalesPlatform.ru end #4308
 			
 			foreach($arrayFirstRowValues as $key=>$value) {
-				$worksheet->setCellValueExplicitByColumnAndRow($count, $rowcount, $key, true);
+				// It'll not translate properly if you don't mention module of that string
+				if ($key == 'ACTION' || $key == vtranslate('LBL_ACTION', $this->primarymodule) || $key == vtranslate($this->primarymodule, $this->primarymodule) . " " . vtranslate('LBL_ACTION', $this->primarymodule) || $key == vtranslate('LBL ACTION', $this->primarymodule) || $key == vtranslate($this->primarymodule, $this->primarymodule) . " " . vtranslate('LBL ACTION', $this->primarymodule)) {
+					continue;
+				}
+				$worksheet->setCellValueExplicitByColumnAndRow($count, $rowcount, decode_html($key), true);
 				$worksheet->getStyleByColumnAndRow($count, $rowcount)->applyFromArray($header_styles);
 
 				// NOTE Performance overhead: http://stackoverflow.com/questions/9965476/phpexcel-column-size-issues

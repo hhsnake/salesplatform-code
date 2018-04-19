@@ -80,7 +80,7 @@ class Faq extends CRMEntity {
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Faq() {
-		$this->log =LoggerManager::getlogger('faq');
+		$this->log =LoggerManager::getLogger('faq');
 		$this->log->debug("Entering Faq() method ...");
 		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Faq');

@@ -41,6 +41,7 @@
 	<input type="hidden" name="folder_value" value="{$FOLDER_VALUE}" />
 	<input type="hidden" name="viewType" value="{$VIEWTYPE}" />
 	<input type="hidden" name="app" id="appName" value="{$SELECTED_MENU_CATEGORY}">
+	<input type="hidden" id="isExcelEditSupported" value="{if $MODULE_MODEL->isExcelEditAllowed()}yes{else}no{/if}" />
 	{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
 		<input type="hidden" name="picklistDependency" value='{Vtiger_Util_Helper::toSafeHTML($PICKIST_DEPENDENCY_DATASOURCE)}' />
 	{/if}
@@ -89,7 +90,7 @@
 				{/if}
 				</th>
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-					{if $SEARCH_MODE_RESULTS and ($LISTVIEW_HEADER->getFieldDataType() eq 'multipicklist')}
+					{if $SEARCH_MODE_RESULTS || ($LISTVIEW_HEADER->getFieldDataType() eq 'multipicklist')}
 						{assign var=NO_SORTING value=1}
 					{else}
 						{assign var=NO_SORTING value=0}
@@ -176,7 +177,10 @@
 												{CurrencyField::appendCurrencySymbol($LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME), $CURRENCY_SYMBOL)}
 											{/if}
 										{else if $LISTVIEW_HEADER->getFieldDataType() eq 'picklist'}
-											{if $LISTVIEW_ENTRY->get('activitytype') eq 'Task'}
+                                                                                    {* SalesPlatform.ru begin *}
+											{* {if $LISTVIEW_ENTRY->get('activitytype') eq 'Task'} *}
+											{if $LISTVIEW_ENTRY->getRaw('activitytype') eq 'Task'}
+                                                                                    {* SalesPlatform.ru end *}
 												{assign var=PICKLIST_FIELD_ID value={$LISTVIEW_HEADER->getId()}}
 											{else}
 												{if $LISTVIEW_HEADER->getName() eq 'taskstatus'}
@@ -190,7 +194,7 @@
 													{assign var=PICKLIST_FIELD_ID value={$LISTVIEW_HEADER->getId()}}
 												{/if}
 											{/if}
-											<span {if !empty($LISTVIEW_ENTRY_VALUE)} class="picklist-color picklist-{$PICKLIST_FIELD_ID}-{Vtiger_Util_Helper::convertSpaceToHyphen($LISTVIEW_ENTRY->getRaw($LISTVIEW_HEADERNAME))}" {/if}> {$LISTVIEW_ENTRY_VALUE} </span>
+                                            <span {if !empty($LISTVIEW_ENTRY_VALUE)} class="picklist-color picklist-{$PICKLIST_FIELD_ID}-{Vtiger_Util_Helper::convertSpaceToHyphen($LISTVIEW_ENTRY_RAWVALUE)}" {/if}> {$LISTVIEW_ENTRY_VALUE} </span>
 										{else if $LISTVIEW_HEADER->getFieldDataType() eq 'multipicklist'}
 											{assign var=MULTI_RAW_PICKLIST_VALUES value=explode('|##|',$LISTVIEW_ENTRY->getRaw($LISTVIEW_HEADERNAME))}
 											{assign var=MULTI_PICKLIST_VALUES value=explode(',',$LISTVIEW_ENTRY_VALUE)}

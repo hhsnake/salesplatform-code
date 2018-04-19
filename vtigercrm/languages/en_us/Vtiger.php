@@ -40,6 +40,9 @@ $languageStrings = array(
 	'LBL_NOT_STARRED' => 'Click to follow',
 	'LBL_QUICK_VIEW' => 'Quick View',
 	'LBL_NOTIFICATION_CENTER' => 'Notification Center',
+	'LBL_NOTIFICATION' => 'Notification',
+	'LBL_STARRED_RECORD_TO' => '%s to %s',
+	'LBL_STARRED_RECORD_UPDATED' => '%s updated %s',
 	'LBL_SETTINGS'=> 'Settings',
 	'LBL_ADD_COMMENT' => 'Add Comment',
 	'LBL_EDIT_FIELDS' => '%s Fields & Layout',
@@ -117,6 +120,7 @@ $languageStrings = array(
 	'LBL_MAKE_PUBLIC' => 'Make Public',
 	'LBL_PAGE' => 'Page',
 	'LBL_LISTVIEW_PAGE_JUMP' => 'Page Jump',
+	'LBL_LISTVIEW_JUMP_TO' => 'Jump To',
 	'LBL_PROFILE_PASSWORD' => 'Profile / Password',
 	'LBL_INFO' => 'Info',
 	'LBL_CANT_MOVE_FROM_PUBLIC_TO_PRIVATE' => 'Cannot able to move from Public tag to Private tag.',
@@ -222,6 +226,9 @@ $languageStrings = array(
 	'LBL_GLOBAL_SEARCH' => 'Type keyword and press enter',
 	'LBL_ALL_RECORDS' => 'All Records',
 	'LBL_NO_RECORDS_FOUND' => 'No records found',
+        //SalesPlatform.ru begin add localization for lists of contacts
+        'LBL_NO_LISTS_FOUND' => 'Lists not found',
+        //SalesPlatform.ru end add localization for lists of contacts
 
 	//Filters & Advance Filter
 	'LBL_AND' => 'and',
@@ -468,6 +475,18 @@ $languageStrings = array(
 	'LBL_IS_EMPTY'=> 'is empty',
 	'LBL_IS_NOT_EMPTY' => 'is not empty',
 	'LBL_APPROVE' => 'Approve',
+	'LBL_HAS_CHANGED' => 'has changed',
+	'LBL_HAS_CHANGED_TO' => 'has changed to',
+	'LBL_HAS_CHANGED_FROM' => 'has changed from',
+	'LBL_LESS_THAN_OR_EQUAL_TO' => 'less than or equal to',
+	'LBL_GREATER_THAN_OR_EQUAL_TO' => 'greater than or equal to',
+	'LBL_IS_NOT' => 'is not',
+	'LBL_IS_ADDED' => 'is added',
+	'LBL_IS_TODAY' => 'is today',
+	'LBL_IS_TOMORROW' => 'is tomorrow',
+	'LBL_IS_YESTERDAY' => 'is yesterday',
+	'LBL_LESS_THAN_DAYS_LATER' => 'less than days later',
+	'LBL_MORE_THAN_DAYS_LATER' => 'more than days later',
 
 	//Detail view summary widgets
 	'LBL_OWNER' => 'Owner',
@@ -1004,6 +1023,9 @@ $languageStrings = array(
 	'LBL_TWEETS' => 'Tweets',
 	'LBL_FAVOURITES' => 'Favourites',
 	'LBL_FOLLOWING' => 'Following',
+    //SalesPlatform.ru begin
+    'LBL_NOT_FOLLOWING' => 'Not following',
+    //SalesPlatform.ru end
 	'LBL_FOLLOWERS' => 'Followers',
 	'LBL_VIEW_FULL_PROFILE' => 'View Full Profile',
 	'LBL_LOCATION' => 'Location',
@@ -1156,6 +1178,7 @@ $languageStrings = array(
 	'LBL_MARKETING' => 'MARKETING',
 	'LBL_SALES' => 'SALES',
 	'LBL_PROJECT' => 'PROJECTS',
+	'LBL_TOOLS' => 'TOOLS',
 	'LBL_TAGS' => 'Tags',
 	'LBL_SHARE_TAGS' => 'Public Tags',
 	'LBL_SHARE_TAG' => 'Shared Tag(s)',
@@ -1274,12 +1297,11 @@ $languageStrings = array(
 	'LBL_REVOKE_ACCESS' => 'Revoke Access',
 	'GOOGLE_REVOKE_ACCESS_MESSAGE' => 'Clicking on this will remove existing Google authentication for Contacts and Calendar. It will not delete any records which are already synchronized.',
 	'OFFICE_REVOKE_ACCESS_MESSAGE' => 'Clicking on this will remove existing Office365 authentication for Contacts, Calendar and Emails. It will not delete any records which are already synchronized.',
-	'LBL_EMAIL_DOMAIN_HELPTEXT' => 'Email Domain field will be used to match Cases and Contacts created from Emails. For example, if a new support email comes from john@apple.com, it would be linked to Organization that has apple.com in the Email domain field. Multiple domains should be separated by commas',
 	'LBL_START_GUIDED_TOUR' => 'Start Guided Tour',
 	'LBL_MENU' => 'Menu',
 	'LBL_EMAIL_DOMAIN_HELPTEXT'=>'Email Domain field will be used to match Cases and Contacts created from Emails. '
-	. 'For example, if a new support email comes from john@apple.com, it would be linked to Organization that has '
-	. 'apple.com in the Email domain field. Multiple domains should be separated by commas',
+	. 'For example, if a new support email comes from john@company.com, it would be linked to Organization that has '
+	. 'company.com in the Email domain field. Multiple domains should be separated by commas',
 
 	'LBL_SHARED_LIST_NON_ADMIN_MESSAGE' => 'This is a Shared list. Please contact your CRM Administrator to configure columns for All list',
 	'LBL_SHARED_LIST_OWNER_MESSAGE' => 'This is a shared list. Please contact %s to change the columns of this list',
@@ -1331,7 +1353,7 @@ $languageStrings = array(
 	'LBL_DUPLICATION_FAILURE_FROM_WEBFORMS' => 'The following %s could not be saved from "%s" webform, as another %s exists with the same values.',
 	'LBL_DUPLICATION_FAILURE_FOR_ADMIN' => 'You can %s to modify duplicate prevention rules.',
 	'LBL_DUPLICATION_FAILURE_FOR_NON_ADMIN' => 'Contact your administrator for revising the duplicate rules',
-	'LBL_DUPLICATE_RECORD_LISTS' =>'Duplicate %s :',
+	'LBL_DUPLICATE_RECORD_LISTS' =>'Duplicate %s(s) :',
 	'LBL_COLUMNS_ADDED'=>'of %s columns added',
 	'LBL_SHOW_ALL'=>'Show all',
 	'LBL_LanguageEditor_WEBTITLE' => 'Labels Editor',
@@ -1456,6 +1478,20 @@ $languageStrings = array(
     'Consignment' => 'Consignment',
     'LBL_CUSTOMER_PORTAL_LOGIN_DETAILS_EMAIL_DESC' => '2Регистрационная информация клиентского портала',
     'LBL_NOT_FOUND' => 'No type records found:',
+    'MARKETING' => 'Marketing',
+    'SALES' => 'Sales',
+    'INVENTORY' => 'Inventory',
+    'SUPPORT' => 'Support',
+    'PROJECT' => 'Projects',
+    'LBL_HAS_CHANGED_FROM' => 'has changed from',
+    'LBL_SHOW_LESS' => 'Show less',
+    'VoipIntegration' => 'Integration with cloud ATC',
+    'SPVoipIntegration' => 'Integration with cloud ATC',
+    'DynamicBlocks' => 'Dynamic blocks',
+    'SPDynamicBlocks' => 'Dynamic blocks',
+    'LBL_TIPS' => 'Hints',
+    'SPTips' => 'Hints',
+    'List columns saved successfully' => 'List columns saved successfully'
     //SalesPlatform.ru end
 );
 
@@ -1715,7 +1751,6 @@ $jsLanguageStrings = array(
 	'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
 	'LBL_WARNING' => 'Warning',
 	'DELETE_USER_PERMANENT_WARNING' => 'Deleting a user permanently will transfer all records including comments and history to new user.',
-	'JS_CLOSE' => 'Close',
 	'JS_DECIMAL_SEPARATOR_AND_GROUPING_SEPARATOR_CANT_BE_SAME' => 'Decimal separator and Grouping separator cant be same',
 	'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
 	'JS_CLOSE' => 'Close',
@@ -1783,8 +1818,6 @@ $jsLanguageStrings = array(
 	'JS_SELECTED_LEAD_DOES_NOT_HAVE_AN_ADDRESS' => 'Selected Lead does not contain address to copy',
 	'JS_INVALID_EMAILS' => 'Invalid Emails',
 	'JS_DIRECTORY_IS_EMPTY' => 'Directory is empty',
-	'JS_INTERNAL_COMMENT' => 'Internal Comment',
-	'JS_INTERNAL_COMMENT_INFO' => 'The comment will only be seen by CRM users, if the internal comment checkbox is enabled. To notify customers (through configurable workflows or customer portal) leave this checkbox disabled',
 	'JS_NO_LINE_ITEM' =>'Line items cannot be empty.',
 	'JS_INTERNAL_COMMENT' => 'Internal Comment',
 	'JS_INTERNAL_COMMENT_INFO' => 'The comment will only be seen by CRM users, if the internal comment checkbox is enabled. To notify customers (through configurable workflows or customer portal) leave this checkbox disabled',
@@ -2004,11 +2037,20 @@ $jsLanguageStrings = array(
 	'JS_SHARED_WITH'=>'Shared with',
 	'JS_DEFAULT_DASHBOARD_TOOLTIP' => 'Make this dashboard as default by reordering it as the first tab!',
 	'JS_SET_DEFAULT_TAB' => 'is set as your default dashboard',
+	'JS_PASSWORD_MISMATCH_ERROR' => 'Please re-enter passwords. The "new password" and "confirm password" values do not match.',
+	'LBL_LIST_DELETE_CONFIRMATION' => 'Are you sure you want to delete?',
+	'JS_WIDGET_RESIZING_WAIT_MSG' => 'Widget contents will load after resizing.',
     //Salesplatform.ru begin
     'JS_USER_ALL' => 'User : All',
     'JS_STATUS_ALL' => 'Status : All',
     'JS_LBL_ASSIGNED_TO' => 'Assigned To', 
     'JS_LBL_HELP_ADDRESS_TYPE' => 'To enable autofill, you need to enter a city',
     'JS_EMPTY_SERVER_NAME_FIELD' => 'Server Name field is required',
+    'JS_NO' => 'No',
+    'JS_SET_TAX_FOR' => 'Set tax for',
+    'JS_EMPTY_RESPONSE' => 'Empty response',
+    'JS_LIST_DELETE_CONFIRMATION' => 'Are you sure you want to delete?',
+    'JS_UPDATED' => 'Updated',
+    'No Results Found' => 'No Results Found'
     //SalesPlatform.ru end
 );

@@ -19,7 +19,7 @@
 			background-repeat: no-repeat;
 		}
 		hr {
-		    margin-top: 15px;
+			margin-top: 15px;
 			background-color: #7C7C7C;
 			height: 2px;
 			border-width: 0;
@@ -79,7 +79,6 @@
 		}
 		.marketingDiv {
 			color: #303030;
-			padding: 10px 20px;
 		}
 		.separatorDiv {
 			background-color: #7C7C7C;
@@ -238,10 +237,10 @@
         {* SalesPlatform begin*}
         <div class="linksNavBar">
             <div class="helpLinks">
-                <a href="http://community.salesplatform.ru/">Сообщество</a> | 
-                <a href="http://community.salesplatform.ru/forums/">Форум</a> | 
-                <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_7">Документация</a> | 
-                <a href="http://community.salesplatform.ru/blogs/">Блог</a> | 
+                <a href="http://community.salesplatform.ru/">{vtranslate('LBL_COMMUNITY', $MODULE)}</a> | 
+                <a href="http://community.salesplatform.ru/forums/">{vtranslate('LBL_FORUMS', $MODULE)}</a> | 
+                <a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_7">{vtranslate('LBL_WIKI', $MODULE)}</a> | 
+                <a href="http://community.salesplatform.ru/blogs/">{vtranslate('LBL_BLOGS', $MODULE)}</a> | 
                 <a href="http://salesplatform.ru/">SalesPlatform.ru</a>
             </div>
         </div>
@@ -280,7 +279,7 @@
 							<span class="bar"></span>
                                                         {*SalesPlatform.ru begin*}
                                                         {*<label>Username</label>*}
-							<label>Пользователь</label>
+							<label>{vtranslate('User Name', $MODULE)}</label>
                                                         {*SalesPlatform.ru end*}
 						</div>
 						<div class="group">
@@ -291,13 +290,13 @@
 							<span class="bar"></span>
                                                         {*SalesPlatform.ru begin*}
                                                         {*<label>Password</label>*}
-							<label>Пароль</label>
+							<label>{vtranslate('Password', $MODULE)}</label>
                                                         {*SalesPlatform.ru end*}
 						</div>
 						<div class="group">
                                                         {*SalesPlatform.ru begin*}
-							<button type="submit" class="button buttonBlue">Вход</button><br>
-							<a class="forgotPasswordLink" style="color: #15c;">Забыли пароль?</a>
+							<button type="submit" class="button buttonBlue">{vtranslate('LBL_SING_IN', $MODULE)}</button><br>
+							<a class="forgotPasswordLink" style="color: #15c;">{vtranslate('ForgotPassword', $MODULE)}</a>
 							{*<button type="submit" class="button buttonBlue">Sign in</button><br>*}
 							{*<a class="forgotPasswordLink" style="color: #15c;">forgot password?</a>*}
                                                         {*SalesPlatform.ru end*}
@@ -315,7 +314,7 @@
 							<span class="bar"></span>
                                                         {*SalesPlatform.ru begin*}
 							{*<LABEL>USERNAME</LABEL>*}
-							<label>Пользователь</label>
+							<label>{vtranslate('User Name', $MODULE)}</label>
                                                         {*SalesPlatform.ru end*}
 						</div>
 						<div class="group">
@@ -324,14 +323,17 @@
 							{*<input id="email" type="email" name="emailId" placeholder="Email" >*}
                                                         {*SalesPlatform.ru end*}
 							<span class="bar"></span>
-							<label>Email</label>
+                                                        {* SalesPlatform.ru begin *}
+							{* <label>Email</label> *}
+							<label>E-mail</label>
+                                                        {* SalesPlatform.ru end *}
 						</div>
 						<div class="group">
                                                         {*SalesPlatform.ru begin*}
-							<button type="submit" class="button buttonBlue forgot-submit-btn">Отправить</button><br>
+							<button type="submit" class="button buttonBlue forgot-submit-btn">{vtranslate('LBL_SUBMIT', $MODULE)}</button><br>
                                                         {* SalesPlatform.ru begin localization fix *}
 							{*<span>Please enter details and submit<a class="forgotPasswordLink pull-right" style="color: #15c;">Назад</a></span>*}
-                                                        <span>{vtranslate('LBL_ENTER_AND_SUBMIT_DETAILS',$MODULE)}<a class="forgotPasswordLink pull-right" style="color: #15c;">Назад</a></span>
+                                                        <span>{vtranslate('LBL_ENTER_AND_SUBMIT_DETAILS',$MODULE)}<a class="forgotPasswordLink pull-right" style="color: #15c;">{vtranslate('LBL_BACK', $MODULE)}</a></span>
                                                         {* SalesPlatform.ru end localization fix *}
 							{*<button type="submit" class="button buttonBlue forgot-submit-btn">Submit</button><br>*}
 							{*<span>Please enter details and submit<a class="forgotPasswordLink pull-right" style="color: #15c;">Back</a></span>*}
@@ -351,38 +353,43 @@
 		<div class="col-lg-5">
 			<div class="marketingDiv widgetHeight">
 				{if $JSON_DATA}
-					{assign var=COUNTER value=0}
-					{foreach key=BLOCK_NAME item=BLOCKS_DATA from=$JSON_DATA}
-						{if $BLOCKS_DATA}
-							<div>
-								{assign var=COUNTER value=$COUNTER+1}
-								<h4>{$BLOCKS_DATA[0].heading}</h4>
-								{foreach item=BLOCK_DATA from=$BLOCKS_DATA}
-									<div class="row">
-										{if $BLOCK_DATA.image}
-											<div class="col-lg-4" style="min-height: 100px;"><img src="{$BLOCK_DATA.image}" style="width: 100%;height: 100%;margin-top: 10px;"/></div>
-											<div class="col-lg-8">
-										{else}
-											<div class="col-lg-12">
-										{/if}
-											<div title="{$BLOCK_DATA.summary}">
-												<h3><b>{$BLOCK_DATA.displayTitle}</b></h3>
-												{$BLOCK_DATA.displaySummary}<br><br>
-											</div>
-											<a href="{$BLOCK_DATA.url}" target="_blank"><u>{$BLOCK_DATA.urlalt}</u></a>
-										{if $BLOCK_DATA.image}
-											</div>
-										{else}
-											</div>
-										{/if}
-									</div>
-								{/foreach}
-							</div>
-							{if $COUNTER neq $DATA_COUNT}
-								<hr>
+					<div class="scrollContainer">
+						{assign var=ALL_BLOCKS_COUNT value=0}
+						{foreach key=BLOCK_NAME item=BLOCKS_DATA from=$JSON_DATA}
+							{if $BLOCKS_DATA}
+								<div>
+									<h4>{$BLOCKS_DATA[0].heading}</h4>
+									<ul class="bxslider">
+										{foreach item=BLOCK_DATA from=$BLOCKS_DATA}
+											<li class="slide">
+												{assign var=ALL_BLOCKS_COUNT value=$ALL_BLOCKS_COUNT+1}
+												{if $BLOCK_DATA.image}
+													<div class="col-lg-3" style="min-height: 100px;"><img src="{$BLOCK_DATA.image}" style="width: 100%;height: 100%;margin-top: 10px;"/></div>
+													<div class="col-lg-9">
+												{else}
+													<div class="col-lg-12">
+												{/if}
+												<div title="{$BLOCK_DATA.summary}">
+													<h3><b>{$BLOCK_DATA.displayTitle}</b></h3>
+													{$BLOCK_DATA.displaySummary}<br><br>
+													<a href="{$BLOCK_DATA.url}" target="_blank"><u>{$BLOCK_DATA.urlalt}</u></a>
+												</div>
+												{if $BLOCK_DATA.image}
+													</div>
+												{else}
+													</div>
+												{/if}
+											</li>
+										{/foreach}
+									</ul>
+								</div>
+								{if $ALL_BLOCKS_COUNT neq $DATA_COUNT}
+									<br>
+									<hr>
+								{/if}
 							{/if}
-						{/if}
-					{/foreach}
+						{/foreach}
+					</div>
 				{else}
 					<div class="inActiveImgDiv">
 						<div>
@@ -438,7 +445,7 @@
 				});
 
 				forgotPasswordDiv.find('button').on('click', function () {
-					var username = jQuery('#forgotPasswordDiv #username').val();
+					var username = jQuery('#forgotPasswordDiv #fusername').val();
 					var email = jQuery('#email').val();
 
 					var email1 = email.replace(/^\s+/, '').replace(/\s+$/, '');
@@ -480,6 +487,28 @@
 					jQuery(e.currentTarget).removeClass('is-active');
 				});
 				loginFormDiv.find('#username').focus();
+
+				var slider = jQuery('.bxslider').bxSlider({
+					auto: true,
+					pause: 4000,
+					nextText: "",
+					prevText: "",
+					autoHover: true
+				});
+				jQuery('.bx-prev, .bx-next, .bx-pager-item').live('click',function(){ slider.startAuto(); });
+				jQuery('.bx-wrapper .bx-viewport').css('background-color', 'transparent');
+				jQuery('.bx-wrapper .bxslider li').css('text-align', 'left');
+				jQuery('.bx-wrapper .bx-pager').css('bottom', '-15px');
+
+				var params = {
+					theme		: 'dark-thick',
+					setHeight	: '100%',
+					advanced	:	{
+										autoExpandHorizontalScroll:true,
+										setTop: 0
+									}
+				};
+				jQuery('.scrollContainer').mCustomScrollbar(params);
 			});
 		</script>
 		</div>

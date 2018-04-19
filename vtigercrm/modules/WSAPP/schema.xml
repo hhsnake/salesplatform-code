@@ -9,7 +9,7 @@
   `appkey` varchar(255) DEFAULT NULL,
   `type` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`appid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8]]></sql>
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8]]></sql>
 		</table>
 		<table>
 			<name>vtiger_wsapp_recordmapping</name>

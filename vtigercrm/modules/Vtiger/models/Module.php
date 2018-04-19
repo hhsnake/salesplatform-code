@@ -385,7 +385,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * Function that returns all the fields for the module
 	 * @return <Array of Vtiger_Field_Model> - list of field models
 	 */
-	public function getFields() {
+	public function getFields($blockInstance=false) {
 		if(empty($this->fields)){
 			$moduleBlockFields = Vtiger_Field_Model::getAllForModule($this);
 			$this->fields = array();
@@ -409,18 +409,18 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * @return <Array of Vtiger_Field_Model> - list of field models
 	 */
 	public function getFieldsByType($type) {
-        if(!is_array($type)) {
-            $type = array($type);
-        }
+		if(!is_array($type)) {
+			$type = array($type);
+		}
         
-        //SalesPlatform.ru begin
-        foreach($type as $typeName) { 
-            if($typeName == 'phone') { 
-                array_push($type, 'SPMobilePhone'); 
-                break; 
-            } 
-        } 
-        //SalesPlatform.ru end
+		//SalesPlatform.ru begin
+		foreach($type as $typeName) { 
+		    if($typeName == 'phone') { 
+		        array_push($type, 'SPMobilePhone'); 
+		        break; 
+		    } 
+		} 
+		//SalesPlatform.ru end
         
 		$fields = $this->getFields();
 		$fieldList = array();
@@ -603,17 +603,18 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * @return <Array> returns related fields list.
 	 */
 	public function getRelatedListFields() {
-		$entityInstance = CRMEntity::getInstance($this->getName());
-		$list_fields_name = $entityInstance->list_fields_name;
-		$list_fields = $entityInstance->list_fields;
 		$relatedListFields = array();
-		foreach ($list_fields as $key => $fieldInfo) {
-			foreach ($fieldInfo as $columnName) {
-				if(array_key_exists($key, $list_fields_name)){
-					$relatedListFields[$columnName] = $list_fields_name[$key];
+		$entityInstance = CRMEntity::getInstance($this->getName());
+		if (isset($entityInstance->list_fields_name)) {
+			$list_fields_name = $entityInstance->list_fields_name;
+			$list_fields = $entityInstance->list_fields;
+			foreach ($list_fields as $key => $fieldInfo) {
+				foreach ($fieldInfo as $columnName) {
+					if(array_key_exists($key, $list_fields_name)){
+						$relatedListFields[$columnName] = $list_fields_name[$key];
+					}
 				}
 			}
-
 		}
 		return $relatedListFields;
 	}
@@ -1099,6 +1100,14 @@ class Vtiger_Module_Model extends Vtiger_Module {
 					AND (vtiger_activity.status is NULL OR vtiger_activity.status NOT IN ('Completed', 'Deferred', 'Cancelled'))
 					AND (vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus NOT IN ('Held','Cancelled'))";
 
+		if(!$currentUser->isAdminUser()) {
+			$moduleFocus = CRMEntity::getInstance('Calendar');
+			$condition = $moduleFocus->buildWhereClauseConditionForCalendar();
+			if($condition) {
+				$query .= ' AND '.$condition;
+			}
+		}
+
 		$params = array($this->getName());
 
 		if ($recordId) {
@@ -1137,13 +1146,13 @@ class Vtiger_Module_Model extends Vtiger_Module {
 				$visibility = false;
 			}
             
-            //SalesPlatform.ru begin
-            require('user_privileges/user_privileges_'.$currentUser->id.'.php');
-            require('user_privileges/sharing_privileges_'.$currentUser->id.'.php');
-            if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-				$visibility = false;
-			}
-            //SalesPlatform.ru end
+		    //SalesPlatform.ru begin
+		    require('user_privileges/user_privileges_'.$currentUser->id.'.php');
+		    require('user_privileges/sharing_privileges_'.$currentUser->id.'.php');
+		    if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
+					$visibility = false;
+				}
+		    //SalesPlatform.ru end
             
 			if(!$currentUser->isAdminUser() && $newRow['activitytype'] != 'Task' && $newRow['visibility'] == 'Private' && $ownerId && $visibility) {
 				foreach($newRow as $data => $value) {
@@ -1527,22 +1536,33 @@ class Vtiger_Module_Model extends Vtiger_Module {
 			$relatedListFields['filelocationtype'] = 'filelocationtype';
 			$relatedListFields['filestatus'] = 'filestatus';
 		}
-
+        
+		//SalesPlatform.ru begin
+		if($relatedModuleName === 'PBXManager') {
+		    $relatedListFields['direction'] = 'direction';
+		}
+		//SalesPlatform.ru end
+        
 		if(count($relatedListFields) > 0) {
 			$currentUser = Users_Record_Model::getCurrentUserModel();
 			$queryGenerator = new QueryGenerator($relatedModuleName, $currentUser);
 			$queryGenerator->setFields($relatedListFields);
 			$selectColumnSql = $queryGenerator->getSelectClauseColumnSQL();
-            //SalesPlatform.ru begin
-			//$newQuery = spliti('FROM', $query);
-            $newQuery = preg_split('/FROM/i', $query);
-            //SalesPlatform.ru end
+			$newQuery = preg_split('/FROM/i', $query);
 			$selectColumnSql = 'SELECT DISTINCT vtiger_crmentity.crmid,'.$selectColumnSql;
 			$query = $selectColumnSql.' FROM '.$newQuery[1];
 		}
 
 		if ($nonAdminQuery) {
 			$query = appendFromClauseToQuery($query, $nonAdminQuery);
+
+			if($functionName == 'get_activities' && trim($nonAdminQuery)) {
+				$moduleFocus = CRMEntity::getInstance('Calendar');
+				$condition = $moduleFocus->buildWhereClauseConditionForCalendar();
+				if($condition) {
+					$query .= ' AND '.$condition;
+				}
+			}
 		}
 
 		return $query;
@@ -1718,15 +1738,30 @@ class Vtiger_Module_Model extends Vtiger_Module {
 
 
 	public function transferRecordsOwnership($transferOwnerId, $relatedModuleRecordIds){
+		$moduleName = $this->getName();
 		foreach($relatedModuleRecordIds as $recordId) {
-			$recordModel = Vtiger_Record_Model::getInstanceById($recordId);
-			$recordModel->set('assigned_user_id', $transferOwnerId);
-			$recordModel->set('mode', 'edit');
-			// Transferring ownership with related module as Inventory modules, removes line item details.
-			// So setting $_REQUEST['ajxaction'] to DETAILVIEW
-			$_REQUEST['ajxaction'] = 'DETAILVIEW';
-			$recordModel->save();
+			if(Users_Privileges_Model::isPermitted($moduleName, 'Save', $recordId)) {
+				try {
+					$recordModel = Vtiger_Record_Model::getInstanceById($recordId);
+					$recordModel->set('assigned_user_id', $transferOwnerId);
+					$recordModel->set('mode', 'edit');
+					// Transferring ownership with related module as Inventory modules, removes line item details.
+					// So setting $_REQUEST['ajxaction'] to DETAILVIEW
+					$_REQUEST['ajxaction'] = 'DETAILVIEW';
+					$recordModel->save();
+				} catch (DuplicateException $e) {
+					return $e->getDuplicationMessage();
+				} catch (Exception $e) {
+                    //SalesPlatform.ru begin
+                    return $e->getMessage();
+                    //SalesPlatform.ru end
+				}
+			}
 		}
+        
+        //SalesPlatform.ru begin
+        return true;
+        //SalesPlatform.ru end
 	}
 
 	/**
@@ -1957,7 +1992,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	}
 
 	function isStarredEnabled(){
-		return false;
+		return true;
 	}
 
 	/**
@@ -1987,4 +2022,44 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		return true;
 	}
 
+	
+	public static function getSyncActionsInDuplicatesCheck() {
+		return array(	1 => 'LBL_PREFER_LATEST_RECORD',
+						2 => 'LBL_PREFER_INTERNAL_RECORD',
+//						3 => 'LBL_PREFER_VTIGER_RECORD',
+						4 => 'LBL_PREFER_EXTERNAL_RECORD');
+	}
+
+	
+	public function isFieldsDuplicateCheckAllowed() {
+		return true;
+	}
+
+	public function isExcelEditAllowed() {
+		return $this->isPermitted('EditView');
+	}
+
+	public function getModuleIcon() {
+		$moduleName = $this->getName();
+		$lowerModuleName = strtolower($moduleName);
+		$title = vtranslate($moduleName, $moduleName);
+
+		$moduleIcon = "<i class='vicon-$lowerModuleName' title='$title'></i>";
+		if ($this->source == 'custom') {
+			$moduleShortName = mb_substr(trim($title), 0, 2);
+			$moduleIcon = "<span class='custom-module' title='$title'>$moduleShortName</span>";
+		}
+
+		$imageFilePath = 'layouts/'.Vtiger_Viewer::getLayoutName()."/modules/$moduleName/$moduleName.png";
+		if (file_exists($imageFilePath)) {
+			$moduleIcon = "<img src='$imageFilePath' title='$title'/>";
+		}
+
+		return $moduleIcon;
+	}
+
+	public static function getModuleIconPath($moduleName) {
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+		return $moduleModel->getModuleIcon();
+	}
 }

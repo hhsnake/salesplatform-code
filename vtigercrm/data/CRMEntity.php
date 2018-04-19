@@ -84,8 +84,11 @@ class CRMEntity {
 		if($moduleModel && !$moduleModel->isEntityModule()) {
 			return;
 		}
-
-		$userSpecificTableIgnoredModules = array("SMSNotifier", "ModComments");
+        
+        //SalesPlatform.ru begin
+		//$userSpecificTableIgnoredModules = array('SMSNotifier', 'PBXManager', 'ModComments');
+        $userSpecificTableIgnoredModules = array('SMSNotifier', 'ModComments');
+        //SalesPlatform.ru end
 		if(in_array($moduleName, $userSpecificTableIgnoredModules)) return;
 
 		$userSpecificTable = Vtiger_Functions::getUserSpecificTableName($moduleName);
@@ -285,9 +288,7 @@ class CRMEntity {
 			$groupid = 0;
 
 
-		if(empty($ownerid) && $ownerid === 0 && $module == "Cases"){
-			// Allow $ownerid = 0 for Cases module    
-		} else if(empty($ownerid)) {
+		if (empty($ownerid)) {
 			$ownerid = $current_user->id;
 		}
 
@@ -530,7 +531,7 @@ class CRMEntity {
 			}
 			if (isset($this->column_fields[$fieldname])) {
 				if ($uitype == 56) {
-					if ($this->column_fields[$fieldname] == 'on' || $this->column_fields[$fieldname] == 1) {
+					if ($this->column_fields[$fieldname] === 'on' || $this->column_fields[$fieldname] == 1) {
 						$fldvalue = '1';
 					} else {
 						$fldvalue = '0';
@@ -872,7 +873,7 @@ class CRMEntity {
 	 * @param <Integer> $record - crmid of record
 	 * @param <String> $module - module name
 	 */
-	function retrieve_entity_info($record, $module) {
+	function retrieve_entity_info($record, $module, $allowDeleted = false) {
 		global $adb, $log, $app_strings, $current_user;
 
 		// INNER JOIN is desirable if all dependent table has entries for the record.
@@ -930,7 +931,7 @@ class CRMEntity {
 
 			$params = array();
 			$required_tables = $this->tab_name_index; // copies-on-write
-                        
+
 			foreach ($cachedModuleFields as $fieldinfo) {
 				if (in_array($fieldinfo['tablename'], $multirow_tables)) {
 					continue;
@@ -952,12 +953,13 @@ class CRMEntity {
                         && stripos($fieldinfo['columnname'], 'shtax') !== false) {
 					continue;
 				}
-                                
+
 				// Alias prefixed with tablename+fieldname to avoid duplicate column name across tables
 				// fieldname are always assumed to be unique for a module
 				$column_clause .=  $fieldinfo['tablename'].'.'.$fieldinfo['columnname'].' AS '.$this->createColumnAliasForField($fieldinfo).',';
 			}
 			$column_clause .= 'vtiger_crmentity.deleted, vtiger_crmentity.label';
+
 			if (isset($required_tables['vtiger_crmentity'])) {
 				$from_clause  = ' vtiger_crmentity';
 				unset($required_tables['vtiger_crmentity']);
@@ -975,22 +977,24 @@ class CRMEntity {
 						$tablename, $joinCondition);
 				}
 			}
-                        
+
 			$where_clause .= ' vtiger_crmentity.crmid=?';
 			$params[] = $record;
 
 			$sql = sprintf('SELECT %s FROM %s WHERE %s %s', $column_clause, $from_clause, $where_clause, $limit_clause);
-                        
+
 			$result = $adb->pquery($sql, $params);
 			// initialize the object
 			$this->column_fields = new TrackableObject();
-                        
+
 			if (!$result || $adb->num_rows($result) < 1) {
 				throw new Exception($app_strings['LBL_RECORD_NOT_FOUND'], -1);
 			} else {
 				$resultrow = $adb->query_result_rowdata($result);
-				if (!empty($resultrow['deleted'])) {
-					throw new Exception($app_strings['LBL_RECORD_DELETE'], 1);
+				if (!$allowDeleted) {
+					if (!empty($resultrow['deleted'])) {
+						throw new Exception($app_strings['LBL_RECORD_DELETE'], 1);
+					}
 				}
 				if(!empty($resultrow['label'])){
 					$this->column_fields['label'] = $resultrow['label'];
@@ -1481,12 +1485,6 @@ class CRMEntity {
 		$this->db->println("TRANS restore starts $module");
 		$this->db->startTransaction();
 
-		$date_var = date("Y-m-d H:i:s");
-		$query = 'UPDATE vtiger_crmentity SET deleted=0,modifiedtime=?,modifiedby=? WHERE crmid = ?';
-		$this->db->pquery($query, array($this->db->formatDate($date_var, true), $current_user->id, $id), true, "Error restoring records :");
-		//Restore related entities/records
-		$this->restoreRelatedRecords($module, $id);
-
 		//Event triggering code
 		require_once("include/events/include.inc");
 		global $adb;
@@ -1496,7 +1494,15 @@ class CRMEntity {
 		$em->initTriggerCache();
 
 		$this->id = $id;
-		$entityData = VTEntityData::fromCRMEntity($this);
+		$entityData = VTEntityData::getInstanceByDeletedEntityId($adb, $id, $module);
+		$em->triggerEvent("vtiger.entity.beforerestore", $entityData);
+
+		$date_var = date("Y-m-d H:i:s");
+		$query = 'UPDATE vtiger_crmentity SET deleted=0,modifiedtime=?,modifiedby=? WHERE crmid = ?';
+		$this->db->pquery($query, array($this->db->formatDate($date_var, true), $current_user->id, $id), true, "Error restoring records :");
+		//Restore related entities/records
+		$this->restoreRelatedRecords($module, $id);
+
 		//Event triggering code
 		$em->triggerEvent("vtiger.entity.afterrestore", $entityData);
 		//Event triggering code ends
@@ -2370,6 +2376,86 @@ class CRMEntity {
 		return $query;
 	}
 
+	function getReportsUiType10Query($module, $queryPlanner){
+		$adb = PearDatabase::getInstance();
+		$relquery = '';
+		$matrix = $queryPlanner->newDependencyMatrix();
+
+		$params = array($module);
+		if($module == "Calendar") {
+			array_push($params,"Events");
+		}
+
+		$fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name IN (".  generateQuestionMarks($params).") WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10) AND vtiger_field.presence IN (0,2)", $params);
+
+		if ($adb->num_rows($fields_query) > 0) {
+			for ($i = 0; $i < $adb->num_rows($fields_query); $i++) {
+				$field_name = $adb->query_result($fields_query, $i, 'fieldname');
+				$field_id = $adb->query_result($fields_query, $i, 'fieldid');
+				$tab_name = $adb->query_result($fields_query, $i, 'tablename');
+				$ui10_modules_query = $adb->pquery("SELECT relmodule FROM vtiger_fieldmodulerel WHERE fieldid=?", array($field_id));
+
+				if ($adb->num_rows($ui10_modules_query) > 0) {
+
+					// Capture the forward table dependencies due to dynamic related-field
+					$crmentityRelModuleFieldTable = "vtiger_crmentityRel$module$field_id";
+
+					$crmentityRelModuleFieldTableDeps = array();
+					$calendarFlag = false;
+					for ($j = 0; $j < $adb->num_rows($ui10_modules_query); $j++) {
+						$rel_mod = $adb->query_result($ui10_modules_query, $j, 'relmodule');
+						if(vtlib_isModuleActive($rel_mod)) {
+							if($rel_mod == 'Calendar') {
+								$calendarFlag = true;
+							}
+							if($calendarFlag && $rel_mod == 'Events') {
+								continue;
+							}
+							$rel_obj = CRMEntity::getInstance($rel_mod);
+							vtlib_setup_modulevars($rel_mod, $rel_obj);
+
+							$rel_tab_name = $rel_obj->table_name;
+							$rel_tab_index = $rel_obj->table_index;
+							$crmentityRelModuleFieldTableDeps[] = $rel_tab_name . "Rel$module$field_id";
+						}
+					}
+
+					$matrix->setDependency($crmentityRelModuleFieldTable, $crmentityRelModuleFieldTableDeps);
+					$matrix->addDependency($tab_name, $crmentityRelModuleFieldTable);
+
+					if ($queryPlanner->requireTable($crmentityRelModuleFieldTable, $matrix)) {
+						$relquery.= " LEFT JOIN vtiger_crmentity AS $crmentityRelModuleFieldTable ON $crmentityRelModuleFieldTable.crmid = $tab_name.$field_name AND vtiger_crmentityRel$module$field_id.deleted=0";
+					}
+
+					$calendarFlag = false;
+					for ($j = 0; $j < $adb->num_rows($ui10_modules_query); $j++) {
+						$rel_mod = $adb->query_result($ui10_modules_query, $j, 'relmodule');
+						if(vtlib_isModuleActive($rel_mod)) {
+							if($rel_mod == 'Calendar') {
+								$calendarFlag = true;
+							}
+							if($calendarFlag && $rel_mod == 'Events') {
+								continue;
+							}
+							$rel_obj = CRMEntity::getInstance($rel_mod);
+							vtlib_setup_modulevars($rel_mod, $rel_obj);
+
+							$rel_tab_name = $rel_obj->table_name;
+							$rel_tab_index = $rel_obj->table_index;
+
+							$rel_tab_name_rel_module_table_alias = $rel_tab_name . "Rel$module$field_id";
+
+							if ($queryPlanner->requireTable($rel_tab_name_rel_module_table_alias)) {
+								$relquery.= " LEFT JOIN $rel_tab_name AS $rel_tab_name_rel_module_table_alias ON $rel_tab_name_rel_module_table_alias.$rel_tab_index = $crmentityRelModuleFieldTable.crmid";
+							}
+						}
+					}
+				}
+			}
+		}
+		return $relquery;
+	}
+
 	/*
 	 * Function to get the security query part of a report
 	 * @param - $module primary module name
@@ -2859,7 +2945,7 @@ class CRMEntity {
 		//as mysql query optimizer puts crmentity on the left side and considerably slow down
 		$query = preg_replace('/\s+/', ' ', $query);
 		if (strripos($query, ' WHERE ') !== false) {
-			vtlib_setup_modulevars($module, $this);
+			vtlib_setup_modulevars($this->moduleName, $this);
 			$query = str_ireplace(' where ', " WHERE $this->table_name.$this->table_index > 0  AND ", $query);
 		}
 		return $query;
@@ -3102,6 +3188,8 @@ class CRMEntity {
 class TrackableObject implements ArrayAccess, IteratorAggregate {
 	private $storage;
 	private $trackingEnabled = true;
+	private $tracking;
+	
 	function __construct($value = array()) {
 		$this->storage = $value;
 	}
@@ -3116,7 +3204,7 @@ class TrackableObject implements ArrayAccess, IteratorAggregate {
 			// decode_html only expects string
 			$olderValue = is_string($olderValue) ? decode_html($olderValue) : $olderValue ;
 			//same logic is used in vtEntityDelta to check for delta
-			if((empty($olderValue) && !empty($value)) || ($olderValue != $value)) {
+			if((empty($olderValue) && !empty($value)) || ($olderValue !== $value)) {
 				$this->changed[] = $key;
 			}
 		}

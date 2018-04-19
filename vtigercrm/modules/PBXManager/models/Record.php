@@ -173,6 +173,48 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
         $db->pquery($query, array($recordingUrl, $sourceuuid));
     }
     
+    /**
+     * Returns pbx manager record model which matches for received end call details
+     * @param string $sourceuuid
+     * @return PBXManager_Record_Model
+     */
+    public static function getModelForEndCallDetails($sourceuuid) {
+        $db = PearDatabase::getInstance();
+        $query = "SELECT * FROM " . self::moduletableName . " WHERE sourceuuid=? AND callstatus IN('in-progress','completed')"; 
+        
+        $params = array($sourceuuid);
+        $result = $db->pquery($query, $params);
+        $rowCount =  $db->num_rows($result);
+        if($rowCount){
+            $rowData = $db->query_result_rowdata($result, 0);
+            $record = new self();
+            $record->setData($rowData);
+            
+            return $record;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Updates call details of pbx manager record model by it's id
+     * @param int $recordId
+     * @param array $details
+     */
+    public static function updateCallDetailsByRecordId($recordId, $details) {
+        $db = PearDatabase::getInstance();
+        $query = 'UPDATE '.self::moduletableName.' SET ';
+        $params = array();
+        foreach($details as $key => $value){
+            $query .= $key . '=?,';
+            $params[] = $value;
+        }
+        $query = substr_replace($query ,"",-1);
+        $query .= ' WHERE pbxmanagerid=?';
+        $params[] = $recordId;
+        
+        $db->pquery($query, $params);
+    }
     
     public static function updateCallDetailsBySourceUUID($sourceuuid, $details) {
         $db = PearDatabase::getInstance();

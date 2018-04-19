@@ -43,20 +43,17 @@ class Products_Relation_Model extends Vtiger_Relation_Model {
 			$queryGenerator = new QueryGenerator($relatedModuleName, $currentUser);
 			$queryGenerator->setFields($relatedListFields);
 			$selectColumnSql = $queryGenerator->getSelectClauseColumnSQL();
-            //SalesPlatform.ru begin
-			//$newQuery = spliti('FROM', $query);
-            $newQuery = preg_split('/FROM/i', $query);
-            //SalesPlatform.ru end
+			$newQuery = preg_split('/FROM/i', $query);
 			$selectColumnSql = 'SELECT DISTINCT vtiger_crmentity.crmid, '.$selectColumnSql;
 			$query = $selectColumnSql.' FROM '.$newQuery[1];
 		}
 		if($functionName == 'get_product_pricebooks'){
-			$newQuery = spliti('FROM', $query);
+			$newQuery = preg_split('/FROM/i', $query);
 			$selectColumnSql = $newQuery[0].' ,vtiger_pricebookproductrel.listprice, vtiger_pricebook.currency_id, vtiger_products.unit_price';
 			$query = $selectColumnSql.' FROM '.$newQuery[1];
 		}
 		if($functionName == 'get_service_pricebooks'){
-			$newQuery = spliti('FROM', $query);
+			$newQuery = preg_split('/FROM/i', $query);
 			$selectColumnSql = $newQuery[0].' ,vtiger_pricebookproductrel.listprice, vtiger_pricebook.currency_id, vtiger_service.unit_price';
 			$query = $selectColumnSql.' FROM '.$newQuery[1];
 		}
@@ -161,4 +158,28 @@ class Products_Relation_Model extends Vtiger_Relation_Model {
 		$productModel = Vtiger_Record_Model::getInstanceById($sourceRecordId, $sourceModuleName);
 		$productModel->updateSubProductQuantity($destinationRecordId, $quantity);
 	}
+    
+    //SalesPlatform.ru begin
+    public function addRelation($sourcerecordId, $destinationRecordId, $otherParams = array()) {
+		$sourceModule = $this->getParentModuleModel();
+		$sourceModuleName = $sourceModule->get('name');
+		$sourceModuleFocus = CRMEntity::getInstance($sourceModuleName);
+		$destinationModuleName = $this->getRelationModuleModel()->get('name');
+        if ($sourceModuleName == 'Products' && $destinationModuleName == 'Products') {
+            $this->specialRelateEntities($sourceModuleFocus, $sourceModuleName, $sourcerecordId, $destinationModuleName, $destinationRecordId, $otherParams);
+        } else {
+            relateEntities($sourceModuleFocus, $sourceModuleName, $sourcerecordId, $destinationModuleName, $destinationRecordId);
+        }
+	}
+    
+    protected function specialRelateEntities($focus, $sourceModule, $sourceRecordId, $destinationModule, $destinationRecordIds, $otherParams = array()) {
+        if (!is_array($destinationRecordIds)) {
+            $destinationRecordIds = Array($destinationRecordIds);
+        }
+        foreach ($destinationRecordIds as $destinationRecordId) {
+            $focus->save_related_module($sourceModule, $sourceRecordId, $destinationModule, $destinationRecordId, $otherParams);
+            $focus->trackLinkedInfo($sourceModule, $sourceRecordId, $destinationModule, $destinationRecordId);
+        }
+    }
+    //SalesPaltform.ru end
 }

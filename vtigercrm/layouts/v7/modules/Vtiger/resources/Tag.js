@@ -64,8 +64,11 @@ Vtiger.Class("Vtiger_Tag_Js",{},{
     constructTagElement : function (params) {
         var tagElement = jQuery(jQuery('#dummyTagElement').html()).clone(true);
         tagElement.attr('data-id',params.id).attr('data-type',params.type);
-        tagElement.find('.tagLabel').html(params.name);
-        return tagElement
+        //SalesPlatform.ru begin
+		//tagElement.find('.tagLabel').html(params.name);
+        tagElement.find('.tagLabel').text(params.name);
+        //SalesPlatform.ru end
+        return tagElement;
     },
     
     addTagsToShowAllTagContianer : function(tagsList) {

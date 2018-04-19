@@ -5,8 +5,8 @@
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
- * Portions created by vtiger are Copyright (C) vtiger. All Rights Reserved
- * Contributor(s): Valmir C. Trindade - Translate to Brazilian Portuguese - 07/05/2014 - www.ttcasolucoes.com.br.
+ * Portions created by vtiger are Copyright (C) vtiger. 
+ * All Rights Reserved. Contributor(s): Valmir C. Trindade - Brazilian Portuguese Translation - www.ttcasolucoes.com.br.
  * *********************************************************************************** */
 $languageStrings = array(
     'LBL_SELECT_ONE' => 'Selecionar',
@@ -21,8 +21,8 @@ $languageStrings = array(
     
     'webappurl'=>'URL do Vtiger Asterisk',
     'vtigersecretkey'=>'Chave Secreta Vtiger',
-    'outboundcontext' => 'Outbound Context',
-    'outboundtrunk' => 'Outbound Trunk',
+    'outboundcontext' => 'Contexto Outbound',
+    'outboundtrunk' => 'Tronco Outbound',
     
 );
 

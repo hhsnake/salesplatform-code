@@ -644,9 +644,30 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 
 				if (!in_array($picklistValueInLowerCase, $allPicklistValuesInLowerCase) && !empty($picklistValueInLowerCase)) {
 					if ($moduleName != 'Calendar') {
+						// Required to update runtime cache.
+						$wsFieldDetails = $fieldInstance->getPicklistDetails();
+                        
+                        //SalesPlatform.ru begin
+                        if($fieldName === 'hdnTaxType') {
+                            $defaultValues = $this->defaultValues;
+                            if(!empty($defaultValues) && array_key_exists('hdnTaxType', $defaultValues)) {
+                                $fieldValue = $defaultValues['hdnTaxType'];
+                            } else {
+                                $fieldValue = Inventory_TaxRecord_Model::getSelectedDefaultTaxMode();
+                            }
+                            $fieldData[$fieldName] = $fieldValue;
+                            continue;
+                        }
+                        //SalesPlatform.ru end
+                        
 						$moduleObject = Vtiger_Module::getInstance($moduleName);
 						$fieldObject = Vtiger_Field::getInstance($fieldName, $moduleObject);
 						$fieldObject->setPicklistValues(array($fieldValue));
+
+						// Update cache state with new value added.
+						$wsFieldDetails[] = array('label' => $fieldValue, 'value' => $fieldValue);
+						Vtiger_Cache::getInstance()->setPicklistDetails($moduleObject->getId(), $fieldName, $wsFieldDetails);
+
 						unset($this->allPicklistValues[$fieldName]);
 					}
 				} else {

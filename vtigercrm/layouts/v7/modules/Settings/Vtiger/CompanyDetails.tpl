@@ -14,7 +14,7 @@
 
 	<div class=" col-lg-12 col-md-12 col-sm-12">
 		<input type="hidden" id="supportedImageFormats" value='{ZEND_JSON::encode(Settings_Vtiger_CompanyDetails_Model::$logoSupportedFormats)}' />
-        {*<div class="blockData" >
+		{*<div class="blockData" >
 		<h3>{vtranslate('LBL_COMPANY_DETAILS', $QUALIFIED_MODULE)}</h3>
 		{if $DESCRIPTION}<span style="font-size:12px;color: black;"> - &nbsp;{vtranslate({$DESCRIPTION}, $QUALIFIED_MODULE)}</span>{/if}
 		</div>
@@ -37,11 +37,14 @@
         <div class="clearfix marginTop10px marginBottom10px" id="selectedCompanyContainer">
             <div class="pull-left">
                 <span class="marginRight10px"><strong>{vtranslate('LBL_COMPANY', $QUALIFIED_MODULE)}</strong></span>
-                <select id="currentCompany" name="currentCompany" class="select2">
-                    {foreach from=$MODULE_MODEL->getCompanies() item=COMPANY}
-                        <option value="{$COMPANY}" {if decode_html($COMPANY) eq decode_html($SELECTED_COMPANY)}selected{/if}>{vtranslate($COMPANY, $QUALIFIED_MODULE)}</option>
-                    {/foreach}
-                </select>
+                    {*SalesPlatform.ru begin
+                    <select id="currentCompany" name="currentCompany" class="select2">*}
+                    <select id="currentCompany" name="currentCompany" class="select2 col-lg-12 col-md-12 col-sm-12" style="min-width: 300px;">
+                    {*SalesPlatform.ru end*}
+                        {foreach from=$MODULE_MODEL->getCompanies() item=COMPANY}
+                            <option value="{$COMPANY}" {if decode_html($COMPANY) eq decode_html($SELECTED_COMPANY)}selected{/if}>{vtranslate($COMPANY, $QUALIFIED_MODULE)}</option>
+                        {/foreach}
+                    </select>
             </div>
         </div>
         {* SalesPlatform.ru end *}

@@ -59,6 +59,7 @@ $languageStrings = array(
 	'LBL_ZLIB_SUPPORT' => 'Поддержка Zlib',
         // SalesPlatform.ru begin	
         'LBL_EXIF_SUPPORT' => 'Поддержка Exif',
+        'LBL_SIMPLEXML' => 'Поддержка SimpleXML',
         // SalesPlatform.ru end
     'LBL_MYSQLI_CONNECT_SUPPORT' => 'Поддержка MySQLi',
     'LBL_OPEN_SSL' => 'Поддержка OpenSSL',
@@ -274,6 +275,29 @@ $languageStrings = array(
         //SalesPlatform.ru begin
         'LBL_WELCOME_TO_VTIGER7_SETUP_WIZARD' => 'Добро пожаловать в мастер установки SalesPlatform Vtiger CRM 7',
         'LBL_VTIGER7_SETUP_WIZARD_DESCRIPTION' => 'Данный мастер поможет вам установить SalesPlatform Vtiger CRM 7',
+        'ERR_DB_NOT_UTF8'  => 'Кодировка или параметры сортировки (collation) базы данных не совместимы с UTF8',
+        'ERR_DB_SQLMODE_NOTFRIENDLY' => 'Конфигурация сервера MySQL не должна содержать следующие параметры sql_mode:<br> ONLY_FULL_GROUP_BY, STRICT_TRANS_TABLES, NO_ZERO_IN_DATE, NO_ZERO_DATE',
+        'Configuration File'            => 'Файл конфигурации',
+        'Tabdata File'                  => 'Файл для хранения структуры модулей',
+        'Parent Tabdata File'           => 'Файл для хранения структуры меню',
+        'Vtlib Test HTML Directory'     => 'Директория для хранения кэша библиотеки очистки HTML-кода',
+        'Cache Directory'               => 'Директория для хранения общего кэша',
+        'Image Cache Directory'         => 'Директория для хранения кэша изображений',
+        'Import Cache Directory'        => 'Директория для хранения кэша импортируемых данных',
+        'Storage Directory'             => 'Директория для хранения загружаемых файлов',
+        'User Privileges Directory'     => 'Директория для хранения прав пользователей',
+        'Modules Directory'             => 'Директория для хранения модулей',
+        'Cron Modules Directory'        => 'Директория для хранения автоматических задач модулей',
+        'Vtlib Test Directory'          => 'Директория для хранения временных файлов основной библиотеки',
+        'Mail Merge Template Directory' => 'Директория для хранения шаблонов писем',
+        'Product Image Directory'       => 'Директория для хранения изображений продуктов',
+        'User Image Directory'          => 'Директория для хранения изображений пользователей',
+        'Contact Image Directory'       => 'Директория для хранения изображений контактов',
+        'Logo Directory'                => 'Директория для хранения логотипов',
+        'Logs Directory'                => 'Директория для хранения журналов системы',
+        //SalesPlatform.ru end
+        //SalesPlatform.ru begin compatibility with mysql 5.7.5+
+        'LBL_MYSQL_RECOMMENDED_SETTINGS' => 'Рекомендованные параметры MySQL'
         //SalesPlatform.ru end
     );
 
@@ -284,6 +308,9 @@ $jsLanguageStrings = array(
         'JS_EMPTY_MAJOR_FIELDS'      => 'Ошибка! Не заполнены обязательные поля.',
         'JS_PLEASE_RESOLVE_ERROR'    => 'Пожалуйста, исправьте ошибку прежде чем продолжить установку',
         'JS_YOUR_INDUSTRY'           => 'Пожалуйста, выберите вид вашей деятельности',
+        //SalesPlatform.ru begin compatibility with mysql 5.7.5+
+        'JS_SQL_MODE_INCORRECT_VALUE'=> 'Рекомендуется отключить строгий режим проверки типов и стандартов( GLOBAL sql_mode = \'\' ). Это может повлиять на некоторые функции Vtiger CRM. Вы уверены, что хотите продолжить? '
+        //SalesPlatform.ru end
 );
 
 //Salesplatform.ru end Fix en_us localisation

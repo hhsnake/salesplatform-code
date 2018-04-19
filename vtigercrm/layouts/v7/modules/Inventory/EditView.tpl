@@ -50,6 +50,9 @@
                                 <input type="hidden" name="sourceRecord" value="{$SOURCE_RECORD}" />
                                 <input type="hidden" name="relationOperation" value="{$IS_RELATION_OPERATION}" />
                             {/if}
+                            {* SalesPlatform.ru begin tag for CheckBeforeSave *}
+                            <input type="hidden" name="mode" value="{$MODE}"/>
+                            {* SalesPlatform.ru end tag for CheckBeforeSave *}
                             {if $RETURN_VIEW}
                                 <input type="hidden" name="returnmodule" value="{$RETURN_MODULE}" />
                                 <input type="hidden" name="returnview" value="{$RETURN_VIEW}" />
@@ -75,10 +78,9 @@
                             <div class='textAlignCenter col-lg-12 col-md-12 col-sm-12 '>
                                 {*SalesPlatform.ru begin*}
                                 <button class="btn btn-success saveButton" type="submit">{vtranslate('LBL_SAVE', $MODULE)}</button>
-                                <a class="cancelLink" href="javascript:history.back()" type="reset">{vtranslate('LBL_CANCEL', $MODULE)}</a>
-                                {*<button class="btn btn-success saveButton" type="submit">Save</button>
-                                <a class="cancelLink" href="javascript:history.back()" type="reset">Cancel</a>*}
-                                {*SalesPaltform.ru end*}
+				{*<button class="btn btn-success saveButton" type="submit">Save</button>*}
+                                {*SalesPaltform.ru end*}                                
+                                <a class="cancelLink" href="javascript:history.{if $DUPLICATE_RECORDS}go(-2){else}back(){/if}" type="reset">{vtranslate('LBL_CANCEL', $MODULE)}</a>
                             </div>
                         </div>
                     </div>

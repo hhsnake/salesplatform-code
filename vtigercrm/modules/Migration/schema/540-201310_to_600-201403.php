@@ -767,8 +767,8 @@ Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_links MODIFY column linkt
 Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_links MODIFY column linklabel VARCHAR(50)', array());
 Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_links MODIFY column handler_class VARCHAR(50)', array());
 Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_links MODIFY column handler VARCHAR(50)', array());
+
 //--
-//
 //Add ModComments to HelpDesk and Faq module
 
 $moduleInstance = Vtiger_Module::getInstance('ModComments');
@@ -803,12 +803,12 @@ do {
 	}
 	for($i=0; $i<$rows; $i++) {
 		$modComments = CRMEntity::getInstance('ModComments');
-		$modComments->column_fields['assigned_user_id'] = $modComments->column_fields['creator'] = $ownerId;
+		$modComments->column_fields['commentcontent'] = decode_html($adb->query_result($ticketComments, $i, 'comments'));
 		$modComments->column_fields['createdtime'] = $adb->query_result($ticketComments, $i, 'createdtime');
 		$modComments->column_fields['modifiedtime'] = $adb->query_result($ticketComments, $i, 'createdtime');
 		$modComments->column_fields['related_to'] = $adb->query_result($ticketComments, $i, 'ticketid');
-        
-        // Contact linked comments should be carried over (http://code.vtiger.com/vtiger/vtigercrm/issues/130)
+		
+		// Contact linked comments should be carried over (http://code.vtiger.com/vtiger/vtigercrm/issues/130)
 		$ownerId = $adb->query_result($ticketComments, $i, 'ownerid');
 		$ownerType = $adb->query_result($ticketComments, $i, 'ownertype');
 		if ($ownerType == 'customer') {
@@ -1365,7 +1365,11 @@ foreach ($summaryFields as $moduleName => $fieldsList) {
 }
 
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('Active', 'vtiger_users', 'status'));
-Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('12', 'vtiger_users', 'hour_format'));
+
+//Salesplatform.ru begin Update hour_format
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('24', 'vtiger_users', 'hour_format'));
+//Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('12', 'vtiger_users', 'hour_format'));
+//Salesplatform.ru end Update hour_format
 
 // Adding users field into all the available profiles, this is used in email templates
 // when non-admin sends an email with users field in the template
@@ -1926,7 +1930,12 @@ for($i=0; $i<$rows; $i++) {
 unset($filterResult);
 
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('Active', 'vtiger_users', 'status'));
-Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('12', 'vtiger_users', 'hour_format'));
+
+//Salesplatform.ru begin Update hour_format
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('24', 'vtiger_users', 'hour_format'));
+//Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ?', array('12', 'vtiger_users', 'hour_format'));
+//Salesplatform.ru end Update hour_format
+
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('softed', 'vtiger_users', 'theme'));
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('Monday', 'vtiger_users', 'dayoftheweek'));
 Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_shorturls ADD COLUMN onetime int(5)', array());
@@ -2070,7 +2079,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				unset($newWorkflowModel->id);
 				$newWorkflowModel->test = Zend_Json::encode($newWorkflowConditions);
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $newWorkflowModel->description = vtranslate('LBL_COMMECT_ADDED_FROM_PORTAL_SEND_EMAIL', 'Install');
 				//$newWorkflowModel->description = 'Comment Added From Portal : Send Email to Record Owner';
                 //SalesPlatform.ru end
@@ -2078,7 +2087,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				$emailTask->id = '';
 				$emailTask->workflowId = $newWorkflowModel->id;
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $emailTask->summary = vtranslate('LBL_COMMECT_ADDED_FROM_PORTAL_SEND_EMAIL', 'Install');
 				//$emailTask->summary = 'Comment Added From Portal : Send Email to Record Owner';
                 //SalesPlatform.ru end
@@ -2130,7 +2139,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				unset($newWorkflowModel->id);
 				$newWorkflowModel->test = Zend_Json::encode(array_merge($portalCondition, $newWorkflowConditions));
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $newWorkflowModel->description = vtranslate('LBL_SEND_EMAIL_TO_CONTACT_WHERE_CONTACT_NOT_PORTAL_USER', 'Install');
 				//$newWorkflowModel->description = 'Comment Added From CRM : Send Email to Contact, where Contact is not a Portal User';
                 //SalesPlatform.ru end
@@ -2138,7 +2147,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				$emailTask->id = '';
 				$emailTask->workflowId = $newWorkflowModel->id;
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $emailTask->summary = vtranslate('LBL_SEND_EMAIL_TO_CONTACT_WHERE_CONTACT_NOT_PORTAL_USER', 'Install');
 				//$emailTask->summary = 'Comment Added From CRM : Send Email to Contact, where Contact is not a Portal User';
                 //SalesPlatform.ru end
@@ -2171,7 +2180,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				unset($newWorkflowModel->id);
 				$newWorkflowModel->test = Zend_Json::encode(array_merge($portalCondition, $newWorkflowConditions));
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $newWorkflowModel->description = vtranslate('LBL_COMMENT_ADDED_FROM_CRM_SEND_EMAIL_TO_PORTAL_CONTACT_USER', 'Install');
 				//$newWorkflowModel->description = 'Comment Added From CRM : Send Email to Contact, where Contact is Portal User';
                 //SalesPlatform.ru end
@@ -2179,7 +2188,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				$emailTask->id = '';
 				$emailTask->workflowId = $newWorkflowModel->id;
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $emailTask->summary = vtranslate('LBL_COMMENT_ADDED_FROM_CRM_SEND_EMAIL_TO_PORTAL_CONTACT_USER', 'Install');
 				//$emailTask->summary = 'Comment Added From CRM : Send Email to Contact, where Contact is Portal User';
                 //SalesPlatform.ru end
@@ -2204,7 +2213,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 				);
 
 				$workflowModel->test = Zend_Json::encode($newConditions);
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $workflowModel->description = vtranslate('LBL_COMMENT_ADDED_FROM_CRM_SEND_EMAL_ORG', 'Install');
 				//$workflowModel->description = 'Comment Added From CRM : Send Email to Organization';
                 //SalesPlatform.ru end
@@ -2212,7 +2221,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				$emailTask->id = '';
 				$emailTask->workflowId = $workflowModel->id;
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $emailTask->summary = vtranslate('LBL_COMMENT_ADDED_FROM_CRM_SEND_EMAL_ORG', 'Install');
 				//$emailTask->summary = 'Comment Added From CRM : Send Email to Organization';
                 //SalesPlatform.ru end
@@ -2280,7 +2289,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				$emailTask->id = '';
 				$emailTask->workflowId = $properties['workflowId'];
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
 				$emailTask->summary = vtranslate('LBL_NOTIFY_RECORD_OWNER_AFTER_TICKET_CREATION', 'Install');
                 //$emailTask->summary = 'Notify Record Owner when Ticket is created from Portal';
                 //SalesPlatform.ru end
@@ -2424,7 +2433,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 				$newConditions = array_merge($newContactCondition, $newConditions);
 
 				$workflowModel->test = Zend_Json::encode($newConditions);
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $workflowModel->description = vtranslate('LBL_SEND_EMAIL_TO_CONTACT_ON_TICKET_UPDATE', 'Install');
 				//$workflowModel->description = 'Send Email to Contact on Ticket Update';
                 //SalesPlatform.ru end
@@ -2432,7 +2441,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				$emailTask->id = $properties['id'];
 				$emailTask->workflowId = $properties['workflowId'];
-				//SalesPlatform.ru begin
+                //SalesPlatform.ru begin
                 $emailTask->summary = vtranslate('LBL_SEND_EMAIL_TO_CONTACT_ON_TICKET_UPDATE', 'Install');
                 //$emailTask->summary = 'Send Email to Contact on Ticket Update';
                 //SalesPlatform.ru end
@@ -2454,8 +2463,8 @@ for ($i = 0; $i < $numOfRows; $i++) {
 				$tm->saveTask($emailTask);
 
 				unset($newWorkflowModel->id);
-                $newWorkflowModel->executionCondition = 1;
-                $newWorkflowModel->test = Zend_Json::encode(array_merge($newContactCondition, $portalCondition));
+				$newWorkflowModel->executionCondition = 1;
+				$newWorkflowModel->test = Zend_Json::encode(array_merge($newContactCondition, $portalCondition));
                 //SalesPaltform.ru begin
                 $newWorkflowModel->description = vtranslate('LBL_TICKET_CREATION_SEND_EMAIL_TO_CONTACT', 'Install');
                 //$newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Contact';
@@ -2516,7 +2525,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				unset($newWorkflowModel->id);
 				$newWorkflowModel->test = Zend_Json::encode($newConditions);
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $newWorkflowModel->description = vtranslate('LBL_SEND_EMAIL_TO_RECORD_OWNER_ON_TICKET_UPDATE', 'Install');
 				//$newWorkflowModel->description = 'Send Email to Record Owner on Ticket Update';
                 //SalesPlatform.ru end
@@ -2524,7 +2533,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				$emailTask->id = '';
 				$emailTask->workflowId = $newWorkflowModel->id;
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
 				$emailTask->summary = vtranslate('LBL_SEND_EMAIL_TO_RECORD_OWNER_ON_TICKET_UPDATE', 'Install');
                 //$emailTask->summary = 'Send Email to Record Owner on Ticket Update';
                 //SalesPlatform.ru end
@@ -2559,7 +2568,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 				unset($newWorkflowModel->id);
 				$newWorkflowModel->executionCondition = 1;
 				$newWorkflowModel->test = Zend_Json::encode($portalCondition);
-                //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $newWorkflowModel->description = vtranslate('TICKET_CREATION_FROM_CRM_SEND_EMAIL_TO_OWNER', 'Install');
                 //$newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Record Owner';
                 //SalesPlatform.ru end

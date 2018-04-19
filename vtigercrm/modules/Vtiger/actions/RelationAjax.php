@@ -175,7 +175,10 @@ class Vtiger_RelationAjax_Action extends Vtiger_Action_Controller {
 				$autoFillNameArray = getEntityName($autoFillModule, $autofillRecordId);
 				$autoFillName = $autoFillNameArray[$autofillRecordId];
 
-				$resultData[] = array(	'id'		=> $request->get('id'), 
+                                // SalesPlatform.ru begin
+				//$resultData[] = array(	'id'		=> $request->get('id'), 
+				$resultData = array(	'id'		=> $request->get('id'), 
+                                // SalesPlatform.ru end
 										'name'		=> decode_html($recordModel->getName()),
 										'parent_id'	=> array(	'id' => $autofillRecordId,
 																'name' => decode_html($autoFillName),

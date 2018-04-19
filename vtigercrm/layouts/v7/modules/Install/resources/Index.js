@@ -164,13 +164,16 @@ jQuery.Class('Install_Index_Js', {}, {
 	},
 
 	registerEventForStep5: function () {
+                //SalesPlatform.ru begin compatibility with mysql 5.7.5+ 
+                jQuery('#recheck').on('click', function () { 
+                        window.location.reload(); 
+                }); 
+                //SalesPlatform.ru end 
+
 		jQuery('input[name="step6"]').on('click', function () {
 			var error = jQuery('#errorMessage');
 			if (error.length) {
-				//SalesPlatform.ru begin
                 alert(app.vtranslate('JS_PLEASE_RESOLVE_ERROR'));
-                //alert('Please resolve the error before proceeding with the installation');
-                //SalesPlatform.ru end     
 				return false;
 			} else {
 				jQuery('form[name="step5"]').submit().hide();

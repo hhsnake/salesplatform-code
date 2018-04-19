@@ -19,18 +19,19 @@ body{
 }
 .main-container{
     background: #fff;
-    border: 1px solid #ddd;
     border-radius: 3px;
-    box-shadow: 0 0 5px #ccc;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
     min-height: 375px;
     *padding: 0 15px;
 }
-.logo{
-    padding: 15px 0 ;
+.logo img{
+    height: 30px;
 }
-.head
-{
-    padding-top: 15px;
+.head{
+    padding: 15px 0 20px;
+}
+.head h3{
+    margin: 0;
 }
 .inner-container{
     padding: 15px 2%;

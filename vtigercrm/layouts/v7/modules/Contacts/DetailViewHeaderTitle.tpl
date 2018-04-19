@@ -12,7 +12,10 @@
 {strip}
    <div class="col-lg-6 col-md-6 col-sm-6">
 	  <div class="record-header clearfix ">
-		 <div class="hidden-sm hidden-xs recordImage bgcontacts app-{$SELECTED_MENU_CATEGORY}">
+            {* SalesPlatform.ru begin *}
+		{* <div class="hidden-sm hidden-xs recordImage bgcontacts app-{$SELECTED_MENU_CATEGORY}">*}
+		 <div class="hidden-sm hidden-xs recordImage">
+            {* SalesPlatform.ru end *}
 			{assign var=IMAGE_DETAILS value=$RECORD->getImageDetails()}
 			{foreach key=ITER item=IMAGE_INFO from=$IMAGE_DETAILS}
 			   {if !empty($IMAGE_INFO.path)}
@@ -22,8 +25,8 @@
 			   {/if}
 			{/foreach}
 			{if empty($IMAGE_DETAILS)}
-			   <div class="name"><span><strong> <i class="vicon-contacts"></i> </strong></span></div>
-					 {/if}
+				<div class="name"><span><strong>{$MODULE_MODEL->getModuleIcon()}</strong></span></div>
+			{/if}
 		 </div>
 		 <div class="recordBasicInfo">
 			<div class="info-row">

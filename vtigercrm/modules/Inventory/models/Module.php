@@ -84,6 +84,14 @@ class Inventory_Module_Model extends Vtiger_Module_Model {
 			$nonAdminQuery = $this->getNonAdminAccessControlQueryForRelation($relatedModuleName);
 			if ($nonAdminQuery) {
 				$query = appendFromClauseToQuery($query, $nonAdminQuery);
+
+				if(trim($nonAdminQuery)) {
+					$relModuleFocus = CRMEntity::getInstance($relatedModuleName);
+					$condition = $relModuleFocus->buildWhereClauseConditionForCalendar();
+					if($condition) {
+						$query .= ' AND '.$condition;
+					}
+				}
 			}
 		} else {
 			$query = parent::getRelationQuery($recordId, $functionName, $relatedModule, $relationId);
@@ -99,10 +107,7 @@ class Inventory_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getExportQuery($focus, $query) {
 		$baseTableName = $focus->table_name;
-        //SalesPlatform.ru begin
-		//$splitQuery = spliti(' FROM ', $query);
-        $splitQuery = preg_split("/ FROM /i", $query);
-        //SalesPlatform.ru end
+		$splitQuery = preg_split('/ FROM /i', $query);
 		$columnFields = explode(',', $splitQuery[0]);
 		foreach ($columnFields as $key => &$value) {
 			if($value == ' vtiger_inventoryproductrel.discount_amount'){
@@ -113,10 +118,7 @@ class Inventory_Module_Model extends Vtiger_Module_Model {
 				$value = ' vtiger_currency_info.currency_name AS currency_id';
 			}
 		}
-        //SalesPlatform.ru begin
-		//$joinSplit = spliti(' WHERE ',$splitQuery[1]);
-        $joinSplit = preg_split('/ WHERE /i', $splitQuery[1]);
-        //SalesPlatform.ru end
+		$joinSplit = preg_split('/ WHERE /i',$splitQuery[1]);
 		$joinSplit[0] .= " LEFT JOIN vtiger_currency_info ON vtiger_currency_info.id = $baseTableName.currency_id";
 		$splitQuery[1] = $joinSplit[0] . ' WHERE ' .$joinSplit[1];
 

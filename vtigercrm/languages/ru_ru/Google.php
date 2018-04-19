@@ -81,6 +81,8 @@ $languageStrings = array(
     'LBL_CHANGE_USER' => 'Сменить пользователя',
     'LBL_SAVE_AND_IMPORT' => 'Сохранить и импортировать',
     'LBL_IMPORT_RESULTS_GOOGLE' => 'Результаты импорта Google',
+    'LBL_REDIRECT_URL' => 'URL-адрес переадресации',
+    'LBL_REDIRECT_URL_MESSAGE' => 'Скопируйте следующий URL-адрес переадресации и вставьте в ваш Google Auth проект как указано на изображении',
     );
 $jsLanguageStrings = array(
     'LBL_SYNC_BUTTON'              => 'Синхронизировать',

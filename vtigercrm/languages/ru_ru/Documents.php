@@ -28,7 +28,7 @@ $languageStrings = array(
 	'Document No'                  => 'Документ №'        , 
 	'Last Modified By'             => 'Последнее изменение'            ,
 	'LBL_FOLDER_HAS_DOCUMENTS'     => 'Пожалуйста, наведите документы из папки перед удалением',
-	'LBL_DOWNLOAD_FILE'            => 'Загрузить файл' , 
+	'LBL_DOWNLOAD_FILE'            => 'Скачать файл' , 
 	'LBL_CHECK_FILE_INTEGRITY'     => 'Проверить целостность файла', // KEY 5.x: LBL_CHECK_INTEGRITY
 	'LBL_INTERNAL'                 => 'Внутренний'                , 
 	'LBL_EXTERNAL'                 => 'Внешний'              , 
@@ -49,9 +49,8 @@ $languageStrings = array(
         //SalesPlatform.ru begin add locale
         'LBL_EMAIL_FILE_AS_ATTACHMENT' => 'Отправить Документ по E-Mail',
         //SalesPlatform.ru end
-        'LBL_VIEW_FILE' => 'Посмотреть файла',
+        'LBL_VIEW_FILE' => 'Посмотреть файл',
         'LBL_PREVIEW_NOT_AVAILABLE' => 'Предварительный просмотр недоступен',
-        'LBL_VIEW_FILE' => 'Посмотреть файла',
         'LBL_PREVIEW_NOT_AVAILABLE' => 'Предварительный просмотр недоступен',
         'LBL_INTERNAL_DOCUMENT_TYPE' =>'Внутренний документ',
         'LBL_EXTERNAL_DOCUMENT_TYPE' =>'Внешний URL',

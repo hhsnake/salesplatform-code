@@ -62,7 +62,12 @@
 					<div class="form-group" style="text-align: center;">
 						<div class="col-xs-2"></div>
 						<div class="col-xs-8">
-							<div class="alert alert-info">{vtranslate($RECORD_MODEL->get('description'),$QUALIFIED_MODULE)}</div>
+                                                    {* SalesPlatform.ru begin *}
+							{*<div class="alert alert-info">{vtranslate($RECORD_MODEL->get('description'),$QUALIFIED_MODULE)}</div>*}
+                                                    {if $RECORD_MODEL->get('description')}
+                                                    <div class="alert alert-info">{vtranslate($RECORD_MODEL->get('description'),$QUALIFIED_MODULE)}</div>
+                                                    {/if}
+                                                    {* SalesPlatform.ru end *}
 						</div>
 					</div>
 				</div>

@@ -223,6 +223,7 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 			}
 		}
         // SalesPlatform.ru begin Set ru_ru to first position
+	//asort($languageinfo);
         if($languageinfo['ru_ru']) {
             $ruLabel = $languageinfo['ru_ru'];
             unset($languageinfo['ru_ru']);

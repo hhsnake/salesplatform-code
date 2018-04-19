@@ -101,6 +101,8 @@ class Vtiger_ListAjax_View extends Vtiger_List_View {
 	public function searchAll(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$searchValue = $request->get('value');
+		$searchModule = $request->get('searchModule');
+
                 //SalespLatform.ru begin
 		$page = $request->get('page');
                 if (!$page) {
@@ -115,7 +117,7 @@ class Vtiger_ListAjax_View extends Vtiger_List_View {
 		$pagingModel = new Vtiger_Paging_Model();
 		$pagingModel->set('range', $range);
 		$pagingModel->set('limit', $pageLimit-1);
-                
+
 		$searchableModules = Vtiger_Module_Model::getSearchableModules();
                 
                 //SalesPlatform.ru begin
@@ -141,7 +143,7 @@ class Vtiger_ListAjax_View extends Vtiger_List_View {
 				$matchingRecords[$searchModule] = $searchedRecords[$searchModule];
 			}
 		}
-                
+
 		$matchingRecordsList = array();
 		foreach ($matchingRecords as $module => $recordModelsList) {
 			$recordsCount = count($recordModelsList);
@@ -183,7 +185,7 @@ class Vtiger_ListAjax_View extends Vtiger_List_View {
 			}
 			$matchingRecordsList[$module] = $listViewModel;
 		}
-                
+
 		$viewer = $this->getViewer($request);
 		$viewer->assign('SEARCH_VALUE', $searchValue);
 

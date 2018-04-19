@@ -21,6 +21,11 @@
 						<div class='row'>
 							<div class="col-lg-12 col-md-12 col-lg-pull-0">
 								{assign var=SINGLE_MODULE_NAME value='SINGLE_'|cat:$MODULE}
+                                {* SalesPlatform.ru begin *}
+                                {if $MODULE == 'Calendar'}
+                                    {assign var=SINGLE_MODULE_NAME value='LBL_TASK'}
+                                {/if}
+                                {* SalesPlatform.ru end *}
 								{if $RECORD_ID neq ''}
 									<h4 class="editHeader" style="margin-top:5px;" title="{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} {$RECORD_STRUCTURE_MODEL->getRecordName()}">{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} - {$RECORD_STRUCTURE_MODEL->getRecordName()}</h4>
 								{else}
@@ -46,6 +51,9 @@
 							<input type="hidden" name="defaultCallDuration" value="{$USER_MODEL->get('callduration')}" />
 							<input type="hidden" name="defaultOtherEventDuration" value="{$USER_MODEL->get('othereventduration')}" />
 							<input type="hidden" name="appName" value="&app={$SELECTED_MENU_CATEGORY}" />
+                                                        {* SalesPlatform.ru begin tag for CheckBeforeSave *}
+                                                        <input type="hidden" name="mode" value="{$MODE}"/>
+                                                        {* SalesPlatform.ru end tag for CheckBeforeSave *}
 							{if $IS_RELATION_OPERATION }
 								<input type="hidden" name="sourceModule" value="{$SOURCE_MODULE}" />
 								<input type="hidden" name="sourceRecord" value="{$SOURCE_RECORD}" />
@@ -76,7 +84,7 @@
 						<div class="row clearfix">
 							<div class='textAlignCenter col-lg-12 col-md-12 col-sm-12 '>
 								<button type='submit' class='btn btn-success saveButton' >{vtranslate('LBL_SAVE', $MODULE)}</button>&nbsp;&nbsp;
-								<a class='cancelLink' href="javascript:history.back()" type="reset">{vtranslate('LBL_CANCEL', $MODULE)}</a>
+								<a class='cancelLink' href="javascript:history.{if $DUPLICATE_RECORDS}go(-2){else}back(){/if}" type="reset">{vtranslate('LBL_CANCEL', $MODULE)}</a>
 							</div>
 						</div>
 					</div>

@@ -82,8 +82,8 @@ class Documents_FilePreview_View extends Vtiger_IndexAjax_View {
 		} else {
 			$viewer->assign('FILE_PREVIEW_NOT_SUPPORTED','yes');
 		}
-
-		$viewer->assign('DOWNLOAD_URL',$downloadUrl);
+        
+		$viewer->assign('DOWNLOAD_URL', $downloadUrl);
 		$viewer->assign('FILE_PATH',$path);
 		$viewer->assign('FILE_NAME',$filename);
 		$viewer->assign('FILE_EXTN',$extn);

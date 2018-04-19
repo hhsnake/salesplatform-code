@@ -20,12 +20,27 @@
 					<h4>{vtranslate('LBL_CONFIRM_CONFIGURATION_SETTINGS','Install')}</h4>
 				</div>
 				<div class="col-sm-2">
-					<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">
+					<a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_7" target="_blank" class="pull-right">
 						<img src="{'help.png'|vimage_path}" alt="Help-Icon"/>
 					</a>
 				</div>
 			</div>
 			<hr>
+                        {*SalesPlatform.ru begin compatibility with mysql 5.7.5+*}
+                        <div class="row offset2">
+					<div class="col-sm-2"></div>
+					<div class="col-sm-8">
+						<div class=" pull-right">
+							<div class="button-container">
+								<a href ="#">
+									<input type="button" class="btn" value="{vtranslate('LBL_RECHECK', 'Install')}" id='recheck'/>
+								</a>
+							</div>
+						</div>
+					</div>
+			</div>
+                        {*SalesPlatform.ru end*}
+                                                               
 			{if $DB_CONNECTION_INFO['flag'] neq true}
 				<div class="offset2 row" id="errorMessage">
 					<div class="col-sm-2"></div>
@@ -114,8 +129,8 @@
 				<div class="col-sm-2"></div>
 				<div class="col-sm-8">
 					<div class="button-container">
-						<input type="button" class="btn btn-large" value="{vtranslate('LBL_BACK','Install')}" {if $DB_CONNECTION_INFO['flag'] eq true} disabled= "disabled" {/if} name="back"/>
-                        {if $DB_CONNECTION_INFO['flag'] eq true}
+						<input type="button" class="btn btn-default" value="{vtranslate('LBL_BACK','Install')}" {if $DB_CONNECTION_INFO['flag'] eq true} disabled= "disabled" {/if} name="back"/>
+						{if $DB_CONNECTION_INFO['flag'] eq true}
 							<input type="button" class="btn btn-large btn-primary" value="{vtranslate('LBL_NEXT','Install')}" name="step6"/>
 						{/if}
 					</div>

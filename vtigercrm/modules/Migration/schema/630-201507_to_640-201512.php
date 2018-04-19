@@ -19,7 +19,30 @@ vimport('~~modules/com_vtiger_workflow/VTEntityMethodManager.inc');
 vimport('~~include/Webservices/Utils.php');
 vimport('~~modules/Users/Users.php');
 
+//Start add new currency - 'CFP Franc or Pacific Franc' 
 global $adb;
+
+$query = 'UPDATE vtiger_currencies_seq SET id = (SELECT currencyid FROM vtiger_currencies ORDER BY currencyid DESC LIMIT 1)';
+$adb->pquery($query, array());
+
+$uniqId = $adb->getUniqueID('vtiger_currencies'); 
+$result = $adb->pquery('SELECT 1 FROM vtiger_currencies WHERE currency_name = ?',array('CFP Franc')); 
+ 
+if($adb->num_rows($result) <= 0){ 
+    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_currencies VALUES (?,?,?,?)', array($uniqId, 'CFP Franc', 'XPF', 'F')); 
+} 
+
+//Adding new timezone (GMT+11:00) New Caledonia 
+$sortOrderResult = $adb->pquery("SELECT sortorderid FROM vtiger_time_zone WHERE time_zone = ?", array('Asia/Yakutsk'));
+if ($adb->num_rows($sortOrderResult)) {
+    $sortOrderId = $adb->query_result($sortOrderResult, 0, 'sortorderid');
+    $adb->pquery("UPDATE vtiger_time_zone SET sortorderid = (sortorderid + 1) WHERE sortorderid > ?", array($sortOrderId));
+    Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_time_zone (time_zone, sortorderid, presence) VALUES (?, ?, ?)', array('Etc/GMT-11', ($sortOrderId + 1), 1));
+    echo "New timezone (GMT+11:00) New Caledonia added.<br>";
+}
+
+
+//SalesPlatform.ru begin
 
 // Begin Update summary fields for PBXManager
 $moduleName = 'PBXManager';
@@ -361,3 +384,5 @@ if(defined('VTIGER_UPGRADE')) {
     Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms_field ADD CONSTRAINT fk_2_vtiger_webforms_field FOREIGN KEY (fieldname) REFERENCES vtiger_field (fieldname) ON DELETE CASCADE', array());
 }
 // End
+
+//SalesPlatform.ru end

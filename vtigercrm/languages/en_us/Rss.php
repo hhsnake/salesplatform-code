@@ -18,6 +18,9 @@ $languageStrings = Array(
     'LBL_FEED_SOURCE' => 'Feed Source',
     'LBL_ENTER_FEED_SOURCE' => 'Enter Feed Source',
     'SINGLE_Rss' => 'Rss Feed',
+    // SalesPlatform.ru begin
+    'List' => 'List',
+    // SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

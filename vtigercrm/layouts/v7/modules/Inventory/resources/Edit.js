@@ -786,9 +786,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 									'discount_amount','lineItemType','searchIcon','netPrice','subprod_names',
 									'productTotal','discountTotal','totalAfterDiscount','taxTotal');
 
-		var nameFields = new Array('discount', 'purchaseCost', 'margin');
 		var classFields = new Array('taxPercentage');
-
 		//To handle variable tax ids
 		for(var classIndex in classFields) {
 			var className = classFields[classIndex];
@@ -807,15 +805,14 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 			lineItemRow.find('#'+actualElementId).attr('id',expectedElementId)
 					   .filter('[name="'+actualElementId+'"]').attr('name',expectedElementId);
 		}
-                
-        // SalesPlatform.ru begin
-        for(var nameIndex in nameFields) {
-            var elementName = nameFields[nameIndex];
-            var actualElementName = elementName + currentSequenceNumber;
-            var expectedElementName = elementName + expectedSequenceNumber;
-            lineItemRow.find('[name="'+actualElementName+'"]').attr('name',expectedElementName);
-        }
-        // SalesPlatform.ru end
+
+		var nameFields = new Array('discount', 'purchaseCost', 'margin');
+		for (var nameIndex in nameFields) {
+			var elementName = nameFields[nameIndex];
+			var actualElementName = elementName+currentSequenceNumber;
+			var expectedElementName = elementName+expectedSequenceNumber;
+			lineItemRow.find('[name="'+actualElementName+'"]').attr('name', expectedElementName);
+		}
 
 		lineItemRow.attr('id', expectedRowId).attr('data-row-num', expectedSequenceNumber);
         lineItemRow.find('input.rowNumber').val(expectedSequenceNumber);
@@ -1295,6 +1292,15 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
                     var lineItemRow = priceContainer.closest('tr');
                     var itemCount = parseFloat($(".qty", lineItemRow).val());
                     var priceValue = parseFloat($('.listPrice', priceContainer).val());
+                    var discount = self.getDiscountTotal(lineItemRow);
+                    
+                    /* Group inc tax caculates after discount */
+                    if(itemCount > 0) {
+                        priceValue -= (discount / itemCount);
+                    } else {
+                        priceValue = 0;
+                    }
+                    
                     groupTaxTotal += parseFloat(itemCount * Math.abs( priceValue * taxPercentage ) / ( 100 + taxPercentage ));
                 }
                 
@@ -1530,7 +1536,10 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 		var loopIterator = 1;
 		var taxDiv =
 				'<div class="taxUI hide" id="tax_div'+rowNumber+'">'+
-                     '<p class="popover_title hide"> Set Tax for : <span class="variable"></span></p>';
+                //SalesPlatform.ru begin
+                    // '<p class="popover_title hide"> Set Tax for : <span class="variable"></span></p>';
+                     '<p class="popover_title hide"> ' + app.vtranslate('JS_SET_TAX_FOR') + ' : <span class="variable"></span></p>';
+                //SalesPlatform.ru end
 			if(!jQuery.isEmptyObject(taxObj)){
 				taxDiv +=
 					'<div class="individualTaxDiv">'+
@@ -1542,11 +1551,17 @@ Vtiger_Edit_Js("Inventory_Edit_Js", {
 							'<tr>'+
 								'<td>  '+taxInfo.taxlabel+'</td>'+
 								'<td style="text-align: right;">'+
-									'<input type="text" name="'+taxName+'_percentage'+rowNumber+'" data-rule-positive=true data-rule-inventory_percentage=true  id="'+taxName+'_percentage'+rowNumber+'" value="'+taxInfo.taxpercentage+'" class="taxPercentage" data-compound-on='+taxInfo.compoundOn+' data-regions-list="'+taxInfo.regionsList+'">&nbsp;%'+
+                                    //SalesPlatform.ru begin
+                                    //'<input type="text" name="'+taxName+'_percentage'+rowNumber+'" data-rule-positive=true data-rule-inventory_percentage=true  id="'+taxName+'_percentage'+rowNumber+'" value="'+taxInfo.taxpercentage+'" class="taxPercentage" data-compound-on='+taxInfo.compoundOn+' data-regions-list="'+taxInfo.regionsList+'">&nbsp;%'+
+									'<input type="text" style="width: 100px; border-radius: 1px; box-shadow: none; border: 1px solid #cccccc; padding: 2px 6px;" name="'+taxName+'_percentage'+rowNumber+'" data-rule-positive=true data-rule-inventory_percentage=true  id="'+taxName+'_percentage'+rowNumber+'" value="'+taxInfo.taxpercentage+'" class="taxPercentage" data-compound-on='+taxInfo.compoundOn+' data-regions-list="'+taxInfo.regionsList+'">&nbsp;%'+
+                                    //SalesPlatform.ru end
 								'</td>'+
 								'<td style="text-align: right; padding-right: 10px;">'+
-									'<input type="text" name="popup_tax_row'+rowNumber+'" class="cursorPointer span1 taxTotal taxTotal'+taxInfo.taxid+'" value="0.0" readonly>'+
-								'</td>'+
+                                    //SalesPlatform.ru begin
+                                    //'<input type="text" name="popup_tax_row'+rowNumber+'" class="cursorPointer span1 taxTotal taxTotal'+taxInfo.taxid+'" value="0.0" readonly>'+
+									'<input style="width: 100px; border-radius: 1px; box-shadow: none; border: 1px solid #cccccc; padding: 2px 6px;" type="text" name="popup_tax_row'+rowNumber+'" class="cursorPointer span1 taxTotal taxTotal'+taxInfo.taxid+'" value="0.0" readonly>'+
+                                    //SalesPlatform.ru end
+                                '</td>'+
 							'</tr>';
 					loopIterator++;
 				}

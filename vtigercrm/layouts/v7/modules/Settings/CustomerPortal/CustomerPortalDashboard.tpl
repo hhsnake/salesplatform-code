@@ -19,30 +19,11 @@
 				</textarea>
 			</div>
 		</div><br>
-		<div>
-			{if isset($WIDGETS_MODULE_LIST['HelpDesk'])}
-				<div class="portal-chart-widget-container" >
-					<div class="portal-chart-header" >
-						<h5>{vtranslate('LBL_CHARTS',$QUALIFIED_MODULE)}</h5>
-					</div>
-					<div class="portal-chart-content" >
-						{foreach from=$CHARTS['charts'] key=KEY item=VALUE}
-							<div class="checkbox label-checkbox" style="padding: 10px 5px;">
-								<label>
-									<input id="{$KEY}" type="checkbox" class="chartsInfo" value="{$KEY}" name="charts[]" {if $VALUE}checked{/if}/>
-									&nbsp;&nbsp{vtranslate({$KEY},$QUALIFIED_MODULE)}
-								</label>
-							</div>
-						{/foreach}
-					</div>
-				</div>
-			{/if}
-		</div><br><br>
 		{foreach from=$WIDGETS['widgets'] key=module item=status}
 			{if $module eq 'HelpDesk' && isset($WIDGETS_MODULE_LIST['HelpDesk'])}
 				<div class="portal-record-widget-container" >
 					<div class="portal-record-widget-content" >
-						<h5>{vtranslate('LBL_RECENT',$QUALIFIED_MODULE)} {vtranslate({$module},'Vtiger')} {*{vtranslate('LBL_REC_WIDGET',$QUALIFIED_MODULE)}*}</h5>
+						<h5>{vtranslate('LBL_RECENT',$QUALIFIED_MODULE)} {vtranslate({$module},'Vtiger')} {vtranslate('LBL_REC_WIDGET',$QUALIFIED_MODULE)}</h5>
 					</div>
 
 					<div class="portal-record-control-container">
@@ -50,9 +31,9 @@
 							<label>
 								<input id="{$module}" type="checkbox" class="widgetsInfo" value="{$status}" name="widgets[]" {if $status}checked{/if}/>
 								{*SalesPaltform.ru begin*}
-                                &nbsp;&nbsp;{vtranslate('LBL_ENABLED', $module)}
-                                {*&nbsp;&nbsp;Enable*}
-                                {*SalesPaltform.ru end*}
+								&nbsp;&nbsp;{vtranslate('LBL_ENABLED', $module)}
+								{*&nbsp;&nbsp;Enable*}
+								{*SalesPaltform.ru end*}
 							</label>
 						</div>
 					</div>
@@ -75,11 +56,11 @@
 								{if isset($WIDGETS_MODULE_LIST[$key])}
 									{foreach from=$value key=key1 item=value1}
 										{if $value1 == 1}
-											<li class="portal-shortcut-list"  data-field="{$key1}">&nbsp;<div class="btn btn-large">{vtranslate({$key1},$QUALIFIED_MODULE)}&nbsp;&nbsp; {*{if $key neq 'HelpDesk'}<span class="deleteShortcut">X</span>{/if}*}</div></li>
-											{/if}
-										{/foreach}
-									{/if}
-								{/foreach}
+											<li class="portal-shortcut-list" data-field="{$key1}">&nbsp;<div class="btn btn-large">{vtranslate({$key1},$QUALIFIED_MODULE)}&nbsp;&nbsp; {*{if $key neq 'HelpDesk'}<span class="deleteShortcut">X</span>{/if}*}</div></li>
+										{/if}
+									{/foreach}
+								{/if}
+							{/foreach}
 						</ul>
 					</div>
 				</div>
@@ -90,7 +71,7 @@
 			{if $module neq 'HelpDesk' && isset($WIDGETS_MODULE_LIST[$module])}
 				<div class="portal-helpdesk-widget-container" >
 					<div class="portal-helpdesk-widget-header" >
-						<h5>{vtranslate('LBL_RECENT',$QUALIFIED_MODULE)} {vtranslate({$module},'Vtiger')} {*{vtranslate('LBL_REC_WIDGET',$QUALIFIED_MODULE)}*}</h5>
+						<h5>{vtranslate('LBL_RECENT',$QUALIFIED_MODULE)} {vtranslate({$module},'Vtiger')} {vtranslate('LBL_REC_WIDGET',$QUALIFIED_MODULE)}</h5>
 					</div>
 
 					<div class="portal-helpdesk-widget-controls">
@@ -98,9 +79,9 @@
 							<label>
 								<input class="widgetsInfo" id="{$module}" type="checkbox" value="{$status}" name="widgets[]" {if $status}checked{/if}/>
 								{*SalesPaltform.ru begin*}
-                                &nbsp;&nbsp;{vtranslate('LBL_ENABLED', $module)}
-                                {*&nbsp;&nbsp;Enable*}
-                                {*SalesPaltform.ru end*}
+								&nbsp;&nbsp;{vtranslate('LBL_ENABLED', $module)}
+								{*&nbsp;&nbsp;Enable*}
+								{*SalesPaltform.ru end*}
 							</label>
 						</div>
 					</div>

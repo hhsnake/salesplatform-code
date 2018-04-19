@@ -92,8 +92,11 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$relatedModel = $relationModel->getRelationModuleModel();
 		$parentRecordModule = $this->getParentRecordModel();
 		$parentModule = $parentRecordModule->getModule();
-
-		$createViewUrl = $relatedModel->getCreateEventRecordUrl().'&returnmode=showRelatedList&returntab_label='.$relationModel->get('label').
+        
+        //SalesPlatform.ru begin
+		//$createViewUrl = $relatedModel->getCreateEventRecordUrl().'&returnmode=showRelatedList&returntab_label='.$relationModel->get('label').
+        $createViewUrl = $relatedModel->getCreateEventRecordUrl().'&returnmode=showRelatedList&returntab_label='. $relationModel->get('label') . '&parent_id=' . $this->parentRecordModel->getId() .
+        //SalesPlatform.ru end
 							'&returnrecord='.$parentRecordModule->getId().'&returnmodule='.$parentModule->get('name').
 							'&returnview=Detail&returnrelatedModuleName=Calendar'.
 							'&returnrelationId='.$relationModel->getId();
@@ -110,9 +113,12 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$relatedModel = $relationModel->getRelationModuleModel();
 		$parentRecordModule = $this->getParentRecordModel();
 		$parentModule = $parentRecordModule->getModule();
-
-		$createViewUrl = $relatedModel->getCreateTaskRecordUrl().'&returnmode=showRelatedList&returntab_label='.$relationModel->get('label').
-							'&returnrecord='.$parentRecordModule->getId().'&returnmodule='.$parentModule->get('name').
+        
+        //SalesPlatform.ru begin
+		//$createViewUrl = $relatedModel->getCreateTaskRecordUrl().'&returnmode=showRelatedList&returntab_label='.$relationModel->get('label').
+        $createViewUrl = $relatedModel->getCreateTaskRecordUrl().'&returnmode=showRelatedList&returntab_label='.$relationModel->get('label') . '&parent_id=' . $this->parentRecordModel->getId() .
+        //SalesPlatform.ru end        
+                '&returnrecord='.$parentRecordModule->getId().'&returnmodule='.$parentModule->get('name').
 							'&returnview=Detail&returnrelatedModuleName=Calendar'.
 							'&returnrelationId='.$relationModel->getId();
 
@@ -302,10 +308,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 			$orderByFieldModuleModel = $relationModule->getFieldByColumn($orderBy);
 			if($orderByFieldModuleModel && $orderByFieldModuleModel->isReferenceField()) {
 				//If reference field then we need to perform a join with crmentity with the related to field
-				//SalesPlatform.ru begin
-                //$queryComponents = $split = spliti(' where ', $query);
-                $queryComponents = $split = preg_split('/ where /i', $query);
-                //SalesPlatform.ru end
+				$queryComponents = $split = preg_split('/ where /i', $query);
 				$selectAndFromClause = $queryComponents[0];
 				$whereCondition = $queryComponents[1];
 				$qualifiedOrderBy = 'vtiger_crmentity'.$orderByFieldModuleModel->get('column');
@@ -370,6 +373,29 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 				}
 
 			}
+            
+            //SalesPlatform.ru begin
+            if ($relationModuleName == 'PBXManager') {
+                $recordingUrl = $row['recordingurl'];                               
+                if (!empty($recordingUrl) && $row['callstatus'] == 'completed') {
+                    $row['recordingurl'] = '<audio preload="metadata" src="index.php?module=PBXManager&action=ListenRecord&record='.$row['crmid'].'" controls>
+                        <a href="index.php?module=PBXManager&action=ListenRecord&record='.$row['crmid'].'" ><i class="icon-volume-up"></i></a>
+                    </audio>';
+                    $newRow['recordingurl'] = $row['recordingurl'];
+                } else {
+                    $newRow['recordingurl'] = '';
+                    $row['recordingurl'] = '';
+                }
+                
+                /* Handle call status */
+                $callStatus = $row['callstatus'];
+                if(!empty($callStatus)) {
+                    $direction = $row['direction'];
+                    $row['callstatus'] = $this->getCallStatusDisplay($direction, $callStatus, $relationModuleName);
+                    $newRow['callstatus'] = $row['callstatus'];
+                } 
+            }
+            //SalesPlatofrm.ru end
 
 			$record = Vtiger_Record_Model::getCleanInstance($relationModule->get('name'));
 			$record->setData($newRow)->setModuleFromInstance($relationModule)->setRawData($row);
@@ -396,7 +422,44 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 
 		return $relatedRecordList;
 	}
-
+    
+    //SalesPlatform.ru begin
+    private function getCallStatusDisplay($direction, $callStatus, $moduleName) {
+        $status = $callStatus;
+        if ($direction == 'outbound') {
+            if ($callStatus == 'ringing' || $callStatus == 'in-progress') {
+                $status = '<span class="label label-info"><i class="fa fa-arrow-up">
+                    </i>&nbsp;' . vtranslate($callStatus, $moduleName) . '</span>';
+            } else if ($callStatus == 'completed') {
+                $status = '<span class="label label-success"><i class="fa fa-arrow-up">
+                    </i>&nbsp;' . vtranslate($callStatus, $moduleName) . '</span>';
+            } else if ($callStatus == 'no-answer') {
+                $status = '<span class="label label-danger"><i class="fa fa-arrow-up">
+                    </i>&nbsp;' . vtranslate($callStatus, $moduleName) . '</span>';
+            } else {
+                $status = '<span class="label label-warning"><i class="fa fa-arrow-up">
+                    </i>&nbsp;' . vtranslate($callStatus, $moduleName) . '</span>';
+            }
+        } else if ($direction == 'inbound') {
+            if ($callStatus == 'ringing' || $callStatus == 'in-progress') {
+                $status = '<span class="label label-info"><i class="fa fa-arrow-down">
+                    </i>&nbsp;' . vtranslate($callStatus, $moduleName) . '</span>';
+            } else if ($callStatus == 'completed') {
+                $status = '<span class="label label-success"><i class="fa fa-arrow-down">
+                    </i>&nbsp;' . vtranslate($callStatus, $moduleName) . '</span>';
+            } else if ($callStatus == 'no-answer') {
+                $status = '<span class="label label-danger"><i class="fa fa-arrow-down">
+                    </i>&nbsp;' . vtranslate($callStatus, $moduleName) . '</span>';
+            } else {
+                $status = '<span class="label label-warning"><i class="fa fa-arrow-down">
+                    </i>&nbsp;' . vtranslate($callStatus, $moduleName) . '</span>';
+            }
+        }
+        
+        return $status;
+    }
+    //SalesPlatform.ru end
+    
 	public function getHeaders() {
 		$relationModel = $this->getRelationModel();
 		$relatedModuleModel = $relationModel->getRelationModuleModel();
@@ -455,17 +518,11 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$queryGenerator->setFields($relatedModuleFields);
 
 		$query = $queryGenerator->getQuery();
-        
-		//SalesPlatform.ru begin
-		//$queryComponents = spliti(' FROM ', $query);
-        $queryComponents = preg_split('/ FROM /i', $query);
-        //SalesPlatform.ru end
+
+		$queryComponents = preg_split('/ FROM /i', $query);
 		$query = $queryComponents[0].' ,vtiger_crmentity.crmid FROM '.$queryComponents[1];
-		
-        //SalesPlatform.ru begin
-		//$whereSplitQueryComponents = spliti(' WHERE ', $query);
-        $whereSplitQueryComponents = preg_split('/ WHERE /i', $query);
-        //SalesPlatform.ru end
+
+		$whereSplitQueryComponents = preg_split('/ WHERE /i', $query);
 		$joinQuery = ' INNER JOIN '.$parentModuleBaseTable.' ON '.$parentModuleBaseTable.'.'.$parentModuleDirectRelatedField." = ".$relatedModuleBaseTable.'.'.$relatedModuleEntityIdField;
 
 		$query = "$whereSplitQueryComponents[0] $joinQuery WHERE $parentModuleBaseTable.$parentModuleEntityIdField = $parentRecordId AND $whereSplitQueryComponents[1]";
@@ -519,10 +576,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$relationQuery = preg_replace("/[ \t\n\r]+/", " ", $relationQuery);
 		$position = stripos($relationQuery,' from ');
 		if ($position) {
-			//SalesPlatform.ru begin
-			//$split = spliti(' FROM ', $relationQuery);
-            $split = preg_split('/ FROM /i', $relationQuery);
-            //SalesPlatform.ru end
+			$split = preg_split('/ FROM /i', $relationQuery);
 			$splitCount = count($split);
 			if($relatedModuleName == 'Calendar') {
 				$relationQuery = 'SELECT DISTINCT vtiger_crmentity.crmid, vtiger_activity.activitytype ';
@@ -594,10 +648,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 
 		$pos = stripos($relationQuery, 'where');
 		if ($pos) {
-			//SalesPlatform.ru begin
-			//$split = spliti('where', $relationQuery);
-            $split = preg_split('/where/i', $relationQuery);
-            //SalesPlatform.ru end
+			$split = preg_split('/where/i', $relationQuery);
 			$updatedQuery = $split[0].' WHERE '.$split[1].' AND '.$condition;
 		} else {
 			$updatedQuery = $relationQuery.' WHERE '.$condition;

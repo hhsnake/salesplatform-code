@@ -53,9 +53,9 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		$menuGroupedByParent['SUPPORT'] = $supportGroup;
 
 		foreach ($menuGroupedByParent as $parentCategory => $menuList) {
-			if($parentCategory == 'ANALYTICS') continue;
+			if($parentCategory == 'ANALYTICS' || $parentCategory == 'SETTINGS') continue;
 			if(count($menuList) > 0) {
-				if(array_key_exists($selectedModule, $menuList)) {
+				if(array_key_exists($selectedModule, $menuList) && $parentCategory) {
 					$moduleFound = true;
 					$selectedModuleMenuCategory = $parentCategory;
 				}
@@ -124,7 +124,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 	function getHeaderScripts(Vtiger_Request $request) {
 		$headerScriptInstances = parent::getHeaderScripts($request);
 		$moduleName = $request->getModule();
-                
+
 		$jsFileNames = array(
 			'libraries.bootstrap.js.eternicode-bootstrap-datepicker.js.bootstrap-datepicker',
 			'~libraries/bootstrap/js/eternicode-bootstrap-datepicker/js/locales/bootstrap-datepicker.'.Vtiger_Language_Handler::getShortLanguageName().'.js',

@@ -35,7 +35,7 @@ $languageStrings = array(
 	'Reports To' => 'Reports To',
 	'Yahoo id' => 'Yahoo id',
 	'Home Phone' => 'Home Phone',
-	'User Image' => 'Upload Photograph',
+	'User Image' => 'User Image',
 	'Date Format' => 'Date Format',
 	'Tag Cloud' => 'Tag Cloud',
 	'Signature' => 'Signature',
@@ -137,9 +137,9 @@ $languageStrings = array(
 	'Asia/Kuwait'  =>  '(UTC+03:00) Kuwait, Riyadh',
 	'Asia/Baghdad'  =>  '(UTC+03:00) Baghdad',
 	'Africa/Nairobi'  =>  '(UTC+03:00) Nairobi',
+	'Europe/Moscow'  =>  '(UTC+03:00) Moscow, Volgograd',
 	'Asia/Tehran'  =>  '(UTC+03:30) Tehran',
 	'Asia/Tbilisi'  =>  '(UTC+04:00) Tbilisi',
-	'Europe/Moscow'  =>  '(UTC+04:00) Moscow, Volgograd',
 	'Asia/Muscat'  =>  '(UTC+04:00) Abu Dhabi, Muscat',
 	'Asia/Baku'  =>  '(UTC+04:00) Baku',
 	'Asia/Yerevan'  =>  '(UTC+04:00) Yerevan',
@@ -286,6 +286,13 @@ $languageStrings = array(
     'Last 2 Days' => 'Last 2 Days',
     'Last Week' => 'Last Week',
     'Agenda' => 'Agenda',
+    'LBL_SING_IN' => 'Sign In',
+    'LBL_BACK' => 'Back',
+    'LBL_SUBMIT' => 'Submit',
+    'LBL_COMMUNITY' => 'Community',
+    'LBL_FORUMS' => 'Forums',
+    'LBL_WIKI' => 'Wiki',
+    'LBL_BLOGS' => 'Blogs',
     //SalesPlatform.ru end
 );
 

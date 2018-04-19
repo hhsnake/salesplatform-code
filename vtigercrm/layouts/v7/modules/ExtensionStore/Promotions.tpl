@@ -17,6 +17,7 @@
 		<div class="banner">
 			<ul class="bxslider">
 				{foreach $PROMOTIONS as $PROMOTION}
+					{if is_object($PROMOTION)}
 					<li>
 						{assign var=SUMMARY value=$PROMOTION->get('summary')}
 						{assign var=EXTENSION_NAME value=$PROMOTION->get('label')}
@@ -27,6 +28,7 @@
 						{/if}
 						<a onclick="window.open('{$LOCATION_URL}')"><img src="{if $PROMOTION->get('bannerURL')}{$PROMOTION->get('bannerURL')}{/if}" title="{$PROMOTION->get('label')}" /></a>
 					</li>
+					{/if}
 				{/foreach}
 			</ul>
 		</div>

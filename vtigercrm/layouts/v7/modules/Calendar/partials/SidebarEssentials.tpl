@@ -8,7 +8,7 @@
 ************************************************************************************}
 {* SalesPlatform.ru begin  *}
 {*{if $smarty.get.view eq 'Calendar' OR $smarty.get.view eq 'SharedCalendar'}*}
-{if $smarty.get.view eq 'Calendar' OR $smarty.get.view eq 'SharedCalendar' OR $MODULE eq 'Calendar'}
+{if $smarty.get.view eq 'Calendar' OR $smarty.get.view eq 'SharedCalendar' OR ($MODULE eq 'Calendar' AND $VIEW neq 'List')}
 {* SalesPlatform.ru end  *}
 <div class="sidebar-menu">
     <div class="module-filters" id="module-filters">

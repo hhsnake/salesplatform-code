@@ -175,6 +175,19 @@ jQuery.Class("Vtiger_Field_Js",{
 	getNewFieldInfo : function() {
 		return this.get('newfieldinfo');
 	},
+        
+        // SalesPlatform.ru begin
+        escapeCssSpecialCharacters: function(inputString) {
+            var badChars = ['.','!','#','$','%','&','(',')','*','+',',','/',':',';','<','=','>','?','@','^','`','~','[',']'];
+            for (var i = 0; i < badChars.length; i++) {
+                if (inputString.includes(badChars[i])) {
+                    var newValue = '\\' + badChars[i];
+                    inputString = inputString.replace(badChars[i], newValue);
+                }
+            }
+            return inputString;
+        },
+        // SalesPlatform.ru end
 
 })
 
@@ -201,6 +214,9 @@ Vtiger_Field_Js('Vtiger_Reference_Field_Js',{},{
 		if(value){
 			html += ' value="'+value+'" disabled="disabled"';
 			reset = true;
+		       //SalesPlatform.ru begin
+		       html += ' data-value="' + value + '"';
+		       //SalesPlatform.ru end
 		}
 		html += '/>';
 
@@ -238,12 +254,23 @@ Vtiger_Field_Js('Vtiger_Picklist_Field_Js',{},{
 	 */
 	getUi : function() {
 		//added class inlinewidth
-		var html = '<select class="select2 inputElement inlinewidth" name="'+ this.getName() +'" id="field_'+this.getModuleName()+'_'+this.getName()+'">';
+		//SalesPlatform.ru begin
+			//var html = '<select class="select2 inputElement inlinewidth" name="'+ this.getName() +'" id="field_'+this.getModuleName()+'_'+this.getName()+'">';
+		var selectElement = $('<select class="select2 inputElement inlinewidth" name="'+ this.getName() +'" id="field_'+this.getModuleName()+'_'+this.getName()+'">');
+		var wrapper = $("<div>");
+		//SalesPlatform.ru end
+		
 		var pickListValues = this.getPickListValues();
 		var selectedOption = app.htmlDecode(this.getValue());
 
 		if(typeof pickListValues[' '] == 'undefined' || pickListValues[' '].length <= 0 || pickListValues[' '] != 'Select an Option') {
-			html += '<option value="">Select an Option</option>';
+			//SalesPlatform.ru begin
+			//html += '<option value="">Select an Option</option>';
+			selectElement.append($('<option/>', {
+			    value: "", 
+			    text: app.vtranslate('JS_SELECT_OPTION')
+			}));
+			//SalesPlatform.ru end
 		}
 
 		var data = this.getData();
@@ -251,36 +278,74 @@ Vtiger_Field_Js('Vtiger_Picklist_Field_Js',{},{
 
 		var fieldName = this.getName();
 		for(var option in pickListValues) {
-			html += '<option value="'+option+'" ';
-
+            		//SalesPlatform.ru begin
+			//html += '<option value="'+option+'" ';
+            		//
+			//var className = '';
+			//if (picklistColors[option]) {
+			//	className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
+			//	html += 'class="'+className+'"';
+			//}
+            		//
+			//if(option == selectedOption) {
+			//	html += ' selected ';
+			//}
+			//html += '>'+pickListValues[option]+'</option>';
+            
 			var className = '';
-			if (picklistColors[option]) {
-				className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
-				html += 'class="'+className+'"';
+			if (picklistColors && picklistColors[option]) {
+			    className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
 			}
-
+			    
+			var params = {
+			    value: option, 
+			    text: pickListValues[option],
+			    class : className
+			};
 			if(option == selectedOption) {
-				html += ' selected ';
+			    params.selected = 'selected';
 			}
-			html += '>'+pickListValues[option]+'</option>';
+			selectElement.append($('<option/>', params));    
+			//SalesPlatform.ru end
 		}
-		html +='</select>';
+        	//SalesPlatform.ru begin
+		//html +='</select>';
+		wrapper.append(selectElement);
+		//SalesPlatform.ru end
 
 		if (picklistColors) {
-			html +='<style type="text/css">';
+            		//SalesPlatform.ru begin
+			//html +='<style type="text/css">';
+			//for(option in picklistColors) {
+			//	var picklistColor = picklistColors[option];
+			//	if (picklistColor) {
+            		//        className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
+            		//        html += '.' + this.escapeCssSpecialCharacters(className)+'{background-color: '+picklistColor+' !important;}';
+			//	}
+			//}
+			//html +='<\style>';
+            		var style = '<style type="text/css">';
 			for(option in picklistColors) {
 				var picklistColor = picklistColors[option];
 				if (picklistColor) {
-					className = '.picklistColor_'+fieldName+'_'+option.replace(' ', '_');
-					html += className+'{background-color: '+picklistColor+' !important;}';
+				    className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
+				    style += '.' + this.escapeCssSpecialCharacters(className)+'{background-color: '+picklistColor+' !important;}';
 				}
 			}
-			html +='<\style>';
+			style +='<\style>';
+            
+		    wrapper.append($(style));
+		    //SalesPlatform.ru end
 		}
 
-		var selectContainer = jQuery(html);
-		this.addValidationToElement(selectContainer);
-		return selectContainer;
+		//SalesPlatform.ru begin
+		//var selectContainer = jQuery(html);
+		//this.addValidationToElement(selectContainer);
+		//return selectContainer;
+        
+		this.addValidationToElement(wrapper);
+		return wrapper;
+        	//SalesPlatform.ru end
 	}
 });
 
@@ -339,7 +404,11 @@ Vtiger_Field_Js('Vtiger_Multipicklist_Field_Js',{},{
 	 * @return - select element and chosen element
 	 */
 	getUi : function() {
-		var html = '<select class="select2 inputElement" multiple name="'+ this.getName() +'[]" id="field_'+this.getModuleName()+'_'+this.getName()+'">';
+		//SalesPlatform.ru begin
+		//var html = '<select class="select2 inputElement" multiple name="'+ this.getName() +'[]" id="field_'+this.getModuleName()+'_'+this.getName()+'">';
+		var selectElement = $('<select class="select2 inputElement" multiple name="'+ this.getName() +'[]" id="field_'+this.getModuleName()+'_'+this.getName()+'"/>');
+		var wrapper = $("<div>");
+		//SalesPlatform.ru end
 		var pickListValues = this.getPickListValues();
 		var selectedOption = app.htmlDecode(this.getValue());
 		var selectedOptionsArray = this.getSelectedOptions(selectedOption);
@@ -349,36 +418,75 @@ Vtiger_Field_Js('Vtiger_Multipicklist_Field_Js',{},{
 
 		var fieldName = this.getName();
 		for(var option in pickListValues) {
-			html += '<option value="'+option+'" ';
-
+            		//SalesPlatform.ru begin
+			//html += '<option value="'+option+'" ';
+            		//
+			//var className = '';
+			//if (picklistColors[option]) {
+			//	className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
+			//	html += 'class="'+className+'"';
+			//}
+            		//
+			//if(jQuery.inArray(option,selectedOptionsArray) != -1){
+			//	html += ' selected ';
+			//}
+			//html += '>'+pickListValues[option]+'</option>';
+            
 			var className = '';
-			if (picklistColors[option]) {
-				className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
-				html += 'class="'+className+'"';
+			if (picklistColors && picklistColors[option]) {
+			    className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
 			}
-
+			    
+			var params = {
+			    value: option, 
+			    text: pickListValues[option],
+			    class : className
+			};
 			if(jQuery.inArray(option,selectedOptionsArray) != -1){
-				html += ' selected ';
+			    params.selected = 'selected';
 			}
-			html += '>'+pickListValues[option]+'</option>';
+			selectElement.append($('<option/>', params));
+			//SalesPlatform.ru end
 		}
-		html +='</select>';
+        	//SalesPlatform.ru begin
+		//html +='</select>';
+		wrapper.append(selectElement);
+		//SalesPlatform.ru end
 
 		if (picklistColors) {
-			html +='<style type="text/css">';
+            		//SalesPlatform.ru begin
+			//html +='<style type="text/css">';
+			//for(option in picklistColors) {
+			//	var picklistColor = picklistColors[option];
+			//	if (picklistColor) {
+            		//        className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
+            		//        html += '.' + this.escapeCssSpecialCharacters(className)+'{background-color: '+picklistColor+' !important;}';
+			//	}
+			//}
+			//html +='<\style>';
+            
+            		var style = '<style type="text/css">';
 			for(option in picklistColors) {
 				var picklistColor = picklistColors[option];
 				if (picklistColor) {
-					className = '.picklistColor_'+fieldName+'_'+option.replace(' ', '_');
-					html += className+'{background-color: '+picklistColor+' !important;}';
+				    className = 'picklistColor_'+fieldName+'_'+option.replace(' ', '_');
+				    style += '.' + this.escapeCssSpecialCharacters(className)+'{background-color: '+picklistColor+' !important;}';
 				}
 			}
-			html +='<\style>';
+			style +='<\style>';
+            
+			wrapper.append(jQuery(style));
+			//SalesPlatform.ru end
 		}
-
-		var selectContainer = jQuery(html);
-		this.addValidationToElement(selectContainer);
-		return selectContainer;
+        
+        	//SalesPlatform.ru begin
+		//var selectContainer = jQuery(html);
+		//this.addValidationToElement(selectContainer);
+		//return selectContainer;
+        
+		this.addValidationToElement(wrapper);
+		return wrapper;
+        	//SalesPlatform.ru end
 	}
 }),
 

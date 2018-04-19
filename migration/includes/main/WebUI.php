@@ -107,15 +107,15 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 		// SalesPlatform.ru begin Check referer setting
 		global $sp_check_site_url;
 		if ($sp_check_site_url == 'true') {
-		// SalesPlatform.ru end
-		// Check we are being connected to on the right host and protocol
-		global $site_URL;
-		$request_URL = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==='on')? 'https': 'http')."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-        if ($site_URL && stripos($request_URL, $site_URL) !== 0){
-            header("Location: $site_URL",TRUE,301);
-            exit;
-        }
-		// SalesPlatform.ru begin Check referer setting
+            // SalesPlatform.ru end
+            // Check we are being connected to on the right host and protocol
+            global $site_URL;
+            $request_URL = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==='on')? 'https': 'http')."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+            if ($site_URL && stripos($request_URL, $site_URL) !== 0){
+                header("Location: $site_URL",TRUE,301);
+                exit;
+            }
+            // SalesPlatform.ru begin Check referer setting
 		}
 		// SalesPlatform.ru end
 
@@ -165,7 +165,24 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 						if($module == 'Calendar') { 
 							// To load MyCalendar instead of list view for calendar
 							//TODO: see if it has to enhanced and get the default view from module model
-							$view = 'Calendar';
+                                                    // SalesPlatform.ru begin
+							//$view = 'Calendar';
+                                                        $userRecordModel = Users_Record_Model::getCurrentUserModel();
+                                                        $defaultCalendarView = $userRecordModel->get('defaultcalendarview');
+                                                        switch ($defaultCalendarView) {
+                                                            case 'MyCalendar':
+                                                                $view = 'Calendar';
+                                                                break;
+                                                            case 'ListView':
+                                                                $view = 'List';
+                                                                break;
+                                                            case 'SharedCalendar':
+                                                                $view = 'SharedCalendar';
+                                                                break;
+                                                            default:
+                                                                $view = 'Calendar';
+                                                        }
+                                                    // SalesPlatform.ru end
 						}
 					} else {
 						$module = 'Home'; $qualifiedModuleName = 'Home'; $view = 'DashBoard';

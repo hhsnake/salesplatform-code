@@ -149,7 +149,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
         //SalesPlatform.ru end
 
 
-        $relatedLinks = $this->getDetailViewRelatedLinks();
+		$relatedLinks = $this->getDetailViewRelatedLinks();
 
 		foreach($relatedLinks as $relatedLinkEntry) {
 			$relatedLink = Vtiger_Link_Model::getInstanceFromValues($relatedLinkEntry);
@@ -168,7 +168,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 				$linkModelList['DETAILVIEWSETTING'][] = Vtiger_Link_Model::getInstanceFromValues($settingsLink);
 			}
 		}
-                
+
         //SalesPlatform.ru begin add templates reports
         foreach(Reports_Module_Model::getTemplatesReportModels($moduleName) as $reportModel) {
             $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues(array(
@@ -307,16 +307,6 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 			}
 		}
                 
-                
-        //SalesPlatform.ru begin
-        $moduleLinks['SIDEBARLINK'][] = Vtiger_Link_Model::getInstanceFromValues(array(
-            'linktype' => 'SIDEBARLINK',
-            'linklabel' => 'LBL_CARD_WIDGETS',
-            'linkurl' => 'index.php?module=' . $this->getModuleName() . '&view=DetailDashBoard&record=' . $this->getRecord()->getId(),
-            'linkicon' => '',
-		));
-        //Salesplatform.ru end
-
 		if($currentUser->getTagCloudStatus()) {
 			$tagWidget = array(
 				'linktype' => 'DETAILVIEWSIDEBARWIDGET',

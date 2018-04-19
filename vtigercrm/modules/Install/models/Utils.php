@@ -26,7 +26,10 @@ class Install_Utils_Model {
 		'Modules Directory' => './modules/',
 		'Cron Modules Directory' => './cron/modules/',
 		'Vtlib Test Directory' => './test/vtlib/',
-		'Vtlib Test HTML Directory' => './test/vtlib/HTML',
+                //SalesPlatform.ru begin #5732
+                // 'Vtlib Test HTML Directory' => './test/vtlib/HTML',
+                'Vtlib Test HTML Directory' => './test/vtlib/HTML/',
+                //SalesPlatform.ru end
 		'Mail Merge Template Directory' => './test/wordtemplatedownload/',
 		'Product Image Directory' => './test/product/',
 		'User Image Directory' => './test/user/',
@@ -81,7 +84,7 @@ class Install_Utils_Model {
 		$errorReportingValue = E_ALL & ~E_NOTICE;
 		//$errorReportingValue = E_WARNING & ~E_NOTICE;
 		// SalesPlatform.ru end
-		if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
+		if(version_compare(PHP_VERSION, '5.3.0') >= 0){
             		// SalesPlatform.ru begin
 			$errorReportingValue = E_ALL & ~E_NOTICE & ~E_DEPRECATED;
 			//$errorReportingValue = E_WARNING & ~E_NOTICE & ~E_DEPRECATED;
@@ -167,25 +170,30 @@ class Install_Utils_Model {
 		$preInstallConfig['LBL_PHP_VERSION']	= array(phpversion(), '5.4.0', (version_compare(phpversion(), '5.4.0', '>=')));
 		$preInstallConfig['LBL_IMAP_SUPPORT']	= array(function_exists('imap_open'), true, (function_exists('imap_open') == true));
 		$preInstallConfig['LBL_ZLIB_SUPPORT']	= array(function_exists('gzinflate'), true, (function_exists('gzinflate') == true));
-        // SalesPlatform.ru begin
-        $preInstallConfig['LBL_EXIF_SUPPORT']	= array(function_exists('exif_read_data'), true, (function_exists('exif_read_data') == true));
-        // SalesPlatform.ru end
-                if ($preInstallConfig['LBL_PHP_VERSION'] >= '5.5.0') {
-                    $preInstallConfig['LBL_MYSQLI_CONNECT_SUPPORT'] = array(extension_loaded('mysqli'), true, extension_loaded('mysqli'));
-                }
-                $preInstallConfig['LBL_OPEN_SSL'] = array(extension_loaded('openssl'), true, extension_loaded('openssl'));
-                $preInstallConfig['LBL_CURL'] = array(extension_loaded('curl'), true, extension_loaded('curl'));
-                $gnInstalled = false;
+		// SalesPlatform.ru begin
+		$preInstallConfig['LBL_EXIF_SUPPORT']	= array(function_exists('exif_read_data'), true, (function_exists('exif_read_data') == true));
+		// SalesPlatform.ru end
+
+		if ($preInstallConfig['LBL_PHP_VERSION'] >= '5.5.0') {
+			$preInstallConfig['LBL_MYSQLI_CONNECT_SUPPORT'] = array(extension_loaded('mysqli'), true, extension_loaded('mysqli'));
+		}
+
+		$preInstallConfig['LBL_OPEN_SSL']		= array(extension_loaded('openssl'), true, extension_loaded('openssl'));
+		$preInstallConfig['LBL_CURL']			= array(extension_loaded('curl'), true, extension_loaded('curl'));
+
+		$gnInstalled = false;
 		if(!function_exists('gd_info')) {
 			eval(self::$gdInfoAlternate);
 		}
+
 		$gd_info = gd_info();
 		if (isset($gd_info['GD Version'])) {
 			$gnInstalled = true;
 		}
+
 		$preInstallConfig['LBL_GD_LIBRARY']		= array((extension_loaded('gd') || $gnInstalled), true, (extension_loaded('gd') || $gnInstalled));
 		$preInstallConfig['LBL_ZLIB_SUPPORT']	= array(function_exists('gzinflate'), true, (function_exists('gzinflate') == true));
-
+		$preInstallConfig['LBL_SIMPLEXML']		= array(function_exists('simplexml_load_file'), true, (function_exists('simplexml_load_file')));
 		// SalesPlatform.ru begin
 		$preInstallConfig['LBL_MB_STRING'] = array(extension_loaded('mbstring'), true, extension_loaded('mbstring'));
 		// SalesPlatform.ru end
@@ -370,6 +378,25 @@ class Install_Utils_Model {
 	}
 
 	/**
+	 * Function to check sql_mode configuration
+	 * @param DbConnection $conn 
+	 * @return boolean
+	 */
+	public static function isMySQLSqlModeFriendly($conn) {
+		$rs = $conn->Execute("SHOW VARIABLES LIKE 'sql_mode'");
+		if ($rs && ($row = $rs->fetchRow())) {
+			$values = explode(',', strtoupper($row['Value']));
+			$unsupported = array('ONLY_FULL_GROUP_BY', 'STRICT_TRANS_TABLES', 'NO_ZERO_IN_DATE', 'NO_ZERO_DATE');
+			foreach ($unsupported as $check) {
+				if (in_array($check, $values)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Function checks the database connection
 	 * @param <String> $db_type
 	 * @param <String> $db_hostname
@@ -390,6 +417,7 @@ class Install_Utils_Model {
 		$db_creation_failed = false; // did we try to create a database and fail?
 		$db_exist_status = false; // does the database exist?
 		$db_utf8_support = false; // does the database support utf8?
+		$db_sqlmode_support = false; // does the database having friendly sql_mode?
 
 		//Checking for database connection parameters
 		if($db_type) {
@@ -401,7 +429,8 @@ class Install_Utils_Model {
 				if(self::isMySQL($db_type)) {
 					$mysql_server_version = self::getMySQLVersion($serverInfo);
 				}
-				if($create_db) {
+				$db_sqlmode_support = self::isMySQLSqlModeFriendly($conn);
+				if($create_db && $db_sqlmode_support) {
 					// drop the current database if it exists
 					$dropdb_conn = NewADOConnection($db_type);
 					if(@$dropdb_conn->Connect($db_hostname, $root_user, $root_password, $db_name)) {
@@ -473,11 +502,15 @@ class Install_Utils_Model {
 					-  '.getTranslatedString('MSG_DB_USER_NOT_AUTHORIZED', 'Install');
 		} elseif(self::isMySQL($db_type) && $mysql_server_version < 4.1) {
 			$error_msg = $mysql_server_version.' -> '.getTranslatedString('ERR_INVALID_MYSQL_VERSION', 'Install');
+		} elseif(!$db_sqlmode_support) {
+			$error_msg = getTranslatedString('ERR_DB_SQLMODE_NOTFRIENDLY', 'Install');
 		} elseif($db_creation_failed) {
 			$error_msg = getTranslatedString('ERR_UNABLE_CREATE_DATABASE', 'Install').' '.$db_name;
 			$error_msg_info = getTranslatedString('MSG_DB_ROOT_USER_NOT_AUTHORIZED', 'Install');
 		} elseif(!$db_exist_status) {
 			$error_msg = $db_name.' -> '.getTranslatedString('ERR_DB_NOT_FOUND', 'Install');
+		} elseif(!$db_utf8_support) {
+			$error_msg = $db_name.' -> '.getTranslatedString('ERR_DB_NOT_UTF8', 'Install');
 		} else {
 			$dbCheckResult['flag'] = true;
 			return $dbCheckResult;

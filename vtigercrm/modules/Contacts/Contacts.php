@@ -146,7 +146,7 @@ class Contacts extends CRMEntity {
 	);
 
 	function Contacts() {
-		$this->log = LoggerManager::getlogger('contact');
+		$this->log = LoggerManager::getLogger('contact');
 		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Contacts');
 	}
@@ -318,7 +318,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -390,7 +390,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/Activity.php");
 		$other = new Activity();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -495,7 +495,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -554,7 +554,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -603,7 +603,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -652,7 +652,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -716,7 +716,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -766,7 +766,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -824,7 +824,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -883,7 +883,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -956,7 +956,7 @@ class Contacts extends CRMEntity {
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
         vtlib_setup_modulevars($related_module, $other);
-		$singular_modname = vtlib_tosingular($related_module);
+		$singular_modname = vtlib_toSingular($related_module);
 
 		$parenttab = getParentTab();
 
@@ -1362,6 +1362,10 @@ function get_contactsforol($user_name)
         if ($queryplanner->requireTable("vtiger_createdbyContacts")){
 			$query .= " left join vtiger_users as vtiger_createdbyContacts on vtiger_createdbyContacts.id = vtiger_crmentityContacts.smcreatorid ";
 		}
+
+		//if secondary modules custom reference field is selected
+        $query .= parent::getReportsUiType10Query($secmodule, $queryplanner);
+        
 		return $query;
 	}
 

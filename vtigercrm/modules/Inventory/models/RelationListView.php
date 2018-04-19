@@ -10,41 +10,6 @@
 
 class Inventory_RelationListView_Model extends Vtiger_RelationListView_Model {
 
-	public function getAddRelationLinks() {
-		$relationModel = $this->getRelationModel();
-		$addLinkModel = array();
-
-		if(!$relationModel->isAddActionSupported()) {
-			return $addLinkModel;
-		}
-		$relatedModel = $relationModel->getRelationModuleModel();
-
-		if ($relatedModel->isPermitted('CreateView')) {
-			if($relatedModel->get('label') == 'Calendar'){
-				$addLinkList[] = array(
-						'linktype' => 'LISTVIEWBASIC',
-						'linklabel' => vtranslate('LBL_ADD_TASK'),
-						'linkurl' => $this->getCreateTaskRecordUrl(),
-						'linkicon' => '',
-				);
-			}else{
-				$addLinkList = array(
-					array(
-						'linktype' => 'LISTVIEWBASIC',
-						'linklabel' => vtranslate('LBL_ADD')." ".vtranslate('SINGLE_'.$relatedModel->getName(), $relatedModel->getName()),
-						'linkurl' => $this->getCreateViewUrl(),
-						'linkicon' => '',
-					)
-				);
-			}
-
-			foreach($addLinkList as $addLink) {
-				$addLinkModel[] = Vtiger_Link_Model::getInstanceFromValues($addLink);
-			}
-		}
-		return $addLinkModel;
-	}
-
 	public function getCreateViewUrl(){
 		$createViewUrl = parent::getCreateViewUrl();
 		$currentUserModel				= Users_Record_Model::getCurrentUserModel();
@@ -73,7 +38,13 @@ class Inventory_RelationListView_Model extends Vtiger_RelationListView_Model {
 			$amount = CurrencyField::convertToUserFormat($currencyValue);
 		}
 		$accountId = ($parentRecordModel->getModuleName() == 'PurchaseOrder') ? $parentRecordModel->get('accountid') : $parentRecordModel->get('account_id');
-
+        
+		//SalesPlatform.ru begin
+		if($parentRecordModel->getModuleName() == 'PurchaseOrder') {
+		    $createViewUrl .= '&relatedvendor=' . $parentRecordModel->get('vendor_id');
+		}
+		//SalesPlatform.ru end
+        
 		return $createViewUrl.'&relatedcontact='.$parentRecordModel->get('contact_id').'&relatedorganization='. $accountId.'&amount='.$amount;
 	}
 

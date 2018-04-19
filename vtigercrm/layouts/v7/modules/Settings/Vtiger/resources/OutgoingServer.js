@@ -96,7 +96,7 @@ Vtiger.Class("Settings_Vtiger_OutgoingServer_Js",{},{
 		var form = jQuery('#OutgoingServerForm');
 		var resetButton = jQuery('.resetButton', form);
 		var cancelLink = jQuery('.cancelLink', form);
-                
+        
 		//register validation engine
 		var params = {
                     submitHandler : function(form) {
@@ -113,11 +113,13 @@ Vtiger.Class("Settings_Vtiger_OutgoingServer_Js",{},{
                             thisInstance.saveOutgoingDetails(form);
                         }
 		};
-        form.vtValidate(params);
-		 form.on('submit', function(e){
-            e.preventDefault();
-            return false;
-        });
+		if (form.length) {
+        	form.vtValidate(params);
+		 	form.on('submit', function(e){
+            	e.preventDefault();
+            	return false;
+        	});
+		}
 		
 		//register click event for resetToDefault Button
 		resetButton.click(function(e) {

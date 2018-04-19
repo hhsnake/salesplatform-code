@@ -1107,7 +1107,10 @@ class Vtiger_Functions {
 	* @returns array of modules
 	*/
 	static function getLineItemFieldModules() {
-		return array('Invoice', 'Quotes', 'PurchaseOrder', 'SalesOrder', 'Products', 'Services');
+        //SalesPlatform.ru begin
+		//return array('Invoice', 'Quotes', 'PurchaseOrder', 'SalesOrder', 'Products', 'Services');
+        return array('Act', 'Consignment', 'Invoice', 'Quotes', 'PurchaseOrder', 'SalesOrder', 'Products', 'Services');
+        //SalesPlatform.ru end
 	}
 
 	/** 
@@ -1330,11 +1333,7 @@ class Vtiger_Functions {
 	 * @return type -- table name
 	 */
 	public static function getUserSpecificTableName($moduleName) {
-		$moduleName = strtolower($moduleName);
-		if ($moduleName == "events") {
-			$moduleName = "calendar";
-		}
-		return "vtiger_".$moduleName.'_user_field';
+		return 'vtiger_crmentity_user_field';
 	}
 
 	/**
@@ -1395,5 +1394,27 @@ class Vtiger_Functions {
 			$i++;
 		} while ($sizeInBytes > 1024);
 		return round($sizeInBytes, 2) . $fileSizeUnits[$i];
+	}
+
+	/**
+	 * Function to check if a module($sourceModule) is related to Documents module.
+	 * @param <string> $sourceModule - Source module
+	 * @return <boolean> Returns TRUE if $sourceModule is related to Documents module and 
+	 * Documents module is active else returns FALSE.
+	 */
+	static function isDocumentsRelated($sourceModule) {
+		$isRelated = false;
+		$moduleName = 'Documents';
+		if (vtlib_isModuleActive($moduleName)) {
+			$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+			$sourceModuleModel = Vtiger_Module_Model::getInstance($sourceModule);
+			if ($moduleModel && $sourceModuleModel) {
+				$relationModel = Vtiger_Relation_Model::getInstance($sourceModuleModel, $moduleModel);
+			}
+			if ($relationModel) {
+				$isRelated = true;
+			}
+		}
+		return $isRelated;
 	}
 }

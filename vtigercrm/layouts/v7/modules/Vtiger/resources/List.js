@@ -753,7 +753,7 @@ Vtiger.Class("Vtiger_List_Js", {
 
 			var value = jQuery.trim(valueElement.text());
 			//adding string,text,url,currency in customhandling list as string will be textlengthchecked
-			var customHandlingFields = ['owner', 'ownergroup', 'picklist', 'multipicklist', 'reference', 'string', 'url', 'currency', 'text'];
+			var customHandlingFields = ['owner', 'ownergroup', 'picklist', 'multipicklist', 'reference', 'string', 'url', 'currency', 'text', 'email'];
 			if (jQuery.inArray(fieldType, customHandlingFields) !== -1) {
 				value = tdElement.data('rawvalue');
 			}
@@ -901,6 +901,7 @@ Vtiger.Class("Vtiger_List_Js", {
 				jQuery('.inline-save', currentTrElement).find('button').attr('disabled', 'disabled');
 				app.request.post({data: params}).then(function (err, result) {
 					if (result) {
+						jQuery('.vt-notification').remove();
 						jQuery('.inline-save', currentTrElement).find('button').removeAttr('disabled');
 						var params = {};
 						thisInstance.loadListViewRecords(params).then(function (data) {
@@ -912,7 +913,7 @@ Vtiger.Class("Vtiger_List_Js", {
 						});
 					} else {
 						app.helper.hideProgress();
-						app.helper.showErrorNotification({"message": err});
+						app.event.trigger('post.save.failed', err);
 						jQuery('.inline-save', currentTrElement).find('button').removeAttr('disabled');
 						return false;
 					}
@@ -1112,6 +1113,10 @@ Vtiger.Class("Vtiger_List_Js", {
 
 		// Double click event - ajax edit
 		listViewContentDiv.on('dblclick', '.listViewEntries', function (e) {
+			if (listViewContentDiv.find('#isExcelEditSupported').val() == 'no') {
+				return;
+			}
+
 			var currentTrElement = jQuery(e.currentTarget);
 			// added to unset the time out set for <a> tags 
 			var rows = currentTrElement.find('a');
@@ -1181,6 +1186,7 @@ Vtiger.Class("Vtiger_List_Js", {
 			thisInstance.registerInlineSaveOnEnterEvent(editedRow);
 		});
 
+		var isOwnerChanged = false;
 		app.event.on('post.listViewMassEdit.loaded', function (e, container) {
 			app.event.trigger('post.listViewInlineEdit.click', container);
 			var offset = container.find('.modal-body .datacontent').offset();
@@ -1189,12 +1195,17 @@ Vtiger.Class("Vtiger_List_Js", {
 			var params = {
 				setHeight: (viewPortHeight - offset['top']) + 'px'
 			};
+
+			container.find('[name="assigned_user_id"]').on('click', function() {
+				isOwnerChanged = true;
+			});
 			app.helper.showVerticalScroll(container.find('.modal-body .datacontent'), params);
 			var editInstance = Vtiger_Edit_Js.getInstance();
 			editInstance.registerBasicEvents(container);
 			var form_original_data = $("#massEdit").serialize();
 			$('#massEdit').on('submit', function (event) {
-				thisInstance.saveMassedit(event, form_original_data);
+				thisInstance.saveMassedit(event, form_original_data, isOwnerChanged);
+				isOwnerChanged = false;
 			});
 			app.helper.registerLeavePageWithoutSubmit($("#massEdit"));
 			app.helper.registerModalDismissWithoutSubmit($("#massEdit"));
@@ -1289,12 +1300,12 @@ Vtiger.Class("Vtiger_List_Js", {
 			element.trigger('change');
 		});
 	},
-	saveMassedit: function (event, form_original_data) {
+	saveMassedit: function (event, form_original_data, isOwnerChanged) {
 		event.preventDefault();
 		var form = $('#massEdit');
 		var form_new_data = form.serialize();
 		app.helper.showProgress();
-		if (form_new_data !== form_original_data) {
+		if (form_new_data !== form_original_data || isOwnerChanged) {
 			var originalData = app.convertUrlToDataParams(form_original_data);
 			var newData = app.convertUrlToDataParams(form_new_data);
 
@@ -1306,16 +1317,25 @@ Vtiger.Class("Vtiger_List_Js", {
 				}
 			}
 
+			if (!newData['assigned_user_id'] && isOwnerChanged) {
+				newData['assigned_user_id'] = originalData['assigned_user_id'];
+			}
+
 			var form_update_data = '';
 			for (var key in newData) {
 				form_update_data += key + '=' + newData[key] + '&';
 			}
 			form_update_data = form_update_data.slice(0, -1);
-			app.request.post({data: form_update_data}).then(function (data) {
+			app.request.post({data: form_update_data}).then(function (err, data) {
 				app.helper.hideProgress();
-				app.helper.hidePageContentOverlay();
-				window.onbeforeunload = null;
-				app.event.trigger('post.listViewMassEditSave');
+				if (data) {
+					jQuery('.vt-notification').remove();
+					app.helper.hidePageContentOverlay();
+					window.onbeforeunload = null;
+					app.event.trigger('post.listViewMassEditSave');
+				} else {
+					app.event.trigger('post.save.failed', err);
+				}
 			});
 		} else {
 			app.helper.hideProgress();
@@ -1595,13 +1615,17 @@ Vtiger.Class("Vtiger_List_Js", {
 			var data = jQuery.extend(formData, listSelectParams);
 			app.helper.showProgress();
 			app.request.post({'data': data}).then(function (err, data) {
+				app.helper.hideProgress();
 				if (err == null) {
-					app.helper.hideProgress();
+					jQuery('.vt-notification').remove();
 					app.helper.hideModal();
 					listInstance.loadListViewRecords().then(function (e) {
 						listInstance.clearList();
 						app.helper.showSuccessNotification({message: app.vtranslate('JS_RECORDS_TRANSFERRED_SUCCESSFULLY')});
 					});
+				} else {
+					app.event.trigger('post.save.failed', err);
+					jQuery(form).find("button[name='saveButton']").removeAttr('disabled');
 				}
 			});
 		}
@@ -2066,7 +2090,7 @@ Vtiger.Class("Vtiger_List_Js", {
 		var tagElement = jQuery(jQuery('#dummyTagElement').html()).clone(true);
 		tagElement.attr('data-id', params.id).attr('data-type', params.type);
 		tagElement.find('.tagLabel').text(params.name);
-		return tagElement
+		return tagElement;
 	},
 	addTagToList: function (tagElement) {
 		var container = jQuery('#listViewTagContainer');
@@ -2239,6 +2263,16 @@ Vtiger.Class("Vtiger_List_Js", {
 			e.stopPropagation();
 		});
 	},
+    
+	//SalesPaltform.ru begin
+	registerAudioFieldClickEvent: function() {
+	    var listViewContentDiv = this.getListViewContainer();       		
+	    listViewContentDiv.on('click', 'audio', function (e) {
+		e.stopPropagation();
+	    });
+	},
+	//SalesPlatform.ru end
+    
 	registerConfigureColumnsEvents: function () {
 		var thisInstance = this;
 		var listViewContentDiv = this.getListViewContainer();
@@ -2426,38 +2460,7 @@ Vtiger.Class("Vtiger_List_Js", {
 			self.registerFloatingThead();
 		});
 	},
-	/*
-	 * Function to register the list view accept record click event
-	 */
-	registerAcceptRecordClickEvent: function () {
-		jQuery('#page').on('click', '.acceptCase', function (e) {
-			var elem = jQuery(e.currentTarget);
-			var originalDropDownMenu = elem.closest('.dropdown-menu').data('original-menu');
-			var parent = app.helper.getDropDownmenuParent(originalDropDownMenu);
-			var recordId = parent.closest('tr').data('id');
-			var params = {
-				'module': 'Cases',
-				'action': 'SaveAjax',
-				'record': recordId,
-				'mode': 'updateCaseStatus'
-			}
-			app.helper.showProgress();
-			app.request.post({data: params}).then(
-					function (error, data) {
-						app.helper.hideProgress();
-						if (error === null) {
-							app.helper.showSuccessNotification({
-								'message': app.vtranslate('JS_CASE_ACCEPTED_SUCCESSFULLY')
-							});
-							window.location.href = data.url;
-						} else {
-							app.helper.showErrorNotification({message: app.vtranslate(error.message)});
-						}
-					}
-			);
-			e.stopPropagation();
-		});
-	},
+
 	registerEvents: function () {
 		var thisInstance = this;
 		this._super();
@@ -2481,7 +2484,9 @@ Vtiger.Class("Vtiger_List_Js", {
 		this.registerDynamicDropdownPosition();
 		this.registerDropdownPosition();
 		this.registerConfigureColumnsEvents();
-		this.registerAcceptRecordClickEvent();
+		//SalesPaltform.ru begin
+		this.registerAudioFieldClickEvent();
+		//SalesPlatform.ru end
 		var recordSelectTrackerObj = this.getRecordSelectTrackerInstance();
 		recordSelectTrackerObj.registerEvents();
 
@@ -2611,7 +2616,21 @@ Vtiger.Class("Vtiger_List_Js", {
 			dropdown.on('hidden.bs.dropdown', function () {
 				dropdown_menu.removeClass('invisible');
 				fixed_dropdown_menu.remove();
+				jQuery('.listViewEntries').removeClass('dropDownOpen');
 			});
+		});
+		jQuery('.listViewEntries').mouseleave(function (e) {
+			var currentDropDown = jQuery(e.currentTarget).find('.dropdown');
+			setTimeout(function () {
+				if (jQuery('.dropdown-menu:hover').length == 0) {
+					if (currentDropDown.hasClass('open')) {
+						jQuery(e.currentTarget).find('.dropdown').trigger('click');
+					}
+					jQuery(e.currentTarget).removeClass('dropDownOpen');
+				} else {
+					jQuery(e.currentTarget).addClass('dropDownOpen');
+				}
+			}, 50);
 		});
 	},
 	getListViewContentHeight: function () {

@@ -250,9 +250,13 @@ $languageStrings = array(
         'LBL_LOGIN_IN_SYSTEM'=>'Вход', 
         'LBL_USER_NAME'=>'Пользователь',
         'LBL_SING_IN'=>'Вход',
-        'LBL_FOGGOT_PASSWORD'=>'Забыли пароль ?',
+        'ForgotPassword'=>'Забыли пароль?',
         'LBL_SUBMIT'=>'Отправить',
-        'LBL_BACK'=>'Назад',
+        'LBL_COMMUNITY' => 'Сообщество',
+        'LBL_FORUMS' => 'Форум',
+        'LBL_WIKI' => 'Документация',
+        'LBL_BLOGS' => 'Блог',
+        'LBL_BACK' => 'Назад',
         'LBL_FOGGOT_PASSWORD_TITLE'=>'Напоминание пароля',
         'LBL_COMMUNITY'=>'Сообщество',
         'LBL_FORUMS'=>'Форум',
@@ -316,6 +320,7 @@ $languageStrings = array(
         // Salesplatform.ru end Localization fix
         //SalesPlatform.ru begin localization fix
         'LBL_ENTER_AND_SUBMIT_DETAILS' => 'Пожалуйста введите данные и нажмите кнопку Отправить',
+        'New Username' => 'Новое имя пользователя',
         //SalesPlatform.ru end localization fix
     );
 
@@ -332,7 +337,10 @@ $jsLanguageStrings = array(
 	'JS_PASSWORD_CHANGE_FAILED_1'=>'Смена пароля прошла неудачно для ',
 	'JS_PASSWORD_CHANGE_FAILED_2'=>' Ошибка. Новый пароль должен быть задан.',
 	'JS_PASSWORD_INCORRECT_OLD'=>'Указан неверно старый пароль. Введите пароль повторно.',
-	'JS_NEW_ACCESS_KEY_REQUESTED' => 'Ключ доступа Новый просил',
+    // SalesPlatform.ru begin
+	//'JS_NEW_ACCESS_KEY_REQUESTED' => 'Ключ доступа Новый просил',
+    'JS_NEW_ACCESS_KEY_REQUESTED' => 'Запрос на смену ключа доступа',
+    // SalesPlatform.ru end
 	'JS_CHANGE_ACCESS_KEY_CONFIRMATION' => 'Вы запросили новый ключ доступа. После его смены необходимо заменить старый ключ доступа на новый во всех приложениях, использующих REST API системы. Вы хотите продолжить?',
         'JS_ENTERED_CURRENT_USERNAME_MSG' => 'Вы ввели текущее имя пользователя. Введите новое имя пользователя.',       
 );

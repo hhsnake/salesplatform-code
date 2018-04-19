@@ -232,7 +232,8 @@ class Vtiger_MenuStructure_Model extends Vtiger_Base_Model {
 							'MARKETING_AND_SALES'	=> 'MARKETING',
 							'INVENTORY'				=> 'INVENTORY',
 							'SUPPORT'				=> 'SUPPORT',
-							'TOOLS'					=> 'PROJECT'
+							'PROJECT'				=> 'PROJECT',
+							'TOOLS'					=> 'TOOLS'
 						  );
 		return $oldToNewAppMap;
 	}
@@ -242,6 +243,17 @@ class Vtiger_MenuStructure_Model extends Vtiger_Base_Model {
 	 * @return <array>
 	 */
 	public static function getAppMenuList(){
-		return array('MARKETING','SALES','INVENTORY','SUPPORT','PROJECT');
+		return array('MARKETING','SALES','INVENTORY','SUPPORT','PROJECT','TOOLS');
+	}
+
+	public static function getAppIcons() {
+		$appImageIcons = array(	'MARKETING' => 'fa-users',
+								'SALES'		=> 'fa-dot-circle-o',
+								'SUPPORT'	=> 'fa-life-ring',
+								'INVENTORY'	=> 'vicon-inventory',
+								'PROJECT'	=> 'fa-briefcase',
+								'TOOLS'		=> 'fa-wrench'
+							);
+		return $appImageIcons;
 	}
 }

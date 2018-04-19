@@ -1,3 +1,11 @@
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 
 var vtUtils = {
 
@@ -79,9 +87,10 @@ var vtUtils = {
 		if(typeof selectElement == 'undefined') {
 			return;
 		}
-		var instance = selectElement.data('select2');
+
 		var limit = params.maximumSelectionSize;
 		selectElement.on('change',function(e){
+			var instance = jQuery(e.currentTarget).data('select2');
 			var data = instance.data();
 			if (jQuery.isArray(data) && data.length >= limit ) {
 				instance.updateResults();
@@ -117,7 +126,7 @@ var vtUtils = {
             jQuery(element).each(function(index, Elem){
                 element = jQuery(Elem);
                 
-                // SalesPlatform.ru begin #5116 fixed localization
+                // SalesPlatform.ru begin
                 var locale = jQuery("[name='locale']").val();
                 if (typeof locale === "undefined") {
                     locale = "ru_ru";
@@ -136,15 +145,16 @@ var vtUtils = {
                 if(calendarType == "range"){
                     //Default first day of the week
                     var defaultFirstDay = jQuery('#start_day').val();
-                    
                     element.dateRangePicker({
                         startOfWeek: defaultFirstDay.toLowerCase(),
                         format: userDateFormat.toUpperCase(),
                         separator: ',',
                         showShortcuts: true,
                         autoClose : false,
-                        duration : 500,
-                        language : language
+			//SalesPlatform.ru begin
+                        language : language,
+			//SalesPlatform.ru end
+                        duration : 500
                     });
                 }else{
                     var elementDateFormat = element.data('dateFormat');
@@ -156,8 +166,7 @@ var vtUtils = {
                         todayBtn: "linked",
                         format: userDateFormat,
                         todayHighlight: true,
-                        clearBtn : true,
-                        language: language
+						clearBtn : true
                     };
 					jQuery.extend(defaultPickerParams, params);
                     element.datepicker(defaultPickerParams);
@@ -259,6 +268,51 @@ var vtUtils = {
     hideQtip : function(element) {
         element.trigger('Vtiger.Qtip.HideMesssage');
     },
+
+	linkifyStr : function(str) {
+		var options = {'TLDs':267};
+		return anchorme.js(str,options);
+	},
+
+	htmlSubstring : function(content, maxlength) {
+		var m, r = /<([^>\s]*)[^>]*>/g,
+			stack = [],
+			lasti = 0,
+			result = '';
+
+		//for each tag, while we don't have enough characters
+		while ((m = r.exec(content)) && maxlength) {
+			//get the text substring between the last tag and this one
+			var temp = content.substring(lasti, m.index).substr(0, maxlength);
+			//append to the result and count the number of characters added
+			result += temp;
+			maxlength -= temp.length;
+			lasti = r.lastIndex;
+
+			if (content) {
+				result += m[0];
+				if (m[1].indexOf('/') === 0) {
+					//if this is a closing tag, then pop the stack (does not account for bad html)
+					stack.pop();
+				} else if (m[1].lastIndexOf('/') !== m[1].length - 1) {
+					//if this is not a self closing tag then push it in the stack
+					stack.push(m[1]);
+				}
+			}
+		}
+
+		//add the remainder of the string, if needed (there are no more tags in here)
+		result += content.substr(lasti, maxlength);
+
+		//fix the unclosed tags
+		while (stack.length) {
+			var unclosedtag = stack.pop();
+			if(jQuery.inArray(unclosedtag,['br']) == -1){
+				result += '</' + unclosedtag + '>';
+			}
+		}
+		return result;
+	},
 
     showValidationMessage : function(element,message,params) {
         if(element.hasClass('select2')) {

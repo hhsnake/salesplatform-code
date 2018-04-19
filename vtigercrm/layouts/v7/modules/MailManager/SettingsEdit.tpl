@@ -124,7 +124,10 @@
                                 <td class="fieldValue selectTrashValue {if !$MAILBOX->exists()}hide{/if}">
                                     <select name="_mbox_trash_folder" class="select2 col-lg-9">
                                         {foreach item=FOLDER from=$FOLDERS}
-                                            <option value="{$FOLDER->name()}" {if $FOLDER->name() eq $MAILBOX->folder()} selected {/if}>{$FOLDER->name()}</option>
+                                            {*SalesPlatform.ru Begin fix "from" field in mail manager*}
+                                            {*<option value="{$FOLDER->name()}" {if $FOLDER->name() eq $MAILBOX->folder()} selected {/if}>{$FOLDER->name()}</option>*}
+                                            <option value="{$FOLDER->name()}" {if $FOLDER->name() eq $MAILBOX->trash()} selected {/if}>{$FOLDER->name()}</option>
+                                            {*SalesPlatform.ru End*}
                                         {/foreach}
                                     </select>
                                         <i class="fa fa-info-circle cursorPointer" id="mmSettingInfo" title="{vtranslate('LBL_CHOOSE_TRASH',$MODULE)}"></i>

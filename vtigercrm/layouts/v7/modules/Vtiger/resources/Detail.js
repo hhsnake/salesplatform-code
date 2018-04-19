@@ -12,7 +12,6 @@ Vtiger.Class("Vtiger_Detail_Js",{
 	detailInstance : false,
 	PreAjaxSaveEvent : 'PreAjaxSaveEvent',
 	PostAjaxSaveEvent : 'PostAjaxSaveEvent',
-        
 	getInstance: function(){
 		if( Vtiger_Detail_Js.detailInstance == false ){
 			var module = app.getModuleName();
@@ -209,8 +208,12 @@ Vtiger.Class("Vtiger_Detail_Js",{
 					app.request.post({data:reqParams}).then(
 						function(error,data) {
 							if(error === null){
+								jQuery('.vt-notification').remove();
 								app.helper.hideModal();
-								app.helper.showAlertBox({'message':app.vtranslate('JS_RECORDS_TRANSFERRED_SUCCESSFULLY')});
+                                app.helper.showSuccessNotification({message:app.vtranslate('JS_RECORDS_TRANSFERRED_SUCCESSFULLY')});
+                            } else {
+								app.event.trigger('post.save.failed', error);
+								jQuery(form).find("button[name='saveButton']").removeAttr('disabled');
 							}
 						}
 					);
@@ -219,7 +222,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			validateAndSubmitForm(form,params);
 		 });
 	},
-    
+
 	/*
 	 * function to trigger send Email
 	 * @params: send email url , module name.
@@ -316,13 +319,18 @@ Vtiger.Class("Vtiger_Detail_Js",{
 						app.helper.showProgress();
 						app.request.post(postParams).then(function(err,data){
 							app.helper.hideProgress();
-							app.helper.hidePageContentOverlay();
-							var relatedModuleName = formData.module;
-							if(relatedModuleName == 'Events') {
-								relatedModuleName = 'Calendar';
+							if (err === null) {
+								jQuery('.vt-notification').remove();
+								app.helper.hidePageContentOverlay();
+								var relatedModuleName = formData.module;
+								if(relatedModuleName == 'Events') {
+									relatedModuleName = 'Calendar';
+								}
+								var relatedController = thisInstance.getRelatedController(relatedModuleName);
+								relatedController.loadRelatedList();
+							} else {
+								app.event.trigger('post.save.failed', err);
 							}
-							var relatedController = thisInstance.getRelatedController(relatedModuleName);
-							relatedController.loadRelatedList();
 					});
 					return false;
 					}
@@ -600,18 +608,15 @@ Vtiger.Class("Vtiger_Detail_Js",{
 						app.helper.showErrorNotification({message:app.vtranslate('JS_PHONEFORMAT_ERROR')});
 						return;
 					}
-                                        
-                                        if(typeof data !== 'boolean'){
-        					var statusDetails = data.statusdetails;
-        					var status = statusDetails.status;
-        					if(status == 'Failed') {
-        						var errorMsg = statusDetails.statusmessage+'<br>'+app.vtranslate('JS_PHONEFORMAT_ERROR');
-        						app.helper.showErrorNotification({'title' : status, 'message' : errorMsg});
-        					} else {
-        						var msg = statusDetails.statusmessage;
-        						app.helper.showSuccessNotification({'title' : status, 'message' : msg});
-        					}
-                                        }
+					var statusDetails = data.statusdetails;
+					var status = statusDetails.status;
+					if(status == 'Failed') {
+						var errorMsg = statusDetails.statusmessage+'<br>'+app.vtranslate('JS_PHONEFORMAT_ERROR');
+						app.helper.showErrorNotification({'title' : status, 'message' : errorMsg});
+					} else {
+						var msg = statusDetails.statusmessage;
+						app.helper.showSuccessNotification({'title' : status, 'message' : msg});
+					}
 				}
 		);
 	},
@@ -668,7 +673,6 @@ Vtiger.Class("Vtiger_Detail_Js",{
 
 				//Detail tab is clicked
 				if(tabElement.data('linkKey') == self.detailViewDetailTabLabel) {
-					self.triggerDetailViewContainerEvents(detailViewContainer);
 					self.registerEventForPicklistDependencySetup(self.getForm());
 				}
 
@@ -688,9 +692,6 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			});
 	},
 
-	triggerDetailViewContainerEvents: function(detailViewContainer) {
-	},
-
 	registerRollupCommentsSwitchEvent : function() {
 		var self = this;
 		var commentsRelatedContainer = jQuery('.commentsRelatedContainer');
@@ -702,16 +703,9 @@ Vtiger.Class("Vtiger_Detail_Js",{
 				self.toggleRollupComments(e);
 			});
 			if(jQuery('#rollupcomments').attr('rollup-status') == 1) {
-                            //SalesPlatfrom.ru end
-				//jQuery('#rollupcomments').bootstrapSwitch('state', true, true);
-				jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
-                            //SalesPlatfrom.ru begin
-
-			}else{
-                            //SalesPlatfrom.ru begin
-				//jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
 				jQuery('#rollupcomments').bootstrapSwitch('state', true, true);
-                            //SalesPlatfrom.ru end
+			}else{
+				jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
 			}
 		}
 	},
@@ -1087,17 +1081,16 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		data['record'] = recordId;
 		data['module'] = this.getModuleName();
 		data['action'] = 'SaveAjax';
-                
+
 		app.request.post({data:data}).then(
 			function(err, reponseData){
 				if(err === null){
-					app.helper.showSuccessNotification({"message":""});
-					aDeferred.resolve(reponseData);
-				} else {
-					app.helper.showErrorNotification({"message":err});
+					app.helper.showSuccessNotification({"message":app.vtranslate('JS_RECORD_UPDATED')});
 				}
+				aDeferred.resolve(err, reponseData);
 			}
 		);
+
 		return aDeferred.promise();
 	},
 
@@ -1174,9 +1167,9 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			ele.append(fieldModel.getUi()).append(inlineSaveWrap);
 			ele.find('.inputElement').addClass('form-control');
 			editElement.append(ele);
-            //SalesPlatform.ru begin
-            thisInstance.initSpMobilePhoneFields(currentTdElement);
-            //SalesPlatform.ru end
+		        //SalesPlatform.ru begin
+		        thisInstance.initSpMobilePhoneFields(currentTdElement);
+		        //SalesPlatform.ru end
 		}
 
 		// for reference fields, actual value will be ID but we need to show related name of that ID
@@ -1334,8 +1327,14 @@ Vtiger.Class("Vtiger_Detail_Js",{
 
                                                                 jQuery(currentTdElement).find('.input-group-addon').addClass('disabled');
                                                                 app.helper.showProgress();
-                                                                thisInstance.saveFieldValues(fieldNameValueMap).then(function(response) {
+						thisInstance.saveFieldValues(fieldNameValueMap).then(function(err, response) {
                                                                         app.helper.hideProgress();
+									if (err !== null) {
+										app.event.trigger('post.save.failed', err);
+										jQuery(currentTdElement).find('.input-group-addon').removeClass('disabled');
+										return true;
+									}
+									jQuery('.vt-notification').remove();
                                                                         var postSaveRecordDetails = response;
                                                                         if(fieldBasicData.data('type') == 'picklist' && app.getModuleName() != 'Users') {
                                                                                 var color = postSaveRecordDetails[fieldName].colormap[postSaveRecordDetails[fieldName].value];
@@ -1434,6 +1433,12 @@ Vtiger.Class("Vtiger_Detail_Js",{
 //						app.helper.showProgress();
 //						thisInstance.saveFieldValues(fieldNameValueMap).then(function(response) {
 //							app.helper.hideProgress();
+//							if (err !== null) {
+//								app.event.trigger('post.save.failed', err);
+//								jQuery(currentTdElement).find('.input-group-addon').removeClass('disabled');
+//								return true;
+//							}
+//							jQuery('.vt-notification').remove();
 //							var postSaveRecordDetails = response;
 //							if(fieldBasicData.data('type') == 'picklist' && app.getModuleName() != 'Users') {
 //								var color = postSaveRecordDetails[fieldName].colormap[postSaveRecordDetails[fieldName].value];
@@ -1610,7 +1615,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		if(typeof contentHolder === 'undefined') {
 			contentHolder = this.getContentHolder();
 		}
-		contentHolder.off('click', 'clearReferenceSelection');
+		contentHolder.off('click', '.clearReferenceSelection');
 		contentHolder.on('click','.clearReferenceSelection',function(e){
 			e.preventDefault();
 			var element = jQuery(e.currentTarget);
@@ -1814,6 +1819,12 @@ Vtiger.Class("Vtiger_Detail_Js",{
 						activitiesWidget.html(data);
 						vtUtils.applyFieldElementsView(activitiesWidget);
 						thisInstance.registerEventForActivityWidget();
+                        
+                        //SalesPlatform.ru begin
+                        var tabElement = thisInstance.getTabByLabel("Activities");
+                        var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), tabElement, thisInstance.getRelatedModuleName());
+                        relatedController.updateRelatedRecordsCount(jQuery(tabElement).data('relation-id'),[1],true);
+                        //SalesPlatform.ru end
 					}
 				);
 			});
@@ -1927,10 +1938,18 @@ Vtiger.Class("Vtiger_Detail_Js",{
 					app.request.post({"data":params}).then(
 						function(err,data) {
 							app.helper.hideProgress();
-							detailViewElement.removeClass('hide');
-							currentTarget.show();
-							detailViewElement.html(translatedValue);
-							fieldnameElement.data('prevValue', ajaxEditNewValue);
+							if (err == null) {
+								jQuery('.vt-notification').remove();
+								detailViewElement.removeClass('hide');
+								currentTarget.show();
+								detailViewElement.html(translatedValue);
+								fieldnameElement.data('prevValue', ajaxEditNewValue);
+							} else {
+								app.event.trigger('post.save.failed', err);
+								detailViewElement.removeClass('hide');
+								currentTarget.show();
+								fieldElement.select2('val', previousValue);
+							}
 					});
 				}
 			}
@@ -2138,7 +2157,6 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		var detailContentsHolder = this.getContentHolder();
 		var clonedCommentBlock = jQuery('.basicEditCommentBlock',detailContentsHolder).clone(true,true).removeClass('basicEditCommentBlock hide').addClass('addCommentBlock');
 		clonedCommentBlock.find('.commentcontenthidden').removeClass('commentcontenthidden').addClass('commentcontent');
-		clonedCommentBlock.find('.commentcontent').addClass('mention_listener');
 		return clonedCommentBlock;
 	},
 
@@ -2150,7 +2168,6 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		var detailContentsHolder = this.getContentHolder();
 		var clonedCommentBlock = jQuery('.basicAddCommentBlock',detailContentsHolder).clone(true,true).removeClass('basicAddCommentBlock hide').addClass('addCommentBlock');
 		clonedCommentBlock.find('.commentcontenthidden').removeClass('commentcontenthidden').addClass('commentcontent');
-		clonedCommentBlock.find('.commentcontent').addClass('mention_listener');
 		return clonedCommentBlock;
 	},
 
@@ -2238,6 +2255,24 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		});
 	},
 
+	toggleCommentContent: function (e) {
+		var currentTarget = jQuery(e.currentTarget);
+		var commentContentBlock = currentTarget.closest('.commentInfoContentBlock');
+		var commentContentInfo = commentContentBlock.find('.commentInfoContent');
+		var toggleElement = jQuery('<div><a class="pull-right toggleComment" style="color: blue;"><small></small></a><div>');
+		var fullComment = vtUtils.linkifyStr(commentContentInfo.data('fullcomment'));
+
+		if (currentTarget.hasClass('showMore')) {
+			toggleElement.find('small').text(commentContentInfo.data('less'));
+			commentContentInfo.html(fullComment+toggleElement.clone().html());
+		} else {
+			var maxLength = commentContentInfo.data('maxlength');
+			toggleElement.find('small').text(commentContentInfo.data('more'));
+			toggleElement.find('.toggleComment').addClass('showMore');
+			commentContentInfo.html(vtUtils.htmlSubstring(fullComment, maxLength)+"..."+toggleElement.clone().html());
+		}
+	},
+
 	toggleRollupComments : function (e) {
 		e.stopPropagation();
 		e.preventDefault();
@@ -2255,7 +2290,6 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		var rollupstatus = rollup[currentTarget.attr('rollup-status')];
                 //SalesPlatform.ru end
 		var viewtype = currentTarget.data('view');
-		var startindex = parseInt(currentTarget.attr('startindex'));
 		var contents, url, params;
 
 		if(viewtype == 'relatedlist') {
@@ -2266,8 +2300,11 @@ Vtiger.Class("Vtiger_Detail_Js",{
 				'url' : url
 			};
 			app.request.get(params).then(function(err, data){
-				currentTarget.attr('rollup-status', !rollupstatus);
-				jQuery('div.related-tabs li[data-label-key="ModComments"]').trigger('click');
+                //SalesPlatform.ru begin
+				//currentTarget.attr('rollup-status', !rollupstatus);
+				//jQuery('div.related-tabs li[data-label-key="ModComments"]').trigger('click');
+                self.loadSelectedTabContents(jQuery('div.related-tabs li[data-label-key="ModComments"]'));
+                //SalesPlatform.ru end
 			});
 		} else {
 			url = 'index.php?module='+moduleName+'&relatedModule=ModComments&view=Detail&record='+
@@ -2286,7 +2323,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 				contents.html(data);
 				vtUtils.enableTooltips();
 				self.registerRollupCommentsSwitchEvent();
-				jQuery('#rollupcomments').bootstrapSwitch('state', !rollupstatus, true);
+				jQuery('#rollupcomments').bootstrapSwitch('state', rollupstatus, true);
 			});
 		}
 	},
@@ -2385,8 +2422,11 @@ Vtiger.Class("Vtiger_Detail_Js",{
 	constructTagElement : function (params) {
 		var tagElement = jQuery(jQuery('#dummyTagElement').html()).clone(true);
 		tagElement.attr('data-id',params.id).attr('data-type',params.type);
-		tagElement.find('.tagLabel').html(params.name);
-		return tagElement
+        //SalesPlatform.ru begin
+		//tagElement.find('.tagLabel').html(params.name);
+        tagElement.find('.tagLabel').text(params.name);
+        //SalesPlatform.ru end
+		return tagElement;
 	},
 
 	showAllTags : function(container) {
@@ -2771,8 +2811,14 @@ Vtiger.Class("Vtiger_Detail_Js",{
 	},
 
 	recordImageRandomColors: function(){
-		var color=  jQuery('.recordImage').css('background-color');
-		if(color === "rgba(0, 0, 0, 0)"){
+            // SalesPlatform.ru begin
+		//var color=  jQuery('.recordImage').css('background-color');
+		//if(color === "rgba(0, 0, 0, 0)"){
+            var element = jQuery('.recordImage');
+            var color =  element.css('background-color');
+            var hasChildrenImg = element.has('img').length;
+            if(color === "rgba(0, 0, 0, 0)" && !hasChildrenImg){
+            // SalesPlatform.ru end
 			jQuery('.recordImage').css('background-color', app.helper.getRandomColor());
 		}
 	},
@@ -2813,6 +2859,14 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		});
 	},
 
+    //SalesPaltform.ru begin
+    registerAudioFieldClickEvent: function() {
+        var detailContentsHolder = this.getContentHolder();       		
+        detailContentsHolder.on('click', 'audio', function (e) {
+			e.stopPropagation();
+		});
+    },
+    //SalesPlatform.ru end
 
 	registerEvents : function() {
 		this._super();
@@ -2820,6 +2874,10 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		var detailContentsHolder = this.getContentHolder();
 		var self = this;
 		this.registerSendSmsSubmitEvent();
+        //SalesPlatform.ru begin
+        this.registerAudioFieldClickEvent();
+        //SalesPlatform.ru end
+        
 		detailContentsHolder.on('click','.viewThread', function(e){
 			var currentTarget = jQuery(e.currentTarget);
 			var currentTargetParent = currentTarget.parent();
@@ -2988,14 +3046,21 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			var commentInfoContent = commentInfoBlock.find('.commentInfoContent');
 			var commentReason = commentInfoBlock.find('[name="editReason"]');
 			var editCommentBlock = self.getEditCommentBlock();
-			editCommentBlock.find('.commentcontent').text(commentInfoContent.text());
+			var fullComment = commentInfoContent.data('fullcomment');
+			if (fullComment) {
+				fullComment = app.helper.getDecodedValue(fullComment);
+			} else {
+				fullComment = commentInfoContent.text();
+			}
+			editCommentBlock.find('.commentcontent').text(fullComment);
 			editCommentBlock.find('[name="reasonToEdit"]').val(commentReason.text());
 			editCommentBlock.find('[name="is_private"]').val(commentInfoBlock.find('[name="is_private"]').val());
 			/*commentInfoContent.hide();
 			commentInfoBlock.find('.commentActionsContainer').hide();*/
 			editCommentBlock.appendTo(commentInfoBlock).show();
 		});
-
+        
+        
 		detailContentsHolder.on('click','.closeCommentBlock', function(e){
 			var currentTarget = jQuery(e.currentTarget);
 			var commentInfoBlock = currentTarget.closest('.singleComment');
@@ -3025,7 +3090,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			app.request.post({data: params}).then(
 				function(err, data) {
 					if (data) {
-						commentArea = commentInfoBlock.find('.commentcontent');
+						var commentArea = commentInfoBlock.find('.commentcontent');
 						commentArea.val(data.usersString);
 						commentArea.focus();
 						var strLength= commentArea.val().length * 2;
@@ -3049,6 +3114,10 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			recentDocumentsTab.trigger('click');
 		});
 
+		detailContentsHolder.off('.toggleComment').on('click', '.toggleComment', function (e) {
+			self.toggleCommentContent(e);
+		});
+
 		app.event.on('post.summarywidget.load',function(event,widgetContainer){
 			vtUtils.applyFieldElementsView(widgetContainer);
 
@@ -3060,16 +3129,9 @@ Vtiger.Class("Vtiger_Detail_Js",{
 				});
 
 				if(jQuery('#rollupcomments').attr('rollup-status') == 1) {
-                                    //SalesPlatfrom.ru begin
-					//jQuery('#rollupcomments').bootstrapSwitch('state', true, true);
-					jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
-                                    //SalesPlatfrom.ru end
-
-				}else{
-                                    //SalesPlatfrom.ru begin
-					//jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
 					jQuery('#rollupcomments').bootstrapSwitch('state', true, true);
-                                    //SalesPlatfrom.ru end
+				}else{
+					jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
 				}
 
 			}
@@ -3085,16 +3147,9 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			});
 
 			if(jQuery('#rollupcomments').attr('rollup-status') == 1) {
-                             //SalesPlatfrom.ru begin
-				//jQuery('#rollupcomments').bootstrapSwitch('state', true, true);
-				jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
-                             //SalesPlatfrom.ru end
-
-			}else{
-                             //SalesPlatfrom.ru begin
-				//jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
 				jQuery('#rollupcomments').bootstrapSwitch('state', true, true);
-                             //SalesPlatfrom.ru end
+			}else{
+				jQuery('#rollupcomments').bootstrapSwitch('state', false, true);
 			}
 
 		}
@@ -3286,16 +3341,21 @@ function sp_js_detailview_checkBeforeSave(fieldData) {
     var fldvalObjectArr = {};
     fldvalObjectArr[fieldData['field']] = fieldData['value'];
 
-    var data = encodeURIComponent(JSON.stringify(fldvalObjectArr));      
-    var urlstring = "index.php?module="+fieldData['module']+"&action=CheckBeforeSave&DetailViewAjaxMode=true&record="+fieldData['record'];
+    var data = {
+        module : fieldData['module'],
+        action : 'CheckBeforeSave',
+        checkBeforeSaveData : fldvalObjectArr,
+        detailViewAjaxMode : true,
+        record : fieldData['record']
+    };
         
     var checkResult = jQuery.Deferred();
-    app.request.post({'data': data, 'url': urlstring}).then(
+    app.request.post({'data': data}).then(
+            // if checkBeforeSave handler exists, var error is empty, else - its not empty
             function (error, responseObj) {
-                if (!empty(responseObj)) {
-                    if (responseObj.response === undefined) {
-                        responseObj = JSON.parse(responseObj);
-                    }
+                if (empty(error) && !empty(responseObj)) {
+                    responseObj = JSON.parse(responseObj);
+                    
                     if (responseObj.response === "OK") {
                         if (responseObj.message !== undefined && !empty(responseObj.message)) {
                             app.helper.showAlertBox({'message': responseObj.message}).then(

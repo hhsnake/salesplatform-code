@@ -45,7 +45,10 @@
                                         {foreach item="CUSTOM_VIEW" from=$GROUP_CUSTOM_VIEWS name="customView"}
                                             <li style="font-size:12px;" class='listViewFilter {if $VIEWID eq $CUSTOM_VIEW->getId() && ($CURRENT_TAG eq '') && !$FOLDER_VALUE} active{/if} {if $smarty.foreach.customView.iteration gt 5} filterHidden hide{/if} '>
                                                 {assign var=VIEWNAME value={vtranslate($CUSTOM_VIEW->get('viewname'), $MODULE)}} 
-                                                <a class="filterName" href="javascript:;" data-filter-id="{$CUSTOM_VIEW->getId()}">{if {$VIEWNAME|strlen > 40} } {$VIEWNAME|substr:0:40|@escape:'html'}..{else}{$VIEWNAME|@escape:'html'}{/if}</a> 
+                                                {* SalesPlatform.ru begin *}
+                                                {* <a class="filterName" href="javascript:;" data-filter-id="{$CUSTOM_VIEW->getId()}">{if {$VIEWNAME|strlen > 40} } {$VIEWNAME|substr:0:40|@escape:'html'}..{else}{$VIEWNAME|@escape:'html'}{/if}</a> *}
+                                                <a class="filterName" href="javascript:;" data-filter-id="{$CUSTOM_VIEW->getId()}">{if {$VIEWNAME|mb_strlen > 40} } {$VIEWNAME|mb_substr:0:40|@escape:'html'}..{else}{$VIEWNAME|@escape:'html'}{/if}</a> 
+                                                {* SalesPlatform.ru begin *}
                                                     <div class=" pull-right">
                                                         <span class="js-popover-container">
                                                     <span class="fa fa-angle-down" rel="popover" data-toggle="popover" aria-expanded="true" 
@@ -123,7 +126,10 @@
                                     <li style="font-size:12px;" class='documentFolder {if $FOLDER_VALUE eq $FOLDER->getName()} active{/if}'>
                                         <a class="filterName" href="javascript:void(0);" data-filter-id="{$FOLDER->get('folderid')}" data-folder-name="{$FOLDER->get('foldername')}" title="{$FOLDERNAME}">
                                             <i class="fa {if $FOLDER_VALUE eq $FOLDER->getName()}fa-folder-open{else}fa-folder{/if}"></i> 
-                                            <span class="foldername">{if {$FOLDERNAME|strlen > 40} } {$FOLDERNAME|substr:0:40|@escape:'html'}..{else}{$FOLDERNAME|@escape:'html'}{/if}</span>
+                                            {* SalesPlatform.ru begin *}
+                                            {* <span class="foldername">{if {$FOLDERNAME|strlen > 40} } {$FOLDERNAME|substr:0:40|@escape:'html'}..{else}{$FOLDERNAME|@escape:'html'}{/if}</span> *}
+                                            <span class="foldername">{if {$FOLDERNAME|strlen > 40} } {$FOLDERNAME|mb_substr:0:40|@escape:'html'}..{else}{$FOLDERNAME|@escape:'html'}{/if}</span>
+                                            {* SalesPlatform.ru end *}
                                         </a>
                                         {if $FOLDER->getName() neq 'Default' && $FOLDER->getName() neq 'Google Drive' && $FOLDER->getName() neq 'Dropbox'}
                                             <div class="dropdown pull-right">
@@ -142,7 +148,7 @@
                                 {/foreach}
                                 <li class="noFolderText" style="display: none;">
                                     <h6 class="lists-header"><center> 
-                                        {vtranslate('LBL_NO_FOLDERS_FOUND')}... 
+                                        {vtranslate('LBL_NO')} {vtranslate('LBL_FOLDERS', $MODULE)} {vtranslate('LBL_FOUND')} ... 
                                     </center></h6>    
                                 </li>
                                 </ul>

@@ -33,6 +33,7 @@ $languageStrings = array(
     'Public: Read Only' => 'Public: Read Only',
     'Public: Read, Create/Edit' => 'Public: Read, Create/Edit',
     'Public: Read, Create/Edit, Delete' => 'Public: Read, Create/Edit, Delete',	
+    'LBL_EDIT_CUSTOM_RULE_TO' => 'Edit rule of',
     // SalesPlatform.ru end
 );
 

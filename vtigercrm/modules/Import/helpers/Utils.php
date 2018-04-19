@@ -253,6 +253,11 @@ class Import_Utils_Helper {
 			case 8	:	$errorMessage = 'File upload stopped by extension';
 			default	:	$errorMessage = 'Unknown upload error';
 		}
+        
+        //SalesPlatform.ru begin
+        $errorMessage = vtranslate($errorMessage);
+        //SalesPlatform.ru end
+        
 		return $errorMessage;
 	}
 }

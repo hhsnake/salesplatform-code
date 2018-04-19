@@ -114,16 +114,18 @@ class SalesOrder extends CRMEntity {
 
 	function save_module($module)
 	{
-        // SalesPlatform.ru begin
-        global $updateInventoryProductRel_deduct_stock;
-		$updateInventoryProductRel_deduct_stock = false;
-        // SalesPlatform.ru end
-		//Checking if quote_id is present and updating the quote status
-		if($this->column_fields["quote_id"] != '')
-		{
-        		$qt_id = $this->column_fields["quote_id"];
-        		$query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=?";
-        		$this->db->pquery($query1, array($qt_id));
+		// SalesPlatform.ru begin
+		global $updateInventoryProductRel_deduct_stock;
+			$updateInventoryProductRel_deduct_stock = false;
+		// SalesPlatform.ru end
+
+		/* $_REQUEST['REQUEST_FROM_WS'] is set from webservices script.
+		 * Depending on $_REQUEST['totalProductCount'] value inserting line items into DB.
+		 * This should be done by webservices, not be normal save of Inventory record.
+		 * So unsetting the value $_REQUEST['totalProductCount'] through check point
+		 */
+		if (isset($_REQUEST['REQUEST_FROM_WS']) && $_REQUEST['REQUEST_FROM_WS']) {
+			unset($_REQUEST['totalProductCount']);
 		}
 
 
@@ -399,6 +401,10 @@ class SalesOrder extends CRMEntity {
 		if ($queryPlanner->requireTable("vtiger_createdbySalesOrder")){
 			$query .= " left join vtiger_users as vtiger_createdbySalesOrder on vtiger_createdbySalesOrder.id = vtiger_crmentitySalesOrder.smcreatorid ";
 		}
+
+		//if secondary modules custom reference field is selected
+        $query .= parent::getReportsUiType10Query($secmodule, $queryPlanner);
+
 		return $query;
 	}
 

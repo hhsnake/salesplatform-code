@@ -58,7 +58,7 @@ class Documents_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 			}
 			$fieldsInfo[$name] = $model->getFieldInfo();
 		}
-
+        
 		$viewer = $this->getViewer($request);
 		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE', Vtiger_Functions::jsonEncode($picklistDependencyDatasource));
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
@@ -72,6 +72,9 @@ class Documents_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('FIELD_MODELS', $fieldList);
 		$viewer->assign('FILE_LOCATION_TYPE', $request->get('type'));
 		$viewer->assign('SCRIPTS', $this->getHeaderScripts($request));
+        //SalesPlatform.ru begin
+        $viewer->assign('ALLOWED_FIELD_MODELS', $this->getAllowedCreateFields($request, $fieldList));
+        //SalesPlatform.ru end
 
 		if ($relationOperation) {
 			$viewer->assign('RELATION_OPERATOR', $relationOperation);
@@ -86,7 +89,21 @@ class Documents_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('MAX_UPLOAD_LIMIT_BYTES', Vtiger_Util_Helper::getMaxUploadSizeInBytes());
 		echo $viewer->view('QuickCreate.tpl',$moduleName,true);
 	}
-
+    
+    //SalesPlatform.ru begin
+    private function getAllowedCreateFields($request, $fieldList) {
+        $normalFieldsList = array();
+        $allowedFieldsNames = $this->getFields($request->get('type'));
+        foreach($fieldList as $fieldName => $fieldModel) {
+            if(in_array($fieldName, $allowedFieldsNames)) {
+                $normalFieldsList[$fieldName] = $fieldModel;
+            }
+        }
+        
+        return $normalFieldsList;
+    }
+    //SalesPlatform.ru end 
+    
 	public function getFields($documentType){
 		$fields = array();
 		switch ($documentType) {

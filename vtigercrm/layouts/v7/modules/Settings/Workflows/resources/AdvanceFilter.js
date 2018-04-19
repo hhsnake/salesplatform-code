@@ -103,58 +103,6 @@ Vtiger_AdvanceFilter_Js('Workflows_AdvanceFilter_Js',{},{
         return conditionSelectElement;
     },
     
-    getMetricFieldSpecificConditionList: function(conditionList, conditionSelected, match, fieldSelected){
-        var options = '';
-        var fieldDataInfo = fieldSelected.data('fieldinfo');
-        var fieldModel = Vtiger_Field_Js.getInstance(fieldDataInfo, this.getModuleName());
-        var picklistValues = fieldModel.data.picklistvalues;
-        for(var key in conditionList) {
-            //IE Browser consider the prototype properties also, it should consider has own properties only.
-            if(conditionList.hasOwnProperty(key)) {
-                var conditionValue = conditionList[key];
-                var conditionLabel = this.getConditionLabel(conditionValue);
-                if(match != null){
-                    if(conditionValue != 'has changed'){
-                        if(conditionValue.indexOf("hours since") !=-1){
-                            for(var key in picklistValues){
-                                var picklistvalue = conditionValue.replace(/%s/i, picklistValues[key]);
-                                options += '<option value="'+picklistvalue+'"';
-                                if(picklistvalue == conditionSelected){
-                                    options += ' selected="selected" ';
-                                }
-                                options += '>'+conditionValue.replace(/%s/i, key)+'</option>';
-                            }
-                        } else {
-                            options += '<option value="'+conditionValue+'"';
-                            if(conditionValue == conditionSelected){
-                                options += ' selected="selected" ';
-                            }
-                            options += '>'+conditionLabel+'</option>';
-                        }
-                    }
-                }else{
-                    if(conditionValue.indexOf("hours since %s") !=-1){
-                        for(var key in picklistValues){
-                            var picklistvalue = conditionValue.replace(/%s/i, picklistValues[key]);
-                            options += '<option value="'+picklistvalue+'"';
-                            if(picklistvalue == conditionSelected){
-                                options += ' selected="selected" ';
-                            }
-                            options += '>'+conditionValue.replace(/%s/i, key)+'</option>';
-                        }
-                    } else {
-                        options += '<option value="'+conditionValue+'"';
-                        if(conditionValue == conditionSelected){
-                            options += ' selected="selected" ';
-                        }
-                        options += '>'+conditionLabel+'</option>';
-                    }
-                }
-            }
-        }
-        return options;
-    },
-
     /**
 	 * Function to retrieve the values of the filter
 	 * @return : object
@@ -317,7 +265,7 @@ Vtiger_Field_Js('Workflows_Field_Js',{},{
 
 Workflows_Field_Js('Workflows_Text_Field_Js', {}, {
     getUi : function() {
-        var html = '<textarea class="getPopupUi" name="'+this.getName()+'" value="">'+this.getValue()+'</textarea>'+
+        var html = '<textarea class="getPopupUi textarea inputElement" name="'+this.getName()+'" value="">'+this.getValue()+'</textarea>'+
         '<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
         html = jQuery(html);
         return this.addValidationToElement(html);
@@ -342,7 +290,7 @@ Vtiger_Date_Field_Js('Workflows_Date_Field_Js',{},{
         var dateSpecificConditions = this.get('dateSpecificConditions');
         if(comparatorSelectedOptionVal.length > 0) {
             if(comparatorSelectedOptionVal == 'between' || comparatorSelectedOptionVal == 'custom'){
-                var html = '<div class="date"><input class="dateField" data-calendar-type="range" name="'+ this.getName() +'" data-date-format="'+ this.getDateFormat() +'" type="text" ReadOnly="true" value="'+  this.getValue() + '"></div>';
+                var html = '<div class="date"><input class="dateField inputElement" style="width:auto;" data-calendar-type="range" name="'+ this.getName() +'" data-date-format="'+ this.getDateFormat() +'" type="text" ReadOnly="true" value="'+  this.getValue() + '"></div>';
                 var element = jQuery(html);
                 return this.addValidationToElement(element);
             } else if(this._specialDateComparator(comparatorSelectedOptionVal)) {
@@ -393,12 +341,12 @@ Vtiger_Date_Field_Js('Workflows_Datetime_Field_Js',{},{
     getUi : function() {
         var comparatorSelectedOptionVal = this.get('comparatorElementVal');
         if(this._specialDateTimeComparator(comparatorSelectedOptionVal)) {
-            var html = '<input name="'+ this.getName() +'" type="text" value="'+this.getValue()+'" data-validator="[{name:PositiveNumber}]"><input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
+            var html = '<input name="'+ this.getName() +'" class="inputElement" type="text" value="'+this.getValue()+'" data-validator="[{name:PositiveNumber}]"><input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
             var element = jQuery(html);
         } else if(comparatorSelectedOptionVal == 'is today' || comparatorSelectedOptionVal == 'is tomorrow' || comparatorSelectedOptionVal == 'is yesterday') {
         // show nothing
         } else {
-            var html = '<input type="text" class="getPopupUi date" name="'+ this.getName() +'"  data-date-format="'+ this.getDateFormat() +'"  value="'+  this.getValue() + '" />'+
+            var html = '<input type="text" class="getPopupUi datetime inputElement" name="'+ this.getName() +'"  data-date-format="'+ this.getDateFormat() +'"  value="'+  this.getValue() + '" />'+
             '<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />'
             var element = jQuery(html);
         }
@@ -420,7 +368,7 @@ Vtiger_Date_Field_Js('Workflows_Datetime_Field_Js',{},{
 Vtiger_Currency_Field_Js('Workflows_Currency_Field_Js',{},{
 
     getUi : function() {
-        var html = '<input type="text" class="getPopupUi marginLeftZero inputElement" name="'+ this.getName() +'" value="'+  this.getValue() + '"  />'+
+        var html = '<input type="text" class="getPopupUi marginLeftZero currency inputElement" name="'+ this.getName() +'" value="'+  this.getValue() + '"  />'+
         '<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
         var element = jQuery(html);
         return this.addValidationToElement(element);
@@ -449,7 +397,7 @@ Vtiger_Field_Js('Vtiger_Percentage_Field_Js',{},{
 	 * @return - input percentage field
 	 */
     getUi : function() {
-        var html = '<input type="text" class="getPopupUi" name="'+ this.getName() +'" value="'+  this.getValue() + '" />'+
+        var html = '<input type="text" class="getPopupUi percent inputElement" name="'+ this.getName() +'" value="'+  this.getValue() + '" />'+
         '<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
         var element = jQuery(html);
         return this.addValidationToElement(element);
@@ -463,7 +411,7 @@ Vtiger_Field_Js('Vtiger_Text_Field_Js',{},{
 	 * @return - input text field
 	 */
     getUi : function() {
-        var html = '<input type="text" class="getPopupUi inputElement" name="'+ this.getName() +'" value="'+  this.getValue() + '" />'+
+        var html = '<input type="text" class="getPopupUi text inputElement" name="'+ this.getName() +'" value="'+  this.getValue() + '" />'+
         '<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
         var element = jQuery(html);
         return this.addValidationToElement(element);
@@ -487,7 +435,7 @@ Vtiger_Field_Js('Vtiger_Boolean_Field_Js',{},{
 Vtiger_Owner_Field_Js('Workflows_Owner_Field_Js',{},{
 
     getUi : function() {
-        var html = '<select class="col-lg-12 select2" name="'+ this.getName() +'">';
+        var html = '<select class="inputElement select2" name="'+ this.getName() +'">';
         html += '<option value="">&nbsp;</option>';
         var pickListValues = this.getPickListValues();
         var selectedOption = this.getValue();
@@ -545,11 +493,61 @@ Vtiger_Picklist_Field_Js('Workflows_Picklist_Field_Js',{},{
             var pickListValue = pickListValues[key];
             pickListValuesArrayFlip[pickListValue] = key;
         }
-        var html = '<input type="hidden" class="col-lg-12 select2" name="'+ this.getName() +'" id="'+ this.getName() +'">';
+        var html = '<input type="hidden" class="inputElement select2" name="'+ this.getName() +'" id="'+ this.getName() +'">';
         var selectContainer = jQuery(html).val(selectedOption);
-        selectContainer.data('tags', tagsArray).data('picklistvalues', pickListValuesArrayFlip).data('maximumSelectionSize', 1);
+        //SalesPlatform.ru begin
+        //selectContainer.data('tags', tagsArray).data('picklistvalues', pickListValuesArrayFlip).data('maximumSelectionSize', 1);
+        selectContainer.data('tags', tagsArray).data('picklistvalues', pickListValuesArrayFlip).data('maximumSelectionSize', 1).data('formatSelection', function (val) {
+            if(pickListValues.hasOwnProperty(val.id)) {
+                return pickListValues[val.id];
+            }
+            
+            return val.id;
+        });
+        //SalesPlatform.ru end
         selectContainer.data('placeholder', app.vtranslate('JS_PLEASE_SELECT_ATLEAST_ONE_OPTION')).data('closeOnSelect', true);
         this.addValidationToElement(selectContainer);
         return selectContainer;
     }
+});
+
+Vtiger_Multipicklist_Field_Js('Workflows_Multipicklist_Field_Js', {}, {
+
+	getUi : function () {
+		var selectedOptions = new Array();
+		var selectedRawOption = app.htmlDecode(this.getValue());
+		if (selectedRawOption) {
+			var selectedOptions = selectedRawOption.split(',');
+		}
+		var pickListValues = this.getPickListValues();
+
+		var tagsArray = new Array();
+		var pickListValuesArrayFlip = {};
+		var selectedOption = '';
+		jQuery.map(pickListValues, function (pickListValue, key) {
+			(jQuery.inArray(key, selectedOptions) !== -1);
+			if (jQuery.inArray(key, selectedOptions) !== -1) {
+				selectedOption += pickListValue+',';
+			}
+			tagsArray.push(pickListValue);
+			pickListValuesArrayFlip[pickListValue] = key;
+		})
+		selectedOption = selectedOption.substring(0,selectedOption.lastIndexOf(','));
+
+		var html = '<input type="hidden" class="col-lg-12 select2" name="'+this.getName()+'[]" id="'+this.getName()+'" data-fieldtype="multipicklist" >';
+		var selectContainer = jQuery(html).val(selectedOption);
+		//SalesPlatform.ru begin
+		//selectContainer.data('tags', tagsArray).data('picklistvalues', pickListValuesArrayFlip);
+		selectContainer.data('tags', tagsArray).data('picklistvalues', pickListValuesArrayFlip).data('formatSelection', function (val) {
+		    if(pickListValues.hasOwnProperty(val.id)) {
+		        return pickListValues[val.id];
+		    }
+		    
+		    return val.id;
+		});
+		//SalesPlatform.ru end
+		selectContainer.data('placeholder', app.vtranslate('JS_PLEASE_SELECT_ATLEAST_ONE_OPTION')).data('closeOnSelect', true);
+		this.addValidationToElement(selectContainer);
+		return selectContainer;
+	}
 });

@@ -32,9 +32,13 @@ class Settings_Vtiger_OutgoingServerSaveAjax_Action extends Settings_Vtiger_Basi
         $request->set('from_email_field', $from_email_field);
         // SalesPlatform.ru end
         try{
-            $id = $outgoingServerSettingsModel->save($request);
-            $data = $outgoingServerSettingsModel->getData();
-            $response->setResult($data);
+            if ($loadDefaultSettings == "true") {
+                $response->setResult('OK');
+            } else {
+                $id = $outgoingServerSettingsModel->save($request);
+                $data = $outgoingServerSettingsModel->getData();
+                $response->setResult($data);
+            }
         }catch(Exception $e) {
             $response->setError($e->getCode(), $e->getMessage());
         }

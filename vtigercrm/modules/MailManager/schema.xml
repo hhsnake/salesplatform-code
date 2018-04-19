@@ -28,6 +28,7 @@
   `mbodyparsed` int(1) DEFAULT NULL,
   `muid` int(11) DEFAULT NULL,
   `lastsavedtime` int(11) DEFAULT NULL,
+  `folder` varchar(250),
   KEY `userid_lastsavedtime_idx` (`userid`,`lastsavedtime`),
   KEY `userid_muid_idx` (`userid`,`muid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
@@ -41,7 +42,7 @@
   `lastsavedtime` int(11) DEFAULT NULL,
   `attachid` int(19) NOT NULL,
   `path` varchar(200) NOT NULL,
-  `cid` varchar(50) DEFAULT NULL,
+  `cid` varchar(100) DEFAULT NULL,
   KEY `userid_muid_idx` (`userid`,`muid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 		</table>

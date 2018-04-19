@@ -164,6 +164,14 @@ class HelpDesk_Module_Model extends Vtiger_Module_Model {
 			$nonAdminQuery = $this->getNonAdminAccessControlQueryForRelation($relatedModuleName);
 			if ($nonAdminQuery) {
 				$query = appendFromClauseToQuery($query, $nonAdminQuery);
+
+				if(trim($nonAdminQuery)) {
+					$relModuleFocus = CRMEntity::getInstance($relatedModuleName);
+					$condition = $relModuleFocus->buildWhereClauseConditionForCalendar();
+					if($condition) {
+						$query .= ' AND '.$condition;
+					}
+				}
 			}
 		} else {
 			$query = parent::getRelationQuery($recordId, $functionName, $relatedModule, $relationId);
@@ -186,10 +194,7 @@ class HelpDesk_Module_Model extends Vtiger_Module_Model {
 			$pos = stripos($listQuery, 'where');
 
 			if ($pos) {
-                //SalesPlatform.ru begin
-				//$split = spliti('where', $listQuery);
-                $split = preg_split('/where/i', $listQuery);
-                //SalesPlatform.ru end
+				$split = preg_split('/where/i', $listQuery);
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
 			} else {
 				$overRideQuery = $listQuery . ' WHERE ' . $condition;

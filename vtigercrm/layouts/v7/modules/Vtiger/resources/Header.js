@@ -29,7 +29,12 @@ jQuery.Class("Vtiger_Header_Js", {
                 record : recordId
             };
             app.request.post({"data":params}).then(function(err,data){
-                app.helper.showModal(data);
+                //SalesPlatform.ru begin workaround with no preview of document after load
+                //app.helper.showModal(data);
+                app.helper.showModal(data, { 
+                    cb : function() {}
+                });
+                //SalesPlatform.ru end
             });
         } else {
             var win = window.open(fileName, '_blank');

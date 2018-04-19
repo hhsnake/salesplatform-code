@@ -20,7 +20,7 @@ Vtiger.Class('Vtiger_Index_Js', {
 	 * @param {type} recordId
 	 * @returns {undefined}
 	 */
-	previewFile: function (e, recordId,attachmentId) {
+	previewFile: function (e, recordId, attachmentId) {
 		e.stopPropagation();
 		if (recordId) {
 			var params = {
@@ -29,9 +29,14 @@ Vtiger.Class('Vtiger_Index_Js', {
 				record: recordId,
 				attachmentid: attachmentId
 			};
-			app.request.post({data:params}).then(function(err, res){
-				app.helper.showModal(res);
-				jQuery('.filePreview .preview-area').height(jQuery(window).height()-143);
+			var modalParams = {
+				cb: function (modalContainer) {
+					modalContainer.find('.viewer').zoomer();
+				},
+				'ignoreScroll' : true
+			};
+			app.request.post({data: params}).then(function (err, res) {
+				app.helper.showModal(res, modalParams);
 			});
 		}
 	},
@@ -102,7 +107,7 @@ Vtiger.Class('Vtiger_Index_Js', {
 						if(prefsNeedToUpdate && length > 1) {
 							app.helper.hideProgress();
 							app.helper.showModal(data);
-							emailEditInstance.registerEmailFieldSelectionEvent();
+							emailEditInstance.registerEmailFieldSelectionEvent(cb);
 							return true;
 						}
 
@@ -118,7 +123,7 @@ Vtiger.Class('Vtiger_Index_Js', {
 							}else {
 								app.helper.hideProgress();
 								app.helper.showModal(data);
-								emailEditInstance.registerEmailFieldSelectionEvent();
+								emailEditInstance.registerEmailFieldSelectionEvent(cb);
 							}
 						}else{
 							emailFields.attr('checked','checked');
@@ -406,11 +411,14 @@ Vtiger.Class('Vtiger_Index_Js', {
 		this.registerMultiUpload();
 		this.registerHoverEventOnAttachment();
 		//this.addBodyScroll();
-		this.mentionerCallBack();
 		this.modulesMenuScrollbar();
+		this.modulesMenuClearIconTitle();
 		Vtiger_Index_Js.registerActivityReminder();
 		//reference preview event registeration
 		this.registerReferencePreviewEvent();
+		this.registerEventForPostSaveFail();
+
+		vtUtils.enableTooltips();
 	},
 
 	addBodyScroll: function () {
@@ -490,6 +498,12 @@ Vtiger.Class('Vtiger_Index_Js', {
 	 * @param accepts form element as parameter
 	 */
 	quickCreateGoToFullForm: function(form, editViewUrl) {
+        //SalesPlatform.ru begin
+        var spCkEditorElements = jQuery("#QuickCreate").find('.sp_cke_field');
+        if (spCkEditorElements.length > 0) {
+            this.CKUpdateElements();
+        } 
+        //SalesPlatform.ru end
 		var formData = form.serializeFormData();
 		//As formData contains information about both view and action removed action and directed to view
 		delete formData.module;
@@ -541,6 +555,12 @@ Vtiger.Class('Vtiger_Index_Js', {
 						app.event.trigger('post.QuickCreateForm.show',form);
 						app.helper.registerLeavePageWithoutSubmit(form);
 						app.helper.registerModalDismissWithoutSubmit(form);
+                                            // SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+                                            var spCkEditorElements = jQuery("#QuickCreate").find('.sp_cke_field');
+                                            if (spCkEditorElements.length > 0) {
+                                                thisInstance.loadCkEditorFieldsQuickCreateView(spCkEditorElements);
+                                            }
+                                            // SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
 					},
 					backdrop : 'static',
 					keyboard : false
@@ -549,7 +569,12 @@ Vtiger.Class('Vtiger_Index_Js', {
 				app.helper.showModal(data, callbackparams);
 				var form = jQuery('form[name="QuickCreate"]');
 				var moduleName = form.find('[name="module"]').val();
-				app.helper.showVerticalScroll(jQuery('form[name="QuickCreate"] .modal-body'), {'autoHideScrollbar': true});
+                //SalesPlatform.ru begin
+                if (jQuery('form[name="QuickCreate"] .modal-body .quickCreateContent .calendarQuickCreateContent').length === 0) {
+                    app.helper.showVerticalScroll(jQuery('form[name="QuickCreate"] .modal-body'), {'autoHideScrollbar': true});
+                }
+                // app.helper.showVerticalScroll(jQuery('form[name="QuickCreate"] .modal-body'), {'autoHideScrollbar': true});
+                //SalesPlatform.ru end
 
 				var targetInstance = thisInstance;
 				var moduleInstance = Vtiger_Edit_Js.getInstanceByModuleName(moduleName);
@@ -560,7 +585,6 @@ Vtiger.Class('Vtiger_Index_Js', {
 
 				vtUtils.applyFieldElementsView(form);
 				targetInstance.quickCreateSave(form,params);
-				app.helper.hideProgress();
 			});
 		});
 	},
@@ -624,6 +648,9 @@ Vtiger.Class('Vtiger_Index_Js', {
 	 * @returns {undefined}
 	 */
 	quickCreateSave : function(form,invokeParams){
+            // SalesPlatform.ru begin
+            var thisInstance = this;
+            // SalesPlatform.ru end
 		var params = {
 			submitHandler: function(form) {
 				// to Prevent submit if already submitted
@@ -631,20 +658,43 @@ Vtiger.Class('Vtiger_Index_Js', {
 				if(this.numberOfInvalids() > 0) {
 					return false;
 				}
+                                
+                                // SalesPlatform.ru begin
+                                // need to update all CKE elements before send form
+                                var spCkEditorElements = jQuery("#QuickCreate").find('.sp_cke_field');
+                                if (spCkEditorElements.length > 0) {
+                                    thisInstance.CKUpdateElements();
+                                } 
+                                // SalesPlatform.ru end
+                                
 				var formData = jQuery(form).serialize();
+                            // SalesPlatform.ru begin CheckBeforeSave
+                            sp_js_quickcreate_checkBeforeSave(jQuery(form).serializeFormData()).then(function () {
+                            // SalesPlatform.ru end CheckBeforeSave
 				app.request.post({data:formData}).then(function(err,data){
-					app.event.trigger("post.QuickCreateForm.save",data,jQuery(form).serializeFormData());
+					app.helper.hideProgress();
 					if(err === null) {
+						jQuery('.vt-notification').remove();
+						app.event.trigger("post.QuickCreateForm.save",data,jQuery(form).serializeFormData());
 						app.helper.hideModal();
-						app.helper.showSuccessNotification({"message":''});
+                                                // SalesPlatform.ru begin
+                                                var serializedFormData = jQuery(form).serializeFormData();
+						//var message = typeof formData.record !== 'undefined' ? app.vtranslate('JS_RECORD_UPDATED'):app.vtranslate('JS_RECORD_CREATED');
+						var message = serializedFormData.record ? app.vtranslate('JS_RECORD_UPDATED'):app.vtranslate('JS_RECORD_CREATED');
+                                                // SalesPlatform.ru end
+						app.helper.showSuccessNotification({"message":message},{delay:4000});
 						invokeParams.callbackFunction(data, err);
 						//To unregister onbefore unload event registered for quickcreate
 						window.onbeforeunload = null;
 					}else{
-						app.helper.showErrorNotification({"message":err});
+						app.event.trigger('post.save.failed', err);
+						jQuery("button[name='saveButton']").removeAttr('disabled');
 					}
 				});
-			},
+                            // SalesPlatform.ru begin CheckBeforeSave
+			    });
+                            // SalesPlatform.ru end CheckBeforeSave
+                        },
 			validationMeta: quickcreate_uimeta
 		};
 		form.vtValidate(params);
@@ -810,12 +860,7 @@ Vtiger.Class('Vtiger_Index_Js', {
 	 */
 	registerAutoCompleteFields : function(container) {
 		var thisInstance = this;
-                //SalesPlatform.ru begin
-		//container.find('input.autoComplete').autocomplete({
-            $('body').on("keydown.autocomplete",".autoComplete",function(e){
-                $(this).autocomplete({
-                //SalesPlatform.ru end
-
+		container.find('input.autoComplete').autocomplete({
 			'minLength' : '3',
 			'source' : function(request, response){
 				//element will be array of dom elements
@@ -839,7 +884,10 @@ Vtiger.Class('Vtiger_Index_Js', {
                                                 //SalesPlatform.ru end
 								jQuery(inputElement).val('');
 								serverDataFormat = new Array({
-										'label' : 'No Results Found',
+                                                                    // SalesPlatform.ru begin
+										//'label' : 'No Results Found',
+                                                                    'label' : app.vtranslate('No Results Found'),
+                                                                    // SalesPlatform.ru end
 										'type'	: 'no results'
 								});
 						}
@@ -896,11 +944,8 @@ Vtiger.Class('Vtiger_Index_Js', {
 				sourceField.trigger(Vtiger_Edit_Js.referenceSelectionEvent,selectedItemData);
 				//trigger post reference selection
 				sourceField.trigger(Vtiger_Edit_Js.postReferenceSelectionEvent,{'data':selectedItemData});
-			},
-                //SalesPlatform.ru begin
-		});});
-		//});
-                //SalesPlatform.ru end
+			}
+		});
 	},
 
 	/**
@@ -908,11 +953,8 @@ Vtiger.Class('Vtiger_Index_Js', {
 	 * @param <jQUery> container
 	 */
 	registerClearReferenceSelectionEvent : function(container) {
-            //SalesPlatform.ru begin
-		//container.off('click', 'clearReferenceSelection');
-		//container.on('click', 'clearReferenceSelection',function(e){
-            container.find('.clearReferenceSelection').on('click', function(e){
-            //SalesPlatform.ru end
+		container.off('click', '.clearReferenceSelection');
+		container.on('click', '.clearReferenceSelection',function(e){
 			e.preventDefault();
 			var element = jQuery(e.currentTarget);
 			var parentTdElement = element.closest('td');
@@ -1363,16 +1405,9 @@ Vtiger.Class('Vtiger_Index_Js', {
 		app.helper.showVerticalScroll(jQuery("#modnavigator #modules-menu"),{autoHideScrollbar:true});
 	},
 
-	mentionerCallBack: function() {
-		jQuery(document).on('textComplete:select', '.mention_listener', function(e, word, strategy) {
-			//First charecter is " " if user mentioned in the begining
-			//Removing it here
-			var value = $(e.currentTarget).val();
-			value = app.getDecodedValue(value);
-			if(value.charAt(0) === ' ') value = value.substr(1);
-			$(e.currentTarget).val(value);
-			Vtiger_Index_Js.hideNC = false;
-		});
+	modulesMenuClearIconTitle: function() {
+		jQuery('#modules-menu i').removeAttr('title');
+		jQuery('#modules-menu .custom-module').removeAttr('title');
 	},
 
 	registerChangeTemplateEvent: function (container, recordId) {
@@ -1672,6 +1707,25 @@ Vtiger.Class('Vtiger_Index_Js', {
 		);
 	},
 
+	/**
+	 * Function to show duplication notification
+	 */
+	registerEventForPostSaveFail : function() {
+		app.event.on('post.save.failed', function (e, err) {
+			jQuery('.vt-notification').remove();
+			var options = {
+				message: err.message
+			};
+			if (err.title) {
+				options['title'] = err.title;
+			}
+			var settings = {
+				'delay': 0
+			};
+			app.helper.showErrorNotification(options, settings);
+		});
+	},
+
 	postRefrenceSearch: function(resultData, container){
 		var thisInstance = this;
 		var module;
@@ -1698,5 +1752,101 @@ Vtiger.Class('Vtiger_Index_Js', {
 				thisInstance.postRefrenceComplete(data, container);
 			}
 		});
-	}
-});        
+            // SalesPlatform.ru begin initializing the field with uitype 19 with the CKEditor editor
+            //}
+            },
+            
+            loadCkEditorFieldsQuickCreateView : function(noteContentElement) {
+                jQuery(noteContentElement).each(function(index, element){
+                    jQuery(element).removeAttr('data-validation-engine').addClass('ckEditorSource');
+                    var ckEditorInstance = new Vtiger_CkEditor_Js();
+                    ckEditorInstance.loadCkEditor(jQuery(element));
+                });
+            },
+            
+            CKUpdateElements : function() {
+                for (var instance in CKEDITOR.instances)
+                    CKEDITOR.instances[instance].updateElement();
+            }
+        //SalesPlatform.ru end initializing the field with uitype 19 with the CKEditor editor
+            });
+        
+// SalesPlatform.ru begin
+/**
+ * Quick create check before save implementation
+ * @param fieldData
+ * @returns {*}
+ */
+function sp_js_quickcreate_checkBeforeSave(fieldData) {
+
+    var data = {
+        module : fieldData['module'],
+        action : 'CheckBeforeSave',
+        checkBeforeSaveData : fieldData,
+        quickCreateMode : true
+    };
+
+    var checkResult = jQuery.Deferred();
+    app.request.post({'data': data}).then(
+            function (error, responseObj) {
+                // if checkBeforeSave handler exists, var error is empty, else - its not empty
+                if (empty(error) && !empty(responseObj)) {
+                    responseObj = JSON.parse(responseObj);
+
+                    if (responseObj.response === "OK") {
+                        if (responseObj.message !== undefined && !empty(responseObj.message)) {
+                            app.helper.showAlertBox({'message': responseObj.message}).then(
+                                    function (e) {
+                                    },
+                                    function (error) {
+                                        checkResult.resolve();
+                                    });
+                        } else {
+                            checkResult.resolve();
+                        }
+                    } else if (responseObj.response === "ALERT") {
+                        var alertMessage;
+                        if (responseObj.message !== undefined) {
+                            alertMessage = responseObj.message;
+                        } else {
+                            alertMessage = 'Alert';
+                        }
+                        app.helper.showAlertBox({'message': alertMessage}).then(
+                                function (e) {
+                                    },
+                                function (error) {
+                                    jQuery("button[name='saveButton']").removeAttr("disabled");
+                                    checkResult.reject();
+                                }
+                        );
+                        checkResult.reject();
+                    } else if (responseObj.response === "CONFIRM") {
+                        var confirmMessage;
+                        if (responseObj.message !== undefined) {
+                            confirmMessage = responseObj.message;
+                        } else {
+                            confirmMessage = 'Confirm';
+                        }
+                        app.helper.showConfirmationBox({'message': confirmMessage}).then(
+                                function (e) {
+                                    checkResult.resolve();
+                                },
+                                function (error) {
+                                    jQuery("button[name='saveButton']").removeAttr("disabled");
+                                    checkResult.reject();
+                                }
+                        );
+                    } else {
+                        checkResult.resolve();
+                    }
+                } else {
+                    checkResult.resolve();
+                }
+            },
+            function (error) {
+                checkResult.resolve();
+            }
+        );
+    return checkResult;
+}
+// SalesPlatform.ru end

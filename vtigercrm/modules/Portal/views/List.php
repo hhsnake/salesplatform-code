@@ -100,8 +100,10 @@ class Portal_List_View extends Vtiger_Index_View {
 		}
 
 		$viewer->assign('PAGE_NUMBER',$pageNumber);
-		$listviewEntries = $listViewModel->getListViewEntries($pagingModel);
-		$pagingModel->calculatePageRange($listviewEntries);
+        //SalesPlatform.ru begin
+		//$listviewEntries = $listViewModel->getListViewEntries($pagingModel);
+		//$pagingModel->calculatePageRange($listviewEntries);
+        //SalesPlatform.ru end
 
 		$viewer->assign('LISTVIEW_ENTRIES', $listviewEntries);
 		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
@@ -114,7 +116,9 @@ class Portal_List_View extends Vtiger_Index_View {
 		$viewer->assign('CURRENT_PAGE', $pageNumber);
 		$viewer->assign('PAGING_INFO', $listViewModel->calculatePageRange($listviewEntries, $pagingModel));
 		$viewer->assign('FASORT_IMAGE',$faSortImage);
-		$viewer->assign('PAGING_MODEL', $pagingModel);
+        //SalesPlatform.ru begin
+		//$viewer->assign('PAGING_MODEL', $pagingModel);
+        //SalesPlatform.ru end
 		$viewer->assign('PAGING_MODEL', $pagingModel);
 		$viewer->assign('PAGE_NUMBER', $pagingModel->get('page'));
 		$viewer->assign('NO_OF_ENTRIES', count($listviewEntries));

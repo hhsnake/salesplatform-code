@@ -13,7 +13,7 @@ Vtiger_Index_Js("Vtiger_Edit_Js",{
     
     editInstance : false,
     
-    recordPresaveEvent : "Pre.Record.Save", 
+    recordPresaveEvent : "Pre.Record.Save",
     
     preReferencePopUpOpenEvent : "Vtiger.Referece.Popup.Pre",
     
@@ -146,9 +146,9 @@ Vtiger_Index_Js("Vtiger_Edit_Js",{
         var spFlagCheckBeforeSave = false;
         this.formValidatorInstance = editViewForm.vtValidate({
             submitHandler : function() {
-                if (spFlagCheckBeforeSave)
+                if (spFlagCheckBeforeSave) {
                     return true;
-                
+                }
                 var e = jQuery.Event(Vtiger_Edit_Js.recordPresaveEvent);
                 app.event.trigger(e);
                 // JS validation
@@ -191,6 +191,7 @@ Vtiger_Index_Js("Vtiger_Edit_Js",{
             }
         });
     },
+    //registerValidation : function () {
     //SalesPlatform.ru end porting CheckBeforeSave
 
     /**
@@ -583,7 +584,6 @@ function empty (mixed_var) {
 
 function sp_js_editview_checkBeforeSave(module, thisForm, mode) {    
     var values = thisForm.serializeFormData();
-    var data = encodeURIComponent(JSON.stringify(values));
     var createMode;
     if(mode == 'edit') {
         createMode = 'edit';
@@ -591,22 +591,26 @@ function sp_js_editview_checkBeforeSave(module, thisForm, mode) {
         createMode = 'create';
     }
     
-    var urlstring = "index.php?module="+module+"&action=CheckBeforeSave&EditViewAjaxMode=true&CreateMode="+createMode;
-    if (typeof values['record'] != 'undefined') {
-        urlstring += "&record="+values['record'];
-    }
+    var data = {
+        module : module,
+        action : 'CheckBeforeSave',
+        checkBeforeSaveData : values,
+        editViewAjaxMode : true,
+        createMode : createMode,
+        record : values['record']
+    };
     
     var checkResult = jQuery.Deferred();
     //Disable twice check before save
     if (typeof thisForm.data('isNeedCheckBeforeSave') != 'undefined' && !thisForm.data('isNeedCheckBeforeSave')) {
         checkResult.resolve();
     } else {
-        app.request.post({'data': data, 'url': urlstring}).then(
+        app.request.post({'data': data}).then(
                 function (error, responseObj) {
-                    if (!empty(responseObj)) {
-                        if (responseObj.response === undefined) {
-                            responseObj = JSON.parse(responseObj);
-                        }
+                // if checkBeforeSave handler exists, var error is empty, else - its not empty
+                    if (empty(error) && !empty(responseObj)) {
+                        responseObj = JSON.parse(responseObj);
+                        
                         if (responseObj.response === "OK") {
                             if (responseObj.message !== undefined && !empty(responseObj.message)) {
                                 app.helper.showAlertBox({'message': responseObj.message}).then(

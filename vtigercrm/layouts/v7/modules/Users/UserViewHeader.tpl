@@ -27,7 +27,10 @@
                         {if $NOIMAGE eq 1}
                             <div class="name">
                                 <span style="font-size:24px;">
-                                    <strong> {$RECORD->getName()|substr:0:2} </strong>
+                                    {* SalesPlatform.ru begin *}
+                                    {* <strong> {$RECORD->getName()|substr:0:2} </strong> *}
+                                    <strong> {$RECORD->getName()|mb_substr:0:2} </strong>
+                                    {* SalesPlatform.ru end *}
                                 </span>
                             </div>
                         {/if}
@@ -36,7 +39,7 @@
                         {$RECORD->getName()}
                     </span>
                 </div>
-                <div class="pull-right col-md-7">
+                <div class="pull-right col-md-7 detailViewButtoncontainer">
                     <div class="btn-group pull-right">
                         {foreach item=DETAIL_VIEW_BASIC_LINK from=$DETAILVIEW_LINKS['DETAILVIEWBASIC']}
                             <button class="btn btn-default {if $DETAIL_VIEW_BASIC_LINK->getLabel() eq 'LBL_EDIT'}{/if}" id="{$MODULE}_detailView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($DETAIL_VIEW_BASIC_LINK->getLabel())}"

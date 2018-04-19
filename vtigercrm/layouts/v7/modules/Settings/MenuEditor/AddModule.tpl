@@ -41,9 +41,10 @@
 							{else}
 								<h5>
 									<center>
-                                        {*SalesPaltform.ru begin*}
+                                        					{*SalesPaltform.ru begin*}
+										{* {vtranslate('LBL_NO', $QUALIFIED_MODULE)} {vtranslate('LBL_MODULES', $QUALIFIED_MODULE)} {vtranslate('LBL_FOUND', $QUALIFIED_MODULE)}.</h4> *}
 										{vtranslate('LBL_NO_FOUND_MODULES', $QUALIFIED_MODULE)}.
-                                        {*SalesPaltform.ru end*}
+                                        					{*SalesPaltform.ru end*}
 									</center>
 								</h5>
 							{/if}

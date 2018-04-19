@@ -86,17 +86,17 @@
 							<input type="hidden" id="lineItemType{$row_no}" name="lineItemType{$row_no}" value="{$entityType}" class="lineItemType"/>
 							<div class="col-lg-2">
 								{if $row_no eq 0}
-									<i class="lineItemPopup cursorPointer vicon-services" data-popup="ServicesPopup" title="{vtranslate('Services',$MODULE)}" data-module-name="Services" data-field-name="serviceid"></i>
-									<i class="lineItemPopup cursorPointer vicon-products" data-popup="ProductsPopup" title="{vtranslate('Products',$MODULE)}" data-module-name="Products" data-field-name="productid"></i>
+									<span class="lineItemPopup cursorPointer" data-popup="ServicesPopup" title="{vtranslate('Services',$MODULE)}" data-module-name="Services" data-field-name="serviceid">{Vtiger_Module_Model::getModuleIconPath('Services')}</span>
+									<span class="lineItemPopup cursorPointer" data-popup="ProductsPopup" title="{vtranslate('Products',$MODULE)}" data-module-name="Products" data-field-name="productid">{Vtiger_Module_Model::getModuleIconPath('Products')}</span>
 								{elseif $entityType eq '' and $PRODUCT_ACTIVE eq 'true'}
-									<i class="lineItemPopup cursorPointer vicon-products" data-popup="ProductsPopup" data-module-name="Products" title="{vtranslate('Products',$MODULE)}" data-field-name="productid"></i>
+									<span class="lineItemPopup cursorPointer" data-popup="ProductsPopup" title="{vtranslate('Products',$MODULE)}" data-module-name="Products" data-field-name="productid">{Vtiger_Module_Model::getModuleIconPath('Products')}</span>
 								{elseif $entityType eq '' and $SERVICE_ACTIVE eq 'true'}
-									<i class="lineItemPopup cursorPointer vicon-services" data-popup="ServicesPopup" data-module-name="Services" title="{vtranslate('Services',$MODULE)}" data-field-name="serviceid" ></i>
+									<span class="lineItemPopup cursorPointer" data-popup="ServicesPopup" title="{vtranslate('Services',$MODULE)}" data-module-name="Services" data-field-name="serviceid">{Vtiger_Module_Model::getModuleIconPath('Services')}</span>
 								{else}
 									{if ($entityType eq 'Services') and (!$data.$productDeleted)}
-										<i class="lineItemPopup cursorPointer vicon-services" data-popup="ServicesPopup" data-module-name="Services" title="{vtranslate('Services',$MODULE)}" data-field-name="serviceid" ></i>
+										<span class="lineItemPopup cursorPointer" data-popup="ServicesPopup" title="{vtranslate('Services',$MODULE)}" data-module-name="Services" data-field-name="serviceid">{Vtiger_Module_Model::getModuleIconPath('Services')}</span>
 									{elseif (!$data.$productDeleted)}
-										<i class="lineItemPopup cursorPointer vicon-products" data-popup="ProductsPopup" data-module-name="Products" title="{vtranslate('Products',$MODULE)}" data-field-name="productid" ></i>
+										<span class="lineItemPopup cursorPointer" data-popup="ProductsPopup" title="{vtranslate('Products',$MODULE)}" data-module-name="Products" data-field-name="productid">{Vtiger_Module_Model::getModuleIconPath('Products')}</span>
 									{/if}
 								{/if}
 							</div>
@@ -172,7 +172,7 @@
 				&nbsp;
 				{assign var=PRICEBOOK_MODULE_MODEL value=Vtiger_Module_Model::getInstance('PriceBooks')}
 				{if $PRICEBOOK_MODULE_MODEL->isPermitted('DetailView') && $MODULE != 'PurchaseOrder'}
-					<i class="priceBookPopup cursorPointer vicon-pricebooks" data-popup="Popup" data-module-name="PriceBooks" style="float:left"></i>
+					<span class="priceBookPopup cursorPointer" data-popup="Popup"  title="{vtranslate('PriceBooks', $MODULE)}" data-module-name="PriceBooks" style="float:left">{Vtiger_Module_Model::getModuleIconPath('PriceBooks')}</span>
 				{/if}
 			</div>
 			<div style="clear:both"></div>
@@ -271,11 +271,17 @@
 									<tr>
 										<td>&nbsp;&nbsp;{$tax_data.taxlabel}</td>
 										<td style="text-align: right;">
-											<input type="text" data-rule-positive=true data-rule-inventory_percentage=true  name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" data-compound-on="{if $tax_data.method eq 'Compound'}{Vtiger_Util_Helper::toSafeHTML(Zend_Json::encode($tax_data.compoundon))}{/if}" data-regions-list="{Vtiger_Util_Helper::toSafeHTML(Zend_Json::encode($tax_data.regionsList))}" class="span1 taxPercentage" />&nbsp;%
-										</td>
+                                            {* SalesPlatform.ru begin *}
+											{* <input type="text" data-rule-positive=true data-rule-inventory_percentage=true  name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" data-compound-on="{if $tax_data.method eq 'Compound'}{Vtiger_Util_Helper::toSafeHTML(Zend_Json::encode($tax_data.compoundon))}{/if}" data-regions-list="{Vtiger_Util_Helper::toSafeHTML(Zend_Json::encode($tax_data.regionsList))}" class="span1 taxPercentage" />&nbsp;% *}
+                                            <input style="width: 100px; border-radius: 1px; box-shadow: none; border: 1px solid #cccccc; padding: 2px 6px;" type="text" data-rule-positive=true data-rule-inventory_percentage=true  name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" data-compound-on="{if $tax_data.method eq 'Compound'}{Vtiger_Util_Helper::toSafeHTML(Zend_Json::encode($tax_data.compoundon))}{/if}" data-regions-list="{Vtiger_Util_Helper::toSafeHTML(Zend_Json::encode($tax_data.regionsList))}" class="span1 taxPercentage" />&nbsp;%
+                                            {* SalesPlatform.ru end *}
+                                        </td>
 										<td style="text-align: right; padding-right: 10px;">
-											<input type="text" name="{$popup_tax_rowname}" class="cursorPointer span1 taxTotal taxTotal{$tax_data.taxid}" value="{$tax_data.amount}" readonly />
-										</td>
+                                            {* SalesPlatform.ru begin *}
+											{* <input type="text" name="{$popup_tax_rowname}" class="cursorPointer span1 taxTotal taxTotal{$tax_data.taxid}" value="{$tax_data.amount}" readonly /> *}
+                                            <input style="width: 100px; border-radius: 1px; box-shadow: none; border: 1px solid #cccccc; padding: 2px 6px;" type="text" name="{$popup_tax_rowname}" class="cursorPointer span1 taxTotal taxTotal{$tax_data.taxid}" value="{$tax_data.amount}" readonly />
+                                            {* SalesPlatform.ru end *}
+                                        </td>
 									</tr>
                                                                     {* SalesPlatform.ru begin *}
                                                                     {/if}

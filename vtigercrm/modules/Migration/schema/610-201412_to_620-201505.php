@@ -15,10 +15,10 @@ include_once 'modules/com_vtiger_workflow/VTWorkflowManager.inc';
 include_once 'include/utils/utils.php';
 
 if(defined('VTIGER_UPGRADE')) {
-    updateVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
+     updateVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
 }
 if(defined('INSTALLATION_MODE')) {
-    // Set of task to be taken care while specifically in installation mode.
+		// Set of task to be taken care while specifically in installation mode.
 }
 
 // SalesPlatform.ru begin
@@ -132,30 +132,30 @@ $updateQuery = "UPDATE vtiger_field SET uitype = 52 WHERE fieldname = 'created_u
 Migration_Index_View::ExecuteQuery($updateQuery,array());
 
 /*141*/
-//registering handlers for Google sync
+//registering handlers for Google sync 
 require_once 'includes/main/WebUI.php';
-require_once 'modules/WSAPP/Utils.php';
+require_once 'modules/WSAPP/Utils.php'; 
 require_once 'modules/Google/connectors/Config.php';
-wsapp_RegisterHandler('Google_vtigerHandler', 'Google_Vtiger_Handler', 'modules/Google/handlers/Vtiger.php');
-wsapp_RegisterHandler('Google_vtigerSyncHandler', 'Google_VtigerSync_Handler', 'modules/Google/handlers/VtigerSync.php');
+wsapp_RegisterHandler('Google_vtigerHandler', 'Google_Vtiger_Handler', 'modules/Google/handlers/Vtiger.php'); 
+wsapp_RegisterHandler('Google_vtigerSyncHandler', 'Google_VtigerSync_Handler', 'modules/Google/handlers/VtigerSync.php'); 
 
-//updating Google Sync Handler names
+//updating Google Sync Handler names 
 $db = PearDatabase::getInstance();
-$names = array('Vtiger_GoogleContacts', 'Vtiger_GoogleCalendar');
-$result = $db->pquery("SELECT stateencodedvalues FROM vtiger_wsapp_sync_state WHERE name IN (".  generateQuestionMarks($names).")", array($names));
-$resultRows = $db->num_rows($result);
-$appKey = array();
-for($i=0; $i<$resultRows; $i++) {
-    $stateValuesJson = $db->query_result($result, $i, 'stateencodedvalues');
-    $stateValues = Zend_Json::decode(decode_html($stateValuesJson));
-    $appKey[] = $stateValues['synctrackerid'];
+$names = array('Vtiger_GoogleContacts', 'Vtiger_GoogleCalendar'); 
+$result = $db->pquery("SELECT stateencodedvalues FROM vtiger_wsapp_sync_state WHERE name IN (".  generateQuestionMarks($names).")", array($names)); 
+$resultRows = $db->num_rows($result); 
+$appKey = array(); 
+for($i=0; $i<$resultRows; $i++) { 
+        $stateValuesJson = $db->query_result($result, $i, 'stateencodedvalues'); 
+        $stateValues = Zend_Json::decode(decode_html($stateValuesJson)); 
+        $appKey[] = $stateValues['synctrackerid']; 
 }
 
-if(!empty($appKey)) {
-    $sql = 'UPDATE vtiger_wsapp SET name = ? WHERE appkey IN ('.  generateQuestionMarks($appKey).')';
-    $res = Migration_Index_View::ExecuteQuery($sql, array('Google_vtigerSyncHandler', $appKey));
+if(!empty($appKey)) { 
+    $sql = 'UPDATE vtiger_wsapp SET name = ? WHERE appkey IN ('.  generateQuestionMarks($appKey).')'; 
+    $res = Migration_Index_View::ExecuteQuery($sql, array('Google_vtigerSyncHandler', $appKey)); 
 }
-
+        
 //Ends 141
 
 //Google Calendar sync changes
@@ -167,12 +167,12 @@ global $adb;
 
 if(!Vtiger_Utils::CheckTable('vtiger_google_oauth2')) {
     Vtiger_Utils::CreateTable('vtiger_google_oauth2',
-        '(service varchar(20),access_token varchar(500),refresh_token varchar(500),userid int(19))',true);
+            '(service varchar(20),access_token varchar(500),refresh_token varchar(500),userid int(19))',true);
     echo '<br> vtiger_google_oauth2 table created <br>';
 }
 
 //(start)Migrating GoogleCalendar ClientIds in wsapp_recordmapping to support v3
-
+            
 $syncTrackerIds = array();
 
 if(Vtiger_Utils::CheckTable('vtiger_wsapp_sync_state')) {
@@ -235,12 +235,12 @@ if(count($appIds)) {
 
 }
 //(end)
-
+            
 //Google Calendar sync changes ends here
 
 //Google migration : Create Sync setting table
-$sql = 'CREATE TABLE vtiger_google_sync_settings (user int(11) DEFAULT NULL,
-    module varchar(50) DEFAULT NULL , clientgroup varchar(255) DEFAULT NULL,
+$sql = 'CREATE TABLE vtiger_google_sync_settings (user int(11) DEFAULT NULL, 
+    module varchar(50) DEFAULT NULL , clientgroup varchar(255) DEFAULT NULL, 
     direction varchar(50) DEFAULT NULL)';
 $db->pquery($sql,array());
 $sql = 'CREATE TABLE vtiger_google_sync_fieldmapping ( vtiger_field varchar(255) DEFAULT NULL,

@@ -26,6 +26,10 @@ $languageStrings = array(
     'LBL_BOOKMARK' => 'Закладка',
     'LBL_BOOKMARKS' => 'Закладки',
     'HTTP_ERROR' => 'Сайт, который вы пытаетесь открыть не является безопасным. Если вы хотите просмотреть веб-страницу, то необходимо нажать на блокатор содержимого в адресной строке и включить его.',
+    // SalesPlatform.ru begin
+    'List' => 'Список',
+    'Detail' => 'Подробно',
+    // SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(

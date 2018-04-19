@@ -128,8 +128,12 @@ $languageStrings = array(
     'LBL_ACTIVITY_NOTIFICATION' => 'Это уведомление о том, что вам назначено действие',
     'LBL_ACTIVITY_INVITATION' => 'Вы были приглашены для деятельности',
     'LBL_DETAILS_STRING' => 'С подробностями',
-    'LBL_CREATED' => 'созданный',
-    'LBL_UPDATED' => 'обновленный',
+    // SalesPlatform.ru begin
+    //'LBL_CREATED' => 'созданный',
+    //'LBL_UPDATED' => 'обновленный',
+    'LBL_CREATED' => 'создано',
+    'LBL_UPDATED' => 'обновлено',
+    // SalesPlatform.ru end
     'Priority' => 'Приоритет',
     'Related To' => 'В связи с',
     'LBL_CONTACT_LIST' => 'Список контактов',
@@ -154,7 +158,10 @@ $languageStrings = array(
     'LBL_REMINDER_NOTIFICATION' => 'Это напоминание для мероприятия',
     'LBL_SELECT_EVENT_TYPE' => 'Вид деятельности',
     'LBL_THIS_WEEK' => 'На этой неделе',
-    'LBL_ADD_TASK_AND_PRESS_ENTER' => 'Добавить задачу и нажмите Enter',
+    // SalesPlatform.ru begin
+    //'LBL_ADD_TASK_AND_PRESS_ENTER' => 'Добавить задачу и нажмите Enter',
+    'LBL_ADD_TASK_AND_PRESS_ENTER' => 'Добавьте задачу и нажмите Enter',
+    // SalesPlatform.ru end
     'LBL_CLICK_HERE_TO_VIEW' => 'Нажмите сюда, чтобы посмотреть',
     'LBL_TOMORROW' => 'Завтра',
     'LBL_AGENDA' => 'Повестка дня',
@@ -176,6 +183,9 @@ $jsLanguageStrings = array(
         'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Не может быть присвоен Будущему событию:',
         'JS_PERMISSION_DENIED'         => 'Доступ запрещен',
 	
+        //SalesPlatform.ru begin #5716 add localization for more link
+        'LBL_MORE'         => 'Ещё',
+        //SalesPlatform.ru end
 	//Calendar view label translation
 	'LBL_MONTH' => 'Месяц',
 	'LBL_TODAY' => 'Сегодня',

@@ -362,7 +362,7 @@
 			autoClose: false,
 			format: 'YYYY-MM-DD',
 			separator: ' to ',
-                        language: 'auto',
+			language: 'auto',
 			startOfWeek: 'sunday',// or monday
 			getValue: function()
 			{

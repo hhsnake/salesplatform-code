@@ -707,8 +707,9 @@ Migration_Index_View::ExecuteQuery('UPDATE vtiger_users SET truncate_trailing_ze
 //deleted the id column from the All filter
 //SalesPlatform.ru begin
 Migration_Index_View::ExecuteQuery("DELETE FROM vtiger_cvcolumnlist WHERE cvid IN
-			(SELECT cvid FROM vtiger_customview WHERE viewname='All' AND entitytype NOT IN
-				('Accounts','Emails','Calendar','ModComments','ProjectMilestone','Project','SMSNotifier','PBXManager','Webmails'))
+			(SELECT cvid FROM vtiger_customview INNER JOIN vtiger_tab ON vtiger_tab.name=vtiger_customview.entitytype
+				WHERE vtiger_tab.customized=0 AND viewname='All' AND entitytype NOT IN
+				('Emails','Calendar','ModComments','ProjectMilestone','Project','SMSNotifier','PBXManager','Webmails'))
 			AND columnindex = 0", array());
 
 
@@ -2145,7 +2146,7 @@ for ($i = 0; $i < $numOfRows; $i++) {
 
 				unset($newWorkflowModel->id);
 				$newWorkflowModel->test = Zend_Json::encode(array_merge($portalCondition, $newWorkflowConditions));
-				 //SalesPlatform.ru begin
+				//SalesPlatform.ru begin
                 $newWorkflowModel->description = vtranslate('LBL_COMMENT_ADDED_FROM_CRM_SEND_EMAIL_TO_PORTAL_CONTACT_USER', 'Install');
 				//$newWorkflowModel->description = 'Comment Added From CRM : Send Email to Contact, where Contact is Portal User';
                 //SalesPlatform.ru end

@@ -634,6 +634,13 @@ $languageStrings = array(
                                         MailManager of a CRM User, provided that the User has configured the MailManager and the login and password are suitable for the Outgoing SMTP server',
     'LBL_NO_TLS' => 'No',
     'LBL_SP_CHECK_SITE_URL' => 'Control the system URL',
+    'LBL_TIPS' => 'Tips module',
+    'VoipIntegration' => 'Integration with cloud ATC',
+    'SPVoipIntegration' => 'Integration with cloud ATC',
+    'DynamicBlocks' => 'Dynamic blocks',
+    'SPDynamicBlocks' => 'Dynamic blocks',
+    'LBL_TIPS' => 'Hints',
+    'SPTips' => 'Hints',
     //Salesplatform.ru end
 );
 
@@ -671,5 +678,6 @@ $jsLanguageStrings = array(
     'JS_LOGO_IMAGE_DIMENSIONS_WRONG' => 'Logo Image dimensions did not match the allowed dimension. Resize your image and try again.',
     //SalesPlatform.ru begin
     'JS_COMPANY_EXISTS' => 'This Legal opinion always exists',
+    'JS_UPDATED' => 'Updated',
     //SalesPlatform.ru end
 );

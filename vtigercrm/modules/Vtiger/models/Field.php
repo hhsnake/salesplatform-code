@@ -146,7 +146,6 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	public function getFieldDataType() {
 		if(!$this->fieldDataType) {
 			$uiType = $this->get('uitype');
-                        
 			if($uiType == '69') {
 				$fieldDataType = 'image';
 			} else if($uiType == '26') {
@@ -1372,10 +1371,7 @@ class Vtiger_Field_Model extends Vtiger_Field {
 				$picklistValues = $this->getPicklistValues();
 				$tableName = "vtiger_$fieldName";
 				if (Vtiger_Utils::CheckTable($tableName)) {
-                                        //SalesPlatform.ru begin
-                                        //if (is_array($picklistValues)) {
-					if (is_array($picklistValues) && !empty($picklistValues)) {
-                                        //SalesPlatform.ru end
+					if (is_array($picklistValues) && count($picklistValues)) {
 						$result = $db->pquery("SELECT $fieldName, color FROM $tableName WHERE $fieldName IN (".generateQuestionMarks($picklistValues).")", array_keys($picklistValues));
 						while ($row = $db->fetch_row($result)) {
 							$picklistColors[$row[$fieldName]] = $row['color'];
@@ -1385,5 +1381,9 @@ class Vtiger_Field_Model extends Vtiger_Field {
 			}
 		}
 		return $picklistColors;
+	}
+
+	public function isUniqueField() {
+		return $this->isunique;
 	}
 }

@@ -159,15 +159,9 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 				foreach ($selectedFields as $selectedFieldJson) {
 					$selectedFieldInfo = Zend_Json::decode($selectedFieldJson);
 					if($selectedFieldInfo) {
-                        //SalesPlatform.ru begin 
-                        $recordModel = Vtiger_Record_Model::getInstanceById($selectedFieldInfo['record']);
-                        //SalesPlatform.ru end
 						$to[] = $selectedFieldInfo['field_value'];
 						$toMailInfo[$selectedFieldInfo['record']][] = $selectedFieldInfo['field_value'];
-						 //SalesPlatform.ru begin
-							$toMailNamesList[$id][] = array('label' => html_entity_decode($recordModel->getName(), ENT_COMPAT|ENT_HTML401, 'UTF-8'), 'value' => $value);
-                            //$toMailNamesList[$id][] = array('label' => $recordModel->getName(), 'value' => $value);
-                            //SalesPlatform.ru end
+						$toMailNamesList[$selectedFieldInfo['record']][] = array('label' => decode_html($selectedFieldInfo['record_label']), 'value' => $selectedFieldInfo['field_value']);
 					}else{
 						$fallBack = true;
 					}
@@ -441,10 +435,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 					}
 					//expecting parent ids and to will be same order
 					$toMailInfo[$parentId][] = $emailValue;
-                    //SalesPlatform.ru begin
-                    $toMailNamesList[$parentId][] = array('label' => html_entity_decode($parentRecordModel->getName(), ENT_COMPAT|ENT_HTML401, 'UTF-8'), 'value' => $emailValue);
-                    //$toMailNamesList[$parentId][] = array('label' => $parentRecordModel->getName(), 'value' => $emailValue);
-                    //SalesPlatform.ru end
+					$toMailNamesList[$parentId][] = array('label' => decode_html($parentRecordModel->getName()), 'value' => decode_html($emailValue));
 				}
 			}
 			if($emailOptOutFlag) {

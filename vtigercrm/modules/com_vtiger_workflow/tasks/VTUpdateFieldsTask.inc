@@ -345,7 +345,7 @@ class VTUpdateFieldsTask extends VTTask {
 
 			// Reverting back the action name as there can be some dependencies on this.
 			$_REQUEST['action'] = $actionName;
-			$util->revertUser();
+            
 		}
 		$util->revertUser();
 		$_FILES = $tmpFiles;

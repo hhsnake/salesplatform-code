@@ -12,7 +12,11 @@
  * Vtiger Entity Record Model Class
  */
 class Vtiger_Record_Model extends Vtiger_Base_Model {
-
+    
+    //SalesPlatform.ru begin
+    private static $globalSearchCache = array();
+    //SalesPlatform.ru end
+    
 	protected $module = false;
 
 	/**
@@ -374,127 +378,166 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
     
     //SalesPlatform.ru end Vtiger 7 global search support
     
-/**
-	 * Function to get the listquery for a full search
-	 * @param  string $tabid  -- tabid of the module to search
-	 * @param  string $searchKey -- search term
-	 */
-	
-	public static function dofullmodulesearch($tabid, $searchKey){
-		require_once 'include/utils/utils.php';
-		$db = PearDatabase::getInstance();
-		$moduleName = vtlib_getModuleNameById($tabid);
-		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-		//SalesPlatform.ru begin 
+    // SalesPlatform.ru begin
+    /**
+    * Function to get the listquery for a full search
+    * @param string $tabid  -- tabid of the module to search
+    * @param string $searchKey -- search term
+    */
+    public static function dofullmodulesearch($tabid, $searchKey){
+        require_once 'include/utils/utils.php';
+        $db = PearDatabase::getInstance();
+        $moduleName = vtlib_getModuleNameById($tabid);
+        $moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+        //SalesPlatform.ru begin 
         if (!empty ($moduleModel)  and $moduleModel->isActive()) {
-		//if (!empty ($moduleModel)  and $moduleModel->isActive() and $moduleName!='PBXManager') {
+        //if (!empty ($moduleModel)  and $moduleModel->isActive() and $moduleName!='PBXManager') {
         //SalesPlatform.ru end
-			$fieldModels = $moduleModel->getFields();
-			$listquery = getListQuery($moduleName);
-			$searchcolumn_query = $db->pquery("select displayfield from berli_globalsearch_settings where gstabid =?", array($tabid));
-			$serachcol_arr = Vtiger_Record_Model::getDisplayLabelsArray($tabid);
-			foreach ($serachcol_arr as $fieldname) {
-				//there could be the case that a custom field was deleted and is still in berli_globalsearch_settings 
-				if ($fieldname=='accountid'){
-					$newfiled = 'account_id';
-				}
-				else {
-					$newfiled = $fieldname;
-				}
-				if (!empty($fieldModels[$newfiled])) {
-						$fieldtable[] = $fieldModels[$newfiled]->table.'.'.$fieldname;
-				}
-			}
-			if (!empty($fieldtable) and is_array($fieldtable)){
-				//fields to display are defined in berli_globalsearch_settings
-				$query_select = implode(",", $fieldtable);
-				$listviewquery = substr($listquery, strpos($listquery, 'FROM'), strlen($listquery));
-				$listquery = "select vtiger_crmentity.crmid, vtiger_crmentity.createdtime, vtiger_crmentity.smownerid, " . $query_select . "  " . $listviewquery;
-			}
-			else {
-				//cover all other cases
-				$listviewquery = substr($listquery, strpos($listquery, 'FROM'), strlen($listquery));
-				$metainfo = Vtiger_Functions::getEntityModuleInfo($moduleName);
-				$listquery = "select vtiger_crmentity.crmid, vtiger_crmentity.createdtime, vtiger_crmentity.smownerid, " . $metainfo['tablename'].".".$metainfo['fieldname'] . "  " . $listviewquery;
-			}
-			$where = Vtiger_Record_Model::getUnifiedWhere($listquery,$moduleName,$searchKey);
-			if($where != ''){
-				$listquery .= ' and ('.$where.')';
-			}
-		}
-		return $listquery;
+            $fieldModels = $moduleModel->getFields();
+            $listquery = getListQuery($moduleName);
+            $searchcolumn_query = $db->pquery("select displayfield from berli_globalsearch_settings where gstabid =?", array($tabid));
+            $serachcol_arr = Vtiger_Record_Model::getDisplayLabelsArray($tabid);
+            foreach ($serachcol_arr as $fieldname) {
+                //there could be the case that a custom field was deleted and is still in berli_globalsearch_settings 
+                if ($fieldname=='accountid'){
+                    $newfiled = 'account_id';
+                }
+                else {
+                    $newfiled = $fieldname;
+                }
+                if (!empty($fieldModels[$newfiled])) {
+                    $fieldtable[] = $fieldModels[$newfiled]->table.'.'.$fieldname;
+                }
+            }
+            if (!empty($fieldtable) and is_array($fieldtable)){
+                //fields to display are defined in berli_globalsearch_settings
+                $query_select = implode(",", $fieldtable);
+                $listviewquery = substr($listquery, strpos($listquery, 'FROM'), strlen($listquery));
+                $listquery = "select vtiger_crmentity.crmid, vtiger_crmentity.createdtime, vtiger_crmentity.smownerid, " . $query_select . "  " . $listviewquery;
+            }
+            else {
+                //cover all other cases
+                $listviewquery = substr($listquery, strpos($listquery, 'FROM'), strlen($listquery));
+                $metainfo = Vtiger_Functions::getEntityModuleInfo($moduleName);
+                $listquery = "select vtiger_crmentity.crmid, vtiger_crmentity.createdtime, vtiger_crmentity.smownerid, " . $metainfo['tablename'].".".$metainfo['fieldname'] . "  " . $listviewquery;
+            }
+            $where = Vtiger_Record_Model::getUnifiedWhere($listquery,$moduleName,$searchKey);
+            if($where != ''){
+                $listquery .= ' and ('.$where.')';
+            }
+        }
+        return $listquery;
+    }
+    
+    /**
+    * Function to get details for user have the permissions to do actions
+    * @return <Boolean> - true/false
+    */
+    public static function getDisplayLabelsArray ($tabid) {
+        $db = PearDatabase::getInstance();
+        $displayfield_query = $db->pquery("select displayfield from berli_globalsearch_settings where gstabid =?", array($tabid));
+        $displayfield = $db->query_result($displayfield_query,0,'displayfield');
+        $serachcol_array = array ();
+        if (trim($displayfield) !='') {
+            $serachcol_array = explode(",",$displayfield);
+        }
+        else {
+            //there is no special settings = get the standard table
+            $entityname_query = $db->pquery("select fieldname from vtiger_entityname where tabid =?", array($tabid));
+            $entitynamecolumn = $db->query_result($entityname_query,0,'fieldname');
+            $serachcol_array = explode(",",$entitynamecolumn);
+        }
+        return $serachcol_array;
+    }
+    
+    /**
+    * Function to get the where condition for a module based on the field table entries
+    * @param  string $listquery  -- ListView query for the module
+    * @param  string $module     -- module name
+    * @param  string $search_val -- entered search string value
+    * @return string $where      -- where condition for the module based on field table entries
+    */
+    static function getUnifiedWhere($listquery,$module,$search_val){
+        global $current_user;
+        $db = PearDatabase::getInstance();
+        require('user_privileges/user_privileges_'.$current_user->id.'.php');
+
+        $search_val = $db->sql_escape_string($search_val);
+        if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
+            $query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
+            $qparams = array(getTabid($module));
+        } else {
+            $profileList = getCurrentUserProfileList();
+            $query = "SELECT columnname, tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+            $qparams = array(getTabid($module), $profileList);
+        }
+        //SalesPlatform.ru begin
+        $moduleModel = Vtiger_Module_Model::getInstance($module);
+        $relationFields = array();
+        $referenceFields = $moduleModel->getFieldsByType('reference');
+        foreach ($referenceFields as $fieldModel) {
+            $relationFields[] = $fieldModel->getName();
+        }
+        //SalesPlatform.ru end
+        $result = $db->pquery($query, $qparams);
+        $noofrows = $db->num_rows($result);
+
+        $where = '';
+        for($i=0;$i<$noofrows;$i++){
+            $columnname = $db->query_result($result,$i,'columnname');
+            $tablename = $db->query_result($result,$i,'tablename');
+            
+            // Search / Lookup customization
+            if($module == 'Contacts' && $columnname == 'accountid') {
+                $columnname = "accountname";
+                $tablename = "vtiger_account";
+            }
+            // END
+            
+            //Before form the where condition, check whether the table for the field has been added in the listview query
+            if(strstr($listquery, $tablename)){
+                if ($where != '') {
+                    $where .= " OR ";
+                }
+                //SalesPlatform.ru begin
+                //$where .= "CONVERT( ".$tablename.".".$columnname." using 'utf8') LIKE '". formatForSqlLike($search_val) ."'";
+                if (in_array($columnname, $relationFields)){
+                    $crmIds = self::getSearchLabelCache($search_val);
+                    if(!empty($crmIds)) {
+                        $where .= "CONVERT( ".$tablename.".".$columnname." using 'utf8') IN (". join(",", $crmIds) . ")";
+                    }
+                } else {
+                    $where .= "CONVERT( ".$tablename.".".$columnname." using 'utf8') LIKE '". formatForSqlLike($search_val) ."'";
+                }
+                //SalesPlatform.ru end
+            }
+        }
+        return $where;
+    }
+    // SalesPlatform.ru end
+    
+    //SalesPlatform.ru begin
+    private static function getSearchLabelCache($searchValue) {
+        if(!array_key_exists($searchValue, self::$globalSearchCache)) {
+            self::$globalSearchCache[$searchValue] = array();
+            $db = PearDatabase::getInstance();
+            $result = $db->pquery(
+                "SELECT crmid FROM vtiger_crmentity WHERE label LIKE ? AND vtiger_crmentity.deleted = 0", 
+                array("%" . $searchValue . "%")
+            );
+            
+            if($result) {
+                while($resultRow = $db->fetchByAssoc($result)) {
+                    self::$globalSearchCache[$searchValue][] = $resultRow['crmid'];
+                }
+            }
+        }
         
-	}
-
-	/**
-	 * Function to get the where condition for a module based on the field table entries
-	 * @param  string $listquery  -- ListView query for the module
-	 * @param  string $module     -- module name
-	 * @param  string $search_val -- entered search string value
-	 * @return string $where      -- where condition for the module based on field table entries
-	 */
-	static function getUnifiedWhere($listquery,$module,$search_val){
-		global $current_user;
-		$db = PearDatabase::getInstance();
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-
-		$search_val = $db->sql_escape_string($search_val);
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
-			$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
-			$qparams = array(getTabid($module));
-		}else{
-			$profileList = getCurrentUserProfileList();
-			$query = "SELECT columnname, tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
-			$qparams = array(getTabid($module), $profileList);
-		}
-		$result = $db->pquery($query, $qparams);
-		$noofrows = $db->num_rows($result);
-
-		$where = '';
-		for($i=0;$i<$noofrows;$i++){
-			$columnname = $db->query_result($result,$i,'columnname');
-			$tablename = $db->query_result($result,$i,'tablename');
-
-			// Search / Lookup customization
-			if($module == 'Contacts' && $columnname == 'accountid') {
-				$columnname = "accountname";
-				$tablename = "vtiger_account";
-			}
-			// END
-
-			//Before form the where condition, check whether the table for the field has been added in the listview query
-			if(strstr($listquery,$tablename)){
-				if($where != ''){
-					$where .= " OR ";
-				}
-				$where .= "CONVERT( ".$tablename.".".$columnname." using 'utf8') LIKE '". formatForSqlLike($search_val) ."'";
-			}
-		}
-		return $where;
-	}
-
-	/**
-	 * Function to get details for user have the permissions to do actions
-	 * @return <Boolean> - true/false
-	 */
-	public static function getDisplayLabelsArray ($tabid) {
-		$db = PearDatabase::getInstance();
-		$displayfield_query = $db->pquery("select displayfield from berli_globalsearch_settings where gstabid =?", array($tabid));
-		$displayfield = $db->query_result($displayfield_query,0,'displayfield');
-		$serachcol_array = array ();
-		if (trim($displayfield) !='') {
-			$serachcol_array = explode(",",$displayfield);
-		}
-		else {
-			//there is no special settings = get the standard table
-			$entityname_query = $db->pquery("select fieldname from vtiger_entityname where tabid =?", array($tabid));
-			$entitynamecolumn = $db->query_result($entityname_query,0,'fieldname');
-			$serachcol_array = explode(",",$entitynamecolumn);
-		}
-		return $serachcol_array;
-	}
-
-        //SalesPlatform.ru begin Vtiger 7 global search support
+        return self::$globalSearchCache[$searchValue];
+    }
+    //SalesPlatform.ru end
+    
+    //SalesPlatform.ru begin Vtiger 7 global search support
 	/**
 	 * Static Function to get the list of records matching the search key
 	 * @param <String> $searchKey
@@ -674,49 +717,49 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
             return $matchingRecords;
         } else {
             //SalesPlatform.ru end
-            $db = PearDatabase::getInstance();
+		$db = PearDatabase::getInstance();
 
-            $query = 'SELECT label, crmid, setype, createdtime FROM vtiger_crmentity WHERE label LIKE ? AND vtiger_crmentity.deleted = 0';
-            $params = array("%$searchKey%");
+		$query = 'SELECT label, crmid, setype, createdtime FROM vtiger_crmentity WHERE label LIKE ? AND vtiger_crmentity.deleted = 0';
+		$params = array("%$searchKey%");
 
-            if($module !== false) {
-                $query .= ' AND setype = ?';
-                $params[] = $module;
-            }
-            //Remove the ordering for now to improve the speed
-            //$query .= ' ORDER BY createdtime DESC';
+		if($module !== false) {
+			$query .= ' AND setype = ?';
+			$params[] = $module;
+		}
+		//Remove the ordering for now to improve the speed
+		//$query .= ' ORDER BY createdtime DESC';
 
-            $result = $db->pquery($query, $params);
-            $noOfRows = $db->num_rows($result);
+		$result = $db->pquery($query, $params);
+		$noOfRows = $db->num_rows($result);
 
-            $moduleModels = $matchingRecords = $leadIdsList = array();
-            for($i=0; $i<$noOfRows; ++$i) {
-                $row = $db->query_result_rowdata($result, $i);
-                if ($row['setype'] === 'Leads') {
-                    $leadIdsList[] = $row['crmid'];
-                }
-            }
-            $convertedInfo = Leads_Module_Model::getConvertedInfo($leadIdsList);
+		$moduleModels = $matchingRecords = $leadIdsList = array();
+		for($i=0; $i<$noOfRows; ++$i) {
+			$row = $db->query_result_rowdata($result, $i);
+			if ($row['setype'] === 'Leads') {
+				$leadIdsList[] = $row['crmid'];
+			}
+		}
+		$convertedInfo = Leads_Module_Model::getConvertedInfo($leadIdsList);
 
-            for($i=0, $recordsCount = 0; $i<$noOfRows && $recordsCount<100; ++$i) {
-                $row = $db->query_result_rowdata($result, $i);
-                if ($row['setype'] === 'Leads' && $convertedInfo[$row['crmid']]) {
-                    continue;
-                }
-                if(Users_Privileges_Model::isPermitted($row['setype'], 'DetailView', $row['crmid'])) {
-                    $row['id'] = $row['crmid'];
-                    $moduleName = $row['setype'];
-                    if(!array_key_exists($moduleName, $moduleModels)) {
-                        $moduleModels[$moduleName] = Vtiger_Module_Model::getInstance($moduleName);
-                    }
-                    $moduleModel = $moduleModels[$moduleName];
-                    $modelClassName = Vtiger_Loader::getComponentClassName('Model', 'Record', $moduleName);
-                    $recordInstance = new $modelClassName();
-                    $matchingRecords[$moduleName][$row['id']] = $recordInstance->setData($row)->setModuleFromInstance($moduleModel);
-                    $recordsCount++;
-                }
-            }
-            return $matchingRecords;        
+		for($i=0, $recordsCount = 0; $i<$noOfRows && $recordsCount<100; ++$i) {
+			$row = $db->query_result_rowdata($result, $i);
+			if ($row['setype'] === 'Leads' && $convertedInfo[$row['crmid']]) {
+				continue;
+			}
+			if(Users_Privileges_Model::isPermitted($row['setype'], 'DetailView', $row['crmid'])) {
+				$row['id'] = $row['crmid'];
+				$moduleName = $row['setype'];
+				if(!array_key_exists($moduleName, $moduleModels)) {
+					$moduleModels[$moduleName] = Vtiger_Module_Model::getInstance($moduleName);
+				}
+				$moduleModel = $moduleModels[$moduleName];
+				$modelClassName = Vtiger_Loader::getComponentClassName('Model', 'Record', $moduleName);
+				$recordInstance = new $modelClassName();
+				$matchingRecords[$moduleName][$row['id']] = $recordInstance->setData($row)->setModuleFromInstance($moduleModel);
+				$recordsCount++;
+			}
+		}
+		return $matchingRecords;
         //SalesPlatform.ru begin    
         }
 	}

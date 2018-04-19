@@ -349,7 +349,10 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_quotes',
 				'table_index'=> 'quoteid',
-				'related_tables' => Array ('vtiger_account' => Array('accountid')),
+				'related_tables' => Array (
+					'vtiger_quotescf' => array('quoteid', 'vtiger_quotes', 'quoteid'),
+					'vtiger_account' => Array('accountid')
+				),
 				'popup_fields'=>Array('subject'),
 			),
 			'SalesOrder'=>
@@ -357,7 +360,10 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_salesorder',
 				'table_index'=> 'salesorderid',
-				'related_tables'=> Array ('vtiger_account' => Array('accountid')),
+				'related_tables'=> Array (
+					'vtiger_salesordercf' => array('salesorderid', 'vtiger_salesorder', 'salesorderid'),
+					'vtiger_account' => Array('accountid')
+				),
 				'popup_fields'=>Array('subject'),
 			),
 			'PurchaseOrder'=>
@@ -404,6 +410,9 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_notes',
 				'table_index'=> 'notesid',
+				'related_tables' => Array(
+					'vtiger_notescf' => Array('notesid', 'vtiger_notes', 'notesid')
+				),
 			),
 			'Products'=>
 			Array(
@@ -427,6 +436,9 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_name' => 'vtiger_vendor',
 				'table_index'=> 'vendorid',
 				'popup_fields'=>Array('vendorname'),
+				'related_tables'=> Array( 
+					'vtiger_vendorcf' => Array('vendorid', 'vtiger_vendor', 'vendorid')
+					),
 			),
 			'Project' => 
 			Array(
@@ -706,7 +718,7 @@ function purifyHtmlEventAttributes($value){
 						"onclick|ondblclick|ondrag|ondragend|ondragenter|ondragleave|ondragover|".
 						"ondragstart|ondrop|onmousedown|onmousemove|onmouseout|onmouseover|".
 						"onmouseup|onmousewheel|onscroll|onwheel|oncopy|oncut|onpaste";
-	if(preg_match("/\s(".$htmlEventAttributes.")\s*=/i", $value)) {
+	if(preg_match("/\s*(".$htmlEventAttributes.")\s*=/i", $value)) {
 		$value = str_replace("=", "&equals;", $value);
 	}
 	return $value;
@@ -762,6 +774,57 @@ function vtlib_module_icon($modulename){
 
 function vtlib_mime_content_type($filename) {
 	return Vtiger_Functions::mime_content_type($filename);
+}
+
+/**
+ * Function to add settings entry in CRM settings page
+ * @param string $linkName
+ * @param string $linkURL
+ * @param string $blockName
+ * @return boolean true/false
+ */
+function vtlib_addSettingsLink($linkName, $linkURL, $blockName = false) {
+	$success = true;
+	$db = PearDatabase::getInstance();
+
+	//Check entry name exist in DB or not
+	$result = $db->pquery('SELECT 1 FROM vtiger_settings_field WHERE name=?', array($linkName));
+	if ($result && !$db->num_rows($result)) {
+		$blockId = 0;
+		if ($blockName) {
+			$blockId = getSettingsBlockId($blockName);//Check block name exist in DB or not
+		}
+
+		if (!$blockId) {
+			$blockName = 'LBL_OTHER_SETTINGS';
+			$blockId = getSettingsBlockId($blockName);//Check block name exist in DB or not
+		}
+
+		//Add block in to DB if not exists
+		if (!$blockId) {
+			$blockSeqResult = $db->pquery('SELECT MAX(sequence) AS sequence FROM vtiger_settings_blocks', array());
+			if ($db->num_rows($blockSeqResult)) {
+				$blockId = $db->getUniqueID('vtiger_settings_blocks');
+				$blockSequence = $db->query_result($blockSeqResult, 0, 'sequence');
+				$db->pquery('INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?,?,?)', array($blockId, 'LBL_OTHER_SETTINGS', $blockSequence++));
+			}
+		}
+
+		//Add settings field in to DB
+		if ($blockId) {
+			$fieldSeqResult = $db->pquery('SELECT MAX(sequence) AS sequence FROM vtiger_settings_field WHERE blockid=?', array($blockId));
+			if ($db->num_rows($fieldSeqResult)) {
+				$fieldId = $db->getUniqueID('vtiger_settings_field');
+				$linkURL = ($linkURL) ? $linkURL : '';
+				$fieldSequence = $db->query_result($fieldSeqResult, 0, 'sequence');
+
+				$db->pquery('INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence, active, pinned) VALUES(?,?,?,?,?,?,?,?,?)', array($fieldId, $blockId, $entryName, '', $entryName, $linkURL, $fieldSequence++, 0, 0));
+			}
+		} else {
+			$success = false;
+		}
+	}
+	return $success;
 }
 
 ?>

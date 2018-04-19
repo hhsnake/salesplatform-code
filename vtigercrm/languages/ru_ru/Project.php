@@ -74,7 +74,10 @@ $languageStrings = array(
     'LBL_EDIT_PROJECT_TASK_STATUS_COLOR' => 'Изменить цвет задачи задачи проекта',
     'LBL_SELECT_PROJECT_TASK_STATUS_COLOR' => 'Выберите цвет задачи проекта',
     'LBL_EDIT_COLOR' => 'Изменить цвет', 
-        );
+    //Salesplatform.ru begin
+    'Is Converted From Opportunity' => 'Преобразовано из Сделки',
+    //SalesPlatform.ru end
+);
 
 $jsLanguageStrings = array(
     'JS_LBL_SELECT_STATUS' => 'Выбор Статус',

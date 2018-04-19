@@ -144,9 +144,10 @@ $languageStrings = array(
     'LBL_SELECT_FIELDS' => 'Выберите поля',
     'LBL_INCLUDES_CREATION' => 'Включает создание',
     'LBL_ACTION_FOR_WORKFLOW' => 'Действия для Обработчика',
-    'LBL_WORKFLOW_SEARCH' => 'Поиск по фамилии',  
+    'LBL_WORKFLOW_SEARCH' => 'Поиск по названию',  
     //SalesPlatform.ru begin fixed localization	
     'LBL_UPDATED' => 'При изменении',
+    'Reply To' => 'Ответить на',
     //SalesPlatform.ru end
     );
 $jsLanguageStrings = array(
@@ -156,7 +157,10 @@ $jsLanguageStrings = array(
 	'JS_WORKFLOW_SAVED_SUCCESSFULLY' => 'Обработчик успешно сохранен',
         'JS_CHECK_START_AND_END_DATE'=>'Конечная дата и время должны быть больше или равны Начальной дате и времени',
         'JS_TASK_STATUS_CHANGED' => 'Статус задачи успешно изменен.',
-        'JS_WORKFLOWS_STATUS_CHANGED' => '"Статус Обработчика успешно изменено.',
+    // SalesPlatform.ru begin
+        //'JS_WORKFLOWS_STATUS_CHANGED' => '"Статус Обработчика успешно изменено.',
+        'JS_WORKFLOWS_STATUS_CHANGED' => 'Статус Обработчика успешно изменен',
+    // SalesPlatform.ru end
         'VTEmailTask' => 'Отправить E-mail',
         'VTEntityMethodTask' => 'Запустить пользовательскую функцию',
         'VTCreateTodoTask' => 'Создать Задачу',

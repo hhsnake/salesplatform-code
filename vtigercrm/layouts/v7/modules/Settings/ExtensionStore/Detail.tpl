@@ -125,15 +125,7 @@
 								{if ($REGISTRATION_STATUS) and ($PASSWORD_STATUS)}
 									<div class="col-sm-6 col-xs-6">
 										<div class="pull-right">
-                                                                                    {* SalesPlatform.ru begin *}
-											{*{if $EXTENSION_DETAIL->isInstalledByExtnStore()}*}
-                                                                                    {* SalesPlatform.ru end *}
-													<button type="button" class="writeReview margin0px pull-right {if $MODULE_ACTION neq 'Installed'} hide{/if}">{vtranslate('LBL_WRITE_A_REVIEW', $QUALIFIED_MODULE)}</button>
-										    {* SalesPlatform.ru begin *}	
-                                                                                        {*{else}
-													<span class="alert alert-error">{vtranslate('LBL_REVIEW_RESTRICTED', $QUALIFIED_MODULE)}</span>
-											{/if}*}
-										    {* SalesPlatform.ru end *}	
+                                            <button type="button" class="writeReview margin0px pull-right {if $MODULE_ACTION neq 'Installed'} hide{/if}">{vtranslate('LBL_WRITE_A_REVIEW', $QUALIFIED_MODULE)}</button>
 										</div>
 									</div>
 								{/if}
@@ -150,7 +142,10 @@
 													{assign var=REVIEW_CREATED_TIME value=$CUSTOMER_REVIEW['createdon']|replace:'T':' '}
 													{$CUSTOMER_INFO['firstname']}&nbsp;{$CUSTOMER_INFO['lastname']}
 												</div>
-												<div class="muted">{Vtiger_Util_Helper::formatDateTimeIntoDayString($REVIEW_CREATED_TIME)|substr:4}</div>
+                                                                                                {* SalesPlatform.ru begin *}
+												{* <div class="muted">{Vtiger_Util_Helper::formatDateTimeIntoDayString($REVIEW_CREATED_TIME)|substr:4}</div> *}
+												<div class="muted">{Vtiger_Util_Helper::formatDateTimeIntoDayString($REVIEW_CREATED_TIME)|mb_substr:4}</div>
+                                                                                                {* SalesPlatform.ru end *}
 											</div>
 											<div class="col-sm-9 col-xs-9">{$CUSTOMER_REVIEW['comment']}</div>
 										</div>

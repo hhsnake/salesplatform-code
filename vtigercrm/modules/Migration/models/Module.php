@@ -39,6 +39,7 @@ class Migration_Module_Model extends Vtiger_Module_Model {
                 array('650-201707' => '6.5.0-201707'),
                 array('701-201707' => '7.0.1-201707'),
                 array('701-201711' => '7.0.1-201711'),
+                array('710-201803' => '7.1.0-201803'),
             );
             // SalesPlatform.ru end
             return $versions;

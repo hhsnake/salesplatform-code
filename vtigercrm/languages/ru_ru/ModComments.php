@@ -17,12 +17,14 @@ $languageStrings = array(
 	'Comment'                      => 'Комментарий'      , 
 	'Creator'                      => 'Автор'                  , 
 	'Related To Comments'          => 'Относится к Комментарию', 
+    'LBL_COMMENTED_AT'             => 'Прокомментировал на',
     //SalesPlatform.ru begin
 	'UserId' => 'Идентификатор пользователя',
     'Customer' => 'Клиент',
+    'Is Private' => 'Личный комментарий',
+    'Related Email Id' => 'Идентификатор связанного e-mail',
     //SalesPlatform.ru end
-    'LBL_COMMENTED_AT'             => 'Прокомментировал на',
-    );
+);
 
 // SalesPlatform.ru begin SPConfiguration fix
 include 'renamed/ModComments.php';

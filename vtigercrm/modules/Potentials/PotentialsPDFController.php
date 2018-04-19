@@ -10,6 +10,7 @@
 
 include_once 'includes/SalesPlatform/PDF/SPPDFController.php';
 require_once 'modules/Accounts/Accounts.php';
+require_once 'modules/Contacts/Contacts.php';
 
 class SalesPlatform_PotentialsPDFController extends SalesPlatform_PDF_SPPDFController {
 

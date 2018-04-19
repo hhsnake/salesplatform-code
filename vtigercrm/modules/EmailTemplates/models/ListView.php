@@ -13,7 +13,7 @@ class EmailTemplates_ListView_Model extends Vtiger_ListView_Model {
 	private $querySelectColumns = array('templatename, foldername, subject', 'systemtemplate', 'module', 'description');
 	private $listViewColumns = array('templatename', 'subject', 'description', 'module');
 
-	public function addColumnToSelectCaluse($columName) {
+	public function addColumnToSelectClause($columName) {
 		if (!is_array($columName))
 			$columNameList = array($columName);
 		else
@@ -194,10 +194,7 @@ class EmailTemplates_ListView_Model extends Vtiger_ListView_Model {
 
 		$position = stripos($listQuery, 'from');
 		if ($position) {
-            //SalesPlatform.ru begin
-			//$split = spliti('from', $listQuery);
-            $split = preg_split('/from/i', $listQuery);
-            //SalesPlatform.ru end
+			$split = preg_split('/from/i', $listQuery);
 			$splitCount = count($split);
 			$listQuery = 'SELECT count(*) AS count ';
 			for ($i=1; $i<$splitCount; $i++) {

@@ -13,7 +13,10 @@
     <div class="col-sm-6 col-lg-6 col-md-6">
         <div class="record-header clearfix">
                 {assign var=IMAGE_DETAILS value=$RECORD->getImageDetails()}
-            <div class="hidden-sm hidden-xs recordImage bgproducts app-{$SELECTED_MENU_CATEGORY}" {if $IMAGE_DETAILS|@count gt 1}style = "display:block"{/if}>
+            {* SalesPlatform.ru begin *}
+            {*<div class="hidden-sm hidden-xs recordImage bgproducts app-{$SELECTED_MENU_CATEGORY}" {if $IMAGE_DETAILS|@count gt 1}style = "display:block"{/if}>*}
+            <div class="hidden-sm hidden-xs recordImage" {if $IMAGE_DETAILS|@count gt 1}style = "display:block"{/if}>
+            {* SalesPlatform.ru end *}
                 {foreach key=ITER item=IMAGE_INFO from=$IMAGE_DETAILS}
 	               {if !empty($IMAGE_INFO.path)}
 	                {if $IMAGE_DETAILS|@count eq 1}
@@ -30,9 +33,9 @@
 	                  <img src="{vimage_path('summary_Products.png')}" class="summaryImg"/>
 	               {/if}
 	        {/foreach}
-                {if empty($IMAGE_DETAILS)}
-                    <div class="name"><span><strong> <i class="vicon-products"></i> </strong></span></div>
-            {/if}      
+			{if empty($IMAGE_DETAILS)}
+				<div class="name"><span><strong>{$MODULE_MODEL->getModuleIcon()}</strong></span></div>
+			{/if}
             </div>
 
             <div class="recordBasicInfo">

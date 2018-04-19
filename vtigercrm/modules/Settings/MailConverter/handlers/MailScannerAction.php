@@ -222,11 +222,16 @@ class Vtiger_MailScannerAction {
 		$contact->column_fields['assigned_user_id'] = $mailscannerrule->assigned_to;
 		$contact->column_fields['description'] = $description;
 		$contact->column_fields['source'] = $this->recordSource;
-		$contact->save('Contacts');
 
-		$this->__SaveAttachements($mailrecord, 'Contacts', $contact);
+		try {
+			$contact->save('Contacts');
 
-		return $contact->id;
+			$this->__SaveAttachements($mailrecord, 'Contacts', $contact);
+			return $contact->id;
+		} catch (Exception $e) {
+			//TODO - Review
+			return false;
+		}
 	}
 
 	/**
@@ -249,11 +254,17 @@ class Vtiger_MailScannerAction {
 		$lead->column_fields['assigned_user_id'] = $mailscannerrule->assigned_to;
 		$lead->column_fields['description'] = $description;
 		$lead->column_fields['source'] = $this->recordSource;
-		$lead->save('Leads');
 
-		$this->__SaveAttachements($mailrecord, 'Leads', $lead);
+		try {
+			$lead->save('Leads');
 
-		return $lead->id;
+			$this->__SaveAttachements($mailrecord, 'Leads', $lead);
+
+			return $lead->id;
+		} catch (Exception $e) {
+			//TODO - Review
+			return false;
+		}
 	}
 
 	/**
@@ -275,11 +286,16 @@ class Vtiger_MailScannerAction {
 		$account->column_fields['assigned_user_id'] = $mailscannerrule->assigned_to;
 		$account->column_fields['description'] = $description;
 		$account->column_fields['source'] = $this->recordSource;
-		$account->save('Accounts');
 
-		$this->__SaveAttachements($mailrecord, 'Accounts', $account);
+		try {
+			$account->save('Accounts');
+			$this->__SaveAttachements($mailrecord, 'Accounts', $account);
 
-		return $account->id;
+			return $account->id;
+		} catch (Exception $e) {
+			//TODO - Review
+			return false;
+		}
 	}
 
 	/**
@@ -315,18 +331,24 @@ class Vtiger_MailScannerAction {
 			$ticket->column_fields['parent_id'] = $linktoid;
 
 		$ticket->column_fields['source'] = $this->recordSource;
-		$ticket->save('HelpDesk');
 
-		// Associate any attachement of the email to ticket
-		$this->__SaveAttachements($mailrecord, 'HelpDesk', $ticket);
+		try {
+			$ticket->save('HelpDesk');
 
-		if($contactLinktoid)
-			$relatedTo = $contactLinktoid;
-		else
-			$relatedTo = $linktoid;
-		$this->linkMail($mailscanner, $mailrecord, $relatedTo);
+			// Associate any attachement of the email to ticket
+			$this->__SaveAttachements($mailrecord, 'HelpDesk', $ticket);
 
-		return $ticket->id;
+			if($contactLinktoid)
+				$relatedTo = $contactLinktoid;
+			else
+				$relatedTo = $linktoid;
+			$this->linkMail($mailscanner, $mailrecord, $relatedTo);
+
+			return $ticket->id;
+		} catch (Exception $e) {
+			//TODO - Review
+			return false;
+		}
 	}
 
 	/**
@@ -409,7 +431,7 @@ class Vtiger_MailScannerAction {
 		$focus->column_fields['description'] = $mailrecord->getBodyHTML();
 		$focus->column_fields['assigned_user_id'] = $assignedToId;
 		$focus->column_fields["date_start"] = date('Y-m-d', $mailrecord->_date);
-		$focus->column_fields["time_start"] = gmdate("H:i:s");
+		$focus->column_fields["time_start"] = date('H:i:s', $mailrecord->_date);
 		$focus->column_fields["email_flag"] = 'MAILSCANNER';
 
 		$from=$mailrecord->_from[0];

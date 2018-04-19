@@ -30,9 +30,9 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			$mail = $connector->openMail($request->get('_msgno'), $foldername);
 			$connector->updateFolder($folder, SA_MESSAGES|SA_UNSEEN);
 
-            // SalesPlatform.ru begin
-            $this->replaceEmbeddedImageAttachments($mail);
-            // SalesPlatform.ru end
+			// SalesPlatform.ru begin
+			$this->replaceEmbeddedImageAttachments($mail);
+			// SalesPlatform.ru end
 
 			$viewer = $this->getViewer($request);
 			$viewer->assign('FOLDER', $folder);
@@ -247,11 +247,9 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			}
 
 		} else if ('attachment_dld' == $this->getOperationArg($request)) {
-            //SalesPlatform.ru begin
-            $attachmentName = decode_html($request->get('_atname'));
-			//$attachmentName = $request->get('_atname');
-            //SalesPlatform.ru end
+			$attachmentName = $request->getRaw('_atname');
 			$attachmentName= str_replace(' ', '_', $attachmentName);
+			$attachmentId   = $request->get('_atid');
 
 			if (MailManager_Utils_Helper::allowedFileExtension($attachmentName)) {
 				// This is to handle larger uploads
@@ -260,7 +258,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 
 				$mail = new MailManager_Message_Model(false, false);
 				$mail->readFromDB($request->get('_muid'));
-				$attachment = $mail->attachments(true, $attachmentName);
+				$attachment = $mail->attachments(true, $attachmentName, $attachmentId);
 				//As we are sending attachment name, it will return only that attachment details
 				if($attachment[0]['data']) {
 					header("Content-type: application/octet-stream");

@@ -19,6 +19,7 @@ $languageStrings = Array(
 	'LBL_NO_RECORDS_FOUND' => 'No records found to Restore in module',
         //SalesPlatform.ru begin localization fix
         'LBL_SEARCH_FOR_MODULES' => 'Search for Modules',
+        'List' => 'List',
         //SalesPlatform.ru end localization fix
 );
 

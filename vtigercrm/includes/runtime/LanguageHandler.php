@@ -97,7 +97,13 @@ class Vtiger_Language_Handler {
 	 * @param <String> $module - module scope in which the translation need to be check
 	 * @return <String> - translated string
 	 */
-	public static function getJSTranslatedString($language, $key, $module = '') {
+    //SalesPlatform.ru begin
+	//public static function getJSTranslatedString($language, $key, $module = '') {
+    public static function getJSTranslatedString($key, $module = '', $language = '') {
+        if(empty($language)) {
+            $language = self::getLanguage();
+        }
+    //SalesPlatform.ru end
 		$moduleStrings = array();
 
 		$module = str_replace(':', '.', $module);
@@ -156,7 +162,7 @@ class Vtiger_Language_Handler {
 	public static function getLanguage() {
 		$userModel = Users_Record_Model::getCurrentUserModel();
 		$language = '';
-		if (!empty($userModel)) {
+		if (!empty($userModel) && $userModel->has('language')) {
 			$language = $userModel->get('language');
 		}
 		return empty($language) ? vglobal('default_language') : $language;

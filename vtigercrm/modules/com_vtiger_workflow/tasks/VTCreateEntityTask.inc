@@ -32,6 +32,7 @@ class VTCreateEntityTask extends VTTask {
 
 		$entityType = $this->entity_type;		
 		if(!vtlib_isModuleActive($entityType)) {
+            $util->revertUser();
 			return;
 		}
 
@@ -63,6 +64,11 @@ class VTCreateEntityTask extends VTTask {
 				$fieldValueType = $fieldInfo['valuetype'];
 				$fieldValue = trim($fieldInfo['value']);
 				$moduleFieldInstance = $moduleFields[$fieldName];
+                
+                //If field is invisible, then continue
+                if (!$moduleFieldInstance) {
+                    continue;
+                }
 				preg_match('/\((\w+) : \((\w+)\) (\w+)\)/',$fieldValue,$matches);
 				if ($fieldValueType == 'fieldname') {
 					$field = $fieldValue;
@@ -163,7 +169,13 @@ class VTCreateEntityTask extends VTTask {
 					if ($allowNameToIdEncode) {
 						$referenceModuleList = $moduleFieldInstance->getReferenceList();
 						$fieldReferenceModule = $referenceModuleList[0];
-						$recordId = Vtiger_Util_Helper::getRecordId($fieldValue, $fieldReferenceModule, true);
+
+						if (is_numeric($fieldValue) && isRecordExists($fieldValue) && getSalesEntityType($fieldValue) == $fieldReferenceModule) {
+							$recordId = $fieldValue;
+						} else {
+							$recordId = Vtiger_Util_Helper::getRecordId($fieldValue, $fieldReferenceModule, true);
+						}
+                        
 						if (!empty($recordId)) {
 							$fieldValue = $recordId;
 						} else {
@@ -178,15 +190,27 @@ class VTCreateEntityTask extends VTTask {
 			// To handle cyclic process
 			$newEntity->_from_workflow = true;
 			$newEntity->column_fields['source'] = 'WORKFLOW';
+			try {
 
-			//If the module triggering workflow and new entity we are creating are same, Then it might end up in infinite loop.
-			//So we need to call saveentity than save in order to avoid workflow triggering for new entity
-			if($moduleName == $entityType) { //TODO: Need to check for conditions as well, If new entity satisfies current workflow conditions and triggers same workflow
-				$newEntity->saveentity($entityType);
-			} else{
-				$newEntity->save($entityType);
+				//If the module triggering workflow and new entity we are creating are same, Then it might end up in infinite loop.
+				//So we need to call saveentity than save in order to avoid workflow triggering for new entity
+				if($moduleName == $entityType) { //TODO: Need to check for conditions as well, If new entity satisfies current workflow conditions and triggers same workflow
+					$newEntity->saveentity($entityType);
+				} else{
+					$newEntity->save($entityType);
+				}
+				relateEntities($focus, $moduleName, $recordId, $entityType, $newEntity->id);
+			} catch (DuplicateException $e) {
+				$workFlowManager = new VTWorkflowManager($adb);
+				$workFlow = $workFlowManager->retrieve($this->workflowId);
+
+				$mailBody = vtranslate('LBL_DUPLICATION_FAILURE_FROM_WORKFLOWS', $entityType, vtranslate('SINGLE_'.$entityType, $entityType),
+														decode_html($workFlow->workflowname), vtranslate('SINGLE_'.$entityType, $entityType));
+				sendMailToUserOnDuplicationPrevention($entityType, $newEntity->column_fields, $mailBody);
+			} catch (Exception $e) {
 			}
-			relateEntities($focus, $moduleName, $recordId, $entityType, $newEntity->id);
+			$util->revertUser();
+            return;
 		}
 
 		$util->revertUser();

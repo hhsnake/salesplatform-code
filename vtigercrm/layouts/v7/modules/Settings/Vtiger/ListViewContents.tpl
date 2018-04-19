@@ -93,7 +93,10 @@
 									<tr class="emptyRecordsDiv">
 										{assign var=COLSPAN_WIDTH value={count($LISTVIEW_HEADERS)+1}}
 										<td colspan="{$COLSPAN_WIDTH}" style="vertical-align:inherit !important;">
-											<center>{vtranslate('LBL_NO')} {vtranslate($MODULE, $QUALIFIED_MODULE)} {vtranslate('LBL_FOUND')}</center>
+                                                                                    {* SalesPlatform begin #5372 *}
+                                                                                    {* <center>{vtranslate('LBL_NO')} {vtranslate($MODULE, $QUALIFIED_MODULE)} {vtranslate('LBL_FOUND')}</center> *}
+                                                                                    <center>{vtranslate('LBL_NOT_FOUND')} {vtranslate($MODULE, $MODULE)}</center>
+                                                                                    {* SalesPlatform end *}
 										</td>
 									</tr>
 								{/if}

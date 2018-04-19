@@ -18,7 +18,6 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$this->exposeMethod('showModuleDetailView');
 		$this->exposeMethod('showModuleSummaryView');
 		$this->exposeMethod('showModuleBasicView');
-		$this->exposeMethod('showHistory');
 		$this->exposeMethod('showRecentActivities');
 		$this->exposeMethod('showRecentComments');
 		$this->exposeMethod('showRelatedList');
@@ -388,17 +387,6 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 	}
 
 	/**
-	 * Funtion to show History view
-	 * @param Vtiger_Request $request
-	 */
-	function showHistory(Vtiger_Request $request){
-		$moduleName = $request->getModule();
-
-		$viewer = $this->getViewer($request);
-		echo $viewer->view('History.tpl', $moduleName, true);
-	}
-
-	/**
 	 * Added to support Engagements view in Vtiger7
 	 * @param Vtiger_Request $request
 	 */
@@ -475,7 +463,7 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 
 		if($rollupsettings['rollup_status']) {
 			$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentId, $moduleName);
-			$recentComments = $parentRecordModel->getRollupCommentsForModule(0, 5);
+			$recentComments = $parentRecordModel->getRollupCommentsForModule(0, 6);
 		}else {
 			$recentComments = ModComments_Record_Model::getRecentComments($parentId, $pagingModel);
 		}

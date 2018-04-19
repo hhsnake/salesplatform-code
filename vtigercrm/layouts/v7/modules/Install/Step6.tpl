@@ -20,7 +20,7 @@
 					<h4>{vtranslate('LBL_ONE_LAST_THING','Install')}</h4>
 				</div>
 				<div class="col-sm-2">
-					<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">
+					<a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_7" target="_blank" class="pull-right">
 						<img src="{'help.png'|vimage_path}" alt="Help-Icon"/>
 					</a>
 				</div>
@@ -86,7 +86,7 @@
 									</select>
                                     {*
 									<select name="industry" class="select2" required="true" style="width:250px;" placeholder="Choose one...">
-										<option>Accounting</option> 
+										<option>Accounting</option>
 										<option>Advertising</option>
 										<option>Agriculture</option>
 										<option>Apparel &amp; Accessories</option>

@@ -13,7 +13,10 @@
 	<script type="text/javascript" src="{vresource_url('layouts/v7/modules/Products/resources/ProductsPopup.js')}"></script>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            {include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE=$MODULE}
+            {*SalesPlatform.ru begin*}
+            {include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE={vtranslate($MODULE, $MODULE)}}
+            {*{include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE=$MODULE}*}
+            {*SalesPlatform.ru end*}
             <div class="modal-body">
                 <div id="popupPageContainer" class="contentsDiv col-sm-12">
                     <input type="hidden" id="parentModule" value="{$SOURCE_MODULE}"/>

@@ -175,6 +175,11 @@ class Calendar_Detail_View extends Vtiger_Detail_View {
 			$viewer->assign('MODULE_MODEL', $moduleModel);
 			$this->setModuleInfo($request, $moduleModel);
 			$viewer->assign('MODULE', $request->getModule());
+            //SalesPlatform.ru begin
+            $detailViewLinkParams = array('MODULE'=>$moduleName, 'RECORD'=>$recordId);
+			$detailViewLinks = $detailViewModel->getDetailViewLinks($detailViewLinkParams);
+			$viewer->assign('DETAILVIEW_LINKS', $detailViewLinks);
+            //SalesPaltform.ru end
 			return $viewer->view('OverlayDetailView.tpl', $moduleName);
 		} else {
 			return $viewer->view('DetailViewFullContents.tpl', $moduleName, true);

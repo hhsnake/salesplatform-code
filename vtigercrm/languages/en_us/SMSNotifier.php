@@ -26,4 +26,8 @@ $languageStrings = array(
 	//Blocks
 	'LBL_SMSNOTIFIER_INFORMATION' => 'SMS Information',
 	'SINGLE_SMSNotifier' => 'SMS Notifier',
+    
+    //SalesPlatform.ru begin
+    'LBL_SET_UP_SMS_PROVIDER' => 'Need configure at least one proved for send SMS',
+    //SalesPlatform.ru end
 );

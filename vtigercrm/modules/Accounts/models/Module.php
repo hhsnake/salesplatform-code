@@ -62,10 +62,7 @@ class Accounts_Module_Model extends Vtiger_Module_Model {
 
 			$position = stripos($listQuery, 'where');
 			if($position) {
-                //SalesPlatform.ru begin
-				//$split = spliti('where', $listQuery);
-                $split = preg_split('/where/i', $listQuery);
-                //SalesPlatform.ru end
+				$split = preg_split('/where/i', $listQuery);
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
 			} else {
 				$overRideQuery = $listQuery. ' WHERE ' . $condition;
@@ -113,6 +110,14 @@ class Accounts_Module_Model extends Vtiger_Module_Model {
 			$nonAdminQuery = $this->getNonAdminAccessControlQueryForRelation($relatedModuleName);
 			if ($nonAdminQuery) {
 				$query = appendFromClauseToQuery($query, $nonAdminQuery);
+
+				if(trim($nonAdminQuery)) {
+					$relModuleFocus = CRMEntity::getInstance($relatedModuleName);
+					$condition = $relModuleFocus->buildWhereClauseConditionForCalendar();
+					if($condition) {
+						$query .= ' AND '.$condition;
+					}
+				}
 			}
 
 			// There could be more than one contact for an activity.
@@ -164,6 +169,14 @@ class Accounts_Module_Model extends Vtiger_Module_Model {
 					AND (vtiger_activity.activitytype NOT IN ('Emails'))
 					AND (vtiger_activity.status is NULL OR vtiger_activity.status NOT IN ('Completed', 'Deferred', 'Cancelled'))
 					AND (vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus NOT IN ('Held', 'Cancelled'))";
+
+		if(!$currentUser->isAdminUser()) {
+			$moduleFocus = CRMEntity::getInstance('Calendar');
+			$condition = $moduleFocus->buildWhereClauseConditionForCalendar();
+			if($condition) {
+				$query .= ' AND '.$condition;
+			}
+		}
 
 		if ($mode === 'upcoming') {
 			$query .= " AND CASE WHEN vtiger_activity.activitytype='Task' THEN due_date >= '$currentDate' ELSE CONCAT(due_date,' ',time_end) >= '$nowInDBFormat' END";

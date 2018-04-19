@@ -34,6 +34,10 @@ $languageStrings = array(
 	'LBL_ADD_FOLDER'               => 'Добавить Папку'                  , // TODO: Review
 	'LBL_REPORT_DELETE_DENIED'     => 'Не хватает прав для удаления Отчета', // TODO: Review
 	'LBL_FOLDER_CAN_NOT_BE_DELETED' => 'Папка не может быть удалена', // TODO: Review
+         // SalesPlatform.ru begin #5716 localization
+        'LBL_LIST_VIEW'                => 'Список'                ,
+        'LBL_EDIT_VIEW'                => 'Редактирование'                ,
+         // SalesPlatform.ru end 
 	'LBL_REPORTS_LIST'             => 'Список Отчетов'                , // TODO: Review
 	'LBL_REPORT_NAME'              => 'Название Отчета', 
 	'LBL_REPORT_FOLDER'            => 'Папка для отчётов', // KEY 5.x: LBL_REP_FOLDER
@@ -159,7 +163,9 @@ $languageStrings = array(
     'LBL_SELECT_MONTH_AND_DAY' => 'Выберите месяц и день',
     'LBL_SELECT_RECIEPIENTS' => 'Получатели',
     'LBL_SPECIFIC_EMAIL_ADDRESS' => 'Отправить уведомление на почту',
+    //SalesPlatform.ru begin #5716 fix localization
     'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'Автоматически сгенерированное уведомление об отчете',
+    //SalesPlatform.ru end
     
     //charts labels
 	'LBL_SELECT_CHART_TYPE' => 'Выберите тип диаграммы',
@@ -221,8 +227,11 @@ $languageStrings = array(
     'LBL_PIVOT_REPORT' => 'Сводный отчет',
     'LBL_PIN_CHART_TO_DASHBOARD' => 'График Pin на панель инструментов',
     'LBL_FILE_FORMAT' => 'Формат файла',
-    'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'Это автоматически сгенерированный сообщения, отправленные от имени запланированного отчета.',
-    'LBL_PIN_CHART_TO_DASHBOARD' => 'График Pin на панель инструментов',
+    'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'Это автосгенерированное письмо, отправленное из запланированного отчета.',
+    // SalesPlatform.ru begin
+    //'LBL_PIN_CHART_TO_DASHBOARD' => 'График Pin на панель инструментов',
+    'LBL_PIN_CHART_TO_DASHBOARD' => 'Прикрепить график на панель инструментов',
+    // SalesPlatform.ru end
     'LBL_FILE_FORMAT' => 'Формат файла',
     'Report Type' => 'Тип отчета',
     'tabular' => 'Подробно',
@@ -241,7 +250,10 @@ $languageStrings = array(
     'LBL_PINNED' => 'Закрепленные',
     'LBL_UNPINNED' => 'Открепить',
     'LBL_REPORTS_DELETED_SUCCESSFULLY' => 'Отчеты успешно удалены',
-    'Primary Module' => 'Основной модуль',     
+    'Primary Module' => 'Основной модуль', 
+    // SalesPlatform.ru begin
+    'LBL_DASHBOARD' => 'Виджеты', 
+    // SalesPlatform.ru end
     );
 $jsLanguageStrings = array(
 	'JS_DUPLICATE_RECORD'          => 'Дубликат отчета'            , // TODO: Review
@@ -250,12 +262,20 @@ $jsLanguageStrings = array(
     //SalesPlatform.ru begin
     'JS_LBL_NO_DATA_FOR_SELECTED_FILTERS' => 'Для выбранных фильров нет данных',    
     //SalesPlatform.ru end
-    'JS_CHART_PINNED_TO_DASHBOARD' => 'Диаграмма, прикрепленная к панели приборов',
-    'JS_CHART_ALREADY_PINNED_TO_DASHBOARD' => 'Диаграмма уже привязана к  панели приборов',
+    // SalesPlatform.ru begin
+    //'JS_CHART_PINNED_TO_DASHBOARD' => 'Диаграмма, прикрепленная к панели приборов',
+    //'JS_CHART_ALREADY_PINNED_TO_DASHBOARD' => 'Диаграмма уже привязана к  панели приборов',
+    'JS_CHART_PINNED_TO_DASHBOARD' => 'Диаграмма прикреплена к панели инструментов',
+    'JS_CHART_ALREADY_PINNED_TO_DASHBOARD' => 'Диаграмма уже привязана к панели инструментов',
+    // SalesPlatform.ru end
     'JS_MOVE_REPORTS'=>'Перемещение отчетов',
     'JS_SCHEDULED_DATE_TIME_ERROR' => 'Запланированная дата и время должно быть больше текущей даты и времени',
-    'JSLBL_PIN_CHART_TO_DASHBOARD' => 'График ПИН-код для приборной панели',
-    'JSLBL_UNPIN_CHART_FROM_DASHBOARD' => 'Открепить диаграмму из приборной панели',
+    //SalesPlatform.ru begin
+    //'JSLBL_PIN_CHART_TO_DASHBOARD' => 'График ПИН-код для приборной панели',
+    //'JSLBL_UNPIN_CHART_FROM_DASHBOARD' => 'Открепить диаграмму из приборной панели',
+    'JSLBL_PIN_CHART_TO_DASHBOARD' => 'Прикрепить диаграмму на панель инструментов',
+    'JSLBL_UNPIN_CHART_FROM_DASHBOARD' => 'Удалить диаграмму из панели инструментов',
+    //SalesPlatform.ru end
     'JS_CHART_REMOVED_FROM_DASHBOARD' => 'Диаграмма удалена из панели',
     );
 

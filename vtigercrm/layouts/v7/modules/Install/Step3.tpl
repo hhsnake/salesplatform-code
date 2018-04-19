@@ -19,7 +19,7 @@
 					<h4>{vtranslate('LBL_INSTALL_PREREQUISITES', 'Install')}</h4>
 				</div>
 				<div class="col-sm-2">
-					<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">
+					<a href="http://salesplatform.ru/wiki/index.php/SalesPlatform_vtiger_crm_7" target="_blank" class="pull-right">
 						<img src="{'help.png'|vimage_path}" alt="Help-Icon"/>
 					</a>
 				</div>
@@ -32,7 +32,7 @@
 						<div class=" pull-right">
 							<div class="button-container">
 								<a href ="#">
-									<input type="button" class="btn" value="{vtranslate('LBL_RECHECK', 'Install')}" id='recheck'/>
+									<input type="button" class="btn btn-default" value="{vtranslate('LBL_RECHECK', 'Install')}" id='recheck'/>
 								</a>
 							</div>
 						</div>
@@ -79,7 +79,10 @@
 								</tr>
 								{foreach key=DIRECTIVE item=VALUE from=$PHP_INI_CURRENT_SETTINGS name=directives}
 									<tr>
-										<td>{$DIRECTIVE}</td><td>{$PHP_INI_RECOMMENDED_SETTINGS[$DIRECTIVE]}</td><td class="no">{$VALUE}</td>
+                                                                                {* SalesPlatform.ru begin #5732 *}
+                                                                                {* <td>{$DIRECTIVE}</td><td>{$PHP_INI_RECOMMENDED_SETTINGS[$DIRECTIVE]}</td><td class="no">{$VALUE}</td> *}
+                                                                                <td>{$DIRECTIVE}</td><td>{$PHP_INI_RECOMMENDED_SETTINGS[$DIRECTIVE]}</td><td class="no">{vtranslate($VALUE, 'Install')}</td>
+                                                                                {* SalesPlatform.ru end *}
 									</tr>
 								{/foreach}
 							</table>
@@ -91,7 +94,10 @@
 								</tr>
 								{foreach item=FILE_PATH key=FILE_NAME from=$FAILED_FILE_PERMISSIONS}
 									<tr>
-										<td nowrap>{$FILE_NAME} ({str_replace("./","",$FILE_PATH)})</td><td class="no">{vtranslate('LBL_NO', 'Install')}</td>
+                                                                                {* SalesPlatform.ru begin #5732 *}
+                                                                                {* <td nowrap>{$FILE_NAME} ({str_replace("./","",$FILE_PATH)})</td><td class="no">{vtranslate('LBL_NO', 'Install')}</td> *}
+                                                                                <td nowrap>{vtranslate($FILE_NAME, 'Install')} ({str_replace("./","",$FILE_PATH)})</td><td class="no">{vtranslate('LBL_NO', 'Install')}</td>
+                                                                                {* SalesPlatform.ru end *}
 									</tr>
 								{/foreach}
 							</table>
@@ -103,7 +109,7 @@
 				<div class="col-sm-2"></div>
 				<div class="col-sm-8">
 					<div class="button-container">
-						<input type="button" class="btn btn-large" value="{vtranslate('LBL_BACK', 'Install')}" name="back"/>
+						<input type="button" class="btn btn-default" value="{vtranslate('LBL_BACK', 'Install')}" name="back"/>
 						<input type="button" class="btn btn-large btn-primary" value="{vtranslate('LBL_NEXT', 'Install')}" name="step4"/>
 					</div>
 				</div>

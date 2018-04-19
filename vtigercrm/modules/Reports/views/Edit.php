@@ -233,7 +233,10 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 		$record = $request->get('record');
 
 		$reportModel = Reports_Record_Model::getCleanInstance($record);
-		if (!empty($record)) {
+        //SalesPlatform.ru begin
+        if (!empty($record) && $reportModel->getPrimaryModule() == $request->get('primary_module')) {
+		//if (!empty($record)) { 
+        //SalesPlatform.ru end
 			$viewer->assign('SELECTED_STANDARD_FILTER_FIELDS', $reportModel->getSelectedStandardFilter());
 			$viewer->assign('SELECTED_ADVANCED_FILTER_FIELDS', $reportModel->transformToNewAdvancedFilter());
 		}

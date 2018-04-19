@@ -301,14 +301,17 @@ class MailManager_Connector_Connector {
 	 */
 	public function deleteMail($msgno) {
 		$msgno = trim($msgno,',');
-                // SalesPlatform begin
+		$msgno = explode(',',$msgno);
+                //SalesPlatform.ru begin
+		//for($i = 0;$i<count($msgno);$i++) {
+		//	@imap_delete($this->mBox, $msgno[$i]);
+		//}
                 $trashFolder = MailManager_Mailbox_Model::activeInstance()->trash();
                 $folder = $this->convertCharacterEncoding(html_entity_decode($trashFolder),'UTF7-IMAP','UTF-8'); 
-		$msgno = explode(',',$msgno);
 		for($i = 0;$i<count($msgno);$i++) { 
 			@imap_mail_move($this->mBox, $msgno[$i], $folder);
 		}
-                // SalesPlatform end
+                //SalesPlatform.ru end
 		imap_expunge($this->mBox);
 	}
 

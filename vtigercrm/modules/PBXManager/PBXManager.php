@@ -129,6 +129,7 @@ class PBXManager extends CRMEntity {
         } else if ($event_type == 'module.preupdate') {
             // TODO Handle actions before this module is updated.
         } else if ($event_type == 'module.postupdate') {
+			$this->registerLookupEvents();
             // TODO Handle actions before this module is updated.
         }
     }
@@ -146,7 +147,6 @@ class PBXManager extends CRMEntity {
         global $log;
         $module = Vtiger_Module::getInstance('Users');
         if ($module) {
-            $module->initTables();
             $blockInstance = Vtiger_Block::getInstance('LBL_MORE_INFORMATION', $module);
             if ($blockInstance) {
                 $fieldInstance = new Vtiger_Field();
@@ -156,8 +156,8 @@ class PBXManager extends CRMEntity {
                 $fieldInstance->typeofdata = 'V~O';
                 $blockInstance->addField($fieldInstance);
             }
+        	$log->info('User Extension Field added');
         }
-        $log->fatal('User Extension Field added');
     }
     
     /**
@@ -172,6 +172,7 @@ class PBXManager extends CRMEntity {
         $restoreEvent = 'vtiger.entity.afterrestore';
         $batchSaveEvent = 'vtiger.batchevent.save';
         $batchDeleteEvent = 'vtiger.batchevent.delete';
+		$convertLeadEvent = 'vtiger.lead.convertlead';
         $handler_path = 'modules/PBXManager/PBXManagerHandler.php';
         $className = 'PBXManagerHandler';
         $batchEventClassName = 'PBXManagerBatchHandler';
@@ -180,6 +181,7 @@ class PBXManager extends CRMEntity {
         $EventManager->registerHandler($restoreEvent, $handler_path, $className);
         $EventManager->registerHandler($batchSaveEvent, $handler_path, $batchEventClassName);
         $EventManager->registerHandler($batchDeleteEvent, $handler_path, $batchEventClassName);
+		$EventManager->registerHandler($convertLeadEvent, $handler_path, $className);
         $log->fatal('Lookup Events Registered');
     }
     

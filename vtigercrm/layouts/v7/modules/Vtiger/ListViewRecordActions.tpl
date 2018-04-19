@@ -15,16 +15,26 @@
         <input type="checkbox" value="{$LISTVIEW_ENTRY->getId()}" class="listViewEntriesCheckBox"/>
     </span>
     {/if}
-    {if $LISTVIEW_ENTRY->get('starred') eq 'Yes'}
+    {* SalesPlatform.ru begin *}
+    {if $LISTVIEW_ENTRY->getRaw('starred') eq 1}
+    {* {if $LISTVIEW_ENTRY->get('starred') eq 'Yes'} *}
+    {* SalesPlatform.ru end *}
         {assign var=STARRED value=true}
     {else}
         {assign var=STARRED value=false}
     {/if}
     {if $QUICK_PREVIEW_ENABLED eq 'true'}
-        <span class="quickView fa fa-eye icon action" data-app="{$SELECTED_MENU_CATEGORY}" title="{vtranslate('LBL_QUICK_VIEW', $MODULE)}"></span>
+		<span>
+			<a class="quickView fa fa-eye icon action" data-app="{$SELECTED_MENU_CATEGORY}" title="{vtranslate('LBL_QUICK_VIEW', $MODULE)}"></a>
+		</span>
     {/if}
 	{if $MODULE_MODEL->isStarredEnabled()}
-		<span class="markStar fa icon action {if $STARRED} fa-star active {else} fa-star-o{/if}" title="{if $STARRED} {vtranslate('LBL_STARRED', $MODULE)} {else} {vtranslate('LBL_NOT_STARRED', $MODULE)}{/if}"></span> 
+		<span>
+            {* SalesPlatform.ru begin *}
+			<a class="markStar fa icon action {if $STARRED} fa-star active {else} fa-star-o{/if}" title="{if $STARRED} {vtranslate('LBL_FOLLOWING', $MODULE)} {else} {vtranslate('LBL_NOT_FOLLOWING', $MODULE)}{/if}"></a>
+            {* <a class="markStar fa icon action {if $STARRED} fa-star active {else} fa-star-o{/if}" title="{if $STARRED} {vtranslate('LBL_STARRED', $MODULE)} {else} {vtranslate('LBL_NOT_STARRED', $MODULE)}{/if}"></a> *}
+            {* SalesPlatform.ru end *}
+		</span>
 	{/if}
     <span class="more dropdown action">
         <span href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">

@@ -11,7 +11,10 @@
 	<div id="taskManagementContainer" class='fc-overlay-modal modal-content' style="height:100%;">
 		<input type="hidden" name="colors" value='{json_encode($COLORS)}'>
 		<div class="overlayHeader">
+			{* SalesPlatform.ru begin *}
+			{* {assign var=HEADER_TITLE value="TASK MANAGEMENT"} *}
 			{assign var=HEADER_TITLE value=vtranslate('TASK MANAGEMENT', 'Calendar')}
+			{* SalesPlatform.ru end *}
 			{include file="ModalHeader.tpl"|vtemplate_path:$MODULE TITLE=$HEADER_TITLE}
 		</div>
 		<hr style="margin:0px;">
@@ -57,7 +60,10 @@
 					{foreach item=PRIORITY from=$PRIORITIES}
 						<div class="col-lg-4 contentsBlock {strtolower($PRIORITY)} ui-droppable" data-priority='{$PRIORITY}' data-page="{$PAGE}">
 							<div class="{strtolower($PRIORITY)}-header" style="border-bottom: 2px solid {$COLORS[$PRIORITY]}">
+								{* SalesPlatform.ru begin *}
+								{* <div class="title" style="background:{$COLORS[$PRIORITY]}"><span>{$PRIORITY}</span></div> *}
 								<div class="title" style="background:{$COLORS[$PRIORITY]}"><span>{vtranslate($PRIORITY, 'Vtiger')}</span></div>
+								{* SalesPlatform.ru end *}
 							</div>
 							<br>
 							<div class="{strtolower($PRIORITY)}-content content" data-priority='{$PRIORITY}' style="border-bottom: 1px solid {$COLORS[$PRIORITY]};padding-bottom: 10px">

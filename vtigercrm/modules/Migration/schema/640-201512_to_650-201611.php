@@ -8,23 +8,11 @@
  * If you have any questions or comments, please email: devel@salesplatform.ru
  ************************************************************************************/
 
-chdir(dirname(__FILE__) . '/../../../');
-include_once 'modules/com_vtiger_workflow/VTTaskManager.inc';
-include_once 'include/utils/utils.php';
-
-vimport('~~modules/com_vtiger_workflow/include.inc');
-vimport('~~modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc');
-vimport('~~modules/com_vtiger_workflow/VTEntityMethodManager.inc');
-vimport('~~include/Webservices/Utils.php');
-vimport('~~modules/Users/Users.php');
-
-global $adb;
 //SalesPlatform.ru begin #3829
 installVtlibModule('Search', 'packages/vtiger/optional/Search.zip');
-//salesPlatform.ru end
-//Vtiger migration begin
+//SalesPlatform.ru end
 if(defined('VTIGER_UPGRADE')) {
-    
+
 //Start add new currency - 'CFP Franc or Pacific Franc' 
 global $adb;
 
@@ -86,7 +74,6 @@ $adb->pquery("Update vtiger_settings_field set linkto='index.php?module=Vtiger&p
 $adb->pquery("ALTER TABLE vtiger_crmentity MODIFY COLUMN description MEDIUMTEXT", array());
 
 }
-//Vtiger migration end
 
 
 //SalesPlatform.ru migration begin

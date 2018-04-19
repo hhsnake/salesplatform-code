@@ -19,7 +19,10 @@ class Services_Module_Model extends Products_Module_Model {
 	 * @return <String> Listview Query
 	 */
 	public function getQueryByModuleField($sourceModule, $field, $record, $listQuery) {
-		$supportedModulesList = array('Leads', 'Accounts', 'HelpDesk', 'Potentials');
+        //SalesPlatform.ru begin
+		//$supportedModulesList = array('Leads', 'Accounts', 'HelpDesk', 'Potentials');
+        $supportedModulesList = array('Contacts', 'Leads', 'Accounts', 'HelpDesk', 'Potentials');
+        //SalesPlatform.ru end 
 		if (($sourceModule == 'PriceBooks' && $field == 'priceBookRelatedList')
 				|| in_array($sourceModule, $supportedModulesList)
 				|| in_array($sourceModule, getInventoryModules())) {
@@ -34,10 +37,7 @@ class Services_Module_Model extends Products_Module_Model {
 
 			$pos = stripos($listQuery, 'where');
 			if ($pos) {
-                //SalesPlatform.ru begin
-				//$split = spliti('where', $listQuery);
-                $split = preg_split('/where/i', $listQuery);
-                //SalesPlatform.ru end
+				$split = preg_split('/where/i', $listQuery);
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
 			} else {
 				$overRideQuery = $listQuery . ' WHERE ' . $condition;

@@ -35,114 +35,122 @@ class Calendar_DragDropAjax_Action extends Calendar_SaveAjax_Action {
 
 		$actionname = 'EditView';
 		$response = new Vtiger_Response();
-		if(isPermitted($moduleName, $actionname, $recordId) === 'no'){
-			$result = array('ispermitted'=>false,'error'=>false);
-			$response->setResult($result);
-			$response->emit();
-		} else {
-			$result = array('ispermitted'=>true,'error'=>false);
-			$record = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
-			$record->set('mode','edit');
-
-			$startDateTime[] = $record->get('date_start');
-			$startDateTime[] = $record->get('time_start');
-			$startDateTime = implode(' ',$startDateTime);
-
-			$oldDateTime[] = $record->get('due_date');
-			$oldDateTime[] = $record->get('time_end');
-			$oldDateTime = implode(' ',$oldDateTime);
-			$resultDateTime = $this->changeDateTime($oldDateTime,$dayDelta,$minuteDelta,$secondsDelta);
-			$interval = strtotime($resultDateTime) - strtotime($startDateTime);
-
-			if(!empty($recurringEditMode) && $recurringEditMode != 'current') {
-				$recurringRecordsList = $record->getRecurringRecordsList();
-				foreach($recurringRecordsList as $parent=>$childs) {
-					$parentRecurringId = $parent;
-					$childRecords = $childs;
-				}
-				if($recurringEditMode == 'future') {
-					$parentKey = array_keys($childRecords, $recordId);
-					$childRecords = array_slice($childRecords, $parentKey[0]);
-				}
-				foreach($childRecords as $childId) {
-					$recordModel = Vtiger_Record_Model::getInstanceById($childId, 'Events');
-					$recordModel->set('mode','edit');
-                                        
-                                        //SalesPlatform begin Array initialization fix
-                                        $startDateTime = [];
-					//$startDateTime = '';
-                                        //SalesPlatform end Array initialization fix
-					$startDateTime[] = $recordModel->get('date_start');
-					$startDateTime[] = $recordModel->get('time_start');
-					$startDateTime = implode(' ',$startDateTime);
-					$dueDate = strtotime($startDateTime) + $interval;
-					$formatDate = date("Y-m-d H:i:s", $dueDate);
-					$parts = explode(' ',$formatDate);
-					$startDateTime = new DateTime($startDateTime);
-
-					$recordModel->set('due_date',$parts[0]);
-					if(activitytype != 'Task') {
-						$recordModel->set('time_end',$parts[1]);
-					}
-                                        
-                                        //SalesPlatform begin Array initialization fix
-                                        $endDateTime = [];
-					//$endDateTime = '';
-                                        //SalesPlatform end Array initialization fix
-					$endDateTime[] = $recordModel->get('due_date');
-					$endDateTime[] = $recordModel->get('time_end');
-					$endDateTime = implode(' ',$endDateTime);
-					$endDateTime = new DateTime($endDateTime);
-
-					if($startDateTime <= $endDateTime) {
-						$this->setRecurrenceInfo($recordModel);
-						$recordModel->save();
-					} else {
-						$result['error'] = true;
-					}
-				}
-				$result['recurringRecords'] = true;
+		try {
+			if(isPermitted($moduleName, $actionname, $recordId) === 'no'){
+				$result = array('ispermitted'=>false,'error'=>false);
+				$response->setResult($result);
 			} else {
-                                //SalesPlatform begin Array initialization fix
-                                $oldDateTime = [];
-				//$oldDateTime = '';
-                                //SalesPlatform end Array initialization fix
+				$result = array('ispermitted'=>true,'error'=>false);
+				$record = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
+				$record->set('mode','edit');
+
+				$startDateTime[] = $record->get('date_start');
+				$startDateTime[] = $record->get('time_start');
+				$startDateTime = implode(' ',$startDateTime);
+
 				$oldDateTime[] = $record->get('due_date');
 				$oldDateTime[] = $record->get('time_end');
 				$oldDateTime = implode(' ',$oldDateTime);
 				$resultDateTime = $this->changeDateTime($oldDateTime,$dayDelta,$minuteDelta,$secondsDelta);
-				$parts = explode(' ',$resultDateTime);
-				$record->set('due_date',$parts[0]);
-				if(activitytype != 'Task') {
-					$record->set('time_end',$parts[1]);
-				}
+				$interval = strtotime($resultDateTime) - strtotime($startDateTime);
 
-                                //SalesPlatform begin Array initialization fix
-                                $startDateTime = [];
-				//$startDateTime = '';
-                                //SalesPlatform end Array initialization fix
-				$startDateTime[] = $record->get('date_start');
-				$startDateTime[] = $record->get('time_start');
-				$startDateTime = implode(' ',$startDateTime);
-				$startDateTime = new DateTime($startDateTime);
+				if(!empty($recurringEditMode) && $recurringEditMode != 'current') {
+					$recurringRecordsList = $record->getRecurringRecordsList();
+					foreach($recurringRecordsList as $parent=>$childs) {
+						$parentRecurringId = $parent;
+						$childRecords = $childs;
+					}
+					if($recurringEditMode == 'future') {
+						$parentKey = array_keys($childRecords, $recordId);
+						$childRecords = array_slice($childRecords, $parentKey[0]);
+					}
+					foreach($childRecords as $childId) {
+						$recordModel = Vtiger_Record_Model::getInstanceById($childId, 'Events');
+						$recordModel->set('mode','edit');
 
-				$endDateTime[] = $record->get('due_date');
-				$endDateTime[] = $record->get('time_end');
-				$endDateTime = implode(' ',$endDateTime);
-				$endDateTime = new DateTime($endDateTime);
-				//Checking if startDateTime is less than or equal to endDateTime
-				if($startDateTime <= $endDateTime) {
-					$this->setRecurrenceInfo($record);
-					$record->save();
+						//SalesPlatform.ru begin
+                                        	$startDateTime = [];
+						//$startDateTime = '';
+						//SalesPlatform.ru end
+						$startDateTime[] = $recordModel->get('date_start');
+						$startDateTime[] = $recordModel->get('time_start');
+						$startDateTime = implode(' ',$startDateTime);
+						$dueDate = strtotime($startDateTime) + $interval;
+						$formatDate = date("Y-m-d H:i:s", $dueDate);
+						$parts = explode(' ',$formatDate);
+						$startDateTime = new DateTime($startDateTime);
+
+						$recordModel->set('due_date',$parts[0]);
+						if(activitytype != 'Task') {
+							$recordModel->set('time_end',$parts[1]);
+						}
+
+						//SalesPlatform.ru begin
+		                                $endDateTime = [];
+						//$endDateTime = '';
+		                                //SalesPlatform.ru end
+						$endDateTime[] = $recordModel->get('due_date');
+						$endDateTime[] = $recordModel->get('time_end');
+						$endDateTime = implode(' ',$endDateTime);
+						$endDateTime = new DateTime($endDateTime);
+
+						if($startDateTime <= $endDateTime) {
+							$this->setRecurrenceInfo($recordModel);
+							$recordModel->save();
+						} else {
+							$result['error'] = true;
+						}
+					}
+					$result['recurringRecords'] = true;
 				} else {
-					$result['error'] = true;
-				}
-				$result['recurringRecords'] = false;
-			}
+					//SalesPlatform.ru begin
+			                $oldDateTime = [];
+					//$oldDateTime = '';
+			                //SalesPlatform.ru end
+					$oldDateTime[] = $record->get('due_date');
+					$oldDateTime[] = $record->get('time_end');
+					$oldDateTime = implode(' ',$oldDateTime);
+					$resultDateTime = $this->changeDateTime($oldDateTime,$dayDelta,$minuteDelta,$secondsDelta);
+					$parts = explode(' ',$resultDateTime);
+					$record->set('due_date',$parts[0]);
+					if(activitytype != 'Task') {
+						$record->set('time_end',$parts[1]);
+					}
 
-			$response->setResult($result);
-			$response->emit();
+					//SalesPlatform.ru begin
+		                        $startDateTime = [];
+					//$startDateTime = '';
+		                        //SalesPlatform.ru end
+					$startDateTime[] = $record->get('date_start');
+					$startDateTime[] = $record->get('time_start');
+					$startDateTime = implode(' ',$startDateTime);
+					$startDateTime = new DateTime($startDateTime);
+					
+					//SalesPlatform.ru begin
+	                                $endDateTime = [];
+	                                //SalesPlatform.ru end
+					$endDateTime[] = $record->get('due_date');
+					$endDateTime[] = $record->get('time_end');
+					$endDateTime = implode(' ',$endDateTime);
+					$endDateTime = new DateTime($endDateTime);
+					//Checking if startDateTime is less than or equal to endDateTime
+					if($startDateTime <= $endDateTime) {
+						$this->setRecurrenceInfo($record);
+						$record->save();
+					} else {
+						$result['error'] = true;
+					}
+					$result['recurringRecords'] = false;
+				}
+
+				$response->setResult($result);
+			}
+		} catch (DuplicateException $e) {
+			$response->setError($e->getMessage(), $e->getDuplicationMessage(), $e->getMessage());
+		} catch (Exception $e) {
+			$response->setError($e->getMessage());
 		}
+		$response->emit();
 	}
 
 	function setRecurrenceInfo($recordModel) {
@@ -193,114 +201,122 @@ class Calendar_DragDropAjax_Action extends Calendar_SaveAjax_Action {
 		$actionname = 'EditView';
 
 		$response = new Vtiger_Response();
-		if(isPermitted($moduleName, $actionname, $recordId) === 'no'){
-			$result = array('ispermitted'=>false);
-			$response->setResult($result);
-			$response->emit();
-		}
-		else{
-			$result = array('ispermitted'=>true);
-			$record = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
-			$record->set('mode','edit');
-
-			$oldStartDateTime[] = $record->get('date_start');
-			$oldStartDateTime[] = $record->get('time_start');
-			$oldStartDateTime = implode(' ',$oldStartDateTime);
-			$resultDateTime = $this->changeDateTime($oldStartDateTime, $dayDelta, $minuteDelta, $secondsDelta);
-			$startDateInterval = strtotime($resultDateTime) - strtotime($oldStartDateTime);
-
-			$oldEndDateTime[] = $record->get('due_date');
-			$oldEndDateTime[] = $record->get('time_end');
-			$oldEndDateTime = implode(' ', $oldEndDateTime);
-			$resultDateTime = $this->changeDateTime($oldEndDateTime, $dayDelta, $minuteDelta, $secondsDelta);
-			$endDateInterval = strtotime($resultDateTime) - strtotime($oldEndDateTime);
-
-			if (!empty($recurringEditMode) && $recurringEditMode != 'current') {
-				$recurringRecordsList = $record->getRecurringRecordsList();
-				foreach ($recurringRecordsList as $parent => $childs) {
-					$parentRecurringId = $parent;
-					$childRecords = $childs;
-				}
-				if ($recurringEditMode == 'future') {
-					$parentKey = array_keys($childRecords, $recordId);
-					$childRecords = array_slice($childRecords, $parentKey[0]);
-				}
-				foreach ($childRecords as $childId) {
-					$recordModel = Vtiger_Record_Model::getInstanceById($childId, 'Events');
-					$recordModel->set('mode', 'edit');
-                                        
-                                        //SalesPlatform begin Array initialization fix
-                                        $startDateTime = [];
-					//$startDateTime = '';
-                                        //SalesPlatform end Array initialization fix
-					$startDateTime[] = $recordModel->get('date_start');
-					$startDateTime[] = $recordModel->get('time_start');
-					$startDateTime = implode(' ', $startDateTime);
-					$startDate = strtotime($startDateTime) + $startDateInterval;
-					$formatStartDate = date("Y-m-d H:i:s", $startDate);
-					$parts = explode(' ', $formatStartDate);
-					$startDateTime = new DateTime($startDateTime);
-
-					$recordModel->set('date_start', $parts[0]);
-					if (activitytype != 'Task')
-						$recordModel->set('time_start', $parts[1]);
-
-					//SalesPlatform begin Array initialization fix
-                                        $endDateTime = [];
-					//$endDateTime = '';
-                                        //SalesPlatform end Array initialization fix
-					$endDateTime[] = $recordModel->get('due_date');
-					$endDateTime[] = $recordModel->get('time_end');
-					$endDateTime = implode(' ', $endDateTime);
-					$endDate = strtotime($endDateTime) + $endDateInterval;
-					$formatEndDate = date("Y-m-d H:i:s", $endDate);
-					$endDateParts = explode(' ', $formatEndDate);
-					$endDateTime = new DateTime($endDateTime);
-					$recordModel->set('due_date', $endDateParts[0]);
-					if (activitytype != 'Task')
-						$recordModel->set('time_end', $endDateParts[1]);
-
-					$this->setRecurrenceInfo($recordModel);
-					$recordModel->save();
-				}
-				$result['recurringRecords'] = true;
+		try {
+			if(isPermitted($moduleName, $actionname, $recordId) === 'no'){
+				$result = array('ispermitted'=>false);
+				$response->setResult($result);
 			} else {
-                            
-                                //SalesPlatform begin Array initialization fix
-                                $oldStartDateTime = [];
-                                //$oldStartDateTime = '';
-                                //SalesPlatform end Array initialization fix
-                                
+				$result = array('ispermitted'=>true);
+				$record = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
+				$record->set('mode','edit');
+				
+				//SalesPlatform.ru begin
+				$oldStartDateTime = [];
+				//SalesPlatform.ru end
 				$oldStartDateTime[] = $record->get('date_start');
 				$oldStartDateTime[] = $record->get('time_start');
-				$oldStartDateTime = implode(' ', $oldStartDateTime);
-				$resultDateTime = $this->changeDateTime($oldStartDateTime,$dayDelta,$minuteDelta,$secondsDelta);
-				$parts = explode(' ',$resultDateTime);
-				$record->set('date_start',$parts[0]);
-				$record->set('time_start',$parts[1]);
-
-                                //SalesPlatform begin Array initialization fix
-                                $oldEndDateTime = [];
-				//$oldEndDateTime = '';
-                                //SalesPlatform end Array initialization fix
-                                
+				$oldStartDateTime = implode(' ',$oldStartDateTime);
+				$resultDateTime = $this->changeDateTime($oldStartDateTime, $dayDelta, $minuteDelta, $secondsDelta);
+				$startDateInterval = strtotime($resultDateTime) - strtotime($oldStartDateTime);
+				
+				//SalesPlatform.ru begin
+				$oldEndDateTime = [];
+				//SalesPlatform.ru end
 				$oldEndDateTime[] = $record->get('due_date');
 				$oldEndDateTime[] = $record->get('time_end');
-				$oldEndDateTime = implode(' ',$oldEndDateTime);
-				$resultDateTime = $this->changeDateTime($oldEndDateTime,$dayDelta,$minuteDelta,$secondsDelta);
-				$parts = explode(' ',$resultDateTime);
-				$record->set('due_date',$parts[0]);
-				if(activitytype != 'Task') {
-					$record->set('time_end',$parts[1]);
-				}
+				$oldEndDateTime = implode(' ', $oldEndDateTime);
+				$resultDateTime = $this->changeDateTime($oldEndDateTime, $dayDelta, $minuteDelta, $secondsDelta);
+				$endDateInterval = strtotime($resultDateTime) - strtotime($oldEndDateTime);
 
-				$this->setRecurrenceInfo($record);
-				$record->save();
-				$result['recurringRecords'] = false;
+				if (!empty($recurringEditMode) && $recurringEditMode != 'current') {
+					$recurringRecordsList = $record->getRecurringRecordsList();
+					foreach ($recurringRecordsList as $parent => $childs) {
+						$parentRecurringId = $parent;
+						$childRecords = $childs;
+					}
+					if ($recurringEditMode == 'future') {
+						$parentKey = array_keys($childRecords, $recordId);
+						$childRecords = array_slice($childRecords, $parentKey[0]);
+					}
+					foreach ($childRecords as $childId) {
+						$recordModel = Vtiger_Record_Model::getInstanceById($childId, 'Events');
+						$recordModel->set('mode', 'edit');
+						
+						//SalesPlatform.ru begin
+						//$startDateTime = '';
+						$startDateTime = [];
+						//SalesPlatform.ru end
+						$startDateTime = '';
+						$startDateTime[] = $recordModel->get('date_start');
+						$startDateTime[] = $recordModel->get('time_start');
+						$startDateTime = implode(' ', $startDateTime);
+						$startDate = strtotime($startDateTime) + $startDateInterval;
+						$formatStartDate = date("Y-m-d H:i:s", $startDate);
+						$parts = explode(' ', $formatStartDate);
+						$startDateTime = new DateTime($startDateTime);
+
+						$recordModel->set('date_start', $parts[0]);
+						if (activitytype != 'Task')
+							$recordModel->set('time_start', $parts[1]);
+						
+						//SalesPlatform.ru begin
+						//$endDateTime = '';
+						$endDateTime = [];
+						//SalesPlatform.ru end
+						$endDateTime[] = $recordModel->get('due_date');
+						$endDateTime[] = $recordModel->get('time_end');
+						$endDateTime = implode(' ', $endDateTime);
+						$endDate = strtotime($endDateTime) + $endDateInterval;
+						$formatEndDate = date("Y-m-d H:i:s", $endDate);
+						$endDateParts = explode(' ', $formatEndDate);
+						$endDateTime = new DateTime($endDateTime);
+						$recordModel->set('due_date', $endDateParts[0]);
+						if (activitytype != 'Task')
+							$recordModel->set('time_end', $endDateParts[1]);
+
+						$this->setRecurrenceInfo($recordModel);
+						$recordModel->save();
+					}
+					$result['recurringRecords'] = true;
+				} else {
+					//SalesPlatform.ru begin
+					//$oldStartDateTime = '';
+					$oldStartDateTime = [];
+					//SalesPlatform.ru end
+					$oldStartDateTime[] = $record->get('date_start');
+					$oldStartDateTime[] = $record->get('time_start');
+					$oldStartDateTime = implode(' ', $oldStartDateTime);
+					$resultDateTime = $this->changeDateTime($oldStartDateTime,$dayDelta,$minuteDelta,$secondsDelta);
+					$parts = explode(' ',$resultDateTime);
+					$record->set('date_start',$parts[0]);
+					$record->set('time_start',$parts[1]);
+					
+					//SalesPlatform.ru begin
+					//$oldEndDateTime = '';
+					$oldEndDateTime = [];
+					//SalesPlatform.ru end
+					$oldEndDateTime[] = $record->get('due_date');
+					$oldEndDateTime[] = $record->get('time_end');
+					$oldEndDateTime = implode(' ',$oldEndDateTime);
+					$resultDateTime = $this->changeDateTime($oldEndDateTime,$dayDelta,$minuteDelta,$secondsDelta);
+					$parts = explode(' ',$resultDateTime);
+					$record->set('due_date',$parts[0]);
+					if(activitytype != 'Task') {
+						$record->set('time_end',$parts[1]);
+					}
+
+					$this->setRecurrenceInfo($record);
+					$record->save();
+					$result['recurringRecords'] = false;
+				}
 			}
 			$response->setResult($result);
-			$response->emit();
+		} catch (DuplicateException $e) {
+			$response->setError($e->getMessage(), $e->getDuplicationMessage(), $e->getMessage());
+		} catch (Exception $e) {
+			$response->setError($e->getMessage());
 		}
+		$response->emit();
 	}
 	/* *
 	 * Function adds days and minutes to datetime string

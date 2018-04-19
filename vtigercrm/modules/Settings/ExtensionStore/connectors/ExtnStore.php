@@ -95,6 +95,10 @@ class Settings_ExtensionStore_ExtnStore_Connector {
 			$client->setAuthorization($authParams['username'], $authParams['password']);
 		}
 
+		global $application_unique_key;
+		if (!$params) $params = array();
+		if (!isset($params['uid'])) $params['uid'] = $application_unique_key;
+
 		$content = $client->$fn($params);
 		$response = $content['response'];
 		$status = $content['status'];
@@ -371,7 +375,7 @@ class Settings_ExtensionStore_ExtnStore_Connector {
 		try {
 			$this->auth = $this->api('/app/customer', 'POST', $signupParams, false);
 			if ($this->auth) {
-				$this->persistLogin($this->auth['email'], $this->auth['password'], false);
+				$this->persistLogin($this->auth['email'], md5($this->auth['password']), false);
 			}
 			return array('success' => true, 'result' => $this->auth);
 		} catch (Exception $ex) {
@@ -483,4 +487,15 @@ class Settings_ExtensionStore_ExtnStore_Connector {
 			return array('success' => false, 'error' => $ex->getMessage());
 		}
 	}
+
+	public function forgotPassword($emailAddress) {
+		$params = array('email' => $emailAddress);
+		try {
+			$response = $this->api('/app/forgotpassword', 'POST', $params, false);
+			return array('success' => true, 'result' => $response);
+		} catch (Exception $ex) {
+			return array('success' => false, 'error' => $ex->getMessage());
+		}
+	}
+
 }

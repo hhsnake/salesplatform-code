@@ -177,7 +177,7 @@ class PBXManager_IncomingCallPoll_Action extends Vtiger_Action_Controller{
     function checkPermissionForPolling(Vtiger_Request $request) {
         Users_Privileges_Model::getCurrentUserPrivilegesModel();
         $callPermission = Users_Privileges_Model::isPermitted('PBXManager', 'ReceiveIncomingCalls');
-
+        
         $serverModel = PBXManager_Server_Model::getInstance();
         $gateway = $serverModel->get("gateway");
 

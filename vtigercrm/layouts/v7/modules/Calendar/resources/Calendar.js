@@ -80,12 +80,11 @@ Vtiger.Class("Calendar_Calendar_Js", {
 					app.helper.hideProgress();
 					app.helper.hideModal();
 					if (!err && res['created']) {
+						jQuery('.vt-notification').remove();
 						thisInstance.updateListView();
 						thisInstance.updateCalendarView("Event");
 					} else {
-						app.helper.showErrorNotification({
-							'message': app.vtranslate('JS_NO_EDIT_PERMISSION')
-						});
+						app.event.trigger('post.save.failed', err);
 					}
 				});
 			}
@@ -139,10 +138,9 @@ Vtiger.Class("Calendar_Calendar_Js", {
 			};
 
 			app.request.post({'data': requestParams}).then(function (e, res) {
+				jQuery('.vt-notification').remove();
 				if (e) {
-					app.helper.showErrorNotification({
-						'message': app.vtranslate('JS_PERMISSION_DENIED')
-					});
+					app.event.trigger('post.save.failed', e);
 				} else if (res && res['valid'] === true && res['markedascompleted'] === true) {
 					thisInstance.updateListView();
 					thisInstance.updateCalendarView(res.activitytype);
@@ -259,6 +257,7 @@ Vtiger.Class("Calendar_Calendar_Js", {
 	},
 	renderEvents: function () {
 		var thisInstance = this;
+                
 		this.getCalendarViewContainer().fullCalendar('addEventSource',
 				function (start, end, timezone, render) {
 					thisInstance.getCalendarViewContainer().fullCalendar('removeEvents');
@@ -1046,14 +1045,21 @@ Vtiger.Class("Calendar_Calendar_Js", {
 				var formData = jQuery(form).serialize();
 				app.helper.showProgress();
 				app.request.post({data: formData}).then(function (err, data) {
+					app.helper.hideProgress();
 					if (!err) {
-						app.helper.showSuccessNotification({"message": ''});
+						jQuery('.vt-notification').remove();
+						app.helper.hideModal();
+                                                // SalesPlatform.ru begin
+                                                var serializedFormData = jQuery(form).serializeFormData();
+						//var message = typeof formData.record !== 'undefined' ? app.vtranslate('JS_EVENT_UPDATED') : app.vtranslate('JS_RECORD_CREATED');
+						var message = serializedFormData.record ? app.vtranslate('JS_EVENT_UPDATED') : app.vtranslate('JS_RECORD_CREATED');
+                                                // SalesPlatform.ru end
+						app.helper.showSuccessNotification({"message": message});
 						thisInstance.showEventOnCalendar(data);
 					} else {
-						app.helper.showErrorNotification({"message": err});
+						app.event.trigger('post.save.failed', err);
+						jQuery("button[name='saveButton']").removeAttr('disabled');
 					}
-					app.helper.hideModal();
-					app.helper.hideProgress();
 				});
 			}
 		};
@@ -1208,6 +1214,7 @@ Vtiger.Class("Calendar_Calendar_Js", {
 		app.request.post({'data': postData}).then(function (e, resp) {
 			app.helper.hideProgress();
 			if (!e) {
+				jQuery('.vt-notification').remove();
 				if (!resp['ispermitted']) {
 					revertFunc();
 					app.helper.showErrorNotification({
@@ -1224,7 +1231,8 @@ Vtiger.Class("Calendar_Calendar_Js", {
 					});
 				}
 			} else {
-				console.log("error : ", e);
+				app.event.trigger('post.save.failed', e);
+				thisInstance.updateAllEventsOnCalendar();
 			}
 		});
 	},
@@ -1359,14 +1367,16 @@ Vtiger.Class("Calendar_Calendar_Js", {
 		jQuery.extend(formData, extraParams);
 		app.helper.showProgress();
 		app.request.post({data: formData}).then(function (err, data) {
-			if (!err) {
-				app.helper.showSuccessNotification({"message": ''});
-			} else {
-				app.helper.showErrorNotification({"message": err});
-			}
-			app.event.trigger("post.QuickCreateForm.save", data, jQuery(form).serializeFormData());
-			app.helper.hideModal();
 			app.helper.hideProgress();
+			if (!err) {
+				jQuery('.vt-notification').remove();
+				app.helper.showSuccessNotification({"message": ''});
+				app.event.trigger("post.QuickCreateForm.save", data, jQuery(form).serializeFormData());
+				app.helper.hideModal();
+			} else {
+				app.event.trigger('post.save.failed', err);
+				jQuery("button[name='saveButton']").removeAttr("disabled");
+			}
 		});
 	},
 	validateAndUpdateEvent: function (modalContainer, isRecurring) {
@@ -1562,6 +1572,16 @@ Vtiger.Class("Calendar_Calendar_Js", {
 		var thisInstance = this;
 		var userDefaultActivityView = thisInstance.getDefaultCalendarView();
 		var userDefaultTimeFormat = thisInstance.getDefaultCalendarTimeFormat();
+                // SalesPlatform.ru begin
+                var dateFormat = jQuery('#date_format').val();
+                var monthPos = dateFormat.search("mm");
+                var datePos = dateFormat.search("dd");
+                if(monthPos < datePos) {
+                    dateFormat = "M/D";
+                } else {
+                    dateFormat = "D/M";
+                }
+                // SalesPlatform.ru end
 		var calenderConfigs = {
 			header: {
 				left: 'month,agendaWeek,agendaDay,vtAgendaList',
@@ -1571,8 +1591,14 @@ Vtiger.Class("Calendar_Calendar_Js", {
 			views: {
 				vtAgendaList: {
 					duration: {days: Calendar_Calendar_Js.numberOfDaysInAgendaView}
-				}
+				},
+                                // SalesPlatform.ru begin
+                                week: {
+                                    columnFormat: 'ddd' + ' ' + dateFormat
+                                }
+                                // SalesPlatform.ru end
 			},
+                        
 			fixedWeekCount: false,
 			firstDay: thisInstance.daysOfWeek[thisInstance.getUserPrefered('start_day')],
 			scrollTime: thisInstance.getUserPrefered('start_hour'),
@@ -1582,6 +1608,9 @@ Vtiger.Class("Calendar_Calendar_Js", {
                         //SalesPlatform.ru end
 			editable: true,
 			eventLimit: true,
+                        //SalesPlatform.ru begin #5716 add localization for more link
+                        eventLimitText: app.vtranslate('LBL_MORE'),
+                        //SalesPlatform.ru end
 			defaultView: userDefaultActivityView,
 			slotLabelFormat: userDefaultTimeFormat,
 			timeFormat: userDefaultTimeFormat,
@@ -1730,7 +1759,6 @@ Vtiger.Class("Calendar_Calendar_Js", {
 		var FC = jQuery.fullCalendar;
 		var view = FC.View;
 		var agendaListView;
-
 		agendaListView = view.extend({
 			initialize: function () {
 				var dateFormat = thisInstance.getUserPrefered('date_format');

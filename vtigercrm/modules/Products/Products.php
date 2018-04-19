@@ -1231,6 +1231,15 @@ class Products extends CRMEntity {
 		if ($queryplanner->requireTable("vtiger_createdbyProducts")){
 			$query .= " left join vtiger_users as vtiger_createdbyProducts on vtiger_createdbyProducts.id = vtiger_crmentityProducts.smcreatorid ";
 		}
+                // SalesPlatform.ru begin
+		if ($queryplanner->requireTable("vtiger_inventorytaxinfo_products")) {
+		    $query .= " left join vtiger_producttaxrel AS vtiger_producttaxrel_products on vtiger_producttaxrel_products.productid = vtiger_products.productid";
+		    $query .= " left join vtiger_inventorytaxinfo AS vtiger_inventorytaxinfo_products on vtiger_inventorytaxinfo_products.taxid = vtiger_producttaxrel_products.taxid";
+		}
+		// SalesPlatform.ru end
+		//if secondary modules custom reference field is selected
+                $query .= parent::getReportsUiType10Query($secmodule, $queryplanner);
+
 		return $query;
 	}
 

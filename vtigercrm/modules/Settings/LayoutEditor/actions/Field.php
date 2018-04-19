@@ -18,6 +18,7 @@ class Settings_LayoutEditor_Field_Action extends Settings_Vtiger_Index_Action {
         $this->exposeMethod('delete');
         $this->exposeMethod('move');
         $this->exposeMethod('unHide');
+		$this->exposeMethod('updateDuplicateHandling');
     }
 
     public function add(Vtiger_Request $request) {
@@ -161,7 +162,9 @@ class Settings_LayoutEditor_Field_Action extends Settings_Vtiger_Index_Action {
             $fieldLabel = array_merge(array($fieldLabel),$pickListValues);
         }
         $fieldInstance->delete();
-        Settings_LayoutEditor_Module_Model::removeLabelFromLangFile($sourceModule, $fieldLabel);
+        //SalesPlatform.ru begin
+        //Settings_LayoutEditor_Module_Model::removeLabelFromLangFile($sourceModule, $fieldLabel);
+        //SalesPlatform.ru end
         //we should delete any update field workflow associated with custom field
         $moduleName = $fieldInstance->getModule()->getName();
         Settings_Workflows_Record_Model::deleteUpadateFieldWorkflow($moduleName, $fieldInstance->getFieldName());
@@ -200,7 +203,23 @@ class Settings_LayoutEditor_Field_Action extends Settings_Vtiger_Index_Action {
         $response->emit();
 
     }
-    
+
+	public function updateDuplicateHandling(Vtiger_Request $request) {
+		$response = new Vtiger_Response();
+		try {
+			$sourceModule = $request->get('sourceModule');
+			$moduleModel = Settings_LayoutEditor_Module_Model::getInstanceByName($sourceModule);
+
+			$fieldIdsList = $request->get('fieldIdsList');
+			$result = $moduleModel->updateDuplicateHandling($request->get('rule'), $fieldIdsList, $request->get('syncActionId'));
+
+			$response->setResult($result);
+		} catch (Exception $e) {
+			$response->setError($e->getCode(), $e->getMessage());
+		}
+		$response->emit();
+	}
+
     public function validateRequest(Vtiger_Request $request) {
         $request->validateWriteAccess();
     }

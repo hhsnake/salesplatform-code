@@ -300,17 +300,14 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 
 
 	public static function getPicklistSupportedModules() {
-		 $db = PearDatabase::getInstance();
-		 $restrictedPickListModule = array('Transactions');
-		// vtlib customization: Ignore disabled modules.
+		$db = PearDatabase::getInstance();
+		$unsupportedModuleIds = array(getTabId('Users'), getTabId('Emails'));
 		$query = "SELECT distinct vtiger_tab.tablabel, vtiger_tab.name as tabname
 				  FROM vtiger_tab
 						inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid
-				  WHERE uitype IN (15,33,16,114) and vtiger_field.tabid NOT IN (29,10)  and vtiger_tab.presence != 1 and vtiger_field.presence in (0,2)
-				  AND vtiger_tab.tablabel NOT IN (" . generateQuestionMarks($restrictedPickListModule) . ")
+				  WHERE uitype IN (15,33,16,114) and vtiger_field.tabid NOT IN (". implode(',', $unsupportedModuleIds) .")  and vtiger_tab.presence != 1 and vtiger_field.presence in (0,2)
 				  ORDER BY vtiger_tab.tabid ASC";
-		// END
-		$result = $db->pquery($query, array($restrictedPickListModule));
+		$result = $db->pquery($query, array());
 
 		$modulesModelsList = array();
 		while($row = $db->fetch_array($result)){
@@ -491,6 +488,7 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 			$query = 'SELECT '.$primaryKey.',color,'.$fieldName.' FROM vtiger_'.$fieldName;
 			$result = $db->pquery($query);
 			$pickListColorMap = array();
+                        $isRoleBasedPicklist = vtws_isRoleBasedPicklist($fieldName);
 			$accessablePicklistValues = self::getAccessiblePicklistValues($fieldName);
 			if($db->num_rows($result) > 0){
 				for($i=0; $i<$db->num_rows($result); $i++) {
@@ -499,7 +497,7 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 					$picklistNameRaw = $db->query_result($result, $i, $fieldName);
 					$picklistName = decode_html($picklistNameRaw);
 					// show color only for accesable picklist values
-					if(vtws_isRoleBasedPicklist($fieldName) && !isset($accessablePicklistValues[$picklistNameRaw])) {
+					if($isRoleBasedPicklist && !isset($accessablePicklistValues[$picklistNameRaw])) {
 						$color = '';
 					}
 					if(!empty($color)) {

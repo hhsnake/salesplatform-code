@@ -63,10 +63,10 @@ class MailManager_Settings_View extends MailManager_MainUI_View {
                 $mboxFolder = strtolower($request->get('_mbox_sent_folder'));
                 $tboxFolder = strtolower($request->get('_mbox_trash_folder'));
                 foreach($folderInstaces as $folder) {
-                    if(strtolower($folder->name()) == $mboxFolder) {
+                    if(mb_strtolower($folder->name()) == $mboxFolder) {
                         $sentFolder = $folder->name();
                     }
-                    if(strtolower($folder->name()) == $tboxFolder) {
+                    if(mb_strtolower($folder->name()) == $tboxFolder) {
                         $trashFolder = $folder->name();
                     }
                 }

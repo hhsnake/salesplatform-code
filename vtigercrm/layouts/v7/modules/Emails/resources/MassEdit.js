@@ -71,7 +71,7 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 	/**
 	 * function to call the registerevents of send Email step1
 	 */
-	registerEmailFieldSelectionEvent : function(){
+	registerEmailFieldSelectionEvent : function(callBack){
 		var thisInstance = this;
 		var selectEmailForm = jQuery("#SendEmailFormStep1");
 		selectEmailForm.on('submit',function(e){
@@ -105,7 +105,11 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			var params = form.serialize();
 			app.helper.showProgress();
 			app.helper.hideModal().then(function(e){
-				thisInstance.showComposeEmailForm(params);
+				thisInstance.showComposeEmailForm(params).then(function(response){
+                    if (typeof callBack === 'function') {
+                        callBack(response);
+                    }
+                });
 			});
 		});
 	},
@@ -846,7 +850,7 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			this.calculateUploadFileSize();
 			this.registerSaveDraftOrSendEmailEvent();
 			var isCkeditorApplied = jQuery('#description').data('isCkeditorApplied');
-			if(isCkeditorApplied != true){
+			if(isCkeditorApplied != true && jQuery('#description').length > 0){
 				this.loadCkEditor(jQuery('#description').data('isCkeditorApplied',true));
 			}
 			this.registerSelectEmailTemplateEvent();

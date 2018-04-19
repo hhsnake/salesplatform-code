@@ -31,7 +31,10 @@
 									</a>
 								</span>
                             </div>&nbsp;&nbsp;
-                            <input style="opacity: 0;" type="checkbox" data-on-color="success" class="taskStatus" data-statusurl="{$TASK->getChangeStatusUrl()}" {if $TASK->isActive()} checked="" value="on" {else} value="off" {/if} />
+                            {*SalesPlatform.ru begin *}
+                            {* <input style="opacity: 0;" type="checkbox" data-on-color="success" class="taskStatus" data-statusurl="{$TASK->getChangeStatusUrl()}" {if $TASK->isActive()} checked="" value="on" {else} value="off" {/if} /> *}
+                            <input style="opacity: 0;" type="checkbox" data-on-color="success" class="taskStatus" data-statusurl="{$TASK->getChangeStatusUrl()}" {if $TASK->isActive()} checked="" value="on" {else} value="off" {/if}  data-on-text="{vtranslate('LBL_YES')}" data-off-text="{vtranslate("LBL_NO")}"/>
+                            {* SalesPlatform.ru end *}
                         </td>
                         <td class="listViewEntryValue">{vtranslate($TASK->getTaskType()->getLabel(),$QUALIFIED_MODULE)}</td>
 						<td><span class="pull-left">{Vtiger_Util_Helper::toSafeHTML($TASK->getName())}</span></td>
@@ -49,7 +52,10 @@
                                 </a>
                             </span>
                         </div>&nbsp;&nbsp;
-                        <input style="opacity: 0;" type="checkbox" data-on-color="success" class="tmpTaskStatus" checked="" value="on"/>
+                        {* SalesPlatform.ru begin *}
+                        {* <input style="opacity: 0;" type="checkbox" data-on-color="success" class="tmpTaskStatus" checked="" value="on"/> *}
+                        <input style="opacity: 0;" type="checkbox" data-on-color="success" class="tmpTaskStatus" checked="" value="on" data-on-text="{vtranslate('LBL_YES')}" data-off-text="{vtranslate("LBL_NO")}"/>
+                        {* SalesPlatform.ru end *}
                     </td>
                     <td class="listViewEntryValue taskType"></td>
                     <td><span class="pull-left taskName"></span></td>

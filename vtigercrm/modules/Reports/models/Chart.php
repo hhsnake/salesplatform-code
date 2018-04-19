@@ -183,7 +183,7 @@ abstract class Base_Chart extends Vtiger_Base_Model{
 		if(is_array($columns)) {
 			foreach($columns as $column) {
 				$fieldModel = $this->getFieldModelByReportColumnName($column);
-                                
+
 				if($fieldModel) {
 					$columnInfo = explode(':', $column);
 
@@ -318,7 +318,7 @@ abstract class Base_Chart extends Vtiger_Base_Model{
 		}
 
 		$groupByColumnsByFieldModel = $this->getGroupbyColumnsByFieldModel();
-                
+
 		if(is_array($groupByColumnsByFieldModel)) {
 			foreach($groupByColumnsByFieldModel as $groupField) {
 				/**
@@ -484,6 +484,21 @@ abstract class Base_Chart extends Vtiger_Base_Model{
 		}
 		return $dataTypes;
 	}
+    
+    //SalesPlatform.ru begin #5720
+    /**
+     * 
+     * @param Vtiger_Field_Model $fieldModel
+     */
+    public function isCalendarStatusField($fieldModel) {
+        return ($fieldModel->getModuleName() == "Calendar" && $fieldModel->getFieldName() == "taskstatus");
+    }
+    
+    public function getEventsStatusFieldValuesMap() {
+        $currentUserModel = Users_Record_Model::getCurrentUserModel();
+        return getAssignedPicklistValues("eventstatus", $currentUserModel->getRole(), PearDatabase::getInstance());
+    }
+    //SalesPlatform.ru end #5720
 }
 
 class PieChart extends Base_Chart {
@@ -491,11 +506,11 @@ class PieChart extends Base_Chart {
 	function generateData(){
 		$db = PearDatabase::getInstance();
 		$values = array();
-                
+
 		$chartSQL = $this->getQuery();
 		$result = $db->pquery($chartSQL, array());
 		$rows = $db->num_rows($result);
-                
+
 		$queryColumnsByFieldModel = $this->getQueryColumnsByFieldModel();
 		if(is_array($queryColumnsByFieldModel)) {
 			foreach($queryColumnsByFieldModel as $field) {
@@ -523,6 +538,11 @@ class PieChart extends Base_Chart {
 		if(($legendField->getFieldDataType() == 'picklist' || $legendField->getFieldDataType() == 'multipicklist') && vtws_isRoleBasedPicklist($legendField->getName())){
 			$currentUserModel = Users_Record_Model::getCurrentUserModel();
 			$picklistvaluesmap = getAssignedPicklistValues($legendField->getName(),$currentUserModel->getRole(), $db);
+            //SalesPlatform.ru begin #5720
+            if($this->isCalendarStatusField($legendField)) {
+                $picklistvaluesmap = array_merge($picklistvaluesmap, $this->getEventsStatusFieldValuesMap());
+            }
+            //SalesPlatform.ru end #5720
 		}
 
 		$sector = trim($sector, '`'); // remove backticks from sector
@@ -622,7 +642,12 @@ class VerticalbarChart extends Base_Chart {
 			if($eachGroupByField->getFieldDataType() == 'picklist' && vtws_isRoleBasedPicklist($eachGroupByField->getName())){
 				$currentUserModel = Users_Record_Model::getCurrentUserModel();
 				$picklistValueMap[$eachGroupByField->getName()] = getAssignedPicklistValues($eachGroupByField->getName(),$currentUserModel->getRole(), $db);
-			}
+                //SalesPlatform.ru begin #5720
+                if($this->isCalendarStatusField($eachGroupByField)) {
+                    $picklistValueMap[$eachGroupByField->getName()] = array_merge($picklistValueMap[$eachGroupByField->getName()], $this->getEventsStatusFieldValuesMap());
+                }
+                //SalesPlatform.ru end #5720
+                }
 		}
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$currencyRateAndSymbol = getCurrencySymbolandCRate($currentUserModel->currency_id);

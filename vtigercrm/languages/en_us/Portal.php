@@ -26,6 +26,9 @@ $languageStrings = array(
 	'LBL_BOOKMARK' => 'Bookmark',
 	'LBL_BOOKMARKS' => 'Bookmarks',
 	'HTTP_ERROR' => 'The website that you are trying to open is not secure and might not open. If you still wish to view the webpage then you can click on the content blocker in the address bar and enable it.',
+    // SalesPlatform.ru begin
+    'List' => 'List',
+    // SalesPlatform.ru end
 );
 
 $jsLanguageStrings = array(
